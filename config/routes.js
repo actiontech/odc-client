@@ -1,50 +1,50 @@
 module.exports = [
-    {
-      path: '/lock',
-      component: '@/page/Lock',
-      spmBPos: 'b46783',
-    },
+    // {
+    //   path: '/lock',
+    //   component: '@/page/Lock',
+    //   spmBPos: 'b46783',
+    // },
     {
       path: '/',
       wrappers: ["@/layout/PageLoadingWrapper"],
       component: '../layout/AppContainer',
       routes: [
-        { path: '/odc/gateway/*', redirect: '/gateway/*'},
-        { path: '/gateway/*', component: '@/page/Gateway', spmBPos: 'b41899' },
+        // { path: '/odc/gateway/*', redirect: '/gateway/*'},
+        // { path: '/gateway/*', component: '@/page/Gateway', spmBPos: 'b41899' },
         {
           path: '/',
           component: '../layout/UserWrapper',
           routes: [
-            {
-              path: '/',
-              component: '../layout/SpaceContainer',
-              wrappers: [
-                "@/layout/OrganizationListenWrap"
-              ],
-              routes: [
-                { path: '/console', component: '@/page/Console' },
-                { path: '/project', component: '@/page/Project/Project', spmBPos: 'b64002' },
-                { path: '/project/:id/:page', component: '@/page/Project', spmBPos: 'b64003' },
-                { path: '/datasource', component: '@/page/Datasource/Datasource', spmBPos: 'b64004' },
-                { path: '/datasource/:id/:page', component: '@/page/Datasource', spmBPos: 'b64005' },
-                { path: '/task', component: '@/page/Task', spmBPos: 'b64006' },
-                { path: '/auth/:page', component: '@/page/Auth', spmBPos: 'b64007' },
-                { path: '/secure/:page', component: '@/page/Secure', spmBPos: 'b64008' },
-                { path: '/externalIntegration/:page', component: '@/page/ExternalIntegration', spmBPos: 'b64009' },
-                { path: '/', component: '@/layout/DefaultRedirect'},
-              ],
-            },
-            {
-              path: '/login',
-              name: 'login',
-              component: '@/page/Login',
-              spmBPos: 'b41895',
-            },
-            {
-              path: '/testLDAP',
-              name: 'testLDAP',
-              component: '@/page/Login/components/LDAPModal',
-            },
+            // {
+            //   path: '/',
+            //   component: '../layout/SpaceContainer',
+            //   wrappers: [
+            //     "@/layout/OrganizationListenWrap"
+            //   ],
+            //   routes: [
+            //     { path: '/console', component: '@/page/Console' },
+            //     { path: '/project', component: '@/page/Project/Project', spmBPos: 'b64002' },
+            //     { path: '/project/:id/:page', component: '@/page/Project', spmBPos: 'b64003' },
+            //     { path: '/datasource', component: '@/page/Datasource/Datasource', spmBPos: 'b64004' },
+            //     { path: '/datasource/:id/:page', component: '@/page/Datasource', spmBPos: 'b64005' },
+            //     { path: '/task', component: '@/page/Task', spmBPos: 'b64006' },
+            //     { path: '/auth/:page', component: '@/page/Auth', spmBPos: 'b64007' },
+            //     { path: '/secure/:page', component: '@/page/Secure', spmBPos: 'b64008' },
+            //     { path: '/externalIntegration/:page', component: '@/page/ExternalIntegration', spmBPos: 'b64009' },
+            //     { path: '/', component: '@/layout/DefaultRedirect'},
+            //   ],
+            // },
+            // {
+            //   path: '/login',
+            //   name: 'login',
+            //   component: '@/page/Login',
+            //   spmBPos: 'b41895',
+            // },
+            // {
+            //   path: '/testLDAP',
+            //   name: 'testLDAP',
+            //   component: '@/page/Login/components/LDAPModal',
+            // },
             {
               path: '/',
               component: '../layout/DefaultContainer',
@@ -56,7 +56,7 @@ module.exports = [
                 //   spmBPos: 'b64001'
                 // },
                 {
-                  path: '/sqlworkspace',
+                  path: '/',
                   wrappers: [
                     "@/layout/OrganizationListenWrap",
                     "@/layout/ThemeWrap"
@@ -66,7 +66,7 @@ module.exports = [
                   spmBPos: 'b41896'
                 },
                 {
-                  path: '/sqlworkspace/:tabKey/:datasourceId',
+                  path: '/:tabKey/:datasourceId',
                   wrappers: [
                     "@/layout/OrganizationListenWrap",
                     "@/layout/ThemeWrap"

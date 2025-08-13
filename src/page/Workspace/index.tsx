@@ -360,7 +360,6 @@ const Workspace: React.FC<WorkspaceProps> = (props: WorkspaceProps) => {
   return (
     <>
       <ConfigProvider>
-        <DmsKitDemo />
         <WorkBenchLayout
           activityBar={<ActivityBar />}
           sideBar={<SideBar />}

@@ -51,11 +51,7 @@ export function setDefaultProject(projectId: number) {
 }
 
 export function getDefaultProjectPage() {
-  if (setting.enableWorkbench) {
-    return '/console';
-  } else {
-    return '/project';
-  }
+  return '/';
 }
 
 export async function toDefaultProjectPage() {
