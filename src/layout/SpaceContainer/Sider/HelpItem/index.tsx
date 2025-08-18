@@ -22,9 +22,10 @@ import modal from '@/store/modal';
 import { isClient } from '@/util/env';
 import { formatMessage, getLocalDocs } from '@/util/intl';
 import tracert from '@/util/tracert';
-import { Menu } from 'antd';
 import React, { useState } from 'react';
 import DropMenu from '../DropMenu';
+import classNames from 'classnames';
+import { PopoverInnerStyleWrapper } from '@actiontech/dms-kit';
 
 interface IProps {}
 
@@ -79,14 +80,23 @@ const HelpItem: React.FC<IProps> = function ({ children }) {
 
   const getHelpMenus = () => {
     return (
-      <Menu
-        selectedKeys={null}
-        items={HELP_MENUS.map((item) => ({
-          key: item.key,
-          onClick: item.action,
-          label: item.title,
-        }))}
-      />
+      <PopoverInnerStyleWrapper>
+        <div className="content">
+          {HELP_MENUS.map((menu) => {
+            return (
+              <div
+                key={menu.key}
+                className={classNames('content-item')}
+                onClick={(e) => {
+                  menu.action?.();
+                }}
+              >
+                <div className="content-item-text">{menu.title}</div>
+              </div>
+            );
+          })}
+        </div>
+      </PopoverInnerStyleWrapper>
     );
   };
 

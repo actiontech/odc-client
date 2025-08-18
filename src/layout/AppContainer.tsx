@@ -39,6 +39,7 @@ import { PageLoadingContext } from './PageLoadingWrapper';
 import StoreProvider from './StoreProvider';
 import { ConfigProvider } from 'antd';
 import { theme } from './antdTheme';
+import { ConfigProvider as DmsKitConfigProvider } from '@actiontech/dms-kit';
 
 // // TODO：支持英文版
 // setLocale('zh-CN');
@@ -217,13 +218,15 @@ const App = inject(
 export default (props: any) => (
   // <Media query="(max-width: 599px)">
   <ErrorBoundary>
-    <ConfigProvider theme={theme}>
-      <StoreProvider>
-        <AuthStoreContext.Provider value={authStore}>
-          <App {...props} />
-        </AuthStoreContext.Provider>
-      </StoreProvider>
-    </ConfigProvider>
+    <DmsKitConfigProvider>
+      <ConfigProvider theme={theme}>
+        <StoreProvider>
+          <AuthStoreContext.Provider value={authStore}>
+            <App {...props} />
+          </AuthStoreContext.Provider>
+        </StoreProvider>
+      </ConfigProvider>
+    </DmsKitConfigProvider>
   </ErrorBoundary>
 );
 

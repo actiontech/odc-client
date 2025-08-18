@@ -19,6 +19,7 @@ import { Badge, Tooltip } from 'antd';
 import classNames from 'classnames';
 
 import styles from './index.less';
+import { BasicToolTip } from '@actiontech/dms-kit';
 
 interface IProps {
   collapsed: boolean;
@@ -54,7 +55,7 @@ export default function ({
       );
     }
     return (
-      <Tooltip title={label} placement="right">
+      <BasicToolTip title={label} placement="right">
         <Badge dot={showDot}>
           <Icon
             onClick={onClick}
@@ -64,7 +65,7 @@ export default function ({
             component={icon}
           />
         </Badge>
-      </Tooltip>
+      </BasicToolTip>
     );
   }
   return (

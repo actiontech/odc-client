@@ -48,17 +48,17 @@ const config = {
   proxy: {
     // 本地开发或者对内 Site 应用的开发环境的代理配置
     '/api/v1/webSocket/obclient': {
-      target: 'http://dev.odc-local.net:7001/proxy/96',
+      target: 'http://localhost:8989',
       ws: true,
     },
     '/api/': {
-      target: 'http://dev.odc-local.net:7001/proxy/96',
+      target: 'http://localhost:8989',
     },
     '/oauth2/': {
-      target: 'http://dev.odc-local.net:7001/proxy/96',
+      target: 'http://localhost:8989',
     },
     '/login/': {
-      target: 'http://dev.odc-local.net:7001/proxy/96',
+      target: 'http://localhost:8989',
     }
   },
 

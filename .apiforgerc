@@ -1,0 +1,22 @@
+{
+  "client": {
+    "sqle-ui": {
+      "project": "sqle-ui",
+      "output": "src/external_api/sqle",
+      "branch": "main",
+      "swaggerPath": "",
+      "swaggerOutput": "",
+      "plugin": "dot-remove, ./scripts/apiClient/plugin.js",
+      "template": "complex"
+    },
+    "dms-ui": {
+      "project": "dms-ui",
+      "output": "src/external_api/base",
+      "branch": "main",
+      "swaggerPath": "",
+      "swaggerOutput": "",
+      "plugin": "simple-cleaner, ./scripts/apiClient/plugin.js",
+      "template": "complex"
+    }
+  }
+}

@@ -15,7 +15,6 @@
  */
 
 import classNames from 'classnames';
-import React from 'react';
 
 interface IProps {
   className?: string;

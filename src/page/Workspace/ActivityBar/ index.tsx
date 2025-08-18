@@ -19,14 +19,12 @@ import HelpItem from '@/layout/SpaceContainer/Sider/HelpItem';
 import MenuItem from '@/layout/SpaceContainer/Sider/MenuItem';
 import MineItem from '@/layout/SpaceContainer/Sider/MineItem';
 import SettingItem from '@/layout/SpaceContainer/Sider/SettingItem';
-import SpaceSelect from '@/layout/SpaceContainer/Sider/SpaceSelect';
 import { openTasksPage } from '@/store/helper/page';
 import { UserStore } from '@/store/login';
 import { ReactComponent as DBSvg } from '@/svgr/database_outline.svg';
 import { ReactComponent as TaskSvg } from '@/svgr/icon_task.svg';
 import { ReactComponent as ManagerSvg } from '@/svgr/operate.svg';
 import { ReactComponent as CodeSvg } from '@/svgr/Snippet.svg';
-import { isClient } from '@/util/env';
 import { formatMessage } from '@/util/intl';
 import { BulbOutlined, UserOutlined } from '@ant-design/icons';
 import { Divider, Space } from 'antd';
@@ -84,17 +82,11 @@ const ActivityBar: React.FC<IProps> = (props) => {
     <div className={styles.bar}>
       <div className={styles.top}>
         <Logo />
-        {!isClient() && (
-          <>
-            <SpaceSelect collapsed={true} />
-            <Divider style={{ marginTop: 6, marginBottom: 12 }} />
-          </>
-        )}
 
         <Space size={12} direction="vertical">
           {items
             .filter((item) => item.isVisible)
-            .map((item, index) => {
+            .map((item) => {
               return (
                 <ActivityBarButton
                   key={item.key}
