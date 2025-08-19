@@ -45,12 +45,17 @@ import { ContainerQuery } from 'react-container-query';
 import Context from './MenuContext';
 import { PageLoadingContext } from './PageLoadingWrapper';
 import StoreProvider from './StoreProvider';
-import { ConfigProvider } from 'antd';
-import { theme } from './antdTheme';
+import { ConfigProvider, Spin } from 'antd';
 import {
   ConfigProvider as DmsKitConfigProvider,
-  SupportLanguage
+  SpinIndicator,
+  SupportLanguage,
+  SupportTheme
 } from '@actiontech/dms-kit';
+import antd_zh_CN from 'antd/locale/zh_CN';
+import antd_en_US from 'antd/locale/en_US';
+import { theme } from './antdTheme';
+
 // // TODO：支持英文版
 // setLocale('zh-CN');
 
@@ -227,16 +232,29 @@ const App = inject(
   'userStore',
   'clusterStore'
 )(observer(AppContainer));
+
+Spin.setDefaultIndicator(<SpinIndicator />);
+
+// eslint-disable-next-line import/no-anonymous-default-export
 export default (props: any) => {
   const locale = getLocale();
+  const currentLanguage =
+    locale === SupportLanguage.enUS
+      ? SupportLanguage.enUS
+      : SupportLanguage.zhCN;
+  const antdLanguage =
+    currentLanguage === SupportLanguage.enUS ? antd_en_US : antd_zh_CN;
+
   return (
     <ErrorBoundary>
       <DmsKitConfigProvider
         language={
-          locale === 'zh-CN' ? SupportLanguage.zhCN : SupportLanguage.enUS
+          locale === SupportLanguage.enUS
+            ? SupportLanguage.enUS
+            : SupportLanguage.zhCN
         }
       >
-        <ConfigProvider theme={theme}>
+        <ConfigProvider locale={antdLanguage} theme={theme}>
           <StoreProvider>
             <AuthStoreContext.Provider value={authStore}>
               <App {...props} />

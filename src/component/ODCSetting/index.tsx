@@ -30,7 +30,6 @@ import {
   Typography
 } from 'antd';
 import React, {
-  ReactNode,
   useCallback,
   useEffect,
   useMemo,
@@ -49,12 +48,13 @@ import { ModalStore } from '@/store/modal';
 import setting, { getCurrentOrganizationId } from '@/store/setting';
 import { getODCSetting, saveODCSetting } from '@/util/client';
 import { isClient } from '@/util/env';
-import { encrypt, safeParseJson } from '@/util/utils';
+import { safeParseJson } from '@/util/utils';
 import { inject, observer } from 'mobx-react';
 import styles from './index.less';
 import odc from '@/plugins/odc';
 import login from '@/store/login';
 import { ConfigHelper } from './utils/configHelper';
+import { BasicModal, ModeSwitcher, ToggleTokens } from '@actiontech/dms-kit';
 
 interface IProps {
   modalStore?: ModalStore;
@@ -93,7 +93,7 @@ const ODCSetting: React.FC<IProps> = ({ modalStore }) => {
   const [spaceFormRef] = Form.useForm();
   const [changed, setChanged] = useState(false);
   const formBoxRef = React.createRef<HTMLDivElement>();
-  const scrollSwitcher = useRef<Boolean>(true);
+  const scrollSwitcher = useRef<boolean>(true);
   const [spaceType, setSpaceType] = useState(ESpaceType.USER);
   const isAdmin = odc.appConfig.manage.user.isODCOrganizationConfig?.(
     login.user
@@ -303,7 +303,7 @@ const ODCSetting: React.FC<IProps> = ({ modalStore }) => {
     const transformedData = ConfigHelper.transformLoadData(data);
     formRef.setFieldsValue(transformedData);
 
-    let spaceData = (await setting.getSpaceConfig()) || {};
+    const spaceData = (await setting.getSpaceConfig()) || {};
 
     const transformedSpaceData = ConfigHelper.transformLoadData(spaceData);
     spaceFormRef.setFieldsValue(transformedSpaceData);
@@ -648,10 +648,10 @@ const ODCSetting: React.FC<IProps> = ({ modalStore }) => {
     );
   }
   return (
-    <Modal
-      wrapClassName={styles.modal}
+    <BasicModal
+      // wrapClassName={styles.modal}
       width={700}
-      destroyOnClose
+      destroyOnHidden
       open={modalStore.odcSettingVisible}
       onCancel={() => close()}
       title={
@@ -663,12 +663,34 @@ const ODCSetting: React.FC<IProps> = ({ modalStore }) => {
       footer={footerRender()}
     >
       <div className={styles.settingHeader}>
-        <Radio.Group
-          className={styles.tabs}
-          defaultValue={ESpaceType.USER}
-          onChange={(e) => setSpaceType(e.target.value)}
+        <ModeSwitcher
+          value={spaceType}
+          onChange={(e) => setSpaceType(e)}
+          options={[
+            {
+              label: formatMessage({
+                id: 'src.component.ODCSetting.6BCFD6DD',
+                defaultMessage: '用户'
+              }),
+              value: ESpaceType.USER
+            },
+            {
+              label: formatMessage({
+                id: 'src.component.ODCSetting.47586FD4',
+                defaultMessage: '个人空间'
+              }),
+              value: ESpaceType.PERSONAL
+            },
+            {
+              label: formatMessage({
+                id: 'src.component.ODCSetting.AC147B83',
+                defaultMessage: '团队空间'
+              }),
+              value: ESpaceType.GROUP
+            }
+          ]}
         >
-          <Radio.Button className={styles.user} value={ESpaceType.USER}>
+          {/* <Radio.Button className={styles.user} value={ESpaceType.USER}>
             {formatMessage({
               id: 'src.component.ODCSetting.6BCFD6DD',
               defaultMessage: '用户'
@@ -688,8 +710,8 @@ const ODCSetting: React.FC<IProps> = ({ modalStore }) => {
                 defaultMessage: '团队空间'
               })}
             </Radio.Button>
-          ) : null}
-        </Radio.Group>
+          ) : null} */}
+        </ModeSwitcher>
         <Search
           className={styles.search}
           placeholder={formatMessage({
@@ -721,7 +743,7 @@ const ODCSetting: React.FC<IProps> = ({ modalStore }) => {
           })}
         </div>
       </div>
-    </Modal>
+    </BasicModal>
   );
 };
 
