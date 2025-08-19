@@ -18,30 +18,30 @@ const TaskList: React.FC<TaskListProps> = (props) => {
       key: 'id',
       title: formatMessage({
         id: 'odc.component.TaskTable.No',
-        defaultMessage: '编号',
+        defaultMessage: '编号'
       }),
-      width: 100,
+      width: 100
     },
     {
       dataIndex: 'type',
       key: 'type',
       title: formatMessage({
         id: 'odc.component.TaskTable.Type',
-        defaultMessage: '类型',
+        defaultMessage: '类型'
       }),
       //类型
       ellipsis: true,
       width: 140,
       render: (type, record) => {
         return TaskTypeMap[type];
-      },
+      }
     },
     {
       dataIndex: 'status',
       key: 'status',
       title: formatMessage({
         id: 'odc.component.TaskTable.Status',
-        defaultMessage: '状态',
+        defaultMessage: '状态'
       }),
       width: 120,
       render: (status, record) => (
@@ -50,8 +50,8 @@ const TaskList: React.FC<TaskListProps> = (props) => {
           type={record?.type}
           progress={Math.floor(record.progressPercentage)}
         />
-      ),
-    },
+      )
+    }
   ];
 
   return (

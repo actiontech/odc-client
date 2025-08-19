@@ -11,7 +11,9 @@ import { SyncOutlined } from '@ant-design/icons';
 
 interface IProps {}
 const MvViewColumns: React.FC<IProps> = () => {
-  const { materializedView, session, onRefresh, pageKey } = useContext(MaterializedViewPageContext);
+  const { materializedView, session, onRefresh, pageKey } = useContext(
+    MaterializedViewPageContext
+  );
   const gridRef = useRef<DataGridRef>();
   const gridColumns = useColumns();
 
@@ -25,7 +27,7 @@ const MvViewColumns: React.FC<IProps> = () => {
         ...column,
         key: isNil(column.ordinalPosition)
           ? `${column.name || ''}@@${idx}`
-          : column.ordinalPosition,
+          : column.ordinalPosition
       };
     });
   }, [materializedView.columns]);

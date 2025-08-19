@@ -9,17 +9,28 @@ import { AxiosRequestConfig } from 'axios';
 import {
   IGetCompanyNoticeReturn,
   IUpdateCompanyNoticeParams,
-  IUpdateCompanyNoticeReturn,
+  IUpdateCompanyNoticeReturn
 } from './index.type';
 
 class CompanyNoticeService extends ServiceBase {
   public getCompanyNotice(options?: AxiosRequestConfig) {
-    return this.get<IGetCompanyNoticeReturn>('/v1/company_notice', undefined, options);
+    return this.get<IGetCompanyNoticeReturn>(
+      '/v1/company_notice',
+      undefined,
+      options
+    );
   }
 
-  public updateCompanyNotice(params: IUpdateCompanyNoticeParams, options?: AxiosRequestConfig) {
+  public updateCompanyNotice(
+    params: IUpdateCompanyNoticeParams,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
-    return this.patch<IUpdateCompanyNoticeReturn>('/v1/company_notice', paramsData, options);
+    return this.patch<IUpdateCompanyNoticeReturn>(
+      '/v1/company_notice',
+      paramsData,
+      options
+    );
   }
 }
 

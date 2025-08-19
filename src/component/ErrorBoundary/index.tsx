@@ -21,20 +21,20 @@ import React from 'react';
 export default class ErrorBoundary extends React.Component {
   public static getDerivedStateFromError(error: any) {
     return {
-      hasError: true,
+      hasError: true
     };
   }
   public state = {
     hasError: false,
     errorComponent: null,
-    errorStack: null,
+    errorStack: null
   };
   constructor(props: any) {
     super(props);
     this.state = {
       hasError: false,
       errorComponent: null,
-      errorStack: null,
+      errorStack: null
     };
   }
   public componentDidCatch(error: any, errorInfo) {
@@ -44,7 +44,7 @@ export default class ErrorBoundary extends React.Component {
     this.setState({
       hasError: true,
       errorComponent: errorInfo?.componentStack,
-      errorStack: error?.stack,
+      errorStack: error?.stack
     });
   }
   public render() {
@@ -58,13 +58,13 @@ export default class ErrorBoundary extends React.Component {
           title={
             formatMessage({
               id: 'odc.src.component.ErrorBoundary.TheSystemIsBeingUpgraded',
-              defaultMessage: '系统正在升级中',
+              defaultMessage: '系统正在升级中'
             }) /* 系统正在升级中 */
           }
           subTitle={
             formatMessage({
               id: 'odc.src.component.ErrorBoundary.TheCurrentODCVersionHas',
-              defaultMessage: '当前 ODC 版本已过期，请刷新重试',
+              defaultMessage: '当前 ODC 版本已过期，请刷新重试'
             }) /* 当前 ODC 版本已过期，请刷新重试 */
           }
           extra={
@@ -76,7 +76,7 @@ export default class ErrorBoundary extends React.Component {
             >
               {formatMessage({
                 id: 'odc.component.ErrorBoundary.Reload',
-                defaultMessage: '重新加载',
+                defaultMessage: '重新加载'
               })}
             </Button>
           }
@@ -92,12 +92,12 @@ export default class ErrorBoundary extends React.Component {
               textAlign: 'center',
               padding: 15,
               background: '#fff1f0',
-              fontSize: 16,
+              fontSize: 16
             }}
           >
             {formatMessage({
               id: 'odc.component.ErrorBoundary.SorryAnUnpredictableExceptionOccurred',
-              defaultMessage: '抱歉，系统发生了不可预知的异常，请',
+              defaultMessage: '抱歉，系统发生了不可预知的异常，请'
             })}
 
             <a
@@ -107,21 +107,21 @@ export default class ErrorBoundary extends React.Component {
             >
               {formatMessage({
                 id: 'odc.component.ErrorBoundary.Reload',
-                defaultMessage: '重新加载',
+                defaultMessage: '重新加载'
               })}
             </a>
           </div>
           <pre
             style={{
               padding: 20,
-              color: 'red',
+              color: 'red'
             }}
           >
             <h3>Stack</h3>
             {this.state.errorStack}
             <h3
               style={{
-                marginTop: 10,
+                marginTop: 10
               }}
             >
               Component

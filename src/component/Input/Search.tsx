@@ -31,7 +31,10 @@ interface IProps {
 
 const splitKey = Symbol('csearch')?.toString();
 
-const RemoveSplitInput = forwardRef(function RemoveSplitInput({ value, ...rest }: any, ref) {
+const RemoveSplitInput = forwardRef(function RemoveSplitInput(
+  { value, ...rest }: any,
+  ref
+) {
   let type;
   let typeText;
   if (value) {
@@ -45,13 +48,21 @@ const RemoveSplitInput = forwardRef(function RemoveSplitInput({ value, ...rest }
       ref={ref}
       value={value}
       prefix={<SearchOutlined />}
-      suffix={<span style={{ paddingRight: 15, color: 'var(--text-color-hint)' }}>{typeText}</span>}
+      suffix={
+        <span style={{ paddingRight: 15, color: 'var(--text-color-hint)' }}>
+          {typeText}
+        </span>
+      }
       {...rest}
     />
   );
 });
 
-const Search: React.FC<IProps> = function ({ searchTypes, onSearch, defaultValue }) {
+const Search: React.FC<IProps> = function ({
+  searchTypes,
+  onSearch,
+  defaultValue
+}) {
   const [forceVisible, setForceVisible] = useState(false);
   const [isEmpty, setIsEmpty] = useState(false);
   const [options, setOptions] = useState([]);
@@ -79,24 +90,36 @@ const Search: React.FC<IProps> = function ({ searchTypes, onSearch, defaultValue
         return {
           value: value + splitKey + v.value + splitKey + v.label,
           label: (
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between'
+              }}
+            >
               <div
                 style={{
                   flex: 1,
                   overflow: 'hidden',
                   whiteSpace: 'nowrap',
-                  textOverflow: 'ellipsis',
+                  textOverflow: 'ellipsis'
                 }}
               >
                 {value}
               </div>
-              <div style={{ flexShrink: 0, flexGrow: 0, color: 'var(--text-color-hint)' }}>
+              <div
+                style={{
+                  flexShrink: 0,
+                  flexGrow: 0,
+                  color: 'var(--text-color-hint)'
+                }}
+              >
                 {v.label}
               </div>
             </div>
-          ),
+          )
         };
-      }),
+      })
     );
     return;
   }

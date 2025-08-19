@@ -23,7 +23,7 @@ import {
   DateTimeEditor,
   NlsEditor,
   TimeEditor,
-  YearEditor,
+  YearEditor
 } from '../../EditableTable/Editors/DateEditor';
 import { InputNumberEditor } from '../../EditableTable/Editors/NumberEditor';
 import { TextEditor } from '../../EditableTable/Editors/TextEditor';
@@ -36,7 +36,7 @@ export default function useColumns(
   enableEdit: boolean,
   supportBlob: boolean,
   originRows: any[],
-  dbMode: ConnectionMode,
+  dbMode: ConnectionMode
 ) {
   const rows = originRows?.slice(0, 30) || [];
   const maxRowsLength = {};
@@ -61,16 +61,28 @@ export default function useColumns(
         key: column.key,
         name: column.name,
         dataType: getDataType(column.columnType),
-        width: getColumnWidth(column.name, column.columnType, maxRowsLength[column.key]),
+        width: getColumnWidth(
+          column.name,
+          column.columnType,
+          maxRowsLength[column.key]
+        ),
         resizable: true,
         sortable: isNlsColumn(column.columnType, dbMode) ? false : true,
         filterable: isNlsColumn(column.columnType, dbMode) ? false : true,
         /**
          * 时间列脱敏之后不允许编辑，避免数据结构对不上
          */
-        editable: !column.readonly && isColumnEditable(column.columnType) && !isNlsAndMasked,
+        editable:
+          !column.readonly &&
+          isColumnEditable(column.columnType) &&
+          !isNlsAndMasked,
         editor: getEditor(column.columnType, dbMode),
-        formatter: getCellFormatter(column.columnType, enableEdit, supportBlob, dbMode),
+        formatter: getCellFormatter(
+          column.columnType,
+          enableEdit,
+          supportBlob,
+          dbMode
+        )
       };
     });
   }, [columns, enableEdit]);
@@ -107,7 +119,7 @@ export function isNumberType(columnType: string) {
     'FLOAT',
     'FLOAT_UNSIGNED',
     'DOUBLE',
-    'DOUBLE_UNSIGNED',
+    'DOUBLE_UNSIGNED'
   ].includes(columnType);
 }
 
@@ -119,15 +131,20 @@ const defaultFormatter = React.memo(
     const isNumber = column.dataType === 'number';
     if (isNil(value)) {
       return (
-        <span style={{ float: isNumber ? 'right' : 'none' }} className={styles.textNull}>
+        <span
+          style={{ float: isNumber ? 'right' : 'none' }}
+          className={styles.textNull}
+        >
           {isUndefined(value) ? '(default)' : '(null)'}
         </span>
       );
     } else {
-      return <span style={{ float: isNumber ? 'right' : 'none' }}>{value}</span>;
+      return (
+        <span style={{ float: isNumber ? 'right' : 'none' }}>{value}</span>
+      );
     }
   },
-  (prev, next) => prev.row === next.row && prev.column?.key === next.column?.key,
+  (prev, next) => prev.row === next.row && prev.column?.key === next.column?.key
 ) as React.FC<any>;
 
 const nlsFormatter = React.memo(
@@ -141,14 +158,14 @@ const nlsFormatter = React.memo(
       return <span>{value}</span>;
     }
   },
-  (prev, next) => prev.row === next.row && prev.column?.key === next.column?.key,
+  (prev, next) => prev.row === next.row && prev.column?.key === next.column?.key
 ) as React.FC<any>;
 
 export function getCellFormatter(
   columnType: string,
   enableEdit: boolean,
   supportBlob: boolean,
-  dbMode: ConnectionMode,
+  dbMode: ConnectionMode
 ) {
   if (isObjectColumn(columnType) && supportBlob) {
     return BlobFormatter;
@@ -163,7 +180,9 @@ export function getCellFormatter(
 }
 
 function getEditor(columnType: string, dbMode: ConnectionMode) {
-  const isOracle = [ConnectionMode.OB_ORACLE, ConnectionMode.ORACLE].includes(dbMode);
+  const isOracle = [ConnectionMode.OB_ORACLE, ConnectionMode.ORACLE].includes(
+    dbMode
+  );
   switch (columnType) {
     case 'TIME': {
       return TimeEditor;
@@ -220,7 +239,11 @@ function getEditor(columnType: string, dbMode: ConnectionMode) {
   }
 }
 
-function getColumnWidth(columnName: string, columnType: string, rowLength: number) {
+function getColumnWidth(
+  columnName: string,
+  columnType: string,
+  rowLength: number
+) {
   const columnNameWidth = (columnName.length || 1) * 8 + 75;
   let columnTypeWidth = 0;
 

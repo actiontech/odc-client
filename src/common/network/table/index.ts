@@ -14,7 +14,14 @@
  * limitations under the License.
  */
 
-import { DbObjectType, INlsObject, ITable, ITableColumn, LobExt, RSModifyDataType } from '@/d.ts';
+import {
+  DbObjectType,
+  INlsObject,
+  ITable,
+  ITableColumn,
+  LobExt,
+  RSModifyDataType
+} from '@/d.ts';
 import { ITableModel } from '@/page/Workspace/components/CreateTable/interface';
 import sessionManager from '@/store/sessionManager';
 import setting from '@/store/setting';
@@ -34,7 +41,7 @@ import odc from '@/plugins/odc';
 export async function getTableColumnList(
   tableName: string,
   databaseName?: string,
-  sessionId?: string,
+  sessionId?: string
 ) {
   if (tableName) {
     const sid = generateTableSid(tableName, databaseName, sessionId);
@@ -42,7 +49,7 @@ export async function getTableColumnList(
     return ((r && r.data) || []).map((c) => ({
       ...c,
       name: c.columnName,
-      type: c.dataType,
+      type: c.dataType
     }));
   }
   return [];
@@ -54,8 +61,8 @@ export async function tableModify(sql: string, tableName: string) {
     data: {
       sid,
       sql,
-      tag: tableName || '',
-    },
+      tag: tableName || ''
+    }
   });
 
   return res?.data;
@@ -65,7 +72,7 @@ export async function getTableInfo(
   tableName: string,
   databaseName: string,
   sessionId: string,
-  isExternalTable?: boolean,
+  isExternalTable?: boolean
 ): Promise<Partial<ITableModel>> {
   const params: { type?: string } = {};
   if (isExternalTable) {
@@ -74,17 +81,21 @@ export async function getTableInfo(
 
   const res = await request.get(
     `/api/v2/connect/sessions/${sessionId}/databases/${encodeObjName(
-      databaseName,
+      databaseName
     )}/tables/${encodeObjName(Base64.encode(tableName))}`,
-    { params },
+    { params }
   );
   const session = sessionManager.sessionMap.get(sessionId);
-  return convertServerTableToTable(res?.data, null, session?.connection?.dialectType);
+  return convertServerTableToTable(
+    res?.data,
+    null,
+    session?.connection?.dialectType
+  );
 }
 
 export async function getLogicTableInfo(
   databaseId: number,
-  tableId: number,
+  tableId: number
 ): Promise<Partial<ITableModel>> {
   const res = await getLogicalTableDetail(databaseId, tableId);
   return {
@@ -94,9 +105,9 @@ export async function getLogicTableInfo(
       {
         isLogicalTable: true,
         tableId,
-        databaseId,
-      },
-    ),
+        databaseId
+      }
+    )
   };
 }
 
@@ -105,17 +116,20 @@ export async function queryTableOrViewData(
   tableOrViewName: string,
   queryLimit: number,
   addRowID?: boolean,
-  sessionId?: string,
+  sessionId?: string
 ) {
   const sid = generateDatabaseSid(dbName, sessionId);
-  const res = await request.post(`/api/v2/datasource/sessions/${sid}/queryData`, {
-    data: {
-      schemaName: dbName,
-      tableOrViewName,
-      queryLimit,
-      addROWID: addRowID,
-    },
-  });
+  const res = await request.post(
+    `/api/v2/datasource/sessions/${sid}/queryData`,
+    {
+      data: {
+        schemaName: dbName,
+        tableOrViewName,
+        queryLimit,
+        addROWID: addRowID
+      }
+    }
+  );
 
   return res?.data;
 }
@@ -124,15 +138,18 @@ export async function queryIdentities(
   types: string[],
   sessionId: string,
   dbName: string,
-  identityNameLike?: string,
+  identityNameLike?: string
 ) {
   const sid = generateDatabaseSid(dbName, sessionId);
-  const res = await request.get(`/api/v2/connect/sessions/${sid}/metadata/identities`, {
-    params: {
-      type: types?.join(','),
-      identityNameLike,
-    },
-  });
+  const res = await request.get(
+    `/api/v2/connect/sessions/${sid}/metadata/identities`,
+    {
+      params: {
+        type: types?.join(','),
+        identityNameLike
+      }
+    }
+  );
 
   return res?.data?.contents;
 }
@@ -140,16 +157,16 @@ export async function queryIdentities(
 export async function generateCreateTableDDL(
   data: ITableModel,
   sessionId: string,
-  dbName: string,
+  dbName: string
 ): Promise<string> {
   const session = sessionManager.sessionMap.get(sessionId);
   const res = await request.post(
     `/api/v2/connect/sessions/${sessionId}/databases/${encodeObjName(
-      dbName,
+      dbName
     )}/tables/generateCreateTableDDL`,
     {
-      data: convertTableToServerTable(data, session?.connection?.dialectType),
-    },
+      data: convertTableToServerTable(data, session?.connection?.dialectType)
+    }
   );
 
   return res?.data?.sql;
@@ -159,27 +176,33 @@ export async function generateUpdateTableDDL(
   newData: Partial<ITableModel>,
   oldData: Partial<ITableModel>,
   sessionId: string,
-  dbName: string,
+  dbName: string
 ): Promise<{ sql: string; tip: string }> {
   const session = sessionManager.sessionMap.get(sessionId);
   const res = await request.post(
     `/api/v2/connect/sessions/${sessionId}/databases/${encodeObjName(
-      dbName,
+      dbName
     )}/tables/generateUpdateTableDDL`,
     {
       data: {
-        previous: convertTableToServerTable(oldData, session?.connection?.dialectType),
-        current: convertTableToServerTable(newData, session?.connection?.dialectType),
-      },
-    },
+        previous: convertTableToServerTable(
+          oldData,
+          session?.connection?.dialectType
+        ),
+        current: convertTableToServerTable(
+          newData,
+          session?.connection?.dialectType
+        )
+      }
+    }
   );
 
   if (!res?.data?.sql) {
     notification.error({
       track: formatMessage({
         id: 'odc.network.table.CurrentlyNoSqlCanBe',
-        defaultMessage: '当前无 SQL 可提交',
-      }), //当前无 SQL 可提交
+        defaultMessage: '当前无 SQL 可提交'
+      }) //当前无 SQL 可提交
     });
   }
   return res?.data || { sql: '', tip: '' };
@@ -189,24 +212,26 @@ export async function generateUpdateTableDDL(
 export async function syncExternalTableFiles(
   sessionId: string,
   databaseName: string,
-  externalTableName: string,
+  externalTableName: string
 ): Promise<boolean> {
   const res = await request.post(
     `/api/v2/connect/sessions/${sessionId}/databases/${encodeObjName(
-      databaseName,
-    )}/externalTables/${encodeObjName(Base64.encode(externalTableName))}/syncExternalTableFiles`,
+      databaseName
+    )}/externalTables/${encodeObjName(
+      Base64.encode(externalTableName)
+    )}/syncExternalTableFiles`,
     {
       params: {
-        ignoreError: true,
-      },
-    },
+        ignoreError: true
+      }
+    }
   );
   return res?.data;
 }
 
 export async function getTableListByDatabaseName(
   sessionId: string,
-  databaseName?: string,
+  databaseName?: string
 ): Promise<ITable[]> {
   const sid = generateDatabaseSid(databaseName, sessionId);
   const ret = await request.get(`/api/v1/table/list/${sid}`);
@@ -220,9 +245,12 @@ export async function getTableListByDatabaseName(
  */
 export async function getTableListWithoutSession(
   databaseId: number,
-  type?: string,
+  type?: string
 ): Promise<ITable[]> {
-  const params: { type?: string; databaseId: number } = { databaseId: databaseId, type };
+  const params: { type?: string; databaseId: number } = {
+    databaseId: databaseId,
+    type
+  };
   const ret = await request.get(`/api/v2/databaseSchema/tables`, { params });
   return ret?.data?.contents || [];
 }
@@ -240,7 +268,7 @@ export async function batchGetDataModifySQL(
   }[],
   sessionId: string,
   dbName: string,
-  whereColumns: string[],
+  whereColumns: string[]
 ): Promise<{
   sql: string;
   tip: string;
@@ -255,14 +283,21 @@ export async function batchGetDataModifySQL(
         const { type, row, initialRow, enableRowId } = updateRow;
         return {
           operate: type,
-          units: wrapDataDML(tableName, row, initialRow, columns, useUniqueColumnName, enableRowId),
+          units: wrapDataDML(
+            tableName,
+            row,
+            initialRow,
+            columns,
+            useUniqueColumnName,
+            enableRowId
+          )
         };
-      }),
-    },
+      })
+    }
   });
   return {
     sql: ret?.data?.sql,
-    tip: ret?.data?.tip,
+    tip: ret?.data?.tip
   };
 }
 
@@ -273,7 +308,7 @@ function wrapDataDML(
   columns: Partial<ITableColumn>[],
   useUniqueColumnName: boolean = false,
   /** 是否支持row id */
-  enableRowId: boolean = false,
+  enableRowId: boolean = false
 ) {
   if (enableRowId) {
     const exsitRowIdColumn = columns.find((column) => {
@@ -283,8 +318,8 @@ function wrapDataDML(
       columns = [
         {
           columnName: 'ROWID',
-          dataType: 'ROWID',
-        } as Partial<ITableColumn>,
+          dataType: 'ROWID'
+        } as Partial<ITableColumn>
       ].concat(columns);
     }
   } else {
@@ -299,7 +334,10 @@ function wrapDataDML(
       return null;
     }
     let time = dayjs(nlsObject.timestamp);
-    let nano = (time.millisecond() * 1000000 + (toInteger(nlsObject?.nano) || 0))
+    let nano = (
+      time.millisecond() * 1000000 +
+      (toInteger(nlsObject?.nano) || 0)
+    )
       .toString()
       ?.padStart(9, '0');
     /**
@@ -310,7 +348,9 @@ function wrapDataDML(
       case 'TIMESTAMP WITH TIME ZONE': {
         let timeZone = nlsObject.timeZoneId;
         if (timeZone) {
-          data = time.utcOffset(timeZone).format(`YYYY-MM-DDTHH:mm:ss.${nano}Z`);
+          data = time
+            .utcOffset(timeZone)
+            .format(`YYYY-MM-DDTHH:mm:ss.${nano}Z`);
         } else {
           data = time.utc().format(`YYYY-MM-DDTHH:mm:ss.${nano}Z`);
         }
@@ -328,7 +368,8 @@ function wrapDataDML(
     const uniqueColumnName = column?.columnName;
     const blobExt: LobExt = row[getBlobValueKey(uniqueColumnName)];
     const nlsObject: INlsObject = row[getNlsValueKey(uniqueColumnName)];
-    const initNlsObject: INlsObject = initialRow?.[getNlsValueKey(uniqueColumnName)];
+    const initNlsObject: INlsObject =
+      initialRow?.[getNlsValueKey(uniqueColumnName)];
     let oldData = initialRow ? initialRow[uniqueColumnName] : null;
     let newData = blobExt ? blobExt.info : row[uniqueColumnName];
     if (initNlsObject) {
@@ -344,8 +385,10 @@ function wrapDataDML(
       newData,
       oldData,
       newDataType: blobExt?.type || RSModifyDataType.RAW,
-      useDefault: typeof row[uniqueColumnName] === 'undefined' && column.columnName !== 'ROWID',
-      primaryKey: column.primaryKey,
+      useDefault:
+        typeof row[uniqueColumnName] === 'undefined' &&
+        column.columnName !== 'ROWID',
+      primaryKey: column.primaryKey
     };
   });
 }
@@ -355,13 +398,21 @@ export async function downloadDataObject(
   columnIndex: number,
   rowIndex: number,
   sessionId: string,
-  dbName: string,
+  dbName: string
 ) {
   if (columnIndex < 0 || rowIndex < 0) {
-    message.error(`Download Error (column: ${columnIndex}, row: ${rowIndex}, sqlId: ${sqlId})`);
+    message.error(
+      `Download Error (column: ${columnIndex}, row: ${rowIndex}, sqlId: ${sqlId})`
+    );
     return;
   }
-  const url = await getDataObjectDownloadUrl(sqlId, columnIndex, rowIndex, sessionId, dbName);
+  const url = await getDataObjectDownloadUrl(
+    sqlId,
+    columnIndex,
+    rowIndex,
+    sessionId,
+    dbName
+  );
   if (url) {
     downloadFile(url);
   }
@@ -373,17 +424,20 @@ export async function getDataObjectDownloadUrl(
   columnIndex: number,
   rowIndex: number,
   sessionId: string,
-  dbName: string,
+  dbName: string
 ) {
   if (setting.isUploadCloudStore) {
-    const res = await request.post(`/api/v2/cloud/specific/DownloadObjectData`, {
-      data: {
-        sqlId,
-        row: rowIndex,
-        col: columnIndex,
-        sid: generateDatabaseSid(dbName, sessionId),
-      },
-    });
+    const res = await request.post(
+      `/api/v2/cloud/specific/DownloadObjectData`,
+      {
+        data: {
+          sqlId,
+          row: rowIndex,
+          col: columnIndex,
+          sid: generateDatabaseSid(dbName, sessionId)
+        }
+      }
+    );
     const donwloadUrl = res?.data;
     console.log('get sql object download url: ', donwloadUrl);
     return donwloadUrl;
@@ -392,18 +446,23 @@ export async function getDataObjectDownloadUrl(
       odc.appConfig.network?.baseUrl?.() +
       `/api/v2/datasource/sessions/${generateDatabaseSid(
         dbName,
-        sessionId,
+        sessionId
       )}/sqls/${sqlId}/download?row=${rowIndex}&col=${columnIndex}`
     );
   }
 }
 
 export async function getFormatNlsDateString(
-  params: Pick<INlsObject, 'nano' | 'timeZoneId' | 'timestamp'> & { dataType: string },
-  sessionId: string,
+  params: Pick<INlsObject, 'nano' | 'timeZoneId' | 'timestamp'> & {
+    dataType: string;
+  },
+  sessionId: string
 ): Promise<string> {
-  const res = await request.post(`/api/v2/connects/sessions/${sessionId}/format`, {
-    data: params,
-  });
+  const res = await request.post(
+    `/api/v2/connects/sessions/${sessionId}/format`,
+    {
+      data: params
+    }
+  );
   return res?.data;
 }

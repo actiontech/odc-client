@@ -7,13 +7,13 @@ import { Select, Tooltip } from 'antd';
 import { TablePrimaryConstraint } from '@/page/Workspace/components/CreateTable/interface';
 import {
   useDeferColumn,
-  useEnableColumn,
+  useEnableColumn
 } from '@/page/Workspace/components/CreateTable/TableConstraint/baseColumn';
 const Option = Select.Option;
 
 export function useColumns(
   columns: any[],
-  mode: ConnectionMode,
+  mode: ConnectionMode
 ): Column<TablePrimaryConstraint, TablePrimaryConstraint>[] {
   const enableColumn = useEnableColumn(mode);
   const deferColumn = useDeferColumn(mode);
@@ -27,7 +27,7 @@ export function useColumns(
         <div
           style={{
             display: 'flex',
-            alignItems: 'center',
+            alignItems: 'center'
           }}
         >
           <span>{item.columnName}</span>
@@ -38,7 +38,7 @@ export function useColumns(
                 marginLeft: '6px',
                 whiteSpace: 'nowrap',
                 overflow: 'hidden',
-                textOverflow: 'ellipsis',
+                textOverflow: 'ellipsis'
               }}
             >
               {item.aliasName}
@@ -58,16 +58,16 @@ export function useColumns(
       key: 'name',
       name: formatMessage({
         id: 'src.page.Workspace.components.CreateMaterializedView.Constraint.Primary.BD5072E1',
-        defaultMessage: '主键约束名称',
+        defaultMessage: '主键约束名称'
       }),
       resizable: true,
-      editable: false,
+      editable: false
     },
     {
       key: 'columns',
       name: formatMessage({
         id: 'odc.TableConstraint.Primary.columns.Column',
-        defaultMessage: '列',
+        defaultMessage: '列'
       }), //列
       resizable: true,
       editable: true,
@@ -75,10 +75,10 @@ export function useColumns(
       editor: ColumnsMultipleSelect,
       formatter: ({ row }) => {
         return <span>{row.columns?.join?.(',')}</span>;
-      },
+      }
     },
 
     enableColumn,
-    deferColumn,
+    deferColumn
   ].filter(Boolean);
 }

@@ -20,7 +20,7 @@ export enum EEventType {
   CREATED = 'CREATED',
   CONVERTING = 'CONVERTING',
   THROWN = 'THROWN',
-  CONVERTED = 'CONVERTED',
+  CONVERTED = 'CONVERTED'
 }
 // 消息发送状态
 export enum EMessageStatus {
@@ -33,13 +33,13 @@ export enum EMessageStatus {
   // 忽略
   THROWN = 'THROWN',
   // 发送中
-  SENDING = 'SENDING',
+  SENDING = 'SENDING'
 }
 // 限流时间单位
 export enum ETimeUnit {
   MINUTES = 'MINUTES',
   HOURS = 'HOURS',
-  DAYS = 'DAYS',
+  DAYS = 'DAYS'
 }
 // #region ------------------------- notification channel -------------------------
 // 通道类型
@@ -51,28 +51,34 @@ export enum EChannelType {
   // 企业微信
   WE_COM = 'WeCom',
   // 自定义webhook
-  WEBHOOK = 'Webhook',
+  WEBHOOK = 'Webhook'
 }
 // 限流策略
 export enum EOverLimitStrategy {
   // 丢弃, UI中文本为忽略
   THROWN = 'THROWN',
   // 重发
-  RESEND = 'RESEND',
+  RESEND = 'RESEND'
 }
 export const EOverLimitStrategyMap = {
-  [EOverLimitStrategy.THROWN]: formatMessage({ id: 'src.d.ts.C34AA00A', defaultMessage: '忽略' }), //'忽略'
-  [EOverLimitStrategy.RESEND]: formatMessage({ id: 'src.d.ts.01B0FD39', defaultMessage: '重发' }), //'重发'
+  [EOverLimitStrategy.THROWN]: formatMessage({
+    id: 'src.d.ts.C34AA00A',
+    defaultMessage: '忽略'
+  }), //'忽略'
+  [EOverLimitStrategy.RESEND]: formatMessage({
+    id: 'src.d.ts.01B0FD39',
+    defaultMessage: '重发'
+  }) //'重发'
 };
 export const EOverLimitStrategyTipMap = {
   [EOverLimitStrategy.THROWN]: formatMessage({
     id: 'src.d.ts.88D96CF0',
-    defaultMessage: '忽略已超出限流的消息，不再重发',
+    defaultMessage: '忽略已超出限流的消息，不再重发'
   }), //'忽略已超出限流的消息，不再重发'
   [EOverLimitStrategy.RESEND]: formatMessage({
     id: 'src.d.ts.38B0347B',
-    defaultMessage: '限流时间过后，将自动重发超出限流的消息',
-  }), //'限流时间过后，将自动重发超出限流的消息'
+    defaultMessage: '限流时间过后，将自动重发超出限流的消息'
+  }) //'限流时间过后，将自动重发超出限流的消息'
 };
 export interface IRateLimitConfig {
   timeUnit: ETimeUnit;
@@ -82,7 +88,7 @@ export interface IRateLimitConfig {
 export enum ELanguage {
   ZH_CN = 'zh-CN',
   ZH_TW = 'zh-TW',
-  EN_US = 'en-US',
+  EN_US = 'en-US'
 }
 export interface IBasChannelConfig {
   /** @description 通道 webhook地址 */

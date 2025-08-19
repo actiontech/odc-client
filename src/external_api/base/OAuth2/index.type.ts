@@ -1,6 +1,10 @@
 /* eslint-disable */
 // @ts-nocheck
-import { IGetOauth2TipsReply, IBindOauth2UserReq, IBindOauth2UserReply } from '../common.type';
+import {
+  IGetOauth2TipsReply,
+  IBindOauth2UserReq,
+  IBindOauth2UserReply
+} from '../common.type';
 
 export interface IGetOauth2TipsReturn extends IGetOauth2TipsReply {}
 

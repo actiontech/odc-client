@@ -31,14 +31,14 @@ export default function ({ column, onChange }) {
         {
           formatMessage({
             id: 'odc.Columns.ColumnExtraInfo.Number.OnlyOneAutoIncrementField',
-            defaultMessage: '每个表仅设置一个自增字段',
+            defaultMessage: '每个表仅设置一个自增字段'
           }) /*每个表仅设置一个自增字段*/
         }
       </Typography.Text>
       <Form.Item
         label={formatMessage({
           id: 'odc.Columns.ColumnExtraInfo.Number.ValueSetting',
-          defaultMessage: '数值设置',
+          defaultMessage: '数值设置'
         })} /*数值设置*/
       >
         <Checkbox.Group
@@ -47,25 +47,25 @@ export default function ({ column, onChange }) {
             onChange({
               ...column,
               unsigned: checkedValues.includes('unsigned'),
-              zerofill: checkedValues.includes('zerofill'),
+              zerofill: checkedValues.includes('zerofill')
             });
           }}
           options={[
             {
               label: formatMessage({
                 id: 'odc.Columns.ColumnExtraInfo.Number.Unsigned',
-                defaultMessage: '无符号',
+                defaultMessage: '无符号'
               }), //无符号
-              value: 'unsigned',
+              value: 'unsigned'
             },
 
             {
               label: formatMessage({
                 id: 'odc.Columns.ColumnExtraInfo.Number.FillZero',
-                defaultMessage: '填充零',
+                defaultMessage: '填充零'
               }), //填充零
-              value: 'zerofill',
-            },
+              value: 'zerofill'
+            }
           ]}
         />
       </Form.Item>

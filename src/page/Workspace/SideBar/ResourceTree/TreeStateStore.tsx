@@ -28,7 +28,7 @@ export type ITreeStateCache = Record<
 const TreeStateStore = React.createContext<{
   cache: ITreeStateCache;
 }>({
-  cache: {},
+  cache: {}
 });
 
 export default TreeStateStore;

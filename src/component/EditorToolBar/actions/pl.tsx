@@ -23,7 +23,7 @@ import {
   CheckOutlined,
   LogoutOutlined,
   RedoOutlined,
-  SaveOutlined,
+  SaveOutlined
 } from '@ant-design/icons';
 
 import { getDataSourceModeConfig } from '@/common/datasource';
@@ -38,9 +38,11 @@ import { ConnectionMode } from '@/d.ts';
 const { confirm } = Modal;
 
 export const getStatus = (ctx: PLPage) => {
-  const plEdit = getDataSourceModeConfig(ctx.getSession?.()?.connection?.type)?.features?.plEdit;
+  const plEdit = getDataSourceModeConfig(ctx.getSession?.()?.connection?.type)
+    ?.features?.plEdit;
   const plSchema = ctx.getFormatPLSchema && ctx.getFormatPLSchema();
-  return [plType.PROCEDURE, plType.FUNCTION].includes(plSchema?.plType) && !plEdit
+  return [plType.PROCEDURE, plType.FUNCTION].includes(plSchema?.plType) &&
+    !plEdit
     ? IConStatus.DISABLE
     : IConStatus.INIT;
 };
@@ -50,7 +52,7 @@ const plActions: ToolBarActions = {
     isShowText: true,
     name: formatMessage({
       id: 'odc.EditorToolBar.actions.pl.ConfirmModification',
-      defaultMessage: '确认修改',
+      defaultMessage: '确认修改'
     }),
     icon: CheckOutlined,
     statusFunc: (ctx: PLPage, hasChangeEditorValue) => {
@@ -58,20 +60,23 @@ const plActions: ToolBarActions = {
       if (!hasChangeEditorValue) return IConStatus.DISABLE;
       return getStatus(ctx);
     },
-    action: debounce(async (ctx: any, databaseType?: String, editorValue?: String) => {
-      switch (databaseType) {
-        case (ConnectionMode.MYSQL, ConnectionMode.OB_MYSQL):
-          return await ctx.savePL(null, true, editorValue);
-        default:
-          return await ctx.savePL();
-      }
-    }, 300),
+    action: debounce(
+      async (ctx: any, databaseType?: String, editorValue?: String) => {
+        switch (databaseType) {
+          case (ConnectionMode.MYSQL, ConnectionMode.OB_MYSQL):
+            return await ctx.savePL(null, true, editorValue);
+          default:
+            return await ctx.savePL();
+        }
+      },
+      300
+    )
   },
 
   PL_TRIGGER_TYPE_SAVE: {
     name: formatMessage({
       id: 'odc.EditorToolBar.actions.pl.ConfirmModification',
-      defaultMessage: '确认修改',
+      defaultMessage: '确认修改'
     }),
     type: 'BUTTON_PRIMARY',
     statusFunc: (ctx: PLPage) => {
@@ -84,13 +89,13 @@ const plActions: ToolBarActions = {
     },
     action: debounce(async (ctx: any) => {
       ctx.savePL();
-    }, 300),
+    }, 300)
   },
 
   PL_SCRIPT_SAVE: {
     name: formatMessage({
       id: 'odc.component.SaveSQLModal.SaveScript',
-      defaultMessage: '保存脚本',
+      defaultMessage: '保存脚本'
     }),
     icon: SaveOutlined,
     statusFunc: (ctx) => {
@@ -102,14 +107,20 @@ const plActions: ToolBarActions = {
     },
     async action(ctx: any) {
       ctx.saveScript();
-    },
+    }
   },
 
   PL_COMPILE: {
-    name: formatMessage({ id: 'odc.EditorToolBar.actions.pl.Compile', defaultMessage: '编译' }),
+    name: formatMessage({
+      id: 'odc.EditorToolBar.actions.pl.Compile',
+      defaultMessage: '编译'
+    }),
     icon: 'PL_COMPILE',
     statusFunc: (ctx) => {
-      if (sqlStore.runningPageKey.has(ctx.props.pageKey) && sqlStore.isCompiling) {
+      if (
+        sqlStore.runningPageKey.has(ctx.props.pageKey) &&
+        sqlStore.isCompiling
+      ) {
         return IConStatus.RUNNING;
       }
       return IConStatus.INIT;
@@ -117,8 +128,9 @@ const plActions: ToolBarActions = {
     // 非匿名块编译才展现
     isVisible(ctx: PLPage) {
       const plSchema = ctx.getFormatPLSchema();
-      const isDisable = !getDataSourceModeConfig(ctx.getSession()?.connection.type)?.features
-        ?.compile;
+      const isDisable = !getDataSourceModeConfig(
+        ctx.getSession()?.connection.type
+      )?.features?.compile;
       if (isDisable) {
         return false;
       }
@@ -130,7 +142,8 @@ const plActions: ToolBarActions = {
       }
       if (
         plSchema.packageName &&
-        (plSchema.plType == plType.FUNCTION || plSchema.plType == plType.PROCEDURE)
+        (plSchema.plType == plType.FUNCTION ||
+          plSchema.plType == plType.PROCEDURE)
       ) {
         /**
          * 程序包的子程序禁用编译
@@ -157,8 +170,8 @@ const plActions: ToolBarActions = {
         message.warning(
           formatMessage({
             id: 'odc.EditorToolBar.actions.pl.ThereAreUnsavedContentsPlease',
-            defaultMessage: '存在未保存的内容，请先确认修改',
-          }),
+            defaultMessage: '存在未保存的内容，请先确认修改'
+          })
         );
         return;
       }
@@ -173,13 +186,13 @@ const plActions: ToolBarActions = {
           type: 'COMPILE',
           status: 'RUNNING',
           startTime: Date.now(),
-          endTime: null,
-        },
+          endTime: null
+        }
       });
 
       const r = {
         type: '',
-        data: null,
+        data: null
       };
 
       const compilePlName = plSchema.packageName || plName;
@@ -188,12 +201,12 @@ const plActions: ToolBarActions = {
         compilePlName,
         compilePlType,
         ctx?.getSession()?.sessionId,
-        ctx?.getSession()?.database?.dbName,
+        ctx?.getSession()?.database?.dbName
       );
       if (res) {
         (r.type = 'COMPILE'),
           (r.data = {
-            COMPILE: res,
+            COMPILE: res
           });
       }
       sqlStore.runningPageKey.delete(pageKey);
@@ -202,20 +215,26 @@ const plActions: ToolBarActions = {
         statusBar: {
           ...ctx.state.statusBar,
           status: res && res?.status ? 'SUCCESS' : 'FAIL',
-          endTime: Date.now(),
+          endTime: Date.now()
         },
 
-        result: r as any,
+        result: r as any
       });
-    },
+    }
   },
 
   PL_EXEC: {
-    name: formatMessage({ id: 'odc.EditorToolBar.actions.pl.RunF', defaultMessage: '运行 F8' }),
+    name: formatMessage({
+      id: 'odc.EditorToolBar.actions.pl.RunF',
+      defaultMessage: '运行 F8'
+    }),
     icon: 'SQL_RUN',
     statusFunc: (ctx: PLPage) => {
       const { sqlStore } = ctx.props;
-      if (sqlStore.runningPageKey.has(ctx.props.pageKey) && !sqlStore.isCompiling) {
+      if (
+        sqlStore.runningPageKey.has(ctx.props.pageKey) &&
+        !sqlStore.isCompiling
+      ) {
         return IConStatus.RUNNING;
       }
       return IConStatus.INIT;
@@ -224,12 +243,15 @@ const plActions: ToolBarActions = {
       const plSchema = ctx.getFormatPLSchema();
       const isAnonymous = plSchema.plType === PLType.ANONYMOUSBLOCK;
       if (
-        !getDataSourceModeConfig(ctx.getSession()?.connection?.type)?.features?.plRun &&
+        !getDataSourceModeConfig(ctx.getSession()?.connection?.type)?.features
+          ?.plRun &&
         !isAnonymous
       ) {
         return false;
       }
-      return plSchema.plType != plType.PKG_HEAD && plSchema.plType != plType.PKG_BODY;
+      return (
+        plSchema.plType != plType.PKG_HEAD && plSchema.plType != plType.PKG_BODY
+      );
     },
     async action(ctx: PLPage) {
       const { pageStore, sqlStore } = ctx.props;
@@ -239,8 +261,8 @@ const plActions: ToolBarActions = {
         message.warning(
           formatMessage({
             id: 'odc.EditorToolBar.actions.pl.ThereAreUnsavedContentsPlease',
-            defaultMessage: '存在未保存的内容，请先确认修改',
-          }),
+            defaultMessage: '存在未保存的内容，请先确认修改'
+          })
         );
         return;
       }
@@ -252,26 +274,29 @@ const plActions: ToolBarActions = {
         const resParse = await sqlStore.parsePL(
           plSchema.ddl,
           ctx.getSession()?.sessionId,
-          ctx.getSession()?.database?.dbName,
+          ctx.getSession()?.database?.dbName
         );
         const { obDbObjectType } = resParse || {};
         if (obDbObjectType !== 'ANONYMOUS_BLOCK') {
           message.warning(
             formatMessage({
               id: 'odc.EditorToolBar.actions.pl.TheWindowContentDoesNot',
-              defaultMessage: '窗口内容不符合匿名块语法定义',
-            }),
+              defaultMessage: '窗口内容不符合匿名块语法定义'
+            })
           );
           return;
         }
       }
 
       await ctx.checkAndFillPLINParams('EXEC');
-    },
+    }
   },
 
   PL_DEBUG: {
-    name: formatMessage({ id: 'odc.EditorToolBar.actions.pl.Debugging', defaultMessage: '调试' }),
+    name: formatMessage({
+      id: 'odc.EditorToolBar.actions.pl.Debugging',
+      defaultMessage: '调试'
+    }),
     icon: BugOutlined,
     statusFunc: (ctx: PLPage) => {
       const { pageKey, debugStore } = ctx.props;
@@ -283,8 +308,9 @@ const plActions: ToolBarActions = {
     isVisible(ctx: PLPage) {
       const plSchema = ctx.getFormatPLSchema();
       return (
-        ![plType.PKG_HEAD, plType.PKG_BODY, plType.TRIGGER].includes(plSchema?.plType) &&
-        ctx.getSession()?.supportFeature.enablePLDebug
+        ![plType.PKG_HEAD, plType.PKG_BODY, plType.TRIGGER].includes(
+          plSchema?.plType
+        ) && ctx.getSession()?.supportFeature.enablePLDebug
       );
     },
     async action(ctx: PLPage) {
@@ -295,8 +321,8 @@ const plActions: ToolBarActions = {
         message.warning(
           formatMessage({
             id: 'odc.EditorToolBar.actions.pl.ThereAreUnsavedContentsPlease',
-            defaultMessage: '存在未保存的内容，请先确认修改',
-          }),
+            defaultMessage: '存在未保存的内容，请先确认修改'
+          })
         );
         return;
       }
@@ -308,28 +334,28 @@ const plActions: ToolBarActions = {
         const resParse = await sqlStore.parsePL(
           plSchema.ddl,
           ctx.getSession()?.sessionId,
-          ctx.getSession()?.database?.dbName,
+          ctx.getSession()?.database?.dbName
         );
         const { obDbObjectType } = resParse || {};
         if (obDbObjectType !== 'ANONYMOUS_BLOCK') {
           message.warning(
             formatMessage({
               id: 'odc.EditorToolBar.actions.pl.TheWindowContentDoesNot',
-              defaultMessage: '窗口内容不符合匿名块语法定义',
-            }),
+              defaultMessage: '窗口内容不符合匿名块语法定义'
+            })
           );
           return;
         }
       }
 
       await ctx.checkAndFillPLINParams('DEBUG');
-    },
+    }
   },
 
   PL_DEBUG_AUTO: {
     name: formatMessage({
       id: 'odc.EditorToolBar.actions.pl.BatchExecution',
-      defaultMessage: '批量执行',
+      defaultMessage: '批量执行'
     }),
     icon: 'PL_AUTO_RUN',
     statusFunc: (ctx: PLPage) => {
@@ -343,13 +369,15 @@ const plActions: ToolBarActions = {
     },
     async action(ctx: PLPage) {
       ctx.getDebug().executeResume();
-    },
+    }
   },
 
   PL_DEBUG_STEP_IN: {
     name:
-      formatMessage({ id: 'odc.EditorToolBar.actions.pl.Jump', defaultMessage: '跳入' }) +
-      ' Ctrl/Cmd + I',
+      formatMessage({
+        id: 'odc.EditorToolBar.actions.pl.Jump',
+        defaultMessage: '跳入'
+      }) + ' Ctrl/Cmd + I',
     icon: 'PL_STEP_IN',
     statusFunc: (ctx: PLPage) => {
       const debug = ctx.getDebug();
@@ -362,13 +390,15 @@ const plActions: ToolBarActions = {
     },
     async action(ctx: PLPage) {
       ctx.getDebug().executeSetpIn();
-    },
+    }
   },
 
   PL_DEBUG_STEP_OUT: {
     name:
-      formatMessage({ id: 'odc.EditorToolBar.actions.pl.JumpOut', defaultMessage: '跳出' }) +
-      ' Ctrl/Cmd + O',
+      formatMessage({
+        id: 'odc.EditorToolBar.actions.pl.JumpOut',
+        defaultMessage: '跳出'
+      }) + ' Ctrl/Cmd + O',
     icon: 'PL_STEP_OUT',
     statusFunc: (ctx: PLPage) => {
       const debug = ctx.getDebug();
@@ -381,14 +411,14 @@ const plActions: ToolBarActions = {
     },
     async action(ctx: PLPage) {
       ctx.getDebug().executeStepOut();
-    },
+    }
   },
 
   PL_DEBUG_STEP_SKIP: {
     name:
       formatMessage({
         id: 'odc.EditorToolBar.actions.pl.SingleStepExecution',
-        defaultMessage: '单步执行',
+        defaultMessage: '单步执行'
       }) + ' Ctrl/Cmd + P',
     icon: 'PL_STEP_SKIP',
     statusFunc: (ctx: PLPage) => {
@@ -402,13 +432,13 @@ const plActions: ToolBarActions = {
     },
     async action(ctx: PLPage) {
       ctx.getDebug().executeStepOver();
-    },
+    }
   },
 
   PL_DEBUG_END: {
     name: formatMessage({
       id: 'odc.EditorToolBar.actions.pl.TerminateDebugging',
-      defaultMessage: '终止调试',
+      defaultMessage: '终止调试'
     }),
     icon: 'SQL_STOP',
     statusFunc: (ctx: PLPage) => {
@@ -422,12 +452,15 @@ const plActions: ToolBarActions = {
     },
     async action(ctx: PLPage) {
       ctx.getDebug().executeExit();
-    },
+    }
   },
 
   PL_DEBUG_RETRY: {
     isShowText: true,
-    name: formatMessage({ id: 'odc.EditorToolBar.actions.pl.ReDebug', defaultMessage: '重新调试' }),
+    name: formatMessage({
+      id: 'odc.EditorToolBar.actions.pl.ReDebug',
+      defaultMessage: '重新调试'
+    }),
     statusFunc: (ctx: PLPage) => {
       const debug = ctx.getDebug();
       if (debug.status === DebugStatus.RECOVER) {
@@ -445,20 +478,20 @@ const plActions: ToolBarActions = {
       confirm({
         title: formatMessage({
           id: 'odc.EditorToolBar.actions.pl.AreYouSureToRe',
-          defaultMessage: '是否确定重新调试？',
+          defaultMessage: '是否确定重新调试？'
         }),
         async onOk() {
           await ctx.checkAndFillPLINParams('DEBUG');
-        },
+        }
       });
-    },
+    }
   },
 
   PL_DEBUG_EXIT: {
     isShowText: true,
     name: formatMessage({
       id: 'odc.EditorToolBar.actions.pl.ExitDebugging',
-      defaultMessage: '退出调试',
+      defaultMessage: '退出调试'
     }),
     icon: LogoutOutlined,
 
@@ -480,18 +513,18 @@ const plActions: ToolBarActions = {
         currentDebugObj: {
           packageName: '',
           plName: '',
-          plType: null,
+          plType: null
         },
         result: {
           type: '',
-          data: null,
-        },
+          data: null
+        }
       });
       const codeEditor = ctx.editor;
       codeEditor.setValue(params.scriptText);
       ctx.clearBreakPoints();
       ctx.clearHighLightLine();
-    },
-  },
+    }
+  }
 };
 export default plActions;

@@ -60,19 +60,19 @@ const Activate: React.FC<IActivateFormProps> = ({
         callback(
           formatMessage({
             id: 'odc.component.Login.ActivateForm.ConfirmPasswordInconsistency',
-            defaultMessage: '确认密码不一致',
-          }), //确认密码不一致
+            defaultMessage: '确认密码不一致'
+          }) //确认密码不一致
         );
         return;
       }
       callback();
     },
-    [formRef],
+    [formRef]
   );
 
   const passwordRegexpRule = passwordRule || {
     pattern: PASSWORD_REGEX,
-    message: PASSWORD_VALIDATE_MESSAGE,
+    message: PASSWORD_VALIDATE_MESSAGE
   };
 
   return (
@@ -87,7 +87,7 @@ const Activate: React.FC<IActivateFormProps> = ({
         name="password"
         label={formatMessage({
           id: 'odc.component.Login.ActivateForm.Password',
-          defaultMessage: '密码',
+          defaultMessage: '密码'
         })} /*密码*/
         dependencies={['confirmPassword']}
         help={passwordRegexpRule.message}
@@ -97,10 +97,10 @@ const Activate: React.FC<IActivateFormProps> = ({
             required: true,
             message: formatMessage({
               id: 'odc.component.Login.ActivateForm.ThePasswordCannotBeEmpty',
-              defaultMessage: '密码不能为空',
-            }), //密码不能为空
+              defaultMessage: '密码不能为空'
+            }) //密码不能为空
           },
-          passwordRegexpRule,
+          passwordRegexpRule
         ]}
       >
         <Input.Password visibilityToggle={false} autoComplete="new-password" />
@@ -109,7 +109,7 @@ const Activate: React.FC<IActivateFormProps> = ({
         name="confirmPassword"
         label={formatMessage({
           id: 'odc.component.Login.ActivateForm.ConfirmPassword',
-          defaultMessage: '确认密码',
+          defaultMessage: '确认密码'
         })} /*确认密码*/
         dependencies={['password']}
         validateFirst
@@ -118,12 +118,12 @@ const Activate: React.FC<IActivateFormProps> = ({
             required: true,
             message: formatMessage({
               id: 'odc.component.Login.ActivateForm.PleaseEnterThePasswordAgain',
-              defaultMessage: '请再次输入密码',
-            }), //请再次输入密码
+              defaultMessage: '请再次输入密码'
+            }) //请再次输入密码
           },
           {
-            validator: handleValidateConfirmPassword,
-          },
+            validator: handleValidateConfirmPassword
+          }
         ]}
       >
         <Input.Password visibilityToggle={false} autoComplete="new-password" />
@@ -139,7 +139,7 @@ const Activate: React.FC<IActivateFormProps> = ({
         {
           formatMessage({
             id: 'odc.component.Login.ActivateForm.Activate',
-            defaultMessage: '激活',
+            defaultMessage: '激活'
           }) /*激活*/
         }
       </Button>
@@ -148,13 +148,18 @@ const Activate: React.FC<IActivateFormProps> = ({
           {
             formatMessage({
               id: 'odc.component.Login.ActivateForm.ReturnToThePreviousStep',
-              defaultMessage: '返回上一步',
+              defaultMessage: '返回上一步'
             }) /*返回上一步*/
           }
         </Button>
       </div>
       {errorMessage && (
-        <Alert type="error" showIcon={true} className={`${prefix}-alert`} message={errorMessage} />
+        <Alert
+          type="error"
+          showIcon={true}
+          className={`${prefix}-alert`}
+          message={errorMessage}
+        />
       )}
     </Form>
   );

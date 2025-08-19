@@ -6,14 +6,14 @@ const CloudStorageConfig: IDataSourceModeConfig = {
   isFileSystem: true,
   connection: {
     address: {
-      items: ['ip'],
+      items: ['ip']
     },
     account: false,
     sys: false,
     ssl: false,
     disableURLParse: true,
     cloudStorage: true,
-    disableExtraConfig: true,
+    disableExtraConfig: true
   },
   features: {
     task: [TaskType.DATA_ARCHIVE],
@@ -26,23 +26,23 @@ const CloudStorageConfig: IDataSourceModeConfig = {
     groupResourceTree: false,
     export: {
       fileLimit: false,
-      snapshot: false,
-    },
-  },
+      snapshot: false
+    }
+  }
 };
 
 const ALIYUN: Record<ConnectType.OSS, IDataSourceModeConfig> = {
-  [ConnectType.OSS]: CloudStorageConfig,
+  [ConnectType.OSS]: CloudStorageConfig
 };
 const AWSS3: Record<ConnectType.S3A, IDataSourceModeConfig> = {
-  [ConnectType.S3A]: CloudStorageConfig,
+  [ConnectType.S3A]: CloudStorageConfig
 };
 
 const HUAWEI: Record<ConnectType.OBS, IDataSourceModeConfig> = {
-  [ConnectType.OBS]: CloudStorageConfig,
+  [ConnectType.OBS]: CloudStorageConfig
 };
 
 const QCLOUD: Record<ConnectType.COS, IDataSourceModeConfig> = {
-  [ConnectType.COS]: CloudStorageConfig,
+  [ConnectType.COS]: CloudStorageConfig
 };
 export default { ALIYUN, AWSS3, HUAWEI, QCLOUD };

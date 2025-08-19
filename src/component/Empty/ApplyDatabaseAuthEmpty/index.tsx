@@ -15,7 +15,7 @@ export function ApplyDatabaseAuthEmpty({ description }: IProps) {
         description ||
         formatMessage({
           id: 'src.component.Empty.ApplyDatabaseAuthEmpty.018D078A',
-          defaultMessage: '项目内暂无数据库，请联系管理员',
+          defaultMessage: '项目内暂无数据库，请联系管理员'
         })
       }
     />

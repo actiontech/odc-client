@@ -22,7 +22,7 @@ import {
   ISQLExecuteDetail,
   ISQLExplain,
   ISQLExplainTreeNode,
-  TraceSpan,
+  TraceSpan
 } from '@/d.ts';
 import setting from '@/store/setting';
 import { uploadFileToOSS } from '@/util/aliyun';
@@ -44,11 +44,13 @@ export async function uploadTableObject(file: File, sessionId: string) {
   if (setting.isUploadCloudStore) {
     return await uploadCloudTableObject(file, sessionId);
   }
-  const url = `/api/v2/datasource/sessions/${generateSessionSid(sessionId)}/upload`;
+  const url = `/api/v2/datasource/sessions/${generateSessionSid(
+    sessionId
+  )}/upload`;
   const form = new FormData();
   form.append('file', file);
   const res = await request.post(url, {
-    data: form,
+    data: form
   });
   return res?.data;
 }
@@ -61,27 +63,31 @@ export async function getSQLExecuteDetail(
   sql: string,
   tag?: string,
   sessionId?: string,
-  dbName?: string,
+  dbName?: string
 ): Promise<ISQLExecuteDetail> {
   const sid = generateDatabaseSid(dbName, sessionId);
   const result = await request.post(`/api/v1/diagnose/getExecDetail/${sid}`, {
     data: {
       sql,
-      tag,
-    },
+      tag
+    }
   });
   return result?.data;
 }
 
-export async function getSQLExplain(sql: string, sessionId, dbName): Promise<ISQLExplain | null> {
+export async function getSQLExplain(
+  sql: string,
+  sessionId,
+  dbName
+): Promise<ISQLExplain | null> {
   const sid = generateDatabaseSid(dbName, sessionId);
   const result = await request.post(`/api/v1/diagnose/explain/${sid}`, {
     data: {
-      sql,
+      sql
     },
     params: {
-      ignoreError: false,
-    },
+      ignoreError: false
+    }
   });
   const { data } = result;
   if (data) {
@@ -92,7 +98,7 @@ export async function getSQLExplain(sql: string, sessionId, dbName): Promise<ISQ
         outline: data.outline,
         originalText: data?.originalText,
         showFormatInfo: data?.showFormatInfo,
-        graph: data?.graph,
+        graph: data?.graph
       };
     }
     return {
@@ -100,7 +106,7 @@ export async function getSQLExplain(sql: string, sessionId, dbName): Promise<ISQ
       outline: data.outline,
       originalText: data?.originalText,
       showFormatInfo: data?.showFormatInfo,
-      graph: data?.graph,
+      graph: data?.graph
     };
   }
   return null;
@@ -109,16 +115,16 @@ export async function getSQLExplain(sql: string, sessionId, dbName): Promise<ISQ
 export async function getSQLExecuteProfile(
   tag: string,
   sessionId,
-  dbName,
+  dbName
 ): Promise<ISQLExplain | null> {
   const sid = generateDatabaseSid(dbName, sessionId);
   const result = await request.post(`/api/v1/diagnose/getQueryProfile/${sid}`, {
     data: {
-      tag,
+      tag
     },
     params: {
-      ignoreError: false,
-    },
+      ignoreError: false
+    }
   });
   const { data } = result;
   if (data) {
@@ -128,7 +134,7 @@ export async function getSQLExecuteProfile(
         outline: data.outline,
         originalText: data?.originalText,
         showFormatInfo: data?.showFormatInfo,
-        graph: data?.graph,
+        graph: data?.graph
       };
     }
   }
@@ -138,7 +144,7 @@ function formatSQLExplainTree(data: any): ISQLExplainTreeNode {
   const formatted: ISQLExplainTreeNode = {
     ...data,
     rowCount: Number(data.rowCount),
-    cost: Number(data.cost),
+    cost: Number(data.cost)
   };
   const children: ISQLExplainTreeNode[] = [];
 
@@ -157,24 +163,24 @@ export async function getSQLExecuteExplain(
   sql: string,
   tag?: string,
   sessionId?: string,
-  dbName?: string,
+  dbName?: string
 ): Promise<ISQLExplain | string | null> {
   const sid = generateDatabaseSid(dbName, sessionId);
   const result = await request.post(`/api/v1/diagnose/getExecExplain/${sid}`, {
     data: {
       sql,
-      tag,
+      tag
     },
     params: {
-      ignoreError: true,
-    },
+      ignoreError: true
+    }
   });
   if (result?.data?.expTree) {
     // 需要预处理成标准树形结构
     return {
       tree: [formatSQLExplainTree(JSON.parse(result.data.expTree))],
       outline: result.data.outline,
-      originalText: result.data.originalText,
+      originalText: result.data.originalText
     };
   }
 
@@ -198,7 +204,7 @@ export async function getFullLinkTrace(
     type: string;
     desc: string;
     queryList: number;
-  }>,
+  }>
 ): Promise<
   Partial<{
     data: TraceSpan;
@@ -206,7 +212,7 @@ export async function getFullLinkTrace(
 > {
   const sid = generateDatabaseSid(dbName, sessionId);
   const res = request.post(`/api/v1/diagnose/getFullLinkTrace/${sid}`, {
-    data,
+    data
   });
   return res;
 }
@@ -228,18 +234,21 @@ export async function getFullLinkTraceDownloadUrl(
     type: string;
     desc: string;
     queryList: number;
-  }>,
+  }>
 ): Promise<string> {
   const sid = generateDatabaseSid(dbName, sessionId);
-  const res = await request.post(`/api/v1/diagnose/getFullLinkTraceDownloadUrl/${sid}`, {
-    data,
-  });
+  const res = await request.post(
+    `/api/v1/diagnose/getFullLinkTraceDownloadUrl/${sid}`,
+    {
+      data
+    }
+  );
   return res?.data;
 }
 export enum IDataFormmater {
   TEXT = 'TXT',
   HEX = 'HEX',
-  Stream = 'Stream',
+  Stream = 'Stream'
 }
 
 export async function fetchResultCache(
@@ -250,19 +259,22 @@ export async function fetchResultCache(
   sessionId: string,
   maxSizeKB: number = 2048,
   skip: number = 0,
-  dbName: string,
+  dbName: string
 ) {
   const res = await request.get(
-    `/api/v2/datasource/sessions/${generateDatabaseSid(dbName, sessionId)}/sqls/${sqlId}/content`,
+    `/api/v2/datasource/sessions/${generateDatabaseSid(
+      dbName,
+      sessionId
+    )}/sqls/${sqlId}/content`,
     {
       params: {
         row: rowNum,
         col: colNum,
         len: maxSizeKB,
         format,
-        skip,
-      },
-    },
+        skip
+      }
+    }
   );
   return res?.data;
 }
@@ -280,7 +292,7 @@ export async function exportResultSet(
   sessionId: string,
   saveSql: boolean,
   maxRows: number,
-  schemaName: string,
+  schemaName: string
 ): Promise<{
   stopTask: () => void;
   task: Promise<string>;
@@ -295,8 +307,8 @@ export async function exportResultSet(
       csvFormat,
       fileName,
       maxRows,
-      saveSql,
-    },
+      saveSql
+    }
   });
   const taskId = res?.data?.taskId;
   if (!taskId) {
@@ -311,8 +323,8 @@ export async function exportResultSet(
     }
     const res = await request.get(`/api/v2/resultset/export/query`, {
       params: {
-        taskId,
-      },
+        taskId
+      }
     });
     if (isStop) {
       resolve(null);
@@ -331,7 +343,7 @@ export async function exportResultSet(
       case 'FAILURE': {
         notification.error({
           track: res?.data?.errorMessage,
-          requestId: res?.requestId,
+          requestId: res?.requestId
         });
         resolve(null);
         return;
@@ -348,23 +360,23 @@ export async function exportResultSet(
     },
     task: new Promise((resolve) => {
       getDownloadUrl(resolve);
-    }),
+    })
   };
 }
 
 export async function runSQLLint(
   sessionId: string,
   delimiter: string,
-  scriptContent: string,
+  scriptContent: string
 ): Promise<{ checkResults: ISQLLintReuslt[]; affectedRows: number }> {
   const res = await request.post(
     `/api/v2/datasource/sessions/${generateSessionSid(sessionId)}/sqlCheck`,
     {
       data: {
         delimiter,
-        scriptContent,
-      },
-    },
+        scriptContent
+      }
+    }
   );
   return res?.data;
 }
@@ -374,7 +386,7 @@ export async function runMultipleSQLLint(
     delimiter: string;
     scriptContent: string;
   },
-  currentOrganizationId: string,
+  currentOrganizationId: string
 ): Promise<
   {
     checkResultList: ISQLLintReuslt[];
@@ -384,8 +396,8 @@ export async function runMultipleSQLLint(
   const res = await request.post(`/api/v2/datasource/sessions/sqlCheck`, {
     data,
     params: {
-      currentOrganizationId,
-    },
+      currentOrganizationId
+    }
   });
   return res?.data?.contents;
 }

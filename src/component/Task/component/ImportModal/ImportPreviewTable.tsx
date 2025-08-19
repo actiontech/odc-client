@@ -5,9 +5,17 @@ import {
   IImportDatabaseView,
   IImportScheduleTaskView,
   ScheduleNonImportableType,
-  ScheduleNonImportableTypeMap,
+  ScheduleNonImportableTypeMap
 } from '@/d.ts/importTask';
-import { Tooltip, Popover, Table, Descriptions, Typography, Empty, Radio } from 'antd';
+import {
+  Tooltip,
+  Popover,
+  Table,
+  Descriptions,
+  Typography,
+  Empty,
+  Radio
+} from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { TaskType } from '@/d.ts';
 import { ConnectTypeText } from '@/constant/label';
@@ -23,16 +31,20 @@ interface ImportPreviewTableProps {
   taskType: TaskType;
 }
 
-const ImportPreviewTable: React.FC<ImportPreviewTableProps> = ({ data, loading, taskType }) => {
-  const [tableType, setTableType] = useState<ScheduleNonImportableType | 'importable'>(
-    'importable',
-  );
+const ImportPreviewTable: React.FC<ImportPreviewTableProps> = ({
+  data,
+  loading,
+  taskType
+}) => {
+  const [tableType, setTableType] = useState<
+    ScheduleNonImportableType | 'importable'
+  >('importable');
 
   const DatabaseInfoPopover = ({
     title,
     value,
     width,
-    children,
+    children
   }: {
     title: string;
     value: IImportDatabaseView;
@@ -44,94 +56,101 @@ const ImportPreviewTable: React.FC<ImportPreviewTableProps> = ({ data, loading, 
         key: 'datasource',
         label: formatMessage({
           id: 'src.component.Task.component.ImportModal.A8BC98CA',
-          defaultMessage: '数据源',
+          defaultMessage: '数据源'
         }),
-        children: value?.name,
+        children: value?.name
       },
       {
         key: 'databaseName',
         label: formatMessage({
           id: 'src.component.Task.component.ImportModal.0B1F9DCD',
-          defaultMessage: '数据库',
+          defaultMessage: '数据库'
         }),
-        children: value?.databaseName,
+        children: value?.databaseName
       },
       {
         key: 'type',
         label: formatMessage({
           id: 'src.component.Task.component.ImportModal.263EFA83',
-          defaultMessage: '类型',
+          defaultMessage: '类型'
         }),
         children: (
           <div style={{ display: 'flex', gap: 6 }}>
             <Icon
               style={{
-                color: getDataSourceStyleByConnectType(value?.type)?.icon?.color,
-                fontSize: 16,
+                color: getDataSourceStyleByConnectType(value?.type)?.icon
+                  ?.color,
+                fontSize: 16
               }}
-              component={getDataSourceStyleByConnectType(value?.type)?.icon?.component}
+              component={
+                getDataSourceStyleByConnectType(value?.type)?.icon?.component
+              }
             />
 
             {ConnectTypeText(value?.type)}
           </div>
-        ),
+        )
       },
       {
         key: 'cloudProvider',
         label: formatMessage({
           id: 'src.component.Task.component.ImportModal.40440087',
-          defaultMessage: '云厂商',
+          defaultMessage: '云厂商'
         }),
         children: (
           <div style={{ display: 'flex', gap: 6 }}>
-            {getCloudProviderName(fromODCPRoviderToProvider[value?.cloudProvider]) || '-'}
+            {getCloudProviderName(
+              fromODCPRoviderToProvider[value?.cloudProvider]
+            ) || '-'}
           </div>
-        ),
+        )
       },
       {
         key: 'region',
         label: formatMessage({
           id: 'src.component.Task.component.ImportModal.F2C95E45',
-          defaultMessage: '地域',
+          defaultMessage: '地域'
         }),
-        children: <div style={{ display: 'flex', gap: 6 }}>{value?.region || '-'}</div>,
+        children: (
+          <div style={{ display: 'flex', gap: 6 }}>{value?.region || '-'}</div>
+        )
       },
       {
         key: 'host',
         label: formatMessage({
           id: 'src.component.Task.component.ImportModal.EFE4E0D0',
-          defaultMessage: '连接信息',
+          defaultMessage: '连接信息'
         }),
         children: (
           <Tooltip title={`${value?.host}:${value?.port}`}>
             {value?.host}:{value?.port}
           </Tooltip>
-        ),
+        )
       },
       {
         key: 'instanceNickName',
         label: formatMessage({
           id: 'src.component.Task.component.ImportModal.4A911A47',
-          defaultMessage: '实例名称',
+          defaultMessage: '实例名称'
         }),
-        children: value?.instanceNickName || value?.instanceId || '-',
+        children: value?.instanceNickName || value?.instanceId || '-'
       },
       {
         key: 'tenantNickName',
         label: formatMessage({
           id: 'src.component.Task.component.ImportModal.396EF2AD',
-          defaultMessage: '租户名称',
+          defaultMessage: '租户名称'
         }),
-        children: value?.tenantNickName || value?.tenantId || '-',
+        children: value?.tenantNickName || value?.tenantId || '-'
       },
       {
         key: 'username',
         label: formatMessage({
           id: 'src.component.Task.component.ImportModal.5928CAE8',
-          defaultMessage: '数据库账号',
+          defaultMessage: '数据库账号'
         }),
-        children: value?.username || '-',
-      },
+        children: value?.username || '-'
+      }
     ];
 
     return (
@@ -165,7 +184,7 @@ const ImportPreviewTable: React.FC<ImportPreviewTableProps> = ({ data, loading, 
     {
       title: formatMessage({
         id: 'src.component.Task.component.ImportModal.B4E8467F',
-        defaultMessage: '源端数据库',
+        defaultMessage: '源端数据库'
       }),
       dataIndex: 'databaseView',
       key: 'databaseView',
@@ -175,7 +194,7 @@ const ImportPreviewTable: React.FC<ImportPreviewTableProps> = ({ data, loading, 
           <DatabaseInfoPopover
             title={formatMessage({
               id: 'src.component.Task.component.ImportModal.50582618',
-              defaultMessage: '源端数据库',
+              defaultMessage: '源端数据库'
             })}
             value={_}
             width={286}
@@ -187,12 +206,12 @@ const ImportPreviewTable: React.FC<ImportPreviewTableProps> = ({ data, loading, 
         );
       },
       width: 200,
-      ellipsis: true,
+      ellipsis: true
     },
     {
       title: formatMessage({
         id: 'src.component.Task.component.ImportModal.76F572C8',
-        defaultMessage: '目标端数据库',
+        defaultMessage: '目标端数据库'
       }),
       dataIndex: 'targetDatabaseView',
       key: 'targetDatabaseView',
@@ -202,7 +221,7 @@ const ImportPreviewTable: React.FC<ImportPreviewTableProps> = ({ data, loading, 
           <DatabaseInfoPopover
             title={formatMessage({
               id: 'src.component.Task.component.ImportModal.776397D6',
-              defaultMessage: '目标端数据库',
+              defaultMessage: '目标端数据库'
             })}
             value={_}
             width={286}
@@ -214,27 +233,27 @@ const ImportPreviewTable: React.FC<ImportPreviewTableProps> = ({ data, loading, 
         );
       },
       width: 200,
-      ellipsis: true,
-    },
+      ellipsis: true
+    }
   ];
 
   const otherScheduleColumns = [
     {
       title: formatMessage({
         id: 'src.component.Task.component.ImportModal.B5C62BDC',
-        defaultMessage: '工单描述',
+        defaultMessage: '工单描述'
       }),
       dataIndex: 'description',
       key: 'description',
       width: 340,
       render: (_, record) => {
         return _ || '-';
-      },
+      }
     },
     {
       title: formatMessage({
         id: 'src.component.Task.component.ImportModal.1EB75659',
-        defaultMessage: '数据库',
+        defaultMessage: '数据库'
       }),
       dataIndex: 'databaseView',
       key: 'databaseView',
@@ -245,7 +264,7 @@ const ImportPreviewTable: React.FC<ImportPreviewTableProps> = ({ data, loading, 
           <DatabaseInfoPopover
             title={formatMessage({
               id: 'src.component.Task.component.ImportModal.8D781AC2',
-              defaultMessage: '数据库',
+              defaultMessage: '数据库'
             })}
             value={_}
             width={286}
@@ -257,52 +276,62 @@ const ImportPreviewTable: React.FC<ImportPreviewTableProps> = ({ data, loading, 
         );
       },
       width: 200,
-      ellipsis: true,
-    },
+      ellipsis: true
+    }
   ];
 
   const columns: ColumnsType<IImportScheduleTaskView> = [
     {
       title: formatMessage({
         id: 'src.component.Task.component.ImportModal.5DE578E8',
-        defaultMessage: '原编号',
+        defaultMessage: '原编号'
       }),
       dataIndex: 'originId',
       key: 'originId',
-      width: 100,
+      width: 100
     },
     {
       title: formatMessage({
         id: 'src.component.Task.component.ImportModal.2043ADA9',
-        defaultMessage: '原项目',
+        defaultMessage: '原项目'
       }),
       dataIndex: 'originProjectName',
       key: 'originProjectName',
       width: 100,
       render: (_) => {
         return _ || '-';
-      },
+      }
     },
     // 数据清理/归档有源端目标端, 分区计划和sql计划只有数据库
-    ...([TaskType.DATA_ARCHIVE, TaskType.DATA_DELETE]?.includes(taskType) ? dlmColumns : []),
+    ...([TaskType.DATA_ARCHIVE, TaskType.DATA_DELETE]?.includes(taskType)
+      ? dlmColumns
+      : []),
     ...([TaskType.SQL_PLAN, TaskType.PARTITION_PLAN]?.includes(taskType)
       ? otherScheduleColumns
-      : []),
+      : [])
   ]?.filter(Boolean);
 
   const groupedData = useMemo(() => {
     return data.reduce(
       (
-        acc: Record<ScheduleNonImportableType | 'importable', IImportScheduleTaskView[]>,
+        acc: Record<
+          ScheduleNonImportableType | 'importable',
+          IImportScheduleTaskView[]
+        >,
 
-        item,
+        item
       ) => {
-        const groupKey = item.importable ? 'importable' : item.nonImportableType;
+        const groupKey = item.importable
+          ? 'importable'
+          : item.nonImportableType;
         acc[groupKey] = acc[groupKey] || [];
         acc[groupKey].push(item);
         return acc;
       },
-      {} as Record<ScheduleNonImportableType | 'importable', IImportScheduleTaskView[]>,
+      {} as Record<
+        ScheduleNonImportableType | 'importable',
+        IImportScheduleTaskView[]
+      >
     );
   }, [data]);
 
@@ -319,7 +348,7 @@ const ImportPreviewTable: React.FC<ImportPreviewTableProps> = ({ data, loading, 
         <Empty
           description={formatMessage({
             id: 'src.component.Task.component.ImportModal.1BF95006',
-            defaultMessage: '暂无可导入的作业',
+            defaultMessage: '暂无可导入的作业'
           })}
           style={{ padding: 24 }}
         />
@@ -349,7 +378,7 @@ const ImportPreviewTable: React.FC<ImportPreviewTableProps> = ({ data, loading, 
           <Radio.Button value={'importable'} key={'importable'}>
             {formatMessage({
               id: 'src.component.Task.component.ImportModal.E8DE787E',
-              defaultMessage: '可导入',
+              defaultMessage: '可导入'
             })}
 
             <Typography.Text type="secondary" style={{ paddingLeft: 4 }}>

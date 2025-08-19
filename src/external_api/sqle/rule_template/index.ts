@@ -63,21 +63,38 @@ import {
   IGetRuleListV1Params,
   IGetRuleListV1Return,
   IGetCategoryStatisticsReturn,
-  IGetDriverRuleVersionTipsReturn,
+  IGetDriverRuleVersionTipsReturn
 } from './index.type';
 
 class RuleTemplateService extends ServiceBase {
-  public getCustomRulesV1(params: IGetCustomRulesV1Params, options?: AxiosRequestConfig) {
+  public getCustomRulesV1(
+    params: IGetCustomRulesV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
-    return this.get<IGetCustomRulesV1Return>('/v1/custom_rules', paramsData, options);
+    return this.get<IGetCustomRulesV1Return>(
+      '/v1/custom_rules',
+      paramsData,
+      options
+    );
   }
 
-  public createCustomRuleV1(params: ICreateCustomRuleV1Params, options?: AxiosRequestConfig) {
+  public createCustomRuleV1(
+    params: ICreateCustomRuleV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
-    return this.post<ICreateCustomRuleV1Return>('/v1/custom_rules', paramsData, options);
+    return this.post<ICreateCustomRuleV1Return>(
+      '/v1/custom_rules',
+      paramsData,
+      options
+    );
   }
 
-  public getRuleTypeByDBTypeV1(params: IGetRuleTypeByDBTypeV1Params, options?: AxiosRequestConfig) {
+  public getRuleTypeByDBTypeV1(
+    params: IGetRuleTypeByDBTypeV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const db_type = paramsData.db_type;
     delete paramsData.db_type;
@@ -85,19 +102,29 @@ class RuleTemplateService extends ServiceBase {
     return this.get<IGetRuleTypeByDBTypeV1Return>(
       `/v1/custom_rules/${db_type}/rule_types`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public getCustomRuleV1(params: IGetCustomRuleV1Params, options?: AxiosRequestConfig) {
+  public getCustomRuleV1(
+    params: IGetCustomRuleV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const rule_id = paramsData.rule_id;
     delete paramsData.rule_id;
 
-    return this.get<IGetCustomRuleV1Return>(`/v1/custom_rules/${rule_id}`, paramsData, options);
+    return this.get<IGetCustomRuleV1Return>(
+      `/v1/custom_rules/${rule_id}`,
+      paramsData,
+      options
+    );
   }
 
-  public deleteCustomRuleV1(params: IDeleteCustomRuleV1Params, options?: AxiosRequestConfig) {
+  public deleteCustomRuleV1(
+    params: IDeleteCustomRuleV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const rule_id = paramsData.rule_id;
     delete paramsData.rule_id;
@@ -105,11 +132,14 @@ class RuleTemplateService extends ServiceBase {
     return this.delete<IDeleteCustomRuleV1Return>(
       `/v1/custom_rules/${rule_id}`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public updateCustomRuleV1(params: IUpdateCustomRuleV1Params, options?: AxiosRequestConfig) {
+  public updateCustomRuleV1(
+    params: IUpdateCustomRuleV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const rule_id = paramsData.rule_id;
     delete paramsData.rule_id;
@@ -117,18 +147,21 @@ class RuleTemplateService extends ServiceBase {
     return this.patch<IUpdateCustomRuleV1Return>(
       `/v1/custom_rules/${rule_id}`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public getRuleTemplateFileV1(params: IGetRuleTemplateFileV1Params, options?: AxiosRequestConfig) {
+  public getRuleTemplateFileV1(
+    params: IGetRuleTemplateFileV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     return this.get<any>('/v1/import_rule_template', paramsData, options);
   }
 
   public getProjectRuleTemplateTipsV1(
     params: IGetProjectRuleTemplateTipsV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -137,13 +170,13 @@ class RuleTemplateService extends ServiceBase {
     return this.get<IGetProjectRuleTemplateTipsV1Return>(
       `/v1/projects/${project_name}/rule_template_tips`,
       paramsData,
-      options,
+      options
     );
   }
 
   public getProjectRuleTemplateListV1(
     params: IGetProjectRuleTemplateListV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -152,13 +185,13 @@ class RuleTemplateService extends ServiceBase {
     return this.get<IGetProjectRuleTemplateListV1Return>(
       `/v1/projects/${project_name}/rule_templates`,
       paramsData,
-      options,
+      options
     );
   }
 
   public createProjectRuleTemplateV1(
     params: ICreateProjectRuleTemplateV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -167,13 +200,13 @@ class RuleTemplateService extends ServiceBase {
     return this.post<ICreateProjectRuleTemplateV1Return>(
       `/v1/projects/${project_name}/rule_templates`,
       paramsData,
-      options,
+      options
     );
   }
 
   public getProjectRuleTemplateV1(
     params: IGetProjectRuleTemplateV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -185,13 +218,13 @@ class RuleTemplateService extends ServiceBase {
     return this.get<IGetProjectRuleTemplateV1Return>(
       `/v1/projects/${project_name}/rule_templates/${rule_template_name}/`,
       paramsData,
-      options,
+      options
     );
   }
 
   public deleteProjectRuleTemplateV1(
     params: IDeleteProjectRuleTemplateV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -203,13 +236,13 @@ class RuleTemplateService extends ServiceBase {
     return this.delete<IDeleteProjectRuleTemplateV1Return>(
       `/v1/projects/${project_name}/rule_templates/${rule_template_name}/`,
       paramsData,
-      options,
+      options
     );
   }
 
   public updateProjectRuleTemplateV1(
     params: IUpdateProjectRuleTemplateV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -221,13 +254,13 @@ class RuleTemplateService extends ServiceBase {
     return this.patch<IUpdateProjectRuleTemplateV1Return>(
       `/v1/projects/${project_name}/rule_templates/${rule_template_name}/`,
       paramsData,
-      options,
+      options
     );
   }
 
   public cloneProjectRuleTemplateV1(
     params: ICloneProjectRuleTemplateV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -239,13 +272,13 @@ class RuleTemplateService extends ServiceBase {
     return this.post<ICloneProjectRuleTemplateV1Return>(
       `/v1/projects/${project_name}/rule_templates/${rule_template_name}/clone`,
       paramsData,
-      options,
+      options
     );
   }
 
   public exportProjectRuleTemplateV1(
     params: IExportProjectRuleTemplateV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -257,13 +290,13 @@ class RuleTemplateService extends ServiceBase {
     return this.get<any>(
       `/v1/projects/${project_name}/rule_templates/${rule_template_name}/export`,
       paramsData,
-      options,
+      options
     );
   }
 
   public getCustomRuleKnowledgeV1(
     params: IGetCustomRuleKnowledgeV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const db_type = paramsData.db_type;
@@ -275,13 +308,13 @@ class RuleTemplateService extends ServiceBase {
     return this.get<IGetCustomRuleKnowledgeV1Return>(
       `/v1/rule_knowledge/db_types/${db_type}/custom_rules/${rule_name}/`,
       paramsData,
-      options,
+      options
     );
   }
 
   public updateCustomRuleKnowledge(
     params: IUpdateCustomRuleKnowledgeParams,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const db_type = paramsData.db_type;
@@ -293,11 +326,14 @@ class RuleTemplateService extends ServiceBase {
     return this.patch<IUpdateCustomRuleKnowledgeReturn>(
       `/v1/rule_knowledge/db_types/${db_type}/custom_rules/${rule_name}/`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public getRuleKnowledgeV1(params: IGetRuleKnowledgeV1Params, options?: AxiosRequestConfig) {
+  public getRuleKnowledgeV1(
+    params: IGetRuleKnowledgeV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const db_type = paramsData.db_type;
     delete paramsData.db_type;
@@ -308,11 +344,14 @@ class RuleTemplateService extends ServiceBase {
     return this.get<IGetRuleKnowledgeV1Return>(
       `/v1/rule_knowledge/db_types/${db_type}/rules/${rule_name}/`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public updateRuleKnowledge(params: IUpdateRuleKnowledgeParams, options?: AxiosRequestConfig) {
+  public updateRuleKnowledge(
+    params: IUpdateRuleKnowledgeParams,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const db_type = paramsData.db_type;
     delete paramsData.db_type;
@@ -323,35 +362,56 @@ class RuleTemplateService extends ServiceBase {
     return this.patch<IUpdateRuleKnowledgeReturn>(
       `/v1/rule_knowledge/db_types/${db_type}/rules/${rule_name}/`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public getRuleTemplateTipsV1(params: IGetRuleTemplateTipsV1Params, options?: AxiosRequestConfig) {
+  public getRuleTemplateTipsV1(
+    params: IGetRuleTemplateTipsV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
-    return this.get<IGetRuleTemplateTipsV1Return>('/v1/rule_template_tips', paramsData, options);
+    return this.get<IGetRuleTemplateTipsV1Return>(
+      '/v1/rule_template_tips',
+      paramsData,
+      options
+    );
   }
 
-  public getRuleTemplateListV1(params: IGetRuleTemplateListV1Params, options?: AxiosRequestConfig) {
+  public getRuleTemplateListV1(
+    params: IGetRuleTemplateListV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
-    return this.get<IGetRuleTemplateListV1Return>('/v1/rule_templates', paramsData, options);
+    return this.get<IGetRuleTemplateListV1Return>(
+      '/v1/rule_templates',
+      paramsData,
+      options
+    );
   }
 
-  public createRuleTemplateV1(params: ICreateRuleTemplateV1Params, options?: AxiosRequestConfig) {
+  public createRuleTemplateV1(
+    params: ICreateRuleTemplateV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
-    return this.post<ICreateRuleTemplateV1Return>('/v1/rule_templates', paramsData, options);
+    return this.post<ICreateRuleTemplateV1Return>(
+      '/v1/rule_templates',
+      paramsData,
+      options
+    );
   }
 
   public importProjectRuleTemplateV1(
     params: IImportProjectRuleTemplateV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const config = options || {};
     const headers = config.headers ? config.headers : {};
     config.headers = {
       ...headers,
 
-      'Content-Type': 'multipart/form-data',
+      'Content-Type': 'multipart/form-data'
     };
 
     const paramsData = new FormData();
@@ -367,11 +427,14 @@ class RuleTemplateService extends ServiceBase {
     return this.post<IImportProjectRuleTemplateV1Return>(
       '/v1/rule_templates/parse',
       paramsData,
-      config,
+      config
     );
   }
 
-  public getRuleTemplateV1(params: IGetRuleTemplateV1Params, options?: AxiosRequestConfig) {
+  public getRuleTemplateV1(
+    params: IGetRuleTemplateV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const rule_template_name = paramsData.rule_template_name;
     delete paramsData.rule_template_name;
@@ -379,11 +442,14 @@ class RuleTemplateService extends ServiceBase {
     return this.get<IGetRuleTemplateV1Return>(
       `/v1/rule_templates/${rule_template_name}/`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public deleteRuleTemplateV1(params: IDeleteRuleTemplateV1Params, options?: AxiosRequestConfig) {
+  public deleteRuleTemplateV1(
+    params: IDeleteRuleTemplateV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const rule_template_name = paramsData.rule_template_name;
     delete paramsData.rule_template_name;
@@ -391,11 +457,14 @@ class RuleTemplateService extends ServiceBase {
     return this.delete<IDeleteRuleTemplateV1Return>(
       `/v1/rule_templates/${rule_template_name}/`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public updateRuleTemplateV1(params: IUpdateRuleTemplateV1Params, options?: AxiosRequestConfig) {
+  public updateRuleTemplateV1(
+    params: IUpdateRuleTemplateV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const rule_template_name = paramsData.rule_template_name;
     delete paramsData.rule_template_name;
@@ -403,11 +472,14 @@ class RuleTemplateService extends ServiceBase {
     return this.patch<IUpdateRuleTemplateV1Return>(
       `/v1/rule_templates/${rule_template_name}/`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public CloneRuleTemplateV1(params: ICloneRuleTemplateV1Params, options?: AxiosRequestConfig) {
+  public CloneRuleTemplateV1(
+    params: ICloneRuleTemplateV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const rule_template_name = paramsData.rule_template_name;
     delete paramsData.rule_template_name;
@@ -415,19 +487,29 @@ class RuleTemplateService extends ServiceBase {
     return this.post<ICloneRuleTemplateV1Return>(
       `/v1/rule_templates/${rule_template_name}/clone`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public exportRuleTemplateV1(params: IExportRuleTemplateV1Params, options?: AxiosRequestConfig) {
+  public exportRuleTemplateV1(
+    params: IExportRuleTemplateV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const rule_template_name = paramsData.rule_template_name;
     delete paramsData.rule_template_name;
 
-    return this.get<any>(`/v1/rule_templates/${rule_template_name}/export`, paramsData, options);
+    return this.get<any>(
+      `/v1/rule_templates/${rule_template_name}/export`,
+      paramsData,
+      options
+    );
   }
 
-  public getRuleListV1(params: IGetRuleListV1Params, options?: AxiosRequestConfig) {
+  public getRuleListV1(
+    params: IGetRuleListV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     return this.get<IGetRuleListV1Return>('/v1/rules', paramsData, options);
   }
@@ -436,12 +518,16 @@ class RuleTemplateService extends ServiceBase {
     return this.get<IGetCategoryStatisticsReturn>(
       '/v1/rules/categoryStatistics',
       undefined,
-      options,
+      options
     );
   }
 
   public GetDriverRuleVersionTips(options?: AxiosRequestConfig) {
-    return this.get<IGetDriverRuleVersionTipsReturn>('/v1/rules_version_tips', undefined, options);
+    return this.get<IGetDriverRuleVersionTipsReturn>(
+      '/v1/rules_version_tips',
+      undefined,
+      options
+    );
   }
 }
 

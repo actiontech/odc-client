@@ -35,7 +35,7 @@ function SessionParam({ sessionId }: { sessionId: string }) {
           position: 'relative',
           display: 'flex',
           flexDirection: 'column',
-          height: '100%',
+          height: '100%'
         }}
       >
         <div style={{ flexGrow: 1 }}>

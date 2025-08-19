@@ -14,15 +14,21 @@
  * limitations under the License.
  */
 import { getDataSourceStyleByConnectType } from '@/common/datasource';
-import { skipPhysicalSqlExecute, stopPhysicalSqlExecute } from '@/common/network/logicalDatabase';
+import {
+  skipPhysicalSqlExecute,
+  stopPhysicalSqlExecute
+} from '@/common/network/logicalDatabase';
 import { getScheduleTaskDetail } from '@/common/network/task';
 import CommonTable from '@/component/CommonTable';
-import { CommonTableMode, ITableLoadOptions } from '@/component/CommonTable/interface';
+import {
+  CommonTableMode,
+  ITableLoadOptions
+} from '@/component/CommonTable/interface';
 import SearchFilter from '@/component/SearchFilter';
 import StatusLabel, {
   logicDBChangeTaskStatus,
   status,
-  subTaskStatus,
+  subTaskStatus
 } from '@/component/Task/component/Status';
 import DetailModal from '@/component/Task/DetailModal';
 import {
@@ -36,10 +42,13 @@ import {
   CycleTaskDetail,
   IDataArchiveJobParameters,
   IDataClearJobParameters,
-  ISqlPlayJobParameters,
+  ISqlPlayJobParameters
 } from '@/d.ts';
 
-import { ISchemaChangeRecord, SchemaChangeRecordStatus } from '@/d.ts/logicalDatabase';
+import {
+  ISchemaChangeRecord,
+  SchemaChangeRecordStatus
+} from '@/d.ts/logicalDatabase';
 import { formatMessage } from '@/util/intl';
 import { getFormatDateTime } from '@/util/utils';
 import Icon, { FilterOutlined, SearchOutlined } from '@ant-design/icons';
@@ -58,29 +67,29 @@ const TaskLabelMap = {
   [TaskType.DATA_ARCHIVE]: {
     [SubTaskType.DATA_ARCHIVE]: formatMessage({
       id: 'odc.component.CommonDetailModal.TaskExecuteRecord.DataArchiving',
-      defaultMessage: '数据归档',
+      defaultMessage: '数据归档'
     }), //数据归档
     [SubTaskType.DATA_ARCHIVE_ROLLBACK]: formatMessage({
       id: 'odc.component.CommonDetailModal.TaskExecuteRecord.Rollback',
-      defaultMessage: '回滚',
+      defaultMessage: '回滚'
     }), //回滚
     [SubTaskType.DATA_ARCHIVE_DELETE]: formatMessage({
       id: 'odc.component.CommonDetailModal.TaskExecuteRecord.SourceTableCleanup',
-      defaultMessage: '源表清理',
-    }), //源表清理
+      defaultMessage: '源表清理'
+    }) //源表清理
   },
   [TaskType.DATA_DELETE]: {
     [SubTaskType.DATA_DELETE]: formatMessage({
       id: 'odc.component.CommonDetailModal.TaskExecuteRecord.DataCleansing',
-      defaultMessage: '数据清理',
-    }), //数据清理
+      defaultMessage: '数据清理'
+    }) //数据清理
   },
   [TaskType.SQL_PLAN]: {
     [SubTaskType.ASYNC]: formatMessage({
       id: 'odc.component.CommonDetailModal.TaskExecuteRecord.DatabaseChanges',
-      defaultMessage: '数据库变更',
-    }), //数据库变更
-  },
+      defaultMessage: '数据库变更'
+    }) //数据库变更
+  }
 };
 
 const getStatusFilters = (isSubTask) => {
@@ -88,7 +97,7 @@ const getStatusFilters = (isSubTask) => {
   return Object.keys(statusMap).map((key) => {
     return {
       text: statusMap?.[key].text,
-      value: key,
+      value: key
     };
   });
 };
@@ -96,7 +105,7 @@ const getStatusFilters = (isSubTask) => {
 const getJobFilter = (taskType: TaskType) => {
   return Object.keys(TaskLabelMap[taskType])?.map((key) => ({
     text: TaskLabelMap[taskType][key],
-    value: key,
+    value: key
   }));
 };
 
@@ -109,12 +118,12 @@ const getLogicalDatabaseAsyncColumns = (params: {
     {
       title: formatMessage({
         id: 'src.component.Task.component.CommonDetailModal.7E35E39B',
-        defaultMessage: '执行数据库',
+        defaultMessage: '执行数据库'
       }),
       key: 'database',
       dataIndex: 'database',
       ellipsis: {
-        showTitle: true,
+        showTitle: true
       },
       filterDropdown: (props) => {
         return (
@@ -122,20 +131,24 @@ const getLogicalDatabaseAsyncColumns = (params: {
             {...props}
             placeholder={formatMessage({
               id: 'src.component.Task.component.CommonDetailModal.B77644B9',
-              defaultMessage: '请输入执行数据库名称',
+              defaultMessage: '请输入执行数据库名称'
             })}
           />
         );
       },
       filterIcon: (filtered) => (
-        <SearchOutlined style={{ color: filtered ? 'var(--icon-color-focus)' : undefined }} />
+        <SearchOutlined
+          style={{ color: filtered ? 'var(--icon-color-focus)' : undefined }}
+        />
       ),
 
       onFilter: (value, record) => {
         return record?.database?.name?.includes(value);
       },
       render: (_, record) => {
-        const icon = getDataSourceStyleByConnectType(record?.database?.dataSource?.type);
+        const icon = getDataSourceStyleByConnectType(
+          record?.database?.dataSource?.type
+        );
         return (
           <Space size={0}>
             <Space size={4}>
@@ -144,7 +157,7 @@ const getLogicalDatabaseAsyncColumns = (params: {
                 style={{
                   color: icon?.icon?.color,
                   fontSize: 16,
-                  marginRight: 4,
+                  marginRight: 4
                 }}
               />
 
@@ -152,12 +165,12 @@ const getLogicalDatabaseAsyncColumns = (params: {
             </Space>
           </Space>
         );
-      },
+      }
     },
     {
       title: formatMessage({
         id: 'src.component.Task.component.CommonDetailModal.B38FABC4',
-        defaultMessage: '数据源',
+        defaultMessage: '数据源'
       }),
       key: 'datasource',
       dataIndex: 'datasource',
@@ -170,23 +183,25 @@ const getLogicalDatabaseAsyncColumns = (params: {
             {...props}
             placeholder={formatMessage({
               id: 'src.component.Task.component.CommonDetailModal.EB0FAD1D',
-              defaultMessage: '请输入数据源名称',
+              defaultMessage: '请输入数据源名称'
             })}
           />
         );
       },
       filterIcon: (filtered) => (
-        <SearchOutlined style={{ color: filtered ? 'var(--icon-color-focus)' : undefined }} />
+        <SearchOutlined
+          style={{ color: filtered ? 'var(--icon-color-focus)' : undefined }}
+        />
       ),
 
       onFilter: (value, record) => {
         return record?.dataSource?.name?.includes(value);
-      },
+      }
     },
     {
       title: formatMessage({
         id: 'src.component.Task.component.CommonDetailModal.D5F9DCA0',
-        defaultMessage: '执行状态',
+        defaultMessage: '执行状态'
       }),
       key: 'status',
       dataIndex: 'status',
@@ -195,7 +210,8 @@ const getLogicalDatabaseAsyncColumns = (params: {
           <Space>
             {logicDBChangeTaskStatus[value]?.icon}
             <Space size={0}>
-              {logicDBChangeTaskStatus[value]?.text}({row?.completedSqlCount}/{row?.totalSqlCount})
+              {logicDBChangeTaskStatus[value]?.text}({row?.completedSqlCount}/
+              {row?.totalSqlCount})
             </Space>
           </Space>
         );
@@ -206,30 +222,38 @@ const getLogicalDatabaseAsyncColumns = (params: {
       filters: Object.entries(SchemaChangeRecordStatus).map(([key, value]) => {
         return {
           text: logicDBChangeTaskStatus[key]?.text,
-          value: key,
+          value: key
         };
-      }),
+      })
     },
     {
       title: formatMessage({
         id: 'src.component.Task.component.CommonDetailModal.13DCD7AB',
-        defaultMessage: '操作',
+        defaultMessage: '操作'
       }),
       key: 'operation',
       render: (value, record: ISchemaChangeRecord) => {
         return (
           <Space>
-            <Link onClick={() => params?.handleLogicalDatabaseAsyncModalOpen(record?.id)}>
+            <Link
+              onClick={() =>
+                params?.handleLogicalDatabaseAsyncModalOpen(record?.id)
+              }
+            >
               {formatMessage({
                 id: 'src.component.Task.component.CommonDetailModal.178F11D7',
-                defaultMessage: '查看',
+                defaultMessage: '查看'
               })}
             </Link>
             {record?.status === SchemaChangeRecordStatus.RUNNING && (
-              <Link onClick={() => params?.handleLogicalDatabaseTaskStop(record?.id)}>
+              <Link
+                onClick={() =>
+                  params?.handleLogicalDatabaseTaskStop(record?.id)
+                }
+              >
                 {formatMessage({
                   id: 'src.component.Task.component.CommonDetailModal.7EF67970',
-                  defaultMessage: '终止',
+                  defaultMessage: '终止'
                 })}
               </Link>
             )}
@@ -237,19 +261,23 @@ const getLogicalDatabaseAsyncColumns = (params: {
             {[
               SchemaChangeRecordStatus.FAILED,
               SchemaChangeRecordStatus.TERMINATED,
-              SchemaChangeRecordStatus.TERMINATE_FAILED,
+              SchemaChangeRecordStatus.TERMINATE_FAILED
             ]?.includes(record?.status) && (
-              <Link onClick={() => params?.handleLogicalDatabaseTaskSkip(record?.id)}>
+              <Link
+                onClick={() =>
+                  params?.handleLogicalDatabaseTaskSkip(record?.id)
+                }
+              >
                 {formatMessage({
                   id: 'src.component.Task.component.CommonDetailModal.88502ED7',
-                  defaultMessage: '跳过',
+                  defaultMessage: '跳过'
                 })}
               </Link>
             )}
           </Space>
         );
-      },
-    },
+      }
+    }
   ];
 };
 
@@ -259,8 +287,15 @@ const getConnectionColumns = (params: {
   >;
   showLog: boolean;
   onReloadList: () => void;
-  onDetailVisible: (task: TaskRecord<TaskRecordParameters>, visible: boolean) => void;
-  onLogVisible: (recordId: number, visible: boolean, status: SubTaskStatus) => void;
+  onDetailVisible: (
+    task: TaskRecord<TaskRecordParameters>,
+    visible: boolean
+  ) => void;
+  onLogVisible: (
+    recordId: number,
+    visible: boolean,
+    status: SubTaskStatus
+  ) => void;
   onExcecuteDetailVisible: (recordId: number, visible: boolean) => void;
   handleLogicalDatabaseTaskStop;
   handleLogicalDatabaseTaskSkip;
@@ -275,19 +310,19 @@ const getConnectionColumns = (params: {
     onExcecuteDetailVisible,
     handleLogicalDatabaseTaskStop,
     handleLogicalDatabaseTaskSkip,
-    handleLogicalDatabaseAsyncModalOpen,
+    handleLogicalDatabaseAsyncModalOpen
   } = params;
   const { id: taskId, type: taskType } = task;
   let showRollback = true;
   if (task.type === TaskType.DATA_ARCHIVE) {
-    showRollback = !(task as CycleTaskDetail<IDataArchiveJobParameters>).jobParameters
-      .deleteTemporaryTable;
+    showRollback = !(task as CycleTaskDetail<IDataArchiveJobParameters>)
+      .jobParameters.deleteTemporaryTable;
   }
   if (isLogicalDbChangeTask(taskType)) {
     return getLogicalDatabaseAsyncColumns({
       handleLogicalDatabaseTaskStop,
       handleLogicalDatabaseTaskSkip,
-      handleLogicalDatabaseAsyncModalOpen,
+      handleLogicalDatabaseAsyncModalOpen
     });
   }
   const jobFilter = getJobFilter(taskType);
@@ -298,45 +333,47 @@ const getConnectionColumns = (params: {
       dataIndex: 'id',
       title: formatMessage({
         id: 'odc.component.CommonDetailModal.TaskExecuteRecord.TaskNumber',
-        defaultMessage: '任务编号',
+        defaultMessage: '任务编号'
       }), //任务编号
       ellipsis: true,
-      width: 80,
+      width: 80
     },
 
     {
       dataIndex: 'jobGroup',
       title: formatMessage({
         id: 'odc.component.CommonDetailModal.TaskExecuteRecord.TaskType',
-        defaultMessage: '任务类型',
+        defaultMessage: '任务类型'
       }), //任务类型
       ellipsis: true,
       filterIcon: <FilterOutlined />,
       filters: jobFilter,
       onFilter: (value: string, record) => {
-        return isSqlPlan ? value === SubTaskType.ASYNC : value === record.jobGroup;
+        return isSqlPlan
+          ? value === SubTaskType.ASYNC
+          : value === record.jobGroup;
       },
       render: (jobGroup) => {
         return TaskLabelMap[taskType][isSqlPlan ? SubTaskType.ASYNC : jobGroup];
-      },
+      }
     },
 
     {
       dataIndex: 'createTime',
       title: formatMessage({
         id: 'odc.component.CommonDetailModal.TaskExecuteRecord.CreationTime',
-        defaultMessage: '创建时间',
+        defaultMessage: '创建时间'
       }), //创建时间
       ellipsis: true,
       width: 150,
-      render: (createTime) => getFormatDateTime(createTime),
+      render: (createTime) => getFormatDateTime(createTime)
     },
 
     {
       dataIndex: 'status',
       title: formatMessage({
         id: 'odc.component.CommonDetailModal.TaskExecuteRecord.TaskStatus',
-        defaultMessage: '任务状态',
+        defaultMessage: '任务状态'
       }), //任务状态
       ellipsis: true,
       width: 120,
@@ -354,14 +391,14 @@ const getConnectionColumns = (params: {
             progress={Math.floor(record.progressPercentage)}
           />
         );
-      },
+      }
     },
 
     {
       dataIndex: 'action',
       title: formatMessage({
         id: 'odc.component.CommonDetailModal.TaskExecuteRecord.Operation',
-        defaultMessage: '操作',
+        defaultMessage: '操作'
       }), //操作
       ellipsis: true,
       width: 210,
@@ -370,7 +407,9 @@ const getConnectionColumns = (params: {
           <TaskTools
             taskId={taskId}
             record={record}
-            showRollback={record?.jobGroup === SubTaskType.DATA_ARCHIVE && showRollback}
+            showRollback={
+              record?.jobGroup === SubTaskType.DATA_ARCHIVE && showRollback
+            }
             showLog={showLog}
             onReloadList={onReloadList}
             onDetailVisible={onDetailVisible}
@@ -378,8 +417,8 @@ const getConnectionColumns = (params: {
             onExcecuteDetailVisible={onExcecuteDetailVisible}
           />
         );
-      },
-    },
+      }
+    }
   ];
 };
 
@@ -396,15 +435,18 @@ const TaskExecuteRecord: React.FC<IProps> = (props) => {
   const [detailVisible, setDetailVisible] = useState(false);
   const [logVisible, setLogVisible] = useState(false);
   const [status, setStatus] = useState<SubTaskStatus>(null);
-  const [excecuteDetailVisible, setExcecuteDetailVisible] = useState<boolean>(false);
+  const [excecuteDetailVisible, setExcecuteDetailVisible] =
+    useState<boolean>(false);
   const tableRef = useRef();
   const taskId = task?.id;
-  const showLog = [TaskType.DATA_ARCHIVE, TaskType.DATA_DELETE]?.includes(task?.type);
+  const showLog = [TaskType.DATA_ARCHIVE, TaskType.DATA_DELETE]?.includes(
+    task?.type
+  );
   const [modalOpen, setModalOpen] = useState<boolean>(false);
 
   const handleDetailVisible = (
     task: TaskRecord<TaskRecordParameters>,
-    visible: boolean = false,
+    visible: boolean = false
   ) => {
     setDetailId(task?.id);
     setDetailVisible(visible);
@@ -426,7 +468,7 @@ const TaskExecuteRecord: React.FC<IProps> = (props) => {
   const handleLogVisible = (
     recordId: number,
     visible: boolean = false,
-    status: SubTaskStatus = null,
+    status: SubTaskStatus = null
   ) => {
     setLogVisible(visible);
     setDetailId(recordId);
@@ -437,7 +479,10 @@ const TaskExecuteRecord: React.FC<IProps> = (props) => {
     handleLogVisible(null);
   };
 
-  const handleExcecuteDetailVisible = (recordId: number, visible: boolean = false) => {
+  const handleExcecuteDetailVisible = (
+    recordId: number,
+    visible: boolean = false
+  ) => {
     setExcecuteDetailVisible(visible);
     setDetailId(recordId);
   };
@@ -455,40 +500,46 @@ const TaskExecuteRecord: React.FC<IProps> = (props) => {
   };
 
   const handleLogicalDatabaseTaskStop = async (detailId: number) => {
-    const res = await stopPhysicalSqlExecute(flowList?.contents?.[0]?.id, detailId);
+    const res = await stopPhysicalSqlExecute(
+      flowList?.contents?.[0]?.id,
+      detailId
+    );
     if (res) {
       message.success(
         formatMessage({
           id: 'src.component.Task.component.CommonDetailModal.1F689C8D',
-          defaultMessage: '正在尝试终止',
-        }),
+          defaultMessage: '正在尝试终止'
+        })
       );
     } else {
       message.warning(
         formatMessage({
           id: 'src.component.Task.component.CommonDetailModal.30E204EE',
-          defaultMessage: '当前任务状态不支持终止',
-        }),
+          defaultMessage: '当前任务状态不支持终止'
+        })
       );
     }
     onReload?.();
   };
 
   const handleLogicalDatabaseTaskSkip = async (detailId: number) => {
-    const res = await skipPhysicalSqlExecute(flowList?.contents?.[0]?.id, detailId);
+    const res = await skipPhysicalSqlExecute(
+      flowList?.contents?.[0]?.id,
+      detailId
+    );
     if (res) {
       message.success(
         formatMessage({
           id: 'src.component.Task.component.CommonDetailModal.B0CD0DE9',
-          defaultMessage: '正在尝试跳过',
-        }),
+          defaultMessage: '正在尝试跳过'
+        })
       );
     } else {
       message.warning(
         formatMessage({
           id: 'src.component.Task.component.CommonDetailModal.6C8E11EA',
-          defaultMessage: '当前任务状态不支持跳过',
-        }),
+          defaultMessage: '当前任务状态不支持跳过'
+        })
       );
     }
     onReload?.();
@@ -513,19 +564,21 @@ const TaskExecuteRecord: React.FC<IProps> = (props) => {
             onExcecuteDetailVisible: handleExcecuteDetailVisible,
             handleLogicalDatabaseTaskStop,
             handleLogicalDatabaseTaskSkip,
-            handleLogicalDatabaseAsyncModalOpen,
+            handleLogicalDatabaseAsyncModalOpen
           }),
-          dataSource: isLogicalDbChangeTask(task?.type) ? subTasks : flowList?.contents,
+          dataSource: isLogicalDbChangeTask(task?.type)
+            ? subTasks
+            : flowList?.contents,
           rowKey: 'id',
           scroll: {
-            x: 650,
+            x: 650
           },
           pagination: !isLogicalDbChangeTask(task?.type)
             ? {
                 current: flowList?.page?.number,
-                total: flowList?.page?.totalElements,
+                total: flowList?.page?.totalElements
               }
-            : null,
+            : null
         }}
         onLoad={handleLoad}
         onChange={onReload}

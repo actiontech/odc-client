@@ -25,7 +25,7 @@ import Notifacation from './Notifacation';
 
 enum MenuKey {
   INFO = 'info',
-  NOTIFICATION = 'notification',
+  NOTIFICATION = 'notification'
 }
 interface IProps {
   id: string;
@@ -33,7 +33,7 @@ interface IProps {
 
 const Components = {
   [MenuKey.INFO]: Info,
-  [MenuKey.NOTIFICATION]: Notifacation,
+  [MenuKey.NOTIFICATION]: Notifacation
 };
 
 const Setting: React.FC<IProps> = (props) => {
@@ -56,9 +56,9 @@ const Setting: React.FC<IProps> = (props) => {
               key: MenuKey.INFO,
               label: formatMessage({
                 id: 'odc.Project.Setting.ProjectInformation',
-                defaultMessage: '项目信息',
-              }),
-            },
+                defaultMessage: '项目信息'
+              })
+            }
           ]}
         />
       </div>

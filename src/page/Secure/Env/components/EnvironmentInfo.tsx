@@ -19,7 +19,10 @@ import RiskLevelLabel from '@/component/RiskLevelLabel';
 import { actionTypes, IManagerResourceType } from '@/d.ts';
 import { IEnvironment } from '@/d.ts/environment';
 import { formatMessage } from '@/util/intl';
-import Icon, { EllipsisOutlined, ExclamationCircleFilled } from '@ant-design/icons';
+import Icon, {
+  EllipsisOutlined,
+  ExclamationCircleFilled
+} from '@ant-design/icons';
 import { Button, Descriptions, Dropdown, Space, Tooltip } from 'antd';
 import { MenuClickEventHandler, MenuInfo } from 'rc-menu/lib/interface';
 import styles from './index.less';
@@ -35,9 +38,15 @@ const EnvironmentInfo: React.FC<{
   currentEnvironment,
   handleSwitchEnvEnabled = () => {},
   handleDeleteEnvironment = () => {},
-  handleUpdateEnvironment = () => {},
+  handleUpdateEnvironment = () => {}
 }) => {
-  const { name, style, builtIn = true, enabled, description } = currentEnvironment ?? {};
+  const {
+    name,
+    style,
+    builtIn = true,
+    enabled,
+    description
+  } = currentEnvironment ?? {};
   const handleMenuOnClick: MenuClickEventHandler = (info: MenuInfo) => {
     switch (info?.key) {
       case actionTypes.update: {
@@ -58,20 +67,22 @@ const EnvironmentInfo: React.FC<{
     {
       label: formatMessage({
         id: 'src.page.Secure.Env.components.FF5B44FE',
-        defaultMessage: '编辑环境',
+        defaultMessage: '编辑环境'
       }), //'编辑环境'
-      key: actionTypes.update,
+      key: actionTypes.update
     },
     {
       label: formatMessage({
         id: 'src.page.Secure.Env.components.75B57B74',
-        defaultMessage: '删除环境',
+        defaultMessage: '删除环境'
       }), //'删除环境'
-      key: actionTypes.delete,
-    },
+      key: actionTypes.delete
+    }
   ]
     ?.filter(
-      (item) => canAcess(createPermission(IManagerResourceType.environment, item?.key))?.accessible,
+      (item) =>
+        canAcess(createPermission(IManagerResourceType.environment, item?.key))
+          ?.accessible
     )
     ?.filter(Boolean);
   const hasPremissions = items?.length !== 0;
@@ -83,7 +94,7 @@ const EnvironmentInfo: React.FC<{
             {
               formatMessage({
                 id: 'odc.Env.components.InnerEnvironment.LabelStyle',
-                defaultMessage: '标签样式:',
+                defaultMessage: '标签样式:'
               }) /*标签样式:*/
             }
           </div>
@@ -93,13 +104,13 @@ const EnvironmentInfo: React.FC<{
               <Tooltip
                 title={formatMessage({
                   id: 'src.page.Secure.Env.components.60756A4B',
-                  defaultMessage: '环境已被禁用',
+                  defaultMessage: '环境已被禁用'
                 })}
               >
                 <ExclamationCircleFilled
                   style={{
                     color: 'var(--function-gold6-color)',
-                    cursor: 'pointer',
+                    cursor: 'pointer'
                   }}
                 />
               </Tooltip>
@@ -109,7 +120,10 @@ const EnvironmentInfo: React.FC<{
         <Space>
           <Acess
             fallback={null}
-            {...createPermission(IManagerResourceType.environment, actionTypes.update)}
+            {...createPermission(
+              IManagerResourceType.environment,
+              actionTypes.update
+            )}
           >
             <Button
               onClick={handleSwitchEnvEnabled}
@@ -120,11 +134,11 @@ const EnvironmentInfo: React.FC<{
               {enabled
                 ? formatMessage({
                     id: 'src.page.Secure.Env.components.A4A3A31E',
-                    defaultMessage: '禁用',
+                    defaultMessage: '禁用'
                   })
                 : formatMessage({
                     id: 'src.page.Secure.Env.components.63058F33',
-                    defaultMessage: '启用',
+                    defaultMessage: '启用'
                   })}
             </Button>
           </Acess>
@@ -132,7 +146,7 @@ const EnvironmentInfo: React.FC<{
             <Dropdown
               menu={{
                 items,
-                onClick: handleMenuOnClick,
+                onClick: handleMenuOnClick
               }}
             >
               <Button style={{ padding: '3.6px 8px' }}>
@@ -148,7 +162,7 @@ const EnvironmentInfo: React.FC<{
           label={
             formatMessage({
               id: 'odc.Env.components.InnerEnvironment.Description',
-              defaultMessage: '描述',
+              defaultMessage: '描述'
             }) //描述
           }
         >

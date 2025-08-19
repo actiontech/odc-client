@@ -33,10 +33,10 @@ const VirtualTable = (props) => {
       set: (scrollLeft) => {
         if (gridRef.current) {
           gridRef.current.scrollTo({
-            scrollLeft,
+            scrollLeft
           });
         }
-      },
+      }
     });
     return obj;
   });
@@ -49,13 +49,16 @@ const VirtualTable = (props) => {
     if (column.width) {
       return column;
     }
-    return { ...column, width: Math.floor((tableWidth - mergedWidth) / widthColumnCount) };
+    return {
+      ...column,
+      width: Math.floor((tableWidth - mergedWidth) / widthColumnCount)
+    };
   });
 
   const resetVirtualGrid = () => {
     gridRef.current?.resetAfterIndices({
       columnIndex: 0,
-      shouldForceUpdate: true,
+      shouldForceUpdate: true
     });
   };
 
@@ -82,7 +85,7 @@ const VirtualTable = (props) => {
         width={tableWidth}
         onScroll={({ scrollLeft }) => {
           onScroll({
-            scrollLeft,
+            scrollLeft
           });
         }}
       >
@@ -94,7 +97,7 @@ const VirtualTable = (props) => {
             <div
               className={classNames(styles.cell, {
                 [styles.cellLast]: columnIndex === mergedColumns.length - 1,
-                [styles.ellipsis]: ellipsis,
+                [styles.ellipsis]: ellipsis
               })}
               style={style}
               title={ellipsis && text}
@@ -121,7 +124,7 @@ const VirtualTable = (props) => {
         columns={mergedColumns}
         pagination={false}
         components={{
-          body: renderVirtualList,
+          body: renderVirtualList
         }}
       />
     </ResizeObserver>

@@ -20,13 +20,13 @@ import {
   IGetDBPerformanceImproveOverviewParams,
   IGetDBPerformanceImproveOverviewReturn,
   IGetOptimizationOverviewParams,
-  IGetOptimizationOverviewReturn,
+  IGetOptimizationOverviewReturn
 } from './index.type';
 
 class SqlOptimizationService extends ServiceBase {
   public getOptimizationRecords(
     params: IGetOptimizationRecordsParams,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -35,17 +35,20 @@ class SqlOptimizationService extends ServiceBase {
     return this.get<IGetOptimizationRecordsReturn>(
       `/v1/projects/${project_name}/sql_optimization_records`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public OptimizeSQLReq(params: IOptimizeSQLReqParams, options?: AxiosRequestConfig) {
+  public OptimizeSQLReq(
+    params: IOptimizeSQLReqParams,
+    options?: AxiosRequestConfig
+  ) {
     const config = options || {};
     const headers = config.headers ? config.headers : {};
     config.headers = {
       ...headers,
 
-      'Content-Type': 'multipart/form-data',
+      'Content-Type': 'multipart/form-data'
     };
 
     const paramsData = new FormData();
@@ -75,7 +78,10 @@ class SqlOptimizationService extends ServiceBase {
     }
 
     if (params.input_mybatis_xml_file != undefined) {
-      paramsData.append('input_mybatis_xml_file', params.input_mybatis_xml_file as any);
+      paramsData.append(
+        'input_mybatis_xml_file',
+        params.input_mybatis_xml_file as any
+      );
     }
 
     if (params.input_zip_file != undefined) {
@@ -99,13 +105,13 @@ class SqlOptimizationService extends ServiceBase {
     return this.post<IOptimizeSQLReqReturn>(
       `/v1/projects/${project_name}/sql_optimization_records`,
       paramsData,
-      config,
+      config
     );
   }
 
   public GetOptimizationRecordReq(
     params: IGetOptimizationRecordReqParams,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -117,11 +123,14 @@ class SqlOptimizationService extends ServiceBase {
     return this.get<IGetOptimizationRecordReqReturn>(
       `/v1/projects/${project_name}/sql_optimization_records/${optimization_record_id}/`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public getOptimizationSQLs(params: IGetOptimizationSQLsParams, options?: AxiosRequestConfig) {
+  public getOptimizationSQLs(
+    params: IGetOptimizationSQLsParams,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -132,11 +141,14 @@ class SqlOptimizationService extends ServiceBase {
     return this.get<IGetOptimizationSQLsReturn>(
       `/v1/projects/${project_name}/sql_optimization_records/${optimization_record_id}/sqls`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public GetOptimizationReq(params: IGetOptimizationReqParams, options?: AxiosRequestConfig) {
+  public GetOptimizationReq(
+    params: IGetOptimizationReqParams,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -150,13 +162,13 @@ class SqlOptimizationService extends ServiceBase {
     return this.get<IGetOptimizationReqReturn>(
       `/v1/projects/${project_name}/sql_optimization_records/${optimization_record_id}/sqls/${number}/`,
       paramsData,
-      options,
+      options
     );
   }
 
   public getDBPerformanceImproveOverview(
     params: IGetDBPerformanceImproveOverviewParams,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -165,13 +177,13 @@ class SqlOptimizationService extends ServiceBase {
     return this.get<IGetDBPerformanceImproveOverviewReturn>(
       `/v1/projects/${project_name}/statistic/optimization_performance_improve_overview`,
       paramsData,
-      options,
+      options
     );
   }
 
   public getOptimizationOverview(
     params: IGetOptimizationOverviewParams,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -180,7 +192,7 @@ class SqlOptimizationService extends ServiceBase {
     return this.get<IGetOptimizationOverviewReturn>(
       `/v1/projects/${project_name}/statistic/optimization_record_overview`,
       paramsData,
-      options,
+      options
     );
   }
 }

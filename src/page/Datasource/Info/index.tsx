@@ -15,7 +15,10 @@
  */
 
 import { getDataSourceModeConfig } from '@/common/datasource';
-import { getDataSourceManageDatabase, syncDatasource } from '@/common/network/connection';
+import {
+  getDataSourceManageDatabase,
+  syncDatasource
+} from '@/common/network/connection';
 import { deleteDatabase } from '@/common/network/database';
 import Action from '@/component/Action';
 import Reload from '@/component/Button/Reload';
@@ -49,11 +52,11 @@ const Info: React.FC<IProps> = ({ id, datasource }) => {
   const [database, setDatabase] = useState<IDatabase>(null);
   const lastParams = useRef({
     pageSize: 0,
-    current: 0,
+    current: 0
   });
   const [filterParams, setFilterParams] = useState<IFilterParams>({
     existed: undefined,
-    belongsToProject: undefined,
+    belongsToProject: undefined
   });
 
   useEffect(() => {
@@ -68,18 +71,21 @@ const Info: React.FC<IProps> = ({ id, datasource }) => {
       parseInt(id),
       name,
       filterParams?.existed,
-      filterParams?.belongsToProject,
+      filterParams?.belongsToProject
     );
     if (res) {
       setData(res?.contents);
       setTotal(res?.page?.totalElements);
     }
   };
-  const { loading: deleteLoading, run: runDeleteDB } = useRequest(deleteDatabase, {
-    manual: true,
-  });
+  const { loading: deleteLoading, run: runDeleteDB } = useRequest(
+    deleteDatabase,
+    {
+      manual: true
+    }
+  );
   const { loading: syncLoading, run: runSync } = useRequest(syncDatasource, {
-    manual: true,
+    manual: true
   });
   function reload(name: string = searchValue) {
     loadData(lastParams?.current?.pageSize, lastParams?.current?.current, name);
@@ -90,8 +96,8 @@ const Info: React.FC<IProps> = ({ id, datasource }) => {
       message.success(
         formatMessage({
           id: 'odc.Datasource.Info.DeletedSuccessfully',
-          defaultMessage: '删除成功',
-        }), //删除成功
+          defaultMessage: '删除成功'
+        }) //删除成功
       );
 
       reload();
@@ -103,8 +109,8 @@ const Info: React.FC<IProps> = ({ id, datasource }) => {
       message.success(
         formatMessage({
           id: 'odc.Datasource.Info.SynchronizationSucceeded',
-          defaultMessage: '同步成功',
-        }), //同步成功
+          defaultMessage: '同步成功'
+        }) //同步成功
       );
 
       reload();
@@ -130,7 +136,7 @@ const Info: React.FC<IProps> = ({ id, datasource }) => {
               {
                 formatMessage({
                   id: 'odc.Datasource.Info.SynchronizeDatabases',
-                  defaultMessage: '同步数据库',
+                  defaultMessage: '同步数据库'
                 }) /*同步数据库*/
               }
             </Button>
@@ -148,7 +154,7 @@ const Info: React.FC<IProps> = ({ id, datasource }) => {
               reload: () => {
                 lastParams.current.current = 1;
                 reload();
-              },
+              }
             }}
           >
             <Space>
@@ -164,12 +170,14 @@ const Info: React.FC<IProps> = ({ id, datasource }) => {
           {
             title: formatMessage({
               id: 'odc.Datasource.Info.DatabaseName',
-              defaultMessage: '数据库名称',
+              defaultMessage: '数据库名称'
             }),
             //数据库名称
             dataIndex: 'name',
             render: (name, record) => {
-              const databaseStyle = getDataSourceStyleByConnectType(record?.dataSource?.type);
+              const databaseStyle = getDataSourceStyleByConnectType(
+                record?.dataSource?.type
+              );
               if (!record.existed) {
                 return (
                   <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -178,7 +186,7 @@ const Info: React.FC<IProps> = ({ id, datasource }) => {
                       style={{
                         color: databaseStyle?.icon?.color,
                         fontSize: 16,
-                        marginRight: 4,
+                        marginRight: 4
                       }}
                     />
                     <HelpDoc
@@ -186,7 +194,7 @@ const Info: React.FC<IProps> = ({ id, datasource }) => {
                       isTip={false}
                       title={formatMessage({
                         id: 'odc.Datasource.Info.TheCurrentDatabaseDoesNot',
-                        defaultMessage: '当前数据库不存在',
+                        defaultMessage: '当前数据库不存在'
                       })} /*当前数据库不存在*/
                     >
                       {name}
@@ -201,18 +209,18 @@ const Info: React.FC<IProps> = ({ id, datasource }) => {
                     style={{
                       color: databaseStyle?.icon?.color,
                       fontSize: 16,
-                      marginRight: 4,
+                      marginRight: 4
                     }}
                   />
                   {name}
                 </div>
               );
-            },
+            }
           },
           {
             title: formatMessage({
               id: 'src.page.Datasource.Info.D30F985C',
-              defaultMessage: '管理员',
+              defaultMessage: '管理员'
             }),
             dataIndex: 'owners',
             ellipsis: true,
@@ -224,34 +232,34 @@ const Info: React.FC<IProps> = ({ id, datasource }) => {
                 <span style={{ color: 'var(--text-color-hint)' }}>
                   {formatMessage({
                     id: 'odc.Project.Database.OwnerEmptyText',
-                    defaultMessage: '未设置',
+                    defaultMessage: '未设置'
                   })}
                 </span>
               );
-            },
+            }
           },
           {
             title: formatMessage({
               id: 'odc.Datasource.Info.CharacterEncoding',
-              defaultMessage: '字符编码',
+              defaultMessage: '字符编码'
             }),
             //字符编码
             dataIndex: 'charsetName',
-            width: 120,
+            width: 120
           },
           {
             title: formatMessage({
               id: 'odc.Datasource.Info.SortingRules',
-              defaultMessage: '排序规则',
+              defaultMessage: '排序规则'
             }),
             //排序规则
             dataIndex: 'collationName',
-            width: 120,
+            width: 120
           },
           {
             title: formatMessage({
               id: 'odc.Datasource.Info.Project',
-              defaultMessage: '所属项目',
+              defaultMessage: '所属项目'
             }),
             //所属项目
             dataIndex: ['project', 'name'],
@@ -259,17 +267,18 @@ const Info: React.FC<IProps> = ({ id, datasource }) => {
             render(value, record, index) {
               const bindProjectName = record.dataSource?.projectName;
               const innerSchema =
-                getDataSourceModeConfig(record.dataSource?.type)?.schema?.innerSchema || [];
+                getDataSourceModeConfig(record.dataSource?.type)?.schema
+                  ?.innerSchema || [];
               const isInnerSchema = innerSchema.includes(record?.name);
               let tip = formatMessage({
                 id: 'odc.src.page.Datasource.Info.ModifyTheProject',
-                defaultMessage: '修改所属项目',
+                defaultMessage: '修改所属项目'
               }); //'修改所属项目'
               let editable = true;
               if (!canUpdate) {
                 tip = formatMessage({
                   id: 'odc.src.page.Datasource.Info.NoCurrentDataSourcePermissions',
-                  defaultMessage: '无当前数据源权限',
+                  defaultMessage: '无当前数据源权限'
                 }); //'无当前数据源权限'
                 editable = false;
               } else if (isInnerSchema) {
@@ -279,9 +288,9 @@ const Info: React.FC<IProps> = ({ id, datasource }) => {
                   {
                     id: 'odc.src.page.Datasource.Info.TheCurrentDataSourceProject',
                     defaultMessage:
-                      '当前数据源所属项目 {bindProjectName}，无法修改。可通过编辑数据源修改所属项目',
+                      '当前数据源所属项目 {bindProjectName}，无法修改。可通过编辑数据源修改所属项目'
                   },
-                  { bindProjectName },
+                  { bindProjectName }
                 ); //`当前数据源所属项目 ${bindProjectName}，无法修改。可通过编辑数据源修改所属项目`
                 editable = false;
               }
@@ -290,7 +299,7 @@ const Info: React.FC<IProps> = ({ id, datasource }) => {
                   style={{
                     display: 'flex',
                     justifyContent: 'space-between',
-                    alignItems: 'center',
+                    alignItems: 'center'
                   }}
                 >
                   <div
@@ -299,14 +308,14 @@ const Info: React.FC<IProps> = ({ id, datasource }) => {
                       flex: 1,
                       overflow: 'hidden',
                       textOverflow: 'ellipsis',
-                      whiteSpace: 'nowrap',
+                      whiteSpace: 'nowrap'
                     }}
                   >
                     {
                       value ||
                         formatMessage({
                           id: 'odc.src.page.Datasource.Info.UnpabledItems',
-                          defaultMessage: '未分配项目',
+                          defaultMessage: '未分配项目'
                         }) //'未分配项目'
                     }
                   </div>
@@ -315,7 +324,7 @@ const Info: React.FC<IProps> = ({ id, datasource }) => {
                       style={{
                         flexShrink: 0,
                         flexGrow: 0,
-                        color: !editable ? 'var(--icon-color-disable)' : null,
+                        color: !editable ? 'var(--icon-color-disable)' : null
                       }}
                       onClick={() => {
                         if (!editable) {
@@ -328,19 +337,19 @@ const Info: React.FC<IProps> = ({ id, datasource }) => {
                       <Icon
                         component={EditOutlined}
                         style={{
-                          fontSize: 14,
+                          fontSize: 14
                         }}
                       />
                     </a>
                   </Tooltip>
                 </div>
               );
-            },
+            }
           },
           {
             title: formatMessage({
               id: 'odc.Datasource.Info.LastSynchronizationTime',
-              defaultMessage: '最近一次同步时间',
+              defaultMessage: '最近一次同步时间'
             }),
             //最近一次同步时间
             dataIndex: 'lastSyncTime',
@@ -348,12 +357,12 @@ const Info: React.FC<IProps> = ({ id, datasource }) => {
             render(v, record) {
               const time = record?.objectLastSyncTime || record?.lastSyncTime;
               return getLocalFormatDateTime(time);
-            },
+            }
           },
           {
             title: formatMessage({
               id: 'odc.Datasource.Info.Operation',
-              defaultMessage: '操作',
+              defaultMessage: '操作'
             }),
             //操作
             dataIndex: 'name',
@@ -365,7 +374,7 @@ const Info: React.FC<IProps> = ({ id, datasource }) => {
                     <Popconfirm
                       title={formatMessage({
                         id: 'odc.Datasource.Info.AreYouSureYouWant',
-                        defaultMessage: '确认删除吗？',
+                        defaultMessage: '确认删除吗？'
                       })}
                       /*确认删除吗？*/ disabled={record.existed}
                       onConfirm={() => {
@@ -376,7 +385,7 @@ const Info: React.FC<IProps> = ({ id, datasource }) => {
                         {
                           formatMessage({
                             id: 'odc.Datasource.Info.Delete',
-                            defaultMessage: '删除',
+                            defaultMessage: '删除'
                           }) /*删除*/
                         }
                       </Action.Link>
@@ -384,12 +393,12 @@ const Info: React.FC<IProps> = ({ id, datasource }) => {
                   )}
                 </Action.Group>
               );
-            },
-          },
+            }
+          }
         ]}
         dataSource={data}
         pagination={{
-          total,
+          total
         }}
         loadData={(page) => {
           const pageSize = page.pageSize;

@@ -28,12 +28,16 @@ import {
   Space,
   Tag,
   Tooltip,
-  Typography,
+  Typography
 } from 'antd';
 import React, { useState } from 'react';
 import { intervalPrecisionOptions } from '../configModal';
 import { NameRuleType } from '../configModal';
-import { START_DATE, INCREAMENT_FIELD_TYPE, increamentFieldTypeLabelMap } from '../const';
+import {
+  START_DATE,
+  INCREAMENT_FIELD_TYPE,
+  increamentFieldTypeLabelMap
+} from '../const';
 import styles from '../index.less';
 import { getLocale } from '@umijs/max';
 
@@ -43,25 +47,25 @@ const startDateOptionValues = [
   {
     label: formatMessage({
       id: 'src.component.Task.component.PartitionPolicyFormTable.RuleFormItem.88D572DE',
-      defaultMessage: '当前时间',
+      defaultMessage: '当前时间'
     }), //'当前时间'
     value: START_DATE.CURRENT_DATE,
     description: formatMessage({
       id: 'src.component.Task.component.PartitionPolicyFormTable.RuleFormItem.684CAF92',
-      defaultMessage: '从实际执行的时间开始创建',
-    }), //'从实际执行的时间开始创建'
+      defaultMessage: '从实际执行的时间开始创建'
+    }) //'从实际执行的时间开始创建'
   },
   {
     label: formatMessage({
       id: 'src.component.Task.component.PartitionPolicyFormTable.RuleFormItem.9CDC5E14',
-      defaultMessage: '指定时间',
+      defaultMessage: '指定时间'
     }), //'指定时间'
     value: START_DATE.CUSTOM_DATE,
     description: formatMessage({
       id: 'src.component.Task.component.PartitionPolicyFormTable.RuleFormItem.0E0ADD3E',
-      defaultMessage: '从指定的某个时间开始创建',
-    }), //'从指定的某个时间开始创建'
-  },
+      defaultMessage: '从指定的某个时间开始创建'
+    }) //'从指定的某个时间开始创建'
+  }
 ];
 
 const incrementFieldTypeOptionsValues = [
@@ -70,33 +74,36 @@ const incrementFieldTypeOptionsValues = [
     value: INCREAMENT_FIELD_TYPE.NUMBER,
     description: formatMessage({
       id: 'src.component.Task.component.PartitionPolicyFormTable.RuleFormItem.33B07A9E',
-      defaultMessage: '仅代表数值数据，如：001、002',
-    }),
+      defaultMessage: '仅代表数值数据，如：001、002'
+    })
   },
   {
     label: increamentFieldTypeLabelMap[INCREAMENT_FIELD_TYPE.TIME_STRING],
     value: INCREAMENT_FIELD_TYPE.TIME_STRING,
     description: formatMessage({
       id: 'src.component.Task.component.PartitionPolicyFormTable.RuleFormItem.38D2B418',
-      defaultMessage: '类型为数值但实际含义为日期时间，如: 20250207',
-    }),
+      defaultMessage: '类型为数值但实际含义为日期时间，如: 20250207'
+    })
   },
   {
     label: increamentFieldTypeLabelMap[INCREAMENT_FIELD_TYPE.TIMESTAMP],
     value: INCREAMENT_FIELD_TYPE.TIMESTAMP,
     description: formatMessage({
       id: 'src.component.Task.component.PartitionPolicyFormTable.RuleFormItem.EBF8762C',
-      defaultMessage: '类型为数值但实际含义为时间戳，如: 1609459200',
-    }),
-  },
+      defaultMessage: '类型为数值但实际含义为时间戳，如: 1609459200'
+    })
+  }
 ];
 
-const incrementByDateOptionsInNumber = ['yyyy', 'yyyyMM', 'yyyyMMdd', 'yyyyMMddHHmmss'].map(
-  (item) => ({
-    label: item,
-    value: item,
-  }),
-);
+const incrementByDateOptionsInNumber = [
+  'yyyy',
+  'yyyyMM',
+  'yyyyMMdd',
+  'yyyyMMddHHmmss'
+].map((item) => ({
+  label: item,
+  value: item
+}));
 
 const getIncrementByDateOptionsInChar = () => {
   const locale = getLocale();
@@ -104,7 +111,7 @@ const getIncrementByDateOptionsInChar = () => {
     'yyyy',
     formatMessage({
       id: 'src.component.Task.component.PartitionPolicyFormTable.RuleFormItem.E205FB6F',
-      defaultMessage: 'yyyy年',
+      defaultMessage: 'yyyy年'
     }),
 
     'yyyyMM',
@@ -112,7 +119,7 @@ const getIncrementByDateOptionsInChar = () => {
     'yyyy/MM',
     formatMessage({
       id: 'src.component.Task.component.PartitionPolicyFormTable.RuleFormItem.216E3527',
-      defaultMessage: 'yyyy年MM月',
+      defaultMessage: 'yyyy年MM月'
     }),
 
     'yyyyMMdd',
@@ -120,15 +127,15 @@ const getIncrementByDateOptionsInChar = () => {
     'yyyy/MM/dd',
     formatMessage({
       id: 'src.component.Task.component.PartitionPolicyFormTable.RuleFormItem.EF0BF81D',
-      defaultMessage: 'yyyy年MM月dd日',
+      defaultMessage: 'yyyy年MM月dd日'
     }),
     'yyyyMMdd HH:mm:ss',
     'yyyy-MM-dd HH:mm:ss',
     'yyyy/MM/dd HH:mm:ss',
     formatMessage({
       id: 'src.component.Task.component.PartitionPolicyFormTable.RuleFormItem.13B22678',
-      defaultMessage: 'yyyy年MM月dd日 HH:mm:ss',
-    }),
+      defaultMessage: 'yyyy年MM月dd日 HH:mm:ss'
+    })
   ];
 
   if (locale !== 'zh-CN') {
@@ -136,13 +143,13 @@ const getIncrementByDateOptionsInChar = () => {
       .filter((item) => !/[\u4e00-\u9fa5]/.test(item))
       .map((item) => ({
         label: item,
-        value: item,
+        value: item
       }));
   }
 
   return options.map((item) => ({
     label: item,
-    value: item,
+    value: item
   }));
 };
 
@@ -157,7 +164,7 @@ const getOptionsByValueList = (valueList) => {
       ),
 
       value,
-      text: label,
+      text: label
     };
   });
 };
@@ -168,7 +175,7 @@ const EmptyHelp = () => null;
 
 const getFieldProps: (
   error: string[],
-  position?: 'prefix' | 'suffix',
+  position?: 'prefix' | 'suffix'
 ) => Partial<{
   status: 'error';
   prefix: React.ReactNode;
@@ -179,9 +186,11 @@ const getFieldProps: (
         status: 'error',
         [position]: (
           <Tooltip title={error?.join('')}>
-            <CloseCircleFilled style={{ color: 'var(--function-red6-color)' }} />
+            <CloseCircleFilled
+              style={{ color: 'var(--function-red6-color)' }}
+            />
           </Tooltip>
-        ),
+        )
       }
     : {};
 };
@@ -199,34 +208,49 @@ const PRECISION_MAP = {
   hour: 15,
   day: 7,
   month: 3,
-  year: 1,
+  year: 1
 };
 
 const getIntervalPrecisionOptionsByIncrementDateType = (
   incrementFieldTypeInDate: string,
-  incrementFieldType: INCREAMENT_FIELD_TYPE,
+  incrementFieldType: INCREAMENT_FIELD_TYPE
 ) => {
-  if (incrementFieldType !== INCREAMENT_FIELD_TYPE.TIME_STRING || !incrementFieldTypeInDate) {
+  if (
+    incrementFieldType !== INCREAMENT_FIELD_TYPE.TIME_STRING ||
+    !incrementFieldTypeInDate
+  ) {
     return intervalPrecisionOptions;
   }
 
   if (incrementFieldTypeInDate?.includes?.('s')) {
-    return intervalPrecisionOptions?.filter((item) => item.value <= PRECISION_MAP.second);
+    return intervalPrecisionOptions?.filter(
+      (item) => item.value <= PRECISION_MAP.second
+    );
   }
   if (incrementFieldTypeInDate?.includes?.('m')) {
-    return intervalPrecisionOptions?.filter((item) => item.value <= PRECISION_MAP.minute);
+    return intervalPrecisionOptions?.filter(
+      (item) => item.value <= PRECISION_MAP.minute
+    );
   }
   if (incrementFieldTypeInDate?.includes?.('H')) {
-    return intervalPrecisionOptions?.filter((item) => item.value <= PRECISION_MAP.hour);
+    return intervalPrecisionOptions?.filter(
+      (item) => item.value <= PRECISION_MAP.hour
+    );
   }
   if (incrementFieldTypeInDate?.includes?.('d')) {
-    return intervalPrecisionOptions?.filter((item) => item.value <= PRECISION_MAP.day);
+    return intervalPrecisionOptions?.filter(
+      (item) => item.value <= PRECISION_MAP.day
+    );
   }
   if (incrementFieldTypeInDate?.includes?.('M')) {
-    return intervalPrecisionOptions?.filter((item) => item.value <= PRECISION_MAP.month);
+    return intervalPrecisionOptions?.filter(
+      (item) => item.value <= PRECISION_MAP.month
+    );
   }
   if (incrementFieldTypeInDate?.includes?.('y')) {
-    return intervalPrecisionOptions?.filter((item) => item.value <= PRECISION_MAP.year);
+    return intervalPrecisionOptions?.filter(
+      (item) => item.value <= PRECISION_MAP.year
+    );
   }
 
   return intervalPrecisionOptions;
@@ -234,9 +258,12 @@ const getIntervalPrecisionOptionsByIncrementDateType = (
 
 const getDefaultPrecisionByIncrementDateTypeInDate = (
   incrementFieldTypeInDate: string,
-  incrementFieldType: INCREAMENT_FIELD_TYPE,
+  incrementFieldType: INCREAMENT_FIELD_TYPE
 ) => {
-  if (incrementFieldType !== INCREAMENT_FIELD_TYPE.TIME_STRING || !incrementFieldTypeInDate) {
+  if (
+    incrementFieldType !== INCREAMENT_FIELD_TYPE.TIME_STRING ||
+    !incrementFieldTypeInDate
+  ) {
     return 3;
   }
 
@@ -272,72 +299,79 @@ const RuleFormItem: React.FC<TableFormProps> = (props) => {
           'option',
           'partitionKeyConfigs',
           field.name,
-          'partitionKeyInvoker',
+          'partitionKeyInvoker'
         ]);
         const fromCurrentTime = getFieldValue([
           'option',
           'partitionKeyConfigs',
           field.name,
-          'fromCurrentTime',
+          'fromCurrentTime'
         ]);
         const incrementFieldType = getFieldValue([
           'option',
           'partitionKeyConfigs',
           field.name,
-          'incrementFieldType',
+          'incrementFieldType'
         ]);
         const incrementFieldTypeInDate = getFieldValue([
           'option',
           'partitionKeyConfigs',
           field.name,
-          'incrementFieldTypeInDate',
+          'incrementFieldTypeInDate'
         ]);
         const generateExprError = getFieldError([
           'option',
           'partitionKeyConfigs',
           field.name,
-          'generateExpr',
+          'generateExpr'
         ]);
         const intervalGenerateExprError = getFieldError([
           'option',
           'partitionKeyConfigs',
           field.name,
-          'intervalGenerateExpr',
+          'intervalGenerateExpr'
         ]);
         const intervalError = getFieldError([
           'option',
           'partitionKeyConfigs',
           field.name,
-          'interval',
+          'interval'
         ]);
 
         const validateInput = (error) => {
           setIntervalErrorInBlur(error);
         };
 
-        const isCustom = partitionKeyInvoker === PARTITION_KEY_INVOKER.CUSTOM_GENERATOR;
+        const isCustom =
+          partitionKeyInvoker === PARTITION_KEY_INVOKER.CUSTOM_GENERATOR;
         const validIntervalPrecisionOptions = intervalPrecisionOptions?.filter(
-          (item) => item.value <= precision,
+          (item) => item.value <= precision
         );
 
-        const intervalFormItemRenderByIncrementFieldType = (type: INCREAMENT_FIELD_TYPE) => {
+        const intervalFormItemRenderByIncrementFieldType = (
+          type: INCREAMENT_FIELD_TYPE
+        ) => {
           switch (type) {
             case INCREAMENT_FIELD_TYPE.NUMBER: {
               return (
-                <Input.Group compact style={{ width: '374px', display: 'inline-flex', height: 29 }}>
+                <Input.Group
+                  compact
+                  style={{ width: '374px', display: 'inline-flex', height: 29 }}
+                >
                   <Tag className={styles.suffix}>
                     <HelpDoc
                       leftText
                       isTip
                       title={formatMessage({
                         id: 'src.component.Task.component.PartitionPolicyFormTable.RuleFormItem.AA5160C7',
-                        defaultMessage: '将使用已有分区最大值作为分区起始值，以此递增',
+                        defaultMessage:
+                          '将使用已有分区最大值作为分区起始值，以此递增'
                       })}
                     >
                       {
                         formatMessage({
                           id: 'src.component.Task.component.PartitionPolicyFormTable.RuleFormItem.9F9223B3' /*间隔*/,
-                          defaultMessage: '间隔',
+                          defaultMessage: '间隔'
                         }) /* 间隔 */
                       }
                     </HelpDoc>
@@ -352,9 +386,9 @@ const RuleFormItem: React.FC<TableFormProps> = (props) => {
                         required: true,
                         message: formatMessage({
                           id: 'src.component.Task.component.PartitionPolicyFormTable.RuleFormItem.8368A05F',
-                          defaultMessage: '请输入',
-                        }), //'请输入'
-                      },
+                          defaultMessage: '请输入'
+                        }) //'请输入'
+                      }
                     ]}
                   >
                     <InputNumber
@@ -382,9 +416,9 @@ const RuleFormItem: React.FC<TableFormProps> = (props) => {
                       required: true,
                       message: formatMessage({
                         id: 'src.component.Task.component.PartitionPolicyFormTable.RuleFormItem.2F986FD8',
-                        defaultMessage: '请输入',
-                      }), //'请输入'
-                    },
+                        defaultMessage: '请输入'
+                      }) //'请输入'
+                    }
                   ]}
                   help={EmptyHelp}
                 >
@@ -394,15 +428,19 @@ const RuleFormItem: React.FC<TableFormProps> = (props) => {
                     addonBefore={
                       formatMessage({
                         id: 'src.component.Task.component.PartitionPolicyFormTable.RuleFormItem.5FE030CF',
-                        defaultMessage: '间隔',
+                        defaultMessage: '间隔'
                       }) /*"间隔"*/
                     }
                     addonAfter={
-                      <Form.Item {...field} name={[field.name, 'intervalPrecision']} noStyle>
+                      <Form.Item
+                        {...field}
+                        name={[field.name, 'intervalPrecision']}
+                        noStyle
+                      >
                         <Select
                           options={getIntervalPrecisionOptionsByIncrementDateType(
                             incrementFieldTypeInDate,
-                            incrementFieldType,
+                            incrementFieldType
                           )}
                           style={{ width: 60 }}
                         />
@@ -427,7 +465,7 @@ const RuleFormItem: React.FC<TableFormProps> = (props) => {
             <Tag className={styles.suffix}>
               {formatMessage({
                 id: 'src.component.Task.component.PartitionPolicyFormTable.RuleFormItem.7BE0F4B2',
-                defaultMessage: '含义',
+                defaultMessage: '含义'
               })}
             </Tag>
             <Form.Item
@@ -437,27 +475,36 @@ const RuleFormItem: React.FC<TableFormProps> = (props) => {
                   required: true,
                   message: formatMessage({
                     id: 'src.component.Task.component.PartitionPolicyFormTable.RuleFormItem.88F8B3BE',
-                    defaultMessage: '请选择',
-                  }),
-                },
+                    defaultMessage: '请选择'
+                  })
+                }
               ]}
               style={{ margin: 0 }}
             >
               <Select
                 options={fieldTypeOptions}
                 style={{
-                  width: incrementFieldType !== INCREAMENT_FIELD_TYPE.TIME_STRING ? 320 : 160,
+                  width:
+                    incrementFieldType !== INCREAMENT_FIELD_TYPE.TIME_STRING
+                      ? 320
+                      : 160
                 }}
                 optionLabelProp="text"
                 dropdownStyle={{ width: 320 }}
                 onChange={(value) => {
-                  const defaultPrecision = getDefaultPrecisionByIncrementDateTypeInDate(
-                    incrementFieldTypeInDate,
-                    value,
-                  );
+                  const defaultPrecision =
+                    getDefaultPrecisionByIncrementDateTypeInDate(
+                      incrementFieldTypeInDate,
+                      value
+                    );
                   setFieldValue(
-                    ['option', 'partitionKeyConfigs', field.name, 'intervalPrecision'],
-                    defaultPrecision,
+                    [
+                      'option',
+                      'partitionKeyConfigs',
+                      field.name,
+                      'intervalPrecision'
+                    ],
+                    defaultPrecision
                   );
                   if (value === INCREAMENT_FIELD_TYPE.TIME_STRING) {
                     setFieldValue('nameRuleType', NameRuleType.PRE_SUFFIX);
@@ -477,9 +524,9 @@ const RuleFormItem: React.FC<TableFormProps> = (props) => {
                     required: true,
                     message: formatMessage({
                       id: 'src.component.Task.component.PartitionPolicyFormTable.RuleFormItem.3174105E',
-                      defaultMessage: '请输入格式',
-                    }),
-                  },
+                      defaultMessage: '请输入格式'
+                    })
+                  }
                 ]}
               >
                 <AutoComplete
@@ -491,16 +538,24 @@ const RuleFormItem: React.FC<TableFormProps> = (props) => {
                   style={{ width: 160 }}
                   dropdownMatchSelectWidth={192}
                   filterOption={(inputValue, option) =>
-                    option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                    option.value
+                      .toUpperCase()
+                      .indexOf(inputValue.toUpperCase()) !== -1
                   }
                   onChange={(e) => {
-                    const defaultPrecision = getDefaultPrecisionByIncrementDateTypeInDate(
-                      e,
-                      incrementFieldType,
-                    );
+                    const defaultPrecision =
+                      getDefaultPrecisionByIncrementDateTypeInDate(
+                        e,
+                        incrementFieldType
+                      );
                     setFieldValue(
-                      ['option', 'partitionKeyConfigs', field.name, 'intervalPrecision'],
-                      defaultPrecision,
+                      [
+                        'option',
+                        'partitionKeyConfigs',
+                        field.name,
+                        'intervalPrecision'
+                      ],
+                      defaultPrecision
                     );
                   }}
                 >
@@ -509,10 +564,13 @@ const RuleFormItem: React.FC<TableFormProps> = (props) => {
                       <Tooltip
                         title={formatMessage({
                           id: 'src.component.Task.component.PartitionPolicyFormTable.RuleFormItem.9C8C52CF',
-                          defaultMessage: '请输入格式，格式需与字段内容保持一致。',
+                          defaultMessage:
+                            '请输入格式，格式需与字段内容保持一致。'
                         })}
                       >
-                        <InfoCircleOutlined style={{ color: 'var(--icon-color-normal)' }} />
+                        <InfoCircleOutlined
+                          style={{ color: 'var(--icon-color-normal)' }}
+                        />
                       </Tooltip>
                     }
                   />
@@ -537,9 +595,9 @@ const RuleFormItem: React.FC<TableFormProps> = (props) => {
                       required: true,
                       message: formatMessage({
                         id: 'src.component.Task.component.PartitionPolicyFormTable.RuleFormItem.DE258551',
-                        defaultMessage: '请输入',
-                      }), //'请输入'
-                    },
+                        defaultMessage: '请输入'
+                      }) //'请输入'
+                    }
                   ]}
                   help={EmptyHelp}
                 >
@@ -547,13 +605,17 @@ const RuleFormItem: React.FC<TableFormProps> = (props) => {
                     placeholder={
                       formatMessage({
                         id: 'src.component.Task.component.PartitionPolicyFormTable.RuleFormItem.13EB1436',
-                        defaultMessage: '请输入 SQL 表达式生成分区上界，可引用变量如 ${INTERVAL}',
+                        defaultMessage:
+                          '请输入 SQL 表达式生成分区上界，可引用变量如 ${INTERVAL}'
                       }) /*"请输入 SQL 表达式生成分区上界，可引用变量如 ${INTERVAL}"*/
                     }
                     {...getFieldProps(generateExprError)}
                   />
                 </Form.Item>
-                <Input.Group compact style={{ width: '374px', display: 'inline-flex', height: 29 }}>
+                <Input.Group
+                  compact
+                  style={{ width: '374px', display: 'inline-flex', height: 29 }}
+                >
                   <Tag className={styles.suffix}>
                     <HelpDoc
                       leftText
@@ -561,14 +623,14 @@ const RuleFormItem: React.FC<TableFormProps> = (props) => {
                       title={
                         formatMessage({
                           id: 'src.component.Task.component.PartitionPolicyFormTable.RuleFormItem.B0EB9B0D',
-                          defaultMessage: 'INTERVAL 初始值及增长步长',
+                          defaultMessage: 'INTERVAL 初始值及增长步长'
                         }) /*"INTERVAL 初始值及增长步长"*/
                       }
                     >
                       {
                         formatMessage({
                           id: 'src.component.Task.component.PartitionPolicyFormTable.RuleFormItem.9F9223B3' /*间隔*/,
-                          defaultMessage: '间隔',
+                          defaultMessage: '间隔'
                         }) /* 间隔 */
                       }
                     </HelpDoc>
@@ -583,9 +645,9 @@ const RuleFormItem: React.FC<TableFormProps> = (props) => {
                         required: true,
                         message: formatMessage({
                           id: 'src.component.Task.component.PartitionPolicyFormTable.RuleFormItem.8368A05F',
-                          defaultMessage: '请输入',
-                        }), //'请输入'
-                      },
+                          defaultMessage: '请输入'
+                        }) //'请输入'
+                      }
                     ]}
                     help={EmptyHelp}
                   >
@@ -593,7 +655,7 @@ const RuleFormItem: React.FC<TableFormProps> = (props) => {
                       placeholder={
                         formatMessage({
                           id: 'src.component.Task.component.PartitionPolicyFormTable.RuleFormItem.609871AF',
-                          defaultMessage: '请输入',
+                          defaultMessage: '请输入'
                         }) /*"请输入"*/
                       }
                       {...getFieldProps(intervalErrorInBlur, 'prefix')}
@@ -615,7 +677,7 @@ const RuleFormItem: React.FC<TableFormProps> = (props) => {
                     {
                       formatMessage({
                         id: 'src.component.Task.component.PartitionPolicyFormTable.RuleFormItem.C6AB94A8' /*起始*/,
-                        defaultMessage: '起始',
+                        defaultMessage: '起始'
                       }) /* 起始 */
                     }
                   </Tag>
@@ -637,7 +699,10 @@ const RuleFormItem: React.FC<TableFormProps> = (props) => {
                       name={[field.name, 'baseTimestampMillis']}
                       className={styles.noMarginBottom}
                     >
-                      <DatePicker showTime {...getFieldProps(intervalGenerateExprError)} />
+                      <DatePicker
+                        showTime
+                        {...getFieldProps(intervalGenerateExprError)}
+                      />
                     </Form.Item>
                   )}
                 </Input.Group>
@@ -651,9 +716,9 @@ const RuleFormItem: React.FC<TableFormProps> = (props) => {
                       required: true,
                       message: formatMessage({
                         id: 'src.component.Task.component.PartitionPolicyFormTable.RuleFormItem.2F986FD8',
-                        defaultMessage: '请输入',
-                      }), //'请输入'
-                    },
+                        defaultMessage: '请输入'
+                      }) //'请输入'
+                    }
                   ]}
                   help={EmptyHelp}
                 >
@@ -663,7 +728,7 @@ const RuleFormItem: React.FC<TableFormProps> = (props) => {
                     addonBefore={
                       formatMessage({
                         id: 'src.component.Task.component.PartitionPolicyFormTable.RuleFormItem.5FE030CF',
-                        defaultMessage: '间隔',
+                        defaultMessage: '间隔'
                       }) /*"间隔"*/
                     }
                     addonAfter={
@@ -675,13 +740,16 @@ const RuleFormItem: React.FC<TableFormProps> = (props) => {
                             required: true,
                             message: formatMessage({
                               id: 'src.component.Task.component.PartitionPolicyFormTable.RuleFormItem.7FB4A416',
-                              defaultMessage: '请选择',
-                            }), //'请选择'
-                          },
+                              defaultMessage: '请选择'
+                            }) //'请选择'
+                          }
                         ]}
                         noStyle
                       >
-                        <Select options={validIntervalPrecisionOptions} style={{ width: 60 }} />
+                        <Select
+                          options={validIntervalPrecisionOptions}
+                          style={{ width: 60 }}
+                        />
                       </Form.Item>
                     }
                     style={{ width: 243 }}
@@ -707,7 +775,7 @@ const RuleFormItem: React.FC<TableFormProps> = (props) => {
                     {
                       formatMessage({
                         id: 'src.component.Task.component.PartitionPolicyFormTable.RuleFormItem.C6AB94A8' /*起始*/,
-                        defaultMessage: '起始',
+                        defaultMessage: '起始'
                       }) /* 起始 */
                     }
                   </Tag>
@@ -729,7 +797,10 @@ const RuleFormItem: React.FC<TableFormProps> = (props) => {
                       name={[field.name, 'baseTimestampMillis']}
                       className={styles.noMarginBottom}
                     >
-                      <DatePicker showTime {...getFieldProps(intervalGenerateExprError)} />
+                      <DatePicker
+                        showTime
+                        {...getFieldProps(intervalGenerateExprError)}
+                      />
                     </Form.Item>
                   )}
                 </Input.Group>

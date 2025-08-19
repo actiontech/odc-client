@@ -14,21 +14,38 @@ import {
   IUpdateUserGroupParams,
   IUpdateUserGroupReturn,
   IDelUserGroupParams,
-  IDelUserGroupReturn,
+  IDelUserGroupReturn
 } from './index.type';
 
 class UserGroupService extends ServiceBase {
-  public ListUserGroups(params: IListUserGroupsParams, options?: AxiosRequestConfig) {
+  public ListUserGroups(
+    params: IListUserGroupsParams,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
-    return this.get<IListUserGroupsReturn>('/v1/dms/user_groups', paramsData, options);
+    return this.get<IListUserGroupsReturn>(
+      '/v1/dms/user_groups',
+      paramsData,
+      options
+    );
   }
 
-  public AddUserGroup(params: IAddUserGroupParams, options?: AxiosRequestConfig) {
+  public AddUserGroup(
+    params: IAddUserGroupParams,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
-    return this.post<IAddUserGroupReturn>('/v1/dms/user_groups', paramsData, options);
+    return this.post<IAddUserGroupReturn>(
+      '/v1/dms/user_groups',
+      paramsData,
+      options
+    );
   }
 
-  public UpdateUserGroup(params: IUpdateUserGroupParams, options?: AxiosRequestConfig) {
+  public UpdateUserGroup(
+    params: IUpdateUserGroupParams,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const user_group_uid = paramsData.user_group_uid;
     delete paramsData.user_group_uid;
@@ -36,11 +53,14 @@ class UserGroupService extends ServiceBase {
     return this.put<IUpdateUserGroupReturn>(
       `/v1/dms/user_groups/${user_group_uid}`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public DelUserGroup(params: IDelUserGroupParams, options?: AxiosRequestConfig) {
+  public DelUserGroup(
+    params: IDelUserGroupParams,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const user_group_uid = paramsData.user_group_uid;
     delete paramsData.user_group_uid;
@@ -48,7 +68,7 @@ class UserGroupService extends ServiceBase {
     return this.delete<IDelUserGroupReturn>(
       `/v1/dms/user_groups/${user_group_uid}`,
       paramsData,
-      options,
+      options
     );
   }
 }

@@ -16,7 +16,10 @@
 
 import { getAuditDetail, getAuditEventMeta } from '@/common/network/manager';
 import CommonTable from '@/component/CommonTable';
-import type { ITableInstance, ITableLoadOptions } from '@/component/CommonTable/interface';
+import type {
+  ITableInstance,
+  ITableLoadOptions
+} from '@/component/CommonTable/interface';
 import { CommonTableMode } from '@/component/CommonTable/interface';
 import CommonDetailModal from '@/component/Manage/DetailModal';
 import { TimeOptions } from '@/component/TimeSelect';
@@ -48,12 +51,13 @@ export const RecordTable: React.FC<{
     executeDate,
     loadData,
     handleTableChange,
-    handleExecuteDateChange,
+    handleExecuteDateChange
   } = props;
   const [detailVisible, setDetailVisible] = useState(false);
   const [detailId, setDetailId] = useState(null);
   const [eventMeta, setEventMeta] = useState<IAuditEvent[]>([]);
-  const { options: eventOptions, filter: eventfilter } = getEventFilterAndOptions(eventMeta);
+  const { options: eventOptions, filter: eventfilter } =
+    getEventFilterAndOptions(eventMeta);
 
   const handleOpenDetailModal = (record: any) => {
     setDetailId(record.id);
@@ -81,13 +85,14 @@ export const RecordTable: React.FC<{
           description: isClient()
             ? formatMessage({
                 id: 'odc.component.RecordPopover.components.NoteTheOperationRecordContains',
-                defaultMessage: '提示：操作记录包含 ODC 上的历史操作',
+                defaultMessage: '提示：操作记录包含 ODC 上的历史操作'
               })
             : //提示: 操作记录包含 ODC 上的历史操作
               formatMessage({
                 id: 'odc.component.RecordPopover.components.NoteTheOperationRecordsInclude',
-                defaultMessage: '提示：操作记录包含对 OceanBase 数据库及 ODC 上的历史操作',
-              }),
+                defaultMessage:
+                  '提示：操作记录包含对 OceanBase 数据库及 ODC 上的历史操作'
+              })
 
           //提示: 操作记录包含对数据库的操作及产品操作
         }}
@@ -98,13 +103,13 @@ export const RecordTable: React.FC<{
               name: 'executeTime',
               title: formatMessage({
                 id: 'odc.component.RecordPopover.components.ExecutionTime.1',
-                defaultMessage: '执行时间：',
+                defaultMessage: '执行时间：'
               }),
 
               //执行时间：
               defaultValue: executeTime,
               dropdownWidth: 160,
-              options: TimeOptions,
+              options: TimeOptions
             },
 
             {
@@ -122,9 +127,9 @@ export const RecordTable: React.FC<{
                 );
 
                 return content;
-              },
-            },
-          ],
+              }
+            }
+          ]
         }}
         onLoad={loadData}
         onChange={handleTableChange}
@@ -132,15 +137,15 @@ export const RecordTable: React.FC<{
           columns: getPageColumns({
             openDetailModal: handleOpenDetailModal,
             eventOptions,
-            eventfilter,
+            eventfilter
           }),
 
           dataSource: records?.contents,
           rowKey: 'id',
           pagination: {
             current: records?.page?.number,
-            total: records?.page?.totalElements,
-          },
+            total: records?.page?.totalElements
+          }
         }}
       />
 
@@ -148,7 +153,7 @@ export const RecordTable: React.FC<{
         visible={detailVisible}
         title={formatMessage({
           id: 'odc.component.RecordPopover.components.RecordDetails',
-          defaultMessage: '记录详情',
+          defaultMessage: '记录详情'
         })}
         /*记录详情*/
         detailId={detailId}
@@ -157,7 +162,7 @@ export const RecordTable: React.FC<{
             {
               formatMessage({
                 id: 'odc.component.RecordPopover.components.Close',
-                defaultMessage: '关闭',
+                defaultMessage: '关闭'
               })
 
               /*关闭*/

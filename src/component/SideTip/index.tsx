@@ -192,7 +192,7 @@ class SideTip extends React.Component<SideTipProps, SideTipState> {
 
     this.state = {
       hide,
-      hovered: false,
+      hovered: false
     };
   }
 
@@ -201,11 +201,11 @@ class SideTip extends React.Component<SideTipProps, SideTipState> {
 
     this.setState(
       {
-        hide: true,
+        hide: true
       },
       () => {
         window.localStorage.setItem(getLocalStorageKey(id), 'true');
-      },
+      }
     );
   };
 
@@ -216,11 +216,11 @@ class SideTip extends React.Component<SideTipProps, SideTipState> {
       // isHide
       this.setState(
         {
-          hide: false,
+          hide: false
         },
         () => {
           window.localStorage.removeItem(getLocalStorageKey(id));
-        },
+        }
       );
     } else {
       if (disabled) return;
@@ -233,7 +233,7 @@ class SideTip extends React.Component<SideTipProps, SideTipState> {
 
   handleMouseEnter = (e) => {
     this.setState({
-      hovered: true,
+      hovered: true
     });
     if (this.props.onMouseEnter) {
       this.props.onMouseEnter(e);
@@ -242,7 +242,7 @@ class SideTip extends React.Component<SideTipProps, SideTipState> {
 
   handleMouseLeave = (e) => {
     this.setState({
-      hovered: false,
+      hovered: false
     });
     if (this.props.onMouseLeave) {
       this.props.onMouseLeave(e);
@@ -281,7 +281,7 @@ class SideTip extends React.Component<SideTipProps, SideTipState> {
       hideable = true,
       disabled = false,
       prefixCls: customizePrefixCls,
-      getPopupContainer,
+      getPopupContainer
     } = this.props;
     const { hide, hovered } = this.state;
     const prefixCls = getPrefixCls('sidetip', customizePrefixCls);
@@ -295,7 +295,7 @@ class SideTip extends React.Component<SideTipProps, SideTipState> {
       [`${buttonPrefix}-icon-open`]: open,
       [`${buttonPrefix}-icon-disabled`]: disabled,
       [`${buttonPrefix}-icon-${typeCls}`]: typeCls,
-      [`${buttonPrefix}-icon-${sizeCls}`]: sizeCls,
+      [`${buttonPrefix}-icon-${sizeCls}`]: sizeCls
     });
 
     // 接受三种形式的icon
@@ -313,18 +313,18 @@ class SideTip extends React.Component<SideTipProps, SideTipState> {
     const closeClassName = classnames(`${buttonPrefix}-close`, {
       [`${buttonPrefix}-close-show`]: open,
       [`${buttonPrefix}-close-${typeCls}`]: typeCls,
-      [`${buttonPrefix}-close-${sizeCls}`]: sizeCls,
+      [`${buttonPrefix}-close-${sizeCls}`]: sizeCls
     });
 
     const buttonClassName = classnames(buttonPrefix, customButtonClassName, {
       [`${buttonPrefix}-disabled`]: disabled,
       [`${buttonPrefix}-${typeCls}`]: typeCls,
-      [`${buttonPrefix}-${sizeCls}`]: sizeCls,
+      [`${buttonPrefix}-${sizeCls}`]: sizeCls
     });
 
     const loadingClassName = classnames(`${buttonPrefix}-loading`, {
       [`${buttonPrefix}-loading-${typeCls}`]: typeCls,
-      [`${buttonPrefix}-loading-${sizeCls}`]: sizeCls,
+      [`${buttonPrefix}-loading-${sizeCls}`]: sizeCls
     });
 
     // 内部 Icon
@@ -348,12 +348,16 @@ class SideTip extends React.Component<SideTipProps, SideTipState> {
     );
 
     const hideIconClassName = classnames(`${prefixCls}-hide`, {
-      [`${prefixCls}-hide-hovered`]: hovered,
+      [`${prefixCls}-hide-hovered`]: hovered
     });
 
     // 隐藏按钮
     const hideIcon = (
-      <div id="ui-mini-hide" onClick={this.hideSideTip} className={hideIconClassName}>
+      <div
+        id="ui-mini-hide"
+        onClick={this.hideSideTip}
+        className={hideIconClassName}
+      >
         <div className={`${prefixCls}-hide-icon`} />
       </div>
     );
@@ -377,7 +381,10 @@ class SideTip extends React.Component<SideTipProps, SideTipState> {
         className={className}
       >
         {tooltip && tooltip.title ? (
-          <Tooltip {...tooltip} getPopupContainer={() => this.buttonRef.current}>
+          <Tooltip
+            {...tooltip}
+            getPopupContainer={() => this.buttonRef.current}
+          >
             {BadgeButton}
           </Tooltip>
         ) : (

@@ -21,7 +21,8 @@ function unifiedStr(value: string) {
   return value?.replace(/\\"|\\t|\'/g, '');
 }
 export function getOBUser(value) {
-  let [username, tenantName = null, clusterName = null] = value?.split(/\@|#|:/);
+  let [username, tenantName = null, clusterName = null] =
+    value?.split(/\@|#|:/);
   if (clusterName) {
     const end = value?.split(clusterName)?.pop();
     if (end) {
@@ -31,7 +32,7 @@ export function getOBUser(value) {
   return {
     username,
     tenantName,
-    clusterName,
+    clusterName
   };
 }
 class Parser {
@@ -51,8 +52,8 @@ class Parser {
       error?.push(
         formatMessage({
           id: 'odc.src.util.TheOptionCannotBeEmpty',
-          defaultMessage: '选项不能为空',
-        }), //'选项不能为空'
+          defaultMessage: '选项不能为空'
+        }) //'选项不能为空'
       );
     }
     for (const option of options) {
@@ -63,10 +64,10 @@ class Parser {
           formatMessage(
             {
               id: 'odc.src.util.TheOptionNameMustStart',
-              defaultMessage: '选项名称必须要以 - 开头: {name}',
+              defaultMessage: '选项名称必须要以 - 开头: {name}'
             },
-            { name },
-          ), //`选项名称必须要以 - 开头: ${name}`
+            { name }
+          ) //`选项名称必须要以 - 开头: ${name}`
         );
       }
       if (param?.some((item) => item?.length === 1)) {
@@ -74,10 +75,11 @@ class Parser {
           formatMessage(
             {
               id: 'odc.src.util.TheOptionKeyMustContain',
-              defaultMessage: '选项键必须包含一个名称，不允许使用单独的 -: {name}',
+              defaultMessage:
+                '选项键必须包含一个名称，不允许使用单独的 -: {name}'
             },
-            { name },
-          ), //`选项键必须包含一个名称，不允许使用单独的 -: ${name}`
+            { name }
+          ) //`选项键必须包含一个名称，不允许使用单独的 -: ${name}`
         );
       }
       if (typeof type !== 'function') {
@@ -85,10 +87,10 @@ class Parser {
           formatMessage(
             {
               id: 'odc.src.util.TheOptionTypeIsLacking',
-              defaultMessage: '选项类型缺少或不是函数: {name}',
+              defaultMessage: '选项类型缺少或不是函数: {name}'
             },
-            { name },
-          ), //`选项类型缺少或不是函数: ${name}`
+            { name }
+          ) //`选项类型缺少或不是函数: ${name}`
         );
       }
       if (shortp[1] !== '-' && shortp.length > 2) {
@@ -96,10 +98,10 @@ class Parser {
           formatMessage(
             {
               id: 'odc.src.util.TheShortOptionNameMust',
-              defaultMessage: '短选项名称必须只有一个字符: {name}',
+              defaultMessage: '短选项名称必须只有一个字符: {name}'
             },
-            { name },
-          ), //`短选项名称必须只有一个字符: ${name}`
+            { name }
+          ) //`短选项名称必须只有一个字符: ${name}`
         );
       }
     }
@@ -111,7 +113,7 @@ class Parser {
     const result: {
       [key: string]: any;
     } = {
-      _: [],
+      _: []
     };
     const errors = this.validateOptions();
     if (errors?.length) {
@@ -132,7 +134,9 @@ class Parser {
       }
       if (wholeArg.length > 1 && wholeArg[0] === '-') {
         const [argName, argStr] =
-          wholeArg[1] === '-' ? wholeArg.split(/=(.*)/, 2) : [wholeArg.substr(0, 2), undefined];
+          wholeArg[1] === '-'
+            ? wholeArg.split(/=(.*)/, 2)
+            : [wholeArg.substr(0, 2), undefined];
         const [name, type, isFlag] = handlers[argName] ?? [];
         if (!(argName in handlers)) {
           continue;
@@ -142,18 +146,24 @@ class Parser {
         } else if (argStr === undefined) {
           if (wholeArg[1] !== '-' && wholeArg.length > 2) {
             let value: any = wholeArg?.substr(2);
-            result[name] = isUndefined(value) ? value : type(value, name, result[name]);
+            result[name] = isUndefined(value)
+              ? value
+              : type(value, name, result[name]);
           } else {
             const next = args[i + 1];
             const isNextValid = !next?.startsWith('-');
             let value: any = isNextValid ? next : null;
-            result[name] = isNil(value) ? value : type(value, name, result[name]);
+            result[name] = isNil(value)
+              ? value
+              : type(value, name, result[name]);
             if (isNextValid) {
               ++i;
             }
           }
         } else {
-          result[name] = isUndefined(argStr) ? argStr : type(argStr, name, result[name]);
+          result[name] = isUndefined(argStr)
+            ? argStr
+            : type(argStr, name, result[name]);
         }
       } else {
         result._.push(wholeArg);
@@ -166,91 +176,91 @@ export const parser = new Parser([
   {
     name: 'user',
     param: ['-u', '--user'],
-    type: String,
+    type: String
   },
   {
     name: 'host',
     param: ['-h', '--host'],
-    type: String,
+    type: String
   },
   {
     name: 'port',
     param: ['-P', '--port'],
-    type: Number,
+    type: Number
   },
   {
     name: 'password',
     param: ['-p', '--password'],
-    type: String,
+    type: String
   },
   {
     name: 'defaultSchema',
     param: ['-D', '--database'],
-    type: String,
+    type: String
   },
   {
     name: 'no-auto-rehash',
     param: ['-A'],
-    type: String,
+    type: String
   },
   {
     name: 'batch',
     param: ['-B'],
-    type: String,
+    type: String
   },
   {
     name: 'comments',
     param: ['-c'],
-    type: String,
+    type: String
   },
   {
     name: 'compress',
     param: ['-C'],
-    type: String,
+    type: String
   },
   {
     name: 'vertical',
     param: ['-E'],
-    type: String,
+    type: String
   },
   {
     name: 'force',
     param: ['-f'],
-    type: String,
+    type: String
   },
   {
     name: 'ignore-spaces',
     param: ['-i'],
-    type: String,
+    type: String
   },
   {
     name: 'no-beep',
     param: ['-b'],
-    type: String,
+    type: String
   },
   {
     name: 'skip-line-numbers',
     param: ['-L'],
-    type: String,
+    type: String
   },
   {
     name: 'unbuffered',
     param: ['-n'],
-    type: String,
+    type: String
   },
   {
     name: 'wait',
     param: ['-w'],
-    type: String,
+    type: String
   },
   {
     name: 'verbose',
     param: ['-v'],
-    type: String,
+    type: String
   },
   {
     name: 'skip-column-names',
     param: ['-N'],
-    type: String,
-  },
+    type: String
+  }
 ]);

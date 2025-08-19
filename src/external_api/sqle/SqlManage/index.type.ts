@@ -31,7 +31,7 @@ import {
   GetSqlManageListV3FilterStatusEnum,
   GetSqlManageListV3FilterPriorityEnum,
   GetSqlManageListV3SortFieldEnum,
-  GetSqlManageListV3SortOrderEnum,
+  GetSqlManageListV3SortOrderEnum
 } from './index.enum';
 
 import {
@@ -45,7 +45,7 @@ import {
   ISqlManageCodingReq,
   IPostSqlManageCodingResp,
   IGetSqlManageSqlAnalysisResp,
-  ISqlManageAnalysisChartResp,
+  ISqlManageAnalysisChartResp
 } from '../common.type';
 
 export interface IGetGlobalSqlManageListParams {
@@ -60,7 +60,8 @@ export interface IGetGlobalSqlManageListParams {
   page_size: number;
 }
 
-export interface IGetGlobalSqlManageListReturn extends IGetGlobalSqlManageListResp {}
+export interface IGetGlobalSqlManageListReturn
+  extends IGetGlobalSqlManageListResp {}
 
 export interface IGetGlobalSqlManageStatisticsParams {
   filter_project_uid?: string;
@@ -70,7 +71,8 @@ export interface IGetGlobalSqlManageStatisticsParams {
   filter_project_priority?: GetGlobalSqlManageStatisticsFilterProjectPriorityEnum;
 }
 
-export interface IGetGlobalSqlManageStatisticsReturn extends IGetGlobalSqlManageStatisticsResp {}
+export interface IGetGlobalSqlManageStatisticsReturn
+  extends IGetGlobalSqlManageStatisticsResp {}
 
 export interface IGetSqlManageListParams {
   project_name: string;
@@ -163,7 +165,8 @@ export interface IGetSqlManageRuleTipsParams {
   project_name: string;
 }
 
-export interface IGetSqlManageRuleTipsReturn extends IGetSqlManageRuleTipsResp {}
+export interface IGetSqlManageRuleTipsReturn
+  extends IGetSqlManageRuleTipsResp {}
 
 export interface ISendSqlManageParams extends ISqlManageCodingReq {
   project_name: string;
@@ -177,7 +180,8 @@ export interface IGetSqlManageSqlAnalysisV1Params {
   sql_manage_id: string;
 }
 
-export interface IGetSqlManageSqlAnalysisV1Return extends IGetSqlManageSqlAnalysisResp {}
+export interface IGetSqlManageSqlAnalysisV1Return
+  extends IGetSqlManageSqlAnalysisResp {}
 
 export interface IGetSqlManageSqlAnalysisChartV1Params {
   project_name: string;
@@ -193,7 +197,8 @@ export interface IGetSqlManageSqlAnalysisChartV1Params {
   metric_name: string;
 }
 
-export interface IGetSqlManageSqlAnalysisChartV1Return extends ISqlManageAnalysisChartResp {}
+export interface IGetSqlManageSqlAnalysisChartV1Return
+  extends ISqlManageAnalysisChartResp {}
 
 export interface IGetSqlManageListV2Params {
   project_name: string;

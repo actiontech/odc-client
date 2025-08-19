@@ -12,13 +12,15 @@ import EditableTable from '@/page/Workspace/components/EditableTable';
 import { formatMessage } from '@/util/intl';
 import {
   ITableListPartition,
-  ITableListColumnsPartition,
+  ITableListColumnsPartition
 } from '@/page/Workspace/components/CreateTable/interface';
 import { partitionNameMap } from '@/page/Workspace/components/CreateTable/Partition/CreateTablePartitionRuleForm';
 import { getTitleByPartType } from '@/page/Workspace/components/TablePage/Partitions';
 interface IProps {}
 const MvViewPartitions: React.FC<IProps> = () => {
-  const { materializedView, session, onRefresh } = useContext(MaterializedViewPageContext);
+  const { materializedView, session, onRefresh } = useContext(
+    MaterializedViewPageContext
+  );
   const [selectedRowsIdx, setSelectedRowIdx] = useState<number[]>([]);
   const gridRef = useRef<DataGridRef>();
   const subpartitionsGridRef = useRef<DataGridRef>();
@@ -28,30 +30,32 @@ const MvViewPartitions: React.FC<IProps> = () => {
       key: 'name',
       name: formatMessage({
         id: 'workspace.window.createTable.partition.name',
-        defaultMessage: '分区名称',
+        defaultMessage: '分区名称'
       }),
       resizable: true,
-      sortable: false,
+      sortable: false
     },
 
     {
       key: 'position',
       name: formatMessage({
         id: 'workspace.window.createTable.partition.position',
-        defaultMessage: '顺序',
+        defaultMessage: '顺序'
       }),
       resizable: true,
       sortable: false,
-      width: 110,
+      width: 110
     },
-    ![IPartitionType.HASH, IPartitionType.KEY]?.includes(materializedView?.partitions?.partType)
+    ![IPartitionType.HASH, IPartitionType.KEY]?.includes(
+      materializedView?.partitions?.partType
+    )
       ? {
           key: 'partValues',
           name: getTitleByPartType(materializedView?.partitions?.partType),
           resizable: true,
-          sortable: false,
+          sortable: false
         }
-      : null,
+      : null
   ]?.filter(Boolean);
 
   const subpartitionsColumns = [
@@ -59,57 +63,59 @@ const MvViewPartitions: React.FC<IProps> = () => {
       key: 'parentName',
       name: formatMessage({
         id: 'src.page.Workspace.components.TablePage.Partitions.30EACD95',
-        defaultMessage: '一级分区名称',
+        defaultMessage: '一级分区名称'
       }),
       resizable: true,
-      sortable: false,
+      sortable: false
     },
     {
       key: 'name',
       name: formatMessage({
         id: 'src.page.Workspace.components.TablePage.Partitions.E6EE95C1',
-        defaultMessage: '二级分区名称',
+        defaultMessage: '二级分区名称'
       }),
       resizable: true,
-      sortable: false,
+      sortable: false
     },
     {
       key: 'position',
       name: formatMessage({
         id: 'src.page.Workspace.components.TablePage.Partitions.AD70BB60',
-        defaultMessage: '顺序',
+        defaultMessage: '顺序'
       }),
       resizable: true,
       sortable: false,
-      width: 110,
+      width: 110
     },
-    ![IPartitionType.HASH, IPartitionType.KEY]?.includes(materializedView?.partitions?.partType)
+    ![IPartitionType.HASH, IPartitionType.KEY]?.includes(
+      materializedView?.partitions?.partType
+    )
       ? {
           key: 'partValues',
           name: getTitleByPartType(materializedView?.partitions?.partType),
           resizable: true,
-          sortable: false,
+          sortable: false
         }
-      : null,
+      : null
   ]?.filter(Boolean);
 
   useEffect(() => {
     const rows = getRowsByPartType(
       materializedView?.partitions?.partType,
       materializedView?.partitions,
-      session.odcDatabase?.dataSource?.dialectType,
+      session.odcDatabase?.dataSource?.dialectType
     );
     const subpartitionsRows = getRowsByPartType(
       materializedView?.subpartitions?.partType,
       materializedView?.subpartitions,
-      session.odcDatabase?.dataSource?.dialectType,
+      session.odcDatabase?.dataSource?.dialectType
     );
     gridRef.current?.setRows?.(rows ?? []);
     subpartitionsGridRef?.current?.setRows?.(subpartitionsRows ?? []);
   }, [
     materializedView?.partitions?.partType,
     materializedView?.partitions,
-    materializedView?.subpartitions,
+    materializedView?.subpartitions
   ]);
 
   switch (materializedView?.partitions?.partType) {
@@ -122,12 +128,12 @@ const MvViewPartitions: React.FC<IProps> = () => {
       const rows = getRowsByPartType(
         materializedView?.partitions?.partType,
         materializedView?.partitions,
-        session.odcDatabase?.dataSource?.dialectType,
+        session.odcDatabase?.dataSource?.dialectType
       );
       const subpartitionsRows = getRowsByPartType(
         materializedView.subpartitions?.partType,
         materializedView?.subpartitions,
-        session.odcDatabase?.dataSource?.dialectType,
+        session.odcDatabase?.dataSource?.dialectType
       );
       return (
         <TableCardLayout
@@ -138,7 +144,7 @@ const MvViewPartitions: React.FC<IProps> = () => {
                   icon={<PlusOutlined />}
                   text={formatMessage({
                     id: 'src.page.Workspace.components.MaterializedViewPage.Partitions.63E013C3',
-                    defaultMessage: '暂不支持',
+                    defaultMessage: '暂不支持'
                   })}
                   disabled
                 />
@@ -146,7 +152,7 @@ const MvViewPartitions: React.FC<IProps> = () => {
                   icon={<DeleteOutlined />}
                   text={formatMessage({
                     id: 'src.page.Workspace.components.MaterializedViewPage.Partitions.940F0641',
-                    defaultMessage: '暂不支持',
+                    defaultMessage: '暂不支持'
                   })}
                   disabled
                 />
@@ -154,7 +160,7 @@ const MvViewPartitions: React.FC<IProps> = () => {
                   icon={<SyncOutlined />}
                   text={formatMessage({
                     id: 'odc.components.ShowTableBaseInfoForm.Refresh',
-                    defaultMessage: '刷新',
+                    defaultMessage: '刷新'
                   })}
                   /* 刷新 */ onClick={onRefresh}
                 />
@@ -167,25 +173,25 @@ const MvViewPartitions: React.FC<IProps> = () => {
               <Typography.Text strong>
                 {formatMessage({
                   id: 'src.page.Workspace.components.TablePage.Partitions.3FB355F5',
-                  defaultMessage: '一级分区',
+                  defaultMessage: '一级分区'
                 })}
               </Typography.Text>
               <span>
                 {formatMessage(
                   {
                     id: 'src.page.Workspace.components.TablePage.Partitions.189B7E31',
-                    defaultMessage: '分区类型: {partitionNameMapPartType}',
+                    defaultMessage: '分区类型: {partitionNameMapPartType}'
                   },
                   {
                     partitionNameMapPartType:
-                      partitionNameMap[materializedView?.partitions?.partType],
-                  },
+                      partitionNameMap[materializedView?.partitions?.partType]
+                  }
                 )}
               </span>
               <span>
                 {formatMessage({
                   id: 'src.page.Workspace.components.TablePage.Partitions.89FFF404',
-                  defaultMessage: '分区键:',
+                  defaultMessage: '分区键:'
                 })}
 
                 {(materializedView?.partitions?.partType as any)?.expression ||
@@ -207,34 +213,42 @@ const MvViewPartitions: React.FC<IProps> = () => {
 
           {subpartitionsRows?.length > 0 ? (
             <>
-              <div style={{ lineHeight: '40px', height: 40, padding: '0px 12px' }}>
+              <div
+                style={{ lineHeight: '40px', height: 40, padding: '0px 12px' }}
+              >
                 <Space size={'large'} align="center">
                   <Typography.Text strong>
                     {formatMessage({
                       id: 'src.page.Workspace.components.TablePage.Partitions.59AC9434',
-                      defaultMessage: '二级分区',
+                      defaultMessage: '二级分区'
                     })}
                   </Typography.Text>
                   <span>
                     {formatMessage(
                       {
                         id: 'src.page.Workspace.components.TablePage.Partitions.7DB0502E',
-                        defaultMessage: '分区类型: {partitionNameMapSubpartitionType}',
+                        defaultMessage:
+                          '分区类型: {partitionNameMapSubpartitionType}'
                       },
                       {
                         partitionNameMapSubpartitionType:
-                          partitionNameMap[materializedView.subpartitions?.partType],
-                      },
+                          partitionNameMap[
+                            materializedView.subpartitions?.partType
+                          ]
+                      }
                     )}
                   </span>
                   <span>
                     {formatMessage({
                       id: 'src.page.Workspace.components.TablePage.Partitions.79A4B409',
-                      defaultMessage: '分区键:',
+                      defaultMessage: '分区键:'
                     })}
 
-                    {(materializedView.subpartitions as ITableListPartition)?.expression ||
-                      (materializedView.subpartitions as ITableListColumnsPartition)?.columns
+                    {(materializedView.subpartitions as ITableListPartition)
+                      ?.expression ||
+                      (
+                        materializedView.subpartitions as ITableListColumnsPartition
+                      )?.columns
                         ?.map((column) => column?.columnName)
                         ?.join(',') ||
                       '-'}
@@ -242,16 +256,16 @@ const MvViewPartitions: React.FC<IProps> = () => {
                   <span>
                     {formatMessage({
                       id: 'src.page.Workspace.components.TablePage.Partitions.B3C734DB',
-                      defaultMessage: '二级分区模板化:',
+                      defaultMessage: '二级分区模板化:'
                     })}
                     {materializedView.subpartitions?.subpartitionTemplated
                       ? formatMessage({
                           id: 'src.page.Workspace.components.TablePage.Partitions.67A2BC68',
-                          defaultMessage: '是',
+                          defaultMessage: '是'
                         })
                       : formatMessage({
                           id: 'src.page.Workspace.components.TablePage.Partitions.31C167AC',
-                          defaultMessage: '否',
+                          defaultMessage: '否'
                         })}
                   </span>
                 </Space>

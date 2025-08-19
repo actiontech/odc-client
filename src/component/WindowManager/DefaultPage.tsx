@@ -46,14 +46,14 @@ export default function DefaultPage() {
         width: 360,
         position: 'absolute',
         top: 0,
-        left: 0,
+        left: 0
       }}
     >
       <Typography.Title level={4}>
         {
           formatMessage({
             id: 'odc.component.WindowManager.DefaultPage.QuickStart',
-            defaultMessage: '快速开始',
+            defaultMessage: '快速开始'
           }) /*快速开始*/
         }
       </Typography.Title>
@@ -71,7 +71,7 @@ export default function DefaultPage() {
           {
             formatMessage({
               id: 'odc.component.WindowManager.DefaultPage.OpenTheSqlWindow',
-              defaultMessage: '打开 SQL 窗口',
+              defaultMessage: '打开 SQL 窗口'
             }) /*打开 SQL 窗口*/
           }
         </div>
@@ -90,7 +90,7 @@ export default function DefaultPage() {
           {
             formatMessage({
               id: 'odc.component.WindowManager.DefaultPage.OpenTheAnonymousBlockWindow',
-              defaultMessage: '打开匿名块窗口',
+              defaultMessage: '打开匿名块窗口'
             }) /*打开匿名块窗口*/
           }
         </div>
@@ -109,7 +109,7 @@ export default function DefaultPage() {
           {
             formatMessage({
               id: 'odc.component.WindowManager.DefaultPage.ViewTickets',
-              defaultMessage: '查看工单',
+              defaultMessage: '查看工单'
             }) /*查看工单*/
           }
         </div>
@@ -120,7 +120,7 @@ export default function DefaultPage() {
           setting.setTheme(
             setting.theme?.key === EThemeConfigKey.ODC_WHITE
               ? EThemeConfigKey.ODC_DARK
-              : EThemeConfigKey.ODC_WHITE,
+              : EThemeConfigKey.ODC_WHITE
           );
         }}
         className={styles.item}
@@ -132,7 +132,7 @@ export default function DefaultPage() {
           {
             formatMessage({
               id: 'odc.component.WindowManager.DefaultPage.SwitchTopics',
-              defaultMessage: '切换主题',
+              defaultMessage: '切换主题'
             }) /*切换主题*/
           }
         </div>

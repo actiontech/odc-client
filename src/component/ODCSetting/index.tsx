@@ -27,27 +27,34 @@ import {
   Row,
   Space,
   Tabs,
-  Typography,
+  Typography
 } from 'antd';
-import React, { ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
 import odcSetting, {
   IODCSetting,
   odcGroupSetting,
   odcPersonSetting,
   ODCSettingGroup,
-  odcSettingMap,
+  odcSettingMap
 } from './config';
 
 import { ModalStore } from '@/store/modal';
 import setting, { getCurrentOrganizationId } from '@/store/setting';
 import { getODCSetting, saveODCSetting } from '@/util/client';
 import { isClient } from '@/util/env';
-import { encrypt, safeParseJson } from '@/util/utils';
+import { safeParseJson } from '@/util/utils';
 import { inject, observer } from 'mobx-react';
 import styles from './index.less';
 import odc from '@/plugins/odc';
 import login from '@/store/login';
 import { ConfigHelper } from './utils/configHelper';
+import { BasicModal, ModeSwitcher, ToggleTokens } from '@actiontech/dms-kit';
 
 interface IProps {
   modalStore?: ModalStore;
@@ -58,13 +65,13 @@ const { Search } = Input;
 enum ESpaceType {
   USER = 'user',
   GROUP = 'group',
-  PERSONAL = 'personal',
+  PERSONAL = 'personal'
 }
 
 const settingMap = {
   [ESpaceType.USER]: odcSetting,
   [ESpaceType.GROUP]: odcGroupSetting,
-  [ESpaceType.PERSONAL]: odcPersonSetting,
+  [ESpaceType.PERSONAL]: odcPersonSetting
 };
 
 type TSetting = Map<
@@ -86,9 +93,11 @@ const ODCSetting: React.FC<IProps> = ({ modalStore }) => {
   const [spaceFormRef] = Form.useForm();
   const [changed, setChanged] = useState(false);
   const formBoxRef = React.createRef<HTMLDivElement>();
-  const scrollSwitcher = useRef<Boolean>(true);
+  const scrollSwitcher = useRef<boolean>(true);
   const [spaceType, setSpaceType] = useState(ESpaceType.USER);
-  const isAdmin = odc.appConfig.manage.user.isODCOrganizationConfig?.(login.user);
+  const isAdmin = odc.appConfig.manage.user.isODCOrganizationConfig?.(
+    login.user
+  );
   const [searchValue, setSearchValue] = useState('');
 
   const getData = useCallback(
@@ -107,7 +116,8 @@ const ODCSetting: React.FC<IProps> = ({ modalStore }) => {
         }
       >();
       settingMap[type].forEach((setting) => {
-        const { group, secondGroup, key, render, storeType, disabledInClient } = setting;
+        const { group, secondGroup, key, render, storeType, disabledInClient } =
+          setting;
         if (!isClient() && storeType === 'local') {
           return;
         }
@@ -118,7 +128,7 @@ const ODCSetting: React.FC<IProps> = ({ modalStore }) => {
           result.set(group.key, {
             ...group,
             secondGroup: new Map(),
-            settings: [],
+            settings: []
           });
         }
         const groupItem = result.get(group.key);
@@ -126,7 +136,7 @@ const ODCSetting: React.FC<IProps> = ({ modalStore }) => {
           if (!groupItem.secondGroup.has(secondGroup.key)) {
             groupItem.secondGroup.set(secondGroup.key, {
               ...secondGroup,
-              settings: [],
+              settings: []
             });
           }
           const secondGroupItem = groupItem.secondGroup.get(secondGroup.key);
@@ -137,7 +147,7 @@ const ODCSetting: React.FC<IProps> = ({ modalStore }) => {
       });
       return result;
     },
-    [odcSetting],
+    [odcSetting]
   );
 
   const userData = useMemo(() => {
@@ -145,7 +155,9 @@ const ODCSetting: React.FC<IProps> = ({ modalStore }) => {
   }, []);
 
   const spaceUserData = useMemo(() => {
-    return getData(login.isPrivateSpace() ? ESpaceType.PERSONAL : ESpaceType.GROUP);
+    return getData(
+      login.isPrivateSpace() ? ESpaceType.PERSONAL : ESpaceType.GROUP
+    );
   }, []);
 
   const data = useMemo(() => {
@@ -161,7 +173,7 @@ const ODCSetting: React.FC<IProps> = ({ modalStore }) => {
         const thirdGroupItems = g.settings.map((setting) => ({
           key: setting.locationKey,
           label: setting.label,
-          parentKey: g.key,
+          parentKey: g.key
         }));
         thirdKeys.push(...thirdGroupItems);
       }
@@ -170,20 +182,20 @@ const ODCSetting: React.FC<IProps> = ({ modalStore }) => {
           const thirdGroupItems = item.settings.map((setting) => ({
             key: setting.locationKey,
             label: setting.label,
-            parentKey: g.key,
+            parentKey: g.key
           }));
           thirdKeys.push(...thirdGroupItems);
         }
         return {
           key: item.key,
           label: item.label,
-          parentKey: g.key,
+          parentKey: g.key
         };
       });
       secondKeys.push(...secondGroupItems);
       return {
         label: g.label,
-        key: g.key,
+        key: g.key
       };
     });
     return [...keys, ...secondKeys, ...thirdKeys];
@@ -267,13 +279,13 @@ const ODCSetting: React.FC<IProps> = ({ modalStore }) => {
       Modal.confirm({
         title: formatMessage({
           id: 'src.component.ODCSetting.983C51BC',
-          defaultMessage: '确认要取消修改配置吗？',
+          defaultMessage: '确认要取消修改配置吗？'
         }), //'确认要取消修改配置吗？'
         onOk: async () => {
           setChanged(false);
           await modalStore.changeOdcSettingVisible(false);
           resetConfigurations();
-        },
+        }
       });
     } else {
       setChanged(false);
@@ -291,7 +303,7 @@ const ODCSetting: React.FC<IProps> = ({ modalStore }) => {
     const transformedData = ConfigHelper.transformLoadData(data);
     formRef.setFieldsValue(transformedData);
 
-    let spaceData = (await setting.getSpaceConfig()) || {};
+    const spaceData = (await setting.getSpaceConfig()) || {};
 
     const transformedSpaceData = ConfigHelper.transformLoadData(spaceData);
     spaceFormRef.setFieldsValue(transformedSpaceData);
@@ -358,8 +370,8 @@ const ODCSetting: React.FC<IProps> = ({ modalStore }) => {
       message.warning(
         formatMessage({
           id: 'src.component.ODCSetting.CFC0C3E8',
-          defaultMessage: '快捷键冲突, 请重新输入。',
-        }),
+          defaultMessage: '快捷键冲突, 请重新输入。'
+        })
       );
       return;
     }
@@ -367,7 +379,9 @@ const ODCSetting: React.FC<IProps> = ({ modalStore }) => {
      * submit serverData
      */
     const isSuccess = await setting.updateUserConfig(serverData as any);
-    const isSpaceSaved = await setting.updateSpaceConfig(spaceServerData as any);
+    const isSpaceSaved = await setting.updateSpaceConfig(
+      spaceServerData as any
+    );
     /**
      * submit localData
      */
@@ -378,8 +392,8 @@ const ODCSetting: React.FC<IProps> = ({ modalStore }) => {
       message.success(
         formatMessage({
           id: 'src.component.ODCSetting.E6DD81BF' /*'保存成功'*/,
-          defaultMessage: '保存成功',
-        }),
+          defaultMessage: '保存成功'
+        })
       );
       close(true);
     }
@@ -389,7 +403,7 @@ const ODCSetting: React.FC<IProps> = ({ modalStore }) => {
     Modal.confirm({
       title: formatMessage({
         id: 'src.component.ODCSetting.647A18AA',
-        defaultMessage: '确定要恢复默认设置吗？',
+        defaultMessage: '确定要恢复默认设置吗？'
       }), //'确定要恢复默认设置吗？'
       onOk: async () => {
         const isSuccess = await setting.resetUserConfig();
@@ -398,12 +412,12 @@ const ODCSetting: React.FC<IProps> = ({ modalStore }) => {
           message.success(
             formatMessage({
               id: 'src.component.ODCSetting.654799D1' /*'已恢复到默认配置'*/,
-              defaultMessage: '已恢复到默认配置',
-            }),
+              defaultMessage: '已恢复到默认配置'
+            })
           );
           close(true);
         }
-      },
+      }
     });
   }
 
@@ -418,7 +432,7 @@ const ODCSetting: React.FC<IProps> = ({ modalStore }) => {
       Array.from(
         groupData.secondGroup.values() as {
           settings: IODCSetting[];
-        }[],
+        }[]
       ).some((sg) => sg.settings?.some((set) => !set.hidden))
     ) {
       return true;
@@ -429,7 +443,7 @@ const ODCSetting: React.FC<IProps> = ({ modalStore }) => {
   function formRender({
     currentRef,
     data,
-    hidden,
+    hidden
   }: {
     currentRef: FormInstance<any>;
     data: TSetting;
@@ -451,54 +465,62 @@ const ODCSetting: React.FC<IProps> = ({ modalStore }) => {
                 </Typography.Title>
               )}
               {groupData?.secondGroup.size > 0 ? (
-                Array.from(groupData?.secondGroup?.values()).map((group, index) => {
-                  return (
-                    <React.Fragment key={group.key}>
-                      <Space
-                        style={{ width: '100%', paddingLeft: 8, marginTop: 12 }}
-                        direction="vertical"
-                      >
-                        {!!group.label && (
-                          <Typography.Text data-name={group.key} strong>
-                            {group.label}
-                          </Typography.Text>
-                        )}
-                        <Row style={{ paddingLeft: 12 }} gutter={20}>
-                          {group.settings.map((set, index) => {
-                            return (
-                              <Col key={index} span={set.span || 10}>
-                                <Form.Item
-                                  label={
-                                    <Space direction="vertical" size={2}>
-                                      <Typography.Text data-name={set.locationKey}>
-                                        {set.label}
-                                      </Typography.Text>
-                                      {!!set.tip && (
-                                        <Typography.Text type="secondary">
-                                          {set.tip}
+                Array.from(groupData?.secondGroup?.values()).map(
+                  (group, index) => {
+                    return (
+                      <React.Fragment key={group.key}>
+                        <Space
+                          style={{
+                            width: '100%',
+                            paddingLeft: 8,
+                            marginTop: 12
+                          }}
+                          direction="vertical"
+                        >
+                          {!!group.label && (
+                            <Typography.Text data-name={group.key} strong>
+                              {group.label}
+                            </Typography.Text>
+                          )}
+                          <Row style={{ paddingLeft: 12 }} gutter={20}>
+                            {group.settings.map((set, index) => {
+                              return (
+                                <Col key={index} span={set.span || 10}>
+                                  <Form.Item
+                                    label={
+                                      <Space direction="vertical" size={2}>
+                                        <Typography.Text
+                                          data-name={set.locationKey}
+                                        >
+                                          {set.label}
                                         </Typography.Text>
-                                      )}
-                                    </Space>
-                                  }
-                                  dependencies={set?.dependencies}
-                                  name={set.key}
-                                  key={set.key}
-                                  rules={set.rules}
-                                  hidden={set.hidden}
-                                >
-                                  {set.render(null, async () => {})}
-                                </Form.Item>
-                              </Col>
-                            );
-                          })}
-                        </Row>
-                      </Space>
-                      {groupData?.secondGroup.size == index + 1 ? (
-                        <div style={{ margin: '0px 0px 24px 0px' }} />
-                      ) : null}
-                    </React.Fragment>
-                  );
-                })
+                                        {!!set.tip && (
+                                          <Typography.Text type="secondary">
+                                            {set.tip}
+                                          </Typography.Text>
+                                        )}
+                                      </Space>
+                                    }
+                                    dependencies={set?.dependencies}
+                                    name={set.key}
+                                    key={set.key}
+                                    rules={set.rules}
+                                    hidden={set.hidden}
+                                  >
+                                    {set.render(null, async () => {})}
+                                  </Form.Item>
+                                </Col>
+                              );
+                            })}
+                          </Row>
+                        </Space>
+                        {groupData?.secondGroup.size == index + 1 ? (
+                          <div style={{ margin: '0px 0px 24px 0px' }} />
+                        ) : null}
+                      </React.Fragment>
+                    );
+                  }
+                )
               ) : (
                 <Space
                   style={{ width: '100%', paddingLeft: 8, marginTop: 9 }}
@@ -515,7 +537,9 @@ const ODCSetting: React.FC<IProps> = ({ modalStore }) => {
                               {set.label}
                             </Typography.Text>
                             {!!set.tip && (
-                              <Typography.Text type="secondary">{set.tip}</Typography.Text>
+                              <Typography.Text type="secondary">
+                                {set.tip}
+                              </Typography.Text>
                             )}
                           </Space>
                         }
@@ -544,7 +568,7 @@ const ODCSetting: React.FC<IProps> = ({ modalStore }) => {
 
   const searchKeys = useCallback(() => {
     const filtered = dataKeys.filter((item) =>
-      item.label.toLowerCase().includes(searchValue.toLowerCase()),
+      item.label.toLowerCase().includes(searchValue.toLowerCase())
     );
     if (filtered.length > 0) {
       setActiveKey(filtered[0].parentKey || filtered[0].key);
@@ -557,7 +581,7 @@ const ODCSetting: React.FC<IProps> = ({ modalStore }) => {
   const handleEnterPress = (e) => {
     if (e.key === 'Enter') {
       const filtered = dataKeys.filter((item) =>
-        item.label.toLowerCase().includes(searchValue.toLowerCase()),
+        item.label.toLowerCase().includes(searchValue.toLowerCase())
       );
       if (filtered.length > 0) {
         setActiveKey(filtered[0].parentKey || filtered[0].key);
@@ -580,7 +604,7 @@ const ODCSetting: React.FC<IProps> = ({ modalStore }) => {
             }
             return {
               label: g.label,
-              key: g.key,
+              key: g.key
             };
           })
           .filter(Boolean)}
@@ -600,7 +624,7 @@ const ODCSetting: React.FC<IProps> = ({ modalStore }) => {
           {
             formatMessage({
               id: 'src.component.ODCSetting.995A8948' /*取消*/,
-              defaultMessage: '取消',
+              defaultMessage: '取消'
             }) /* 取消 */
           }
         </Button>
@@ -608,7 +632,7 @@ const ODCSetting: React.FC<IProps> = ({ modalStore }) => {
           {
             formatMessage({
               id: 'src.component.ODCSetting.82931AF2' /*恢复默认设置*/,
-              defaultMessage: '恢复默认设置',
+              defaultMessage: '恢复默认设置'
             }) /* 恢复默认设置 */
           }
         </Button>
@@ -616,7 +640,7 @@ const ODCSetting: React.FC<IProps> = ({ modalStore }) => {
           {
             formatMessage({
               id: 'src.component.ODCSetting.AB9A3FA4' /*保存*/,
-              defaultMessage: '保存',
+              defaultMessage: '保存'
             }) /* 保存 */
           }
         </Button>
@@ -624,50 +648,75 @@ const ODCSetting: React.FC<IProps> = ({ modalStore }) => {
     );
   }
   return (
-    <Modal
-      wrapClassName={styles.modal}
+    <BasicModal
+      // wrapClassName={styles.modal}
       width={700}
-      destroyOnClose
+      destroyOnHidden
       open={modalStore.odcSettingVisible}
       onCancel={() => close()}
       title={
         formatMessage({
           id: 'src.component.ODCSetting.AEB0A2EF',
-          defaultMessage: '设置',
+          defaultMessage: '设置'
         }) /*"设置"*/
       }
       footer={footerRender()}
     >
       <div className={styles.settingHeader}>
-        <Radio.Group
-          className={styles.tabs}
-          defaultValue={ESpaceType.USER}
-          onChange={(e) => setSpaceType(e.target.value)}
+        <ModeSwitcher
+          value={spaceType}
+          onChange={(e) => setSpaceType(e)}
+          options={[
+            {
+              label: formatMessage({
+                id: 'src.component.ODCSetting.6BCFD6DD',
+                defaultMessage: '用户'
+              }),
+              value: ESpaceType.USER
+            },
+            {
+              label: formatMessage({
+                id: 'src.component.ODCSetting.47586FD4',
+                defaultMessage: '个人空间'
+              }),
+              value: ESpaceType.PERSONAL
+            },
+            {
+              label: formatMessage({
+                id: 'src.component.ODCSetting.AC147B83',
+                defaultMessage: '团队空间'
+              }),
+              value: ESpaceType.GROUP
+            }
+          ]}
         >
-          <Radio.Button className={styles.user} value={ESpaceType.USER}>
-            {formatMessage({ id: 'src.component.ODCSetting.6BCFD6DD', defaultMessage: '用户' })}
+          {/* <Radio.Button className={styles.user} value={ESpaceType.USER}>
+            {formatMessage({
+              id: 'src.component.ODCSetting.6BCFD6DD',
+              defaultMessage: '用户'
+            })}
           </Radio.Button>
           {login.isPrivateSpace() ? (
             <Radio.Button className={styles.space} value={ESpaceType.PERSONAL}>
               {formatMessage({
                 id: 'src.component.ODCSetting.47586FD4',
-                defaultMessage: '个人空间',
+                defaultMessage: '个人空间'
               })}
             </Radio.Button>
           ) : isAdmin ? (
             <Radio.Button className={styles.space} value={ESpaceType.GROUP}>
               {formatMessage({
                 id: 'src.component.ODCSetting.AC147B83',
-                defaultMessage: '团队空间',
+                defaultMessage: '团队空间'
               })}
             </Radio.Button>
-          ) : null}
-        </Radio.Group>
+          ) : null} */}
+        </ModeSwitcher>
         <Search
           className={styles.search}
           placeholder={formatMessage({
             id: 'src.component.ODCSetting.439621E6',
-            defaultMessage: '搜索设置项',
+            defaultMessage: '搜索设置项'
           })}
           onChange={(e) => handleSearch(e.target.value)}
           onSearch={handleSearch}
@@ -680,19 +729,21 @@ const ODCSetting: React.FC<IProps> = ({ modalStore }) => {
           {formRender({
             currentRef: formRef,
             data: userData,
-            hidden: spaceType !== ESpaceType.USER,
+            hidden: spaceType !== ESpaceType.USER
           })}
           {formRender({
             currentRef: spaceFormRef,
             data: spaceUserData,
-            hidden: spaceType === ESpaceType.USER,
+            hidden: spaceType === ESpaceType.USER
           })}
         </div>
         <div className={styles.menu}>
-          {tabRender({ data: spaceType === ESpaceType.USER ? userData : spaceUserData })}
+          {tabRender({
+            data: spaceType === ESpaceType.USER ? userData : spaceUserData
+          })}
         </div>
       </div>
-    </Modal>
+    </BasicModal>
   );
 };
 

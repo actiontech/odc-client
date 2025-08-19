@@ -14,19 +14,25 @@
  * limitations under the License.
  */
 
-import { getTableColumnList, getTableListByDatabaseName } from '@/common/network/table';
+import {
+  getTableColumnList,
+  getTableListByDatabaseName
+} from '@/common/network/table';
 import { ConnectionMode, ITable, ITableColumn } from '@/d.ts';
 import { IDatabase } from '@/d.ts/database';
 import {
   TableForeignConstraintOnDeleteType,
-  TableForeignConstraintOnUpdateType,
+  TableForeignConstraintOnUpdateType
 } from '@/d.ts/table';
 import { formatMessage } from '@/util/intl';
 import { Column } from '@oceanbase-odc/ob-react-data-grid';
 import { useRequest } from 'ahooks';
 import { uniq } from 'lodash';
 import { useContext, useEffect, useMemo, useState } from 'react';
-import { SelectEditor, WrapSelectEditor } from '../../../EditableTable/Editors/SelectEditor';
+import {
+  SelectEditor,
+  WrapSelectEditor
+} from '../../../EditableTable/Editors/SelectEditor';
 import { TextEditor } from '../../../EditableTable/Editors/TextEditor';
 import { TableColumn, TableForeignConstraint } from '../../interface';
 import TableContext from '../../TableContext';
@@ -38,14 +44,17 @@ function TableSelect(props) {
   const tableContext = useContext(TableContext);
   const [tableList, setTableList] = useState<ITable[]>([]);
   const { loading, run: _fetchTable } = useRequest(getTableListByDatabaseName, {
-    manual: true,
+    manual: true
   });
 
   const fetchTable = async () => {
     if (!tableContext?.session?.sessionId) {
       return;
     }
-    const list = await _fetchTable(tableContext?.session?.sessionId, schemaname);
+    const list = await _fetchTable(
+      tableContext?.session?.sessionId,
+      schemaname
+    );
     setTableList(list);
   };
   useEffect(() => {
@@ -71,7 +80,7 @@ function ColumnSelect(props) {
   const tableContext = useContext(TableContext);
   const [columnList, setColumnList] = useState<ITableColumn[]>([]);
   const { loading, run: _fetchTable } = useRequest(getTableColumnList, {
-    manual: true,
+    manual: true
   });
 
   const fetchColumns = async () => {
@@ -102,12 +111,16 @@ function ColumnSelect(props) {
 export function useColumns(
   columns: TableColumn[],
   databases: IDatabase[],
-  mode: ConnectionMode,
+  mode: ConnectionMode
 ): Column<TableForeignConstraint, TableForeignConstraint>[] {
   const enableColumn = useEnableColumnForeign(mode);
   const deferColumn = useDeferColumn(mode);
   const validColumns = useMemo(() => {
-    return uniq(columns?.filter((column) => !!column.name?.trim()).map((column) => column.name));
+    return uniq(
+      columns
+        ?.filter((column) => !!column.name?.trim())
+        .map((column) => column.name)
+    );
   }, [columns]);
   const ColumnsMultipleSelect = useMemo(() => {
     return WrapSelectEditor(validColumns);
@@ -115,7 +128,7 @@ export function useColumns(
   const schemaSelect = useMemo(() => {
     return WrapSelectEditor(
       databases.map((d) => d.name),
-      false,
+      false
     );
   }, [databases]);
 
@@ -125,10 +138,10 @@ export function useColumns(
         TableForeignConstraintOnDeleteType.CASCADE,
         TableForeignConstraintOnDeleteType.NO_ACTION,
         TableForeignConstraintOnDeleteType.RESTRICT,
-        TableForeignConstraintOnDeleteType.SET_NULL,
+        TableForeignConstraintOnDeleteType.SET_NULL
       ],
 
-      false,
+      false
     );
   }, []);
   const onUpdateSelect = useMemo(() => {
@@ -137,10 +150,10 @@ export function useColumns(
         TableForeignConstraintOnUpdateType.CASCADE,
         TableForeignConstraintOnUpdateType.NO_ACTION,
         TableForeignConstraintOnUpdateType.RESTRICT,
-        TableForeignConstraintOnUpdateType.SET_NULL,
+        TableForeignConstraintOnUpdateType.SET_NULL
       ],
 
-      false,
+      false
     );
   }, []);
   return [
@@ -148,20 +161,20 @@ export function useColumns(
       key: 'name',
       name: formatMessage({
         id: 'odc.CreateTable.Columns.columns.Name',
-        defaultMessage: '名称',
+        defaultMessage: '名称'
       }),
       //名称
       resizable: true,
       editable: true,
       editor: TextEditor,
-      width: 120,
+      width: 120
     },
 
     {
       key: 'columns',
       name: formatMessage({
         id: 'odc.TableConstraint.Foreign.columns.Column',
-        defaultMessage: '列',
+        defaultMessage: '列'
       }), //列
       resizable: true,
       minWidth: 150,
@@ -170,72 +183,72 @@ export function useColumns(
       editor: ColumnsMultipleSelect,
       formatter: ({ row }) => {
         return <span>{row.columns?.join?.(',')}</span>;
-      },
+      }
     },
 
     {
       key: 'schemaname',
       name: formatMessage({
         id: 'odc.TableConstraint.Foreign.columns.AssociatedSchema',
-        defaultMessage: '关联 Schema',
+        defaultMessage: '关联 Schema'
       }),
       //关联 Schema
       resizable: true,
       editable: true,
       editor: schemaSelect,
-      width: 150,
+      width: 150
     },
 
     {
       key: 'tableName',
       name: formatMessage({
         id: 'odc.TableConstraint.Foreign.columns.AssociatedTable',
-        defaultMessage: '关联表',
+        defaultMessage: '关联表'
       }),
       //关联表
       resizable: true,
       editable: true,
       editor: TableSelect,
-      width: 150,
+      width: 150
     },
 
     {
       key: 'parentColumns',
       name: formatMessage({
         id: 'odc.TableConstraint.Foreign.columns.AssociatedColumn',
-        defaultMessage: '关联列',
+        defaultMessage: '关联列'
       }), //关联列
       resizable: true,
       editable: true,
       editor: ColumnSelect,
-      width: 150,
+      width: 150
     },
 
     {
       key: 'onDelete',
       name: formatMessage({
         id: 'odc.TableConstraint.Foreign.columns.Delete',
-        defaultMessage: '删除',
+        defaultMessage: '删除'
       }), //删除
       resizable: true,
       editable: true,
       editor: onDeleteSelect,
-      width: 120,
+      width: 120
     },
 
     {
       key: 'onUpdate',
       name: formatMessage({
         id: 'odc.TableConstraint.Foreign.columns.Update',
-        defaultMessage: '更新',
+        defaultMessage: '更新'
       }), //更新
       resizable: true,
       editable: true,
       editor: onUpdateSelect,
-      width: 120,
+      width: 120
     },
 
     enableColumn,
-    deferColumn,
+    deferColumn
   ].filter(Boolean);
 }

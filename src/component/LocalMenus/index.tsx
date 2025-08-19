@@ -31,8 +31,12 @@ const LocalMenus: React.FC<IProos> = (props) => {
   const { showIcon, className } = props;
   const locale = getLocale();
   const localeObj =
-    localeList.find((item) => item.value.toLowerCase() === locale?.toLowerCase()) ||
-    localeList.find((item) => item.value?.toLowerCase() === defaultLocale?.toLowerCase());
+    localeList.find(
+      (item) => item.value.toLowerCase() === locale?.toLowerCase()
+    ) ||
+    localeList.find(
+      (item) => item.value?.toLowerCase() === defaultLocale?.toLowerCase()
+    );
   const localeMenu = {
     onClick: ({ key }) => {
       window._forceRefresh = true;
@@ -41,8 +45,8 @@ const LocalMenus: React.FC<IProos> = (props) => {
     },
     items: localeList.map((item) => ({
       key: item.value,
-      label: item.label,
-    })),
+      label: item.label
+    }))
   };
   return (
     <DropdownMenu menu={localeMenu} className={className}>

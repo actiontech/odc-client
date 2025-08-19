@@ -4,7 +4,7 @@ export enum UserOperationKey {
   /** 编辑角色 */
   EDIT_ROLES = 'editRole',
   /** 移除成员 */
-  REMOVE_ROLES = 'removeRole',
+  REMOVE_ROLES = 'removeRole'
 }
 
 export enum DataBaseOperationKey {
@@ -27,11 +27,11 @@ export enum DataBaseOperationKey {
   /** 登录数据库 */
   LOGICAL_DATABASE_LOGIN = 'logicalDatabaseLogin',
   /** 移除逻辑库 */
-  DELETE_LOGIN_DATABASE = 'logicalDatabaseDelete',
+  DELETE_LOGIN_DATABASE = 'logicalDatabaseDelete'
 }
 
 export enum ArchivedProjectOperationKey {
-  REMOVE = 'remove',
+  REMOVE = 'remove'
 }
 
 export type IOperation = {

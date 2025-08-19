@@ -9,7 +9,11 @@ interface IProps {
 }
 
 const QrCodeWithIcon = ({ size = 75 }: IProps) => {
-  const renderContent = (qrSize: number, padding: number, iconClassName: string) => (
+  const renderContent = (
+    qrSize: number,
+    padding: number,
+    iconClassName: string
+  ) => (
     <div className={styles.container}>
       <div className={styles.iconContainer}>
         <DingSvg className={iconClassName} />
@@ -27,7 +31,10 @@ const QrCodeWithIcon = ({ size = 75 }: IProps) => {
   );
 
   return (
-    <Popover placement="left" content={renderContent(160, 0, styles.circleIconPopover)}>
+    <Popover
+      placement="left"
+      content={renderContent(160, 0, styles.circleIconPopover)}
+    >
       {renderContent(size, 5, styles.circleIcon)}
     </Popover>
   );

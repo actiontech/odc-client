@@ -21,6 +21,6 @@ export interface ISSOLogin {
 
 export function apply() {
   channel.add(ChannelMap.ODC_SSO_TEST).send(ChannelMap.ODC_SSO_TEST, {
-    isSuccess: true,
+    isSuccess: true
   });
 }

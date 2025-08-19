@@ -18,7 +18,7 @@ import { IResponseData } from '.';
 
 export enum EComparisonScope {
   ALL = 'ALL',
-  PART = 'PART',
+  PART = 'PART'
 }
 
 export enum EOperationType {
@@ -27,7 +27,7 @@ export enum EOperationType {
   DROP = 'DROP',
   NO_ACTION = 'NO_ACTION',
   SKIP = 'SKIP',
-  UNSUPPORTED = 'UNSUPPORTED',
+  UNSUPPORTED = 'UNSUPPORTED'
 }
 
 export interface IComparisonResult {

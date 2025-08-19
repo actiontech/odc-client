@@ -54,7 +54,7 @@ class ToolTipInput extends React.PureComponent<ToolTipInputProos> {
   inputRef = React.createRef();
 
   state = {
-    isShowTop: false,
+    isShowTop: false
   };
 
   timer = null;
@@ -64,7 +64,8 @@ class ToolTipInput extends React.PureComponent<ToolTipInputProos> {
     if (!tempDiv) {
       const el = document.createElement('DIV');
       el.id = 'J_inputResizeTemp';
-      el.style.cssText = 'position:absolute;top:-99999px;padding:0 11px;height:0';
+      el.style.cssText =
+        'position:absolute;top:-99999px;padding:0 11px;height:0';
       document.body.appendChild(el);
       tempDiv = el;
     }
@@ -88,7 +89,7 @@ class ToolTipInput extends React.PureComponent<ToolTipInputProos> {
     clearTimeout(this.timer);
     this.timer = setTimeout(() => {
       this.setState({
-        isShowTop: el.clientWidth + 2 < el.scrollWidth,
+        isShowTop: el.clientWidth + 2 < el.scrollWidth
       });
     }, 300);
   };
@@ -116,7 +117,7 @@ class ToolTipInput extends React.PureComponent<ToolTipInputProos> {
           this.props.value ||
           formatMessage({
             id: 'odc.component.PartitionRange.PartitionValueInput.PleaseFillIn',
-            defaultMessage: '请填写',
+            defaultMessage: '请填写'
           })
         }
         placement="topLeft"
@@ -131,7 +132,7 @@ class ToolTipInput extends React.PureComponent<ToolTipInputProos> {
           onChange={this.handleInputChange}
           onBlur={() => {
             this.setState({
-              isShowTop: false,
+              isShowTop: false
             });
           }}
         />
@@ -181,7 +182,7 @@ class PartitionValueInput extends React.PureComponent<PartitionValueInputProps> 
         <span className="empty-tip">
           {formatMessage({
             id: 'odc.component.PartitionRange.PartitionValueInput.SelectAFieldFirst',
-            defaultMessage: '请先选择字段',
+            defaultMessage: '请先选择字段'
           })}
         </span>
       );
@@ -203,7 +204,7 @@ class PartitionValueInput extends React.PureComponent<PartitionValueInputProps> 
                 addonBefore={columnName}
                 placeholder={formatMessage({
                   id: 'odc.component.PartitionRange.PartitionValueInput.PleaseFillIn',
-                  defaultMessage: '请填写',
+                  defaultMessage: '请填写'
                 })}
               />
             </Form.Item>
@@ -222,7 +223,7 @@ class PartitionValueInput extends React.PureComponent<PartitionValueInputProps> 
         <span className="empty-tip">
           {formatMessage({
             id: 'odc.component.PartitionRange.PartitionValueInput.SelectAFieldFirst',
-            defaultMessage: '请先选择字段',
+            defaultMessage: '请先选择字段'
           })}
         </span>
       );
@@ -248,7 +249,11 @@ class PartitionValueInput extends React.PureComponent<PartitionValueInputProps> 
                       key={`${columnName}-list-input`}
                       placeholder={columnName}
                       onChange={(e) => {
-                        this.handleListColumInputChange(i, columnName, e.target.value);
+                        this.handleListColumInputChange(
+                          i,
+                          columnName,
+                          e.target.value
+                        );
                       }}
                     />
                   );

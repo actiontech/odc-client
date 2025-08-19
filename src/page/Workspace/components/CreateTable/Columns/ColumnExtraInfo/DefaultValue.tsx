@@ -27,7 +27,11 @@ interface IProps {
   onChange: (newColumn: TableColumn) => void;
 }
 
-const DefaultValue: React.FC<IProps> = function ({ column, originColumns, onChange }) {
+const DefaultValue: React.FC<IProps> = function ({
+  column,
+  originColumns,
+  onChange
+}) {
   const { defaultValueOrExpr } = column;
   const pageContext = useContext(TablePageContext);
   let enable = useMemo(() => {
@@ -40,7 +44,9 @@ const DefaultValue: React.FC<IProps> = function ({ column, originColumns, onChan
       }
       return true;
     }
-    const originData = originColumns?.find((c) => c.ordinalPosition === column.ordinalPosition);
+    const originData = originColumns?.find(
+      (c) => c.ordinalPosition === column.ordinalPosition
+    );
     /**
      * 编辑状态下，非自增，非虚拟列才可以编辑
      */
@@ -54,7 +60,7 @@ const DefaultValue: React.FC<IProps> = function ({ column, originColumns, onChan
       <Form.Item
         label={formatMessage({
           id: 'odc.CreateTable.Columns.columns.DefaultValueExpression',
-          defaultMessage: '缺省值/表达式',
+          defaultMessage: '缺省值/表达式'
         })}
       >
         <Space>
@@ -65,7 +71,7 @@ const DefaultValue: React.FC<IProps> = function ({ column, originColumns, onChan
             onChange={(v) => {
               onChange({
                 ...column,
-                defaultValueOrExpr: v.target.value,
+                defaultValueOrExpr: v.target.value
               });
             }}
           />
@@ -75,7 +81,7 @@ const DefaultValue: React.FC<IProps> = function ({ column, originColumns, onChan
             onChange={(e) => {
               onChange({
                 ...column,
-                defaultValueOrExpr: e.target.checked ? null : '',
+                defaultValueOrExpr: e.target.checked ? null : ''
               });
             }}
             checked={isNullValue}

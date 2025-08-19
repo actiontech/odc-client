@@ -26,7 +26,7 @@ import type {
   IFilterContent,
   IOperationContent,
   ITableLoadOptions,
-  ITitleContent,
+  ITitleContent
 } from './interface';
 import useURLParams from '@/util/hooks/useUrlParams';
 
@@ -60,7 +60,7 @@ export const Toolbar: React.FC<IProps> = (props) => {
     onFilterChange,
     onSearchChange,
     onTabChange,
-    onOperationClick,
+    onOperationClick
   } = props;
   const { getParam, deleteParam } = useURLParams();
   const urlTriggerValue = getParam('filtered');
@@ -68,10 +68,16 @@ export const Toolbar: React.FC<IProps> = (props) => {
   return (
     <Space className={classNames(styles.toolBar, 'odc-commontable-toolbar')}>
       {operationContent?.isNeedOccupyElement && <div></div>}
-      {operationContent && <OperationContent {...operationContent} onClick={onOperationClick} />}
-      {titleContent && <TitleContent {...titleContent} onTabChange={onTabChange} />}
+      {operationContent && (
+        <OperationContent {...operationContent} onClick={onOperationClick} />
+      )}
+      {titleContent && (
+        <TitleContent {...titleContent} onTabChange={onTabChange} />
+      )}
       <Space split={isSplit ? '|' : null} size={16}>
-        {cascaderContent && <Cascader {...cascaderContent} multiple maxTagCount="responsive" />}
+        {cascaderContent && (
+          <Cascader {...cascaderContent} multiple maxTagCount="responsive" />
+        )}
         {urlTriggerValue && (
           <Tag
             closable
@@ -83,7 +89,7 @@ export const Toolbar: React.FC<IProps> = (props) => {
           >
             {formatMessage({
               id: 'src.component.CommonTable.2363A9C8',
-              defaultMessage: '仅展示周期执行任务',
+              defaultMessage: '仅展示周期执行任务'
             })}
           </Tag>
         )}

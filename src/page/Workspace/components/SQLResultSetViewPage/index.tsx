@@ -33,7 +33,7 @@ const SQLResultSetViewPage: React.FC<IProps> = (props) => {
     <div
       style={{
         height: `calc(100vh - ${otherHeight}px)`,
-        background: '#ffffff',
+        background: '#ffffff'
       }}
     >
       <CommonIDE
@@ -41,10 +41,13 @@ const SQLResultSetViewPage: React.FC<IProps> = (props) => {
         language={config?.sql?.language}
         initialSQL={props.params?.sqlContent}
         editorProps={{
-          readOnly: true,
+          readOnly: true
         }}
         toolbarGroupKey="EMPTY"
-        resultSets={generateResultSetColumns(props.params?.resultSets, ConnectionMode.OB_ORACLE)}
+        resultSets={generateResultSetColumns(
+          props.params?.resultSets,
+          ConnectionMode.OB_ORACLE
+        )}
         showLog={false}
       />
     </div>

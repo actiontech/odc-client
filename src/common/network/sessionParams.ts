@@ -25,7 +25,7 @@ import { generateVarSid } from './pathUtil';
 export async function updateVariable(
   newData: IConnectionProperty,
   type: ConnectionPropertyType,
-  sessionId?: string,
+  sessionId?: string
 ): Promise<boolean> {
   const sid = generateVarSid(type, sessionId);
   const { key, value } = newData;
@@ -35,14 +35,17 @@ export async function updateVariable(
     data: {
       changed: true,
       key,
-      value,
-    },
+      value
+    }
   });
 
   return result?.data;
 }
 
-export async function fetchVariableList(type: ConnectionPropertyType, sessionId: string) {
+export async function fetchVariableList(
+  type: ConnectionPropertyType,
+  sessionId: string
+) {
   const sid = generateVarSid(type, sessionId);
   const res = await request.get(`/api/v2/variables/list/${sid}`);
   return (
@@ -50,15 +53,20 @@ export async function fetchVariableList(type: ConnectionPropertyType, sessionId:
       return {
         ...p,
         initialValue: p.value,
-        modified: false,
+        modified: false
       };
     }) || []
   );
 }
 
-export async function getDatabaseSessionList(sessionId: string): Promise<IDatabaseSession[]> {
+export async function getDatabaseSessionList(
+  sessionId: string
+): Promise<IDatabaseSession[]> {
   const res = await request.get(
-    `/api/v1/dbsession/list/${generateVarSid(ConnectionPropertyType.GLOBAL, sessionId)}`,
+    `/api/v1/dbsession/list/${generateVarSid(
+      ConnectionPropertyType.GLOBAL,
+      sessionId
+    )}`
   );
   return res?.data || [];
 }
@@ -66,7 +74,7 @@ export async function getDatabaseSessionList(sessionId: string): Promise<IDataba
 export async function killSessions(
   sessionIds: string[],
   datasourceId: number,
-  killType: 'session' | 'query',
+  killType: 'session' | 'query'
 ): Promise<
   {
     sessionId: number;
@@ -78,8 +86,8 @@ export async function killSessions(
     data: {
       sessionIds,
       datasourceId,
-      killType,
-    },
+      killType
+    }
   });
   return res?.data;
 }

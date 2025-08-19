@@ -6,7 +6,11 @@
 import ServiceBase from '../Service.base';
 import { AxiosRequestConfig } from 'axios';
 
-import { IGetOauth2TipsReturn, IBindOauth2UserParams, IBindOauth2UserReturn } from './index.type';
+import {
+  IGetOauth2TipsReturn,
+  IBindOauth2UserParams,
+  IBindOauth2UserReturn
+} from './index.type';
 
 class OAuth2Service extends ServiceBase {
   public Oauth2LinkOrCallback(options?: AxiosRequestConfig) {
@@ -14,12 +18,23 @@ class OAuth2Service extends ServiceBase {
   }
 
   public GetOauth2Tips(options?: AxiosRequestConfig) {
-    return this.get<IGetOauth2TipsReturn>('/v1/dms/oauth2/tips', undefined, options);
+    return this.get<IGetOauth2TipsReturn>(
+      '/v1/dms/oauth2/tips',
+      undefined,
+      options
+    );
   }
 
-  public BindOauth2User(params: IBindOauth2UserParams, options?: AxiosRequestConfig) {
+  public BindOauth2User(
+    params: IBindOauth2UserParams,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
-    return this.post<IBindOauth2UserReturn>('/v1/dms/oauth2/user/bind', paramsData, options);
+    return this.post<IBindOauth2UserReturn>(
+      '/v1/dms/oauth2/user/bind',
+      paramsData,
+      options
+    );
   }
 }
 

@@ -16,7 +16,12 @@
 
 import MultiLineOverflowText from '@/component/MultiLineOverflowText';
 import { TAB_HEADER_HEIGHT } from '@/constant';
-import { IExecutingInfo, IResultSet, ISqlExecuteResultStatus, SqlType } from '@/d.ts';
+import {
+  IExecutingInfo,
+  IResultSet,
+  ISqlExecuteResultStatus,
+  SqlType
+} from '@/d.ts';
 import { RenderLevel } from '@/page/Secure/Env/components/InnerEnvironment';
 import { formatMessage } from '@/util/intl';
 import {
@@ -24,7 +29,7 @@ import {
   CloseCircleFilled,
   ExclamationCircleFilled,
   FileTextFilled,
-  StopFilled,
+  StopFilled
 } from '@ant-design/icons';
 import { Button, Space, Spin, Typography } from 'antd';
 import React from 'react';
@@ -52,13 +57,16 @@ function getSuccessLog(type: SqlType, total: number) {
         <>
           {formatMessage({
             id: 'workspace.window.sql.result.success',
-            defaultMessage: '执行以下 SQL 成功',
+            defaultMessage: '执行以下 SQL 成功'
           })}
           {formatMessage(
-            { id: 'workspace.window.sql.result.affected', defaultMessage: '，影响 {num} 条数据' },
             {
-              num: total,
+              id: 'workspace.window.sql.result.affected',
+              defaultMessage: '，影响 {num} 条数据'
             },
+            {
+              num: total
+            }
           )}
         </>
       );
@@ -66,7 +74,7 @@ function getSuccessLog(type: SqlType, total: number) {
     default: {
       return formatMessage({
         id: 'workspace.window.sql.result.success',
-        defaultMessage: '执行以下 SQL 成功',
+        defaultMessage: '执行以下 SQL 成功'
       });
     }
   }
@@ -85,9 +93,9 @@ function renderViolations(data: IResultSet['logTypeData'][0]) {
             formatMessage(
               {
                 id: 'odc.components.SQLResultSet.SQLResultLog.CheckviolationslengthSpecificationSuggestionsExist',
-                defaultMessage: '存在 {checkViolationsLength} 个规范建议',
+                defaultMessage: '存在 {checkViolationsLength} 个规范建议'
               },
-              { checkViolationsLength: checkViolations.length },
+              { checkViolationsLength: checkViolations.length }
             ) /*存在 {checkViolationsLength} 个规范建议*/
           }
         </div>
@@ -108,12 +116,12 @@ const runningLogPage = (
   currentExecuteInfo: IExecutingInfo,
   stopRunning,
   onOpenExecutingDetailModal,
-  isSupportProfile,
+  isSupportProfile
 ) => {
   const count = currentExecuteInfo?.task?.sqls?.length || 0;
   const executeSqlList = currentExecuteInfo?.task?.sqls;
   const currentSQLIndex = executeSqlList.findIndex(
-    (item) => item.sqlTuple?.sqlId === currentExecuteInfo?.executingSQLId,
+    (item) => item.sqlTuple?.sqlId === currentExecuteInfo?.executingSQLId
   );
   return (
     <div className={styles.runningSql}>
@@ -123,9 +131,10 @@ const runningLogPage = (
           {formatMessage(
             {
               id: 'src.page.Workspace.components.SQLResultSet.7F598F77',
-              defaultMessage: '共有 ${count} 个 SQL 执行，当前正在执行第 ${currentSQLIndex + 1} 个',
+              defaultMessage:
+                '共有 ${count} 个 SQL 执行，当前正在执行第 ${currentSQLIndex + 1} 个'
             },
-            { count: count, BinaryExpression1: currentSQLIndex + 1 },
+            { count: count, BinaryExpression1: currentSQLIndex + 1 }
           )}
         </div>
         <div>
@@ -134,7 +143,7 @@ const runningLogPage = (
               <span>
                 {formatMessage({
                   id: 'src.page.Workspace.components.SQLResultSet.9BDFC99E',
-                  defaultMessage: '当前 Trace ID:',
+                  defaultMessage: '当前 Trace ID:'
                 })}
                 {currentExecuteInfo?.traceId}
               </span>
@@ -143,13 +152,13 @@ const runningLogPage = (
                   onClick={() =>
                     onOpenExecutingDetailModal(
                       currentExecuteInfo?.traceId,
-                      currentExecuteInfo?.executingSQL,
+                      currentExecuteInfo?.executingSQL
                     )
                   }
                 >
                   {formatMessage({
                     id: 'src.page.Workspace.components.SQLResultSet.4035B347',
-                    defaultMessage: '查看执行画像',
+                    defaultMessage: '查看执行画像'
                   })}
                 </Link>
               ) : null}
@@ -161,7 +170,7 @@ const runningLogPage = (
         <Button onClick={stopRunning} style={{ marginTop: 16 }}>
           {formatMessage({
             id: 'src.page.Workspace.components.SQLResultSet.D3F95049',
-            defaultMessage: '终 止',
+            defaultMessage: '终 止'
           })}
         </Button>
       )}
@@ -176,7 +185,7 @@ const SQLResultLog: React.FC<IProps> = function (props) {
     stopRunning,
     onOpenExecutingDetailModal,
     loading,
-    isSupportProfile = false,
+    isSupportProfile = false
   } = props;
   if (loading)
     return (
@@ -200,7 +209,7 @@ const SQLResultLog: React.FC<IProps> = function (props) {
                       {
                         formatMessage({
                           id: 'odc.components.SQLResultSet.SQLResultLog.TheExecutionIsSuccessfulWith',
-                          defaultMessage: '执行成功，存在告警信息',
+                          defaultMessage: '执行成功，存在告警信息'
                         })
                         /* 执行成功，存在告警信息 */
                       }
@@ -210,7 +219,7 @@ const SQLResultLog: React.FC<IProps> = function (props) {
                     {
                       formatMessage({
                         id: 'odc.components.SQLResultSet.SQLResultLog.AlertDetails',
-                        defaultMessage: '告警详情:',
+                        defaultMessage: '告警详情:'
                       })
                       /* 告警详情: */
                     }
@@ -240,7 +249,7 @@ const SQLResultLog: React.FC<IProps> = function (props) {
                       {
                         formatMessage({
                           id: 'odc.components.SQLResultSet.SQLResultLog.DbmsOutput',
-                          defaultMessage: 'DBMS 输出',
+                          defaultMessage: 'DBMS 输出'
                         })
 
                         /* DBMS输出 */
@@ -266,25 +275,28 @@ const SQLResultLog: React.FC<IProps> = function (props) {
               {isCanceled
                 ? formatMessage({
                     id: 'odc.components.SQLResultSet.SQLResultLog.SqlExecutionCanceled',
-                    defaultMessage: 'SQL 执行被取消',
+                    defaultMessage: 'SQL 执行被取消'
                   })
                 : // SQL 执行被取消
                   formatMessage({
                     id: 'workspace.window.sql.result.failure',
-                    defaultMessage: '执行以下 SQL 失败',
+                    defaultMessage: '执行以下 SQL 失败'
                   })}
             </Space>
-            <MultiLineOverflowText className={styles.executedSQL} content={logData.executeSql} />
+            <MultiLineOverflowText
+              className={styles.executedSQL}
+              content={logData.executeSql}
+            />
             <div className={styles.failReason}>
               {isCanceled
                 ? formatMessage({
                     id: 'odc.components.SQLResultSet.SQLResultLog.ReasonForCancellation',
-                    defaultMessage: '取消原因',
+                    defaultMessage: '取消原因'
                   })
                 : // 取消原因
                   formatMessage({
                     id: 'workspace.window.sql.result.failureReason',
-                    defaultMessage: '失败原因：',
+                    defaultMessage: '失败原因：'
                   })}
             </div>
             <div className={styles.track}>{logData.track}</div>
@@ -297,7 +309,7 @@ const SQLResultLog: React.FC<IProps> = function (props) {
         className={styles.result}
         style={{
           maxHeight: `${resultHeight - TAB_HEADER_HEIGHT}px`,
-          overflowY: 'auto',
+          overflowY: 'auto'
         }}
       >
         {logs}
@@ -308,7 +320,7 @@ const SQLResultLog: React.FC<IProps> = function (props) {
       currentExecuteInfo,
       stopRunning,
       onOpenExecutingDetailModal,
-      isSupportProfile,
+      isSupportProfile
     );
   }
 };

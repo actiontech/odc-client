@@ -1,6 +1,10 @@
 /* eslint-disable */
 // @ts-nocheck
-import { IGetCompanyNoticeResp, IUpdateCompanyNoticeReq, IBaseRes } from '../common.type';
+import {
+  IGetCompanyNoticeResp,
+  IUpdateCompanyNoticeReq,
+  IBaseRes
+} from '../common.type';
 
 export interface IGetCompanyNoticeReturn extends IGetCompanyNoticeResp {}
 

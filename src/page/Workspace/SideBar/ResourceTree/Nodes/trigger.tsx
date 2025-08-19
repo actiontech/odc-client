@@ -26,22 +26,25 @@ import { ResourceNodeType, TreeDataNode } from '../type';
 
 enum THEME {
   TRIGGER_ENABLE = 'var(--icon-color-3)',
-  TRIGGER_DISABLE = 'var(--icon-color-disable)',
+  TRIGGER_DISABLE = 'var(--icon-color-disable)'
 }
 
-export function TriggerTreeData(dbSession: SessionStore, database: IDatabase): TreeDataNode {
+export function TriggerTreeData(
+  dbSession: SessionStore,
+  database: IDatabase
+): TreeDataNode {
   const dbName = database.name;
   const triggers = dbSession?.database?.triggers;
   const treeData: TreeDataNode = {
     title: formatMessage({
       id: 'odc.ResourceTree.Nodes.trigger.Trigger',
-      defaultMessage: '触发器',
+      defaultMessage: '触发器'
     }), //触发器
     key: `${database.id}-${dbName}-trigger`,
     type: ResourceNodeType.TriggerRoot,
     data: database,
     sessionId: dbSession?.sessionId,
-    isLeaf: false,
+    isLeaf: false
   };
   if (triggers) {
     treeData.children = triggers.map((trigger) => {
@@ -49,11 +52,11 @@ export function TriggerTreeData(dbSession: SessionStore, database: IDatabase): T
         trigger.enableState === TriggerState.enabled
           ? formatMessage({
               id: 'odc.ResourceTree.config.procedure.Enable',
-              defaultMessage: '启用',
+              defaultMessage: '启用'
             }) // 启用
           : formatMessage({
               id: 'odc.ResourceTree.config.procedure.Disable',
-              defaultMessage: '禁用',
+              defaultMessage: '禁用'
             }); // 禁用
       const icon = (
         <Tooltip placement="right" title={title}>
@@ -63,7 +66,7 @@ export function TriggerTreeData(dbSession: SessionStore, database: IDatabase): T
               color:
                 trigger.enableState === TriggerState.enabled
                   ? THEME.TRIGGER_ENABLE
-                  : THEME.TRIGGER_DISABLE,
+                  : THEME.TRIGGER_DISABLE
             }}
           />
         </Tooltip>
@@ -79,7 +82,7 @@ export function TriggerTreeData(dbSession: SessionStore, database: IDatabase): T
             undefined,
             trigger.enableState,
             undefined,
-            session?.database?.databaseId,
+            session?.database?.databaseId
           );
         },
         type: ResourceNodeType.Trigger,
@@ -88,7 +91,7 @@ export function TriggerTreeData(dbSession: SessionStore, database: IDatabase): T
         icon: icon,
         warning: trigger.status === 'INVALID' ? trigger.errorMessage : null,
         sessionId: dbSession?.sessionId,
-        isLeaf: true,
+        isLeaf: true
       };
     });
   }

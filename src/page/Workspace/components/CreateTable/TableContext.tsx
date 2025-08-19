@@ -24,7 +24,7 @@ import {
   TableInfo,
   TablePartition,
   TablePrimaryConstraint,
-  TableUniqueConstraint,
+  TableUniqueConstraint
 } from './interface';
 
 interface ITableContextProps {
@@ -52,7 +52,13 @@ interface ITableContextProps {
 function voidFunc(v: any) {}
 
 const TableContext = React.createContext<ITableContextProps>({
-  info: { tableName: '', collation: '', character: '', comment: '', columnGroups: [] },
+  info: {
+    tableName: '',
+    collation: '',
+    character: '',
+    comment: '',
+    columnGroups: []
+  },
   setInfo: voidFunc,
   columns: [],
   setColumns: voidFunc,
@@ -67,7 +73,7 @@ const TableContext = React.createContext<ITableContextProps>({
   foreignConstraints: [],
   setForeignConstraints: voidFunc,
   checkConstraints: [],
-  setCheckConstraints: voidFunc,
+  setCheckConstraints: voidFunc
 });
 
 export default TableContext;

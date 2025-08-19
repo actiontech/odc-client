@@ -39,8 +39,8 @@ const DeleteProjectModal: React.FC<DeleteProjectModalIProps> = (props) => {
       message.success(
         formatMessage({
           id: 'odc.Setting.Info.OperationSucceeded',
-          defaultMessage: '操作成功',
-        }), //操作成功
+          defaultMessage: '操作成功'
+        }) //操作成功
       );
       afterDelete?.();
       setOpen(false);
@@ -53,12 +53,12 @@ const DeleteProjectModal: React.FC<DeleteProjectModalIProps> = (props) => {
             formatMessage(
               {
                 id: 'src.page.Project.components.DeleteProjectModal.tsx.E30AA7E1',
-                defaultMessage: '请输入 {verifyValue} ',
+                defaultMessage: '请输入 {verifyValue} '
               },
-              { verifyValue },
-            ),
-          ],
-        },
+              { verifyValue }
+            )
+          ]
+        }
       ]);
     }
   };
@@ -68,9 +68,9 @@ const DeleteProjectModal: React.FC<DeleteProjectModalIProps> = (props) => {
       title={formatMessage(
         {
           id: 'src.page.Project.components.DeleteProjectModal.tsx.C103BA30',
-          defaultMessage: '删除{projectListLength}个项目',
+          defaultMessage: '删除{projectListLength}个项目'
         },
-        { projectListLength: projectList.length },
+        { projectListLength: projectList.length }
       )}
       open={open}
       onCancel={() => {
@@ -79,7 +79,7 @@ const DeleteProjectModal: React.FC<DeleteProjectModalIProps> = (props) => {
       onOk={handleOK}
       okText={formatMessage({
         id: 'src.page.Project.components.DeleteProjectModal.tsx.8B88D33D',
-        defaultMessage: '删除',
+        defaultMessage: '删除'
       })}
       okType={'danger'}
     >
@@ -88,7 +88,8 @@ const DeleteProjectModal: React.FC<DeleteProjectModalIProps> = (props) => {
         showIcon
         message={formatMessage({
           id: 'src.page.Project.components.DeleteProjectModal.tsx.AFD8430A',
-          defaultMessage: '项目删除后所有数据不可恢复，请谨慎操作，输入下面内容再次确认操作。',
+          defaultMessage:
+            '项目删除后所有数据不可恢复，请谨慎操作，输入下面内容再次确认操作。'
         })}
         style={{ marginBottom: '12px' }}
       />
@@ -97,7 +98,7 @@ const DeleteProjectModal: React.FC<DeleteProjectModalIProps> = (props) => {
         <Descriptions.Item
           label={formatMessage({
             id: 'src.page.Project.components.DeleteProjectModal.tsx.0D5B4B7B',
-            defaultMessage: '删除项目',
+            defaultMessage: '删除项目'
           })}
         >
           {projectList.map((item) => item.name).join('; ')}
@@ -110,12 +111,12 @@ const DeleteProjectModal: React.FC<DeleteProjectModalIProps> = (props) => {
             <span>
               {formatMessage({
                 id: 'src.page.Project.components.DeleteProjectModal.tsx.DE5B1B2F',
-                defaultMessage: '请输入',
+                defaultMessage: '请输入'
               })}
               <span style={{ color: 'red' }}>{verifyValue}</span>
               {formatMessage({
                 id: 'src.page.Project.components.DeleteProjectModal.tsx.15CA1805',
-                defaultMessage: '以确认操作',
+                defaultMessage: '以确认操作'
               })}
             </span>
           }
@@ -125,15 +126,15 @@ const DeleteProjectModal: React.FC<DeleteProjectModalIProps> = (props) => {
               required: true,
               message: formatMessage({
                 id: 'src.page.Project.components.DeleteProjectModal.tsx.1A3DA14E',
-                defaultMessage: '请输入',
-              }),
-            },
+                defaultMessage: '请输入'
+              })
+            }
           ]}
         >
           <Input
             placeholder={formatMessage({
               id: 'src.page.Project.components.DeleteProjectModal.tsx.8C00D75B',
-              defaultMessage: '请输入',
+              defaultMessage: '请输入'
             })}
           />
         </Form.Item>

@@ -12,13 +12,13 @@ import {
   IExecuteDatabaseComparisonV1Params,
   IExecuteDatabaseComparisonV1Return,
   IGenDatabaseDiffModifySQLsV1Params,
-  IGenDatabaseDiffModifySQLsV1Return,
+  IGenDatabaseDiffModifySQLsV1Return
 } from './index.type';
 
 class DatabaseComparisonService extends ServiceBase {
   public getComparisonStatementV1(
     params: IGetComparisonStatementV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -27,13 +27,13 @@ class DatabaseComparisonService extends ServiceBase {
     return this.post<IGetComparisonStatementV1Return>(
       `/v1/projects/${project_name}/database_comparison/comparison_statements`,
       paramsData,
-      options,
+      options
     );
   }
 
   public executeDatabaseComparisonV1(
     params: IExecuteDatabaseComparisonV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -42,13 +42,13 @@ class DatabaseComparisonService extends ServiceBase {
     return this.post<IExecuteDatabaseComparisonV1Return>(
       `/v1/projects/${project_name}/database_comparison/execute_comparison`,
       paramsData,
-      options,
+      options
     );
   }
 
   public genDatabaseDiffModifySQLsV1(
     params: IGenDatabaseDiffModifySQLsV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -57,7 +57,7 @@ class DatabaseComparisonService extends ServiceBase {
     return this.post<IGenDatabaseDiffModifySQLsV1Return>(
       `/v1/projects/${project_name}/database_comparison/modify_sql_statements`,
       paramsData,
-      options,
+      options
     );
   }
 }

@@ -21,16 +21,16 @@ import odc from '@/plugins/odc';
 const securityGroup: ODCSettingGroup = {
   label: formatMessage({
     id: 'src.component.ODCSetting.config.group.E5B961CE',
-    defaultMessage: '安全设置',
+    defaultMessage: '安全设置'
   }),
-  key: 'groupSecurity',
+  key: 'groupSecurity'
 };
 
 const securitySetting: IODCSetting[] = [
   {
     label: formatMessage({
       id: 'src.component.ODCSetting.config.group.FCE83157',
-      defaultMessage: '数据源密钥',
+      defaultMessage: '数据源密钥'
     }),
     key: 'odc.security.default.customDataSourceEncryptionKey',
     locationKey: 'secretKey',
@@ -42,16 +42,16 @@ const securitySetting: IODCSetting[] = [
             return Promise.resolve();
           }
           return Promise.reject();
-        },
-      },
+        }
+      }
     ],
 
     storeType: 'server',
     render: (value, onChange) => {
       return <SecretKeyItem value={value || ''} onChange={onChange} />;
     },
-    hidden: !odc.appConfig?.spaceConfig?.showSecurity,
-  },
+    hidden: !odc.appConfig?.spaceConfig?.showSecurity
+  }
 ];
 
 export default securitySetting;

@@ -18,11 +18,14 @@ import {
   IUpdateMemberGroupParams,
   IUpdateMemberGroupReturn,
   IDeleteMemberGroupParams,
-  IDeleteMemberGroupReturn,
+  IDeleteMemberGroupReturn
 } from './index.type';
 
 class MemberGroupService extends ServiceBase {
-  public ListMemberGroups(params: IListMemberGroupsParams, options?: AxiosRequestConfig) {
+  public ListMemberGroups(
+    params: IListMemberGroupsParams,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_uid = paramsData.project_uid;
     delete paramsData.project_uid;
@@ -30,11 +33,14 @@ class MemberGroupService extends ServiceBase {
     return this.get<IListMemberGroupsReturn>(
       `/v1/dms/projects/${project_uid}/member_groups`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public AddMemberGroup(params: IAddMemberGroupParams, options?: AxiosRequestConfig) {
+  public AddMemberGroup(
+    params: IAddMemberGroupParams,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_uid = paramsData.project_uid;
     delete paramsData.project_uid;
@@ -42,11 +48,14 @@ class MemberGroupService extends ServiceBase {
     return this.post<IAddMemberGroupReturn>(
       `/v1/dms/projects/${project_uid}/member_groups`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public ListMemberGroupTips(params: IListMemberGroupTipsParams, options?: AxiosRequestConfig) {
+  public ListMemberGroupTips(
+    params: IListMemberGroupTipsParams,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_uid = paramsData.project_uid;
     delete paramsData.project_uid;
@@ -54,11 +63,14 @@ class MemberGroupService extends ServiceBase {
     return this.get<IListMemberGroupTipsReturn>(
       `/v1/dms/projects/${project_uid}/member_groups/tips`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public GetMemberGroup(params: IGetMemberGroupParams, options?: AxiosRequestConfig) {
+  public GetMemberGroup(
+    params: IGetMemberGroupParams,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_uid = paramsData.project_uid;
     delete paramsData.project_uid;
@@ -69,11 +81,14 @@ class MemberGroupService extends ServiceBase {
     return this.get<IGetMemberGroupReturn>(
       `/v1/dms/projects/${project_uid}/member_groups/${member_group_uid}`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public UpdateMemberGroup(params: IUpdateMemberGroupParams, options?: AxiosRequestConfig) {
+  public UpdateMemberGroup(
+    params: IUpdateMemberGroupParams,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_uid = paramsData.project_uid;
     delete paramsData.project_uid;
@@ -84,11 +99,14 @@ class MemberGroupService extends ServiceBase {
     return this.put<IUpdateMemberGroupReturn>(
       `/v1/dms/projects/${project_uid}/member_groups/${member_group_uid}`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public DeleteMemberGroup(params: IDeleteMemberGroupParams, options?: AxiosRequestConfig) {
+  public DeleteMemberGroup(
+    params: IDeleteMemberGroupParams,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_uid = paramsData.project_uid;
     delete paramsData.project_uid;
@@ -99,7 +117,7 @@ class MemberGroupService extends ServiceBase {
     return this.delete<IDeleteMemberGroupReturn>(
       `/v1/dms/projects/${project_uid}/member_groups/${member_group_uid}`,
       paramsData,
-      options,
+      options
     );
   }
 }

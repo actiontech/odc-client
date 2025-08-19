@@ -26,21 +26,21 @@ export const getTitleByParams = (params: { type: TaskPageType }) => {
     case TaskPageType.ALL: {
       title = formatMessage({
         id: 'odc.src.page.Workspace.components.TaskPage.WorkOrderAllWorkOrders',
-        defaultMessage: '工单-所有工单',
+        defaultMessage: '工单-所有工单'
       }); //'工单-所有工单'
       break;
     }
     case TaskPageType.CREATED_BY_CURRENT_USER: {
       title = formatMessage({
         id: 'odc.src.page.Workspace.components.TaskPage.WorkersIInitiated',
-        defaultMessage: '工单-我发起的',
+        defaultMessage: '工单-我发起的'
       }); //'工单-我发起的'
       break;
     }
     case TaskPageType.APPROVE_BY_CURRENT_USER: {
       title = formatMessage({
         id: 'odc.src.page.Workspace.components.TaskPage.WorkOrderWaitingForMe',
-        defaultMessage: '工单-待我审批的',
+        defaultMessage: '工单-待我审批的'
       }); //'工单-待我审批的'
       break;
     }
@@ -48,11 +48,11 @@ export const getTitleByParams = (params: { type: TaskPageType }) => {
       title = formatMessage(
         {
           id: 'odc.src.page.Workspace.components.TaskPage.WorkOrderTaskTypeMaptype',
-          defaultMessage: '工单-{TaskTypeMapType}',
+          defaultMessage: '工单-{TaskTypeMapType}'
         },
         {
-          TaskTypeMapType: TaskTypeMap[type],
-        },
+          TaskTypeMapType: TaskTypeMap[type]
+        }
       ); //`工单-${TaskTypeMap[type]}`
       break;
     }

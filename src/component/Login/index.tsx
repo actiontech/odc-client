@@ -107,20 +107,21 @@ const Login: React.FC<LoginProps> = (props) => {
     ssoLoginName,
     authCodeImg,
     onAuthCodeImgChange,
-    style = {},
+    style = {}
   } = props;
   const [showRegister, setShowRegister] = useControllableValue(props, {
     defaultValue: false,
     valuePropName: 'showRegister',
-    trigger: 'onShowRegisterChange',
+    trigger: 'onShowRegisterChange'
   });
   const [showActivate, setShowActivate] = useControllableValue(props, {
     defaultValue: false,
     valuePropName: 'showActivate',
-    trigger: 'onShowActivateChange',
+    trigger: 'onShowActivateChange'
   });
   const prefix = getPrefix('login');
-  const isLoading = loginProps?.loading || registerProps?.loading || otherLoginProps?.loading;
+  const isLoading =
+    loginProps?.loading || registerProps?.loading || otherLoginProps?.loading;
 
   const [isLDAPLogin, setIsLDAPLogin] = useState<boolean>(false);
   const switchSSOLoginType = () => {
@@ -129,7 +130,10 @@ const Login: React.FC<LoginProps> = (props) => {
   const switchForm = useCallback(() => {
     if (isLoading) {
       message.warning(
-        formatMessage({ id: 'odc.component.Login.Running', defaultMessage: '正在执行中' }), //正在执行中
+        formatMessage({
+          id: 'odc.component.Login.Running',
+          defaultMessage: '正在执行中'
+        }) //正在执行中
       );
     }
     setShowRegister(!showRegister);
@@ -138,7 +142,10 @@ const Login: React.FC<LoginProps> = (props) => {
   const goBack = useCallback(() => {
     if (isLoading) {
       message.warning(
-        formatMessage({ id: 'odc.component.Login.Running', defaultMessage: '正在执行中' }), //正在执行中
+        formatMessage({
+          id: 'odc.component.Login.Running',
+          defaultMessage: '正在执行中'
+        }) //正在执行中
       );
     }
     setShowActivate(!showActivate);
@@ -161,7 +168,7 @@ const Login: React.FC<LoginProps> = (props) => {
               <Divider
                 style={{
                   marginTop: 14,
-                  marginBottom: 20,
+                  marginBottom: 20
                 }}
               />
 
@@ -169,7 +176,7 @@ const Login: React.FC<LoginProps> = (props) => {
                 {
                   formatMessage({
                     id: 'odc.component.Login.SetPasswordToActivateAccount',
-                    defaultMessage: '设置密码激活账号',
+                    defaultMessage: '设置密码激活账号'
                   }) /*设置密码激活账号*/
                 }
               </Typography.Title>
@@ -177,7 +184,7 @@ const Login: React.FC<LoginProps> = (props) => {
                 {
                   formatMessage({
                     id: 'odc.component.Login.ForAccountSecurityYouNeed',
-                    defaultMessage: '为了账号安全，需要设置密码激活账号',
+                    defaultMessage: '为了账号安全，需要设置密码激活账号'
                   }) /*为了账号安全，需要设置密码激活账号*/
                 }
               </Typography.Paragraph>
@@ -192,11 +199,15 @@ const Login: React.FC<LoginProps> = (props) => {
             <>
               {showRegister ? (
                 <>
-                  <img src={logo} alt="" className={`${prefix}-reigster-logo`} />
+                  <img
+                    src={logo}
+                    alt=""
+                    className={`${prefix}-reigster-logo`}
+                  />
                   <Divider
                     style={{
                       marginTop: 14,
-                      marginBottom: 20,
+                      marginBottom: 20
                     }}
                   />
 
@@ -204,7 +215,7 @@ const Login: React.FC<LoginProps> = (props) => {
                     {
                       formatMessage({
                         id: 'odc.component.Login.RegisterAnAccount',
-                        defaultMessage: '注册账号',
+                        defaultMessage: '注册账号'
                       }) /*注册账号*/
                     }
                   </Typography.Title>
@@ -215,7 +226,10 @@ const Login: React.FC<LoginProps> = (props) => {
                   />
                 </>
               ) : isLDAPLogin ? (
-                <LDAPLogin ssoLoginName={ssoLoginName} switchSSOLoginType={switchSSOLoginType} />
+                <LDAPLogin
+                  ssoLoginName={ssoLoginName}
+                  switchSSOLoginType={switchSSOLoginType}
+                />
               ) : (
                 <>
                   <img src={logo} alt="" className={`${prefix}-logo`} />
@@ -244,11 +258,11 @@ const Login: React.FC<LoginProps> = (props) => {
                   showRegister
                     ? formatMessage({
                         id: 'odc.component.Login.LogOnToAnExisting',
-                        defaultMessage: '登录已有账号',
+                        defaultMessage: '登录已有账号'
                       }) //登录已有账号
                     : formatMessage({
                         id: 'odc.component.Login.RegisterAnAccount',
-                        defaultMessage: '注册账号',
+                        defaultMessage: '注册账号'
                       }) //注册账号
                 }
               </a>

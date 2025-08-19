@@ -27,16 +27,16 @@ import notification from '../notification';
 const errorMsgMap = {
   EXECUTE_DDL_FAILED: formatMessage({
     id: 'request.execute.ddl.error',
-    defaultMessage: '执行 DDL 出错',
+    defaultMessage: '执行 DDL 出错'
   }),
   ConnectionExpired: formatMessage({
     id: 'request.connection.expired',
-    defaultMessage: '当前连接已断开，请重新连接',
+    defaultMessage: '当前连接已断开，请重新连接'
   }),
   ConnectionKilled: formatMessage({
     id: 'request.connection.killed',
-    defaultMessage: 'SQL 执行异常，导致连接断开',
-  }),
+    defaultMessage: 'SQL 执行异常，导致连接断开'
+  })
 };
 
 /**
@@ -56,7 +56,7 @@ export function resolveODCError(
   },
   url: string,
   params: any,
-  data: any,
+  data: any
 ): boolean {
   let errCode = null;
   let errMsg = '';
@@ -80,7 +80,10 @@ export function resolveODCError(
        */
       if (location.hash.endsWith('login')) {
         return true;
-      } else if (location.hash.indexOf('gateway/') > -1 || url?.indexOf('/lab/status') > -1) {
+      } else if (
+        location.hash.indexOf('gateway/') > -1 ||
+        url?.indexOf('/lab/status') > -1
+      ) {
         /**
          * gateway 不出现弹窗
          */
@@ -132,11 +135,14 @@ export function resolveODCError(
         track:
           errMsg ||
           errorMsgMap[errCode] ||
-          formatMessage({ id: 'request.execute.ddl.default', defaultMessage: '出错了' }),
+          formatMessage({
+            id: 'request.execute.ddl.default',
+            defaultMessage: '出错了'
+          }),
         supportRepeat: true,
         holdErrorTip: params.holdErrorTip,
         requestId,
-        extraMessage: res?.extraMessage,
+        extraMessage: res?.extraMessage
       });
       if (!hasShow && params.wantCatchError) {
         throw new Error(errMsg);

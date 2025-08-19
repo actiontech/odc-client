@@ -21,7 +21,11 @@ import { ReactComponent as PersonalSvg } from '@/svgr/personal_space.svg';
 import { ReactComponent as GroupSvg } from '@/svgr/project_space.svg';
 import { formatMessage } from '@/util/intl';
 import tracert from '@/util/tracert';
-import Icon, { CheckOutlined, ExclamationCircleFilled, SwapOutlined } from '@ant-design/icons';
+import Icon, {
+  CheckOutlined,
+  ExclamationCircleFilled,
+  SwapOutlined
+} from '@ant-design/icons';
 import { history } from '@umijs/max';
 import { Checkbox, Modal, Select, Space, Typography } from 'antd';
 import classNames from 'classnames';
@@ -37,14 +41,18 @@ const SpaceSelect: React.FC<ISpaceSelect> = (props) => {
   const { collapsed, userStore } = props;
 
   const handleOk = async (ori: IOrganization) => {
-    const isSuccess = await userStore?.switchCurrentOrganization(ori.id, null, () => {
-      if (ori?.type === SpaceType.SYNERGY) {
-        tracert.click('a3112.b46782.c330848.d367359');
-        history.push('/project');
-      } else {
-        tracert.click('a3112.b46782.c330848.d367360');
+    const isSuccess = await userStore?.switchCurrentOrganization(
+      ori.id,
+      null,
+      () => {
+        if (ori?.type === SpaceType.SYNERGY) {
+          tracert.click('a3112.b46782.c330848.d367359');
+          history.push('/project');
+        } else {
+          tracert.click('a3112.b46782.c330848.d367360');
+        }
       }
-    });
+    );
     if (!isSuccess) {
       return;
     }
@@ -59,9 +67,9 @@ const SpaceSelect: React.FC<ISpaceSelect> = (props) => {
         title: formatMessage(
           {
             id: 'odc.Sider.SpaceSelect.AreYouSureYouWant',
-            defaultMessage: '确认要切换为{oriDisplayName}吗',
+            defaultMessage: '确认要切换为{oriDisplayName}吗'
           },
-          { oriDisplayName: ori.displayName },
+          { oriDisplayName: ori.displayName }
         ), //`确认要切换为${ori.displayName}吗`
         icon: <ExclamationCircleFilled />,
         content: (
@@ -76,29 +84,37 @@ const SpaceSelect: React.FC<ISpaceSelect> = (props) => {
               {
                 formatMessage({
                   id: 'odc.Sider.SpaceSelect.NoMorePrompt',
-                  defaultMessage: '不再提示',
+                  defaultMessage: '不再提示'
                 }) /*不再提示*/
               }
             </Checkbox>
           </>
         ),
 
-        okText: formatMessage({ id: 'odc.Sider.SpaceSelect.Ok', defaultMessage: '确定' }), //确定
-        cancelText: formatMessage({ id: 'odc.Sider.SpaceSelect.Cancel', defaultMessage: '取消' }), //取消
+        okText: formatMessage({
+          id: 'odc.Sider.SpaceSelect.Ok',
+          defaultMessage: '确定'
+        }), //确定
+        cancelText: formatMessage({
+          id: 'odc.Sider.SpaceSelect.Cancel',
+          defaultMessage: '取消'
+        }), //取消
         onOk: () => {
           handleOk(ori);
-        },
+        }
       });
     } else {
       handleOk(ori);
     }
   };
-  const isSpaceInArray = !!userStore.organizations?.find((o) => o.id === userStore?.organizationId);
+  const isSpaceInArray = !!userStore.organizations?.find(
+    (o) => o.id === userStore?.organizationId
+  );
 
   return (
     <Select
       className={classNames(styles['space-switch'], {
-        [styles.collapsed]: collapsed,
+        [styles.collapsed]: collapsed
       })}
       onDropdownVisibleChange={(v) => {
         if (v) {
@@ -131,10 +147,14 @@ const SpaceSelect: React.FC<ISpaceSelect> = (props) => {
                   </div>
                   <span>{item.displayName || '-'}</span>
                 </Space>
-              ),
+              )
           };
         })
-        .concat(isSpaceInArray ? [] : { value: userStore?.organizationId, label: <span>-</span> })}
+        .concat(
+          isSpaceInArray
+            ? []
+            : { value: userStore?.organizationId, label: <span>-</span> }
+        )}
     />
   );
 };

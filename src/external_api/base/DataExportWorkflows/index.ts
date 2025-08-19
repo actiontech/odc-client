@@ -20,13 +20,13 @@ import {
   IExportDataExportWorkflowParams,
   IExportDataExportWorkflowReturn,
   IRejectDataExportWorkflowParams,
-  IRejectDataExportWorkflowReturn,
+  IRejectDataExportWorkflowReturn
 } from './index.type';
 
 class DataExportWorkflowsService extends ServiceBase {
   public ListDataExportWorkflows(
     params: IListDataExportWorkflowsParams,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_uid = paramsData.project_uid;
@@ -35,11 +35,14 @@ class DataExportWorkflowsService extends ServiceBase {
     return this.get<IListDataExportWorkflowsReturn>(
       `/v1/dms/projects/${project_uid}/data_export_workflows`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public AddDataExportWorkflow(params: IAddDataExportWorkflowParams, options?: AxiosRequestConfig) {
+  public AddDataExportWorkflow(
+    params: IAddDataExportWorkflowParams,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_uid = paramsData.project_uid;
     delete paramsData.project_uid;
@@ -47,13 +50,13 @@ class DataExportWorkflowsService extends ServiceBase {
     return this.post<IAddDataExportWorkflowReturn>(
       `/v1/dms/projects/${project_uid}/data_export_workflows`,
       paramsData,
-      options,
+      options
     );
   }
 
   public CancelDataExportWorkflow(
     params: ICancelDataExportWorkflowParams,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_uid = paramsData.project_uid;
@@ -62,11 +65,14 @@ class DataExportWorkflowsService extends ServiceBase {
     return this.post<ICancelDataExportWorkflowReturn>(
       `/v1/dms/projects/${project_uid}/data_export_workflows/cancel`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public GetDataExportWorkflow(params: IGetDataExportWorkflowParams, options?: AxiosRequestConfig) {
+  public GetDataExportWorkflow(
+    params: IGetDataExportWorkflowParams,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_uid = paramsData.project_uid;
     delete paramsData.project_uid;
@@ -77,13 +83,13 @@ class DataExportWorkflowsService extends ServiceBase {
     return this.get<IGetDataExportWorkflowReturn>(
       `/v1/dms/projects/${project_uid}/data_export_workflows/${data_export_workflow_uid}`,
       paramsData,
-      options,
+      options
     );
   }
 
   public ApproveDataExportWorkflow(
     params: IApproveDataExportWorkflowParams,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_uid = paramsData.project_uid;
@@ -95,13 +101,13 @@ class DataExportWorkflowsService extends ServiceBase {
     return this.post<IApproveDataExportWorkflowReturn>(
       `/v1/dms/projects/${project_uid}/data_export_workflows/${data_export_workflow_uid}/approve`,
       paramsData,
-      options,
+      options
     );
   }
 
   public ExportDataExportWorkflow(
     params: IExportDataExportWorkflowParams,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_uid = paramsData.project_uid;
@@ -113,13 +119,13 @@ class DataExportWorkflowsService extends ServiceBase {
     return this.post<IExportDataExportWorkflowReturn>(
       `/v1/dms/projects/${project_uid}/data_export_workflows/${data_export_workflow_uid}/export`,
       paramsData,
-      options,
+      options
     );
   }
 
   public RejectDataExportWorkflow(
     params: IRejectDataExportWorkflowParams,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_uid = paramsData.project_uid;
@@ -131,7 +137,7 @@ class DataExportWorkflowsService extends ServiceBase {
     return this.post<IRejectDataExportWorkflowReturn>(
       `/v1/dms/projects/${project_uid}/data_export_workflows/${data_export_workflow_uid}/reject`,
       paramsData,
-      options,
+      options
     );
   }
 }

@@ -29,19 +29,22 @@ import { openExternalTableTableViewPage } from '@/store/helper/page';
 import { ReactComponent as TableOutlined } from '@/svgr/menuTable.svg';
 import logger from '@/util/logger';
 
-export function ExternalTableTreeData(dbSession: SessionStore, database: IDatabase): TreeDataNode {
+export function ExternalTableTreeData(
+  dbSession: SessionStore,
+  database: IDatabase
+): TreeDataNode {
   const dbName = database.name;
   const tables = dbSession?.database?.externalTableTables;
   const treeData: TreeDataNode = {
     title: formatMessage({
       id: 'src.page.Workspace.SideBar.ResourceTree.Nodes.5EFA3A45',
-      defaultMessage: '外表',
+      defaultMessage: '外表'
     }),
     key: `${database?.id}-${dbName}-externalTable`,
     type: ResourceNodeType.ExternalTableRoot,
     data: database,
     sessionId: dbSession?.sessionId,
-    isLeaf: false,
+    isLeaf: false
   };
   if (tables) {
     const dataTypes = dbSession?.dataTypes;
@@ -66,7 +69,7 @@ export function ExternalTableTreeData(dbSession: SessionStore, database: IDataba
           columnRoot = {
             title: formatMessage({
               id: 'odc.ResourceTree.Nodes.table.Column',
-              defaultMessage: '列',
+              defaultMessage: '列'
             }), //列
             type: ResourceNodeType.ExternalTableColumnRoot,
             key: `${tableKey}-column`,
@@ -75,7 +78,7 @@ export function ExternalTableTreeData(dbSession: SessionStore, database: IDataba
             icon: (
               <FolderOpenFilled
                 style={{
-                  color: '#3FA3FF',
+                  color: '#3FA3FF'
                 }}
               />
             ),
@@ -88,16 +91,20 @@ export function ExternalTableTreeData(dbSession: SessionStore, database: IDataba
                 sessionId: dbSession?.sessionId,
                 icon: convertDataTypeToDataShowType(c.type, dataTypes) && (
                   <Icon
-                    component={fieldIconMap[convertDataTypeToDataShowType(c.type, dataTypes)]}
+                    component={
+                      fieldIconMap[
+                        convertDataTypeToDataShowType(c.type, dataTypes)
+                      ]
+                    }
                     style={{
-                      color: '#3FA3FF',
+                      color: '#3FA3FF'
                     }}
                   />
                 ),
 
-                isLeaf: true,
+                isLeaf: true
               };
-            }),
+            })
           };
         }
 
@@ -113,20 +120,20 @@ export function ExternalTableTreeData(dbSession: SessionStore, database: IDataba
               TopTab.PROPS,
               PropsTab.DDL,
               session?.odcDatabase?.id,
-              node?.data?.info?.tableId,
+              node?.data?.info?.tableId
             );
           },
           icon: (
             <TableOutlined
               style={{
-                color: '#3FA3FF',
+                color: '#3FA3FF'
               }}
             />
           ),
 
           sessionId: dbSession?.sessionId,
           isLeaf: false,
-          children: table.columns ? [columnRoot].filter(Boolean) : null,
+          children: table.columns ? [columnRoot].filter(Boolean) : null
         };
       })
       .filter(Boolean);

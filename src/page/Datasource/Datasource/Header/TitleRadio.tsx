@@ -37,8 +37,10 @@ const TitleRadio: React.FC<IProps> = function ({ value, options, onChange }) {
             style={{
               fontSize: 16,
               fontWeight: isSelected ? 600 : 'normal',
-              color: isSelected ? 'var(--text-color-primary)' : 'var(--text-color-hint)',
-              cursor: 'pointer',
+              color: isSelected
+                ? 'var(--text-color-primary)'
+                : 'var(--text-color-hint)',
+              cursor: 'pointer'
             }}
             onClick={() => {
               if (isSelected) {

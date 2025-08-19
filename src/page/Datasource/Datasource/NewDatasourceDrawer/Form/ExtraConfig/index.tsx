@@ -28,41 +28,46 @@ import styles from './index.less';
 interface IProps {}
 const ExtraConfig: React.FC<IProps> = function () {
   const context = useContext(DatasourceFormContext);
-  const sysAccountExist = context.isEdit && !!context.originDatasource?.sysTenantUsername;
+  const sysAccountExist =
+    context.isEdit && !!context.originDatasource?.sysTenantUsername;
   const sysItem = {
     label: formatMessage({
       id: 'odc.src.page.Datasource.Datasource.NewDatasourceDrawer.Form.ExtraConfig.SYSTenantAccount',
-      defaultMessage: 'sys 租户账号',
+      defaultMessage: 'sys 租户账号'
     }), //'sys 租户账号'
     key: 'sys',
     forceRender: true,
     children: (
-      <SysForm formRef={context.form} isEdit={context.isEdit} sysAccountExist={sysAccountExist} />
-    ),
+      <SysForm
+        formRef={context.form}
+        isEdit={context.isEdit}
+        sysAccountExist={sysAccountExist}
+      />
+    )
   };
   const sslItem = {
     label: 'SSL',
     key: 'ssl',
     forceRender: true,
-    children: <SSLItem />,
+    children: <SSLItem />
   };
   const initScriptItem = {
     label: formatMessage({
       id: 'odc.src.page.Datasource.Datasource.NewDatasourceDrawer.Form.ExtraConfig.ConnectTheInitializedScript',
-      defaultMessage: '连接初始化脚本',
+      defaultMessage: '连接初始化脚本'
     }), //'连接初始化脚本'
     key: 'script',
     forceRender: true,
-    children: <InitScriptItem />,
+    children: <InitScriptItem />
   };
   const jdbcItem = {
     label: formatMessage({
       id: 'odc.src.page.Datasource.Datasource.NewDatasourceDrawer.Form.ExtraConfig.DriveAttribute',
-      defaultMessage: '驱动属性',
+      defaultMessage: '驱动属性'
     }), //'驱动属性'
     key: 'jdbc',
     forceRender: true,
-    children: <JDBCParamsItem />,
+    children: <JDBCParamsItem />
   };
   if (context?.dataSourceConfig?.disableExtraConfig) {
     return null;
@@ -75,7 +80,7 @@ const ExtraConfig: React.FC<IProps> = function () {
           <span style={{ fontWeight: 'bold' }}>
             {formatMessage({
               id: 'odc.src.page.Datasource.Datasource.NewDatasourceDrawer.Form.ExtraConfig.AdvancedSettings',
-              defaultMessage: '高级设置',
+              defaultMessage: '高级设置'
             })}
           </span> /* 高级设置 */
         }
@@ -95,7 +100,7 @@ const ExtraConfig: React.FC<IProps> = function () {
                         config?.sys && sysItem,
                         config?.ssl && sslItem,
                         initScriptItem,
-                        jdbcItem,
+                        jdbcItem
                       ].filter(Boolean)
                     : [initScriptItem]
                 }

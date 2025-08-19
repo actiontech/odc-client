@@ -37,7 +37,7 @@ const LDAP: React.FC<{
   return (
     <div
       style={{
-        width: '460px',
+        width: '460px'
       }}
     >
       <LDAPLogin isTest={true} />
@@ -51,165 +51,180 @@ export const LDAPLogin: React.FC<{
   ssoLoginName?: string;
   switchSSOLoginType?: () => void;
 }> = inject('userStore')(
-  observer(({ isTest = false, userStore, ssoLoginName, switchSSOLoginType = null }) => {
-    const prefix = getPrefix('login');
-    const [isSubmiting, setIsSubmiting] = useState<boolean>(false);
-    const [form] = useForm<{
-      username: string;
-      password: string;
-    }>();
-    const [formData, setFormData] = useState<{
-      mode: ELDAPMode;
-      data: ISSOConfig;
-    }>();
-    const [errorMessage, setErrorMessage] = useState<string>(null);
-    const handleTest = async () => {
-      const data = await form.validateFields().catch();
-      if (isSubmiting) {
-        return;
-      }
-      setIsSubmiting(true);
-      const res = await testClientRegistration(formData?.data, 'test');
-      if (!res?.testId) {
-        setIsSubmiting(false);
-        return;
-      }
-      const result = await userStore.ldapLogin({
-        username: data?.username,
-        password: data?.password,
-        testId: res.testId,
-        registrationId: res?.testRegistrationId,
-      });
-      if (!result?.successful) {
-        setIsSubmiting(false);
-        setErrorMessage(result?.errMsg);
-      } else {
-        channel.send(ChannelMap.LDAP_TEST, {
-          isSuccess: true,
+  observer(
+    ({
+      isTest = false,
+      userStore,
+      ssoLoginName,
+      switchSSOLoginType = null
+    }) => {
+      const prefix = getPrefix('login');
+      const [isSubmiting, setIsSubmiting] = useState<boolean>(false);
+      const [form] = useForm<{
+        username: string;
+        password: string;
+      }>();
+      const [formData, setFormData] = useState<{
+        mode: ELDAPMode;
+        data: ISSOConfig;
+      }>();
+      const [errorMessage, setErrorMessage] = useState<string>(null);
+      const handleTest = async () => {
+        const data = await form.validateFields().catch();
+        if (isSubmiting) {
+          return;
+        }
+        setIsSubmiting(true);
+        const res = await testClientRegistration(formData?.data, 'test');
+        if (!res?.testId) {
+          setIsSubmiting(false);
+          return;
+        }
+        const result = await userStore.ldapLogin({
+          username: data?.username,
+          password: data?.password,
           testId: res.testId,
+          registrationId: res?.testRegistrationId
         });
-        setIsSubmiting(false);
-        setErrorMessage(null);
-      }
-    };
-    const handleLogin = async () => {
-      const data = await form.validateFields().catch();
-      if (isSubmiting) {
-        return;
-      }
-      setIsSubmiting(true);
-      const result = await userStore.ldapLogin({
-        username: data?.username,
-        password: data?.password,
-      });
-      console.log(result);
-      if (result?.successful) {
-        message.success(formatMessage({ id: 'login.login.success', defaultMessage: '登录成功' }));
-        setErrorMessage(null);
-        await userStore.getOrganizations();
-        const isSuccess = await userStore.switchCurrentOrganization();
-        if (!isSuccess) {
-          logger.error('switch organization failed');
-          return;
-        }
-        if (!userStore.user?.enabled) {
-          history.replace('/exception/403');
-          return;
-        }
-
-        // 跳转主页
-        const query: { [key: string]: any } = new URLSearchParams(location.search) || {};
-        if (query.has('redirectTo')) {
-          history.push(decodeURIComponent(query.get('redirectTo')));
+        if (!result?.successful) {
+          setIsSubmiting(false);
+          setErrorMessage(result?.errMsg);
         } else {
-          toDefaultProjectPage();
+          channel.send(ChannelMap.LDAP_TEST, {
+            isSuccess: true,
+            testId: res.testId
+          });
+          setIsSubmiting(false);
+          setErrorMessage(null);
         }
-      } else {
-        setErrorMessage(result?.errMsg);
-        console.error(result);
-      }
-      setIsSubmiting(false);
-    };
-    useEffect(() => {
-      if (isTest) {
-        channel.add(ChannelMap.LDAP_TEST);
-        channel.add(ChannelMap.LDAP_MAIN);
-        channel.listen(ChannelMap.LDAP_TEST, (data) => {
-          if (data?.receiveSuccess) {
-            logger.log('[ldapTest]: comfirmed ldapMain had received message from ldapTest');
-            window.close();
-          }
+      };
+      const handleLogin = async () => {
+        const data = await form.validateFields().catch();
+        if (isSubmiting) {
+          return;
+        }
+        setIsSubmiting(true);
+        const result = await userStore.ldapLogin({
+          username: data?.username,
+          password: data?.password
         });
-        channel.listen(ChannelMap.LDAP_MAIN, (data) => {
-          setFormData(data);
-          channel.send(ChannelMap.LDAP_TEST, data);
-          logger.log(
-            '[ldapTest]: comfirmed ldapTest had received message from ldapMain, close ldapMain',
+        console.log(result);
+        if (result?.successful) {
+          message.success(
+            formatMessage({
+              id: 'login.login.success',
+              defaultMessage: '登录成功'
+            })
           );
-          channel.close(ChannelMap.LDAP_MAIN);
-        });
-      }
-    }, [isTest]);
-    if (isTest) {
-      return (
-        <div
-          className={`${prefix}-container`}
-          style={{
-            width: '460px',
-            height: '640px',
-            overflow: 'hidden',
-            maxWidth: '460px',
-          }}
-        >
-          <div className={`${prefix}-card`}>
-            <div className={`${prefix}-content`}>
-              <LDAPLoginContent
-                isSubmiting={isSubmiting}
-                isTest={isTest}
-                prefix={prefix}
-                form={form}
-                switchSSOLoginType={switchSSOLoginType}
-                handleTest={handleTest}
-                handleLogin={handleLogin}
-              />
+          setErrorMessage(null);
+          await userStore.getOrganizations();
+          const isSuccess = await userStore.switchCurrentOrganization();
+          if (!isSuccess) {
+            logger.error('switch organization failed');
+            return;
+          }
+          if (!userStore.user?.enabled) {
+            history.replace('/exception/403');
+            return;
+          }
 
-              {errorMessage && (
-                <Alert
-                  type="error"
-                  showIcon={true}
-                  className={`${prefix}-alert`}
-                  message={errorMessage}
+          // 跳转主页
+          const query: { [key: string]: any } =
+            new URLSearchParams(location.search) || {};
+          if (query.has('redirectTo')) {
+            history.push(decodeURIComponent(query.get('redirectTo')));
+          } else {
+            toDefaultProjectPage();
+          }
+        } else {
+          setErrorMessage(result?.errMsg);
+          console.error(result);
+        }
+        setIsSubmiting(false);
+      };
+      useEffect(() => {
+        if (isTest) {
+          channel.add(ChannelMap.LDAP_TEST);
+          channel.add(ChannelMap.LDAP_MAIN);
+          channel.listen(ChannelMap.LDAP_TEST, (data) => {
+            if (data?.receiveSuccess) {
+              logger.log(
+                '[ldapTest]: comfirmed ldapMain had received message from ldapTest'
+              );
+              window.close();
+            }
+          });
+          channel.listen(ChannelMap.LDAP_MAIN, (data) => {
+            setFormData(data);
+            channel.send(ChannelMap.LDAP_TEST, data);
+            logger.log(
+              '[ldapTest]: comfirmed ldapTest had received message from ldapMain, close ldapMain'
+            );
+            channel.close(ChannelMap.LDAP_MAIN);
+          });
+        }
+      }, [isTest]);
+      if (isTest) {
+        return (
+          <div
+            className={`${prefix}-container`}
+            style={{
+              width: '460px',
+              height: '640px',
+              overflow: 'hidden',
+              maxWidth: '460px'
+            }}
+          >
+            <div className={`${prefix}-card`}>
+              <div className={`${prefix}-content`}>
+                <LDAPLoginContent
+                  isSubmiting={isSubmiting}
+                  isTest={isTest}
+                  prefix={prefix}
+                  form={form}
+                  switchSSOLoginType={switchSSOLoginType}
+                  handleTest={handleTest}
+                  handleLogin={handleLogin}
                 />
-              )}
+
+                {errorMessage && (
+                  <Alert
+                    type="error"
+                    showIcon={true}
+                    className={`${prefix}-alert`}
+                    message={errorMessage}
+                  />
+                )}
+              </div>
             </div>
           </div>
-        </div>
+        );
+      }
+      return (
+        <>
+          <LDAPLoginContent
+            ssoLoginName={ssoLoginName}
+            isSubmiting={isSubmiting}
+            isTest={isTest}
+            prefix={prefix}
+            form={form}
+            switchSSOLoginType={switchSSOLoginType}
+            handleTest={handleTest}
+            handleLogin={handleLogin}
+          />
+
+          {errorMessage && (
+            <Alert
+              type="error"
+              showIcon={true}
+              className={`${prefix}-alert`}
+              message={errorMessage}
+            />
+          )}
+        </>
       );
     }
-    return (
-      <>
-        <LDAPLoginContent
-          ssoLoginName={ssoLoginName}
-          isSubmiting={isSubmiting}
-          isTest={isTest}
-          prefix={prefix}
-          form={form}
-          switchSSOLoginType={switchSSOLoginType}
-          handleTest={handleTest}
-          handleLogin={handleLogin}
-        />
-
-        {errorMessage && (
-          <Alert
-            type="error"
-            showIcon={true}
-            className={`${prefix}-alert`}
-            message={errorMessage}
-          />
-        )}
-      </>
-    );
-  }),
+  )
 );
 
 const LDAPLoginContent: React.FC<{
@@ -232,7 +247,7 @@ const LDAPLoginContent: React.FC<{
   form,
   switchSSOLoginType,
   handleTest,
-  handleLogin,
+  handleLogin
 }) => {
   const logo = getLocalImg('version_icon.png');
   const [focusInput, setFocusInput] = useState<string>('');
@@ -241,27 +256,27 @@ const LDAPLoginContent: React.FC<{
       <img src={logo} alt="" className={`${prefix}-logo-small`} />
       <Divider
         style={{
-          margin: '12px 0px 28px',
+          margin: '12px 0px 28px'
         }}
       />
 
       <div
         style={{
           fontSize: '24px',
-          marginBottom: '50px',
+          marginBottom: '50px'
         }}
       >
         {ssoLoginName
           ? formatMessage(
               {
                 id: 'src.page.Login.components.LDAPModal.7201A252',
-                defaultMessage: '{ssoLoginName} 登录',
+                defaultMessage: '{ssoLoginName} 登录'
               },
-              { ssoLoginName },
+              { ssoLoginName }
             )
           : formatMessage({
               id: 'src.page.Login.components.LDAPModal.95DA8BD0' /*LDAP 登录*/,
-              defaultMessage: 'LDAP 登录',
+              defaultMessage: 'LDAP 登录'
             })}
       </div>
       <div>
@@ -279,16 +294,16 @@ const LDAPLoginContent: React.FC<{
                 required: true,
                 message: formatMessage({
                   id: 'src.page.Login.components.LDAPModal.A50C8198',
-                  defaultMessage: '账号不能为空',
-                }), //'账号不能为空'
-              },
+                  defaultMessage: '账号不能为空'
+                }) //'账号不能为空'
+              }
             ]}
           >
             <Input
               prefix={<UserOutlined />}
               placeholder={formatMessage({
                 id: 'src.page.Login.components.LDAPModal.B5335F6F',
-                defaultMessage: '请输入 LDAP 账号',
+                defaultMessage: '请输入 LDAP 账号'
               })}
               onFocus={() => {
                 setFocusInput('username');
@@ -297,7 +312,7 @@ const LDAPLoginContent: React.FC<{
                 setFocusInput('');
               }}
               className={classNames({
-                [`${prefix}-focus-input`]: focusInput === 'username',
+                [`${prefix}-focus-input`]: focusInput === 'username'
               })}
             />
           </Form.Item>
@@ -308,9 +323,9 @@ const LDAPLoginContent: React.FC<{
                 required: true,
                 message: formatMessage({
                   id: 'src.page.Login.components.LDAPModal.AA5AB5DA',
-                  defaultMessage: 'LDAP 密码不能为空',
-                }), //'LDAP 密码不能为空'
-              },
+                  defaultMessage: 'LDAP 密码不能为空'
+                }) //'LDAP 密码不能为空'
+              }
             ]}
           >
             <Input.Password
@@ -319,7 +334,7 @@ const LDAPLoginContent: React.FC<{
               prefix={<LockOutlined />}
               placeholder={formatMessage({
                 id: 'src.page.Login.components.LDAPModal.9C1F7A9B',
-                defaultMessage: '请输入 LDAP 密码',
+                defaultMessage: '请输入 LDAP 密码'
               })}
               onFocus={() => {
                 setFocusInput('password');
@@ -327,7 +342,9 @@ const LDAPLoginContent: React.FC<{
               onBlur={() => {
                 setFocusInput('');
               }}
-              className={focusInput === 'password' ? `${prefix}-focus-input` : ''}
+              className={
+                focusInput === 'password' ? `${prefix}-focus-input` : ''
+              }
             />
           </Form.Item>
           <Button
@@ -342,16 +359,21 @@ const LDAPLoginContent: React.FC<{
             {
               formatMessage({
                 id: 'src.page.Login.components.LDAPModal.B82B6C2B' /*登录*/,
-                defaultMessage: '登录',
+                defaultMessage: '登录'
               }) /* 登录 */
             }
           </Button>
           {switchSSOLoginType ? (
-            <Button style={{ marginTop: '20px' }} block type="link" onClick={switchSSOLoginType}>
+            <Button
+              style={{ marginTop: '20px' }}
+              block
+              type="link"
+              onClick={switchSSOLoginType}
+            >
               {
                 formatMessage({
                   id: 'src.page.Login.components.LDAPModal.F8E8B25F' /*返回上一步*/,
-                  defaultMessage: '返回上一步',
+                  defaultMessage: '返回上一步'
                 }) /* 返回上一步 */
               }
             </Button>

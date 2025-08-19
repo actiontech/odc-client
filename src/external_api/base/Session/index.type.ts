@@ -4,7 +4,7 @@ import {
   IAddSessionReq,
   IAddSessionReply,
   IDelSessionReply,
-  IGetUserBySessionReply,
+  IGetUserBySessionReply
 } from '../common.type';
 
 export interface IAddSessionParams extends IAddSessionReq {}

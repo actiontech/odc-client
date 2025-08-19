@@ -43,7 +43,9 @@ const ProjectRoleSelect: React.FC<IProps> = (props) => {
         return false;
       }
       // 包含空值 && 不是所有筛选项为空
-      return _values?.some((value) => !value) && !_values?.every((value) => !value);
+      return (
+        _values?.some((value) => !value) && !_values?.every((value) => !value)
+      );
     });
     if (!validValues.length || invalidValues.length) {
       itemRequired = true;
@@ -56,8 +58,8 @@ const ProjectRoleSelect: React.FC<IProps> = (props) => {
       name="projectRoles"
       rules={[
         {
-          validator: handleValidator,
-        },
+          validator: handleValidator
+        }
       ]}
     >
       {(fields, { add, remove }) => {
@@ -68,23 +70,23 @@ const ProjectRoleSelect: React.FC<IProps> = (props) => {
                 <Form.Item
                   name={[name, 'projectId']}
                   style={{
-                    width: '210px',
+                    width: '210px'
                   }}
                   rules={[
                     {
                       required: isRequired,
                       message: formatMessage({
                         id: 'odc.src.page.Auth.Autoauth.component.FormModal.PleaseChoose',
-                        defaultMessage: '请选择',
-                      }), //'请选择'
-                    },
+                        defaultMessage: '请选择'
+                      }) //'请选择'
+                    }
                   ]}
                 >
                   <Select
                     placeholder={
                       formatMessage({
                         id: 'odc.src.page.Auth.Autoauth.component.FormModal.PleaseSelectTheProject',
-                        defaultMessage: '请选择项目',
+                        defaultMessage: '请选择项目'
                       }) /* 请选择项目 */
                     }
                     options={projectOptions}
@@ -93,23 +95,23 @@ const ProjectRoleSelect: React.FC<IProps> = (props) => {
                 <Form.Item
                   name={[name, 'roles']}
                   style={{
-                    width: '210px',
+                    width: '210px'
                   }}
                   rules={[
                     {
                       required: isRequired,
                       message: formatMessage({
                         id: 'odc.src.page.Auth.Autoauth.component.FormModal.PleaseChoose.1',
-                        defaultMessage: '请选择',
-                      }), //'请选择'
-                    },
+                        defaultMessage: '请选择'
+                      }) //'请选择'
+                    }
                   ]}
                 >
                   <Select
                     placeholder={
                       formatMessage({
                         id: 'odc.src.page.Auth.Autoauth.component.FormModal.PleaseSelectTheRole',
-                        defaultMessage: '请选择角色',
+                        defaultMessage: '请选择角色'
                       }) /* 请选择角色 */
                     }
                     mode="multiple"
@@ -127,7 +129,7 @@ const ProjectRoleSelect: React.FC<IProps> = (props) => {
             <Form.Item
               style={{
                 marginBottom: 0,
-                width: '428px',
+                width: '428px'
               }}
             >
               <Button
@@ -135,7 +137,7 @@ const ProjectRoleSelect: React.FC<IProps> = (props) => {
                 onClick={() =>
                   add({
                     projectId: undefined,
-                    roles: undefined,
+                    roles: undefined
                   })
                 }
                 block
@@ -144,7 +146,7 @@ const ProjectRoleSelect: React.FC<IProps> = (props) => {
                 {
                   formatMessage({
                     id: 'odc.src.page.Auth.Autoauth.component.FormModal.AddTo',
-                    defaultMessage: '添加',
+                    defaultMessage: '添加'
                   }) /* 
                 添加
                 */

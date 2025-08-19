@@ -10,16 +10,19 @@ export default () => {
         image={Empty.PRESENTED_IMAGE_SIMPLE}
         description={formatMessage({
           id: 'src.component.Empty.ProjectSelectEmpty.256B8DEF',
-          defaultMessage: '暂无项目',
+          defaultMessage: '暂无项目'
         })}
       />
       <Divider />
       <div className={styles.setting}>
         <SettingOutlined color="#1890ff" />
-        <span className={styles.action} onClick={() => window.open('#/project')}>
+        <span
+          className={styles.action}
+          onClick={() => window.open('#/project')}
+        >
           {formatMessage({
             id: 'src.component.Empty.ProjectSelectEmpty.E8AA0AD9',
-            defaultMessage: '管理项目',
+            defaultMessage: '管理项目'
           })}
         </span>
       </div>

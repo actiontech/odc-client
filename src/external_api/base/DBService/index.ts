@@ -40,20 +40,27 @@ import {
   IImportDBServicesOfOneProjectV2Return,
   IImportDBServicesOfOneProjectCheckV2Params,
   IUpdateDBServiceV2Params,
-  IUpdateDBServiceV2Return,
+  IUpdateDBServiceV2Return
 } from './index.type';
 
 class DBServiceService extends ServiceBase {
-  public ListGlobalDBServices(params: IListGlobalDBServicesParams, options?: AxiosRequestConfig) {
+  public ListGlobalDBServices(
+    params: IListGlobalDBServicesParams,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
-    return this.get<IListGlobalDBServicesReturn>('/v1/dms/db_services', paramsData, options);
+    return this.get<IListGlobalDBServicesReturn>(
+      '/v1/dms/db_services',
+      paramsData,
+      options
+    );
   }
 
   public ListDBServiceDriverOption(options?: AxiosRequestConfig) {
     return this.get<IListDBServiceDriverOptionReturn>(
       '/v1/dms/db_services/driver_options',
       undefined,
-      options,
+      options
     );
   }
 
@@ -61,11 +68,14 @@ class DBServiceService extends ServiceBase {
     return this.get<IListGlobalDBServicesTipsReturn>(
       '/v1/dms/db_services/tips',
       undefined,
-      options,
+      options
     );
   }
 
-  public ListDBServices(params: IListDBServicesParams, options?: AxiosRequestConfig) {
+  public ListDBServices(
+    params: IListDBServicesParams,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_uid = paramsData.project_uid;
     delete paramsData.project_uid;
@@ -73,11 +83,14 @@ class DBServiceService extends ServiceBase {
     return this.get<IListDBServicesReturn>(
       `/v1/dms/projects/${project_uid}/db_services`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public AddDBService(params: IAddDBServiceParams, options?: AxiosRequestConfig) {
+  public AddDBService(
+    params: IAddDBServiceParams,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_uid = paramsData.project_uid;
     delete paramsData.project_uid;
@@ -85,13 +98,13 @@ class DBServiceService extends ServiceBase {
     return this.post<IAddDBServiceReturn>(
       `/v1/dms/projects/${project_uid}/db_services`,
       paramsData,
-      options,
+      options
     );
   }
 
   public CheckDBServiceIsConnectable(
     params: ICheckDBServiceIsConnectableParams,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_uid = paramsData.project_uid;
@@ -100,13 +113,13 @@ class DBServiceService extends ServiceBase {
     return this.post<ICheckDBServiceIsConnectableReturn>(
       `/v1/dms/projects/${project_uid}/db_services/connection`,
       paramsData,
-      options,
+      options
     );
   }
 
   public CheckProjectDBServicesConnections(
     params: ICheckProjectDBServicesConnectionsParams,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_uid = paramsData.project_uid;
@@ -115,13 +128,13 @@ class DBServiceService extends ServiceBase {
     return this.post<ICheckProjectDBServicesConnectionsReturn>(
       `/v1/dms/projects/${project_uid}/db_services/connections`,
       paramsData,
-      options,
+      options
     );
   }
 
   public ImportDBServicesOfOneProject(
     params: IImportDBServicesOfOneProjectParams,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_uid = paramsData.project_uid;
@@ -130,20 +143,20 @@ class DBServiceService extends ServiceBase {
     return this.post<IImportDBServicesOfOneProjectReturn>(
       `/v1/dms/projects/${project_uid}/db_services/import`,
       paramsData,
-      options,
+      options
     );
   }
 
   public ImportDBServicesOfOneProjectCheck(
     params: IImportDBServicesOfOneProjectCheckParams,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const config = options || {};
     const headers = config.headers ? config.headers : {};
     config.headers = {
       ...headers,
 
-      'Content-Type': 'multipart/form-data',
+      'Content-Type': 'multipart/form-data'
     };
 
     const paramsData = new FormData();
@@ -157,11 +170,14 @@ class DBServiceService extends ServiceBase {
     return this.post(
       `/v1/dms/projects/${project_uid}/db_services/import_check`,
       paramsData,
-      config,
+      config
     );
   }
 
-  public ListDBServiceTips(params: IListDBServiceTipsParams, options?: AxiosRequestConfig) {
+  public ListDBServiceTips(
+    params: IListDBServiceTipsParams,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_uid = paramsData.project_uid;
     delete paramsData.project_uid;
@@ -169,11 +185,14 @@ class DBServiceService extends ServiceBase {
     return this.get<IListDBServiceTipsReturn>(
       `/v1/dms/projects/${project_uid}/db_services/tips`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public UpdateDBService(params: IUpdateDBServiceParams, options?: AxiosRequestConfig) {
+  public UpdateDBService(
+    params: IUpdateDBServiceParams,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_uid = paramsData.project_uid;
     delete paramsData.project_uid;
@@ -184,11 +203,14 @@ class DBServiceService extends ServiceBase {
     return this.put<IUpdateDBServiceReturn>(
       `/v1/dms/projects/${project_uid}/db_services/${db_service_uid}`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public DelDBService(params: IDelDBServiceParams, options?: AxiosRequestConfig) {
+  public DelDBService(
+    params: IDelDBServiceParams,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_uid = paramsData.project_uid;
     delete paramsData.project_uid;
@@ -199,13 +221,13 @@ class DBServiceService extends ServiceBase {
     return this.delete<IDelDBServiceReturn>(
       `/v1/dms/projects/${project_uid}/db_services/${db_service_uid}`,
       paramsData,
-      options,
+      options
     );
   }
 
   public CheckDBServiceIsConnectableById(
     params: ICheckDBServiceIsConnectableByIdParams,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_uid = paramsData.project_uid;
@@ -217,19 +239,26 @@ class DBServiceService extends ServiceBase {
     return this.post<ICheckDBServiceIsConnectableByIdReturn>(
       `/v1/dms/projects/${project_uid}/db_services/${db_service_uid}/connection`,
       paramsData,
-      options,
+      options
     );
   }
 
   public ListGlobalDBServicesV2(
     params: IListGlobalDBServicesV2Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
-    return this.get<IListGlobalDBServicesV2Return>('/v2/dms/db_services', paramsData, options);
+    return this.get<IListGlobalDBServicesV2Return>(
+      '/v2/dms/db_services',
+      paramsData,
+      options
+    );
   }
 
-  public ListDBServicesV2(params: IListDBServicesV2Params, options?: AxiosRequestConfig) {
+  public ListDBServicesV2(
+    params: IListDBServicesV2Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_uid = paramsData.project_uid;
     delete paramsData.project_uid;
@@ -237,11 +266,14 @@ class DBServiceService extends ServiceBase {
     return this.get<IListDBServicesV2Return>(
       `/v2/dms/projects/${project_uid}/db_services`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public AddDBServiceV2(params: IAddDBServiceV2Params, options?: AxiosRequestConfig) {
+  public AddDBServiceV2(
+    params: IAddDBServiceV2Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_uid = paramsData.project_uid;
     delete paramsData.project_uid;
@@ -249,13 +281,13 @@ class DBServiceService extends ServiceBase {
     return this.post<IAddDBServiceV2Return>(
       `/v2/dms/projects/${project_uid}/db_services`,
       paramsData,
-      options,
+      options
     );
   }
 
   public ImportDBServicesOfOneProjectV2(
     params: IImportDBServicesOfOneProjectV2Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_uid = paramsData.project_uid;
@@ -264,20 +296,20 @@ class DBServiceService extends ServiceBase {
     return this.post<IImportDBServicesOfOneProjectV2Return>(
       `/v2/dms/projects/${project_uid}/db_services/import`,
       paramsData,
-      options,
+      options
     );
   }
 
   public ImportDBServicesOfOneProjectCheckV2(
     params: IImportDBServicesOfOneProjectCheckV2Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const config = options || {};
     const headers = config.headers ? config.headers : {};
     config.headers = {
       ...headers,
 
-      'Content-Type': 'multipart/form-data',
+      'Content-Type': 'multipart/form-data'
     };
 
     const paramsData = new FormData();
@@ -291,11 +323,14 @@ class DBServiceService extends ServiceBase {
     return this.post(
       `/v2/dms/projects/${project_uid}/db_services/import_check`,
       paramsData,
-      config,
+      config
     );
   }
 
-  public UpdateDBServiceV2(params: IUpdateDBServiceV2Params, options?: AxiosRequestConfig) {
+  public UpdateDBServiceV2(
+    params: IUpdateDBServiceV2Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_uid = paramsData.project_uid;
     delete paramsData.project_uid;
@@ -306,7 +341,7 @@ class DBServiceService extends ServiceBase {
     return this.put<IUpdateDBServiceV2Return>(
       `/v2/dms/projects/${project_uid}/db_services/${db_service_uid}`,
       paramsData,
-      options,
+      options
     );
   }
 }

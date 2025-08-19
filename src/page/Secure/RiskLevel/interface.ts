@@ -46,29 +46,29 @@ export enum Expression {
   TASK_TYPE = 'TASK_TYPE',
   SQL_CHECK_RESULT = 'SQL_CHECK_RESULT',
   PROJECT_NAME = 'PROJECT_NAME',
-  DATABASE_NAME = 'DATABASE_NAME',
+  DATABASE_NAME = 'DATABASE_NAME'
 }
 export const ExpressionMap = {
   [Expression.ENVIRONMENT_NAME]: formatMessage({
     id: 'odc.src.page.Secure.RiskLevel.Environment',
-    defaultMessage: '环境',
+    defaultMessage: '环境'
   }), //'环境'
   [Expression.TASK_TYPE]: formatMessage({
     id: 'odc.src.page.Secure.RiskLevel.Type',
-    defaultMessage: '任务类型',
+    defaultMessage: '任务类型'
   }), //'任务类型'
   [Expression.SQL_CHECK_RESULT]: formatMessage({
     id: 'odc.src.page.Secure.RiskLevel.SQLExaminationResults',
-    defaultMessage: 'SQL 检查结果',
+    defaultMessage: 'SQL 检查结果'
   }), //'SQL 检查结果'
   [Expression.PROJECT_NAME]: formatMessage({
     id: 'odc.src.page.Secure.RiskLevel.ProjectName',
-    defaultMessage: '项目名称',
+    defaultMessage: '项目名称'
   }), //'项目名称'
   [Expression.DATABASE_NAME]: formatMessage({
     id: 'odc.src.page.Secure.RiskLevel.NameDatabase',
-    defaultMessage: '数据库名称',
-  }), //'数据库名称'
+    defaultMessage: '数据库名称'
+  }) //'数据库名称'
 };
 export enum EOperator {
   EQUALS = 'EQUALS',
@@ -76,7 +76,7 @@ export enum EOperator {
   CONTAINS = 'CONTAINS',
   NOT_CONTAINS = 'NOT_CONTAINS',
   IN = 'IN',
-  NOT_IN = 'NOT_IN',
+  NOT_IN = 'NOT_IN'
 }
 export const OperatorMap = {
   [EOperator.EQUALS]: '=', //'等于'
@@ -84,5 +84,5 @@ export const OperatorMap = {
   [EOperator.CONTAINS]: 'contains', //'包含'
   [EOperator.NOT_CONTAINS]: 'not contains', //'不包含'
   [EOperator.IN]: 'in', //'在'
-  [EOperator.NOT_IN]: 'not in', //'不在'
+  [EOperator.NOT_IN]: 'not in' //'不在'
 };

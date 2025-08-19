@@ -18,7 +18,7 @@ import {
   IGetAuditFileListRes,
   IGetAuditFileExecStatisticRes,
   IGetAuditTaskSQLsResV2,
-  IGetTaskAnalysisDataResV2,
+  IGetTaskAnalysisDataResV2
 } from '../common.type';
 
 import {
@@ -27,14 +27,15 @@ import {
   getAuditTaskSQLsV1FilterAuditLevelEnum,
   getAuditTaskSQLsV2FilterExecStatusEnum,
   getAuditTaskSQLsV2FilterAuditStatusEnum,
-  getAuditTaskSQLsV2FilterAuditLevelEnum,
+  getAuditTaskSQLsV2FilterAuditLevelEnum
 } from './index.enum';
 
 export interface ICreateAuditTasksV1Params extends ICreateAuditTasksGroupReqV1 {
   project_name: string;
 }
 
-export interface ICreateAuditTasksV1Return extends ICreateAuditTasksGroupResV1 {}
+export interface ICreateAuditTasksV1Return
+  extends ICreateAuditTasksGroupResV1 {}
 
 export interface ICreateAndAuditTaskV1Params extends ICreateAuditTaskReqV1 {
   project_name: string;
@@ -80,7 +81,8 @@ export interface IUpdateSqlFileOrderV1Params extends IUpdateSqlFileOrderV1Req {
   task_id: string;
 }
 
-export interface IUpdateSqlFileOrderV1Return extends IGetSqlFileOrderMethodResV1 {}
+export interface IUpdateSqlFileOrderV1Return
+  extends IGetSqlFileOrderMethodResV1 {}
 
 export interface IAuditTaskGroupIdV1Params {
   task_group_id: number;
@@ -118,7 +120,8 @@ export interface IGetAuditTaskSQLContentV1Params {
   task_id: string;
 }
 
-export interface IGetAuditTaskSQLContentV1Return extends IGetAuditTaskSQLContentResV1 {}
+export interface IGetAuditTaskSQLContentV1Return
+  extends IGetAuditTaskSQLContentResV1 {}
 
 export interface IDownloadAuditTaskSQLFileV1Params {
   task_id: string;
@@ -148,7 +151,8 @@ export interface IGetAuditTaskSQLsV1Params {
 
 export interface IGetAuditTaskSQLsV1Return extends IGetAuditTaskSQLsResV1 {}
 
-export interface IUpdateAuditTaskSQLsV1Params extends IUpdateAuditTaskSQLsReqV1 {
+export interface IUpdateAuditTaskSQLsV1Params
+  extends IUpdateAuditTaskSQLsReqV1 {
   task_id: string;
 
   number: string;
@@ -178,9 +182,11 @@ export interface IGetAsyncRewriteTaskStatusParams {
   number: number;
 }
 
-export interface IGetAsyncRewriteTaskStatusReturn extends IAsyncRewriteTaskStatusRes {}
+export interface IGetAsyncRewriteTaskStatusReturn
+  extends IAsyncRewriteTaskStatusRes {}
 
-export interface IGetSqlFileOrderMethodV1Return extends IGetSqlFileOrderMethodResV1 {}
+export interface IGetSqlFileOrderMethodV1Return
+  extends IGetSqlFileOrderMethodResV1 {}
 
 export interface IGetAuditFileListParams {
   task_id: string;
@@ -198,7 +204,8 @@ export interface IGetAuditFileExecStatisticParams {
   file_id: string;
 }
 
-export interface IGetAuditFileExecStatisticReturn extends IGetAuditFileExecStatisticRes {}
+export interface IGetAuditFileExecStatisticReturn
+  extends IGetAuditFileExecStatisticRes {}
 
 export interface IGetAuditTaskSQLsV2Params {
   task_id: string;
@@ -226,4 +233,5 @@ export interface IGetTaskAnalysisDataV2Params {
   number: number;
 }
 
-export interface IGetTaskAnalysisDataV2Return extends IGetTaskAnalysisDataResV2 {}
+export interface IGetTaskAnalysisDataV2Return
+  extends IGetTaskAnalysisDataResV2 {}

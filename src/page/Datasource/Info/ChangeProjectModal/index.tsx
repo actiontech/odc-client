@@ -32,13 +32,18 @@ interface IProps {
   close: () => void;
   onSuccess: () => void;
 }
-export default function ChangeProjectModal({ visible, database, close, onSuccess }: IProps) {
+export default function ChangeProjectModal({
+  visible,
+  database,
+  close,
+  onSuccess
+}: IProps) {
   const [projectInfo, setProjectInfo] = useState<IProject>();
   const [ownerSelectStatus, setOwnerSelectStatus] = useState<boolean>(false);
   const [form] = Form.useForm();
 
   const { data, loading, run } = useRequest(listProjects, {
-    manual: true,
+    manual: true
   });
   useEffect(() => {
     if (visible) {
@@ -46,7 +51,7 @@ export default function ChangeProjectModal({ visible, database, close, onSuccess
       const owner_ids = database?.owners?.map(({ id }) => id) || [];
       form.setFieldsValue({
         project: database?.project?.id || null,
-        ownerIds: owner_ids,
+        ownerIds: owner_ids
       });
       if (database?.project?.id) {
         getProjectDetail(database?.project?.id);
@@ -72,20 +77,24 @@ export default function ChangeProjectModal({ visible, database, close, onSuccess
       title={
         formatMessage({
           id: 'odc.src.page.Datasource.Info.ChangeProjectModal.ModifyTheProject',
-          defaultMessage: '修改所属项目',
+          defaultMessage: '修改所属项目'
         }) //'修改所属项目'
       }
       open={visible}
       onCancel={onClose}
       onOk={async () => {
         const value = await form.validateFields();
-        const isSuccess = await updateDataBase([database?.id], value.project, value.ownerIds);
+        const isSuccess = await updateDataBase(
+          [database?.id],
+          value.project,
+          value.ownerIds
+        );
         if (isSuccess) {
           message.success(
             formatMessage({
               id: 'odc.Info.ChangeProjectModal.OperationSucceeded',
-              defaultMessage: '操作成功',
-            }), //操作成功
+              defaultMessage: '操作成功'
+            }) //操作成功
           );
           onClose();
           onSuccess();
@@ -111,7 +120,7 @@ export default function ChangeProjectModal({ visible, database, close, onSuccess
           {
             formatMessage({
               id: 'odc.Info.ChangeProjectModal.DatabaseName',
-              defaultMessage: '数据库名称：',
+              defaultMessage: '数据库名称：'
             }) /*数据库名称：*/
           }
 
@@ -122,7 +131,7 @@ export default function ChangeProjectModal({ visible, database, close, onSuccess
             message={formatMessage({
               id: 'src.page.Datasource.Info.ChangeProjectModal.1FCE3834',
               defaultMessage:
-                '通过该入口修改库所属项目或库管理员会导致针对该库的库权限分配失效。若只需修改库管理员且希望库权限分配不受影响，可通过【设置库管理员】入口进行调整。',
+                '通过该入口修改库所属项目或库管理员会导致针对该库的库权限分配失效。若只需修改库管理员且希望库权限分配不受影响，可通过【设置库管理员】入口进行调整。'
             })}
             showIcon
           />
@@ -136,20 +145,20 @@ export default function ChangeProjectModal({ visible, database, close, onSuccess
                   callback(
                     formatMessage({
                       id: 'odc.Info.ChangeProjectModal.PleaseSelectAProject',
-                      defaultMessage: '请选择项目',
-                    }), //请选择项目
+                      defaultMessage: '请选择项目'
+                    }) //请选择项目
                   );
 
                   return;
                 }
                 callback();
-              },
-            },
+              }
+            }
           ]}
           label={
             formatMessage({
               id: 'odc.src.page.Datasource.Info.ChangeProjectModal.Project',
-              defaultMessage: '项目',
+              defaultMessage: '项目'
             }) //'项目'
           }
           name={'project'}
@@ -165,7 +174,7 @@ export default function ChangeProjectModal({ visible, database, close, onSuccess
           hasDefaultSet={false}
           setFormOwnerIds={(value) => {
             form.setFieldsValue({
-              ownerIds: value,
+              ownerIds: value
             });
           }}
           disabled={ownerSelectStatus}

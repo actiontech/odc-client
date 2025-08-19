@@ -18,21 +18,35 @@ import {
   getAllConnectTypes,
   getDataSourceModeConfig,
   getDataSourceStyleByConnectType,
-  getDsByConnectType,
+  getDsByConnectType
 } from '@/common/datasource';
 import { testConnection } from '@/common/network/connection';
 import { listEnvironments } from '@/common/network/env';
 import RiskLevelLabel from '@/component/RiskLevelLabel';
 import { isConnectTypeBeFileSystemGroup } from '@/util/connection';
 import { ConnectTypeText } from '@/constant/label';
-import { AccountType, ConnectType, IConnectionTestErrorType, DatasourceGroup } from '@/d.ts';
+import {
+  AccountType,
+  ConnectType,
+  IConnectionTestErrorType,
+  DatasourceGroup
+} from '@/d.ts';
 import { IDatasource, IDataSourceType } from '@/d.ts/datasource';
 import login from '@/store/login';
 import { haveOCP } from '@/util/env';
 import { formatMessage, getLocalDocs } from '@/util/intl';
 import Icon from '@ant-design/icons';
 import { useRequest } from 'ahooks';
-import { Form, FormInstance, Input, Select, Space, Typography, Alert, Button } from 'antd';
+import {
+  Form,
+  FormInstance,
+  Input,
+  Select,
+  Space,
+  Typography,
+  Alert,
+  Button
+} from 'antd';
 import { forwardRef, useImperativeHandle, useState, useMemo } from 'react';
 import Account from './Account';
 import AddressItems from './AddressItems';
@@ -55,7 +69,7 @@ interface IProps {
 }
 export default forwardRef<IFormRef, IProps>(function DatasourceForm(
   { isEdit, originDatasource, type, disableTheme }: IProps,
-  ref,
+  ref
 ) {
   const [form] = Form.useForm();
   const [testResult, setTestResult] = useState<{
@@ -68,12 +82,14 @@ export default forwardRef<IFormRef, IProps>(function DatasourceForm(
     ref,
     () => {
       return {
-        form,
+        form
       };
     },
-    [form],
+    [form]
   );
-  const { data: environments, loading } = useRequest(() => listEnvironments({ enabled: true }));
+  const { data: environments, loading } = useRequest(() =>
+    listEnvironments({ enabled: true })
+  );
   async function test() {
     setTestResult(null);
     let values;
@@ -93,7 +109,7 @@ export default forwardRef<IFormRef, IProps>(function DatasourceForm(
         'sid',
         'serviceName',
         'userRole',
-        'catalogName',
+        'catalogName'
       ]);
     } catch (e) {}
     if (!values) {
@@ -102,7 +118,7 @@ export default forwardRef<IFormRef, IProps>(function DatasourceForm(
     const params = isEdit
       ? {
           ...originDatasource,
-          ...values,
+          ...values
         }
       : values;
     const res = await testConnection(params, AccountType.MAIN, true);
@@ -111,7 +127,7 @@ export default forwardRef<IFormRef, IProps>(function DatasourceForm(
         errorCode: IConnectionTestErrorType.UNKNOWN,
         errorMessage: res?.errMsg,
         active: false,
-        type: null,
+        type: null
       });
       return;
     }
@@ -121,7 +137,7 @@ export default forwardRef<IFormRef, IProps>(function DatasourceForm(
           errorCode: IConnectionTestErrorType.OB_WEAK_READ_CONSISTENCY_REQUIRED,
           errorMessage: res?.data?.errorMessage,
           active: false,
-          type: null,
+          type: null
         });
       } else {
         switch (res?.data?.errorCode) {
@@ -131,8 +147,8 @@ export default forwardRef<IFormRef, IProps>(function DatasourceForm(
             form.setFields([
               {
                 errors: [res?.data?.errorMessage],
-                name: ['host'],
-              },
+                name: ['host']
+              }
             ]);
             break;
           }
@@ -142,8 +158,8 @@ export default forwardRef<IFormRef, IProps>(function DatasourceForm(
             form.setFields([
               {
                 errors: [res?.data?.errorMessage],
-                name: ['host'],
-              },
+                name: ['host']
+              }
             ]);
             break;
           }
@@ -152,17 +168,18 @@ export default forwardRef<IFormRef, IProps>(function DatasourceForm(
             form.setFields([
               {
                 errors: [res?.data?.errorMessage],
-                name: ['port'],
-              },
+                name: ['port']
+              }
             ]);
             break;
           }
           case IConnectionTestErrorType.OB_WEAK_READ_CONSISTENCY_REQUIRED: {
             setTestResult({
-              errorCode: IConnectionTestErrorType.OB_WEAK_READ_CONSISTENCY_REQUIRED,
+              errorCode:
+                IConnectionTestErrorType.OB_WEAK_READ_CONSISTENCY_REQUIRED,
               errorMessage: res?.data?.errorMessage,
               active: false,
-              type: null,
+              type: null
             });
             break;
           }
@@ -183,17 +200,18 @@ export default forwardRef<IFormRef, IProps>(function DatasourceForm(
         <Alert
           message={formatMessage({
             id: 'src.page.Datasource.Datasource.NewDatasourceDrawer.Form.C8E3BD0E',
-            defaultMessage: '对象存储仅支持数据归档',
+            defaultMessage: '对象存储仅支持数据归档'
           })}
           type="info"
           showIcon
           style={{
-            marginBottom: '12px',
+            marginBottom: '12px'
           }}
           action={
             <a
               href={
-                odc.appConfig?.docs.url || getLocalDocs('100.create-a-personal-connection.html')
+                odc.appConfig?.docs.url ||
+                getLocalDocs('100.create-a-personal-connection.html')
               }
               target={'_blank'}
               onClick={(e) => {
@@ -202,7 +220,7 @@ export default forwardRef<IFormRef, IProps>(function DatasourceForm(
             >
               {formatMessage({
                 id: 'src.page.Datasource.Datasource.NewDatasourceDrawer.Form.FE0F7CF3',
-                defaultMessage: '查看详情',
+                defaultMessage: '查看详情'
               })}
             </a>
           }
@@ -221,7 +239,7 @@ export default forwardRef<IFormRef, IProps>(function DatasourceForm(
         originDatasource,
         dataSourceConfig: dsc,
         disableTheme,
-        setTestResult,
+        setTestResult
       }}
     >
       {AlertMessage}
@@ -231,7 +249,7 @@ export default forwardRef<IFormRef, IProps>(function DatasourceForm(
           password: '',
           sysTenantPassword: '',
           userRole: 'NORMAL',
-          sid: '',
+          sid: ''
         }}
         layout="vertical"
         form={form}
@@ -242,18 +260,18 @@ export default forwardRef<IFormRef, IProps>(function DatasourceForm(
             rules={[
               {
                 required: true,
-                max: 128,
-              },
+                max: 128
+              }
             ]}
             label={formatMessage({
               id: 'odc.NewDatasourceDrawer.Form.DataSourceName',
-              defaultMessage: '数据源名称',
+              defaultMessage: '数据源名称'
             })}
             /*数据源名称*/ name={'name'}
           >
             <Input
               style={{
-                width: '100%',
+                width: '100%'
               }}
             />
           </Form.Item>
@@ -266,15 +284,17 @@ export default forwardRef<IFormRef, IProps>(function DatasourceForm(
                   {
                     formatMessage({
                       id: 'odc.src.page.Datasource.Datasource.NewDatasourceDrawer.Form.DataSourceType',
-                      defaultMessage: '数据源类型:',
+                      defaultMessage: '数据源类型:'
                     }) /* 数据源类型: */
                   }
                 </span>
                 <Icon
-                  component={getDataSourceStyleByConnectType(type)?.icon?.component}
+                  component={
+                    getDataSourceStyleByConnectType(type)?.icon?.component
+                  }
                   style={{
                     color: getDataSourceStyleByConnectType(type)?.icon?.color,
-                    fontSize: 14,
+                    fontSize: 14
                   }}
                 />
 
@@ -288,12 +308,12 @@ export default forwardRef<IFormRef, IProps>(function DatasourceForm(
         <Form.Item
           rules={[
             {
-              required: true,
-            },
+              required: true
+            }
           ]}
           label={formatMessage({
             id: 'odc.NewDatasourceDrawer.Form.Type',
-            defaultMessage: '类型',
+            defaultMessage: '类型'
           })}
           /*类型*/ name={'type'}
           noStyle
@@ -303,12 +323,12 @@ export default forwardRef<IFormRef, IProps>(function DatasourceForm(
             placeholder={
               formatMessage({
                 id: 'odc.src.page.Datasource.Datasource.NewDatasourceDrawer.Form.PleaseChooseTheType.1',
-                defaultMessage: '请选择类型',
+                defaultMessage: '请选择类型'
               }) /* 请选择类型 */
             }
             style={{
               width: 208,
-              display: 'none',
+              display: 'none'
             }}
           >
             {connectTypeList?.map((item) => {
@@ -330,7 +350,9 @@ export default forwardRef<IFormRef, IProps>(function DatasourceForm(
               <>
                 {!haveOCP() && !dsc?.disableURLParse && (
                   <ParseURLItem
-                    unionUser={getDataSourceModeConfig(type)?.connection?.unionUser}
+                    unionUser={
+                      getDataSourceModeConfig(type)?.connection?.unionUser
+                    }
                     autoType={!isEdit}
                   />
                 )}
@@ -340,19 +362,19 @@ export default forwardRef<IFormRef, IProps>(function DatasourceForm(
                     label={
                       formatMessage({
                         id: 'odc.src.page.Datasource.Datasource.NewDatasourceDrawer.Form.DefaultDatabase',
-                        defaultMessage: '默认数据库',
+                        defaultMessage: '默认数据库'
                       }) /* 默认数据库 */
                     }
                     rules={[
                       {
-                        required: true,
-                      },
+                        required: true
+                      }
                     ]}
                     name={'defaultSchema'}
                   >
                     <Input
                       style={{
-                        width: 208,
+                        width: 208
                       }}
                     />
                   </Form.Item>
@@ -362,19 +384,19 @@ export default forwardRef<IFormRef, IProps>(function DatasourceForm(
                 <Form.Item
                   rules={[
                     {
-                      required: true,
-                    },
+                      required: true
+                    }
                   ]}
                   label={formatMessage({
                     id: 'odc.NewDatasourceDrawer.Form.Environment',
-                    defaultMessage: '环境',
+                    defaultMessage: '环境'
                   })}
                   /*环境*/ name={'environmentId'}
                 >
                   <Select
                     loading={loading}
                     style={{
-                      width: 208,
+                      width: 208
                     }}
                   >
                     {environments
@@ -382,7 +404,10 @@ export default forwardRef<IFormRef, IProps>(function DatasourceForm(
                       ?.map((env) => {
                         return (
                           <Option key={env.id} value={env.id}>
-                            <RiskLevelLabel color={env.style} content={env.name} />
+                            <RiskLevelLabel
+                              color={env.style}
+                              content={env.name}
+                            />
                           </Option>
                         );
                       })}

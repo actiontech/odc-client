@@ -5,12 +5,7 @@
 import React, { useMemo, useState, useContext, useCallback } from 'react';
 import { Space } from 'antd';
 import Icon from '@ant-design/icons';
-import {
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-  BulbOutlined,
-  UserOutlined,
-} from '@ant-design/icons';
+import { BulbOutlined, UserOutlined } from '@ant-design/icons';
 import { inject, observer } from 'mobx-react';
 
 import { ReactComponent as DBSvg } from '@/svgr/database_outline.svg';
@@ -18,7 +13,10 @@ import { ReactComponent as TaskSvg } from '@/svgr/icon_task.svg';
 import { ReactComponent as ManagerSvg } from '@/svgr/operate.svg';
 import { ReactComponent as CodeSvg } from '@/svgr/Snippet.svg';
 
-import { ActivityBarItemType, ActivityBarItemTypeText } from '../ActivityBar/type';
+import {
+  ActivityBarItemType,
+  ActivityBarItemTypeText
+} from '../ActivityBar/type';
 import ActivityBarContext from '../context/ActivityBarContext';
 
 import { formatMessage } from '@/util/intl';
@@ -39,7 +37,7 @@ import {
   NavItemStyleWrapper,
   ItemLabelStyleWrapper,
   ToggleButtonStyleWrapper,
-  DividerLineStyleWrapper,
+  DividerLineStyleWrapper
 } from './style';
 import { BasicToolTip } from '@actiontech/dms-kit';
 
@@ -62,28 +60,28 @@ const ActivityBarNew: React.FC<IProps> = () => {
         title: ActivityBarItemTypeText[ActivityBarItemType.Database],
         key: ActivityBarItemType.Database,
         icon: DBSvg,
-        isVisible: true,
+        isVisible: true
       },
       {
         title: ActivityBarItemTypeText[ActivityBarItemType.Script],
         key: ActivityBarItemType.Script,
         icon: CodeSvg,
-        isVisible: true,
+        isVisible: true
       },
       {
         title: ActivityBarItemTypeText[ActivityBarItemType.Task],
         key: ActivityBarItemType.Task,
         icon: TaskSvg,
-        isVisible: true,
+        isVisible: true
       },
       {
         title: ActivityBarItemTypeText[ActivityBarItemType.Manager],
         key: ActivityBarItemType.Manager,
         icon: ManagerSvg,
-        isVisible: true,
-      },
+        isVisible: true
+      }
     ],
-    [],
+    []
   );
 
   const handleItemClick = useCallback(
@@ -100,7 +98,7 @@ const ActivityBarNew: React.FC<IProps> = () => {
       }
       context?.setActiveKey?.(item.key);
     },
-    [context],
+    [context]
   );
 
   return (
@@ -117,14 +115,20 @@ const ActivityBarNew: React.FC<IProps> = () => {
                 const ActiveIcon = item.icon as any;
                 const isActive = context?.activeKey === item.key;
                 return (
-                  <BasicToolTip key={item.key} title={item.title} placement="right">
+                  <BasicToolTip
+                    key={item.key}
+                    title={item.title}
+                    placement="right"
+                  >
                     <NavItemStyleWrapper
                       $active={isActive}
                       $collapsed={collapsed}
                       onClick={() => handleItemClick(item)}
                     >
                       <Icon component={ActiveIcon} style={{ fontSize: 16 }} />
-                      <ItemLabelStyleWrapper hidden={collapsed}>{item.title}</ItemLabelStyleWrapper>
+                      <ItemLabelStyleWrapper hidden={collapsed}>
+                        {item.title}
+                      </ItemLabelStyleWrapper>
                     </NavItemStyleWrapper>
                   </BasicToolTip>
                 );
@@ -156,7 +160,10 @@ const ActivityBarNew: React.FC<IProps> = () => {
               disableTip={true}
               icon={BulbOutlined}
               collapsed={collapsed}
-              label={formatMessage({ id: 'odc.Index.Sider.Help', defaultMessage: '帮助' })}
+              label={formatMessage({
+                id: 'odc.Index.Sider.Help',
+                defaultMessage: '帮助'
+              })}
             />
           </HelpItem>
           <MineItem>
@@ -164,7 +171,10 @@ const ActivityBarNew: React.FC<IProps> = () => {
               disableTip={true}
               icon={UserOutlined}
               collapsed={collapsed}
-              label={formatMessage({ id: 'odc.Index.Sider.Mine', defaultMessage: '我的' })}
+              label={formatMessage({
+                id: 'odc.Index.Sider.Mine',
+                defaultMessage: '我的'
+              })}
             />
           </MineItem>
         </Space>

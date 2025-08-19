@@ -43,7 +43,10 @@ const RollBackModal: React.FC<IProps> = (props) => {
 
   return (
     <Modal
-      title={formatMessage({ id: 'odc.component.RollbackModal.Rollback', defaultMessage: '回滚' })}
+      title={formatMessage({
+        id: 'odc.component.RollbackModal.Rollback',
+        defaultMessage: '回滚'
+      })}
       /*回滚*/ open={open}
       onOk={handleOk}
       onCancel={onCancel}
@@ -53,7 +56,7 @@ const RollBackModal: React.FC<IProps> = (props) => {
           {
             formatMessage({
               id: 'odc.component.RollbackModal.RollbackScheme',
-              defaultMessage: '回滚方案',
+              defaultMessage: '回滚方案'
             }) /*回滚方案*/
           }
         </Text>
@@ -61,7 +64,8 @@ const RollBackModal: React.FC<IProps> = (props) => {
           {
             formatMessage({
               id: 'odc.component.RollbackModal.ToRollBackDatabaseChanges',
-              defaultMessage: '数据库变更回滚需重新发起新的工单并执行，请先选择回滚方案',
+              defaultMessage:
+                '数据库变更回滚需重新发起新的工单并执行，请先选择回滚方案'
             }) /*数据库变更回滚需重新发起新的工单并执行，请先选择回滚方案*/
           }
         </Text>
@@ -70,7 +74,7 @@ const RollBackModal: React.FC<IProps> = (props) => {
             {
               formatMessage({
                 id: 'odc.component.RollbackModal.ReferenceSystemGeneratedSolutions',
-                defaultMessage: '引用系统生成的方案',
+                defaultMessage: '引用系统生成的方案'
               }) /*引用系统生成的方案*/
             }
           </Radio>
@@ -78,7 +82,7 @@ const RollBackModal: React.FC<IProps> = (props) => {
             {
               formatMessage({
                 id: 'odc.component.RollbackModal.Custom',
-                defaultMessage: '自定义',
+                defaultMessage: '自定义'
               }) /*自定义*/
             }
           </Radio>

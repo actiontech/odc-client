@@ -23,22 +23,28 @@ import modal from '@/store/modal';
 import page from '@/store/page';
 import { formatMessage } from '@/util/intl';
 import { downloadPLDDL } from '@/util/sqlExport';
-import { PlusOutlined, QuestionCircleFilled, ReloadOutlined } from '@ant-design/icons';
+import {
+  PlusOutlined,
+  QuestionCircleFilled,
+  ReloadOutlined
+} from '@ant-design/icons';
 import { message, Modal } from 'antd';
 import { ResourceNodeType } from '../../type';
 import { hasChangePermission, hasExportPermission } from '../index';
 import { IMenuItemConfig } from '../type';
 import { isSupportExport } from './helper';
 
-export const sequenceMenusConfig: Partial<Record<ResourceNodeType, IMenuItemConfig[]>> = {
+export const sequenceMenusConfig: Partial<
+  Record<ResourceNodeType, IMenuItemConfig[]>
+> = {
   [ResourceNodeType.SequenceRoot]: [
     {
       key: ResourceTreeNodeMenuKeys.CREATE_SEQUENCE,
       text: [
         formatMessage({
           id: 'odc.TreeNodeMenu.config.sequence.CreateASequence',
-          defaultMessage: '新建序列',
-        }),
+          defaultMessage: '新建序列'
+        })
       ],
 
       icon: PlusOutlined,
@@ -46,21 +52,24 @@ export const sequenceMenusConfig: Partial<Record<ResourceNodeType, IMenuItemConf
       run(session, node) {
         modal.changeCreateSequenceModalVisible(true, {
           databaseId: session?.odcDatabase?.id,
-          dbName: session?.database?.dbName,
+          dbName: session?.database?.dbName
         });
-      },
+      }
     },
     {
       key: 'REFRESH',
       text: [
-        formatMessage({ id: 'odc.ResourceTree.actions.Refresh', defaultMessage: '刷新' }), //刷新
+        formatMessage({
+          id: 'odc.ResourceTree.actions.Refresh',
+          defaultMessage: '刷新'
+        }) //刷新
       ],
       icon: ReloadOutlined,
       actionType: actionTypes.read,
       async run(session, node) {
         await session.database.getSequenceList();
-      },
-    },
+      }
+    }
   ],
 
   [ResourceNodeType.Sequence]: [
@@ -70,8 +79,8 @@ export const sequenceMenusConfig: Partial<Record<ResourceNodeType, IMenuItemConf
       text: [
         formatMessage({
           id: 'odc.TreeNodeMenu.config.sequence.ViewSequence',
-          defaultMessage: '查看序列',
-        }),
+          defaultMessage: '查看序列'
+        })
       ],
       run(session, node) {
         const sequence: ISequence = node.data;
@@ -79,16 +88,19 @@ export const sequenceMenusConfig: Partial<Record<ResourceNodeType, IMenuItemConf
           sequence?.name,
           undefined,
           session?.odcDatabase?.id,
-          session?.database?.dbName,
+          session?.database?.dbName
         );
-      },
+      }
     },
 
     {
       key: ResourceTreeNodeMenuKeys.UPDATE_SEQUENCE,
       ellipsis: true,
       text: [
-        formatMessage({ id: 'odc.TreeNodeMenu.config.sequence.Modify', defaultMessage: '修改' }),
+        formatMessage({
+          id: 'odc.TreeNodeMenu.config.sequence.Modify',
+          defaultMessage: '修改'
+        })
       ],
       actionType: actionTypes.update,
       async run(session, node) {
@@ -96,24 +108,27 @@ export const sequenceMenusConfig: Partial<Record<ResourceNodeType, IMenuItemConf
         const sequence = await getSequence(
           sequenceInfo?.name,
           session?.sessionId,
-          session?.database?.dbName,
+          session?.database?.dbName
         );
         if (sequence) {
           modal.changeCreateSequenceModalVisible(true, {
             isEdit: true,
             data: sequence,
             databaseId: session?.odcDatabase?.id,
-            dbName: session?.database?.dbName,
+            dbName: session?.database?.dbName
           });
         }
-      },
+      }
     },
 
     {
       key: ResourceTreeNodeMenuKeys.DELETE_SEQUENCE,
       ellipsis: true,
       text: [
-        formatMessage({ id: 'odc.TreeNodeMenu.config.sequence.Delete', defaultMessage: '删除' }),
+        formatMessage({
+          id: 'odc.TreeNodeMenu.config.sequence.Delete',
+          defaultMessage: '删除'
+        })
       ],
       actionType: actionTypes.delete,
       hasDivider: true,
@@ -126,19 +141,25 @@ export const sequenceMenusConfig: Partial<Record<ResourceNodeType, IMenuItemConf
           title: formatMessage(
             {
               id: 'workspace.window.createSequence.modal.delete',
-              defaultMessage: '是否确定删除序列 {name}？',
+              defaultMessage: '是否确定删除序列 {name}？'
             },
-            { name: sequenceInfo?.name },
+            { name: sequenceInfo?.name }
           ),
-          okText: formatMessage({ id: 'app.button.ok', defaultMessage: '确定' }),
-          cancelText: formatMessage({ id: 'app.button.cancel', defaultMessage: '取消' }),
+          okText: formatMessage({
+            id: 'app.button.ok',
+            defaultMessage: '确定'
+          }),
+          cancelText: formatMessage({
+            id: 'app.button.cancel',
+            defaultMessage: '取消'
+          }),
           centered: true,
           icon: <QuestionCircleFilled />,
           onOk: async () => {
             const isSuccess = await dropObject(
               sequenceInfo?.name,
               DbObjectType.sequence,
-              session?.sessionId,
+              session?.sessionId
             );
             if (!isSuccess) {
               return;
@@ -147,20 +168,20 @@ export const sequenceMenusConfig: Partial<Record<ResourceNodeType, IMenuItemConf
             message.success(
               formatMessage({
                 id: 'workspace.window.createSequence.delete.success',
-                defaultMessage: '删除序列成功',
-              }),
+                defaultMessage: '删除序列成功'
+              })
             );
 
             // TODO：如果当前有视图详情页面，需要关闭
             const openedPage = page?.pages.find(
-              (p) => p.params.sequenceName === sequenceInfo?.name,
+              (p) => p.params.sequenceName === sequenceInfo?.name
             );
             if (openedPage) {
               page?.close(openedPage.key);
             }
-          },
+          }
         });
-      },
+      }
     },
 
     {
@@ -168,7 +189,7 @@ export const sequenceMenusConfig: Partial<Record<ResourceNodeType, IMenuItemConf
       ellipsis: true,
       text: formatMessage({
         id: 'odc.TreeNodeMenu.config.sequence.Export',
-        defaultMessage: '导出',
+        defaultMessage: '导出'
       }), //导出
       disabled: (session) => {
         return !hasExportPermission(session);
@@ -181,16 +202,16 @@ export const sequenceMenusConfig: Partial<Record<ResourceNodeType, IMenuItemConf
         modal.changeExportModal(true, {
           type: DbObjectType.sequence,
           name: sequenceInfo?.name,
-          databaseId: session?.database.databaseId,
+          databaseId: session?.database.databaseId
         });
-      },
+      }
     },
     {
       key: ResourceTreeNodeMenuKeys.DOWNLOAD,
       ellipsis: true,
       text: formatMessage({
         id: 'odc.TreeNodeMenu.config.sequence.Download',
-        defaultMessage: '下载',
+        defaultMessage: '下载'
       }), //下载
       hasDivider: true,
       async run(session, node) {
@@ -198,23 +219,31 @@ export const sequenceMenusConfig: Partial<Record<ResourceNodeType, IMenuItemConf
         const obj = await getSequence(
           sequenceInfo?.name,
           session?.sessionId,
-          session?.database?.dbName,
+          session?.database?.dbName
         );
         if (obj) {
-          downloadPLDDL(sequenceInfo?.name, 'SEQUENCE', obj.ddl, session?.database?.dbName);
+          downloadPLDDL(
+            sequenceInfo?.name,
+            'SEQUENCE',
+            obj.ddl,
+            session?.database?.dbName
+          );
         }
-      },
+      }
     },
 
     {
       key: ResourceTreeNodeMenuKeys.REFRESH_SEQUENCE,
       ellipsis: true,
       text: [
-        formatMessage({ id: 'odc.TreeNodeMenu.config.sequence.Refresh', defaultMessage: '刷新' }),
+        formatMessage({
+          id: 'odc.TreeNodeMenu.config.sequence.Refresh',
+          defaultMessage: '刷新'
+        })
       ],
       async run(session, node) {
         await session.database.getSequenceList();
-      },
-    },
-  ],
+      }
+    }
+  ]
 };

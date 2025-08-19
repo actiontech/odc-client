@@ -45,14 +45,17 @@ export default class ModalHelp extends PureComponent<{
             {formatMessage(
               {
                 id: 'odc.components.ModalHelpAbout.VersionNumberPkgversion',
-                defaultMessage: '版本号：{pkgVersion}',
+                defaultMessage: '版本号：{pkgVersion}'
               },
-              { pkgVersion: ODC_VERSION },
+              { pkgVersion: ODC_VERSION }
             )}
           </p>
           <span>Server: {setting?.serverSystemInfo?.version}</span>
           <br />
-          <span>Release Date: {RELEASE_DATE ? dayjs(RELEASE_DATE).format('YYYY-MM-DD') : ''}</span>
+          <span>
+            Release Date:{' '}
+            {RELEASE_DATE ? dayjs(RELEASE_DATE).format('YYYY-MM-DD') : ''}
+          </span>
         </div>
         <div className={styles.copyright}>
           <div>
@@ -62,8 +65,15 @@ export default class ModalHelp extends PureComponent<{
             <div className="grey-color">{pkg.copyright}</div>
           </div>
           <Space size={18}>
-            <img style={{ height: 16 }} src={window.publicPath + 'img/ob_logo.svg'} />
-            <a href="https://github.com/oceanbase/odc" className={styles.github} target="_blank">
+            <img
+              style={{ height: 16 }}
+              src={window.publicPath + 'img/ob_logo.svg'}
+            />
+            <a
+              href="https://github.com/oceanbase/odc"
+              className={styles.github}
+              target="_blank"
+            >
               <GithubFilled />
             </a>
           </Space>

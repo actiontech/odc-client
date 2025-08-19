@@ -48,7 +48,7 @@ export default function Logo() {
         <BasicToolTip
           title={formatMessage({
             id: 'src.page.Workspace.ActivityBar.F4EC445B',
-            defaultMessage: '返回首页',
+            defaultMessage: '返回首页'
           })}
           placement="right"
         >
@@ -58,7 +58,7 @@ export default function Logo() {
               fontSize: 16,
               padding: 6,
               backgroundColor: 'var(--hover-color)',
-              cursor: 'pointer',
+              cursor: 'pointer'
             }}
           />
         </BasicToolTip>

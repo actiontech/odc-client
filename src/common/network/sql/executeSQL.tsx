@@ -23,7 +23,7 @@ import {
   executeSQLPreHandle,
   IExecuteSQLParams,
   IExecuteTaskResult,
-  ISQLExecuteTask,
+  ISQLExecuteTask
 } from './preHandle';
 
 class Task {
@@ -36,16 +36,18 @@ class Task {
     public requestId: string,
     public sessionId: string,
     private taskInfo: ISQLExecuteTask,
-    private onUpdate: (info: IExecutingInfo) => void,
+    private onUpdate: (info: IExecutingInfo) => void
   ) {}
   private fetchData = async () => {
     const res = await request.get(
-      `/api/v2/datasource/sessions/${generateSessionSid(this.sessionId)}/sqls/getMoreResults`,
+      `/api/v2/datasource/sessions/${generateSessionSid(
+        this.sessionId
+      )}/sqls/getMoreResults`,
       {
         params: {
-          requestId: this.requestId,
-        },
-      },
+          requestId: this.requestId
+        }
+      }
     );
     if (res?.isError) {
       throw new Error(res?.errMsg);
@@ -60,7 +62,7 @@ class Task {
         task: this.taskInfo,
         traceId: null,
         executingSQL: null,
-        executingSQLId: null,
+        executingSQLId: null
       });
       this._getResult(resolve);
     });
@@ -94,7 +96,7 @@ class Task {
         task: this.taskInfo,
         traceId: data.traceId,
         executingSQL: data.sql,
-        executingSQLId: data.sqlId,
+        executingSQLId: data.sqlId
       });
       if (data?.finished) {
         callback(this.result);
@@ -135,7 +137,7 @@ class TaskManager {
     requestId: string,
     sessionId: string,
     taskInfo: ISQLExecuteTask,
-    onUpdate: (info: IExecutingInfo) => void,
+    onUpdate: (info: IExecutingInfo) => void
   ): Promise<ISqlExecuteResult[]> {
     const task = new Task(requestId, sessionId, taskInfo, onUpdate);
     this.tasks.push(task);
@@ -162,29 +164,32 @@ export default async function executeSQL(
   sessionId: string,
   dbName: string,
   needModal: boolean = true,
-  onUpdate: (info: IExecutingInfo) => void = () => {},
+  onUpdate: (info: IExecutingInfo) => void = () => {}
 ): Promise<IExecuteTaskResult> {
   const sid = generateDatabaseSid(dbName, sessionId);
   const serverParams =
     typeof params === 'string'
       ? {
           sid,
-          sql: params,
+          sql: params
         }
       : {
           sid,
-          ...params,
+          ...params
         };
-  const res = await request.post(`/api/v2/datasource/sessions/${sid}/sqls/streamExecute`, {
-    data: serverParams,
-  });
+  const res = await request.post(
+    `/api/v2/datasource/sessions/${sid}/sqls/streamExecute`,
+    {
+      data: serverParams
+    }
+  );
   const taskInfo: ISQLExecuteTask = res?.data;
 
   const {
     pass,
     data: preHandleData,
     lintResultSet,
-    status,
+    status
   } = executeSQLPreHandle(taskInfo, params, needModal, sessionId);
   if (!pass) {
     return preHandleData;
@@ -194,7 +199,7 @@ export default async function executeSQL(
     requestId,
     sessionId,
     taskInfo,
-    onUpdate,
+    onUpdate
   );
   let results = executeRes;
   results = results?.map((result) => {
@@ -206,11 +211,14 @@ export default async function executeSQL(
   return {
     invalid: false,
     executeSuccess:
-      !!results && !results?.find((result) => result.status !== ISqlExecuteResultStatus.SUCCESS),
+      !!results &&
+      !results?.find(
+        (result) => result.status !== ISqlExecuteResultStatus.SUCCESS
+      ),
     executeResult: results || [],
     violatedRules: [],
     lintResultSet,
     hasLintResults: lintResultSet?.length > 0,
-    status,
+    status
   };
 }

@@ -19,7 +19,10 @@ import { convertColumnType } from '@/util/utils';
 import MySQLNumber from './number';
 import MySQLString from './string';
 
-export default function convertValueToSQLString(value: string | null, dataType: string) {
+export default function convertValueToSQLString(
+  value: string | null,
+  dataType: string
+) {
   dataType = convertColumnType(dataType);
   switch (dataType) {
     case 'DOUBLE':

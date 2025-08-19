@@ -46,8 +46,8 @@ const ThemeWrap: React.FC<IProps> = function ({ children, settingStore }) {
       if (theme.key === EThemeConfigKey.ODC_DARK) {
         ConfigProvider.config({
           theme: {
-            algorithm: AntdTheme.darkAlgorithm,
-          },
+            algorithm: AntdTheme.darkAlgorithm
+          }
         });
       }
       setTimeout(() => {
@@ -59,8 +59,8 @@ const ThemeWrap: React.FC<IProps> = function ({ children, settingStore }) {
       document.body.classList.remove(className);
       ConfigProvider.config({
         theme: {
-          algorithm: AntdTheme.defaultAlgorithm,
-        },
+          algorithm: AntdTheme.defaultAlgorithm
+        }
       });
     };
   }, [settingStore.theme, setMaskMode]);
@@ -70,7 +70,7 @@ const ThemeWrap: React.FC<IProps> = function ({ children, settingStore }) {
         algorithm:
           settingStore.theme?.key === EThemeConfigKey.ODC_DARK
             ? AntdTheme.darkAlgorithm
-            : AntdTheme.defaultAlgorithm,
+            : AntdTheme.defaultAlgorithm
       }}
     >
       {maskMode && (
@@ -83,7 +83,7 @@ const ThemeWrap: React.FC<IProps> = function ({ children, settingStore }) {
             bottom: 0,
             zIndex: 9999,
             animationName: maskMode === 'dark' ? 'odcDarkMask' : 'odcWhiteMask',
-            animationDuration: '0.3s',
+            animationDuration: '0.3s'
           }}
         />
       )}

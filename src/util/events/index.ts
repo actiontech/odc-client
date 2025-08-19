@@ -14,14 +14,22 @@
  * limitations under the License.
  */
 
-import { PackageBodyPage, PLEditPage, PLPageType } from '@/store/helper/page/pages/pl';
+import {
+  PackageBodyPage,
+  PLEditPage,
+  PLPageType
+} from '@/store/helper/page/pages/pl';
 import EventBus from 'eventbusjs';
-import { IPLPageActionData, IPLPageCreatedEventData, ODCEventType } from './type';
+import {
+  IPLPageActionData,
+  IPLPageCreatedEventData,
+  ODCEventType
+} from './type';
 
 export function triggerActionAfterPLPageCreated(
   plPage: PLEditPage | PackageBodyPage,
   action: 'compile' | 'debug' | 'run',
-  isNew: boolean,
+  isNew: boolean
 ) {
   if (!isNew) {
     EventBus.dispatch(ODCEventType.PLPageAction, null, {
@@ -31,7 +39,7 @@ export function triggerActionAfterPLPageCreated(
         plPage?.pageParams?.plPageType === PLPageType.pkgBody
           ? plPage?.pageParams?.plSchema?.plName
           : plPage?.pageParams?.plName,
-      plType: plPage?.plType,
+      plType: plPage?.plType
     } as IPLPageActionData);
     return;
   }
@@ -48,7 +56,7 @@ export function triggerActionAfterPLPageCreated(
         plPage?.pageParams?.plPageType === PLPageType.pkgBody
           ? plPage?.pageParams?.plSchema?.plName
           : plPage?.pageParams?.plName,
-      plType: plPage?.plType,
+      plType: plPage?.plType
     } as IPLPageActionData);
   }
   EventBus.addEventListener(ODCEventType.PLPageCreated, onPageCreated);

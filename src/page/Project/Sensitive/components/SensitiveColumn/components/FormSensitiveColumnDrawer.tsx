@@ -17,7 +17,10 @@
 import { batchCreateSensitiveColumns } from '@/common/network/sensitiveColumn';
 import { ESensitiveColumnType, ISensitiveColumn } from '@/d.ts/sensitiveColumn';
 import ProjectContext from '@/page/Project/ProjectContext';
-import { AddSensitiveColumnType, ScanTableData } from '@/page/Project/Sensitive/interface';
+import {
+  AddSensitiveColumnType,
+  ScanTableData
+} from '@/page/Project/Sensitive/interface';
 import { formatMessage } from '@/util/intl';
 import tracert from '@/util/tracert';
 import { Button, Drawer, message, Space } from 'antd';
@@ -35,11 +38,11 @@ export function getTitle(addSensitiveColumnType: AddSensitiveColumnType) {
   return addSensitiveColumnType === AddSensitiveColumnType.Manual
     ? formatMessage({
         id: 'odc.SensitiveColumn.components.FormSensitiveColumnDrawer.ManuallyAddSensitiveColumns',
-        defaultMessage: '手动添加敏感列',
+        defaultMessage: '手动添加敏感列'
       }) //手动添加敏感列
     : formatMessage({
         id: 'odc.SensitiveColumn.components.FormSensitiveColumnDrawer.ScanToAddSensitiveColumns',
-        defaultMessage: '扫描添加敏感列',
+        defaultMessage: '扫描添加敏感列'
       }); //扫描添加敏感列
 }
 const FormSensitiveColumnDrawer = ({
@@ -48,7 +51,7 @@ const FormSensitiveColumnDrawer = ({
   projectId,
   onClose,
   onOk,
-  addSensitiveColumnType,
+  addSensitiveColumnType
 }) => {
   const [formRef] = useForm();
   const [_formRef] = useForm();
@@ -56,7 +59,9 @@ const FormSensitiveColumnDrawer = ({
   const scanTableData = useWatch('scanTableData', _formRef);
   const context = useContext(ProjectContext);
   const [submiting, setSubmiting] = useState<boolean>(false);
-  const [sensitiveColumns, setSensitiveColumns] = useState<ISensitiveColumn[]>([]);
+  const [sensitiveColumns, setSensitiveColumns] = useState<ISensitiveColumn[]>(
+    []
+  );
   const [manageSensitiveRuleDrawerOpen, setManageSensitiveRuleDrawerOpen] =
     useState<boolean>(false);
   const [formData, setFormData] = useState<Object>({});
@@ -65,22 +70,34 @@ const FormSensitiveColumnDrawer = ({
     const obj = {};
     Object.keys(rawFormData)?.forEach((database) => {
       if (rawFormData[database]?.[ESensitiveColumnType.TABLE_COLUMN]) {
-        for (const tableName in rawFormData[database]?.[ESensitiveColumnType.TABLE_COLUMN]) {
-          for (const columnName in rawFormData[database]?.[ESensitiveColumnType.TABLE_COLUMN][
-            tableName
-          ]) {
-            obj[`${database}_${ESensitiveColumnType.TABLE_COLUMN}_${tableName}_${columnName}`] =
-              rawFormData[database]?.[ESensitiveColumnType.TABLE_COLUMN][tableName][columnName];
+        for (const tableName in rawFormData[database]?.[
+          ESensitiveColumnType.TABLE_COLUMN
+        ]) {
+          for (const columnName in rawFormData[database]?.[
+            ESensitiveColumnType.TABLE_COLUMN
+          ][tableName]) {
+            obj[
+              `${database}_${ESensitiveColumnType.TABLE_COLUMN}_${tableName}_${columnName}`
+            ] =
+              rawFormData[database]?.[ESensitiveColumnType.TABLE_COLUMN][
+                tableName
+              ][columnName];
           }
         }
       }
       if (rawFormData[database]?.[ESensitiveColumnType.VIEW_COLUMN]) {
-        for (const viewName in rawFormData[database]?.[ESensitiveColumnType.VIEW_COLUMN]) {
-          for (const columnName in rawFormData[database]?.[ESensitiveColumnType.VIEW_COLUMN][
-            viewName
-          ]) {
-            obj[`${database}_${ESensitiveColumnType.VIEW_COLUMN}_${viewName}_${columnName}`] =
-              rawFormData[database]?.[ESensitiveColumnType.VIEW_COLUMN][viewName][columnName];
+        for (const viewName in rawFormData[database]?.[
+          ESensitiveColumnType.VIEW_COLUMN
+        ]) {
+          for (const columnName in rawFormData[database]?.[
+            ESensitiveColumnType.VIEW_COLUMN
+          ][viewName]) {
+            obj[
+              `${database}_${ESensitiveColumnType.VIEW_COLUMN}_${viewName}_${columnName}`
+            ] =
+              rawFormData[database]?.[ESensitiveColumnType.VIEW_COLUMN][
+                viewName
+              ][columnName];
           }
         }
       }
@@ -89,7 +106,9 @@ const FormSensitiveColumnDrawer = ({
   };
   const handleScanSubmit = async () => {
     await formRef.validateFields().catch();
-    const { scanTableData: rawFormData } = await _formRef.validateFields().catch();
+    const { scanTableData: rawFormData } = await _formRef
+      .validateFields()
+      .catch();
     const rawData = [];
     const sensitiveColumnMap = ref.current?.getColumnMap() || new Map();
     const map = parseData(merge(formData, rawFormData));
@@ -98,12 +117,14 @@ const FormSensitiveColumnDrawer = ({
       if (sensitiveColumnMap.has(key)) {
         const column = sensitiveColumnMap
           .get(key)
-          ?.dataSource.find((item) => item.columnName === sensitiveColumn.columnName);
+          ?.dataSource.find(
+            (item) => item.columnName === sensitiveColumn.columnName
+          );
         if (column) {
           rawData.push({
             ...sensitiveColumn,
             enabled: true,
-            maskingAlgorithmId: map[`${key}_${sensitiveColumn.columnName}`],
+            maskingAlgorithmId: map[`${key}_${sensitiveColumn.columnName}`]
           });
         }
       }
@@ -116,8 +137,8 @@ const FormSensitiveColumnDrawer = ({
       message.success(
         formatMessage({
           id: 'odc.SensitiveColumn.components.FormSensitiveColumnDrawer.New',
-          defaultMessage: '新建成功',
-        }), //新建成功
+          defaultMessage: '新建成功'
+        }) //新建成功
       );
       onOk(async () => {
         await formRef?.resetFields();
@@ -133,8 +154,8 @@ const FormSensitiveColumnDrawer = ({
       message.error(
         formatMessage({
           id: 'odc.SensitiveColumn.components.FormSensitiveColumnDrawer.FailedToCreate',
-          defaultMessage: '新建失败',
-        }), //新建失败
+          defaultMessage: '新建失败'
+        }) //新建失败
       );
     }
   };
@@ -160,9 +181,9 @@ const FormSensitiveColumnDrawer = ({
             database: undefined,
             tableName: undefined,
             columnName: undefined,
-            maskingAlgorithmId: undefined,
-          },
-        ],
+            maskingAlgorithmId: undefined
+          }
+        ]
       });
     }
   }, [isEdit, visible]);
@@ -171,7 +192,7 @@ const FormSensitiveColumnDrawer = ({
     <div
       style={{
         display: 'flex',
-        justifyContent: 'flex-end',
+        justifyContent: 'flex-end'
       }}
     >
       <Space>
@@ -179,15 +200,19 @@ const FormSensitiveColumnDrawer = ({
           {
             formatMessage({
               id: 'odc.SensitiveColumn.components.FormSensitiveColumnDrawer.Cancel',
-              defaultMessage: '取消',
+              defaultMessage: '取消'
             }) /*取消*/
           }
         </Button>
-        <Button type="primary" disabled={submiting || !scanTableData} onClick={handleScanSubmit}>
+        <Button
+          type="primary"
+          disabled={submiting || !scanTableData}
+          onClick={handleScanSubmit}
+        >
           {
             formatMessage({
               id: 'odc.SensitiveColumn.components.FormSensitiveColumnDrawer.Submit',
-              defaultMessage: '提交',
+              defaultMessage: '提交'
             }) /*提交*/
           }
         </Button>
@@ -220,7 +245,7 @@ const FormSensitiveColumnDrawer = ({
         title={
           formatMessage({
             id: 'odc.src.page.Project.Sensitive.components.SensitiveColumn.components.ManagementRecognitionRules',
-            defaultMessage: '管理识别规则',
+            defaultMessage: '管理识别规则'
           }) //'管理识别规则'
         }
         width={720}

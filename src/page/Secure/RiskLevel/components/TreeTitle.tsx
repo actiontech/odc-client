@@ -20,7 +20,13 @@ import { useState } from 'react';
 import styles from './index.less';
 import { BooleanOperatorMap, EBooleanOperator } from './InnerRiskLevel';
 
-const TreeTitle = ({ formRef, booleanOperator, index, fieldName, updateFields }) => {
+const TreeTitle = ({
+  formRef,
+  booleanOperator,
+  index,
+  fieldName,
+  updateFields
+}) => {
   const [isHover, setIsHover] = useState<boolean>(false);
   const [localBooleanOperator, setlocalBooleanOperator] =
     useState<EBooleanOperator>(booleanOperator);

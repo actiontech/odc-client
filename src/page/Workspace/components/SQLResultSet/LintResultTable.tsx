@@ -27,16 +27,16 @@ import styles from './index.less';
 const LintResultTip = {
   default: formatMessage({
     id: 'odc.src.page.Workspace.components.SQLResultSet.CurrentSQLCanBeExecuted',
-    defaultMessage: '当前 SQL 可直接执行',
+    defaultMessage: '当前 SQL 可直接执行'
   }), //'当前 SQL 可直接执行'
   suggest: formatMessage({
     id: 'odc.src.page.Workspace.components.SQLResultSet.TheCurrentSQLNeedsApproval',
-    defaultMessage: '当前 SQL 存在需要审批项，请发起审批或修改后再执行',
+    defaultMessage: '当前 SQL 存在需要审批项，请发起审批或修改后再执行'
   }), //'当前 SQL 存在需要审批项，请发起审批或修改后再执行'
   must: formatMessage({
     id: 'odc.src.page.Workspace.components.SQLResultSet.TheCurrentSQLExistenceMust',
-    defaultMessage: '当前 SQL 存在必须改进项，请修改后再执行',
-  }), //'当前 SQL 存在必须改进项，请修改后再执行'
+    defaultMessage: '当前 SQL 存在必须改进项，请修改后再执行'
+  }) //'当前 SQL 存在必须改进项，请修改后再执行'
 };
 export interface ILintResultTableProps {
   ctx?: any;
@@ -60,7 +60,7 @@ const LintResultTable: React.FC<ILintResultTableProps> = ({
   lintResultSet,
   baseOffset = 0,
   sqlChanged,
-  modalStore,
+  modalStore
 }) => {
   const [disabled, setDisabled] = useState<boolean>(false);
   const [tip, setTip] = useState<string>('');
@@ -80,19 +80,22 @@ const LintResultTable: React.FC<ILintResultTableProps> = ({
                 position: ['bottomRight'],
                 pageSize,
                 hideOnSinglePage: true,
-                showSizeChanger: false,
+                showSizeChanger: false
               }
             : resultHeight
             ? {
                 position: ['bottomRight'],
-                pageSize: resultHeight - 150 > 24 ? Math.floor((resultHeight - 150) / 24) : 5,
+                pageSize:
+                  resultHeight - 150 > 24
+                    ? Math.floor((resultHeight - 150) / 24)
+                    : 5,
                 hideOnSinglePage: true,
-                showSizeChanger: false,
+                showSizeChanger: false
               }
             : {
                 position: ['bottomRight'],
                 hideOnSinglePage: true,
-                showSizeChanger: false,
+                showSizeChanger: false
               }
         }
       />
@@ -104,7 +107,7 @@ const LintResultTable: React.FC<ILintResultTableProps> = ({
         return {
           row: index + 1,
           sql: resultSet?.sql,
-          rules: groupByPropertyName(resultSet?.violations, 'level'),
+          rules: groupByPropertyName(resultSet?.violations, 'level')
         };
       });
       setDataSource(newDataSource);
@@ -134,13 +137,13 @@ const LintResultTable: React.FC<ILintResultTableProps> = ({
         height: resultHeight || '100%',
         overflow: 'auto',
         overflowX: 'hidden',
-        maxHeight: resultHeight || '100%',
+        maxHeight: resultHeight || '100%'
       }}
     >
       <div
         style={{
           display: 'flex',
-          flexDirection: 'column',
+          flexDirection: 'column'
         }}
       >
         {hasExtraOpt && (
@@ -152,14 +155,14 @@ const LintResultTable: React.FC<ILintResultTableProps> = ({
                 modalStore.changeCreateAsyncTaskModal(true, {
                   databaseId: session?.odcDatabase?.id,
                   sql: ctx?.getSelectionContent() || ctx?.getValue(),
-                  rules: lintResultSet,
+                  rules: lintResultSet
                 });
               }}
             >
               {
                 formatMessage({
                   id: 'odc.src.page.Workspace.components.SQLResultSet.InitiateApproval',
-                  defaultMessage: '\n              发起审批\n            ',
+                  defaultMessage: '\n              发起审批\n            '
                 }) /* 
             发起审批
             */
@@ -173,7 +176,7 @@ const LintResultTable: React.FC<ILintResultTableProps> = ({
           className={styles.table}
           style={{
             flexGrow: 1,
-            paddingBottom: 8,
+            paddingBottom: 8
           }}
         >
           <CallbackTable />

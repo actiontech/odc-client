@@ -19,7 +19,7 @@ import {
   IConnection,
   IManagePagesKeys,
   IManagerResourceType,
-  IManagerResourceType as resourceTypes,
+  IManagerResourceType as resourceTypes
 } from '@/d.ts';
 import authStore, { AuthStore, AuthStoreContext } from '@/store/auth';
 import { isString } from 'lodash';
@@ -47,25 +47,29 @@ const Acess = observer(
     props: {
       fallback?: ReactElement;
       children?: ReactElement;
-    } & AcessParameter,
+    } & AcessParameter
   ) => {
     const { children, fallback = <NoAuth /> } = props;
     const { accessible } = useAcess(props);
     if (accessible) return children;
     return fallback;
-  },
+  }
 );
 
 /**
  * 存在一个权限，就可以返回
  */
 const AcessMultiPermission = observer(
-  (props: { fallback?: ReactElement; children?: ReactElement; permissions: AcessParameter[] }) => {
+  (props: {
+    fallback?: ReactElement;
+    children?: ReactElement;
+    permissions: AcessParameter[];
+  }) => {
     const { children, permissions, fallback = <NoAuth /> } = props;
     const results = useMultiAcess(props.permissions);
     if (results?.find((item) => item.accessible)) return children;
     return fallback;
-  },
+  }
 );
 
 /**
@@ -73,20 +77,24 @@ const AcessMultiPermission = observer(
  * 和 AcessMultiPermission 需要精确匹配一个资源不同，这个只会检查是否有该资源类型的权限。
  */
 const AccessResourceTypePermission = observer(
-  (props: { fallback?: ReactElement; children?: ReactElement; permissions: AcessParameter[] }) => {
+  (props: {
+    fallback?: ReactElement;
+    children?: ReactElement;
+    permissions: AcessParameter[];
+  }) => {
     const { children, permissions, fallback = <NoAuth /> } = props;
     const authState = useContext(AuthStoreContext);
     const isExist = !!permissions.find(({ resourceIdentifier, action }) => {
       const [resourceType, resourceId] = resourceIdentifier?.split(':') ?? [];
       const resourceIds = authState.getResourceByAction(
         resourceType as IManagerResourceType,
-        action as actionTypes,
+        action as actionTypes
       );
       return !!resourceIds?.length;
     });
     if (isExist) return children;
     return fallback;
-  },
+  }
 );
 
 /**
@@ -110,11 +118,15 @@ function useMultiAcess(permissions: AcessParameter[]): AcessResult[] {
  */
 function getAcess(authState: AuthStore, permission: AcessParameter) {
   const { resourceIdentifier = '', action } = permission;
-  if (!(isString(action) && isString(resourceIdentifier))) return { accessible: false };
+  if (!(isString(action) && isString(resourceIdentifier)))
+    return { accessible: false };
   const [resourceType, resourceId] = resourceIdentifier?.split(':') ?? [];
-  const actions = authState.getResourceActions(resourceId, resourceType as IManagerResourceType);
+  const actions = authState.getResourceActions(
+    resourceId,
+    resourceType as IManagerResourceType
+  );
   return {
-    accessible: actions.has(action as actionTypes),
+    accessible: actions.has(action as actionTypes)
   };
 }
 
@@ -129,28 +141,49 @@ function NoAuth(): JSX.Element {
 function createPermission(
   resourceType: resourceTypes,
   action: actionTypes = actionTypes.read,
-  resourceId?: any,
+  resourceId?: any
 ) {
   return {
     resourceIdentifier: `${resourceType}:${resourceId ?? '*'}`,
-    action,
+    action
   };
 }
 
 const systemUpdatePermissions = {
   // 资源管理权限
-  [resourceTypes.resource]: createPermission(resourceTypes.resource, actionTypes.update),
-  [resourceTypes.project]: createPermission(resourceTypes.project, actionTypes.update),
-  [resourceTypes.user]: createPermission(resourceTypes.user, actionTypes.update),
-  [resourceTypes.role]: createPermission(resourceTypes.role, actionTypes.update),
+  [resourceTypes.resource]: createPermission(
+    resourceTypes.resource,
+    actionTypes.update
+  ),
+  [resourceTypes.project]: createPermission(
+    resourceTypes.project,
+    actionTypes.update
+  ),
+  [resourceTypes.user]: createPermission(
+    resourceTypes.user,
+    actionTypes.update
+  ),
+  [resourceTypes.role]: createPermission(
+    resourceTypes.role,
+    actionTypes.update
+  ),
   // 系统操作权限
-  [resourceTypes.flow_config]: createPermission(resourceTypes.flow_config, actionTypes.update),
+  [resourceTypes.flow_config]: createPermission(
+    resourceTypes.flow_config,
+    actionTypes.update
+  ),
   [resourceTypes.odc_audit_event]: createPermission(
     resourceTypes.odc_audit_event,
-    actionTypes.update,
+    actionTypes.update
   ),
-  [resourceTypes.auto_auth]: createPermission(resourceTypes.auto_auth, actionTypes.update),
-  [resourceTypes.integration]: createPermission(resourceTypes.integration, actionTypes.update),
+  [resourceTypes.auto_auth]: createPermission(
+    resourceTypes.auto_auth,
+    actionTypes.update
+  ),
+  [resourceTypes.integration]: createPermission(
+    resourceTypes.integration,
+    actionTypes.update
+  )
 };
 
 // 写权限
@@ -173,5 +206,5 @@ export {
   canAcess,
   actionTypes,
   systemUpdatePermissions,
-  createPermission,
+  createPermission
 };

@@ -30,8 +30,11 @@ export default React.memo(
     const [detailModalVisible, setDetailModalVisible] = useState(false);
     const columnKey = resultContext?.isColumnMode ? row.columnKey : column.key;
     const value = row[columnKey];
-    const isOriginValueBeNil = row._originRow && isNil(row._originRow[columnKey]);
-    const isMasked = resultContext.originColumns?.find((c) => c.key === columnKey)?.masked;
+    const isOriginValueBeNil =
+      row._originRow && isNil(row._originRow[columnKey]);
+    const isMasked = resultContext.originColumns?.find(
+      (c) => c.key === columnKey
+    )?.masked;
     /**
      * 是否支持查看详情
      */
@@ -39,7 +42,9 @@ export default React.memo(
     return (
       <div className={styles.textFormatter}>
         {isNil(value) ? (
-          <span className={styles.textNull}>{isUndefined(value) ? '(default)' : '(null)'}</span>
+          <span className={styles.textNull}>
+            {isUndefined(value) ? '(default)' : '(null)'}
+          </span>
         ) : (
           value
         )}
@@ -70,5 +75,5 @@ export default React.memo(
       </div>
     );
   },
-  (prev, next) => prev.row === next.row && prev.column === next.column,
+  (prev, next) => prev.row === next.row && prev.column === next.column
 );

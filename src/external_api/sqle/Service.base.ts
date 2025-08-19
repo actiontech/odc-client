@@ -6,7 +6,7 @@ class ServiceBase {
   protected get<T>(url: string, data: any = {}, options?: AxiosRequestConfig) {
     return ApiBase.get<T>(url, {
       params: data,
-      ...options,
+      ...options
     });
   }
 
@@ -14,10 +14,14 @@ class ServiceBase {
     return ApiBase.post<T>(url, data, options);
   }
 
-  protected delete<T>(url: string, data: any = {}, options?: AxiosRequestConfig) {
+  protected delete<T>(
+    url: string,
+    data: any = {},
+    options?: AxiosRequestConfig
+  ) {
     return ApiBase.delete<T>(url, {
       data,
-      ...options,
+      ...options
     });
   }
 
@@ -25,7 +29,11 @@ class ServiceBase {
     return ApiBase.put<T>(url, data, options);
   }
 
-  protected patch<T>(url: string, data: any = {}, options?: AxiosRequestConfig) {
+  protected patch<T>(
+    url: string,
+    data: any = {},
+    options?: AxiosRequestConfig
+  ) {
     return ApiBase.patch<T>(url, data, options);
   }
 

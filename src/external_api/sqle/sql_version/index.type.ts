@@ -12,7 +12,7 @@ import {
   ILockSqlVersionReqV1,
   IGetWorkflowsThatCanBeAssociatedToVersionResV1,
   IBatchAssociateWorkflowsWithVersionReqV1,
-  IGetDepBetweenStageInstanceResV1,
+  IGetDepBetweenStageInstanceResV1
 } from '../common.type';
 
 export interface IGetSqlVersionListV1Params {
@@ -49,7 +49,8 @@ export interface IGetSqlVersionDetailV1Params {
   sql_version_id: string;
 }
 
-export interface IGetSqlVersionDetailV1Return extends IGetSqlVersionDetailResV1 {}
+export interface IGetSqlVersionDetailV1Return
+  extends IGetSqlVersionDetailResV1 {}
 
 export interface IDeleteSqlVersionV1Params {
   project_name: string;
@@ -67,7 +68,8 @@ export interface IUpdateSqlVersionV1Params extends IUpdateSqlVersionReqV1 {
 
 export interface IUpdateSqlVersionV1Return extends IBaseRes {}
 
-export interface IBatchExecuteWorkflowsV1Params extends IBatchExecuteWorkflowsReqV1 {
+export interface IBatchExecuteWorkflowsV1Params
+  extends IBatchExecuteWorkflowsReqV1 {
   project_name: string;
 
   sql_version_id: string;
@@ -75,7 +77,8 @@ export interface IBatchExecuteWorkflowsV1Params extends IBatchExecuteWorkflowsRe
 
 export interface IBatchExecuteWorkflowsV1Return extends IBaseRes {}
 
-export interface IBatchReleaseWorkflowsV1Params extends IBatchReleaseWorkflowReqV1 {
+export interface IBatchReleaseWorkflowsV1Params
+  extends IBatchReleaseWorkflowReqV1 {
   project_name: string;
 
   sql_version_id: string;

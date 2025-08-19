@@ -6,15 +6,22 @@
 import ServiceBase from '../Service.base';
 import { AxiosRequestConfig } from 'axios';
 
-import { IDirectGetSQLAnalysisV1Params, IDirectGetSQLAnalysisV1Return } from './index.type';
+import {
+  IDirectGetSQLAnalysisV1Params,
+  IDirectGetSQLAnalysisV1Return
+} from './index.type';
 
 class SqlAnalysisService extends ServiceBase {
   public directGetSQLAnalysisV1(
     params: IDirectGetSQLAnalysisV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
-    return this.get<IDirectGetSQLAnalysisV1Return>('/v1/sql_analysis', paramsData, options);
+    return this.get<IDirectGetSQLAnalysisV1Return>(
+      '/v1/sql_analysis',
+      paramsData,
+      options
+    );
   }
 }
 

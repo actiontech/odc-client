@@ -16,9 +16,13 @@
 
 import {
   getDataSourceModeConfigByConnectionMode,
-  getDataSourceStyleByConnectType,
+  getDataSourceStyleByConnectType
 } from '@/common/datasource';
-import { getSubTask, getTaskDetail, swapTableName } from '@/common/network/task';
+import {
+  getSubTask,
+  getTaskDetail,
+  swapTableName
+} from '@/common/network/task';
 import Action from '@/component/Action';
 import DisplayTable from '@/component/DisplayTable';
 import RiskLevelLabel from '@/component/RiskLevelLabel';
@@ -29,7 +33,7 @@ import {
   TaskDetail,
   TaskPageType,
   TaskRecordParameters,
-  TaskType,
+  TaskType
 } from '@/d.ts';
 import { TaskStore } from '@/store/task';
 import { formatMessage } from '@/util/intl';
@@ -52,34 +56,38 @@ const getColumns = (params: {
       dataIndex: 'resultJson',
       title: formatMessage({
         id: 'odc.component.CommonDetailModal.TaskProgress.SourceTable',
-        defaultMessage: '源表',
+        defaultMessage: '源表'
       }),
       //源表
       ellipsis: true,
       render: (resultJson) => {
         return <span>{JSON.parse(resultJson ?? '{}')?.originTableName}</span>;
-      },
+      }
     },
     {
       dataIndex: 'status',
       title: formatMessage({
         id: 'odc.component.CommonDetailModal.TaskProgress.ExecutionStatus',
-        defaultMessage: '执行状态',
+        defaultMessage: '执行状态'
       }),
       //执行状态
       ellipsis: true,
       width: 140,
       render: (status, record) => {
         return (
-          <StatusLabel isSubTask status={status} progress={Math.floor(record.progressPercentage)} />
+          <StatusLabel
+            isSubTask
+            status={status}
+            progress={Math.floor(record.progressPercentage)}
+          />
         );
-      },
+      }
     },
     {
       dataIndex: 'action',
       title: formatMessage({
         id: 'odc.component.CommonDetailModal.TaskProgress.Operation',
-        defaultMessage: '操作',
+        defaultMessage: '操作'
       }),
       //操作
       ellipsis: true,
@@ -96,7 +104,7 @@ const getColumns = (params: {
               {
                 formatMessage({
                   id: 'odc.component.CommonDetailModal.TaskProgress.View',
-                  defaultMessage: '查看',
+                  defaultMessage: '查看'
                 }) /*查看*/
               }
             </Action.Link>
@@ -109,7 +117,7 @@ const getColumns = (params: {
                 {
                   formatMessage({
                     id: 'odc.src.component.Task.component.CommonDetailModal.WatchNameSwitch',
-                    defaultMessage: '\n                表名切换\n              ',
+                    defaultMessage: '\n                表名切换\n              '
                   }) /* 
             表名切换
             */
@@ -118,38 +126,44 @@ const getColumns = (params: {
             )}
           </>
         );
-      },
-    },
+      }
+    }
   ];
 };
-const getMultipleAsyncColumns = ({ onOpenDetail }: { onOpenDetail: (taskId: number) => void }) => {
+const getMultipleAsyncColumns = ({
+  onOpenDetail
+}: {
+  onOpenDetail: (taskId: number) => void;
+}) => {
   return [
     {
       title: formatMessage({
         id: 'src.component.Task.component.CommonDetailModal.FC1C254D',
-        defaultMessage: '执行顺序',
+        defaultMessage: '执行顺序'
       }),
       dataIndex: 'nodeIndex',
       width: 100,
       render: (nodeIndex) => nodeIndex + 1,
       onCell: (record, index) => {
         return {
-          rowSpan: record?.needMerge ? record?.rowSpan : 0,
+          rowSpan: record?.needMerge ? record?.rowSpan : 0
         };
-      },
+      }
     },
     {
       title: formatMessage({
         id: 'src.component.Task.component.CommonDetailModal.9A136568',
-        defaultMessage: '数据库',
+        defaultMessage: '数据库'
       }),
       dataIndex: 'database',
       width: 200,
       ellipsis: {
-        showTitle: true,
+        showTitle: true
       },
       render: (_, record) => {
-        const icon = getDataSourceStyleByConnectType(record?.database?.dataSource?.type);
+        const icon = getDataSourceStyleByConnectType(
+          record?.database?.dataSource?.type
+        );
         return (
           <Popover
             content={
@@ -165,7 +179,7 @@ const getMultipleAsyncColumns = ({ onOpenDetail }: { onOpenDetail: (taskId: numb
                     style={{
                       color: icon?.icon?.color,
                       fontSize: 16,
-                      marginRight: 4,
+                      marginRight: 4
                     }}
                   />
 
@@ -189,7 +203,7 @@ const getMultipleAsyncColumns = ({ onOpenDetail }: { onOpenDetail: (taskId: numb
                   style={{
                     color: icon?.icon?.color,
                     fontSize: 16,
-                    marginRight: 4,
+                    marginRight: 4
                   }}
                 />
 
@@ -201,12 +215,12 @@ const getMultipleAsyncColumns = ({ onOpenDetail }: { onOpenDetail: (taskId: numb
             </Space>
           </Popover>
         );
-      },
+      }
     },
     {
       title: formatMessage({
         id: 'src.component.Task.component.CommonDetailModal.0DAC1A06',
-        defaultMessage: '开始时间',
+        defaultMessage: '开始时间'
       }),
       dataIndex: 'createTime',
       width: 178,
@@ -216,13 +230,13 @@ const getMultipleAsyncColumns = ({ onOpenDetail }: { onOpenDetail: (taskId: numb
             ? getLocalFormatDateTime(record?.flowInstanceDetailResp?.createTime)
             : '-'}
         </div>
-      ),
+      )
     },
     {
       dataIndex: 'status',
       title: formatMessage({
         id: 'src.component.Task.component.CommonDetailModal.B46A5216',
-        defaultMessage: '执行状态',
+        defaultMessage: '执行状态'
       }),
       ellipsis: true,
       width: 120,
@@ -230,16 +244,18 @@ const getMultipleAsyncColumns = ({ onOpenDetail }: { onOpenDetail: (taskId: numb
         return (
           <StatusLabel
             status={record?.status}
-            progress={Math.floor(record?.flowInstanceDetailResp?.progressPercentage)}
+            progress={Math.floor(
+              record?.flowInstanceDetailResp?.progressPercentage
+            )}
           />
         );
-      },
+      }
     },
     {
       dataIndex: 'action',
       title: formatMessage({
         id: 'src.component.Task.component.CommonDetailModal.1DB56DDA',
-        defaultMessage: '操作',
+        defaultMessage: '操作'
       }),
       ellipsis: true,
       width: 90,
@@ -255,14 +271,14 @@ const getMultipleAsyncColumns = ({ onOpenDetail }: { onOpenDetail: (taskId: numb
               {
                 formatMessage({
                   id: 'odc.component.CommonDetailModal.TaskProgress.View',
-                  defaultMessage: '查看',
+                  defaultMessage: '查看'
                 }) /*查看*/
               }
             </Action.Link>
           </>
         );
-      },
-    },
+      }
+    }
   ];
 };
 
@@ -271,15 +287,17 @@ const getLogicalDatabaseAsyncColumns = () => {
     {
       title: formatMessage({
         id: 'src.component.Task.component.CommonDetailModal.E38B64D9',
-        defaultMessage: '执行数据库',
+        defaultMessage: '执行数据库'
       }),
       key: 'database',
       dataIndex: 'database',
       ellipsis: {
-        showTitle: true,
+        showTitle: true
       },
       render: (_, record) => {
-        const icon = getDataSourceStyleByConnectType(record?.database?.dataSource?.type);
+        const icon = getDataSourceStyleByConnectType(
+          record?.database?.dataSource?.type
+        );
         return (
           <Popover
             content={
@@ -295,7 +313,7 @@ const getLogicalDatabaseAsyncColumns = () => {
                     style={{
                       color: icon?.icon?.color,
                       fontSize: 16,
-                      marginRight: 4,
+                      marginRight: 4
                     }}
                   />
 
@@ -319,7 +337,7 @@ const getLogicalDatabaseAsyncColumns = () => {
                   style={{
                     color: icon?.icon?.color,
                     fontSize: 16,
-                    marginRight: 4,
+                    marginRight: 4
                   }}
                 />
 
@@ -331,28 +349,28 @@ const getLogicalDatabaseAsyncColumns = () => {
             </Space>
           </Popover>
         );
-      },
+      }
     },
     {
       title: formatMessage({
         id: 'src.component.Task.component.CommonDetailModal.AB5C26BA',
-        defaultMessage: '数据源',
+        defaultMessage: '数据源'
       }),
       key: 'datasource',
-      dataIndex: 'datasource',
+      dataIndex: 'datasource'
     },
     {
       title: formatMessage({
         id: 'src.component.Task.component.CommonDetailModal.7902B91E',
-        defaultMessage: '执行状态',
+        defaultMessage: '执行状态'
       }),
       key: 'status',
-      dataIndex: 'status',
+      dataIndex: 'status'
     },
     {
       title: formatMessage({
         id: 'src.component.Task.component.CommonDetailModal.EDEF0329',
-        defaultMessage: '操作',
+        defaultMessage: '操作'
       }),
       key: 'operation',
       render: (value, record) => {
@@ -360,12 +378,12 @@ const getLogicalDatabaseAsyncColumns = () => {
           <Button type="link">
             {formatMessage({
               id: 'src.component.Task.component.CommonDetailModal.593D5BD8',
-              defaultMessage: '查看',
+              defaultMessage: '查看'
             })}
           </Button>
         );
-      },
-    },
+      }
+    }
   ];
 };
 interface IProps {
@@ -374,7 +392,8 @@ interface IProps {
   theme?: string;
 }
 const TaskProgress: React.FC<IProps> = (props) => {
-  const { handleDetailVisible: _handleDetailVisible, setState } = useContext(TaskDetailContext);
+  const { handleDetailVisible: _handleDetailVisible, setState } =
+    useContext(TaskDetailContext);
   const { task, theme, taskStore } = props;
   const [subTasks, setSubTasks] = useState([]);
   const [databases, setDatabases] = useState([]);
@@ -385,33 +404,38 @@ const TaskProgress: React.FC<IProps> = (props) => {
       const res = await getSubTask(task.id);
       if (task?.type === TaskType.MULTIPLE_ASYNC) {
         const sortDb = flatArray(
-          (task as TaskDetail<IMultipleAsyncTaskParams>)?.parameters?.orderedDatabaseIds,
+          (task as TaskDetail<IMultipleAsyncTaskParams>)?.parameters
+            ?.orderedDatabaseIds
         );
         // @ts-ignore
-        const dbMap = res?.contents?.[0]?.databaseChangingRecordList?.reduce((pre, cur) => {
-          pre[cur?.database?.id] = cur;
-          return pre;
-        }, {});
+        const dbMap = res?.contents?.[0]?.databaseChangingRecordList?.reduce(
+          (pre, cur) => {
+            pre[cur?.database?.id] = cur;
+            return pre;
+          },
+          {}
+        );
         const rawData = [];
         let rawCount = 0;
-        (task as TaskDetail<IMultipleAsyncTaskParams>)?.parameters?.orderedDatabaseIds?.map(
-          (item, index) => {
-            item?.forEach((_item_, _index_) => {
-              rawData.push({
-                id: rawCount,
-                nodeIndex: index,
-                rowSpan: item?.length,
-                needMerge: _index_ === 0,
-                ...dbMap[_item_],
-              });
-              rawCount++;
+        (
+          task as TaskDetail<IMultipleAsyncTaskParams>
+        )?.parameters?.orderedDatabaseIds?.map((item, index) => {
+          item?.forEach((_item_, _index_) => {
+            rawData.push({
+              id: rawCount,
+              nodeIndex: index,
+              rowSpan: item?.length,
+              needMerge: _index_ === 0,
+              ...dbMap[_item_]
             });
-          },
-        );
+            rawCount++;
+          });
+        });
         // @ts-ignore
         setSubTasks(rawData);
         const databases = flatArray(
-          (task as TaskDetail<IMultipleAsyncTaskParams>)?.parameters?.orderedDatabaseIds,
+          (task as TaskDetail<IMultipleAsyncTaskParams>)?.parameters
+            ?.orderedDatabaseIds
         )?.map((item) => dbMap?.[item]);
         databases?.length && setDatabases(databases);
       } else {
@@ -419,8 +443,8 @@ const TaskProgress: React.FC<IProps> = (props) => {
       }
     },
     {
-      pollingInterval: 3000,
-    },
+      pollingInterval: 3000
+    }
   );
   const subTask = subTasks?.find((item) => item.id === detailId);
   const resultJson = JSON.parse(subTask?.resultJson ?? '{}');
@@ -430,8 +454,8 @@ const TaskProgress: React.FC<IProps> = (props) => {
       message.success(
         formatMessage({
           id: 'odc.src.component.Task.component.CommonDetailModal.StartTheNameSwitching',
-          defaultMessage: '开始表名切换',
-        }), //'开始表名切换'
+          defaultMessage: '开始表名切换'
+        }) //'开始表名切换'
       );
       loadData();
     }
@@ -449,7 +473,7 @@ const TaskProgress: React.FC<IProps> = (props) => {
   const onOpenDetail = async (taskId: number) => {
     const data = await getTaskDetail(taskId, true);
     setState({
-      detailVisible: false,
+      detailVisible: false
     });
     taskStore.changeTaskPageType(TaskPageType.ASYNC);
     _handleDetailVisible(data, true);
@@ -462,13 +486,13 @@ const TaskProgress: React.FC<IProps> = (props) => {
       case TaskType.MULTIPLE_ASYNC: {
         // return getLogicalDatabaseAsyncColumns();
         return getMultipleAsyncColumns({
-          onOpenDetail,
+          onOpenDetail
         });
       }
       case TaskType.ONLINE_SCHEMA_CHANGE: {
         return getColumns({
           onOpenDetail: handleDetailVisible,
-          onSwapTable: handleSwapTable,
+          onSwapTable: handleSwapTable
         });
       }
       case TaskType.LOGICAL_DATABASE_CHANGE: {
@@ -485,7 +509,9 @@ const TaskProgress: React.FC<IProps> = (props) => {
   //       onOpenDetail: handleDetailVisible,
   //       onSwapTable: handleSwapTable,
   //     });
-  const pendingExectionDatabases = databases?.filter((item) => !item?.status)?.length;
+  const pendingExectionDatabases = databases?.filter(
+    (item) => !item?.status
+  )?.length;
   return (
     <>
       {task?.type === TaskType.MULTIPLE_ASYNC && subTasks?.length > 0 && (
@@ -493,12 +519,13 @@ const TaskProgress: React.FC<IProps> = (props) => {
           {formatMessage(
             {
               id: 'src.component.Task.component.CommonDetailModal.E75BF608',
-              defaultMessage: '共 {subTasksLength} 个数据库， {pendingExectionDatabases} 个待执行',
+              defaultMessage:
+                '共 {subTasksLength} 个数据库， {pendingExectionDatabases} 个待执行'
             },
             {
               subTasksLength: subTasks?.length,
-              pendingExectionDatabases,
-            },
+              pendingExectionDatabases
+            }
           )}
         </div>
       )}
@@ -522,18 +549,18 @@ const TaskProgress: React.FC<IProps> = (props) => {
         <Space
           direction="vertical"
           style={{
-            display: 'flex',
+            display: 'flex'
           }}
         >
           <SimpleTextItem
             label={formatMessage({
               id: 'odc.component.CommonDetailModal.TaskProgress.NewTableDdl',
-              defaultMessage: '新表 DDL',
+              defaultMessage: '新表 DDL'
             })}
             /*新表 DDL*/ content={
               <div
                 style={{
-                  marginTop: '8px',
+                  marginTop: '8px'
                 }}
               >
                 <SQLContent
@@ -543,7 +570,9 @@ const TaskProgress: React.FC<IProps> = (props) => {
                   sqlObjectNames={null}
                   taskId={task?.id}
                   language={
-                    getDataSourceModeConfigByConnectionMode(resultJson?.dialectType)?.sql?.language
+                    getDataSourceModeConfigByConnectionMode(
+                      resultJson?.dialectType
+                    )?.sql?.language
                   }
                 />
               </div>
@@ -554,12 +583,12 @@ const TaskProgress: React.FC<IProps> = (props) => {
           <SimpleTextItem
             label={formatMessage({
               id: 'odc.component.CommonDetailModal.TaskProgress.SourceTableDdl',
-              defaultMessage: '源表 DDL',
+              defaultMessage: '源表 DDL'
             })}
             /*源表 DDL*/ content={
               <div
                 style={{
-                  marginTop: '8px',
+                  marginTop: '8px'
                 }}
               >
                 <SQLContent
@@ -569,7 +598,9 @@ const TaskProgress: React.FC<IProps> = (props) => {
                   sqlObjectNames={null}
                   taskId={task?.id}
                   language={
-                    getDataSourceModeConfigByConnectionMode(resultJson?.dialectType)?.sql?.language
+                    getDataSourceModeConfigByConnectionMode(
+                      resultJson?.dialectType
+                    )?.sql?.language
                   }
                 />
               </div>

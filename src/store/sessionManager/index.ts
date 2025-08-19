@@ -44,7 +44,7 @@ export class SessionManagerStore {
    */
   async initConnection(
     connectionId: ConnectionId,
-    databaseId: number,
+    databaseId: number
   ): Promise<boolean | 'NotFound'> {
     if (databaseId) {
       /**
@@ -54,7 +54,7 @@ export class SessionManagerStore {
       const database = res?.data;
       if (!database && res?.errCode !== 'NotFound') {
         notification.error({
-          track: res?.errMsg,
+          track: res?.errMsg
         });
       }
       if (res?.errCode === 'NotFound') {
@@ -64,14 +64,17 @@ export class SessionManagerStore {
         return false;
       }
       this.database.set(databaseId, database);
-      this.connection.set(database.dataSource?.id || database?.id, database?.dataSource);
+      this.connection.set(
+        database.dataSource?.id || database?.id,
+        database?.dataSource
+      );
       return true;
     } else {
       const res = await getConnectionDetailResponse(connectionId);
       const datasource = res?.data;
       if (!datasource && res?.errCode !== 'NotFound') {
         notification.error({
-          track: res?.errMsg,
+          track: res?.errMsg
         });
       }
       if (res?.errCode === 'NotFound') {
@@ -96,10 +99,12 @@ export class SessionManagerStore {
     datasourceId: ConnectionId,
     databaseid: number,
     isMaster: boolean = false,
-    recordDbAccessHistory: boolean = false,
+    recordDbAccessHistory: boolean = false
   ): Promise<SessionStore | null | 'NotFound'> {
     if (isMaster && databaseid) {
-      const masterSession = this.sessionMap.get(this.masterSession.get(databaseid));
+      const masterSession = this.sessionMap.get(
+        this.masterSession.get(databaseid)
+      );
       if (masterSession) {
         /**
          * 判断是否超过了10s，超过10s则需要重新请求一下database
@@ -132,7 +137,7 @@ export class SessionManagerStore {
         enabled: null,
         clientCertObjectId: null,
         clientKeyObjectId: null,
-        CACertObjectId: null,
+        CACertObjectId: null
       },
       organizationId: null,
       creatorId: null,
@@ -153,7 +158,7 @@ export class SessionManagerStore {
       updateTime: null,
       status: {
         status: IConnectionStatus.ACTIVE,
-        errorMessage: null,
+        errorMessage: null
       },
       properties: null,
       copyFromId: null,
@@ -176,12 +181,16 @@ export class SessionManagerStore {
       projectId: null,
       sid: null,
       serviceName: null,
-      userRole: null,
+      userRole: null
     };
     // if(database.type === DBType.LOGICAL){
     //   return
     // }
-    const session = await SessionStore.createInstance(datasource, database, recordDbAccessHistory);
+    const session = await SessionStore.createInstance(
+      datasource,
+      database,
+      recordDbAccessHistory
+    );
     runInAction(() => {
       if (session) {
         this.sessionMap.set(session.sessionId, session);
@@ -221,7 +230,10 @@ export class SessionManagerStore {
   @action
   async destoryStore(force: boolean = false) {
     this.connection.clear();
-    await SessionStore.batchDestory(Array.from(this.sessionMap.values()), force);
+    await SessionStore.batchDestory(
+      Array.from(this.sessionMap.values()),
+      force
+    );
     this.sessionMap.clear();
     this.database.clear();
     this.masterSession.clear();
@@ -230,7 +242,9 @@ export class SessionManagerStore {
   destorySession(sessionId: string, force: boolean = false) {
     const session = this.sessionMap.get(sessionId);
     if (session) {
-      const masterSessionId = this.masterSession.get(session?.database?.databaseId);
+      const masterSessionId = this.masterSession.get(
+        session?.database?.databaseId
+      );
       if (session?.sessionId === masterSessionId && !force) {
         /**
          * do not destory master session

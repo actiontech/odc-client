@@ -35,7 +35,10 @@ const getGroupMapId = (record: IDatabase, groupMode) => {
     case DatabaseGroup.cluster: {
       return (
         record?.dataSource?.clusterName ||
-        formatMessage({ id: 'src.page.Project.Database.C129D7E6', defaultMessage: '无集群' })
+        formatMessage({
+          id: 'src.page.Project.Database.C129D7E6',
+          defaultMessage: '无集群'
+        })
       );
     }
     case DatabaseGroup.connectType: {
@@ -44,7 +47,10 @@ const getGroupMapId = (record: IDatabase, groupMode) => {
     case DatabaseGroup.tenant: {
       return tenantName && clusterName
         ? `${tenantName}@${clusterName}`
-        : formatMessage({ id: 'src.page.Project.Database.FC645671', defaultMessage: '无租户' });
+        : formatMessage({
+            id: 'src.page.Project.Database.FC645671',
+            defaultMessage: '无租户'
+          });
     }
   }
 };
@@ -80,17 +86,24 @@ const getOrdinaryDatabaseOperation: getDatabaseOperation = (params) => {
     setDatabase,
     setChangeOwnerModalVisible,
     setVisible,
-    setOpenManageLogicDatabase,
+    setOpenManageLogicDatabase
   } = params;
-  const hasExportAuth = record.authorizedPermissionTypes?.includes(DatabasePermissionType.EXPORT);
-  const hasChangeAuth = record.authorizedPermissionTypes?.includes(DatabasePermissionType.CHANGE);
+  const hasExportAuth = record.authorizedPermissionTypes?.includes(
+    DatabasePermissionType.EXPORT
+  );
+  const hasChangeAuth = record.authorizedPermissionTypes?.includes(
+    DatabasePermissionType.CHANGE
+  );
   const config = getDataSourceModeConfig(record?.dataSource?.type);
   const hasDBAuth = !!record.authorizedPermissionTypes?.length;
   const notSupportToResourceTree = !config?.features?.groupResourceTree;
   const curRoles = project?.currentUserResourceRoles || [];
-  const isOwnerOrDBA = curRoles.some((role) => [ProjectRole.OWNER, ProjectRole.DBA].includes(role));
+  const isOwnerOrDBA = curRoles.some((role) =>
+    [ProjectRole.OWNER, ProjectRole.DBA].includes(role)
+  );
   const disableTransfer =
-    !!record?.dataSource?.projectId && !config?.schema?.innerSchema?.includes(record?.name);
+    !!record?.dataSource?.projectId &&
+    !config?.schema?.innerSchema?.includes(record?.name);
   const existed = record.existed;
   const isFileSyetem = isConnectTypeBeFileSystemGroup(record.connectType);
 
@@ -103,26 +116,28 @@ const getOrdinaryDatabaseOperation: getDatabaseOperation = (params) => {
       },
       text: formatMessage({
         id: 'odc.Project.Database.Export',
-        defaultMessage: '导出',
+        defaultMessage: '导出'
       }),
       visible:
-        config?.features?.task?.includes(TaskType.EXPORT) && setting.enableDBExport && existed,
+        config?.features?.task?.includes(TaskType.EXPORT) &&
+        setting.enableDBExport &&
+        existed,
       disable: !hasExportAuth || isFileSyetem,
       disableTooltip: () => {
         if (isFileSyetem) {
           return formatMessage({
             id: 'src.page.Project.Database.AD9F468B',
-            defaultMessage: '该数据源类型不支持',
+            defaultMessage: '该数据源类型不支持'
           });
         } else if (!hasExportAuth) {
           return formatMessage({
             id: 'src.page.Project.Database.A74B21AE',
-            defaultMessage: '暂无导出权限，请先申请数据库权限',
+            defaultMessage: '暂无导出权限，请先申请数据库权限'
           });
         } else {
           return '';
         }
-      },
+      }
     },
     {
       key: DataBaseOperationKey.IMPORT,
@@ -132,26 +147,28 @@ const getOrdinaryDatabaseOperation: getDatabaseOperation = (params) => {
       },
       text: formatMessage({
         id: 'odc.Project.Database.Import',
-        defaultMessage: '导入',
+        defaultMessage: '导入'
       }),
       visible:
-        config?.features?.task?.includes(TaskType.IMPORT) && setting.enableDBImport && existed,
+        config?.features?.task?.includes(TaskType.IMPORT) &&
+        setting.enableDBImport &&
+        existed,
       disable: !hasChangeAuth || isFileSyetem,
       disableTooltip: () => {
         if (isFileSyetem) {
           return formatMessage({
             id: 'src.page.Project.Database.3B98A160',
-            defaultMessage: '该数据源类型不支持',
+            defaultMessage: '该数据源类型不支持'
           });
         } else if (!hasChangeAuth) {
           return formatMessage({
             id: 'src.page.Project.Database.EA72923D',
-            defaultMessage: '暂无变更权限，请先申请数据库权限',
+            defaultMessage: '暂无变更权限，请先申请数据库权限'
           });
         } else {
           return '';
         }
-      },
+      }
     },
     {
       key: DataBaseOperationKey.DDL,
@@ -161,7 +178,7 @@ const getOrdinaryDatabaseOperation: getDatabaseOperation = (params) => {
       },
       text: formatMessage({
         id: 'odc.Project.Database.DatabaseChanges',
-        defaultMessage: '数据库变更',
+        defaultMessage: '数据库变更'
       }),
       visible: config?.features?.task?.includes(TaskType.ASYNC) && existed,
       disable: !hasChangeAuth || isFileSyetem,
@@ -169,17 +186,17 @@ const getOrdinaryDatabaseOperation: getDatabaseOperation = (params) => {
         if (isFileSyetem) {
           return formatMessage({
             id: 'src.page.Project.Database.9628B84B',
-            defaultMessage: '该数据源类型不支持',
+            defaultMessage: '该数据源类型不支持'
           });
         } else if (!hasChangeAuth) {
           return formatMessage({
             id: 'src.page.Project.Database.EA72923D',
-            defaultMessage: '暂无变更权限，请先申请数据库权限',
+            defaultMessage: '暂无变更权限，请先申请数据库权限'
           });
         } else {
           return '';
         }
-      },
+      }
     },
     {
       key: DataBaseOperationKey.LOGIN,
@@ -191,12 +208,12 @@ const getOrdinaryDatabaseOperation: getDatabaseOperation = (params) => {
           record?.id,
           null,
           '',
-          isLogicalDatabase(record),
+          isLogicalDatabase(record)
         );
       },
       text: formatMessage({
         id: 'odc.Project.Database.LogOnToTheDatabase',
-        defaultMessage: '登录数据库',
+        defaultMessage: '登录数据库'
       }),
       visible: existed,
       disable: !hasDBAuth || notSupportToResourceTree || isFileSyetem,
@@ -204,17 +221,17 @@ const getOrdinaryDatabaseOperation: getDatabaseOperation = (params) => {
         if (isFileSyetem) {
           return formatMessage({
             id: 'src.page.Project.Database.737317DB',
-            defaultMessage: '该数据源类型不支持',
+            defaultMessage: '该数据源类型不支持'
           });
         } else if (!hasDBAuth) {
           return formatMessage({
             id: 'src.page.Project.Database.6EC9F229',
-            defaultMessage: '暂无权限',
+            defaultMessage: '暂无权限'
           });
         } else {
           return '';
         }
-      },
+      }
     },
     {
       key: DataBaseOperationKey.CHANGEOWNER,
@@ -224,7 +241,7 @@ const getOrdinaryDatabaseOperation: getDatabaseOperation = (params) => {
       },
       text: formatMessage({
         id: 'src.page.Project.Database.DEFC0E70',
-        defaultMessage: '设置库管理员',
+        defaultMessage: '设置库管理员'
       }),
       visible: existed,
       disable: !isOwnerOrDBA || isFileSyetem,
@@ -232,12 +249,12 @@ const getOrdinaryDatabaseOperation: getDatabaseOperation = (params) => {
         if (isFileSyetem) {
           return formatMessage({
             id: 'src.page.Project.Database.E93B9BA4',
-            defaultMessage: '该数据源类型不支持',
+            defaultMessage: '该数据源类型不支持'
           });
         } else {
           return '';
         }
-      },
+      }
     },
     {
       key: DataBaseOperationKey.TRANSFER,
@@ -248,7 +265,8 @@ const getOrdinaryDatabaseOperation: getDatabaseOperation = (params) => {
       },
       text: formatMessage({
         id: 'odc.src.page.Project.Database.ModifyTheProject',
-        defaultMessage: '\n                      修改所属项目\n                    ',
+        defaultMessage:
+          '\n                      修改所属项目\n                    '
       }),
       visible: true,
       disable: !hasChangeAuth || disableTransfer || isFileSyetem,
@@ -256,23 +274,24 @@ const getOrdinaryDatabaseOperation: getDatabaseOperation = (params) => {
         if (isFileSyetem) {
           return formatMessage({
             id: 'src.page.Project.Database.F9B0C796',
-            defaultMessage: '该数据源类型不支持',
+            defaultMessage: '该数据源类型不支持'
           });
         } else if (!hasChangeAuth) {
           return formatMessage({
             id: 'src.page.Project.Database.8FB9732D',
-            defaultMessage: '暂无权限',
+            defaultMessage: '暂无权限'
           });
         } else if (disableTransfer) {
           return formatMessage({
             id: 'odc.src.page.Project.Database.TheDataSourceHasBeen',
-            defaultMessage: '所属的数据源已关联当前项目，无法修改。可通过编辑数据源修改所属项目',
+            defaultMessage:
+              '所属的数据源已关联当前项目，无法修改。可通过编辑数据源修改所属项目'
           });
         } else {
           return '';
         }
-      },
-    },
+      }
+    }
   ];
 
   return ordinaryActions;
@@ -280,14 +299,19 @@ const getOrdinaryDatabaseOperation: getDatabaseOperation = (params) => {
 
 /** 逻辑库操作 */
 const getLogicalDatabaseOperation: getDatabaseOperation = (params) => {
-  const { record, project, setDatabase, reload, setOpenManageLogicDatabase } = params;
+  const { record, project, setDatabase, reload, setOpenManageLogicDatabase } =
+    params;
   const hasDBAuth = !!record.authorizedPermissionTypes?.length;
   const isOwnerOrDBA = project?.currentUserResourceRoles?.some((role) =>
-    [ProjectRole.OWNER, ProjectRole.DBA].includes(role),
+    [ProjectRole.OWNER, ProjectRole.DBA].includes(role)
   );
   const hasOperateAuth = isOwnerOrDBA || hasDBAuth;
-  const hasChangeAuth = record.authorizedPermissionTypes?.includes(DatabasePermissionType.CHANGE);
-  const hasQueryAuth = record.authorizedPermissionTypes?.includes(DatabasePermissionType.QUERY);
+  const hasChangeAuth = record.authorizedPermissionTypes?.includes(
+    DatabasePermissionType.CHANGE
+  );
+  const hasQueryAuth = record.authorizedPermissionTypes?.includes(
+    DatabasePermissionType.QUERY
+  );
   /** 逻辑库专属操作 */
   const logicalActions = [
     {
@@ -298,7 +322,7 @@ const getLogicalDatabaseOperation: getDatabaseOperation = (params) => {
       },
       text: formatMessage({
         id: 'src.page.Project.Database.D9A05E1E',
-        defaultMessage: '逻辑表管理',
+        defaultMessage: '逻辑表管理'
       }),
       visible: true,
       disable: !hasOperateAuth,
@@ -306,21 +330,21 @@ const getLogicalDatabaseOperation: getDatabaseOperation = (params) => {
         if (!hasOperateAuth) {
           return formatMessage({
             id: 'src.page.Project.Database.D8BEA086',
-            defaultMessage: '暂无权限',
+            defaultMessage: '暂无权限'
           });
         }
-      },
+      }
     },
     {
       key: DataBaseOperationKey.UPDATE_LOGIN_DATABASE,
       action: () =>
         modalStore.changeLogicialDatabaseModal(true, {
           projectId: project?.id,
-          databaseId: record?.id,
+          databaseId: record?.id
         }),
       text: formatMessage({
         id: 'src.page.Project.Database.D45EF5F3',
-        defaultMessage: '逻辑库变更',
+        defaultMessage: '逻辑库变更'
       }),
       visible: true,
       disable: !hasChangeAuth,
@@ -328,12 +352,12 @@ const getLogicalDatabaseOperation: getDatabaseOperation = (params) => {
         if (!hasChangeAuth) {
           return formatMessage({
             id: 'src.page.Project.Database.12FDA4F2',
-            defaultMessage: '暂无权限, 请先申请库权限',
+            defaultMessage: '暂无权限, 请先申请库权限'
           });
         } else {
           return '';
         }
-      },
+      }
     },
     {
       key: DataBaseOperationKey.LOGICAL_DATABASE_LOGIN,
@@ -344,12 +368,12 @@ const getLogicalDatabaseOperation: getDatabaseOperation = (params) => {
           record?.id,
           null,
           '',
-          isLogicalDatabase(record),
+          isLogicalDatabase(record)
         );
       },
       text: formatMessage({
         id: 'src.page.Project.Database.F8F1FF42',
-        defaultMessage: '登录数据库',
+        defaultMessage: '登录数据库'
       }),
       visible: true,
       disable: !hasQueryAuth,
@@ -357,12 +381,12 @@ const getLogicalDatabaseOperation: getDatabaseOperation = (params) => {
         if (!hasQueryAuth) {
           return formatMessage({
             id: 'src.page.Project.Database.8B2C5A3A',
-            defaultMessage: '暂无权限, 请先申请库权限',
+            defaultMessage: '暂无权限, 请先申请库权限'
           });
         } else {
           return '';
         }
-      },
+      }
     },
     {
       key: DataBaseOperationKey.DELETE_LOGIN_DATABASE,
@@ -371,22 +395,22 @@ const getLogicalDatabaseOperation: getDatabaseOperation = (params) => {
           title: formatMessage(
             {
               id: 'src.page.Project.Database.DFEFF83D',
-              defaultMessage: '确认要移除逻辑库 {recordName} 吗？',
+              defaultMessage: '确认要移除逻辑库 {recordName} 吗？'
             },
-            { recordName: record.name },
+            { recordName: record.name }
           ),
           centered: true,
           content: formatMessage({
             id: 'src.page.Project.Database.4EC56DD2',
-            defaultMessage: '仅移除逻辑库及其相关配置，不影响实际数据库的数据。',
+            defaultMessage: '仅移除逻辑库及其相关配置，不影响实际数据库的数据。'
           }),
           cancelText: formatMessage({
             id: 'src.page.Project.Database.4F537F46',
-            defaultMessage: '取消',
+            defaultMessage: '取消'
           }),
           okText: formatMessage({
             id: 'src.page.Project.Database.0DD4D2EB',
-            defaultMessage: '移除',
+            defaultMessage: '移除'
           }),
           okType: 'danger',
           onCancel: () => {},
@@ -396,19 +420,19 @@ const getLogicalDatabaseOperation: getDatabaseOperation = (params) => {
               message.success(
                 formatMessage({
                   id: 'src.page.Project.Database.026A9C34',
-                  defaultMessage: '移除成功',
-                }),
+                  defaultMessage: '移除成功'
+                })
               );
               reload?.();
               return;
             }
             showDeleteErrorModal(record.name);
-          },
+          }
         });
       },
       text: formatMessage({
         id: 'src.page.Project.Database.3A2CD412',
-        defaultMessage: '移除逻辑库',
+        defaultMessage: '移除逻辑库'
       }),
       visible: true,
       disable: !hasChangeAuth,
@@ -416,13 +440,13 @@ const getLogicalDatabaseOperation: getDatabaseOperation = (params) => {
         if (!hasChangeAuth) {
           return formatMessage({
             id: 'src.page.Project.Database.680DB47A',
-            defaultMessage: '暂无权限',
+            defaultMessage: '暂无权限'
           });
         } else {
           return '';
         }
-      },
-    },
+      }
+    }
   ];
 
   return logicalActions;
@@ -432,17 +456,17 @@ const handleMenuClick = (type: TaskPageType, databaseId: number) => {
   switch (type) {
     case TaskPageType.IMPORT:
       modalStore.changeImportModal(true, {
-        databaseId,
+        databaseId
       });
       break;
     case TaskPageType.EXPORT:
       modalStore.changeExportModal(true, {
-        databaseId,
+        databaseId
       });
       break;
     case TaskPageType.ASYNC:
       modalStore.changeCreateAsyncTaskModal(true, {
-        databaseId,
+        databaseId
       });
       break;
     default:
@@ -452,14 +476,18 @@ const handleMenuClick = (type: TaskPageType, databaseId: number) => {
 const showDeleteErrorModal = (name: string) => {
   Modal.error({
     title: formatMessage(
-      { id: 'src.page.Project.Database.2D8C1CD8', defaultMessage: '逻辑 {name} 移除失败？' },
-      { name },
+      {
+        id: 'src.page.Project.Database.2D8C1CD8',
+        defaultMessage: '逻辑 {name} 移除失败？'
+      },
+      { name }
     ),
     centered: true,
     content: formatMessage({
       id: 'src.page.Project.Database.C8C89C9E',
-      defaultMessage: '当前逻辑库存在执行中的工单，暂时无法删除，请完成或终止工单后再移除。',
-    }),
+      defaultMessage:
+        '当前逻辑库存在执行中的工单，暂时无法删除，请完成或终止工单后再移除。'
+    })
   });
 };
 

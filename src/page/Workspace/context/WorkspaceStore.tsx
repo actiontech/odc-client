@@ -34,7 +34,9 @@ import { DBObjectSyncStatus, DatabaseGroup } from '@/d.ts/database';
 import { ResourceNodeType } from '@/page/Workspace/SideBar/ResourceTree/type';
 
 export default function WorkspaceStore({ children }) {
-  const [activityBarKey, setActivityBarKey] = useState(ActivityBarItemType.Database);
+  const [activityBarKey, setActivityBarKey] = useState(
+    ActivityBarItemType.Database
+  );
   const { datasourceId } = useParams<{ datasourceId: string }>();
   const [currentObject, setCurrentObject] = useState<{
     value: React.Key;
@@ -42,7 +44,7 @@ export default function WorkspaceStore({ children }) {
   }>(undefined);
   const [shouldExpandedKeys, setShouldExpandedKeys] = useState<React.Key[]>([]);
   const [groupMode, _setGroupMode] = useState(
-    login.isPrivateSpace() ? DatabaseGroup.dataSource : DatabaseGroup.project,
+    login.isPrivateSpace() ? DatabaseGroup.dataSource : DatabaseGroup.project
   );
 
   const setGroupMode = (type: DatabaseGroup) => {
@@ -55,7 +57,9 @@ export default function WorkspaceStore({ children }) {
     if (type && type !== 'null' && type !== 'undefined') {
       if (
         login.isPrivateSpace() &&
-        [DatabaseGroup.project, DatabaseGroup.none].includes(type as DatabaseGroup)
+        [DatabaseGroup.project, DatabaseGroup.none].includes(
+          type as DatabaseGroup
+        )
       ) {
         return;
       }
@@ -65,7 +69,7 @@ export default function WorkspaceStore({ children }) {
 
   const [selectProjectId, _setSelectProjectId] = useState<number>(null);
   const [selectDatasourceId, _setSelectDatasourceId] = useState<number>(
-    datasourceId ? toInteger(datasourceId) : null,
+    datasourceId ? toInteger(datasourceId) : null
   );
   const [datasourceList, setDatasourceList] = useState<IDatasource[]>([]);
   const [projectList, setProjectList] = useState<IProject[]>([]);
@@ -81,18 +85,24 @@ export default function WorkspaceStore({ children }) {
     _setSelectDatasourceId(v);
   }
 
-  const { loading: dsLoading, run: fetchDatasource } = useRequest(getDataSourceGroupByProject, {
-    defaultParams: [login.isPrivateSpace()],
-    manual: true,
-  });
+  const { loading: dsLoading, run: fetchDatasource } = useRequest(
+    getDataSourceGroupByProject,
+    {
+      defaultParams: [login.isPrivateSpace()],
+      manual: true
+    }
+  );
   const { loading: projLoading, run: fetchProject } = useRequest(listProjects, {
     defaultParams: [null, 1, 9999, false],
-    manual: true,
+    manual: true
   });
 
-  const { run: fetchDatabases, loading: dbLoading } = useRequest(listDatabases, {
-    manual: true,
-  });
+  const { run: fetchDatabases, loading: dbLoading } = useRequest(
+    listDatabases,
+    {
+      manual: true
+    }
+  );
 
   const reloadDatasourceList = useCallback(async () => {
     const data = await fetchDatasource();
@@ -115,7 +125,7 @@ export default function WorkspaceStore({ children }) {
       null,
       login.isPrivateSpace(),
       true,
-      true,
+      true
     );
     setDatabaseList(data?.contents || []);
     return data?.contents;
@@ -132,8 +142,8 @@ export default function WorkspaceStore({ children }) {
     {
       pollingInterval: 30000,
       pollingWhenHidden: false,
-      manual: true,
-    },
+      manual: true
+    }
   );
 
   return (
@@ -155,13 +165,13 @@ export default function WorkspaceStore({ children }) {
         reloadDatabaseList,
         pollingDatabase,
         groupMode,
-        setGroupMode,
+        setGroupMode
       }}
     >
       <ActivityBarContext.Provider
         value={{
           activeKey: activityBarKey,
-          setActiveKey: setActivityBarKey,
+          setActiveKey: setActivityBarKey
         }}
       >
         {children}

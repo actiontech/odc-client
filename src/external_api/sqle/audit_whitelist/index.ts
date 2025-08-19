@@ -14,11 +14,14 @@ import {
   IDeleteAuditWhitelistByIdV1Params,
   IDeleteAuditWhitelistByIdV1Return,
   IUpdateAuditWhitelistByIdV1Params,
-  IUpdateAuditWhitelistByIdV1Return,
+  IUpdateAuditWhitelistByIdV1Return
 } from './index.type';
 
 class AuditWhitelistService extends ServiceBase {
-  public getAuditWhitelistV1(params: IGetAuditWhitelistV1Params, options?: AxiosRequestConfig) {
+  public getAuditWhitelistV1(
+    params: IGetAuditWhitelistV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -26,13 +29,13 @@ class AuditWhitelistService extends ServiceBase {
     return this.get<IGetAuditWhitelistV1Return>(
       `/v1/projects/${project_name}/audit_whitelist`,
       paramsData,
-      options,
+      options
     );
   }
 
   public createAuditWhitelistV1(
     params: ICreateAuditWhitelistV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -41,13 +44,13 @@ class AuditWhitelistService extends ServiceBase {
     return this.post<ICreateAuditWhitelistV1Return>(
       `/v1/projects/${project_name}/audit_whitelist`,
       paramsData,
-      options,
+      options
     );
   }
 
   public deleteAuditWhitelistByIdV1(
     params: IDeleteAuditWhitelistByIdV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -59,13 +62,13 @@ class AuditWhitelistService extends ServiceBase {
     return this.delete<IDeleteAuditWhitelistByIdV1Return>(
       `/v1/projects/${project_name}/audit_whitelist/${audit_whitelist_id}/`,
       paramsData,
-      options,
+      options
     );
   }
 
   public UpdateAuditWhitelistByIdV1(
     params: IUpdateAuditWhitelistByIdV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -77,7 +80,7 @@ class AuditWhitelistService extends ServiceBase {
     return this.patch<IUpdateAuditWhitelistByIdV1Return>(
       `/v1/projects/${project_name}/audit_whitelist/${audit_whitelist_id}/`,
       paramsData,
-      options,
+      options
     );
   }
 }

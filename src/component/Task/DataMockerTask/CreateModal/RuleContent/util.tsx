@@ -29,7 +29,9 @@ function getValueText(value, options?: { showTime: boolean }) {
       })
       .join(' ~ ');
   } else if (isDayjs(value)) {
-    return value.format(options?.showTime ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD');
+    return value.format(
+      options?.showTime ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD'
+    );
   }
   return toString(value);
 }
@@ -38,7 +40,7 @@ function getValueText(value, options?: { showTime: boolean }) {
  */
 export function getTextItem(
   items: [string, string | typeof dayjs | any[]][],
-  options?: { showTime: boolean },
+  options?: { showTime: boolean }
 ) {
   return items
     ?.map((item) => {

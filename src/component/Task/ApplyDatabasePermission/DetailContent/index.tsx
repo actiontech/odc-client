@@ -20,7 +20,7 @@ import { SimpleTextItem } from '@/component/Task/component/SimpleTextItem';
 import {
   IConnectionStatus,
   type IApplyDatabasePermissionTaskParams,
-  type TaskDetail,
+  type TaskDetail
 } from '@/d.ts';
 import { getFormatDateTime } from '@/util/utils';
 import { Descriptions, Divider, Alert, Space } from 'antd';
@@ -36,7 +36,7 @@ const getConnectionColumns = () => {
       dataIndex: 'name',
       title: formatMessage({
         id: 'src.component.Task.ApplyDatabasePermission.DetailContent.3EE454F2',
-        defaultMessage: '数据库',
+        defaultMessage: '数据库'
       }), //'数据库'
       ellipsis: true,
       width: 339,
@@ -46,8 +46,8 @@ const getConnectionColumns = () => {
           dataSource: {
             type: record?.dialectType,
             name: record?.dataSourceName,
-            status: { status: IConnectionStatus.ACTIVE },
-          },
+            status: { status: IConnectionStatus.ACTIVE }
+          }
         };
         return (
           <Space>
@@ -55,20 +55,20 @@ const getConnectionColumns = () => {
             {value}
           </Space>
         );
-      },
+      }
     },
 
     {
       dataIndex: 'dataSourceName',
       title: formatMessage({
         id: 'src.component.Task.ApplyDatabasePermission.DetailContent.CE83F40A',
-        defaultMessage: '所属数据源',
+        defaultMessage: '所属数据源'
       }), //'所属数据源'
       ellipsis: true,
       render(value) {
         return value || '-';
-      },
-    },
+      }
+    }
   ];
 };
 
@@ -87,7 +87,7 @@ const TaskContent: React.FC<IProps> = (props) => {
           label={
             formatMessage({
               id: 'src.component.Task.ApplyDatabasePermission.DetailContent.1FA7FD5C',
-              defaultMessage: '任务编号',
+              defaultMessage: '任务编号'
             }) /*"任务编号"*/
           }
         >
@@ -97,14 +97,14 @@ const TaskContent: React.FC<IProps> = (props) => {
           label={
             formatMessage({
               id: 'src.component.Task.ApplyDatabasePermission.DetailContent.AFAA55EA',
-              defaultMessage: '任务类型',
+              defaultMessage: '任务类型'
             }) /*"任务类型"*/
           }
         >
           {
             formatMessage({
               id: 'src.component.Task.ApplyDatabasePermission.DetailContent.176A9CCE' /*申请库权限*/,
-              defaultMessage: '申请库权限',
+              defaultMessage: '申请库权限'
             }) /* 申请库权限 */
           }
         </Descriptions.Item>
@@ -112,16 +112,19 @@ const TaskContent: React.FC<IProps> = (props) => {
           <Descriptions.Item
             label={formatMessage({
               id: 'odc.DataArchiveTask.DetailContent.RiskLevel',
-              defaultMessage: '风险等级',
+              defaultMessage: '风险等级'
             })} /*风险等级*/
           >
-            <RiskLevelLabel level={task?.riskLevel?.level} color={task?.riskLevel?.style} />
+            <RiskLevelLabel
+              level={task?.riskLevel?.level}
+              color={task?.riskLevel?.style}
+            />
           </Descriptions.Item>
         )}
       </Descriptions>
       <Divider
         style={{
-          marginTop: 4,
+          marginTop: 4
         }}
       />
 
@@ -129,7 +132,8 @@ const TaskContent: React.FC<IProps> = (props) => {
         <Alert
           message={formatMessage({
             id: 'src.component.Task.ApplyDatabasePermission.DetailContent.F091144E',
-            defaultMessage: '数据库中包含逻辑库，审批通过后将默认获得其关联物理库的权限。',
+            defaultMessage:
+              '数据库中包含逻辑库，审批通过后将默认获得其关联物理库的权限。'
           })}
           type="info"
           showIcon
@@ -141,7 +145,7 @@ const TaskContent: React.FC<IProps> = (props) => {
           label={
             formatMessage({
               id: 'src.component.Task.ApplyDatabasePermission.DetailContent.476FEE55',
-              defaultMessage: '申请项目',
+              defaultMessage: '申请项目'
             }) /*"申请项目"*/
           }
         >
@@ -152,7 +156,7 @@ const TaskContent: React.FC<IProps> = (props) => {
         label={
           formatMessage({
             id: 'src.component.Task.ApplyDatabasePermission.DetailContent.281F6779',
-            defaultMessage: '数据库',
+            defaultMessage: '数据库'
           }) /*"数据库"*/
         }
         content={
@@ -172,7 +176,7 @@ const TaskContent: React.FC<IProps> = (props) => {
 
       <Divider
         style={{
-          marginTop: 4,
+          marginTop: 4
         }}
       />
 
@@ -181,17 +185,19 @@ const TaskContent: React.FC<IProps> = (props) => {
           label={
             formatMessage({
               id: 'src.component.Task.ApplyDatabasePermission.DetailContent.CF7D0545',
-              defaultMessage: '权限类型',
+              defaultMessage: '权限类型'
             }) /*"权限类型"*/
           }
         >
-          {parameters?.types?.map((key) => permissionOptionsMap[key].text)?.join(', ')}
+          {parameters?.types
+            ?.map((key) => permissionOptionsMap[key].text)
+            ?.join(', ')}
         </Descriptions.Item>
         <Descriptions.Item
           label={
             formatMessage({
               id: 'src.component.Task.ApplyDatabasePermission.DetailContent.8AAD2AC1',
-              defaultMessage: '权限有效期',
+              defaultMessage: '权限有效期'
             }) /*"权限有效期"*/
           }
         >
@@ -201,7 +207,7 @@ const TaskContent: React.FC<IProps> = (props) => {
           label={
             formatMessage({
               id: 'src.component.Task.ApplyDatabasePermission.DetailContent.265A918A',
-              defaultMessage: '申请原因',
+              defaultMessage: '申请原因'
             }) /*"申请原因"*/
           }
         >
@@ -210,7 +216,7 @@ const TaskContent: React.FC<IProps> = (props) => {
       </Descriptions>
       <Divider
         style={{
-          marginTop: 4,
+          marginTop: 4
         }}
       />
 
@@ -219,7 +225,7 @@ const TaskContent: React.FC<IProps> = (props) => {
           label={
             formatMessage({
               id: 'src.component.Task.ApplyDatabasePermission.DetailContent.2C812515',
-              defaultMessage: '创建人',
+              defaultMessage: '创建人'
             }) /*"创建人"*/
           }
         >
@@ -229,7 +235,7 @@ const TaskContent: React.FC<IProps> = (props) => {
           label={
             formatMessage({
               id: 'src.component.Task.ApplyDatabasePermission.DetailContent.80FC915E',
-              defaultMessage: '创建时间',
+              defaultMessage: '创建时间'
             }) /*"创建时间"*/
           }
         >

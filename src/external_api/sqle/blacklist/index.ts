@@ -14,11 +14,14 @@ import {
   IDeleteBlackListParams,
   IDeleteBlackListReturn,
   IUpdateBlacklistV1Params,
-  IUpdateBlacklistV1Return,
+  IUpdateBlacklistV1Return
 } from './index.type';
 
 class BlacklistService extends ServiceBase {
-  public getBlacklistV1(params: IGetBlacklistV1Params, options?: AxiosRequestConfig) {
+  public getBlacklistV1(
+    params: IGetBlacklistV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -26,11 +29,14 @@ class BlacklistService extends ServiceBase {
     return this.get<IGetBlacklistV1Return>(
       `/v1/projects/${project_name}/blacklist`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public createBlacklistV1(params: ICreateBlacklistV1Params, options?: AxiosRequestConfig) {
+  public createBlacklistV1(
+    params: ICreateBlacklistV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -38,11 +44,14 @@ class BlacklistService extends ServiceBase {
     return this.post<ICreateBlacklistV1Return>(
       `/v1/projects/${project_name}/blacklist`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public deleteBlackList(params: IDeleteBlackListParams, options?: AxiosRequestConfig) {
+  public deleteBlackList(
+    params: IDeleteBlackListParams,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -53,11 +62,14 @@ class BlacklistService extends ServiceBase {
     return this.delete<IDeleteBlackListReturn>(
       `/v1/projects/${project_name}/blacklist/${blacklist_id}/`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public updateBlacklistV1(params: IUpdateBlacklistV1Params, options?: AxiosRequestConfig) {
+  public updateBlacklistV1(
+    params: IUpdateBlacklistV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -68,7 +80,7 @@ class BlacklistService extends ServiceBase {
     return this.patch<IUpdateBlacklistV1Return>(
       `/v1/projects/${project_name}/blacklist/${blacklist_id}/`,
       paramsData,
-      options,
+      options
     );
   }
 }

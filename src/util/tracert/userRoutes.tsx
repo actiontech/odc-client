@@ -28,7 +28,10 @@ interface TracertRoutePath {
   redirect: string;
 }
 
-export const getValidRoutes = (allUserRoutes: IRoute[], defaultStrict = true) => {
+export const getValidRoutes = (
+  allUserRoutes: IRoute[],
+  defaultStrict = true
+) => {
   const allRoutePath: TracertRoutePath[] = [];
 
   const parseSubRouteConfig = (routeConfig: IRoute, parentPath: string) => {
@@ -36,19 +39,26 @@ export const getValidRoutes = (allUserRoutes: IRoute[], defaultStrict = true) =>
       return;
     }
 
-    const { exact = true, strict = defaultStrict, sensitive = false, redirect } = routeConfig;
+    const {
+      exact = true,
+      strict = defaultStrict,
+      sensitive = false,
+      redirect
+    } = routeConfig;
     const routeConfigPath = routeConfig.path || '';
     const curRoutePath =
-      routeConfigPath.indexOf('/') === 0 ? routeConfigPath : join(parentPath, routeConfigPath);
+      routeConfigPath.indexOf('/') === 0
+        ? routeConfigPath
+        : join(parentPath, routeConfigPath);
 
     const curRoutePathRegExp = pathToRegexp(curRoutePath, [], {
       strict,
       sensitive,
-      end: exact,
+      end: exact
     });
 
     const findIndex = allRoutePath.findIndex(
-      (item) => item.regExp.toString() === curRoutePathRegExp.toString(),
+      (item) => item.regExp.toString() === curRoutePathRegExp.toString()
     );
     const curTitle = routeConfig.title || routeConfig.name || '';
 
@@ -59,7 +69,7 @@ export const getValidRoutes = (allUserRoutes: IRoute[], defaultStrict = true) =>
         regExp: curRoutePathRegExp,
         route: curRoutePath,
         spmBPos: findSpmBPos,
-        redirect: redirect || '',
+        redirect: redirect || ''
       });
     } else {
       const exist: any = allRoutePath[findIndex] || {};
@@ -92,7 +102,10 @@ export const getValidRoutes = (allUserRoutes: IRoute[], defaultStrict = true) =>
   return allRoutePath;
 };
 
-export const findPathRoute = (allRoutes: TracertRoutePath[], curPathName: string) => {
+export const findPathRoute = (
+  allRoutes: TracertRoutePath[],
+  curPathName: string
+) => {
   let path = curPathName;
   // PC 开启 exportStatic 时，会生成弱 MPA 形式
   // 当刷新时，会在当前路由后新增 /，
@@ -128,7 +141,7 @@ export const findPathRoute = (allRoutes: TracertRoutePath[], curPathName: string
     route,
     redirect,
     spmBPos,
-    title,
+    title
   };
 };
 
@@ -152,7 +165,7 @@ interface Tracert {
 
 let lastRouteInfo: any = {
   route: null,
-  pathname: null,
+  pathname: null
 };
 
 export function getRoute(params: RouteChange, tracert: Tracert) {
@@ -170,15 +183,29 @@ export function getRoute(params: RouteChange, tracert: Tracert) {
     targetRoute = findPathRoute(allRoutes, location.pathname);
   }
 
-  const { route, redirect, spmBPos, title, name, spmb, path, ignoreMergeRoute, queryTitle }: any =
-    targetRoute || {};
+  const {
+    route,
+    redirect,
+    spmBPos,
+    title,
+    name,
+    spmb,
+    path,
+    ignoreMergeRoute,
+    queryTitle
+  }: any = targetRoute || {};
 
   const nextRoute: string = path || route || '';
 
   let nextSpmb: string = spmBPos || spmb || '';
   const { spmAPos, _qiankunRouteFilter } = tracert;
 
-  if (typeof spmBPos === 'object' && spmBPos !== null && spmAPos && spmBPos[spmAPos]) {
+  if (
+    typeof spmBPos === 'object' &&
+    spmBPos !== null &&
+    spmAPos &&
+    spmBPos[spmAPos]
+  ) {
     nextSpmb = spmBPos[spmAPos];
   }
 
@@ -193,14 +220,15 @@ export function getRoute(params: RouteChange, tracert: Tracert) {
   if (
     !nextRoute ||
     (redirect && !nextSpmb) ||
-    (lastRouteInfo.route === nextRoute && lastRouteInfo.pathname === location.pathname)
+    (lastRouteInfo.route === nextRoute &&
+      lastRouteInfo.pathname === location.pathname)
   ) {
     return;
   }
 
   lastRouteInfo = {
     route: nextRoute,
-    pathname: location.pathname,
+    pathname: location.pathname
   };
 
   let titleFromQuery = '';
@@ -212,12 +240,14 @@ export function getRoute(params: RouteChange, tracert: Tracert) {
     // 处理B位title采集
     if (queryTitle && typeof queryTitle === 'string' && location.search) {
       const queryObj = parse(location.search) || {};
-      titleFromQuery = decodeURIComponent(queryObj[queryTitle] || title || name);
+      titleFromQuery = decodeURIComponent(
+        queryObj[queryTitle] || title || name
+      );
     }
   }
 
   tracert.call('set', {
-    framePageTitle: titleFromQuery || title || name || '',
+    framePageTitle: titleFromQuery || title || name || ''
   });
 
   if (typeof nextSpmb != 'string' || !nextSpmb) {
@@ -226,6 +256,6 @@ export function getRoute(params: RouteChange, tracert: Tracert) {
 
   return {
     pathName: nextRoute,
-    spmBPos: nextSpmb,
+    spmBPos: nextSpmb
   };
 }

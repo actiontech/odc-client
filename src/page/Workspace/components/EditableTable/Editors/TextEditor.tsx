@@ -24,7 +24,14 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import type { TextAreaRef } from 'antd/lib/input/TextArea';
 import AntdEditorWrap from './AntdEditorWrap';
 
-export function TextEditor<T>({ row, onRowChange, column, left, top, width }: EditorProps<T>) {
+export function TextEditor<T>({
+  row,
+  onRowChange,
+  column,
+  left,
+  top,
+  width
+}: EditorProps<T>) {
   const { key, name } = column;
   const value = row[key];
   const editorRef = useRef<TextAreaRef>(null);
@@ -35,7 +42,7 @@ export function TextEditor<T>({ row, onRowChange, column, left, top, width }: Ed
     (e: ChangeEvent<HTMLTextAreaElement>) => {
       onRowChange({ ...row, [key]: e.target.value });
     },
-    [onRowChange],
+    [onRowChange]
   );
 
   return (
@@ -48,7 +55,7 @@ export function TextEditor<T>({ row, onRowChange, column, left, top, width }: Ed
             setTimeout(() => {
               editorRef.current?.resizableTextArea.textArea.setSelectionRange(
                 Number.MAX_SAFE_INTEGER,
-                Number.MAX_SAFE_INTEGER,
+                Number.MAX_SAFE_INTEGER
               );
             }, 100);
           }}
@@ -81,7 +88,7 @@ export function TextEditor<T>({ row, onRowChange, column, left, top, width }: Ed
           zIndex={1031}
           okText={formatMessage({
             id: 'odc.EditableTable.Editors.TextEditor.Submitted',
-            defaultMessage: '提交',
+            defaultMessage: '提交'
           })} /* 提交 */
           onCancel={() => {
             setIsShowTextModal(false);

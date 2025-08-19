@@ -44,7 +44,7 @@ interface IDatasouceFormContext {
 }
 
 const DatasourceFormContext = React.createContext<IDatasouceFormContext>({
-  test: () => {},
+  test: () => {}
 });
 
 export default DatasourceFormContext;

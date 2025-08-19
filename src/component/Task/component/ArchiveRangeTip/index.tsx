@@ -21,7 +21,7 @@ const { Text, Link } = Typography;
 const example1 = "create_time<'2023-01-01'";
 const example2 = formatMessage({
   id: 'odc.src.component.Task.component.ArchiveRangeTip.FilterConditionCreateTime.1',
-  defaultMessage: "过滤条件：create_time<'${bizdate}'",
+  defaultMessage: "过滤条件：create_time<'${bizdate}'"
 }); //"过滤条件：create_time<'${bizdate}'"
 const Content: React.FC<{
   label: string;
@@ -33,7 +33,7 @@ const Content: React.FC<{
           {
             formatMessage({
               id: 'odc.src.component.Task.component.ArchiveRangeTip.SuchAsChoice',
-              defaultMessage: '如选择',
+              defaultMessage: '如选择'
             }) /* 如选择 */
           }
 
@@ -41,7 +41,7 @@ const Content: React.FC<{
           {
             formatMessage({
               id: 'odc.src.component.Task.component.ArchiveRangeTip.DataBeforeJanuary01',
-              defaultMessage: ' 2023 年 01 月 01 日前的数据，可设置：',
+              defaultMessage: ' 2023 年 01 月 01 日前的数据，可设置：'
             }) /*  2023 年 01 月 01 日前的数据，可设置： */
           }
         </Text>
@@ -52,14 +52,14 @@ const Content: React.FC<{
       <Space
         direction="vertical"
         style={{
-          width: '100%',
+          width: '100%'
         }}
       >
         <Text>
           {
             formatMessage({
               id: 'odc.src.component.Task.component.ArchiveRangeTip.IfYouChooseRegular',
-              defaultMessage: '如选择定期',
+              defaultMessage: '如选择定期'
             }) /* 如选择定期 */
           }
 
@@ -67,7 +67,7 @@ const Content: React.FC<{
           {
             formatMessage({
               id: 'odc.src.component.Task.component.ArchiveRangeTip.Data7DaysAgo',
-              defaultMessage: ' 7 天前的数据，可设置：',
+              defaultMessage: ' 7 天前的数据，可设置：'
             }) /*  7 天前的数据，可设置： */
           }
         </Text>
@@ -78,7 +78,7 @@ const Content: React.FC<{
               {
                 formatMessage({
                   id: 'odc.src.component.Task.component.ArchiveRangeTip.CustomVariableSettings',
-                  defaultMessage: '自定义变量设置',
+                  defaultMessage: '自定义变量设置'
                 }) /* 自定义变量设置 */
               }
             </Text>
@@ -86,7 +86,7 @@ const Content: React.FC<{
               {
                 formatMessage({
                   id: 'odc.src.component.Task.component.ArchiveRangeTip.VariableNameBizdate',
-                  defaultMessage: '变量名称：bizdate',
+                  defaultMessage: '变量名称：bizdate'
                 }) /* 变量名称：bizdate */
               }
             </Text>
@@ -94,7 +94,7 @@ const Content: React.FC<{
               {
                 formatMessage({
                   id: 'odc.src.component.Task.component.ArchiveRangeTip.TimeFormatYyyyMm',
-                  defaultMessage: '时间格式：yyyy-mm-dd',
+                  defaultMessage: '时间格式：yyyy-mm-dd'
                 }) /* 时间格式：yyyy-mm-dd */
               }
             </Text>
@@ -102,7 +102,7 @@ const Content: React.FC<{
               {
                 formatMessage({
                   id: 'odc.src.component.Task.component.ArchiveRangeTip.TimeOffsetMinus7',
-                  defaultMessage: '时间偏移：减 7 日',
+                  defaultMessage: '时间偏移：减 7 日'
                 }) /* 时间偏移：减 7 日 */
               }
             </Text>
@@ -126,7 +126,7 @@ const ArchiveRangeTip: React.FC<IProps> = (props) => {
         {
           formatMessage({
             id: 'odc.src.component.Task.component.ArchiveRangeTip.SceneExample',
-            defaultMessage: '场景示例',
+            defaultMessage: '场景示例'
           }) /* 场景示例 */
         }
       </Link>

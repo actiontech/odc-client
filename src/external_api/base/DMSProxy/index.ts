@@ -6,15 +6,22 @@
 import ServiceBase from '../Service.base';
 import { AxiosRequestConfig } from 'axios';
 
-import { IRegisterDMSProxyTargetParams, IRegisterDMSProxyTargetReturn } from './index.type';
+import {
+  IRegisterDMSProxyTargetParams,
+  IRegisterDMSProxyTargetReturn
+} from './index.type';
 
 class DMSProxyService extends ServiceBase {
   public RegisterDMSProxyTarget(
     params: IRegisterDMSProxyTargetParams,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
-    return this.post<IRegisterDMSProxyTargetReturn>('/v1/dms/proxys', paramsData, options);
+    return this.post<IRegisterDMSProxyTargetReturn>(
+      '/v1/dms/proxys',
+      paramsData,
+      options
+    );
   }
 }
 

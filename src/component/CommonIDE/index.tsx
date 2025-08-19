@@ -40,7 +40,7 @@ export enum ITabType {
   /**
    * 结果（预留）
    */
-  RESULT = 'result',
+  RESULT = 'result'
 }
 interface ICommonIDEProps {
   /**
@@ -99,7 +99,7 @@ interface ICommonIDEState {
 
 class CommonIDE extends React.PureComponent<ICommonIDEProps, ICommonIDEState> {
   state: ICommonIDEState = {
-    resultHeight: RESULT_HEIGHT,
+    resultHeight: RESULT_HEIGHT
   };
 
   public editor: monaco.editor.IStandaloneCodeEditor;
@@ -107,7 +107,7 @@ class CommonIDE extends React.PureComponent<ICommonIDEProps, ICommonIDEState> {
 
   private handleChangeSplitPane = debounce((size: number) => {
     this.setState({
-      resultHeight: size,
+      resultHeight: size
     });
     this.emitResize();
   }, 200);
@@ -123,7 +123,10 @@ class CommonIDE extends React.PureComponent<ICommonIDEProps, ICommonIDEState> {
   private onEditorCreated = (editor) => {
     this.editor = editor;
     if (!this.model) {
-      this.model = monaco.editor.createModel(this.props.initialSQL, this.props.language);
+      this.model = monaco.editor.createModel(
+        this.props.initialSQL,
+        this.props.language
+      );
       this.editor.setModel(this.model);
     } else {
       this.editor.setModel(this.model);
@@ -154,14 +157,14 @@ class CommonIDE extends React.PureComponent<ICommonIDEProps, ICommonIDEState> {
       resultSets,
       toolbarActions,
       session,
-      placeholder,
+      placeholder
     } = this.props;
 
     const { resultHeight } = this.state;
     return (
       <div
         className={classnames(styles.main, {
-          [styles.bordered]: bordered,
+          [styles.bordered]: bordered
         })}
       >
         <div className={styles.toolbar}>
@@ -202,10 +205,10 @@ class CommonIDE extends React.PureComponent<ICommonIDEProps, ICommonIDEState> {
                           key: ITabType.LOG as string,
                           label: formatMessage({
                             id: 'odc.component.CommonIDE.Result',
-                            defaultMessage: '运行结果',
+                            defaultMessage: '运行结果'
                           }),
-                          children: log,
-                        },
+                          children: log
+                        }
                       ]
                     : []
                   )
@@ -217,9 +220,9 @@ class CommonIDE extends React.PureComponent<ICommonIDEProps, ICommonIDEState> {
                             set.executeSql,
                             formatMessage({
                               id: 'workspace.window.sql.result',
-                              defaultMessage: '结果',
+                              defaultMessage: '结果'
                             }) +
-                              (i + 1),
+                              (i + 1)
                           ),
                           children:
                             !!set.columns?.length &&
@@ -235,7 +238,9 @@ class CommonIDE extends React.PureComponent<ICommonIDEProps, ICommonIDEState> {
                                 rows={set.rows}
                                 enableRowId={true}
                                 originSql={set.originSql}
-                                resultHeight={resultHeight - TAB_HEADER_HEIGHT - 1}
+                                resultHeight={
+                                  resultHeight - TAB_HEADER_HEIGHT - 1
+                                }
                                 generalSqlType={set.generalSqlType}
                                 traceId={set.traceId}
                                 isEditing={false}
@@ -243,10 +248,13 @@ class CommonIDE extends React.PureComponent<ICommonIDEProps, ICommonIDEState> {
                                 onExport={null}
                               />
                             ) : (
-                              <SQLResultLog resultHeight={resultHeight} resultSet={set} />
-                            ),
+                              <SQLResultLog
+                                resultHeight={resultHeight}
+                                resultSet={set}
+                              />
+                            )
                         };
-                      }),
+                      })
                     )
                     .filter(Boolean)}
                 />

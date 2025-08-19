@@ -59,12 +59,12 @@ const Register: React.FC<IRegisterFormProps> = ({
         throw new Error(
           formatMessage({
             id: 'odc.component.Login.RegisterForm.TheUsernameAlreadyExists',
-            defaultMessage: '用户名已存在',
-          }),
+            defaultMessage: '用户名已存在'
+          })
         ); //用户名已存在
       }
     },
-    [isUserExists],
+    [isUserExists]
   );
 
   const handleValidateConfirmPassword = useCallback(
@@ -78,19 +78,19 @@ const Register: React.FC<IRegisterFormProps> = ({
         callback(
           formatMessage({
             id: 'odc.component.Login.RegisterForm.ConfirmPasswordInconsistency',
-            defaultMessage: '确认密码不一致',
-          }), //确认密码不一致
+            defaultMessage: '确认密码不一致'
+          }) //确认密码不一致
         );
         return;
       }
       callback();
     },
-    [formRef],
+    [formRef]
   );
 
   const passwordRegexpRule = passwordRule || {
     pattern: PASSWORD_REGEX,
-    message: PASSWORD_VALIDATE_MESSAGE,
+    message: PASSWORD_VALIDATE_MESSAGE
   };
 
   return (
@@ -105,11 +105,12 @@ const Register: React.FC<IRegisterFormProps> = ({
         name="username"
         label={formatMessage({
           id: 'odc.component.Login.RegisterForm.Username',
-          defaultMessage: '用户名',
+          defaultMessage: '用户名'
         })} /*用户名*/
         extra={formatMessage({
           id: 'odc.component.Login.RegisterForm.SupportsEnglishNumbersUnderscoresAnd',
-          defaultMessage: '支持英文、数字、下划线和特殊字符 (._+@#$%)，长度为 4~48 个字符',
+          defaultMessage:
+            '支持英文、数字、下划线和特殊字符 (._+@#$%)，长度为 4~48 个字符'
         })} /*支持英文、数字、下划线和特殊字符 (._+@#$%)，长度 4~48 位字符*/
         validateFirst
         rules={[
@@ -118,27 +119,27 @@ const Register: React.FC<IRegisterFormProps> = ({
             whitespace: true,
             message: formatMessage({
               id: 'odc.component.Login.RegisterForm.TheUsernameCannotBeEmpty',
-              defaultMessage: '用户名不能为空',
-            }), //用户名不能为空
+              defaultMessage: '用户名不能为空'
+            }) //用户名不能为空
           },
           {
             min: 4,
             max: 48,
             message: formatMessage({
               id: 'odc.component.Login.RegisterForm.TheUsernameMustBeTo',
-              defaultMessage: '用户名长度为 4~48 个字符',
-            }), //用户名长度 4~48 位字符
+              defaultMessage: '用户名长度为 4~48 个字符'
+            }) //用户名长度 4~48 位字符
           },
           {
             pattern: /^[a-zA-Z0-9_.+@#$%]+$/,
             message: formatMessage({
               id: 'odc.component.Login.RegisterForm.TheUserNameFormatDoes',
-              defaultMessage: '用户名格式不符合要求',
-            }), //用户名格式不符合要求
+              defaultMessage: '用户名格式不符合要求'
+            }) //用户名格式不符合要求
           },
           {
-            validator: handleValidateAccount,
-          },
+            validator: handleValidateAccount
+          }
         ]}
       >
         <Input autoComplete="new-account" autoFocus />
@@ -147,7 +148,7 @@ const Register: React.FC<IRegisterFormProps> = ({
         name="password"
         label={formatMessage({
           id: 'odc.component.Login.RegisterForm.Password',
-          defaultMessage: '密码',
+          defaultMessage: '密码'
         })} /*密码*/
         dependencies={['confirmPassword']}
         help={passwordRegexpRule.message}
@@ -157,10 +158,10 @@ const Register: React.FC<IRegisterFormProps> = ({
             required: true,
             message: formatMessage({
               id: 'odc.component.Login.RegisterForm.ThePasswordCannotBeEmpty',
-              defaultMessage: '密码不能为空',
-            }), //密码不能为空
+              defaultMessage: '密码不能为空'
+            }) //密码不能为空
           },
-          passwordRegexpRule,
+          passwordRegexpRule
         ]}
       >
         <Input.Password visibilityToggle={false} autoComplete="new-password" />
@@ -169,7 +170,7 @@ const Register: React.FC<IRegisterFormProps> = ({
         name="confirmPassword"
         label={formatMessage({
           id: 'odc.component.Login.RegisterForm.ConfirmPassword',
-          defaultMessage: '确认密码',
+          defaultMessage: '确认密码'
         })} /*确认密码*/
         dependencies={['password']}
         validateFirst
@@ -178,12 +179,12 @@ const Register: React.FC<IRegisterFormProps> = ({
             required: true,
             message: formatMessage({
               id: 'odc.component.Login.RegisterForm.PleaseEnterThePasswordAgain',
-              defaultMessage: '请再次输入密码',
-            }), //请再次输入密码
+              defaultMessage: '请再次输入密码'
+            }) //请再次输入密码
           },
           {
-            validator: handleValidateConfirmPassword,
-          },
+            validator: handleValidateConfirmPassword
+          }
         ]}
       >
         <Input.Password visibilityToggle={false} autoComplete="new-password" />
@@ -199,12 +200,17 @@ const Register: React.FC<IRegisterFormProps> = ({
         {
           formatMessage({
             id: 'odc.component.Login.RegisterForm.RegisterNow',
-            defaultMessage: '立即注册',
+            defaultMessage: '立即注册'
           }) /*立即注册*/
         }
       </Button>
       {errorMessage && (
-        <Alert type="error" showIcon={true} className={`${prefix}-alert`} message={errorMessage} />
+        <Alert
+          type="error"
+          showIcon={true}
+          className={`${prefix}-alert`}
+          message={errorMessage}
+        />
       )}
     </Form>
   );

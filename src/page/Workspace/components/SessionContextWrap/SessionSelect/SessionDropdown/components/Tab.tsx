@@ -21,13 +21,13 @@ const DatabaseSelectTab: React.FC<IProps> = (props) => {
       <Radio.Button value={TabsType.all}>
         {formatMessage({
           id: 'src.page.Workspace.components.SessionContextWrap.SessionSelect.SessionDropdown.components.D9D77695',
-          defaultMessage: '全部',
+          defaultMessage: '全部'
         })}
       </Radio.Button>
       <Radio.Button value={TabsType.recentlyUsed}>
         {formatMessage({
           id: 'src.page.Workspace.components.SessionContextWrap.SessionSelect.SessionDropdown.components.C13AC3B3',
-          defaultMessage: '最近',
+          defaultMessage: '最近'
         })}
       </Radio.Button>
     </Radio.Group>

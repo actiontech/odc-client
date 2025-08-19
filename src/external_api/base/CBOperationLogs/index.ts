@@ -11,11 +11,14 @@ import {
   IListCBOperationLogsReturn,
   IExportCBOperationLogsParams,
   IGetCBOperationLogTipsParams,
-  IGetCBOperationLogTipsReturn,
+  IGetCBOperationLogTipsReturn
 } from './index.type';
 
 class CBOperationLogsService extends ServiceBase {
-  public ListCBOperationLogs(params: IListCBOperationLogsParams, options?: AxiosRequestConfig) {
+  public ListCBOperationLogs(
+    params: IListCBOperationLogsParams,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_uid = paramsData.project_uid;
     delete paramsData.project_uid;
@@ -23,11 +26,14 @@ class CBOperationLogsService extends ServiceBase {
     return this.get<IListCBOperationLogsReturn>(
       `/v1/dms/projects/${project_uid}/cb_operation_logs`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public ExportCBOperationLogs(params: IExportCBOperationLogsParams, options?: AxiosRequestConfig) {
+  public ExportCBOperationLogs(
+    params: IExportCBOperationLogsParams,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_uid = paramsData.project_uid;
     delete paramsData.project_uid;
@@ -35,11 +41,14 @@ class CBOperationLogsService extends ServiceBase {
     return this.get(
       `/v1/dms/projects/${project_uid}/cb_operation_logs/export`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public GetCBOperationLogTips(params: IGetCBOperationLogTipsParams, options?: AxiosRequestConfig) {
+  public GetCBOperationLogTips(
+    params: IGetCBOperationLogTipsParams,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_uid = paramsData.project_uid;
     delete paramsData.project_uid;
@@ -47,7 +56,7 @@ class CBOperationLogsService extends ServiceBase {
     return this.get<IGetCBOperationLogTipsReturn>(
       `/v1/dms/projects/${project_uid}/cb_operation_logs/tips`,
       paramsData,
-      options,
+      options
     );
   }
 }

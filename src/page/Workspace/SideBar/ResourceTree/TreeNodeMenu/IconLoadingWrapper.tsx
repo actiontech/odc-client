@@ -13,7 +13,11 @@ const IconLoadingWrapper = ({ icon }) => {
 
   return (
     <div onClick={handleClick}>
-      {loading ? <Icon component={LoadingOutlined} /> : <Icon component={icon} />}
+      {loading ? (
+        <Icon component={LoadingOutlined} />
+      ) : (
+        <Icon component={icon} />
+      )}
     </div>
   );
 };

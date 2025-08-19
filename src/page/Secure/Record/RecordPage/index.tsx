@@ -14,9 +14,16 @@
  * limitations under the License.
  */
 
-import { getAuditDetail, getAuditEventMeta, getAuditList } from '@/common/network/manager';
+import {
+  getAuditDetail,
+  getAuditEventMeta,
+  getAuditList
+} from '@/common/network/manager';
 import CommonTable from '@/component/CommonTable';
-import type { ITableInstance, ITableLoadOptions } from '@/component/CommonTable/interface';
+import type {
+  ITableInstance,
+  ITableLoadOptions
+} from '@/component/CommonTable/interface';
 import { IOperationOptionType } from '@/component/CommonTable/interface';
 import CommonDetailModal from '@/component/Manage/DetailModal';
 import { TimeOptions } from '@/component/TimeSelect';
@@ -50,13 +57,14 @@ const RecordPage: React.FC<any> = () => {
   const userMap = users?.contents?.reduce((total, { name, accountName }) => {
     total[name] = {
       name,
-      accountName,
+      accountName
     };
 
     return total;
   }, {});
 
-  const { options: eventOptions, filter: eventfilter } = getEventFilterAndOptions(eventMeta);
+  const { options: eventOptions, filter: eventfilter } =
+    getEventFilterAndOptions(eventMeta);
 
   const openDetailModal = (auditList: IAudit) => {
     setDetailModalVisible(true);
@@ -84,7 +92,7 @@ const RecordPage: React.FC<any> = () => {
       connectionName,
       clientIpAddress,
       username = '',
-      result,
+      result
     } = filters ?? {};
     const { column, order } = sorter ?? {};
     const { current = 1 } = pagination ?? {};
@@ -101,7 +109,7 @@ const RecordPage: React.FC<any> = () => {
       endTime: executeDate?.[1]?.valueOf() ?? getPreTime(0),
       sort: column?.dataIndex,
       page: current,
-      size: pageSize,
+      size: pageSize
     };
 
     if (executeTime !== 'custom' && typeof executeTime === 'number') {
@@ -110,7 +118,9 @@ const RecordPage: React.FC<any> = () => {
     }
 
     // sorter
-    data.sort = column ? `${column.dataIndex},${order === 'ascend' ? 'asc' : 'desc'}` : undefined;
+    data.sort = column
+      ? `${column.dataIndex},${order === 'ascend' ? 'asc' : 'desc'}`
+      : undefined;
     const startIndex = pageSize * (current - 1);
     const auditList = await getAuditList(data);
 
@@ -156,13 +166,13 @@ const RecordPage: React.FC<any> = () => {
               name: 'executeTime',
               title: formatMessage({
                 id: 'odc.components.RecordPage.ExecutionTime.1',
-                defaultMessage: '执行时间：',
+                defaultMessage: '执行时间：'
               }),
 
               //执行时间：
               defaultValue: 7,
               dropdownWidth: 160,
-              options: TimeOptions,
+              options: TimeOptions
             },
 
             {
@@ -180,9 +190,9 @@ const RecordPage: React.FC<any> = () => {
                 );
 
                 return content;
-              },
-            },
-          ],
+              }
+            }
+          ]
         }}
         operationContent={{
           options: [
@@ -191,21 +201,21 @@ const RecordPage: React.FC<any> = () => {
               icon: <ExportOutlined />,
               content: formatMessage({
                 id: 'odc.components.RecordPage.Export',
-                defaultMessage: '导出',
+                defaultMessage: '导出'
               }),
 
               //导出
               tooltip: formatMessage({
                 id: 'odc.components.RecordPage.ExportOperationRecords',
-                defaultMessage: '导出操作记录',
+                defaultMessage: '导出操作记录'
               }),
 
               //导出操作记录
               onClick: () => {
                 handleRecordExportVisible(true);
-              },
-            },
-          ],
+              }
+            }
+          ]
         }}
         onLoad={loadData}
         onChange={handleTableChange}
@@ -216,15 +226,15 @@ const RecordPage: React.FC<any> = () => {
             startIndex,
             eventfilter,
             eventOptions,
-            userMap,
+            userMap
           }),
 
           dataSource: auditList?.contents,
           rowKey: 'id',
           pagination: {
             current: auditList?.page?.number,
-            total: auditList?.page?.totalElements,
-          },
+            total: auditList?.page?.totalElements
+          }
         }}
       />
 
@@ -232,7 +242,7 @@ const RecordPage: React.FC<any> = () => {
         visible={detailModalVisible}
         title={formatMessage({
           id: 'odc.components.RecordPage.RecordDetails',
-          defaultMessage: '记录详情',
+          defaultMessage: '记录详情'
         })}
         /*记录详情*/
         detailId={detailId}
@@ -241,14 +251,16 @@ const RecordPage: React.FC<any> = () => {
             {
               formatMessage({
                 id: 'odc.components.RecordPage.Close',
-                defaultMessage: '关闭',
+                defaultMessage: '关闭'
               }) /*关闭*/
             }
           </Button>
         }
         onClose={handleCloseDetailModal}
         getDetail={getAuditDetail}
-        renderContent={(key, data) => <RecordContent data={data} userMap={userMap} />}
+        renderContent={(key, data) => (
+          <RecordContent data={data} userMap={userMap} />
+        )}
       />
 
       <FormRecordExportModal

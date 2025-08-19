@@ -57,24 +57,24 @@ export const CommonDeleteModal: React.FC<{
         formatMessage(
           {
             id: 'odc.components.CommonDeleteModal.DeleteType',
-            defaultMessage: '删除{type}',
+            defaultMessage: '删除{type}'
           },
 
-          { type },
+          { type }
         )
         // `删除${type}`
       }
       okText={formatMessage({
         id: 'odc.components.CommonDeleteModal.Delete',
-        defaultMessage: '删除',
+        defaultMessage: '删除'
       })}
       /* 删除 */ cancelText={formatMessage({
         id: 'odc.components.CommonDeleteModal.Cancel',
-        defaultMessage: '取消',
+        defaultMessage: '取消'
       })}
       /* 取消 */ okButtonProps={{
         danger: true,
-        type: 'default',
+        type: 'default'
       }}
       onOk={handleDelete}
       onCancel={onCancel}
@@ -93,10 +93,10 @@ export const CommonDeleteModal: React.FC<{
               formatMessage(
                 {
                   id: 'odc.components.CommonDeleteModal.TypeName',
-                  defaultMessage: '{type}名称:',
+                  defaultMessage: '{type}名称:'
                 },
 
-                { type },
+                { type }
               )
               /* {type}名称: */
             }
@@ -107,7 +107,7 @@ export const CommonDeleteModal: React.FC<{
           {
             formatMessage({
               id: 'odc.components.CommonDeleteModal.Enter',
-              defaultMessage: '请输入',
+              defaultMessage: '请输入'
             })
             /* 请输入 */
           }
@@ -116,7 +116,7 @@ export const CommonDeleteModal: React.FC<{
           {
             formatMessage({
               id: 'odc.components.CommonDeleteModal.ConfirmTheOperation',
-              defaultMessage: '以确认操作',
+              defaultMessage: '以确认操作'
             })
             /* 以确认操作 */
           }
@@ -128,9 +128,9 @@ export const CommonDeleteModal: React.FC<{
             formatMessage(
               {
                 id: 'odc.components.CommonDeleteModal.EnterName',
-                defaultMessage: '请输入{name}',
+                defaultMessage: '请输入{name}'
               },
-              { name },
+              { name }
             ) // `请输入${name}`
           }
         />
@@ -140,7 +140,7 @@ export const CommonDeleteModal: React.FC<{
             {
               formatMessage({
                 id: 'odc.components.CommonDeleteModal.IncorrectInputInformation',
-                defaultMessage: '输入信息有误',
+                defaultMessage: '输入信息有误'
               }) /* 输入信息有误 */
             }
           </span>

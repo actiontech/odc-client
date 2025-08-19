@@ -41,19 +41,25 @@ function SQLExecuteModal(props: {
 
   const doExecuteSQL = useCallback(async () => {
     try {
-      const result = await executeSQL(innerSQL, session.sessionId, session.database?.dbName);
+      const result = await executeSQL(
+        innerSQL,
+        session.sessionId,
+        session.database?.dbName
+      );
       if (!result) {
         return;
       }
       if (result?.invalid) {
         onClose();
-      } else if (result?.executeResult?.[0]?.status === ISqlExecuteResultStatus.SUCCESS) {
+      } else if (
+        result?.executeResult?.[0]?.status === ISqlExecuteResultStatus.SUCCESS
+      ) {
         onSuccess(innerSQL);
         message.success(
           formatMessage({
             id: 'odc.component.SQLExecuteModal.ExecutionSucceeded',
-            defaultMessage: '执行成功',
-          }), // 执行成功
+            defaultMessage: '执行成功'
+          }) // 执行成功
         );
       } else {
         notification.error(result?.executeResult?.[0]);
@@ -67,16 +73,16 @@ function SQLExecuteModal(props: {
     <Modal
       title={formatMessage({
         id: 'odc.component.SQLExecuteModal.SqlConfirmation',
-        defaultMessage: 'SQL 确认',
+        defaultMessage: 'SQL 确认'
       })} /* SQL 确认 */
       width={600}
       bodyStyle={{
-        height: 400,
+        height: 400
       }}
       open={visible}
       destroyOnClose
       okButtonProps={{
-        disabled: !innerSQL,
+        disabled: !innerSQL
       }}
       onCancel={onClose}
       onOk={doExecuteSQL}
@@ -84,7 +90,9 @@ function SQLExecuteModal(props: {
       <CommonIDE
         session={session}
         bordered={true}
-        language={getDataSourceModeConfig(session?.connection?.type)?.sql?.language}
+        language={
+          getDataSourceModeConfig(session?.connection?.type)?.sql?.language
+        }
         initialSQL={sql}
         onSQLChange={(sql) => {
           setInnerSQL(sql);

@@ -130,14 +130,14 @@ export const KEY_CODE_MAP: Record<number, KeyCode> = {
   222: KeyCode.Quote,
   223: KeyCode.OEM_8,
   226: KeyCode.IntlBackslash,
-  229: KeyCode.KEY_IN_COMPOSITION,
+  229: KeyCode.KEY_IN_COMPOSITION
 };
 
 const convertMap = {
   [KeyCode.Ctrl]: KeyMod.CtrlCmd,
   [KeyCode.Meta]: KeyMod.CtrlCmd,
   [KeyCode.Shift]: KeyMod.Shift,
-  [KeyCode.Alt]: KeyMod.Alt,
+  [KeyCode.Alt]: KeyMod.Alt
 };
 
 export function getKeyCodeText(code: string) {

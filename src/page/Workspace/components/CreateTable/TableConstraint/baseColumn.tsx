@@ -21,23 +21,26 @@ import { useMemo } from 'react';
 import { WrapSelectEditor } from '../../EditableTable/Editors/SelectEditor';
 import { TextEditor } from '../../EditableTable/Editors/TextEditor';
 import { useTableConfig } from '../config';
-import { CheckBoxFormatter, ReadonlyCheckBoxFormatter } from '../RdgFomatter/CheckboxFormatter';
+import {
+  CheckBoxFormatter,
+  ReadonlyCheckBoxFormatter
+} from '../RdgFomatter/CheckboxFormatter';
 import WrapValueFormatter from '../RdgFomatter/ValueFormatter';
 
 export function useDeferColumn(mode: ConnectionMode) {
   const deferOptions = {
     [TableConstraintDefer.NOT]: formatMessage({
       id: 'odc.CreateTable.TableConstraint.baseColumn.NonDelayed',
-      defaultMessage: '不可延迟',
+      defaultMessage: '不可延迟'
     }), //不可延迟
     [TableConstraintDefer.DEFERRABLE_DEFER]: formatMessage({
       id: 'odc.CreateTable.TableConstraint.baseColumn.DelayedVerification',
-      defaultMessage: '延迟验证',
+      defaultMessage: '延迟验证'
     }), //延迟验证
     [TableConstraintDefer.DEFERRABLE_IMMEDIATE]: formatMessage({
       id: 'odc.CreateTable.TableConstraint.baseColumn.VerifyNow',
-      defaultMessage: '立即验证',
-    }), //立即验证
+      defaultMessage: '立即验证'
+    }) //立即验证
   };
   const config = useTableConfig(mode);
   const methodSelect = useMemo(() => {
@@ -45,10 +48,10 @@ export function useDeferColumn(mode: ConnectionMode) {
       Object.entries(deferOptions).map(([key, text]) => {
         return {
           text,
-          value: key,
+          value: key
         };
       }),
-      false,
+      false
     );
   }, []);
   const deferFormatter = useMemo(() => {
@@ -63,14 +66,14 @@ export function useDeferColumn(mode: ConnectionMode) {
     key: 'defer',
     name: formatMessage({
       id: 'odc.CreateTable.TableConstraint.baseColumn.DelayedState',
-      defaultMessage: '可延迟状态',
+      defaultMessage: '可延迟状态'
     }), //可延迟状态
     resizable: true,
     filterable: false,
     editor: methodSelect,
     editable: true,
     width: 150,
-    formatter: deferFormatter,
+    formatter: deferFormatter
   };
 }
 
@@ -83,14 +86,14 @@ export function useEnableColumn(mode: ConnectionMode) {
     key: 'enable',
     name: formatMessage({
       id: 'odc.CreateTable.TableConstraint.baseColumn.WhetherToEnable',
-      defaultMessage: '是否启用',
+      defaultMessage: '是否启用'
     }), //是否启用
     resizable: true,
     editable: false,
     filterable: false,
     width: 100,
     editor: TextEditor,
-    formatter: ReadonlyCheckBoxFormatter,
+    formatter: ReadonlyCheckBoxFormatter
   };
 }
 
@@ -103,12 +106,12 @@ export function useEnableColumnForeign(mode: ConnectionMode) {
     key: 'enable',
     name: formatMessage({
       id: 'odc.CreateTable.TableConstraint.baseColumn.WhetherToEnable',
-      defaultMessage: '是否启用',
+      defaultMessage: '是否启用'
     }), //是否启用
     resizable: true,
     editable: false,
     filterable: false,
     width: 100,
-    formatter: CheckBoxFormatter,
+    formatter: CheckBoxFormatter
   };
 }

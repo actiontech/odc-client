@@ -6,7 +6,7 @@ import {
   ICreatePipelineResV1,
   IGetPipelineDetailResV1,
   IBaseRes,
-  IUpdatePipelineReqV1,
+  IUpdatePipelineReqV1
 } from '../common.type';
 
 export interface IGetPipelinesV1Params {

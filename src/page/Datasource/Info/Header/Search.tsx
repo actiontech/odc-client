@@ -37,7 +37,7 @@ const Search: React.FC<IProps> = function () {
       prefix={<SearchOutlined />}
       placeholder={formatMessage({
         id: 'src.page.Datasource.Info.Header.B547D3A4',
-        defaultMessage: '搜索数据库',
+        defaultMessage: '搜索数据库'
       })}
       onChange={changeInput}
       onBlur={handleBlur}

@@ -20,7 +20,17 @@ import { TraceSpan } from '@/d.ts';
 import SessionStore from '@/store/sessionManager/session';
 import { downloadFile, formatTimeTemplatMicroSeconds } from '@/util/utils';
 import { CopyOutlined, QuestionCircleOutlined } from '@ant-design/icons';
-import { Button, Col, Descriptions, Drawer, Input, message, Radio, Row, Tooltip } from 'antd';
+import {
+  Button,
+  Col,
+  Descriptions,
+  Drawer,
+  Input,
+  message,
+  Radio,
+  Row,
+  Tooltip
+} from 'antd';
 import React, { useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import styles from './index.less';
@@ -40,15 +50,17 @@ export const InfoRender = ({ infos }) => {
 };
 export enum TraceTabsType {
   Trace = 'Trace',
-  List = 'List',
+  List = 'List'
 }
 export function randomUUID(len = 0, radix = 16) {
-  const characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
+  const characters =
+    '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
   const uuid = [];
   let i: number;
   const currentRadix = radix || characters.length;
   if (len) {
-    for (i = 0; i < len; i++) uuid[i] = characters[0 | (Math.random() * currentRadix)];
+    for (i = 0; i < len; i++)
+      uuid[i] = characters[0 | (Math.random() * currentRadix)];
   } else {
     let r: number;
     uuid[8] = uuid[13] = uuid[18] = uuid[23] = '-';
@@ -90,7 +102,8 @@ const Trace: React.FC<{
   const [innerTreeData, setInnerTreeData] = useState([]);
   const [tabName, setTabName] = useState<string>(TraceTabsType.Trace);
   const [originStartTimestamp, setOriginStartTimestamp] = useState<string>('');
-  const [totalElapseMicroSeconds, setTotalElapseMicroSeconds] = useState<number>();
+  const [totalElapseMicroSeconds, setTotalElapseMicroSeconds] =
+    useState<number>();
   const [downloadLoading, setDownloadLoading] = useState<boolean>(false);
   const [searchValue, setSearchValue] = useState<string>(null);
 
@@ -117,10 +130,14 @@ const Trace: React.FC<{
 
   async function handleJsonDownload() {
     setDownloadLoading(true);
-    const url = await getFullLinkTraceDownloadUrl(session?.sessionId, session?.database?.dbName, {
-      sql: sql,
-      tag: traceId,
-    });
+    const url = await getFullLinkTraceDownloadUrl(
+      session?.sessionId,
+      session?.database?.dbName,
+      {
+        sql: sql,
+        tag: traceId
+      }
+    );
     if (url) {
       await downloadFile(url);
     }
@@ -133,7 +150,7 @@ const Trace: React.FC<{
       title={
         formatMessage({
           id: 'odc.src.page.Workspace.components.Trace.FullLinkTraceDetails',
-          defaultMessage: '全链路 Trace 详情',
+          defaultMessage: '全链路 Trace 详情'
         }) //'全链路 Trace 详情'
       }
       destroyOnClose={true}
@@ -154,14 +171,14 @@ const Trace: React.FC<{
               key="copy"
               text={traceId}
               style={{
-                marginLeft: '8px',
+                marginLeft: '8px'
               }}
               onCopy={() => {
                 message.success(
                   formatMessage({
                     id: 'odc.src.page.Workspace.components.Trace.Replication',
-                    defaultMessage: '复制成功',
-                  }), //'复制成功'
+                    defaultMessage: '复制成功'
+                  }) //'复制成功'
                 );
               }}
             >
@@ -173,7 +190,7 @@ const Trace: React.FC<{
               {
                 formatMessage({
                   id: 'odc.src.page.Workspace.components.Trace.StartingTime',
-                  defaultMessage: '开始时间: ',
+                  defaultMessage: '开始时间: '
                 }) /* 开始时间:  */
               }
             </span>
@@ -185,7 +202,7 @@ const Trace: React.FC<{
               {
                 formatMessage({
                   id: 'odc.src.page.Workspace.components.Trace.Duration',
-                  defaultMessage: '持续时间: ',
+                  defaultMessage: '持续时间: '
                 }) /* 持续时间:  */
               }
             </span>
@@ -196,12 +213,15 @@ const Trace: React.FC<{
         </Row>
       </div>
       <div className={styles.optContainer}>
-        <Radio.Group value={tabName} onChange={(e) => setTabName(e.target.value)}>
+        <Radio.Group
+          value={tabName}
+          onChange={(e) => setTabName(e.target.value)}
+        >
           <Radio.Button value={TraceTabsType.Trace}>
             {
               formatMessage({
                 id: 'odc.src.page.Workspace.components.Trace.TraceView',
-                defaultMessage: 'Trace 视图',
+                defaultMessage: 'Trace 视图'
               }) /* Trace 视图 */
             }
           </Radio.Button>
@@ -209,7 +229,7 @@ const Trace: React.FC<{
             {
               formatMessage({
                 id: 'odc.src.page.Workspace.components.Trace.ListView',
-                defaultMessage: '列表视图',
+                defaultMessage: '列表视图'
               }) /* 列表视图 */
             }
           </Radio.Button>
@@ -217,22 +237,26 @@ const Trace: React.FC<{
         <div className={styles.rightSide}>
           <Input.Search
             style={{
-              width: '256px',
+              width: '256px'
             }}
             placeholder={
               formatMessage({
                 id: 'odc.src.page.Workspace.components.Trace.SearchForTheKeyword',
-                defaultMessage: '搜索关键字',
+                defaultMessage: '搜索关键字'
               }) /* 搜索关键字 */
             }
             onSearch={onSearch}
           />
 
-          <Button loading={downloadLoading} disabled={downloadLoading} onClick={handleJsonDownload}>
+          <Button
+            loading={downloadLoading}
+            disabled={downloadLoading}
+            onClick={handleJsonDownload}
+          >
             {
               formatMessage({
                 id: 'odc.src.page.Workspace.components.Trace.ExportJson',
-                defaultMessage: '\n            导出 Json\n          ',
+                defaultMessage: '\n            导出 Json\n          '
               }) /* 
             导出 Json
             */
@@ -243,14 +267,15 @@ const Trace: React.FC<{
             title={
               formatMessage({
                 id: 'odc.src.page.Workspace.components.Trace.ExportTheJSONFileThat',
-                defaultMessage: '导出符合 OpenTracing 规范的 Json 文件，可导入 Jaeger 查看',
+                defaultMessage:
+                  '导出符合 OpenTracing 规范的 Json 文件，可导入 Jaeger 查看'
               }) //'导出符合 OpenTracing 规范的 Json 文件，可导入 Jaeger 查看'
             }
           >
             <QuestionCircleOutlined
               style={{
                 marginRight: '8px',
-                cursor: 'pointer',
+                cursor: 'pointer'
               }}
             />
           </Tooltip>

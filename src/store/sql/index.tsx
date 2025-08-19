@@ -28,7 +28,7 @@ import {
   IResultSet,
   ISqlExecuteResult,
   ISqlExecuteResultStatus,
-  ISQLExplainTreeNode,
+  ISQLExplainTreeNode
 } from '@/d.ts';
 import { formatMessage } from '@/util/intl';
 import request from '@/util/request';
@@ -46,24 +46,24 @@ export enum ExcecuteSQLMode {
   SQL = 'SQL',
   TRIGGER = 'TRIGGER',
   SYNONYM = 'SYNONYM',
-  TYPE = 'TYPE',
+  TYPE = 'TYPE'
 }
 export enum PL_RUNNING_STATUS {
   // @ts-ignore
   COMPILE = formatMessage({
     id: 'odc.src.store.sql.Compile',
-    defaultMessage: '编译',
+    defaultMessage: '编译'
   }),
   // @ts-ignore
   EXEC = formatMessage({
     id: 'odc.src.store.sql.Run',
-    defaultMessage: '运行',
+    defaultMessage: '运行'
   }),
   // @ts-ignore
   DEBUG = formatMessage({
     id: 'odc.src.store.sql.Debugging',
-    defaultMessage: '调试',
-  }),
+    defaultMessage: '调试'
+  })
 }
 export class SQLStore {
   @observable.shallow
@@ -136,8 +136,8 @@ export class SQLStore {
         message.success(
           formatMessage({
             id: 'odc.src.store.sql.SubmittedSuccessfully',
-            defaultMessage: '提交成功',
-          }), //提交成功
+            defaultMessage: '提交成功'
+          }) //提交成功
         );
       }
     } finally {
@@ -156,7 +156,10 @@ export class SQLStore {
       sessionManager.sessionMap.get(sessionId)?.initSessionStatus();
       if (data?.executeResult?.[0].status === ISqlExecuteResultStatus.SUCCESS) {
         message.success(
-          formatMessage({ id: 'odc.src.store.sql.RollbackSucceeded', defaultMessage: '回滚成功' }), //回滚成功
+          formatMessage({
+            id: 'odc.src.store.sql.RollbackSucceeded',
+            defaultMessage: '回滚成功'
+          }) //回滚成功
         );
       }
     } finally {
@@ -174,8 +177,8 @@ export class SQLStore {
         message.success(
           formatMessage({
             id: 'odc.src.store.sql.StoppedSuccessfully',
-            defaultMessage: '停止成功',
-          }), //停止成功
+            defaultMessage: '停止成功'
+          }) //停止成功
         );
       }
     } finally {
@@ -190,7 +193,7 @@ export class SQLStore {
     isSection: boolean,
     sessionId: string,
     dbName: string,
-    needModal: boolean = true,
+    needModal: boolean = true
   ): Promise<any> {
     if (!this.resultSets.has(pageKey)) {
       this.resultSets.set(pageKey, []);
@@ -202,7 +205,8 @@ export class SQLStore {
       !!isSection && this.isRunningSection.add(pageKey);
       const showTableColumnInfo = session?.params?.tableColumnInfoVisible;
       const fullLinkTraceEnabled = session?.params?.fullLinkTraceEnabled;
-      const continueExecutionOnError = session?.params?.continueExecutionOnError;
+      const continueExecutionOnError =
+        session?.params?.continueExecutionOnError;
       const isSupportProfile = session?.supportFeature.enableProfile;
       const handleResult = (info: IExecutingInfo) => {
         // 兼容后端不按约定返回的情况
@@ -217,15 +221,13 @@ export class SQLStore {
           session.initSessionStatus();
         }
         runInAction(() => {
-          const finishedSQLResult: Record<string, ISqlExecuteResult> = info.results?.reduce(
-            (prev, cur) => {
+          const finishedSQLResult: Record<string, ISqlExecuteResult> =
+            info.results?.reduce((prev, cur) => {
               prev[cur.sqlId] = cur;
               const otherSQLId = cur.sqlId?.split('-')[0];
               otherSQLId && (prev[otherSQLId] = cur);
               return prev;
-            },
-            {},
-          );
+            }, {});
           this.records = this.records?.map((i) => {
             const result = finishedSQLResult[i.sqlId];
             const isExecutingSQLId = i?.sqlId === info?.executingSQLId;
@@ -235,13 +237,13 @@ export class SQLStore {
                 ...i,
                 ...result,
                 isSupportProfile: isSupportProfile && result?.withQueryProfile,
-                sessionId,
+                sessionId
               };
             } else if (isExecutingSQLId) {
               /* 执行中 */
               return {
                 ...i,
-                status: ISqlExecuteResultStatus.RUNNING,
+                status: ISqlExecuteResultStatus.RUNNING
               };
             } else {
               /* 未执行 */
@@ -254,7 +256,10 @@ export class SQLStore {
             this.resultSets.set(pageKey, [
               ...lockedResultSets,
               this.getLogTab(info),
-              ...generateResultSetColumns(info.results, session?.connection?.dialectType),
+              ...generateResultSetColumns(
+                info.results,
+                session?.connection?.dialectType
+              )
             ]);
           }
         });
@@ -289,14 +294,14 @@ export class SQLStore {
             connectionReset: false,
             checkViolations: [],
             withFullLinkTrace: false,
-            withQueryProfile: false,
+            withQueryProfile: false
           };
         });
         this.records = [
           ...recordAll?.reverse()?.map((r, index) => {
             return { ...r };
           }),
-          ...this.records,
+          ...this.records
         ];
 
         this.initLog(pageKey, info);
@@ -312,8 +317,9 @@ export class SQLStore {
           continueExecutionOnError,
           fullLinkTraceEnabled,
           addROWID:
-            setting.configurations?.['odc.sqlexecute.default.addInternalRowId'] === 'true' &&
-            session.supportFeature?.enableRowId,
+            setting.configurations?.[
+              'odc.sqlexecute.default.addInternalRowId'
+            ] === 'true' && session.supportFeature?.enableRowId
         },
         sessionId,
         dbName,
@@ -325,7 +331,7 @@ export class SQLStore {
           } else {
             handleResult(info);
           }
-        },
+        }
       );
       return res;
     } catch (e) {
@@ -341,7 +347,10 @@ export class SQLStore {
     const resultSet = this.resultSets.get(pageKey);
     const lockedResultSets = resultSet.filter((r) => r.locked);
     this.resultSets.set(pageKey, [...lockedResultSets, this.getLogTab(info)]);
-    this.setActiveTab(pageKey, this.resultSets.get(pageKey)?.find((i) => i.type == 'LOG')?.uniqKey);
+    this.setActiveTab(
+      pageKey,
+      this.resultSets.get(pageKey)?.find((i) => i.type == 'LOG')?.uniqKey
+    );
   }
 
   public getLogTab(record?: IExecutingInfo): IResultSet {
@@ -368,10 +377,10 @@ export class SQLStore {
           executeSql: item.executeSql,
           statementWarnings: item.statementWarnings,
           sqlType: item.sqlType,
-          checkViolations: item.checkViolations,
+          checkViolations: item.checkViolations
         };
       }),
-      total: task?.sqls?.length || 0,
+      total: task?.sqls?.length || 0
     };
   }
 
@@ -381,8 +390,8 @@ export class SQLStore {
     const sid = generateDatabaseSid(dbName, sessionId);
     const res = await request.post(`/api/v2/pl/parsePLNameType/${sid}`, {
       data: {
-        sql,
-      },
+        sql
+      }
     });
     return res?.data;
   } // 编译 PL
@@ -392,11 +401,11 @@ export class SQLStore {
     plName: string,
     obDbObjectType: string,
     sessionId,
-    dbName,
+    dbName
   ): Promise<IPLCompileResult> {
     const sid = generateDatabaseSid(dbName, sessionId);
     const res = await request.post(`/api/v2/pl/compile/${sid}`, {
-      data: { obDbObjectType, plName },
+      data: { obDbObjectType, plName }
     });
     return res && res.data;
   }
@@ -414,28 +423,42 @@ export class SQLStore {
   }) {
     const sid = generateDatabaseSid(params.dbName, params.sessionId);
     const res = await request.post(
-      `/api/v2/connect/sessions/${encodeURIComponent(sid)}/currentDatabase/batchCompilations`,
+      `/api/v2/connect/sessions/${encodeURIComponent(
+        sid
+      )}/currentDatabase/batchCompilations`,
       {
-        data: params,
-      },
+        data: params
+      }
     );
     return res?.data;
   }
 
   @action
-  public async getBatchCompilePLResult(id: string, sessionId: string, dbName: string) {
+  public async getBatchCompilePLResult(
+    id: string,
+    sessionId: string,
+    dbName: string
+  ) {
     const sid = generateDatabaseSid(dbName, sessionId);
     const res = await request.get(
-      `/api/v2/connect/sessions/${encodeURIComponent(sid)}/currentDatabase/batchCompilations/${id}`,
+      `/api/v2/connect/sessions/${encodeURIComponent(
+        sid
+      )}/currentDatabase/batchCompilations/${id}`
     );
     return res?.data;
   }
 
   @action
-  public async deleteBatchCompilePL(id: string, sessionId: string, dbName: string) {
+  public async deleteBatchCompilePL(
+    id: string,
+    sessionId: string,
+    dbName: string
+  ) {
     const sid = generateDatabaseSid(dbName, sessionId);
     const res = await request.delete(
-      `/api/v2/connect/sessions/${encodeURIComponent(sid)}/currentDatabase/batchCompilations/${id}`,
+      `/api/v2/connect/sessions/${encodeURIComponent(
+        sid
+      )}/currentDatabase/batchCompilations/${id}`
     );
     return res?.data;
   }
@@ -447,7 +470,7 @@ export class SQLStore {
     anonymousBlockDdl?: string,
     ignoreError?: boolean,
     sessionId?: string,
-    dbName?: string,
+    dbName?: string
   ): Promise<IPLExecResult> {
     const sid = generateDatabaseSid(dbName, sessionId);
     const { plName } = plSchema;
@@ -458,28 +481,32 @@ export class SQLStore {
         {
           type: PLType.PROCEDURE,
           procedure: { ...plSchema?.procedure, params: plSchema?.params },
-          anonymousBlockDdl,
+          anonymousBlockDdl
         },
         sessionId,
-        ignoreError,
+        ignoreError
       );
     } else if (plSchema.plType === PLType.FUNCTION) {
       res = await await executePL(
         {
           type: PLType.FUNCTION,
           function: { ...plSchema?.function, params: plSchema?.params },
-          anonymousBlockDdl,
+          anonymousBlockDdl
         },
         sessionId,
-        ignoreError,
+        ignoreError
       );
     } else {
-      const data = await executeSQL({ sql: plSchema.ddl, split: false }, sessionId, dbName); // 数据格式兼容
+      const data = await executeSQL(
+        { sql: plSchema.ddl, split: false },
+        sessionId,
+        dbName
+      ); // 数据格式兼容
       if (data?.invalid) {
         return {
           status: 'FAIL',
           errorMessage: 'Request Abort',
-          unauthorizedDBResources: data?.unauthorizedDBResources,
+          unauthorizedDBResources: data?.unauthorizedDBResources
         };
       } else if (
         data?.executeResult?.[0]?.status !== ISqlExecuteResultStatus.SUCCESS &&
@@ -487,12 +514,12 @@ export class SQLStore {
       ) {
         return {
           status: 'FAIL',
-          errorMessage: data?.executeResult?.[0]?.track,
+          errorMessage: data?.executeResult?.[0]?.track
         };
       } else {
         dbms = { line: data?.executeResult?.[0]?.dbmsOutput };
         res = {
-          data: { data: true },
+          data: { data: true }
         };
       }
     }
@@ -502,7 +529,7 @@ export class SQLStore {
     if (res.errMsg) {
       res.data = {
         status: 'FAIL',
-        errorMessage: res.errMsg,
+        errorMessage: res.errMsg
       };
     } // 追加 DBMS
 
@@ -532,7 +559,11 @@ export class SQLStore {
   }
 
   @action
-  public async refreshResultSet(pageKey: string, resultSetIndex: number, sessionId: string) {
+  public async refreshResultSet(
+    pageKey: string,
+    resultSetIndex: number,
+    sessionId: string
+  ) {
     const resultSet = this.resultSets.get(pageKey);
     const session = sessionManager.sessionMap.get(sessionId);
 
@@ -541,10 +572,10 @@ export class SQLStore {
       const record = await executeSQL(
         {
           sql: target.originSql,
-          queryLimit: session?.params?.queryLimit,
+          queryLimit: session?.params?.queryLimit
         },
         session?.sessionId,
-        session?.database?.dbName,
+        session?.database?.dbName
       );
       if (record?.invalid) {
         return;
@@ -553,8 +584,8 @@ export class SQLStore {
         message.error(
           formatMessage({
             id: 'workspace.window.sql.record.empty',
-            defaultMessage: '无法获得 SQL 执行记录',
-          }),
+            defaultMessage: '无法获得 SQL 执行记录'
+          })
         );
         return;
       } // 加入历史记录
@@ -562,10 +593,10 @@ export class SQLStore {
       this.records = [
         ...record?.executeResult?.reverse().map((result) => {
           return {
-            ...result,
+            ...result
           };
         }),
-        ...this.records,
+        ...this.records
       ];
       // 在结果集中重新执行 SQL 肯定只有一条
 
@@ -573,8 +604,8 @@ export class SQLStore {
         ...generateResultSetColumns(
           record.executeResult,
           session?.connection?.dialectType,
-          target.uniqKey,
-        )[0],
+          target.uniqKey
+        )[0]
       };
       this.resultSets.set(pageKey, clone(resultSet));
     }
@@ -621,7 +652,7 @@ export class SQLStore {
     columnIdx: number,
     updated: {
       [key: string]: unknown;
-    },
+    }
   ): boolean => {
     const columnKey = Object.keys(updated)[0];
     const modified = rows[columnIdx]?.[columnKey] !== updated[columnKey];
@@ -686,7 +717,7 @@ export class SQLStore {
     const formatted: ISQLExplainTreeNode = {
       ...data,
       rowCount: Number(data.rowCount),
-      cost: Number(data.cost),
+      cost: Number(data.cost)
     };
     const children: ISQLExplainTreeNode[] = [];
 

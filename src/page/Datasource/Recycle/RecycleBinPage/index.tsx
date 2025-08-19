@@ -22,5 +22,11 @@ interface IProps {
 }
 
 export default function RecycleBin({ dataSourceId, theme }: IProps) {
-  return <RecycleBinPage simpleHeader datasourceId={parseInt(dataSourceId)} theme={theme} />;
+  return (
+    <RecycleBinPage
+      simpleHeader
+      datasourceId={parseInt(dataSourceId)}
+      theme={theme}
+    />
+  );
 }

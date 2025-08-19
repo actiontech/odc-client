@@ -31,7 +31,14 @@ export const SimpleTextItem: React.FC<{
   showSplit?: boolean;
   style?: React.CSSProperties;
 }> = (props) => {
-  const { label, content, direction = 'row', className = '', showSplit = true, style } = props;
+  const {
+    label,
+    content,
+    direction = 'row',
+    className = '',
+    showSplit = true,
+    style
+  } = props;
   return (
     <div
       className={className}
@@ -40,7 +47,7 @@ export const SimpleTextItem: React.FC<{
         fontSize: 12,
         lineHeight: '20px',
         flexDirection: direction,
-        ...style,
+        ...style
       }}
     >
       <div
@@ -48,17 +55,17 @@ export const SimpleTextItem: React.FC<{
           flexGrow: 0,
           flexShrink: 0,
           color: 'var(--text-color-hint)',
-          marginBottom: direction === 'column' ? '8px' : 0,
+          marginBottom: direction === 'column' ? '8px' : 0
         }}
       >
         {showSplit
           ? formatMessage(
               {
                 id: 'odc.component.TaskDetailDrawer.TaskInfo.Label',
-                defaultMessage: '{label}：',
+                defaultMessage: '{label}：'
               },
 
-              { label },
+              { label }
             )
           : label}
       </div>
@@ -66,7 +73,7 @@ export const SimpleTextItem: React.FC<{
         style={{
           flexGrow: 1,
           wordBreak: 'break-all',
-          color: 'var(--text-color-primary)',
+          color: 'var(--text-color-primary)'
         }}
       >
         {content}
@@ -79,7 +86,7 @@ export const TaskStatus: React.FC<ITaskStatus> = (props) => {
   return (
     <Space
       style={{
-        fontSize: 12,
+        fontSize: 12
       }}
     >
       <span>{props.icon}</span>

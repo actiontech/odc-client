@@ -25,7 +25,7 @@ const CustomDropdown = ({
   setEditDatasourceId,
   setAddDSVisiable,
   userStore,
-  sync,
+  sync
 }) => {
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const treeContext = useContext(ResourceTreeContext);
@@ -48,48 +48,49 @@ const CustomDropdown = ({
         {
           label: formatMessage({
             id: 'odc.src.page.Workspace.SideBar.ResourceTree.SelectPanel.Datasource.Clone',
-            defaultMessage: '克隆',
+            defaultMessage: '克隆'
           }),
           key: 'clone',
-          onClick: (e) => handleMenuClick(e, () => setCopyDatasourceId(node.data.id)),
+          onClick: (e) =>
+            handleMenuClick(e, () => setCopyDatasourceId(node.data.id))
         },
         {
           label: formatMessage({
             id: 'odc.ResourceTree.Datasource.Edit',
-            defaultMessage: '编辑',
+            defaultMessage: '编辑'
           }),
           key: 'edit',
           onClick: (e) =>
             handleMenuClick(e, () => {
               setEditDatasourceId(node.data.id);
               setAddDSVisiable(true);
-            }),
+            })
         },
         {
           label: formatMessage({
             id: 'odc.ResourceTree.Datasource.Delete',
-            defaultMessage: '删除',
+            defaultMessage: '删除'
           }),
           key: 'delete',
           onClick: (e) =>
             handleMenuClick(e, () => {
               const name = node.title;
               deleteDataSource(name as string, node.data.id as string);
-            }),
+            })
         },
         userStore.isPrivateSpace()
           ? {
               label: formatMessage({
                 id: 'src.page.Workspace.SideBar.ResourceTree.DatabaseSearchModal.components.884084AB',
-                defaultMessage: '同步数据库',
+                defaultMessage: '同步数据库'
               }),
               key: 'sync',
               onClick: (e) =>
                 handleMenuClick(e, () => {
                   sync(node.data.id);
-                }),
+                })
             }
-          : null,
+          : null
       ]?.filter(Boolean)
     : [];
   const menu = (
@@ -116,7 +117,7 @@ const CustomDropdown = ({
           if (!node?.disabled) {
             setCurrentObject?.({
               value: node.key,
-              type: node.type,
+              type: node.type
             });
           }
         }}
@@ -147,7 +148,7 @@ const DataSourceNodeMenu = (props: IProps) => {
     setAddDSVisiable,
     setEditDatasourceId,
     copyDatasourceId,
-    reload,
+    reload
   } = props;
   const dataSource = node.data;
 
@@ -157,8 +158,8 @@ const DataSourceNodeMenu = (props: IProps) => {
       message.success(
         formatMessage({
           id: 'odc.Datasource.Info.SynchronizationSucceeded',
-          defaultMessage: '同步成功',
-        }), //同步成功
+          defaultMessage: '同步成功'
+        }) //同步成功
       );
       reload();
     }
@@ -177,7 +178,7 @@ const DataSourceNodeMenu = (props: IProps) => {
             flex: 1,
             overflow: 'hidden',
             display: 'flex',
-            justifyContent: 'space-between',
+            justifyContent: 'space-between'
           }}
         >
           <CustomDropdown
@@ -192,23 +193,29 @@ const DataSourceNodeMenu = (props: IProps) => {
           />
           <div
             className={classNames(treeStyles.envTip, {
-              [treeStyles.envTipPersonal]: userStore.isPrivateSpace(),
+              [treeStyles.envTipPersonal]: userStore.isPrivateSpace()
             })}
           >
             <Badge
               className={treeStyles.env}
-              color={EnvColorMap[dataSource?.environmentStyle?.toUpperCase()]?.tipColor}
+              color={
+                EnvColorMap[dataSource?.environmentStyle?.toUpperCase()]
+                  ?.tipColor
+              }
             />
           </div>
           {dataSource && (
-            <div className={treeStyles.menuActions} style={{ marginRight: '6px' }}>
+            <div
+              className={treeStyles.menuActions}
+              style={{ marginRight: '6px' }}
+            >
               {!isConnectTypeBeFileSystemGroup(dataSource.type) && (
                 <SearchOutlined
                   className={treeStyles.menuActions}
                   style={
                     userStore.isPrivateSpace()
                       ? {
-                          marginRight: '12px',
+                          marginRight: '12px'
                         }
                       : {}
                   }
@@ -230,7 +237,7 @@ const DataSourceNodeMenu = (props: IProps) => {
                       formatMessage({
                         id: 'odc.src.page.Workspace.SideBar.ResourceTree.SelectPanel.Datasource.Clone.1',
                         defaultMessage:
-                          '\n                                  克隆\n                                ',
+                          '\n                                  克隆\n                                '
                       }) /* 
                                克隆
                                */
@@ -246,24 +253,26 @@ const DataSourceNodeMenu = (props: IProps) => {
                   >
                     {formatMessage({
                       id: 'odc.ResourceTree.Datasource.Edit',
-                      defaultMessage: '编辑',
+                      defaultMessage: '编辑'
                     })}
                   </Action.Link>
 
                   <Action.Link
-                    onClick={() => deleteDataSource(node.title as string, dataSource.id)}
+                    onClick={() =>
+                      deleteDataSource(node.title as string, dataSource.id)
+                    }
                     key={'delete'}
                   >
                     {formatMessage({
                       id: 'odc.ResourceTree.Datasource.Delete',
-                      defaultMessage: '删除',
+                      defaultMessage: '删除'
                     })}
                   </Action.Link>
 
                   <Action.Link onClick={() => sync(dataSource.id)} key={'sync'}>
                     {formatMessage({
                       id: 'src.page.Workspace.SideBar.ResourceTree.DatabaseSearchModal.components.884084AB',
-                      defaultMessage: '同步数据库',
+                      defaultMessage: '同步数据库'
                     })}
                   </Action.Link>
                 </Action.Group>

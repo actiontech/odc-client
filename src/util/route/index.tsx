@@ -24,7 +24,7 @@ export function gotoSQLWorkspace(
   tabKey: string = '',
   isLogicalDatabase: boolean = false,
   isCreateTable: boolean = false,
-  databaseName?: string,
+  databaseName?: string
 ) {
   const url =
     location.origin +

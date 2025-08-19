@@ -31,7 +31,7 @@ const TableColumns: React.FC<IProps> = function ({ isExternalTable }) {
       value={{
         columns: table?.columns,
         session: tableContext.session,
-        setColumns: () => {},
+        setColumns: () => {}
       }}
     >
       <Columns isExternalTable={isExternalTable} />

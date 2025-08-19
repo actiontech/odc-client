@@ -33,7 +33,11 @@ const FilterIcon: React.FC<IProps> = function ({
 }) {
   return (
     <div
-      className={classNames(styles.icon, { [styles.iconActive]: isActive }, className)}
+      className={classNames(
+        styles.icon,
+        { [styles.iconActive]: isActive },
+        className
+      )}
       onClick={onClick}
       {...rest}
     >

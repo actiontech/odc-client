@@ -37,7 +37,7 @@ import { DBType } from '@/d.ts/database';
 import LogicTableBaseInfo from './LogicTableBaseInfo';
 import {
   PropsTab as TablePropsTab,
-  TopTab as TableTopTab,
+  TopTab as TableTopTab
 } from '@/page/Workspace/components/TablePage';
 
 interface IProps {
@@ -46,7 +46,11 @@ interface IProps {
   isExternalTable?: boolean;
 }
 
-const ShowTableBaseInfoForm: React.FC<IProps> = ({ pageKey, dbType, isExternalTable }) => {
+const ShowTableBaseInfoForm: React.FC<IProps> = ({
+  pageKey,
+  dbType,
+  isExternalTable
+}) => {
   const tableContext = useContext(TablePageContext);
   const session = tableContext.session;
   const table = tableContext?.table;
@@ -65,14 +69,14 @@ const ShowTableBaseInfoForm: React.FC<IProps> = ({ pageKey, dbType, isExternalTa
             lineHeight: '38px',
             height: 38,
             borderBottom: '1px solid var(--divider-color)',
-            padding: '0px 12px',
+            padding: '0px 12px'
           }}
         >
           <span>
             {
               formatMessage({
                 id: 'odc.components.ShowTableBaseInfoForm.Editing',
-                defaultMessage: '编辑',
+                defaultMessage: '编辑'
               })
               /* 编辑 */
             }
@@ -82,7 +86,7 @@ const ShowTableBaseInfoForm: React.FC<IProps> = ({ pageKey, dbType, isExternalTa
               {
                 formatMessage({
                   id: 'odc.components.ShowTableBaseInfoForm.Cancel',
-                  defaultMessage: '取消',
+                  defaultMessage: '取消'
                 })
                 /* 取消 */
               }
@@ -96,12 +100,13 @@ const ShowTableBaseInfoForm: React.FC<IProps> = ({ pageKey, dbType, isExternalTa
                   const { collation, character, ...rest } = data;
                   const newData = cloneDeep(table);
                   Object.assign(newData.info, rest);
-                  const { sql: updateTableDML, tip } = await generateUpdateTableDDL(
-                    newData,
-                    table,
-                    session.sessionId,
-                    session.database.dbName,
-                  );
+                  const { sql: updateTableDML, tip } =
+                    await generateUpdateTableDDL(
+                      newData,
+                      table,
+                      session.sessionId,
+                      session.database.dbName
+                    );
                   if (!updateTableDML) {
                     return;
                   }
@@ -119,18 +124,18 @@ const ShowTableBaseInfoForm: React.FC<IProps> = ({ pageKey, dbType, isExternalTa
                           newTableName,
                           TableTopTab.PROPS,
                           TablePropsTab.INFO,
-                          params?.tableId,
+                          params?.tableId
                         );
                         await page.updatePage(
                           pageKey,
                           {
                             title: newTableName,
-                            updateKey: tablePage?.pageKey,
+                            updateKey: tablePage?.pageKey
                           },
 
                           {
-                            tableName: newTableName,
-                          },
+                            tableName: newTableName
+                          }
                         );
                       } else {
                         /**
@@ -141,7 +146,7 @@ const ShowTableBaseInfoForm: React.FC<IProps> = ({ pageKey, dbType, isExternalTa
                       setIsEditing(false);
                     },
                     tip,
-                    () => setIsEditing(false),
+                    () => setIsEditing(false)
                   );
                 }
               }}
@@ -149,7 +154,7 @@ const ShowTableBaseInfoForm: React.FC<IProps> = ({ pageKey, dbType, isExternalTa
               {
                 formatMessage({
                   id: 'odc.components.ShowTableBaseInfoForm.Determine',
-                  defaultMessage: '确定',
+                  defaultMessage: '确定'
                 })
                 /* 确定 */
               }
@@ -164,7 +169,7 @@ const ShowTableBaseInfoForm: React.FC<IProps> = ({ pageKey, dbType, isExternalTa
               icon={<EditOutlined />}
               text={formatMessage({
                 id: 'odc.components.ShowTableBaseInfoForm.Editing',
-                defaultMessage: '编辑',
+                defaultMessage: '编辑'
               })}
               /* 编辑 */ onClick={() => setIsEditing(true)}
             />
@@ -174,7 +179,7 @@ const ShowTableBaseInfoForm: React.FC<IProps> = ({ pageKey, dbType, isExternalTa
             icon={<SyncOutlined />}
             text={formatMessage({
               id: 'odc.components.ShowTableBaseInfoForm.Refresh',
-              defaultMessage: '刷新',
+              defaultMessage: '刷新'
             })}
             /* 刷新 */ onClick={tableContext.onRefresh}
           />
@@ -186,7 +191,7 @@ const ShowTableBaseInfoForm: React.FC<IProps> = ({ pageKey, dbType, isExternalTa
           <TableContext.Provider
             value={{
               info: table?.info,
-              session,
+              session
             }}
           >
             <CreateTableBaseInfoForm formRef={formRef} isEdit={true} />
@@ -198,136 +203,138 @@ const ShowTableBaseInfoForm: React.FC<IProps> = ({ pageKey, dbType, isExternalTa
             {
               label: formatMessage({
                 id: 'workspace.window.createTable.baseInfo.tableName',
-                defaultMessage: '表名称',
+                defaultMessage: '表名称'
               }),
 
-              content: table?.info?.tableName,
+              content: table?.info?.tableName
             },
             {
               label: formatMessage({
                 id: 'src.page.Workspace.components.TablePage.ShowTableBaseInfoForm.52095769',
-                defaultMessage: '表类型',
+                defaultMessage: '表类型'
               }),
               content: isExternalTable
                 ? formatMessage({
                     id: 'src.page.Workspace.components.TablePage.ShowTableBaseInfoForm.3C463D88',
-                    defaultMessage: '外表',
+                    defaultMessage: '外表'
                   })
                 : formatMessage({
                     id: 'src.page.Workspace.components.TablePage.ShowTableBaseInfoForm.B7A406C8',
-                    defaultMessage: '表',
-                  }),
+                    defaultMessage: '表'
+                  })
             },
 
             {
               label: formatMessage({
                 id: 'workspace.window.createTable.baseInfo.character',
-                defaultMessage: '默认字符集',
+                defaultMessage: '默认字符集'
               }),
 
-              content: table?.info?.character || 'utf8mb4',
+              content: table?.info?.character || 'utf8mb4'
             },
 
             {
               label: formatMessage({
                 id: 'workspace.window.createTable.baseInfo.collation',
-                defaultMessage: '默认排序规则',
+                defaultMessage: '默认排序规则'
               }),
 
-              content: table?.info?.collation || 'utf8mb4',
+              content: table?.info?.collation || 'utf8mb4'
             },
 
             {
               label: formatMessage({
                 id: 'workspace.window.createTable.baseInfo.comment',
-                defaultMessage: '描述',
+                defaultMessage: '描述'
               }),
 
               content:
                 table?.info?.comment ||
                 formatMessage({
                   id: 'odc.components.ShowTableBaseInfoForm.Empty',
-                  defaultMessage: '空',
-                }),
+                  defaultMessage: '空'
+                })
               // 空
             },
             {
               label: formatMessage({
                 id: 'odc.TablePage.ShowTableBaseInfoForm.Owner',
-                defaultMessage: '所有者',
+                defaultMessage: '所有者'
               }), //所有者
               content:
                 table?.info?.owner ||
                 formatMessage({
                   id: 'odc.components.ShowTableBaseInfoForm.Empty',
-                  defaultMessage: '空',
-                }),
+                  defaultMessage: '空'
+                })
               // 空
             },
             {
               label: formatMessage({
                 id: 'odc.TablePage.ShowTableBaseInfoForm.LastModifiedDate',
-                defaultMessage: '最近修改日期',
+                defaultMessage: '最近修改日期'
               }), //最近修改日期
               content:
                 getLocalFormatDateTime(table?.info?.updateTime) ||
                 formatMessage({
                   id: 'odc.components.ShowTableBaseInfoForm.Empty',
-                  defaultMessage: '空',
-                }),
+                  defaultMessage: '空'
+                })
               // 空
             },
             {
               label: formatMessage({
                 id: 'odc.TablePage.ShowTableBaseInfoForm.RowDataVolume',
-                defaultMessage: '行数据量',
+                defaultMessage: '行数据量'
               }), //行数据量 //行数据量
               content: (
                 <HelpDoc
                   {...{
                     doc: 'tableRowcountToolTip',
                     leftText: true,
-                    isTip: true,
+                    isTip: true
                   }}
                 >
                   {table?.info?.rowCount ||
                     formatMessage({
                       id: 'odc.components.ShowTableBaseInfoForm.Empty',
-                      defaultMessage: '空',
+                      defaultMessage: '空'
                     })}
                 </HelpDoc>
-              ),
+              )
 
               // 空
             },
             {
               label: formatMessage({
                 id: 'odc.TablePage.ShowTableBaseInfoForm.Size',
-                defaultMessage: '大小',
+                defaultMessage: '大小'
               }), //大小 //大小
               content: (
                 <HelpDoc
                   {...{
                     doc: 'tableSizeToolTip',
                     leftText: true,
-                    isTip: true,
+                    isTip: true
                   }}
                 >
                   {table?.info?.tableSize ||
                     formatMessage({
                       id: 'odc.components.ShowTableBaseInfoForm.Empty',
-                      defaultMessage: '空',
+                      defaultMessage: '空'
                     })}
                 </HelpDoc>
-              ),
+              )
             },
             !!table?.info?.columnGroups?.length && {
               label: formatMessage({
                 id: 'src.page.Workspace.components.TablePage.ShowTableBaseInfoForm.FC24F422',
-                defaultMessage: '存储模式',
+                defaultMessage: '存储模式'
               }),
-              content: table?.info?.columnGroups?.map((c) => columnGroupsText[c]).join(', '),
-            },
+              content: table?.info?.columnGroups
+                ?.map((c) => columnGroupsText[c])
+                .join(', ')
+            }
           ].filter(Boolean)}
         />
       )}

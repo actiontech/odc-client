@@ -34,7 +34,7 @@ export function FunctionTreeNodeData(
   packageName?: string,
   menuKey?: ResourceNodeType,
   pkg?: Partial<IPackage>,
-  index?: number,
+  index?: number
 ): TreeDataNode {
   const funcKey = `${dbSession?.database?.databaseId}-${packageName}-${dbName}-function-pkg-${func.funName}-index:${index}`;
   let paramRoot: TreeDataNode;
@@ -45,7 +45,7 @@ export function FunctionTreeNodeData(
     paramRoot = {
       title: formatMessage({
         id: 'odc.ResourceTree.Nodes.function.Parameter',
-        defaultMessage: '参数',
+        defaultMessage: '参数'
       }), //参数
       key: `${funcKey}-param`,
       type: ResourceNodeType.FunctionParamRoot,
@@ -53,7 +53,7 @@ export function FunctionTreeNodeData(
         <Icon
           component={ParameterSvg}
           style={{
-            color: THEME,
+            color: THEME
           }}
         />
       ),
@@ -63,9 +63,9 @@ export function FunctionTreeNodeData(
           title: p.paramName,
           key: `${funcKey}-param-${p.paramName}${p.seqNum}`,
           type: ResourceNodeType.FunctionParam,
-          isLeaf: true,
+          isLeaf: true
         };
-      }),
+      })
     };
   }
 
@@ -73,14 +73,14 @@ export function FunctionTreeNodeData(
     returnroot = {
       title: formatMessage({
         id: 'odc.ResourceTree.Nodes.function.ReturnType',
-        defaultMessage: '返回类型',
+        defaultMessage: '返回类型'
       }), //返回类型
       key: `${funcKey}-returnType`,
       type: ResourceNodeType.FunctionReturnTypeRoot,
       icon: (
         <NumberOutlined
           style={{
-            color: THEME,
+            color: THEME
           }}
         />
       ),
@@ -90,9 +90,9 @@ export function FunctionTreeNodeData(
           title: func.returnType,
           key: `${funcKey}-returnType-${func.returnType}`,
           type: ResourceNodeType.FunctionReturnType,
-          isLeaf: true,
-        },
-      ],
+          isLeaf: true
+        }
+      ]
     };
   }
 
@@ -100,13 +100,13 @@ export function FunctionTreeNodeData(
     variableRoot = {
       title: formatMessage({
         id: 'odc.ResourceTree.Nodes.function.Variable',
-        defaultMessage: '变量',
+        defaultMessage: '变量'
       }), //变量
       key: `${funcKey}-variable`,
       icon: (
         <InfoOutlined
           style={{
-            color: THEME,
+            color: THEME
           }}
         />
       ),
@@ -117,9 +117,9 @@ export function FunctionTreeNodeData(
           title: p.varName,
           key: `${funcKey}-variable-${p.varName}${p.varType}`,
           type: ResourceNodeType.FunctionVariable,
-          isLeaf: true,
+          isLeaf: true
         };
-      }),
+      })
     };
   }
   return {
@@ -134,7 +134,7 @@ export function FunctionTreeNodeData(
       <Icon
         component={FunctionSvg}
         style={{
-          color: THEME,
+          color: THEME
         }}
       />
     ),
@@ -142,11 +142,21 @@ export function FunctionTreeNodeData(
       // 程序包中的子程序 双击直接打开所在的程序包详情
       switch (menuKey) {
         case ResourceNodeType.PackageHeadFunction: {
-          openPackageViewPage(pkg.packageName, TopTab.HEAD, false, session?.database?.databaseId);
+          openPackageViewPage(
+            pkg.packageName,
+            TopTab.HEAD,
+            false,
+            session?.database?.databaseId
+          );
           break;
         }
         case ResourceNodeType.PackageBodyFunction: {
-          openPackageViewPage(pkg.packageName, TopTab.BODY, false, session?.database?.databaseId);
+          openPackageViewPage(
+            pkg.packageName,
+            TopTab.BODY,
+            false,
+            session?.database?.databaseId
+          );
           break;
         }
         default: {
@@ -155,7 +165,7 @@ export function FunctionTreeNodeData(
             undefined,
             undefined,
             session?.database?.databaseId,
-            null,
+            null
           );
         }
       }
@@ -164,32 +174,40 @@ export function FunctionTreeNodeData(
     packageName: packageName,
     data: func,
     isLeaf: false,
-    children: [paramRoot, returnroot, variableRoot].filter(Boolean),
+    children: [paramRoot, returnroot, variableRoot].filter(Boolean)
   };
 }
 
 export function FunctionTreeData(
   dbSession: SessionStore,
   database: IDatabase,
-  packageName: string = '',
+  packageName: string = ''
 ): TreeDataNode {
   const dbName = database.name;
   const functions = dbSession?.database?.functions;
   const treeData: TreeDataNode = {
     title: formatMessage({
       id: 'odc.ResourceTree.Nodes.function.Function',
-      defaultMessage: '函数',
+      defaultMessage: '函数'
     }), //函数
     key: `${database.id}-${dbName}-function-pkg`,
     type: ResourceNodeType.FunctionRoot,
     data: database,
     sessionId: dbSession?.sessionId,
-    isLeaf: false,
+    isLeaf: false
   };
 
   if (functions?.length) {
     treeData.children = functions.map((func, i) => {
-      return FunctionTreeNodeData(func, dbSession, dbName, packageName, null, null, i);
+      return FunctionTreeNodeData(
+        func,
+        dbSession,
+        dbName,
+        packageName,
+        null,
+        null,
+        i
+      );
     });
   }
   return treeData;

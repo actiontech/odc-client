@@ -22,14 +22,17 @@ import { ConnectionMode, SchemaComparingResult } from '@/d.ts';
 import { formatMessage } from '@/util/intl';
 import { Tabs } from 'antd';
 import { useMemo, useRef, useState } from 'react';
-import { IShadowSyncAnalysisResult, ShadowTableSyncTaskResult } from '../../interface';
+import {
+  IShadowSyncAnalysisResult,
+  ShadowTableSyncTaskResult
+} from '../../interface';
 import RecordSQLView, { IViewRef } from '../RecordSQLView';
 import { useColumns } from './column';
 
 enum TabKeys {
   SYNC = 'sync',
   UNSYNC = 'unsync',
-  SQL = 'sql',
+  SQL = 'sql'
 }
 
 interface IProps {
@@ -40,7 +43,13 @@ interface IProps {
   cancelSkip?: (keys: number[]) => void;
 }
 
-export default function ({ data, resultData, connectionMode, skip, cancelSkip }: IProps) {
+export default function ({
+  data,
+  resultData,
+  connectionMode,
+  skip,
+  cancelSkip
+}: IProps) {
   const [activeKey, setActiveKey] = useState(TabKeys.SYNC);
   const SQLViewRef = useRef<IViewRef>();
   const isViewMode = !!resultData;
@@ -56,10 +65,10 @@ export default function ({ data, resultData, connectionMode, skip, cancelSkip }:
     {
       skip,
       cancelSkip,
-      viewResult,
+      viewResult
     },
 
-    resultData,
+    resultData
   );
 
   const unSyncColumns = useColumns(
@@ -67,10 +76,10 @@ export default function ({ data, resultData, connectionMode, skip, cancelSkip }:
     {
       skip,
       cancelSkip,
-      viewResult,
+      viewResult
     },
 
-    resultData,
+    resultData
   );
 
   const [syncTable, unSyncTable] = useMemo(() => {
@@ -82,7 +91,9 @@ export default function ({ data, resultData, connectionMode, skip, cancelSkip }:
       _unSyncTable = [];
     tables.forEach((table) => {
       if (
-        [SchemaComparingResult.CREATE, SchemaComparingResult.UPDATE].includes(table.comparingResult)
+        [SchemaComparingResult.CREATE, SchemaComparingResult.UPDATE].includes(
+          table.comparingResult
+        )
       ) {
         _syncTable.push(table);
       } else {
@@ -106,7 +117,7 @@ export default function ({ data, resultData, connectionMode, skip, cancelSkip }:
             key: TabKeys.SYNC,
             label: formatMessage({
               id: 'odc.StructConfigPanel.StructAnalysisResult.SynchronizedTables',
-              defaultMessage: '同步的表',
+              defaultMessage: '同步的表'
             }),
             style: { paddingBottom: 50 },
             children: (
@@ -122,35 +133,35 @@ export default function ({ data, resultData, connectionMode, skip, cancelSkip }:
                           {
                             okText: formatMessage({
                               id: 'odc.StructConfigPanel.StructAnalysisResult.BatchSkip',
-                              defaultMessage: '批量跳过',
+                              defaultMessage: '批量跳过'
                             }), //批量跳过
                             onOk: async (keys: number[]) => {
                               return await skip(keys);
-                            },
-                          },
-                        ],
+                            }
+                          }
+                        ]
                       }
                 }
                 tableProps={{
                   rowKey: 'id',
                   pagination: {
-                    pageSize: 15,
+                    pageSize: 15
                   },
                   scroll: {
-                    x: 650,
+                    x: 650
                   },
                   dataSource: syncTable,
-                  columns: syncColumns,
+                  columns: syncColumns
                 }}
                 onLoad={async () => {}}
               />
-            ),
+            )
           },
           {
             key: TabKeys.UNSYNC,
             label: formatMessage({
               id: 'odc.StructConfigPanel.StructAnalysisResult.UnsynchronizedTables',
-              defaultMessage: '不同步的表',
+              defaultMessage: '不同步的表'
             }),
             style: { paddingBottom: 50 },
             children: (
@@ -160,23 +171,23 @@ export default function ({ data, resultData, connectionMode, skip, cancelSkip }:
                 titleContent={null}
                 tableProps={{
                   pagination: {
-                    pageSize: 15,
+                    pageSize: 15
                   },
                   scroll: {
-                    x: 650,
+                    x: 650
                   },
                   dataSource: unSyncTable,
-                  columns: unSyncColumns,
+                  columns: unSyncColumns
                 }}
                 onLoad={async () => {}}
               />
-            ),
+            )
           },
           {
             key: TabKeys.SQL,
             label: formatMessage({
               id: 'odc.StructConfigPanel.StructAnalysisResult.SqlPreview',
-              defaultMessage: 'SQL 预览',
+              defaultMessage: 'SQL 预览'
             }),
             children: (
               <div
@@ -184,7 +195,7 @@ export default function ({ data, resultData, connectionMode, skip, cancelSkip }:
                   width: '100%',
                   height: 400,
                   border: '1px solid var(--odc-border-color)',
-                  position: 'relative',
+                  position: 'relative'
                 }}
               >
                 <MonacoEditor
@@ -193,12 +204,16 @@ export default function ({ data, resultData, connectionMode, skip, cancelSkip }:
                   language={config?.sql?.language}
                 />
               </div>
-            ),
-          },
+            )
+          }
         ]}
       />
 
-      <RecordSQLView ref={SQLViewRef} taskId={data?.id} connectionMode={connectionMode} />
+      <RecordSQLView
+        ref={SQLViewRef}
+        taskId={data?.id}
+        connectionMode={connectionMode}
+      />
     </>
   );
 }

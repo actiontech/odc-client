@@ -8,7 +8,7 @@ import {
   IGetOptimizationSQLsRes,
   IGetOptimizationSQLRes,
   IGetDBPerformanceImproveOverviewResp,
-  IGetOptimizationOverviewResp,
+  IGetOptimizationOverviewResp
 } from '../common.type';
 
 export interface IGetOptimizationRecordsParams {
@@ -27,7 +27,8 @@ export interface IGetOptimizationRecordsParams {
   project_name: string;
 }
 
-export interface IGetOptimizationRecordsReturn extends IGetOptimizationRecordsRes {}
+export interface IGetOptimizationRecordsReturn
+  extends IGetOptimizationRecordsRes {}
 
 export interface IOptimizeSQLReqParams extends IOptimizeSQLReq {
   project_name: string;
@@ -65,7 +66,8 @@ export interface IGetOptimizationRecordReqParams {
   sql?: string;
 }
 
-export interface IGetOptimizationRecordReqReturn extends IGetOptimizationRecordRes {}
+export interface IGetOptimizationRecordReqReturn
+  extends IGetOptimizationRecordRes {}
 
 export interface IGetOptimizationSQLsParams {
   page_index: number;
@@ -104,4 +106,5 @@ export interface IGetOptimizationOverviewParams {
   project_name: string;
 }
 
-export interface IGetOptimizationOverviewReturn extends IGetOptimizationOverviewResp {}
+export interface IGetOptimizationOverviewReturn
+  extends IGetOptimizationOverviewResp {}

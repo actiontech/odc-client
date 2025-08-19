@@ -36,9 +36,9 @@ function SelectModal({ modalStore }: IProps) {
       {
         page: 1,
         size: 9999,
-        minPrivilege: 'update',
-      },
-    ],
+        minPrivilege: 'update'
+      }
+    ]
   });
   const [form] = Form.useForm<{ dataSourceId: number }>();
 
@@ -46,7 +46,7 @@ function SelectModal({ modalStore }: IProps) {
     <Modal
       title={formatMessage({
         id: 'odc.component.SelectDatabase.component.SelectADataSource',
-        defaultMessage: '选择数据源',
+        defaultMessage: '选择数据源'
       })} /*选择数据源*/
       open={modalStore.selectDatabaseVisible}
       onCancel={onClose}
@@ -66,7 +66,7 @@ function SelectModal({ modalStore }: IProps) {
           rules={[{ required: true }]}
           label={formatMessage({
             id: 'odc.component.SelectDatabase.component.DataSource',
-            defaultMessage: '数据源',
+            defaultMessage: '数据源'
           })} /*数据源*/
         >
           <SessionSelect

@@ -15,7 +15,10 @@
  */
 
 import { getClusterAndTenantList } from '@/common/network/connection';
-import { getOBCloudClusterList, getOBCloudUserListByTenant } from '@/common/network/obcloud';
+import {
+  getOBCloudClusterList,
+  getOBCloudUserListByTenant
+} from '@/common/network/obcloud';
 import type { IConnectionType } from '@/d.ts';
 import { haveOCP } from '@/util/env';
 import { action, observable } from 'mobx';
@@ -27,10 +30,20 @@ export interface ICluster {
   instanceId?: string;
   vpcId?: string;
   version?: string;
-  type: 'CLUSTER' | 'MYSQL_TENANT' | 'ORACLE_TENANT' | 'MYSQL_SERVERLESS' | 'ORACLE_SERVERLESS';
+  type:
+    | 'CLUSTER'
+    | 'MYSQL_TENANT'
+    | 'ORACLE_TENANT'
+    | 'MYSQL_SERVERLESS'
+    | 'ORACLE_SERVERLESS';
   status: 'ONLINE' | 'OTHERS';
 }
-export const ClusterTypeList = ['CLUSTER', 'DEDICATED', 'K8s_DEDICATED', 'UNKNOWN'];
+export const ClusterTypeList = [
+  'CLUSTER',
+  'DEDICATED',
+  'K8s_DEDICATED',
+  'UNKNOWN'
+];
 
 export interface ITenant {
   tenantName: string | React.ReactNode;
@@ -73,7 +86,7 @@ export class ClusterStore {
                 return {
                   tenantName: tenant.name,
                   tenantId: tenant.id,
-                  tenantMode: tenant.tenantMode,
+                  tenantMode: tenant.tenantMode
                 };
               });
               break;
@@ -83,9 +96,11 @@ export class ClusterStore {
               tenants.push({
                 tenantName: item.name,
                 tenantId: item.id,
-                tenantMode: !['ORACLE_TENANT', 'ORACLE_SERVERLESS'].includes(item.type)
+                tenantMode: !['ORACLE_TENANT', 'ORACLE_SERVERLESS'].includes(
+                  item.type
+                )
                   ? 'MySQL'
-                  : 'ORACLE',
+                  : 'ORACLE'
               });
               newTenantMap[item.id] = tenants;
               break;
@@ -95,7 +110,7 @@ export class ClusterStore {
             instanceName: item.name,
             instanceId: item.id,
             type: item.type,
-            status: item.state,
+            status: item.state
           };
         });
         this.tenantListMap = newTenantMap;
@@ -108,7 +123,7 @@ export class ClusterStore {
             instanceName: name,
             instanceId: name,
             type: 'CLUSTER',
-            status: 'ONLINE',
+            status: 'ONLINE'
           };
         });
 
@@ -116,11 +131,11 @@ export class ClusterStore {
           (map, name) => {
             map[ODC_DEFAULT_CLUSTER_ID].push({
               tenantId: name,
-              tenantName: name,
+              tenantName: name
             });
             return map;
           },
-          { [ODC_DEFAULT_CLUSTER_ID]: [] },
+          { [ODC_DEFAULT_CLUSTER_ID]: [] }
         );
       }
     }
@@ -150,7 +165,7 @@ export class ClusterStore {
       if (res) {
         this.userListMap = {
           ...this.userListMap,
-          [tenantId]: res,
+          [tenantId]: res
         };
       }
     }

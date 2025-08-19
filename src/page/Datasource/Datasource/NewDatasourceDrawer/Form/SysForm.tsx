@@ -19,7 +19,16 @@ import FormItemPanel from '@/component/FormItemPanel';
 import { AccountType } from '@/d.ts';
 import { haveOCP } from '@/util/env';
 import { formatMessage } from '@/util/intl';
-import { Checkbox, Col, Form, Input, InputRef, message, Row, Typography } from 'antd';
+import {
+  Checkbox,
+  Col,
+  Form,
+  Input,
+  InputRef,
+  message,
+  Row,
+  Typography
+} from 'antd';
 import type { FormInstance } from 'antd/lib/form';
 import { useContext, useEffect, useRef, useState } from 'react';
 import DatasourceFormContext from './context';
@@ -41,7 +50,7 @@ export default (props: IProps) => {
 
   useEffect(() => {
     formRef.setFieldsValue({
-      useSys: sysAccountExist,
+      useSys: sysAccountExist
     });
   }, [sysAccountExist]);
 
@@ -56,13 +65,15 @@ export default (props: IProps) => {
         'tenantName',
         'sysTenantUsername',
         'sysTenantPassword',
-        'sslConfig',
+        'sslConfig'
       ]);
     } catch (e) {}
     if (!values) {
       return;
     }
-    const params = isEdit ? { ...formContext.originDatasource, ...values } : values;
+    const params = isEdit
+      ? { ...formContext.originDatasource, ...values }
+      : values;
     params.username = params?.sysTenantUsername;
     params.password = params?.sysTenantPassword;
     const res = await testConnection(params, AccountType.SYS_READ, true);
@@ -71,8 +82,8 @@ export default (props: IProps) => {
       ? message.success(
           formatMessage({
             id: 'odc.NewDatasourceDrawer.Form.SysForm.ConnectionSuccessful',
-            defaultMessage: '连接成功',
-          }), //连接成功
+            defaultMessage: '连接成功'
+          }) //连接成功
         )
       : message.error(error);
   }
@@ -82,12 +93,16 @@ export default (props: IProps) => {
   }
   return (
     <>
-      <Form.Item name="useSys" valuePropName="checked" style={{ marginBottom: 0 }}>
+      <Form.Item
+        name="useSys"
+        valuePropName="checked"
+        style={{ marginBottom: 0 }}
+      >
         <Checkbox>
           {
             formatMessage({
               id: 'odc.component.AddConnectionForm.SysForm.UseTheSysTenantAccount',
-              defaultMessage: '使用 sys 租户账号查询租户视图',
+              defaultMessage: '使用 sys 租户账号查询租户视图'
             })
             /*使用 sys 租户账号查询租户视图*/
           }
@@ -98,7 +113,7 @@ export default (props: IProps) => {
           {
             formatMessage({
               id: 'odc.component.AddConnectionForm.SysForm.TheExportAndDerivativeSpeed',
-              defaultMessage: '部分对象的导出和导数速度提升均依赖该账号',
+              defaultMessage: '部分对象的导出和导数速度提升均依赖该账号'
             }) /*部分对象的导出和导数速度提升均依赖该账号*/
           }
         </Typography.Text>
@@ -118,7 +133,7 @@ export default (props: IProps) => {
                     <Form.Item
                       label={formatMessage({
                         id: 'odc.AddConnectionDrawer.AddConnectionForm.Account',
-                        defaultMessage: '账号',
+                        defaultMessage: '账号'
                       })}
                       name="sysTenantUsername"
                     >
@@ -127,7 +142,7 @@ export default (props: IProps) => {
                         ref={sysInput}
                         placeholder={formatMessage({
                           id: 'odc.AddConnectionDrawer.AddConnectionForm.Enter',
-                          defaultMessage: '请输入',
+                          defaultMessage: '请输入'
                         })}
                       />
                     </Form.Item>
@@ -136,25 +151,29 @@ export default (props: IProps) => {
                     <Form.Item
                       label={formatMessage({
                         id: 'odc.AddConnectionDrawer.AddConnectionForm.Password',
-                        defaultMessage: '密码',
+                        defaultMessage: '密码'
                       })}
                       name="sysTenantPassword"
                     >
                       <Password
-                        isEditing={!isSysPwdCopyMode || !sysAccountExist || sysPasswordIsEditing}
+                        isEditing={
+                          !isSysPwdCopyMode ||
+                          !sysAccountExist ||
+                          sysPasswordIsEditing
+                        }
                       />
                     </Form.Item>
                   </Col>
                 </Row>
                 <a
                   style={{
-                    marginRight: 8,
+                    marginRight: 8
                   }}
                   onClick={async () => testSys()}
                 >
                   {formatMessage({
                     id: 'portal.connection.form.test',
-                    defaultMessage: '测试连接',
+                    defaultMessage: '测试连接'
                   })}
                 </a>
                 {isSysPwdCopyMode &&
@@ -165,14 +184,14 @@ export default (props: IProps) => {
                         setSysPasswordIsEditing(false);
 
                         formContext.form?.setFieldsValue({
-                          sysTenantPassword: null,
+                          sysTenantPassword: null
                         });
                       }}
                     >
                       {
                         formatMessage({
                           id: 'odc.AddConnectionDrawer.AddConnectionForm.CancelModification',
-                          defaultMessage: '取消修改',
+                          defaultMessage: '取消修改'
                         })
 
                         /* 取消修改 */
@@ -183,14 +202,14 @@ export default (props: IProps) => {
                       onClick={() => {
                         setSysPasswordIsEditing(true);
                         formContext.form?.setFieldsValue({
-                          sysTenantPassword: '',
+                          sysTenantPassword: ''
                         });
                       }}
                     >
                       {
                         formatMessage({
                           id: 'odc.AddConnectionDrawer.AddConnectionForm.ChangePassword',
-                          defaultMessage: '修改密码',
+                          defaultMessage: '修改密码'
                         })
 
                         /* 修改密码 */

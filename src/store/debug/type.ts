@@ -58,7 +58,7 @@ export enum DebugStatus {
   /**
    * 重启中
    */
-  RECOVER = 'recover',
+  RECOVER = 'recover'
 }
 
 export interface ICreateDebugConfig {
@@ -72,7 +72,10 @@ export interface ICreateDebugConfig {
    */
   content?: string;
   anonymousBlock?: string;
-  onContextChange?: (newContext: IDebugStackItem[], oldContext: IDebugStackItem[]) => void;
+  onContextChange?: (
+    newContext: IDebugStackItem[],
+    oldContext: IDebugStackItem[]
+  ) => void;
 }
 
 export interface IDebugConfig extends ICreateDebugConfig {

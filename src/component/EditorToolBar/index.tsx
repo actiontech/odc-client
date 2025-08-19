@@ -53,7 +53,11 @@ interface ToolBarCommonAction<T> {
   isShowText?: boolean;
   isVisible?: (ctx: T) => boolean;
   statusFunc?: (ctx: T, hasChangeEditorValue?: boolean) => IConStatus;
-  action?: (ctx: T, databaseType?: string, editorValue?: string) => Promise<void>;
+  action?: (
+    ctx: T,
+    databaseType?: string,
+    editorValue?: string
+  ) => Promise<void>;
   disabled?: boolean;
 }
 interface ToolBarMenuAction<T> {
@@ -84,7 +88,10 @@ function isCustomAction<T>(action: any): action is ToolBarCustomAction<T> {
 }
 
 export interface ToolBarActions<T = any> {
-  [key: string]: ToolBarCommonAction<T> | ToolBarMenuAction<T> | ToolBarCustomAction<T>;
+  [key: string]:
+    | ToolBarCommonAction<T>
+    | ToolBarMenuAction<T>
+    | ToolBarCustomAction<T>;
 }
 
 @observer
@@ -107,7 +114,7 @@ export default class EditorToolBar extends Component<IProps, IState> {
        * 缩起左侧列表的个数
        */
       isShrinkGroupNumber?: number;
-    },
+    }
   ) {
     const { ctx, databaseType, editorValue, defaultEditorValue } = this.props;
     const hasChangeEditorValue = editorValue !== defaultEditorValue;
@@ -117,7 +124,11 @@ export default class EditorToolBar extends Component<IProps, IState> {
       return;
     }
 
-    function getActionButton(actionKey: string, j: number, isShowText?: boolean) {
+    function getActionButton(
+      actionKey: string,
+      j: number,
+      isShowText?: boolean
+    ) {
       const actionItem = ACTIONS[actionKey];
 
       if (!actionItem) {
@@ -150,9 +161,9 @@ export default class EditorToolBar extends Component<IProps, IState> {
               items: menu?.map((menuItem, menuIndex) => {
                 return {
                   key: menuItem,
-                  label: getActionButton(menuItem, menuIndex, true),
+                  label: getActionButton(menuItem, menuIndex, true)
                 };
-              }),
+              })
             }}
           />
         );
@@ -164,13 +175,15 @@ export default class EditorToolBar extends Component<IProps, IState> {
           isShowText: itemIsShowText,
           statusFunc,
           action,
-          confirmConfig,
+          confirmConfig
         } = actionItem;
         /**
          * string 模式，icon 在 toolbar button 中统一定义，这边不再传递具体的 icon 组件
          */
 
-        const status = statusFunc ? statusFunc(ctx, hasChangeEditorValue) : IConStatus.INIT;
+        const status = statusFunc
+          ? statusFunc(ctx, hasChangeEditorValue)
+          : IConStatus.INIT;
         let realConfirmConfig = confirmConfig;
         if (typeof confirmConfig === 'function') {
           realConfirmConfig = confirmConfig();
@@ -183,7 +196,7 @@ export default class EditorToolBar extends Component<IProps, IState> {
                     onConfirm: async () => {
                       await action(ctx);
                     },
-                    ...realConfirmConfig,
+                    ...realConfirmConfig
                   }
                 : undefined
             }
@@ -202,14 +215,16 @@ export default class EditorToolBar extends Component<IProps, IState> {
         throw new Error(
           formatMessage({
             id: 'odc.component.EditorToolBar.TheToolbarIsIncorrectlyConfigured',
-            defaultMessage: 'toolbar 配置错误！请检查 actions 中的配置符合 TS 定义',
-          }),
+            defaultMessage:
+              'toolbar 配置错误！请检查 actions 中的配置符合 TS 定义'
+          })
         ); //toolbar 配置错误！请检查 actions 中的配置符合 TS 定义
       }
     }
 
     actionGroups.forEach((actionGroup: any, i: number) => {
-      const isShrink = actionGroups.length - i - (cfg?.isShrinkGroupNumber || 0) < 1;
+      const isShrink =
+        actionGroups.length - i - (cfg?.isShrinkGroupNumber || 0) < 1;
       let _tmpArr = [];
 
       actionGroup.forEach((actionKey: string, j: number) => {
@@ -226,7 +241,7 @@ export default class EditorToolBar extends Component<IProps, IState> {
               key={`${i}-tool-buttom`}
               content={<Space>{_tmpArr}</Space>}
               icon={'ELLIPSIS_MENU'}
-            />,
+            />
           );
         }
       } else {
@@ -254,7 +269,7 @@ export default class EditorToolBar extends Component<IProps, IState> {
                   <Toolbar>
                     <div className="tools-left">
                       {this.renderActionButtons(actionGroup.left, {
-                        isShrinkGroupNumber: params.isShrinkLeft ? 2 : 0,
+                        isShrinkGroupNumber: params.isShrinkLeft ? 2 : 0
                       })}
                     </div>
                     <div className="tools-right">

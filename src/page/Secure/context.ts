@@ -14,7 +14,11 @@
  * limitations under the License.
  */
 
-import type { IManagerUser, IManageUserListParams, IResponseData } from '@/d.ts';
+import type {
+  IManagerUser,
+  IManageUserListParams,
+  IResponseData
+} from '@/d.ts';
 import React from 'react';
 
 interface ISecureContext {

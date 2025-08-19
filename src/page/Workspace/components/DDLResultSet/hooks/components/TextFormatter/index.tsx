@@ -31,7 +31,9 @@ export default React.memo(
     return (
       <div className={styles.textFormatter}>
         {isNil(value) ? (
-          <span className={styles.textNull}>{isUndefined(value) ? '(default)' : '(null)'}</span>
+          <span className={styles.textNull}>
+            {isUndefined(value) ? '(default)' : '(null)'}
+          </span>
         ) : (
           value?.replace(/\r/g, '\\r').replace(/\n/g, '\\n')
         )}
@@ -70,5 +72,5 @@ export default React.memo(
   (prev, next) =>
     prev.row === next.row &&
     prev.column?.key === next.column?.key &&
-    prev.column?.name === next.column?.name,
+    prev.column?.name === next.column?.name
 );

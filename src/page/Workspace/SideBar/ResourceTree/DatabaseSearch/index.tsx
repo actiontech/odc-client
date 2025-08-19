@@ -32,7 +32,7 @@ const DatabaseSearch: React.FC<IProps> = (props) => {
       className={styles.searchInput}
       placeholder={formatMessage({
         id: 'src.page.Workspace.SideBar.ResourceTree.DatabaseSearch.86200ED0',
-        defaultMessage: '搜索',
+        defaultMessage: '搜索'
       })}
       size="small"
       onChange={(e) => {
@@ -42,7 +42,7 @@ const DatabaseSearch: React.FC<IProps> = (props) => {
       onSearch={() => {
         modalStore.changeDatabaseSearchModalVisible(true, {
           initStatus: SearchStatus.defalut,
-          initSearchKey: searchValue,
+          initSearchKey: searchValue
         });
       }}
     />

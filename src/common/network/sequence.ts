@@ -22,11 +22,11 @@ export async function getSequenceCreateSQL(
   sequenceName: string,
   sequence: Partial<ISequence>,
   sessionId: string,
-  dbName: string,
+  dbName: string
 ) {
   const sid = generateSequenceSid(sequenceName, sessionId, dbName);
   const ret = await request.patch(`/api/v1/sequence/getCreateSql/${sid}`, {
-    data: sequence,
+    data: sequence
   });
   return ret?.data?.sql;
 }
@@ -35,16 +35,20 @@ export async function getSequenceUpdateSQL(
   sequenceName: string,
   sequence: Partial<ISequence>,
   sessionId: string,
-  dbName: string,
+  dbName: string
 ) {
   const sid = generateSequenceSid(sequenceName, sessionId, dbName);
   const ret = await request.patch(`/api/v1/sequence/getUpdateSql/${sid}`, {
-    data: { ...sequence, name: sequenceName },
+    data: { ...sequence, name: sequenceName }
   });
   return ret?.data?.sql;
 }
 
-export async function getSequence(sequenceName: string, sessionId: string, dbName: string) {
+export async function getSequence(
+  sequenceName: string,
+  sessionId: string,
+  dbName: string
+) {
   const sid = generateSequenceSid(sequenceName, sessionId, dbName);
   const res = await request.get(`/api/v1/sequence/${sid}`);
   return res?.data;

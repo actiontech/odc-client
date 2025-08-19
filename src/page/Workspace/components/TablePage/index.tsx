@@ -23,7 +23,14 @@ import { ExportOutlined } from '@ant-design/icons';
 import { Radio, Space, Spin, Tabs } from 'antd';
 import type { RadioChangeEvent } from 'antd/lib/radio';
 import { inject, observer } from 'mobx-react';
-import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
 import { ITableModel } from '../CreateTable/interface';
 import TableColumns from './Columns';
 import TableConstraints from './Constraints';
@@ -58,7 +65,7 @@ interface IProps {
 // 顶层 Tab key 枚举
 export enum TopTab {
   PROPS = 'PROPS',
-  DATA = 'DATA',
+  DATA = 'DATA'
 }
 
 // 属性 Tab key 枚举
@@ -68,10 +75,15 @@ export enum PropsTab {
   INDEX = 'INDEX',
   CONSTRAINT = 'CONSTRAINT',
   DDL = 'DDL',
-  PARTITION = 'PARTITION',
+  PARTITION = 'PARTITION'
 }
 
-const TablePage: React.FC<IProps> = function ({ params, pageStore, pageKey, settingStore }) {
+const TablePage: React.FC<IProps> = function ({
+  params,
+  pageStore,
+  pageKey,
+  settingStore
+}) {
   const { isExternalTable } = params;
   const [table, setTable] = useState<Partial<ITableModel>>(null);
   const version = useRef(0);
@@ -83,7 +95,7 @@ const TablePage: React.FC<IProps> = function ({ params, pageStore, pageKey, sett
       tableName: any,
       onSuccess,
       tip,
-      callback: () => void,
+      callback: () => void
     ) => Promise<boolean>;
   }>();
   const { session } = useContext(SessionContext);
@@ -98,9 +110,17 @@ const TablePage: React.FC<IProps> = function ({ params, pageStore, pageKey, sett
     }
     let newTable;
     if (isLogicalDatabase(session?.odcDatabase)) {
-      newTable = await getLogicTableInfo(session?.odcDatabase?.id, params?.tableId);
+      newTable = await getLogicTableInfo(
+        session?.odcDatabase?.id,
+        params?.tableId
+      );
     } else {
-      newTable = await getTableInfo(params.tableName, dbName, session?.sessionId, isExternalTable);
+      newTable = await getTableInfo(
+        params.tableName,
+        dbName,
+        session?.sessionId,
+        isExternalTable
+      );
     }
     if (newTable) {
       version.current++;
@@ -112,29 +132,32 @@ const TablePage: React.FC<IProps> = function ({ params, pageStore, pageKey, sett
       if (
         newTableName &&
         newTableName !==
-          getQuoteTableName(params.tableName, session?.odcDatabase?.dataSource?.dialectType)
+          getQuoteTableName(
+            params.tableName,
+            session?.odcDatabase?.dataSource?.dialectType
+          )
       ) {
         setTable({
           ...newTable,
-          info: Object.assign({}, newTable?.info, { tableName: newTableName }),
+          info: Object.assign({}, newTable?.info, { tableName: newTableName })
         });
         const tablePage = new TablePageModel(
           params?.databaseId,
           newTableName,
           topTab,
           propsTab,
-          params?.tableId,
+          params?.tableId
         );
         await pageStore.updatePage(
           pageKey,
           {
             title: newTableName,
-            updateKey: tablePage.pageKey,
+            updateKey: tablePage.pageKey
           },
 
           {
-            tableName: newTableName,
-          },
+            tableName: newTableName
+          }
         );
       }
     }
@@ -167,8 +190,8 @@ const TablePage: React.FC<IProps> = function ({ params, pageStore, pageKey, sett
       pageKey,
       {},
       {
-        topTab,
-      },
+        topTab
+      }
     );
   };
 
@@ -177,15 +200,15 @@ const TablePage: React.FC<IProps> = function ({ params, pageStore, pageKey, sett
       pageKey,
       {},
       {
-        propsTab,
-      },
+        propsTab
+      }
     );
   };
 
   const oldTable = useMemo(() => {
     return {
       tableName: table?.info?.tableName,
-      columns: table?.columns,
+      columns: table?.columns
     };
   }, [table]);
 
@@ -193,29 +216,39 @@ const TablePage: React.FC<IProps> = function ({ params, pageStore, pageKey, sett
     <>
       <div style={{ height: '100%', overflow: 'auto' }}>
         <div className={styles.header}>
-          <Radio.Group onChange={handleTopTabChanged} value={topTab} className={styles.topbar}>
+          <Radio.Group
+            onChange={handleTopTabChanged}
+            value={topTab}
+            className={styles.topbar}
+          >
             <Radio.Button value={TopTab.PROPS}>
-              {formatMessage({ id: 'workspace.window.table.toptab.props', defaultMessage: '属性' })}
+              {formatMessage({
+                id: 'workspace.window.table.toptab.props',
+                defaultMessage: '属性'
+              })}
             </Radio.Button>
             {!isLogicalDatabase(session?.odcDatabase) && (
               <Radio.Button value={TopTab.DATA}>
                 {formatMessage({
                   id: 'workspace.window.table.toptab.data',
-                  defaultMessage: '数据',
+                  defaultMessage: '数据'
                 })}
               </Radio.Button>
             )}
           </Radio.Group>
           <Space>
             {settingStore.enableDBExport &&
-            getDataSourceModeConfig(session?.connection?.type)?.features?.task?.includes(
-              TaskType.EXPORT,
-            ) &&
+            getDataSourceModeConfig(
+              session?.connection?.type
+            )?.features?.task?.includes(TaskType.EXPORT) &&
             !isLogicalDatabase(session?.odcDatabase) &&
             !isExternalTable ? (
               <Toolbar.Button
                 text={
-                  formatMessage({ id: 'odc.components.TablePage.Export', defaultMessage: '导出' }) //导出
+                  formatMessage({
+                    id: 'odc.components.TablePage.Export',
+                    defaultMessage: '导出'
+                  }) //导出
                 }
                 icon={ExportOutlined}
                 isShowText
@@ -223,7 +256,7 @@ const TablePage: React.FC<IProps> = function ({ params, pageStore, pageKey, sett
                   modal.changeExportModal(true, {
                     type: DbObjectType.table,
                     name: table?.info?.tableName,
-                    databaseId: session?.database.databaseId,
+                    databaseId: session?.database.databaseId
                   });
                 }}
               />
@@ -240,7 +273,7 @@ const TablePage: React.FC<IProps> = function ({ params, pageStore, pageKey, sett
               return executeRef.current?.showExecuteModal(...args);
             },
             editMode: true,
-            session,
+            session
           }}
         >
           <Tabs
@@ -262,7 +295,7 @@ const TablePage: React.FC<IProps> = function ({ params, pageStore, pageKey, sett
                       {
                         label: formatMessage({
                           id: 'workspace.window.table.propstab.info',
-                          defaultMessage: '基本信息',
+                          defaultMessage: '基本信息'
                         }),
                         key: PropsTab.INFO,
                         children: (
@@ -271,32 +304,34 @@ const TablePage: React.FC<IProps> = function ({ params, pageStore, pageKey, sett
                             dbType={dbType}
                             isExternalTable={params.isExternalTable}
                           />
-                        ),
+                        )
                       },
                       {
                         label: formatMessage({
                           id: 'workspace.window.table.propstab.column',
-                          defaultMessage: '列',
+                          defaultMessage: '列'
                         }),
                         key: PropsTab.COLUMN,
                         children: (
                           <Spin spinning={false}>
-                            <TableColumns isExternalTable={params.isExternalTable} />
+                            <TableColumns
+                              isExternalTable={params.isExternalTable}
+                            />
                           </Spin>
-                        ),
+                        )
                       },
                       // 外表不展示索引
                       !isExternalTable && {
                         key: PropsTab.INDEX,
                         label: formatMessage({
                           id: 'workspace.window.table.propstab.index',
-                          defaultMessage: '索引',
+                          defaultMessage: '索引'
                         }),
                         children: (
                           <Spin spinning={false}>
                             <TableIndexes />
                           </Spin>
-                        ),
+                        )
                       },
                       // 外表不展示约束
                       enableConstraint &&
@@ -310,8 +345,8 @@ const TablePage: React.FC<IProps> = function ({ params, pageStore, pageKey, sett
                           key: PropsTab.CONSTRAINT,
                           label: formatMessage({
                             id: 'workspace.window.table.propstab.constraint',
-                            defaultMessage: '约束',
-                          }),
+                            defaultMessage: '约束'
+                          })
                         },
 
                       showPartition
@@ -319,26 +354,26 @@ const TablePage: React.FC<IProps> = function ({ params, pageStore, pageKey, sett
                             key: PropsTab.PARTITION,
                             label: formatMessage({
                               id: 'workspace.window.table.propstab.partition',
-                              defaultMessage: '分区',
+                              defaultMessage: '分区'
                             }),
                             children: (
                               <Spin spinning={false}>
                                 <TablePartitions />
                               </Spin>
-                            ),
+                            )
                           }
                         : null,
                       {
                         key: PropsTab.DDL,
                         label: formatMessage({
                           id: 'workspace.window.table.propstab.ddl',
-                          defaultMessage: 'DDL',
+                          defaultMessage: 'DDL'
                         }),
-                        children: <TableDDL key={version.current} />,
-                      },
+                        children: <TableDDL key={version.current} />
+                      }
                     ].filter(Boolean)}
                   />
-                ),
+                )
               },
               {
                 key: TopTab.DATA,
@@ -353,13 +388,17 @@ const TablePage: React.FC<IProps> = function ({ params, pageStore, pageKey, sett
                       key={version.current}
                       isExternalTable={params.isExternalTable}
                     />
-                  ) : null,
-              },
+                  ) : null
+              }
             ]}
           />
         </TablePageContext.Provider>
       </div>
-      <ShowExecuteModal session={session} ref={executeRef} callbackRef={callbackRef} />
+      <ShowExecuteModal
+        session={session}
+        ref={executeRef}
+        callbackRef={callbackRef}
+      />
     </>
   ) : (
     <WorkSpacePageLoading />
@@ -367,8 +406,12 @@ const TablePage: React.FC<IProps> = function ({ params, pageStore, pageKey, sett
 };
 
 export default WrapSessionPage(
-  inject('pageStore', 'sessionManagerStore', 'settingStore')(observer(TablePage)),
+  inject(
+    'pageStore',
+    'sessionManagerStore',
+    'settingStore'
+  )(observer(TablePage)),
   true,
   true,
-  true,
+  true
 );

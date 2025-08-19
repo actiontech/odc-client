@@ -27,7 +27,13 @@ interface IProps<T> extends EditorProps<T> {
   multiple: boolean;
 }
 
-function AutoCompleteEditor<T>({ row, onRowChange, column, width, options }: IProps<T>) {
+function AutoCompleteEditor<T>({
+  row,
+  onRowChange,
+  column,
+  width,
+  options
+}: IProps<T>) {
   const [open, setOpen] = useState(false);
   const { key } = column;
   const editorRef = useRef<any>(null);
@@ -43,7 +49,7 @@ function AutoCompleteEditor<T>({ row, onRowChange, column, width, options }: IPr
       let realValue = value;
       onRowChange({ ...row, [key]: realValue });
     },
-    [onRowChange],
+    [onRowChange]
   );
   return (
     <AntdEditorWrap>
@@ -60,9 +66,9 @@ function AutoCompleteEditor<T>({ row, onRowChange, column, width, options }: IPr
           onRowChange(
             {
               ...row,
-              [key]: v,
+              [key]: v
             },
-            true,
+            true
           );
         }}
         options={options
@@ -74,7 +80,7 @@ function AutoCompleteEditor<T>({ row, onRowChange, column, width, options }: IPr
           })
           .map((value) => {
             return {
-              value,
+              value
             };
           })}
         onChange={innerOnChange}

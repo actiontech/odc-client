@@ -24,7 +24,7 @@ import {
   CloudDownloadOutlined,
   EditOutlined,
   FileSearchOutlined,
-  SyncOutlined,
+  SyncOutlined
 } from '@ant-design/icons';
 import type { DataGridRef } from '@oceanbase-odc/ob-react-data-grid';
 import { Layout, message, Tabs } from 'antd';
@@ -56,14 +56,14 @@ const { Content } = Layout;
 
 // 顶层 Tab key 枚举
 export enum TopTab {
-  PROPS = 'PROPS',
+  PROPS = 'PROPS'
 }
 
 // 属性 Tab key 枚举
 export enum PropsTab {
   INFO = 'INFO',
   PARAMS = 'PARAMS',
-  DDL = 'DDL',
+  DDL = 'DDL'
 }
 
 interface IProps {
@@ -95,7 +95,7 @@ class FunctionPage extends Component<
     propsTab: this.props.params.propsTab || PropsTab.INFO,
     func: null,
     dataLoading: false,
-    formated: false,
+    formated: false
   };
 
   public UNSAFE_componentWillReceiveProps(nextProps: IProps) {
@@ -106,7 +106,7 @@ class FunctionPage extends Component<
       nextProps.params.propsTab !== this.state.propsTab
     ) {
       this.setState({
-        propsTab: nextProps.params.propsTab,
+        propsTab: nextProps.params.propsTab
       });
     }
   }
@@ -121,7 +121,7 @@ class FunctionPage extends Component<
       path: true,
       funName: func.funName,
       topTab: TopTab.PROPS,
-      propsTab,
+      propsTab
     });
   };
 
@@ -131,7 +131,7 @@ class FunctionPage extends Component<
       funName,
       false,
       session?.sessionId,
-      session?.database?.dbName,
+      session?.database?.dbName
     );
     if (func) {
       func.params = func.params.map((param) => {
@@ -139,7 +139,7 @@ class FunctionPage extends Component<
         return {
           ...param,
           dataType,
-          dataLength,
+          dataLength
         };
       });
       this.setState({ func });
@@ -147,21 +147,24 @@ class FunctionPage extends Component<
       message.error(
         formatMessage({
           id: 'workspace.window.function.load.error',
-          defaultMessage: '加载函数失败',
-        }),
+          defaultMessage: '加载函数失败'
+        })
       );
     }
   };
 
   public async componentDidMount() {
     const {
-      params: { funName },
+      params: { funName }
     } = this.props;
 
     await this.reloadFunction(funName);
   }
 
-  public componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<Record<string, any>>) {
+  public componentDidUpdate(
+    prevProps: Readonly<IProps>,
+    prevState: Readonly<Record<string, any>>
+  ) {
     const { func } = this.state;
     if (prevState.func?.params !== func?.params) {
       this.gridRef.current?.setRows?.(func?.params ?? []);
@@ -174,7 +177,7 @@ class FunctionPage extends Component<
       funName,
       session?.sessionId,
       session?.database?.dbName,
-      session?.odcDatabase?.id,
+      session?.odcDatabase?.id
     );
   }
 
@@ -191,49 +194,51 @@ class FunctionPage extends Component<
       this.editor.setValue(func?.ddl || '');
     }
     this.setState({
-      formated: !formated,
+      formated: !formated
     });
   };
 
   public render() {
     const {
       session,
-      params: { funName },
+      params: { funName }
     } = this.props;
     const { propsTab, func, formated } = this.state;
-    const isMySQL = isConnectionModeBeMySQLType(session?.connection?.dialectType);
+    const isMySQL = isConnectionModeBeMySQLType(
+      session?.connection?.dialectType
+    );
 
     const tableColumns = [
       {
         key: 'paramName',
         name: formatMessage({
           id: 'workspace.window.createFunction.paramName',
-          defaultMessage: '名称',
+          defaultMessage: '名称'
         }),
 
         width: isMySQL ? undefined : 150,
-        sortable: false,
+        sortable: false
       },
 
       {
         key: 'paramMode',
         name: formatMessage({
           id: 'workspace.window.createFunction.paramMode',
-          defaultMessage: '模式',
+          defaultMessage: '模式'
         }),
 
         width: isMySQL ? 150 : 100,
-        sortable: false,
+        sortable: false
       },
 
       {
         key: 'dataType',
         name: formatMessage({
           id: 'workspace.window.createFunction.dataType',
-          defaultMessage: '数据类型',
+          defaultMessage: '数据类型'
         }),
         sortable: false,
-        width: isMySQL ? 160 : 120,
+        width: isMySQL ? 160 : 120
       },
 
       isMySQL
@@ -241,10 +246,10 @@ class FunctionPage extends Component<
             key: 'dataLength',
             name: formatMessage({
               id: 'odc.components.FunctionPage.Length',
-              defaultMessage: '长度',
+              defaultMessage: '长度'
             }), // 长度
             sortable: false,
-            width: 100,
+            width: 100
           }
         : null,
 
@@ -254,11 +259,11 @@ class FunctionPage extends Component<
             key: 'defaultValue',
             name: formatMessage({
               id: 'workspace.window.createFunction.defaultValue',
-              defaultMessage: '默认值',
+              defaultMessage: '默认值'
             }),
 
-            sortable: false,
-          },
+            sortable: false
+          }
     ].filter(Boolean);
 
     return (
@@ -275,15 +280,15 @@ class FunctionPage extends Component<
                   key: PropsTab.INFO,
                   label: formatMessage({
                     id: 'workspace.window.table.propstab.info',
-                    defaultMessage: '基本信息',
+                    defaultMessage: '基本信息'
                   }),
-                  children: <ShowFunctionBaseInfoForm model={func} />,
+                  children: <ShowFunctionBaseInfoForm model={func} />
                 },
                 {
                   key: PropsTab.PARAMS,
                   label: formatMessage({
                     id: 'workspace.window.function.propstab.params',
-                    defaultMessage: '参数',
+                    defaultMessage: '参数'
                   }),
                   children: (
                     <>
@@ -291,7 +296,7 @@ class FunctionPage extends Component<
                         <ToolbarButton
                           text={formatMessage({
                             id: 'workspace.window.session.button.refresh',
-                            defaultMessage: '刷新',
+                            defaultMessage: '刷新'
                           })}
                           icon={<SyncOutlined />}
                           onClick={this.reloadFunction.bind(this, func.funName)}
@@ -307,7 +312,7 @@ class FunctionPage extends Component<
                         readonly={true}
                       />
                     </>
-                  ),
+                  )
                 },
                 {
                   key: PropsTab.DDL,
@@ -315,11 +320,12 @@ class FunctionPage extends Component<
                   children: (
                     <>
                       <Toolbar>
-                        {getDataSourceModeConfig(session?.connection?.type)?.features?.plEdit && (
+                        {getDataSourceModeConfig(session?.connection?.type)
+                          ?.features?.plEdit && (
                           <ToolbarButton
                             text={formatMessage({
                               id: 'workspace.window.session.button.edit',
-                              defaultMessage: '编辑',
+                              defaultMessage: '编辑'
                             })}
                             icon={<EditOutlined />}
                             onClick={this.editFunction.bind(this, func.funName)}
@@ -330,7 +336,7 @@ class FunctionPage extends Component<
                           text={
                             formatMessage({
                               id: 'odc.components.FunctionPage.Download',
-                              defaultMessage: '下载',
+                              defaultMessage: '下载'
                             }) //下载
                           }
                           icon={<CloudDownloadOutlined />}
@@ -339,7 +345,7 @@ class FunctionPage extends Component<
                               funName,
                               PLType.FUNCTION,
                               func?.ddl,
-                              session?.database?.dbName,
+                              session?.database?.dbName
                             );
                           }}
                         />
@@ -347,7 +353,7 @@ class FunctionPage extends Component<
                         <ToolbarButton
                           text={formatMessage({
                             id: 'workspace.window.sql.button.search',
-                            defaultMessage: '查找',
+                            defaultMessage: '查找'
                           })}
                           icon={<FileSearchOutlined />}
                           onClick={this.showSearchWidget.bind(this)}
@@ -358,37 +364,45 @@ class FunctionPage extends Component<
                             formated
                               ? formatMessage({
                                   id: 'odc.components.FunctionPage.Unformat',
-                                  defaultMessage: '取消格式化',
+                                  defaultMessage: '取消格式化'
                                 })
                               : // 取消格式化
                                 formatMessage({
                                   id: 'odc.components.FunctionPage.Formatting',
-                                  defaultMessage: '格式化',
+                                  defaultMessage: '格式化'
                                 })
 
                             // 格式化
                           }
                           icon={<AlignLeftOutlined />}
                           onClick={this.handleFormat}
-                          status={formated ? IConStatus.ACTIVE : IConStatus.INIT}
+                          status={
+                            formated ? IConStatus.ACTIVE : IConStatus.INIT
+                          }
                         />
 
                         <ToolbarButton
                           text={formatMessage({
                             id: 'workspace.window.session.button.refresh',
-                            defaultMessage: '刷新',
+                            defaultMessage: '刷新'
                           })}
                           icon={<SyncOutlined />}
                           onClick={this.reloadFunction.bind(this, func.funName)}
                         />
                       </Toolbar>
-                      <div style={{ height: `calc(100% - 38px)`, position: 'relative' }}>
+                      <div
+                        style={{
+                          height: `calc(100% - 38px)`,
+                          position: 'relative'
+                        }}
+                      >
                         <SQLCodePreviewer
                           readOnly
                           defaultValue={(func && func.ddl) || ''}
                           value={(func && func.ddl) || ''}
                           language={
-                            getDataSourceModeConfig(session?.connection?.type)?.sql?.language
+                            getDataSourceModeConfig(session?.connection?.type)
+                              ?.sql?.language
                           }
                           onEditorCreated={(editor: IEditor) => {
                             this.editor = editor;
@@ -396,8 +410,8 @@ class FunctionPage extends Component<
                         />
                       </div>
                     </>
-                  ),
-                },
+                  )
+                }
               ]}
             />
           </Content>
@@ -419,5 +433,5 @@ export default WrapSessionPage(
   },
   true,
   true,
-  true,
+  true
 );

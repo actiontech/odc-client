@@ -34,7 +34,10 @@ import React, { PureComponent } from 'react';
 import SplitPane from 'react-split-pane';
 import CustomDragLayer from '../GrammerHelpSider/component/CustomDragLayer';
 import MonacoEditor, { IEditor } from '../MonacoEditor';
-import TemplateInsertModal, { CLOSE_INSERT_PROMPT_KEY, getCopyText } from '../TemplateInsertModal';
+import TemplateInsertModal, {
+  CLOSE_INSERT_PROMPT_KEY,
+  getCopyText
+} from '../TemplateInsertModal';
 import styles from './index.less';
 
 const { Content } = Layout;
@@ -80,7 +83,7 @@ export default class ScriptPage extends PureComponent<IProps> {
     templateName: '',
     offset: null,
     /// resultHeight: RESULT_HEIGHT
-    editorValue: this.props?.editor?.defaultValue,
+    editorValue: this.props?.editor?.defaultValue
   };
 
   componentDidMount() {
@@ -96,7 +99,7 @@ export default class ScriptPage extends PureComponent<IProps> {
   setStateForEditorValue = (value: string) => {
     this.props?.editor?.onValueChange?.(value);
     this.setState({
-      editorValue: value,
+      editorValue: value
     });
   };
 
@@ -113,7 +116,7 @@ export default class ScriptPage extends PureComponent<IProps> {
       sessionSelectReadonly,
       dialectTypes,
       showSessionSelect = true,
-      databaseType,
+      databaseType
     } = this.props;
     const isShowDebugStackBar = !!stackbar?.list?.length;
     const { editorValue } = this.state;
@@ -125,7 +128,7 @@ export default class ScriptPage extends PureComponent<IProps> {
         style={{
           minHeight: 'auto',
           height: '100%',
-          background: 'var(--background-primary-color)',
+          background: 'var(--background-primary-color)'
         }}
       >
         <Content style={{ position: 'relative' }}>
@@ -157,7 +160,8 @@ export default class ScriptPage extends PureComponent<IProps> {
                     }}
                     title={stack.plName}
                   >
-                    {stack.plName} {stack.isActive && <i className="icon-active" />}
+                    {stack.plName}{' '}
+                    {stack.isActive && <i className="icon-active" />}
                   </div>
                 );
               })}
@@ -172,15 +176,18 @@ export default class ScriptPage extends PureComponent<IProps> {
                 (showSessionSelect ? 32 : 0),
               bottom: statusBar && statusBar.status ? 32 : 0,
               left: 0,
-              right: 0,
+              right: 0
             }}
             onHover={(item, monitor) => {
               ctx.editor?.focus();
               const clientOffset = monitor.getClientOffset();
-              editorUtils.updateEditorCursorPositionByClientPosition(ctx.editor, {
-                clientX: clientOffset.x,
-                clientY: clientOffset.y,
-              });
+              editorUtils.updateEditorCursorPositionByClientPosition(
+                ctx.editor,
+                {
+                  clientX: clientOffset.x,
+                  clientY: clientOffset.y
+                }
+              );
             }}
             onDrop={async (item, monitor) => {
               const snippetBody = snippetStore.snippetDragging?.body;
@@ -192,29 +199,42 @@ export default class ScriptPage extends PureComponent<IProps> {
                 editorUtils.insertSnippetTemplate(ctx.editor, snippetTemplate);
               } else if (
                 [DbObjectType.table, DbObjectType.view].includes(
-                  snippetStore.snippetDragging?.objType,
+                  snippetStore.snippetDragging?.objType
                 )
               ) {
                 const position = (ctx.editor as IEditor)?.getPosition();
                 if (!position) {
                   return;
                 }
-                if (snippetStore.snippetDragging.databaseId !== session.database.databaseId) {
+                if (
+                  snippetStore.snippetDragging.databaseId !==
+                  session.database.databaseId
+                ) {
                   message.warning(
                     formatMessage({
                       id: 'src.component.ScriptPage.D0B6C37B' /*'该对象不属于当前数据库'*/,
-                      defaultMessage: '该对象不属于当前数据库',
-                    }),
+                      defaultMessage: '该对象不属于当前数据库'
+                    })
                   );
                   return;
                 }
-                const CLOSE_INSERT_PROMPT = localStorage.getItem(CLOSE_INSERT_PROMPT_KEY);
+                const CLOSE_INSERT_PROMPT = localStorage.getItem(
+                  CLOSE_INSERT_PROMPT_KEY
+                );
                 if (CLOSE_INSERT_PROMPT === 'true') {
                   const name = snippetBody;
                   const type = snippetStore.snippetDragging?.objType;
                   const value =
-                    settingStore.configurations['odc.sqlexecute.default.objectDraggingOption'];
-                  const insertText = await getCopyText(name, type, value, true, session.sessionId);
+                    settingStore.configurations[
+                      'odc.sqlexecute.default.objectDraggingOption'
+                    ];
+                  const insertText = await getCopyText(
+                    name,
+                    type,
+                    value,
+                    true,
+                    session.sessionId
+                  );
                   const editor = ctx.editor as IEditor;
                   editor.focus();
                   editorUtils.insertSnippetTemplate(ctx.editor, insertText);
@@ -224,12 +244,15 @@ export default class ScriptPage extends PureComponent<IProps> {
                     templateName: snippetBody,
                     offset: {
                       line: position.lineNumber,
-                      column: position.column,
-                    },
+                      column: position.column
+                    }
                   });
                 }
               } else {
-                editorUtils.insertTextToCurrectPosition(ctx.editor, snippetBody);
+                editorUtils.insertTextToCurrectPosition(
+                  ctx.editor,
+                  snippetBody
+                );
               }
             }}
           >
@@ -263,9 +286,9 @@ export default class ScriptPage extends PureComponent<IProps> {
           ...{
             minHeight: 'auto',
             height: '100%',
-            background: 'var(--background-primary-color)',
+            background: 'var(--background-primary-color)'
           },
-          ...style,
+          ...style
         }}
       >
         {Result ? (
@@ -294,7 +317,7 @@ export default class ScriptPage extends PureComponent<IProps> {
             this.setState({
               templateInsertModalVisible: false,
               templateName: '',
-              offset: null,
+              offset: null
             });
           }}
           onOk={(insertText) => {
@@ -308,11 +331,11 @@ export default class ScriptPage extends PureComponent<IProps> {
               {
                 templateInsertModalVisible: false,
                 templateName: '',
-                offset: null,
+                offset: null
               },
               () => {
                 editorUtils.insertSnippetTemplate(ctx.editor, insertText);
-              },
+              }
             );
           }}
         />

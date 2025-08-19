@@ -23,14 +23,14 @@ import {
   ICloneRuleTemplateReqV1,
   IGetRulesResV1,
   IGetRuleCategoryStatisticResV1,
-  IGetDriverRuleVersionTipsResV1,
+  IGetDriverRuleVersionTipsResV1
 } from '../common.type';
 
 import {
   getRuleTemplateFileV1FileTypeEnum,
   exportProjectRuleTemplateV1ExportTypeEnum,
   importProjectRuleTemplateV1FileTypeEnum,
-  exportRuleTemplateV1ExportTypeEnum,
+  exportRuleTemplateV1ExportTypeEnum
 } from './index.enum';
 
 export interface IGetCustomRulesV1Params {
@@ -49,7 +49,8 @@ export interface IGetRuleTypeByDBTypeV1Params {
   db_type: string;
 }
 
-export interface IGetRuleTypeByDBTypeV1Return extends IGetRuleTypeByDBTypeResV1 {}
+export interface IGetRuleTypeByDBTypeV1Return
+  extends IGetRuleTypeByDBTypeResV1 {}
 
 export interface IGetCustomRuleV1Params {
   rule_id: string;
@@ -81,7 +82,8 @@ export interface IGetProjectRuleTemplateTipsV1Params {
   filter_db_type?: string;
 }
 
-export interface IGetProjectRuleTemplateTipsV1Return extends IGetRuleTemplateTipsResV1 {}
+export interface IGetProjectRuleTemplateTipsV1Return
+  extends IGetRuleTemplateTipsResV1 {}
 
 export interface IGetProjectRuleTemplateListV1Params {
   project_name: string;
@@ -91,9 +93,11 @@ export interface IGetProjectRuleTemplateListV1Params {
   page_size: number;
 }
 
-export interface IGetProjectRuleTemplateListV1Return extends IGetProjectRuleTemplatesResV1 {}
+export interface IGetProjectRuleTemplateListV1Return
+  extends IGetProjectRuleTemplatesResV1 {}
 
-export interface ICreateProjectRuleTemplateV1Params extends ICreateProjectRuleTemplateReqV1 {
+export interface ICreateProjectRuleTemplateV1Params
+  extends ICreateProjectRuleTemplateReqV1 {
   project_name: string;
 }
 
@@ -109,7 +113,8 @@ export interface IGetProjectRuleTemplateV1Params {
   tags?: string;
 }
 
-export interface IGetProjectRuleTemplateV1Return extends IGetProjectRuleTemplateResV1 {}
+export interface IGetProjectRuleTemplateV1Return
+  extends IGetProjectRuleTemplateResV1 {}
 
 export interface IDeleteProjectRuleTemplateV1Params {
   project_name: string;
@@ -119,7 +124,8 @@ export interface IDeleteProjectRuleTemplateV1Params {
 
 export interface IDeleteProjectRuleTemplateV1Return extends IBaseRes {}
 
-export interface IUpdateProjectRuleTemplateV1Params extends IUpdateProjectRuleTemplateReqV1 {
+export interface IUpdateProjectRuleTemplateV1Params
+  extends IUpdateProjectRuleTemplateReqV1 {
   project_name: string;
 
   rule_template_name: string;
@@ -127,7 +133,8 @@ export interface IUpdateProjectRuleTemplateV1Params extends IUpdateProjectRuleTe
 
 export interface IUpdateProjectRuleTemplateV1Return extends IBaseRes {}
 
-export interface ICloneProjectRuleTemplateV1Params extends ICloneProjectRuleTemplateReqV1 {
+export interface ICloneProjectRuleTemplateV1Params
+  extends ICloneProjectRuleTemplateReqV1 {
   project_name: string;
 
   rule_template_name: string;
@@ -149,9 +156,11 @@ export interface IGetCustomRuleKnowledgeV1Params {
   db_type: string;
 }
 
-export interface IGetCustomRuleKnowledgeV1Return extends IGetRuleKnowledgeResV1 {}
+export interface IGetCustomRuleKnowledgeV1Return
+  extends IGetRuleKnowledgeResV1 {}
 
-export interface IUpdateCustomRuleKnowledgeParams extends IUpdateRuleKnowledgeReq {
+export interface IUpdateCustomRuleKnowledgeParams
+  extends IUpdateRuleKnowledgeReq {
   rule_name: string;
 
   db_type: string;
@@ -179,7 +188,8 @@ export interface IGetRuleTemplateTipsV1Params {
   filter_db_type?: string;
 }
 
-export interface IGetRuleTemplateTipsV1Return extends IGetRuleTemplateTipsResV1 {}
+export interface IGetRuleTemplateTipsV1Return
+  extends IGetRuleTemplateTipsResV1 {}
 
 export interface IGetRuleTemplateListV1Params {
   page_index: number;
@@ -199,7 +209,8 @@ export interface IImportProjectRuleTemplateV1Params {
   rule_template_file: any;
 }
 
-export interface IImportProjectRuleTemplateV1Return extends IParseProjectRuleTemplateFileResV1 {}
+export interface IImportProjectRuleTemplateV1Return
+  extends IParseProjectRuleTemplateFileResV1 {}
 
 export interface IGetRuleTemplateV1Params {
   rule_template_name: string;
@@ -251,6 +262,8 @@ export interface IGetRuleListV1Params {
 
 export interface IGetRuleListV1Return extends IGetRulesResV1 {}
 
-export interface IGetCategoryStatisticsReturn extends IGetRuleCategoryStatisticResV1 {}
+export interface IGetCategoryStatisticsReturn
+  extends IGetRuleCategoryStatisticResV1 {}
 
-export interface IGetDriverRuleVersionTipsReturn extends IGetDriverRuleVersionTipsResV1 {}
+export interface IGetDriverRuleVersionTipsReturn
+  extends IGetDriverRuleVersionTipsResV1 {}

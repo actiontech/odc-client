@@ -31,18 +31,18 @@ export function register(language: string): Plugin {
           new Blob(
             [
               `importScripts(${JSON.stringify(
-                `${url.href}workers/${MONACO_VERSION}/${type}.js`.toString(),
-              )});`,
+                `${url.href}workers/${MONACO_VERSION}/${type}.js`.toString()
+              )});`
             ],
             {
-              type: 'application/javascript',
-            },
-          ),
+              type: 'application/javascript'
+            }
+          )
         );
         return objectURL;
       }
       return `${url}workers/${MONACO_VERSION}/${type}.js`;
-    },
+    }
   };
   language = language || 'obmysql';
   if (plugin) {

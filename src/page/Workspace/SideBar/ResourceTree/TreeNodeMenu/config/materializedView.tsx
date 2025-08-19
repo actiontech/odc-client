@@ -1,48 +1,68 @@
 import { actionTypes } from '@/component/Acess';
 import { copyObj } from '@/component/TemplateInsertModal';
-import { DbObjectType, DragInsertType, IView, ResourceTreeNodeMenuKeys } from '@/d.ts';
-import { PropsTab, TopTab } from '@/page/Workspace/components/MaterializedViewPage';
+import {
+  DbObjectType,
+  DragInsertType,
+  IView,
+  ResourceTreeNodeMenuKeys
+} from '@/d.ts';
+import {
+  PropsTab,
+  TopTab
+} from '@/page/Workspace/components/MaterializedViewPage';
 import { message, Modal } from 'antd';
 import { openNewSQLPage } from '@/store/helper/page';
 import tracert from '@/util/tracert';
 import { formatMessage } from '@/util/intl';
 import { downloadPLDDL } from '@/util/sqlExport';
-import { PlusOutlined, QuestionCircleFilled, ReloadOutlined } from '@ant-design/icons';
+import {
+  PlusOutlined,
+  QuestionCircleFilled,
+  ReloadOutlined
+} from '@ant-design/icons';
 import { ResourceNodeType } from '../../type';
 import { hasTableChangePermission, hasTableExportPermission } from '../index';
 import { IMenuItemConfig } from '../type';
 import { isSupportExport } from './helper';
-import { openMaterializedViewViewPage, openCreateMaterializedViewPage } from '@/store/helper/page';
+import {
+  openMaterializedViewViewPage,
+  openCreateMaterializedViewPage
+} from '@/store/helper/page';
 import { getMaterializedView } from '@/common/network/materializedView/index';
 import modalStore from '@/store/modal';
 import { dropObject } from '@/common/network/database';
 import pageStore from '@/store/page';
 
-export const materializedViewConfig: Partial<Record<ResourceNodeType, IMenuItemConfig[]>> = {
+export const materializedViewConfig: Partial<
+  Record<ResourceNodeType, IMenuItemConfig[]>
+> = {
   [ResourceNodeType.MaterializedViewRoot]: [
     {
       key: ResourceTreeNodeMenuKeys.CREATE_MATERIALIZED_VIEW,
       icon: PlusOutlined,
       text: formatMessage({
         id: 'src.page.Workspace.SideBar.ResourceTree.TreeNodeMenu.config.956E7805',
-        defaultMessage: '新建物化视图',
+        defaultMessage: '新建物化视图'
       }),
       actionType: actionTypes.create,
       run(session, node) {
         openCreateMaterializedViewPage(session?.odcDatabase?.id);
-      },
+      }
     },
     {
       key: 'REFRESH',
       text: [
-        formatMessage({ id: 'odc.ResourceTree.actions.Refresh', defaultMessage: '刷新' }), //刷新
+        formatMessage({
+          id: 'odc.ResourceTree.actions.Refresh',
+          defaultMessage: '刷新'
+        }) //刷新
       ],
       icon: ReloadOutlined,
       actionType: actionTypes.read,
       async run(session, node) {
         await session.database.getMaterializedViewList();
-      },
-    },
+      }
+    }
   ],
 
   [ResourceNodeType.MaterializedView]: [
@@ -50,7 +70,7 @@ export const materializedViewConfig: Partial<Record<ResourceNodeType, IMenuItemC
       key: ResourceTreeNodeMenuKeys.BROWSER_SCHEMA,
       text: formatMessage({
         id: 'src.page.Workspace.SideBar.ResourceTree.TreeNodeMenu.config.CDD2E445',
-        defaultMessage: '查看物化视图属性',
+        defaultMessage: '查看物化视图属性'
       }),
       ellipsis: true,
       run(session, node) {
@@ -59,15 +79,15 @@ export const materializedViewConfig: Partial<Record<ResourceNodeType, IMenuItemC
           TopTab.PROPS,
           PropsTab.DDL,
           session?.odcDatabase?.id,
-          session?.odcDatabase?.name,
+          session?.odcDatabase?.name
         );
-      },
+      }
     },
     {
       key: ResourceTreeNodeMenuKeys.BROWSER_DATA,
       text: formatMessage({
         id: 'src.page.Workspace.SideBar.ResourceTree.TreeNodeMenu.config.BDEC9A66',
-        defaultMessage: '查看物化视图数据',
+        defaultMessage: '查看物化视图数据'
       }),
       ellipsis: true,
       hasDivider: true,
@@ -77,35 +97,41 @@ export const materializedViewConfig: Partial<Record<ResourceNodeType, IMenuItemC
           TopTab.DATA,
           PropsTab.DDL,
           session?.odcDatabase?.id,
-          session?.odcDatabase?.name,
+          session?.odcDatabase?.name
         );
-      },
+      }
     },
     {
       key: ResourceTreeNodeMenuKeys.DOWNLOAD,
-      text: formatMessage({ id: 'odc.TreeNodeMenu.config.view.Download', defaultMessage: '下载' }), //下载
+      text: formatMessage({
+        id: 'odc.TreeNodeMenu.config.view.Download',
+        defaultMessage: '下载'
+      }), //下载
       ellipsis: true,
       async run(session, node) {
         const materializedViewName = node?.data?.info?.name;
         const materializedView = await getMaterializedView({
           sessionId: session.sessionId,
           dbName: session.database.dbName,
-          materializedViewName,
+          materializedViewName
         });
         if (materializedView) {
           downloadPLDDL(
             materializedViewName,
             'TABLE',
             materializedView?.info?.ddl,
-            session.database.dbName,
+            session.database.dbName
           );
         }
-      },
+      }
     },
     {
       key: ResourceTreeNodeMenuKeys.COPY,
       text: [
-        formatMessage({ id: 'odc.TreeNodeMenu.config.view.Copy', defaultMessage: '复制' }), //复制
+        formatMessage({
+          id: 'odc.TreeNodeMenu.config.view.Copy',
+          defaultMessage: '复制'
+        }) //复制
       ],
       ellipsis: true,
       children: [
@@ -114,8 +140,8 @@ export const materializedViewConfig: Partial<Record<ResourceNodeType, IMenuItemC
           text: [
             formatMessage({
               id: 'odc.TreeNodeMenu.config.table.ObjectName',
-              defaultMessage: '对象名',
-            }), //对象名
+              defaultMessage: '对象名'
+            }) //对象名
           ],
           run(session, node) {
             const materializedViewName = node?.data?.info?.name;
@@ -123,17 +149,17 @@ export const materializedViewConfig: Partial<Record<ResourceNodeType, IMenuItemC
               materializedViewName,
               DbObjectType.materialized_view,
               DragInsertType.NAME,
-              session.sessionId,
+              session.sessionId
             );
-          },
+          }
         },
         {
           key: ResourceTreeNodeMenuKeys.COPY_SELECT,
           text: [
             formatMessage({
               id: 'odc.TreeNodeMenu.config.table.SelectStatement',
-              defaultMessage: 'Select 语句',
-            }),
+              defaultMessage: 'Select 语句'
+            })
           ],
 
           run(session, node) {
@@ -142,17 +168,17 @@ export const materializedViewConfig: Partial<Record<ResourceNodeType, IMenuItemC
               materializedViewName,
               DbObjectType.materialized_view,
               DragInsertType.SELECT,
-              session.sessionId,
+              session.sessionId
             );
-          },
+          }
         },
         {
           key: ResourceTreeNodeMenuKeys.COPY_INSERT,
           text: [
             formatMessage({
               id: 'odc.TreeNodeMenu.config.table.InsertStatement',
-              defaultMessage: 'Insert 语句',
-            }),
+              defaultMessage: 'Insert 语句'
+            })
 
             //INSERT 语句
           ],
@@ -162,17 +188,17 @@ export const materializedViewConfig: Partial<Record<ResourceNodeType, IMenuItemC
               materializedViewName,
               DbObjectType.materialized_view,
               DragInsertType.INSERT,
-              session.sessionId,
+              session.sessionId
             );
-          },
+          }
         },
         {
           key: ResourceTreeNodeMenuKeys.COPY_UPDATE,
           text: [
             formatMessage({
               id: 'odc.TreeNodeMenu.config.table.UpdateStatement',
-              defaultMessage: 'Update 语句',
-            }),
+              defaultMessage: 'Update 语句'
+            })
 
             //UPDATE 语句
           ],
@@ -182,17 +208,17 @@ export const materializedViewConfig: Partial<Record<ResourceNodeType, IMenuItemC
               materializedViewName,
               DbObjectType.materialized_view,
               DragInsertType.UPDATE,
-              session.sessionId,
+              session.sessionId
             );
-          },
+          }
         },
         {
           key: ResourceTreeNodeMenuKeys.COPY_DELETE,
           text: [
             formatMessage({
               id: 'odc.TreeNodeMenu.config.table.DeleteStatement',
-              defaultMessage: 'Delete 语句',
-            }),
+              defaultMessage: 'Delete 语句'
+            })
 
             //DELETE 语句
           ],
@@ -202,11 +228,11 @@ export const materializedViewConfig: Partial<Record<ResourceNodeType, IMenuItemC
               materializedViewName,
               DbObjectType.materialized_view,
               DragInsertType.DELETE,
-              session.sessionId,
+              session.sessionId
             );
-          },
-        },
-      ],
+          }
+        }
+      ]
     },
     {
       key: ResourceTreeNodeMenuKeys.OPEN_TABLE_SQLWINDOW,
@@ -214,18 +240,23 @@ export const materializedViewConfig: Partial<Record<ResourceNodeType, IMenuItemC
       text: [
         formatMessage({
           id: 'odc.src.page.Workspace.SideBar.ResourceTree.TreeNodeMenu.config.OpenTheSQLWindow',
-          defaultMessage: '打开 SQL 窗口',
-        }), //'打开 SQL 窗口'
+          defaultMessage: '打开 SQL 窗口'
+        }) //'打开 SQL 窗口'
       ],
       hasDivider: true,
       run(session, node) {
         tracert.click('a3112.b41896.c330992.d367627');
         openNewSQLPage(session?.database?.databaseId);
-      },
+      }
     },
     {
       key: ResourceTreeNodeMenuKeys.DELETE_TABLE,
-      text: [formatMessage({ id: 'odc.TreeNodeMenu.config.view.Delete', defaultMessage: '删除' })],
+      text: [
+        formatMessage({
+          id: 'odc.TreeNodeMenu.config.view.Delete',
+          defaultMessage: '删除'
+        })
+      ],
       ellipsis: true,
       actionType: actionTypes.delete,
       disabled: (session, node) => {
@@ -237,19 +268,19 @@ export const materializedViewConfig: Partial<Record<ResourceNodeType, IMenuItemC
           title: formatMessage(
             {
               id: 'workspace.window.createTable.modal.delete',
-              defaultMessage: '是否确定删除 {name} ？',
+              defaultMessage: '是否确定删除 {name} ？'
             },
             {
-              name: materializedViewName,
-            },
+              name: materializedViewName
+            }
           ),
           okText: formatMessage({
             id: 'app.button.ok',
-            defaultMessage: '确定',
+            defaultMessage: '确定'
           }),
           cancelText: formatMessage({
             id: 'app.button.cancel',
-            defaultMessage: '取消',
+            defaultMessage: '取消'
           }),
           icon: <QuestionCircleFilled />,
           centered: true,
@@ -258,27 +289,27 @@ export const materializedViewConfig: Partial<Record<ResourceNodeType, IMenuItemC
             const success = await dropObject(
               materializedViewName,
               DbObjectType.materialized_view,
-              session.sessionId,
+              session.sessionId
             );
             if (success) {
               await session.database.getMaterializedViewList();
               message.success(
                 formatMessage({
                   id: 'src.page.Workspace.SideBar.ResourceTree.TreeNodeMenu.config.C87931E7',
-                  defaultMessage: '删除物化视图成功',
-                }),
+                  defaultMessage: '删除物化视图成功'
+                })
               );
               const openedPage = pageStore!.pages.find(
-                (p) => p.params.materializedViewName === materializedViewName,
+                (p) => p.params.materializedViewName === materializedViewName
               );
               if (openedPage) {
                 pageStore!.close(openedPage.key);
               }
             }
-          },
+          }
         });
-      },
-    },
+      }
+    }
   ],
 
   [ResourceNodeType.MaterializedViewColumnRoot]: [
@@ -287,8 +318,8 @@ export const materializedViewConfig: Partial<Record<ResourceNodeType, IMenuItemC
       text: [
         formatMessage({
           id: 'odc.TreeNodeMenu.config.table.ViewColumns',
-          defaultMessage: '查看列',
-        }),
+          defaultMessage: '查看列'
+        })
       ],
 
       ellipsis: true,
@@ -299,25 +330,25 @@ export const materializedViewConfig: Partial<Record<ResourceNodeType, IMenuItemC
           TopTab.PROPS,
           PropsTab.COLUMN,
           session?.odcDatabase?.id,
-          session?.odcDatabase?.name,
+          session?.odcDatabase?.name
         );
-      },
+      }
     },
     {
       key: ResourceTreeNodeMenuKeys.REFRESH_COLUMNS,
       text: [
         formatMessage({
           id: 'odc.TreeNodeMenu.config.table.Refresh',
-          defaultMessage: '刷新',
-        }),
+          defaultMessage: '刷新'
+        })
       ],
 
       ellipsis: true,
       async run(session, node) {
         const materializedViewInfo = node?.data?.info;
         await session.database.loadMaterializedView(materializedViewInfo);
-      },
-    },
+      }
+    }
   ],
 
   [ResourceNodeType.MaterializedViewIndexRoot]: [
@@ -326,8 +357,8 @@ export const materializedViewConfig: Partial<Record<ResourceNodeType, IMenuItemC
       text: [
         formatMessage({
           id: 'odc.TreeNodeMenu.config.table.ViewIndexes',
-          defaultMessage: '查看索引',
-        }),
+          defaultMessage: '查看索引'
+        })
       ],
 
       ellipsis: true,
@@ -338,25 +369,25 @@ export const materializedViewConfig: Partial<Record<ResourceNodeType, IMenuItemC
           TopTab.PROPS,
           PropsTab.INDEX,
           session?.odcDatabase?.id,
-          session?.odcDatabase?.name,
+          session?.odcDatabase?.name
         );
-      },
+      }
     },
     {
       key: ResourceTreeNodeMenuKeys.REFRESH_COLUMNS,
       text: [
         formatMessage({
           id: 'odc.TreeNodeMenu.config.table.Refresh',
-          defaultMessage: '刷新',
-        }),
+          defaultMessage: '刷新'
+        })
       ],
 
       ellipsis: true,
       async run(session, node) {
         const materializedViewInfo = node?.data?.info;
         await session.database.loadMaterializedView(materializedViewInfo);
-      },
-    },
+      }
+    }
   ],
 
   [ResourceNodeType.MaterializedViewPartitionRoot]: [
@@ -365,8 +396,8 @@ export const materializedViewConfig: Partial<Record<ResourceNodeType, IMenuItemC
       text: [
         formatMessage({
           id: 'odc.TreeNodeMenu.config.table.ViewPartitions',
-          defaultMessage: '查看分区',
-        }),
+          defaultMessage: '查看分区'
+        })
       ],
 
       ellipsis: true,
@@ -377,25 +408,25 @@ export const materializedViewConfig: Partial<Record<ResourceNodeType, IMenuItemC
           TopTab.PROPS,
           PropsTab.PARTITION,
           session?.odcDatabase?.id,
-          session?.odcDatabase?.name,
+          session?.odcDatabase?.name
         );
-      },
+      }
     },
     {
       key: ResourceTreeNodeMenuKeys.REFRESH_COLUMNS,
       text: [
         formatMessage({
           id: 'odc.TreeNodeMenu.config.table.Refresh',
-          defaultMessage: '刷新',
-        }),
+          defaultMessage: '刷新'
+        })
       ],
 
       ellipsis: true,
       async run(session, node) {
         const materializedViewInfo = node?.data?.info;
         await session.database.loadMaterializedView(materializedViewInfo);
-      },
-    },
+      }
+    }
   ],
 
   [ResourceNodeType.MaterializedViewConstraintRoot]: [
@@ -404,8 +435,8 @@ export const materializedViewConfig: Partial<Record<ResourceNodeType, IMenuItemC
       text: [
         formatMessage({
           id: 'odc.TreeNodeMenu.config.table.ViewConstraints',
-          defaultMessage: '查看约束',
-        }),
+          defaultMessage: '查看约束'
+        })
       ],
 
       ellipsis: true,
@@ -416,24 +447,24 @@ export const materializedViewConfig: Partial<Record<ResourceNodeType, IMenuItemC
           TopTab.PROPS,
           PropsTab.CONSTRAINT,
           session?.odcDatabase?.id,
-          session?.odcDatabase?.name,
+          session?.odcDatabase?.name
         );
-      },
+      }
     },
     {
       key: ResourceTreeNodeMenuKeys.REFRESH_COLUMNS,
       text: [
         formatMessage({
           id: 'odc.TreeNodeMenu.config.table.Refresh',
-          defaultMessage: '刷新',
-        }),
+          defaultMessage: '刷新'
+        })
       ],
 
       ellipsis: true,
       async run(session, node) {
         const materializedViewInfo = node?.data?.info;
         await session.database.loadMaterializedView(materializedViewInfo);
-      },
-    },
-  ],
+      }
+    }
+  ]
 };

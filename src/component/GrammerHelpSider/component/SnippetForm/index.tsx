@@ -22,7 +22,7 @@ import snippetStore, {
   EnumSnippetAction,
   EnumSnippetType,
   SNIPPET_ACTIONS,
-  SNIPPET_TYPES,
+  SNIPPET_TYPES
 } from '@/store/snippet';
 import { formatMessage } from '@/util/intl';
 import { Button, Drawer, Form, Input, message, Modal, Select } from 'antd';
@@ -53,32 +53,32 @@ class SnippetFormDrawer extends PureComponent<IProps> {
     // 用户有输入，加二次确认
     if (data.description || data.body || data.prefix) {
       const actionName = SNIPPET_ACTIONS.find(
-        (snippetAction) => snippetAction.key === action,
+        (snippetAction) => snippetAction.key === action
       )?.name;
       this.modal = Modal.confirm({
         title: formatMessage(
           {
             id: 'odc.component.SnippetForm.ExitTheActionnameCodeSnippet',
-            defaultMessage: '退出{actionName}代码片段',
+            defaultMessage: '退出{actionName}代码片段'
           },
           {
-            actionName,
-          },
+            actionName
+          }
         ),
         // `退出${actionName}代码片段`
         content: formatMessage(
           {
             id: 'odc.component.SnippetForm.IfTheContentIsNot',
-            defaultMessage: '存在未保存内容，退出{actionName}代码片段',
+            defaultMessage: '存在未保存内容，退出{actionName}代码片段'
           },
           {
-            actionName,
-          },
+            actionName
+          }
         ),
         // `存在未保存内容, 退出${actionName}代码片段`
         onOk() {
           self.props.onClose();
-        },
+        }
       });
     } else {
       this.props.onClose();
@@ -101,12 +101,12 @@ class SnippetFormDrawer extends PureComponent<IProps> {
                 formatMessage(
                   {
                     id: 'odc.component.SnippetForm.SyntaxFragmentValuesprefixIsCreated',
-                    defaultMessage: '代码片段 {valuesPrefix} 创建成功！',
+                    defaultMessage: '代码片段 {valuesPrefix} 创建成功！'
                   },
                   {
-                    valuesPrefix: values.prefix,
-                  },
-                ),
+                    valuesPrefix: values.prefix
+                  }
+                )
 
                 // `代码片段 ${values.prefix} 创建成功！`
               );
@@ -116,19 +116,19 @@ class SnippetFormDrawer extends PureComponent<IProps> {
           case EnumSnippetAction.EDIT:
             r = await snippetStore.updateCustomerSnippet({
               ...values,
-              id: snippet.id,
+              id: snippet.id
             });
             if (r) {
               message.success(
                 formatMessage(
                   {
                     id: 'odc.component.SnippetForm.TheSyntaxSnippetSnippetprefixHas',
-                    defaultMessage: '代码片段 {snippetPrefix} 更新成功！',
+                    defaultMessage: '代码片段 {snippetPrefix} 更新成功！'
                   },
                   {
-                    snippetPrefix: snippet.prefix,
-                  },
-                ),
+                    snippetPrefix: snippet.prefix
+                  }
+                )
 
                 // `代码片段 ${snippet.prefix} 更新成功！`
               );
@@ -152,12 +152,14 @@ class SnippetFormDrawer extends PureComponent<IProps> {
       return null;
     }
     const config = getDataSourceModeConfig(ConnectType.MYSQL);
-    const actionItem = SNIPPET_ACTIONS.find((actionItem) => actionItem.key === action);
+    const actionItem = SNIPPET_ACTIONS.find(
+      (actionItem) => actionItem.key === action
+    );
     const initialValues = {
       prefix: snippet?.prefix,
       snippetType: snippet?.snippetType || EnumSnippetType.NORMAL,
       description: snippet?.description,
-      body: snippet?.body,
+      body: snippet?.body
     };
     return (
       <Drawer
@@ -165,11 +167,11 @@ class SnippetFormDrawer extends PureComponent<IProps> {
           formatMessage(
             {
               id: 'odc.component.SnippetForm.ActionitemnameSyntaxFragment',
-              defaultMessage: '{actionItemName}代码片段',
+              defaultMessage: '{actionItemName}代码片段'
             },
             {
-              actionItemName: actionItem.name,
-            },
+              actionItemName: actionItem.name
+            }
           )
 
           // `${actionItem.name}代码片段`
@@ -179,32 +181,37 @@ class SnippetFormDrawer extends PureComponent<IProps> {
         onClose={this.onClose}
         open={visible}
         bodyStyle={{
-          paddingBottom: 80,
+          paddingBottom: 80
         }}
       >
         {!visible ? null : (
-          <Form layout="vertical" hideRequiredMark initialValues={initialValues} ref={this.formRef}>
+          <Form
+            layout="vertical"
+            hideRequiredMark
+            initialValues={initialValues}
+            ref={this.formRef}
+          >
             <Form.Item
               name="prefix"
               label={formatMessage({
                 id: 'odc.component.SnippetForm.Syntax',
-                defaultMessage: '代码片段名称',
+                defaultMessage: '代码片段名称'
               })}
               /* 语法名称 */ rules={[
                 {
                   required: true,
                   message: formatMessage({
                     id: 'odc.component.SnippetForm.EnterASyntaxName',
-                    defaultMessage: '请填写代码片段名称',
-                  }),
+                    defaultMessage: '请填写代码片段名称'
+                  })
                   // 请填写语法名称
                 },
                 {
                   max: 60,
                   message: formatMessage({
                     id: 'odc.component.SnippetForm.TheSyntaxNameCannotExceed',
-                    defaultMessage: '代码片段名称不能超过 60 个字符',
-                  }),
+                    defaultMessage: '代码片段名称不能超过 60 个字符'
+                  })
 
                   // 语法名称不能超过 60 个字符
                 },
@@ -212,18 +219,18 @@ class SnippetFormDrawer extends PureComponent<IProps> {
                   pattern: /^[a-zA-Z0-9_]+$/,
                   message: formatMessage({
                     id: 'odc.component.SnippetForm.TheSyntaxNameMustContain',
-                    defaultMessage: '代码片段名称为英文字母、数字、下划线组成',
-                  }),
+                    defaultMessage: '代码片段名称为英文字母、数字、下划线组成'
+                  })
 
                   // 语法名称为英文字母、数字、下划线组成
-                },
+                }
               ]}
             >
               <Input
                 placeholder={
                   formatMessage({
                     id: 'odc.component.SnippetForm.EnterASyntaxName',
-                    defaultMessage: '请填写代码片段名称',
+                    defaultMessage: '请填写代码片段名称'
                   })
                   // 请填写语法名称
                 }
@@ -233,41 +240,41 @@ class SnippetFormDrawer extends PureComponent<IProps> {
               name="snippetType"
               label={formatMessage({
                 id: 'odc.component.SnippetForm.SyntaxType',
-                defaultMessage: '代码片段类型',
+                defaultMessage: '代码片段类型'
               })}
               /* 语法类型 */ rules={[
                 {
                   required: true,
                   message: formatMessage({
                     id: 'odc.component.SnippetForm.SelectASyntaxType',
-                    defaultMessage: '请选择代码片段类型',
-                  }),
+                    defaultMessage: '请选择代码片段类型'
+                  })
                   // 请选择语法类型
-                },
+                }
               ]}
             >
               <Select
                 placeholder={formatMessage({
                   id: 'odc.component.SnippetForm.SelectASyntaxType',
-                  defaultMessage: '请选择代码片段类型',
+                  defaultMessage: '请选择代码片段类型'
                 })}
                 /* 请选择语法类型 */ style={{
-                  width: '196px',
+                  width: '196px'
                 }}
               >
-                {SNIPPET_TYPES.filter((item) => item.key !== EnumSnippetType.ALL).map(
-                  (snippetType) => (
-                    <Option value={snippetType.key} key={snippetType.key}>
-                      {snippetType.name}
-                    </Option>
-                  ),
-                )}
+                {SNIPPET_TYPES.filter(
+                  (item) => item.key !== EnumSnippetType.ALL
+                ).map((snippetType) => (
+                  <Option value={snippetType.key} key={snippetType.key}>
+                    {snippetType.name}
+                  </Option>
+                ))}
               </Select>
             </Form.Item>
             <Form.Item
               label={formatMessage({
                 id: 'odc.component.SnippetForm.Syntax.1',
-                defaultMessage: '代码片段',
+                defaultMessage: '代码片段'
               })}
               /* 代码片段 */
             >
@@ -275,7 +282,7 @@ class SnippetFormDrawer extends PureComponent<IProps> {
                 style={{
                   height: 340,
                   width: '100%',
-                  border: '1px solid var(--odc-border-color)',
+                  border: '1px solid var(--odc-border-color)'
                 }}
               >
                 <EditorToolBar
@@ -288,7 +295,7 @@ class SnippetFormDrawer extends PureComponent<IProps> {
                   style={{
                     height: 300,
                     width: '100%',
-                    position: 'relative',
+                    position: 'relative'
                   }}
                 >
                   <Form.Item
@@ -300,8 +307,8 @@ class SnippetFormDrawer extends PureComponent<IProps> {
                         required: true,
                         message: formatMessage({
                           id: 'odc.component.SnippetForm.EnterASyntax',
-                          defaultMessage: '请输入代码片段',
-                        }),
+                          defaultMessage: '请输入代码片段'
+                        })
                         // 请输入语法
                       },
                       {
@@ -309,11 +316,12 @@ class SnippetFormDrawer extends PureComponent<IProps> {
                         message: formatMessage(
                           {
                             id: 'odc.src.component.GrammerHelpSider.component.SnippetForm.TheGrammarLengthCannotExceed',
-                            defaultMessage: '语法长度不能超过 {MAX_SNIPPRT_SIZE} 个字符',
+                            defaultMessage:
+                              '语法长度不能超过 {MAX_SNIPPRT_SIZE} 个字符'
                           },
-                          { MAX_SNIPPRT_SIZE },
-                        ), //`语法长度不能超过 ${MAX_SNIPPRT_SIZE} 个字符`
-                      },
+                          { MAX_SNIPPRT_SIZE }
+                        ) //`语法长度不能超过 ${MAX_SNIPPRT_SIZE} 个字符`
+                      }
                     ]}
                   >
                     <MonacoEditor
@@ -331,15 +339,15 @@ class SnippetFormDrawer extends PureComponent<IProps> {
               name="description"
               label={formatMessage({
                 id: 'odc.component.SnippetForm.SyntaxDescription',
-                defaultMessage: '代码片段描述',
+                defaultMessage: '代码片段描述'
               })}
               /* 语法描述 */ rules={[
                 {
                   required: false,
                   message: formatMessage({
                     id: 'odc.component.SnippetForm.EnterASyntaxDescription',
-                    defaultMessage: '请输入代码片段描述',
-                  }),
+                    defaultMessage: '请输入代码片段描述'
+                  })
 
                   // 请输入语法描述
                 },
@@ -347,20 +355,20 @@ class SnippetFormDrawer extends PureComponent<IProps> {
                   max: 200,
                   message: formatMessage({
                     id: 'odc.component.SnippetForm.TheSyntaxDescriptionCannotExceed',
-                    defaultMessage: '代码片段描述长度不超过 200 个字符',
-                  }),
+                    defaultMessage: '代码片段描述长度不超过 200 个字符'
+                  })
 
                   // 语法描述长度不能超过 200 个字符
-                },
+                }
               ]}
             >
               <TextArea
                 placeholder={formatMessage({
                   id: 'odc.component.SnippetForm.EnterASyntaxDescription',
-                  defaultMessage: '请输入代码片段描述',
+                  defaultMessage: '请输入代码片段描述'
                 })}
                 /* 请输入语法描述 */ style={{
-                  height: '120px',
+                  height: '120px'
                 }}
               />
             </Form.Item>
@@ -373,19 +381,19 @@ class SnippetFormDrawer extends PureComponent<IProps> {
                 borderTop: '1px solid var(--divider-color)',
                 padding: '8px 16px',
                 background: 'var(--background-secondry-color)',
-                textAlign: 'right',
+                textAlign: 'right'
               }}
             >
               <Button
                 onClick={this.onClose}
                 style={{
-                  marginRight: 8,
+                  marginRight: 8
                 }}
               >
                 {
                   formatMessage({
                     id: 'odc.component.SnippetForm.Cancel',
-                    defaultMessage: '取消',
+                    defaultMessage: '取消'
                   })
                   /* 取消 */
                 }
@@ -394,7 +402,7 @@ class SnippetFormDrawer extends PureComponent<IProps> {
                 {
                   formatMessage({
                     id: 'odc.component.SnippetForm.Determine',
-                    defaultMessage: '确定',
+                    defaultMessage: '确定'
                   })
                   /* 确定 */
                 }

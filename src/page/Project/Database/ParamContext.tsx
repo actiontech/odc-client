@@ -24,7 +24,7 @@ interface IParamContext {
 const ParamContext: React.Context<IParamContext> = React.createContext({
   searchValue: null,
   sortType: null,
-  connectType: [],
+  connectType: []
 });
 
 export default ParamContext;

@@ -6,12 +6,22 @@
 import ServiceBase from '../Service.base';
 import { AxiosRequestConfig } from 'axios';
 
-import { IListOpPermissionsParams, IListOpPermissionsReturn } from './index.type';
+import {
+  IListOpPermissionsParams,
+  IListOpPermissionsReturn
+} from './index.type';
 
 class OpPermissionService extends ServiceBase {
-  public ListOpPermissions(params: IListOpPermissionsParams, options?: AxiosRequestConfig) {
+  public ListOpPermissions(
+    params: IListOpPermissionsParams,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
-    return this.get<IListOpPermissionsReturn>('/v1/dms/op_permissions', paramsData, options);
+    return this.get<IListOpPermissionsReturn>(
+      '/v1/dms/op_permissions',
+      paramsData,
+      options
+    );
   }
 }
 

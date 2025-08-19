@@ -38,7 +38,11 @@ export interface IMenuItemConfig {
   children?: IMenuItemConfig[];
   ellipsis?: boolean;
   icon?: IconComponentProps['component'];
-  run?: (session: SessionStore, node: TreeDataNode, pollingDatabase?: () => void) => void;
+  run?: (
+    session: SessionStore,
+    node: TreeDataNode,
+    pollingDatabase?: () => void
+  ) => void;
   // 所需权限点list
   needAccessTypeList?: DatabasePermissionType[];
 }

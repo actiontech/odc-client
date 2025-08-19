@@ -11,7 +11,7 @@ export enum getAuditTaskSQLsV1FilterExecStatusEnum {
 
   'manually_executed' = 'manually_executed',
 
-  'execute_rollback' = 'execute_rollback',
+  'execute_rollback' = 'execute_rollback'
 }
 
 export enum getAuditTaskSQLsV1FilterAuditStatusEnum {
@@ -19,7 +19,7 @@ export enum getAuditTaskSQLsV1FilterAuditStatusEnum {
 
   'doing' = 'doing',
 
-  'finished' = 'finished',
+  'finished' = 'finished'
 }
 
 export enum getAuditTaskSQLsV1FilterAuditLevelEnum {
@@ -29,7 +29,7 @@ export enum getAuditTaskSQLsV1FilterAuditLevelEnum {
 
   'warn' = 'warn',
 
-  'error' = 'error',
+  'error' = 'error'
 }
 
 export enum getAuditTaskSQLsV2FilterExecStatusEnum {
@@ -49,7 +49,7 @@ export enum getAuditTaskSQLsV2FilterExecStatusEnum {
 
   'terminate_failed' = 'terminate_failed',
 
-  'execute_rollback' = 'execute_rollback',
+  'execute_rollback' = 'execute_rollback'
 }
 
 export enum getAuditTaskSQLsV2FilterAuditStatusEnum {
@@ -57,7 +57,7 @@ export enum getAuditTaskSQLsV2FilterAuditStatusEnum {
 
   'doing' = 'doing',
 
-  'finished' = 'finished',
+  'finished' = 'finished'
 }
 
 export enum getAuditTaskSQLsV2FilterAuditLevelEnum {
@@ -67,5 +67,5 @@ export enum getAuditTaskSQLsV2FilterAuditLevelEnum {
 
   'warn' = 'warn',
 
-  'error' = 'error',
+  'error' = 'error'
 }

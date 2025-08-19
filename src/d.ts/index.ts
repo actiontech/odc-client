@@ -34,7 +34,7 @@ import {
   TableIndex,
   TableColumn,
   TablePartition,
-  TablePrimaryConstraint,
+  TablePrimaryConstraint
 } from '@/page/Workspace/components/CreateTable/interface';
 import { IColumnStoreServerType } from '@/d.ts/table';
 import { LockStrategy } from '@/component/Task/AlterDdlTask/CreateModal';
@@ -89,7 +89,7 @@ export interface IOrganization {
 export enum SQL_OBJECT_TYPE {
   TABLE,
   VIEW,
-  FUNCTION,
+  FUNCTION
 }
 
 // 个人配置
@@ -126,7 +126,7 @@ export interface ISystemConfig {
 // 自动提交模式
 export enum AutoCommitMode {
   ON = 'ON',
-  OFF = 'OFF',
+  OFF = 'OFF'
 }
 
 export enum IManagerUserStatus {
@@ -135,7 +135,7 @@ export enum IManagerUserStatus {
   // 停用
   DEACTIVATE = 'DEACTIVATE',
   // 启用
-  ACTIVATE = 'ACTIVATE',
+  ACTIVATE = 'ACTIVATE'
 }
 
 /**
@@ -143,14 +143,14 @@ export enum IManagerUserStatus {
  */
 export enum SQLSessionMode {
   MultiSession = 'MultiSession',
-  SingleSession = 'SingleSession',
+  SingleSession = 'SingleSession'
 }
 
 export enum IManagerDetailTabs {
   DETAIL = 'DETAIL',
   RESOURCE = 'RESOURCE',
   ROLE = 'ROLE',
-  TASK_FLOW = 'TASK_FLOW',
+  TASK_FLOW = 'TASK_FLOW'
 }
 
 /**
@@ -184,7 +184,7 @@ export enum IManagerResourceType {
   environment = 'ODC_ENVIRONMENT',
   individual_organization = 'ODC_INDIVIDUAL_ORGANIZATION',
   database = 'ODC_DATABASE',
-  odc_organization_config = 'ODC_ORGANIZATION_CONFIG',
+  odc_organization_config = 'ODC_ORGANIZATION_CONFIG'
 }
 
 export enum actionTypes {
@@ -195,7 +195,7 @@ export enum actionTypes {
   delete = 'delete',
   writeAndReadConnect = 'connect',
   readonlyconnect = 'readonlyconnect',
-  apply = 'apply',
+  apply = 'apply'
 }
 
 export enum IManagePagesKeys {
@@ -213,7 +213,7 @@ export enum IManagePagesKeys {
   SECURITY_AUDIT = 'security_audit',
   MASK_DATA = 'mask_data',
   INTEGRATION_APPROVAL = 'integration_approval',
-  SQL_INTERCEPTOR = 'sql_interceptor',
+  SQL_INTERCEPTOR = 'sql_interceptor'
 }
 
 export interface IManagerUser {
@@ -257,7 +257,7 @@ export interface IManagerUserPermission {
 }
 
 export enum IRoles {
-  SYSTEM_ADMIN = 1,
+  SYSTEM_ADMIN = 1
 }
 
 export interface IManagerRole {
@@ -293,7 +293,7 @@ export interface IManagerRole {
 export enum IManagerRolePermissionType {
   connectionAccessPermissions = 'connectionAccessPermissions',
   resourceManagementPermissions = 'resourceManagementPermissions',
-  systemOperationPermissions = 'systemOperationPermissions',
+  systemOperationPermissions = 'systemOperationPermissions'
 }
 
 export interface IResourceRole {
@@ -328,19 +328,19 @@ export enum IConnectionStatus {
   TESTING = 'TESTING',
   UNKNOWN = 'UNKNOWN',
   NOPASSWORD = 'NOPASSWORD',
-  DISABLED = 'DISABLED',
+  DISABLED = 'DISABLED'
 }
 
 export enum AccountType {
   MAIN = 'MAIN', // 对应 v1版本 test
   READONLY = 'READONLY', // v2 新增，使用场景：公共连接
-  SYS_READ = 'SYS_READ',
+  SYS_READ = 'SYS_READ'
 }
 
 export enum CipherType {
   RAW = 'RAW',
   BCRYPT = 'BCRYPT',
-  AES256SALT = 'AES256SALT',
+  AES256SALT = 'AES256SALT'
 }
 
 export interface IManagerPublicConnection extends IConnection {
@@ -416,7 +416,7 @@ interface Encryption {
 export enum EncryptionAlgorithm {
   AES256_BASE64 = 'AES256_BASE64',
   AES192_BASE64_4A = 'AES192_BASE64_4A',
-  RAW = 'RAW',
+  RAW = 'RAW'
 }
 
 export enum IntegrationType {
@@ -424,7 +424,7 @@ export enum IntegrationType {
   APPROVAL = 'APPROVAL',
   // SQL 审核集成
   SQL_INTERCEPTOR = 'SQL_INTERCEPTOR',
-  SSO = 'SSO',
+  SSO = 'SSO'
 }
 
 export enum AuditEventType {
@@ -488,7 +488,7 @@ export enum AuditEventType {
   // 多库变更
   MULTIPLE_ASYNC = 'MULTIPLE_ASYNC',
   // 多库变更模版
-  DATABASE_CHANGE_CHANGING_ORDER_TEMPLATE_MANAGEMENT = 'DATABASE_CHANGE_CHANGING_ORDER_TEMPLATE_MANAGEMENT',
+  DATABASE_CHANGE_CHANGING_ORDER_TEMPLATE_MANAGEMENT = 'DATABASE_CHANGE_CHANGING_ORDER_TEMPLATE_MANAGEMENT'
 }
 
 export enum AuditEventActionType {
@@ -689,7 +689,7 @@ export enum AuditEventActionType {
   // #region 多库变更模版管理
   CREATE_DATABASE_CHANGE_CHANGING_ORDER_TEMPLATE = 'CREATE_DATABASE_CHANGE_CHANGING_ORDER_TEMPLATE',
   DELETE_DATABASE_CHANGE_CHANGING_ORDER_TEMPLATE = 'DELETE_DATABASE_CHANGE_CHANGING_ORDER_TEMPLATE',
-  UPDATE_DATABASE_CHANGE_CHANGING_ORDER_TEMPLATE = 'UPDATE_DATABASE_CHANGE_CHANGING_ORDER_TEMPLATE',
+  UPDATE_DATABASE_CHANGE_CHANGING_ORDER_TEMPLATE = 'UPDATE_DATABASE_CHANGE_CHANGING_ORDER_TEMPLATE'
   // #endregion
 }
 
@@ -700,12 +700,12 @@ export enum AuditEventDialectType {
   MYSQL = 'MYSQL',
   DORIS = 'DORIS',
   PG = 'POSTGRESQL',
-  UNKNOWN = 'UNKNOWN',
+  UNKNOWN = 'UNKNOWN'
 }
 
 export enum AuditEventResult {
   SUCCESS = 'SUCCESS',
-  FAILED = 'FAILED',
+  FAILED = 'FAILED'
 }
 
 export interface IAudit {
@@ -768,13 +768,13 @@ export enum ConnectionMode {
   OB_MYSQL = 'OB_MYSQL',
   OB_ORACLE = 'OB_ORACLE',
   ALL = 'ALL',
-  UNKNOWN = 'UNKNOWN',
+  UNKNOWN = 'UNKNOWN'
 }
 
 export enum IConnectionType {
   PRIVATE = 'PRIVATE', // 个人连接
   ORGANIZATION = 'ORGANIZATION',
-  ALL = 'ALL',
+  ALL = 'ALL'
 }
 
 export interface IManageUserListParams {
@@ -931,7 +931,7 @@ export enum IConnectionPropertyType {
   DATE = 'date',
   DATETIME = 'datetime',
   TIME = 'time',
-  OBJECT = 'object',
+  OBJECT = 'object'
 }
 
 export enum IConnectionTestErrorType {
@@ -947,7 +947,7 @@ export enum IConnectionTestErrorType {
   OB_WEAK_READ_CONSISTENCY_REQUIRED = 'ObWeakReadConsistencyRequired',
   ACCESS_DENIED = 'AccessDenied',
   INVALID_ACCESSKEY_ID = 'InvalidAccessKeyId',
-  SIGNATURE_DOES_NOT_MATCH = 'SignatureDoesNotMatch',
+  SIGNATURE_DOES_NOT_MATCH = 'SignatureDoesNotMatch'
 }
 
 export interface IConnectionProperty {
@@ -963,7 +963,7 @@ export interface IConnectionProperty {
 }
 export enum ConnectionAddressType {
   HOST_PORT = 'HOST_PORT',
-  CONFIG_URL = 'CONFIG_URL',
+  CONFIG_URL = 'CONFIG_URL'
 }
 
 export enum PageType {
@@ -1007,7 +1007,7 @@ export enum PageType {
   TUTORIAL = 'TUTORIAL',
   /** 物化视图 */
   MATERIALIZED_VIEW = 'MATERIALIZED_VIEW',
-  CREATE_MATERIALIZED_VIEW = 'CREATE_MATERIALIZED_VIEW',
+  CREATE_MATERIALIZED_VIEW = 'CREATE_MATERIALIZED_VIEW'
 }
 
 export interface IPage {
@@ -1026,7 +1026,7 @@ export interface ISQLPage extends IPage {
 export enum ColumnOrder {
   ASC = 'ASC',
   DESC = 'DESC',
-  NONE = 'NONE',
+  NONE = 'NONE'
 }
 
 export interface IColumn {
@@ -1154,7 +1154,7 @@ export interface IColumnMetaData {
 export enum ILogType {
   INFO = 'INFO',
   WARN = 'WARN',
-  ERROR = 'ERROR',
+  ERROR = 'ERROR'
 }
 
 export interface ILogItem {
@@ -1175,7 +1175,7 @@ export enum ResourceTabKey {
   // 类型
   TYPE = 'TYPE',
   // 同义词
-  SYNONYM = 'SYNONYM',
+  SYNONYM = 'SYNONYM'
 }
 
 /** 数据库 Schema 相关 */
@@ -1269,20 +1269,20 @@ export enum ColumnShowType {
   YEAR = 'YEAR',
   MONTH = 'MONTH',
   ENUM = 'ENUM', // 枚举类型
-  SET = 'SET',
+  SET = 'SET'
 } // 集合类型
 
 // 索引
 
 export enum IndexRange {
   GLOBAL = 'GLOBAL',
-  LOCAL = 'LOCAL',
+  LOCAL = 'LOCAL'
 }
 
 export enum IndexType {
   PRIMARY = 'PRIMARY',
   UNIQUE = 'UNIQUE',
-  NORMAL = 'NORMAL',
+  NORMAL = 'NORMAL'
 }
 
 export interface ITableIndex extends IEditable {
@@ -1305,7 +1305,7 @@ export enum IPartitionType {
   RANGE_COLUMNS = 'RANGE_COLUMNS',
   LIST = 'LIST',
   LIST_COLUMNS = 'LIST_COLUMNS',
-  NONE = 'NONE',
+  NONE = 'NONE'
 }
 
 export interface ITablePartition extends IEditable {
@@ -1345,7 +1345,7 @@ export interface IFunction {
 export enum ParamMode {
   IN = 'IN',
   OUT = 'OUT',
-  INOUT = 'INOUT',
+  INOUT = 'INOUT'
 }
 
 export interface IRoutineCharacteristic {
@@ -1444,7 +1444,7 @@ export enum RefreshMethod {
   REFRESH_FAST = 'REFRESH_FAST',
   REFRESH_FORCE = 'REFRESH_FORCE',
   REFRESH_COMPLETE = 'REFRESH_COMPLETE',
-  NEVER_REFRESH = 'NEVER_REFRESH',
+  NEVER_REFRESH = 'NEVER_REFRESH'
 }
 
 // 物化视图
@@ -1489,7 +1489,7 @@ export enum RefreshScheduleUnit {
   DAY = 'DAY',
   WEEK = ' WEEK',
   MONTH = 'MONTH',
-  YEAR = 'YEAR',
+  YEAR = 'YEAR'
 }
 
 export interface MaterializedViewInfo {
@@ -1543,30 +1543,30 @@ export interface ITrigger {
 // 触发器启用状态
 export enum TriggerState {
   enabled = 'ENABLED',
-  disabled = 'DISABLED',
+  disabled = 'DISABLED'
 }
 
 export enum TriggerSchemaType {
-  TABLE = 'TABLE',
+  TABLE = 'TABLE'
 }
 
 export enum TriggerType {
-  SIMPLE = 'SIMPLE',
+  SIMPLE = 'SIMPLE'
 }
 
 export enum TriggerMode {
   BEFORE = 'BEFORE',
-  AFTER = 'AFTER',
+  AFTER = 'AFTER'
 }
 
 export enum TriggerGrade {
-  ROW = 'row',
+  ROW = 'row'
 }
 
 export enum TriggerEvents {
   INSERT = 'INSERT',
   UPDATE = 'UPDATE',
-  DELETE = 'DELETE',
+  DELETE = 'DELETE'
 }
 
 export interface ITriggerBaseInfoForm {
@@ -1638,7 +1638,7 @@ export interface IType {
 export enum TypeCode {
   OBJECT = 'OBJECT',
   VARRAY = 'VARRAY',
-  TABLE = 'TABLE',
+  TABLE = 'TABLE'
 }
 
 export interface ITypeForm {
@@ -1662,7 +1662,7 @@ export interface ISynonym {
 
 export enum SynonymType {
   PUBLIC = 'PUBLIC',
-  COMMON = 'COMMON',
+  COMMON = 'COMMON'
 }
 
 // 结果集，历史记录追加
@@ -1676,7 +1676,7 @@ export enum SqlType {
   update = 'UPDATE',
   delete = 'DELETE',
   sort = 'SORT',
-  replace = 'REPLACE',
+  replace = 'REPLACE'
 }
 
 export enum DbObjectType {
@@ -1697,7 +1697,7 @@ export enum DbObjectType {
   column = 'COLUMN',
   external_table = 'EXTERNAL_TABLE',
   logical_table = 'LOGICAL_TABLE',
-  materialized_view = 'MATERIALIZED_VIEW',
+  materialized_view = 'MATERIALIZED_VIEW'
 }
 
 export interface IResultTimerStage {
@@ -1790,18 +1790,18 @@ export enum ISqlExecuteResultStatus {
   FAILED = 'FAILED',
   CANCELED = 'CANCELED',
   CREATED = 'CREATED',
-  RUNNING = 'RUNNING',
+  RUNNING = 'RUNNING'
 }
 
 export enum IProfileNodeStatus {
   FINISHED = 'FINISHED',
   RUNNING = 'RUNNING',
-  PREPARING = 'PREPARING',
+  PREPARING = 'PREPARING'
 }
 
 export enum IProfileStatus {
   FINISHED = 'FINISHED',
-  RUNNING = 'RUNNING',
+  RUNNING = 'RUNNING'
 }
 
 export interface ISqlExecuteResultWidthData {
@@ -1812,14 +1812,14 @@ export interface ISqlExecuteResultWidthData {
 
 export enum FileType {
   csv = 'csv',
-  sql = 'sql',
+  sql = 'sql'
 }
 
 export enum GeneralSQLType {
   'DDL' = 'DDL',
   'DML' = 'DML',
   'DQL' = 'DQL',
-  'OTHER' = 'OTHER',
+  'OTHER' = 'OTHER'
 }
 
 export interface IExportResultSet {
@@ -1940,7 +1940,7 @@ export interface ISQLExecuteDetail {
 export enum TraceSpanNode {
   JDBC = 'JDBC',
   OBProxy = 'OBProxy',
-  OBServer = 'OBServer',
+  OBServer = 'OBServer'
 }
 export interface TraceSpan {
   logs: string;
@@ -1964,20 +1964,20 @@ export enum ConstraintType {
   UNIQUE = 'UNIQUE',
   FOREIGN = 'FOREIGN',
   CHECK = 'CHECK',
-  INVALID = 'INVALID',
+  INVALID = 'INVALID'
 }
 
 export enum ConstraintDelayConfig {
   DEFERRABLE_INITIALLY_IMMEDIATE = 'DEFERRABLE INITIALLY IMMEDIATE',
   DEFERRABLE_INITIALLY_DEFERRED = 'DEFERRABLE INITIALLY DEFERRED',
-  NOT_DEFERRABLE = 'NOT DEFERRABLE',
+  NOT_DEFERRABLE = 'NOT DEFERRABLE'
 }
 
 export enum ConstraintAction {
   CASCADE = 'CASCADE',
   NO_ACTION = 'NO ACTION',
   RESTRICT = 'RESTRICT',
-  SET_NULL = 'SET NULL',
+  SET_NULL = 'SET NULL'
 }
 
 export interface ITableConstraint extends IEditable {
@@ -1999,12 +1999,12 @@ export interface ITableConstraint extends IEditable {
 
 export enum DataTransferTaskLogType {
   ALL = 'ALL',
-  WARN = 'WARN',
+  WARN = 'WARN'
 }
 
 export enum CommonTaskLogType {
   ALL = 'ALL',
-  WARN = 'WARN',
+  WARN = 'WARN'
 }
 
 export interface IExportObj {
@@ -2019,7 +2019,7 @@ export enum ITransferDataObjStatus {
   SUCCESS = 'SUCCESS',
   FAILURE = 'FAILURE',
   KILLED = 'KILLED',
-  UNKNOWN = 'UNKNOWN',
+  UNKNOWN = 'UNKNOWN'
 }
 
 /** 数据导入导出状态对象 */
@@ -2073,17 +2073,17 @@ export enum DatabaseObjectType {
   TABLE = 'TABLE',
   INDEX = 'INDEX',
   VIEW = 'VIEW',
-  DATABASE = 'DATABASE',
+  DATABASE = 'DATABASE'
 }
 
 export enum TransferType {
   IMPORT = 'IMPORT',
-  EXPORT = 'EXPORT',
+  EXPORT = 'EXPORT'
 }
 
 export enum TaskPageScope {
   CREATED_BY_CURRENT_USER = 'createdByCurrentUser',
-  APPROVE_BY_CURRENT_USER = 'approveByCurrentUser',
+  APPROVE_BY_CURRENT_USER = 'approveByCurrentUser'
 }
 
 export enum TaskPageType {
@@ -2109,7 +2109,7 @@ export enum TaskPageType {
   APPLY_TABLE_PERMISSION = 'APPLY_TABLE_PERMISSION',
   STRUCTURE_COMPARISON = 'STRUCTURE_COMPARISON',
   MULTIPLE_ASYNC = 'MULTIPLE_ASYNC',
-  LOGICAL_DATABASE_CHANGE = 'LOGICAL_DATABASE_CHANGE',
+  LOGICAL_DATABASE_CHANGE = 'LOGICAL_DATABASE_CHANGE'
 }
 
 export enum TaskType {
@@ -2154,11 +2154,11 @@ export enum TaskType {
   /** 多库变更 */
   MULTIPLE_ASYNC = 'MULTIPLE_ASYNC',
   /** 逻辑库变更 */
-  LOGICAL_DATABASE_CHANGE = 'LOGICAL_DATABASE_CHANGE',
+  LOGICAL_DATABASE_CHANGE = 'LOGICAL_DATABASE_CHANGE'
 }
 
 export enum TaskJobType {
-  DATA_DELETE = 'DATA_DELETE',
+  DATA_DELETE = 'DATA_DELETE'
 }
 
 export enum SubTaskType {
@@ -2166,7 +2166,7 @@ export enum SubTaskType {
   DATA_DELETE = 'DATA_DELETE',
   DATA_ARCHIVE_ROLLBACK = 'DATA_ARCHIVE_ROLLBACK',
   DATA_ARCHIVE_DELETE = 'DATA_ARCHIVE_DELETE',
-  ASYNC = 'ASYNC',
+  ASYNC = 'ASYNC'
 }
 
 export enum TaskSubType {
@@ -2177,26 +2177,26 @@ export enum TaskSubType {
   CREATE = 'CREATE',
   DROP = 'DROP',
   ALTER = 'ALTER',
-  OTHER = 'OTHER',
+  OTHER = 'OTHER'
 }
 
 export enum EnvPageType {
   DEV = 'DEV',
   TEST = 'TEST',
-  PROD = 'PROD',
+  PROD = 'PROD'
 }
 
 export enum RiskDetectRuleType {
   DEFAULT = 'DEFAULT',
   LOW = 'LOW',
   MIDDLE = 'MIDDLE',
-  HIGH = 'HIGH',
+  HIGH = 'HIGH'
 }
 
 export enum EnvType {
   DEV = 'DEV',
   TEST = 'TEST',
-  PROD = 'PROD',
+  PROD = 'PROD'
 }
 export interface IExportDbObject {
   dbObjectType: DbObjectType;
@@ -2206,7 +2206,7 @@ export interface IExportDbObject {
 export enum ExportFormat {
   SQL = 'SQL',
   ODC = 'ODC',
-  TEXT = 'TEXT',
+  TEXT = 'TEXT'
 }
 
 export interface IDataTransferTaskConfig {
@@ -2248,13 +2248,13 @@ export interface ISequence {
 
 export enum EXPORT_TYPE {
   CSV = 'CSV',
-  SQL = 'SQL',
+  SQL = 'SQL'
 }
 
 export enum EXPORT_CONTENT {
   DATA_AND_STRUCT,
   DATA,
-  STRUCT,
+  STRUCT
 }
 
 export interface ExportFormData {
@@ -2314,7 +2314,7 @@ export enum IMPORT_TYPE {
   ZIP = 'ZIP',
   SQL = 'SQL',
   CSV = 'CSV',
-  DIR = 'DIR',
+  DIR = 'DIR'
 }
 
 /**
@@ -2322,7 +2322,7 @@ export enum IMPORT_TYPE {
  */
 export enum FILE_DATA_TYPE {
   SQL = 'SQL',
-  CSV = 'CSV',
+  CSV = 'CSV'
 }
 
 export interface CsvColumnMapping {
@@ -2344,13 +2344,13 @@ export enum IMPORT_ENCODING {
   GB2312 = 'GB2312',
   GBK = 'GBK',
   GB18030 = 'GB18030',
-  BIG5 = 'BIG5',
+  BIG5 = 'BIG5'
 }
 
 export enum IMPORT_CONTENT {
   DATA_AND_STRUCT,
   DATA,
-  STRUCT,
+  STRUCT
 }
 
 export interface ImportFormData {
@@ -2485,7 +2485,7 @@ export enum ResourceTreeNodeMenuKeys {
   // EXTERNAL_TABLE
   EXTERNAL_TABLE_SYNCHRONIZATION_TABLE = 'EXTERNAL_TABLE_SYNCHRONIZATION_TABLE',
   //
-  CREATE_MATERIALIZED_VIEW = 'CREATE_MATERIALIZED_VIEW',
+  CREATE_MATERIALIZED_VIEW = 'CREATE_MATERIALIZED_VIEW'
 }
 
 export interface TaskRecord<P> {
@@ -2609,24 +2609,24 @@ export enum ScheduleChangeStatus {
   APPROVING = 'APPROVING',
   CHANGING = 'CHANGING',
   SUCCESS = 'SUCCESS',
-  FAILED = 'FAILED',
+  FAILED = 'FAILED'
 }
 
 export enum MigrationInsertAction {
   INSERT_IGNORE = 'INSERT_IGNORE',
-  INSERT_DUPLICATE_UPDATE = 'INSERT_DUPLICATE_UPDATE',
+  INSERT_DUPLICATE_UPDATE = 'INSERT_DUPLICATE_UPDATE'
 }
 
 export enum ShardingStrategy {
   FIXED_LENGTH = 'FIXED_LENGTH',
-  MATCH = 'MATCH',
+  MATCH = 'MATCH'
 }
 
 export enum SyncTableStructureEnum {
   COLUMN = 'COLUMN',
   CONSTRAINT = 'CONSTRAINT',
   INDEX = 'INDEX',
-  PARTITION = 'PARTITION',
+  PARTITION = 'PARTITION'
 }
 
 export interface IDLMJobParametersTables {
@@ -2781,7 +2781,7 @@ export enum SubTaskType {
   DELETE = 'DELETE',
   QUICK_DELETE = 'QUICK_DELETE',
   DEIRECT_DELETE = 'DEIRECT_DELETE',
-  ROLLBACK = 'ROLLBACK',
+  ROLLBACK = 'ROLLBACK'
 }
 
 export interface ISubTaskTaskUnit {
@@ -3034,7 +3034,7 @@ export enum RollbackType {
   // 引用
   REF = 'reference',
   // 自定义
-  CUSTOM = 'CUSTOM',
+  CUSTOM = 'CUSTOM'
 }
 
 export interface IPermissionTaskParams {
@@ -3141,14 +3141,14 @@ export enum TaskExecStrategy {
   DAY = 'DAY',
   WEEK = 'WEEK',
   MONTH = 'MONTH',
-  CRON = 'CRON',
+  CRON = 'CRON'
 }
 
 export enum TaskFlowNodeType {
   APPROVAL_TASK = 'APPROVAL_TASK',
   GATEWAY = 'GATEWAY',
   SERVICE_TASK = 'SERVICE_TASK',
-  PRE_CHECK = 'PRE_CHECK',
+  PRE_CHECK = 'PRE_CHECK'
 }
 
 export enum TaskOperationType {
@@ -3156,13 +3156,13 @@ export enum TaskOperationType {
   UPDATE = 'UPDATE',
   PAUSE = 'PAUSE',
   TERMINATE = 'TERMINATE',
-  RESUME = 'RESUME',
+  RESUME = 'RESUME'
 }
 
 export enum IFlowTaskType {
   PRE_CHECK = 'PRE_CHECK',
   MULTIPLE_ASYNC = 'MULTIPLE_ASYNC',
-  GENERATE_ROLLBACK = 'GENERATE_ROLLBACK',
+  GENERATE_ROLLBACK = 'GENERATE_ROLLBACK'
 }
 
 export interface ITaskFlowNode {
@@ -3240,7 +3240,7 @@ export enum TaskStatus {
   TIMEOUT = 'TIMEOUT',
   PRE_CHECK_FAILED = 'PRE_CHECK_FAILED',
   CREATING = 'CREATING',
-  EXECUTION_ABNORMAL = 'EXECUTION_ABNORMAL', // 执行异常
+  EXECUTION_ABNORMAL = 'EXECUTION_ABNORMAL' // 执行异常
 }
 
 export enum SubTaskStatus {
@@ -3249,13 +3249,13 @@ export enum SubTaskStatus {
   DONE = 'DONE', // 执行完成
   FAILED = 'FAILED', // 执行失败
   CANCELED = 'CANCELED', // 执行取消
-  ABNORMAL = 'ABNORMAL', // 执行异常
+  ABNORMAL = 'ABNORMAL' // 执行异常
 }
 
 export enum StatusNodeType {
   FLOW_TASK = 'FLOW_TASK',
   CYCLE_TASK = 'CYCLE_TASK',
-  SUB_TASK = 'SUB_TASK',
+  SUB_TASK = 'SUB_TASK'
 }
 
 export enum TaskNodeStatus {
@@ -3267,19 +3267,19 @@ export enum TaskNodeStatus {
   EXPIRED = 'EXPIRED',
   FAILED = 'FAILED',
   WAIT_FOR_CONFIRM = 'WAIT_FOR_CONFIRM',
-  PRE_CHECK_FAILED = 'PRE_CHECK_FAILED',
+  PRE_CHECK_FAILED = 'PRE_CHECK_FAILED'
 }
 
 export enum SQLContentType {
   TEXT = 'TEXT',
-  FILE = 'FILE',
+  FILE = 'FILE'
 }
 
 /**
  * 解密tag
  */
 export enum DECODE_TAG {
-  SDYD = 'SD_MOBILE',
+  SDYD = 'SD_MOBILE'
 }
 
 export interface TaskTools<T> {
@@ -3342,14 +3342,18 @@ type SequenceMenuType = 'sequence';
 
 type SynonymMenuType = 'synonym';
 
-export type MenusType = TableMenuType | ViewMenuType | SequenceMenuType | SynonymMenuType;
+export type MenusType =
+  | TableMenuType
+  | ViewMenuType
+  | SequenceMenuType
+  | SynonymMenuType;
 
 export enum TableTreeNode {
   TABLE = 'TABLE',
   COLUMN = 'COLUMN',
   INDEX = 'INDEX',
   PARTITION = 'PARTITION',
-  CONSTRAINT = 'CONSTRAINT',
+  CONSTRAINT = 'CONSTRAINT'
 }
 
 /** 触发器 属性 Tab key 枚举 */
@@ -3357,20 +3361,20 @@ export enum TriggerPropsTab {
   BASE_INFO = 'INFO',
   BASE_OBJECT = 'BASE_OBJECT',
   CORRELATION = 'CORRELATION',
-  DDL = 'DDL',
+  DDL = 'DDL'
 }
 
 /** 同义词 属性 Tab key 枚举 */
 export enum SynonymPropsTab {
   BASE_INFO = 'INFO',
-  DDL = 'DDL',
+  DDL = 'DDL'
 }
 
 /** 类型 属性 Tab key 枚举 */
 export enum TypePropsTab {
   BASE_INFO = 'INFO',
   CORRELATION = 'CORRELATION',
-  DDL = 'DDL',
+  DDL = 'DDL'
 }
 
 /**
@@ -3412,7 +3416,7 @@ export enum MockGenerator {
   FIX_DATE_GENERATOR = 'FIX_DATE_GENERATOR',
   STEP_DATE_GENERATOR = 'STEP_DATE_GENERATOR',
   NULL_GENERATOR = 'NULL_GENERATOR',
-  SKIP_GENERATOR = 'SKIP_GENERATOR',
+  SKIP_GENERATOR = 'SKIP_GENERATOR'
 }
 
 export interface IServerMockColumn {
@@ -3463,7 +3467,7 @@ export interface IColumnSizeMap {
 export enum ESSOLgoinType {
   OAUTH2 = 'OAUTH2',
   LDAP = 'LDAP',
-  OIDC = 'OIDC',
+  OIDC = 'OIDC'
 }
 export interface ServerSystemInfo {
   buildTime: number;
@@ -3532,7 +3536,7 @@ export enum ODCErrorsCode {
   SysTenantAccountNotSet = 'SysTenantAccountNotSet',
   SysTenantAccountInvalid = 'SysTenantAccountInvalid',
   PermissionChanged = 'PermissionChanged',
-  AccessDenied = 'AccessDenied',
+  AccessDenied = 'AccessDenied'
 }
 
 export enum ConnectType {
@@ -3549,13 +3553,13 @@ export enum ConnectType {
   OSS = 'OSS',
   COS = 'COS',
   OBS = 'OBS',
-  S3A = 'S3A',
+  S3A = 'S3A'
 }
 
 export enum DatasourceGroup {
   OceanBaseDatabase = 'OceanBaseDatabase',
   OtherDatabase = 'OtherDatabase',
-  FileSystem = 'FileSystem',
+  FileSystem = 'FileSystem'
 }
 
 export enum DragInsertType {
@@ -3563,12 +3567,12 @@ export enum DragInsertType {
   SELECT = 'select_stmt',
   INSERT = 'insert_stmt',
   UPDATE = 'update_stmt',
-  DELETE = 'delete_stmt',
+  DELETE = 'delete_stmt'
 }
 
 export enum SQLLintMode {
   AUTO = 'AUTO',
-  MANUAL = 'MANUAL',
+  MANUAL = 'MANUAL'
 }
 
 export interface IRecycleConfig {
@@ -3580,7 +3584,7 @@ export interface IRecycleConfig {
 export enum RSModifyDataType {
   RAW = 'RAW',
   FILE = 'FILE',
-  HEX = 'HEX',
+  HEX = 'HEX'
 }
 
 export class LobExt {
@@ -3604,7 +3608,7 @@ export enum MaskRuleType {
   // 取整
   ROUNDING = 'ROUNDING',
   // 置空
-  NULL = 'NULL',
+  NULL = 'NULL'
 }
 
 export enum MaskRuleCustomSegmentsType {
@@ -3615,14 +3619,14 @@ export enum MaskRuleCustomSegmentsType {
   // 其他位数
   LEFT_OVER = 'LEFT_OVER',
   // 指定分隔符前
-  DELIMITER = 'DELIMITER',
+  DELIMITER = 'DELIMITER'
 }
 
 export enum MaskRuleHashType {
   MD5 = 'MD5',
   SHA256 = 'SHA256',
   SHA512 = 'SHA512',
-  SM3 = 'SM3',
+  SM3 = 'SM3'
 }
 
 export enum MaskRuleSegmentsType {
@@ -3639,7 +3643,7 @@ export enum MaskRuleSegmentsType {
   // 替换后四位
   POST_4 = 'POST_4',
   // 自定义
-  CUSTOM = 'CUSTOM',
+  CUSTOM = 'CUSTOM'
 }
 
 export interface IMaskRule {
@@ -3695,7 +3699,7 @@ export interface IMaskPolicy {
 
 export enum TaskPartitionStrategy {
   DROP = 'DROP',
-  CREATE = 'CREATE',
+  CREATE = 'CREATE'
 }
 
 export interface IPartitionTableConfig {
@@ -3718,7 +3722,7 @@ export interface IPartitionTablePreviewConfig {
 
 export enum PARTITION_NAME_INVOKER {
   CUSTOM_PARTITION_NAME_GENERATOR = 'CUSTOM_PARTITION_NAME_GENERATOR',
-  DATE_BASED_PARTITION_NAME_GENERATOR = 'DATE_BASED_PARTITION_NAME_GENERATOR',
+  DATE_BASED_PARTITION_NAME_GENERATOR = 'DATE_BASED_PARTITION_NAME_GENERATOR'
 }
 
 export enum PARTITION_KEY_INVOKER {
@@ -3728,12 +3732,12 @@ export enum PARTITION_KEY_INVOKER {
   HISTORICAL_PARTITION_PLAN_DROP_GENERATOR = 'HISTORICAL_PARTITION_PLAN_DROP_GENERATOR',
   HISTORICAL_PARTITION_PLAN_CREATE_GENERATOR = 'HISTORICAL_PARTITION_PLAN_CREATE_GENERATOR',
   NUMBER_INCREASING_GENERATOR = 'NUMBER_INCREASING_GENERATOR',
-  TIME_STRING_INCREASING_GENERATOR = 'TIME_STRING_INCREASING_GENERATOR',
+  TIME_STRING_INCREASING_GENERATOR = 'TIME_STRING_INCREASING_GENERATOR'
 }
 
 export enum TaskErrorStrategy {
   CONTINUE = 'CONTINUE',
-  ABORT = 'ABORT',
+  ABORT = 'ABORT'
 }
 
 export interface IPartitionKeyConfig {
@@ -3826,7 +3830,7 @@ export interface IPartitionPlanKeyType {
 export enum IPartitionPlanPeriodUnit {
   YEAR = 'YEAR',
   MONTH = 'MONTH',
-  DAY = 'DAY',
+  DAY = 'DAY'
 }
 
 export enum SchemaComparingResult {
@@ -3858,7 +3862,7 @@ export enum SchemaComparingResult {
   /**
    * 跳过分析
    */
-  SKIP = 'SKIP',
+  SKIP = 'SKIP'
 }
 
 export enum ConnectionFilterStatus {
@@ -3866,14 +3870,14 @@ export enum ConnectionFilterStatus {
   INACTIVE = 'INACTIVE',
   TESTING = 'TESTING',
   NOPASSWORD = 'NOPASSWORD',
-  ALL = 'ALL',
+  ALL = 'ALL'
 }
 
 export enum TransState {
   UNKNOWN = 'UNKNOWN',
   IDLE = 'IDLE',
   ACTIVE = 'ACTIVE',
-  TIMEOUT = 'TIMEOUT',
+  TIMEOUT = 'TIMEOUT'
 }
 
 export interface ISessionStatus {
@@ -3938,7 +3942,7 @@ export interface IExportResultSetCSVFormat {
 export enum IExportResultSetFileType {
   SQL = 'SQL',
   CSV = 'CSV',
-  EXCEL = 'EXCEL',
+  EXCEL = 'EXCEL'
 }
 export type ObjectId = string | number;
 export type ScriptId = string | number;
@@ -3969,7 +3973,7 @@ export enum ISSOType {
   OIDC = 'OIDC',
   OAUTH2 = 'OAUTH2',
   LDAP = 'LDAP',
-  SAML = 'SAML',
+  SAML = 'SAML'
 }
 
 export enum IClientAuthenticationMethod {
@@ -3979,17 +3983,17 @@ export enum IClientAuthenticationMethod {
   client_secret_post = 'client_secret_post',
   client_secret_jwt = 'client_secret_jwt',
   private_key_jwt = 'private_key_jwt',
-  none = 'none',
+  none = 'none'
 }
 
 export enum IAuthorizationGrantType {
-  authorization_code = 'authorization_code',
+  authorization_code = 'authorization_code'
 }
 
 export enum IUserInfoAuthenticationMethod {
   header = 'header',
   form = 'form',
-  query = 'query',
+  query = 'query'
 }
 
 export interface ISSO_OAUTH2_CONFIG {
@@ -4034,7 +4038,7 @@ export interface ISSO_LDAP_CONFIG {
 export enum SAMLType {
   verification = 'verification',
   signing = 'signing',
-  decryption = 'decryption',
+  decryption = 'decryption'
 }
 
 export interface ISSO_SAML_CONFIG {
@@ -4142,13 +4146,13 @@ export interface INlsObject {
 
 export enum ETheme {
   DARK = 'dark',
-  WHITE = 'white',
+  WHITE = 'white'
 }
 
 export enum EStatus {
   SUBMIT = 'submit',
   APPROVAL = 'approval',
-  DISABLED = 'disabled',
+  DISABLED = 'disabled'
 }
 
 export interface AgainTaskRecord {
@@ -4163,7 +4167,7 @@ export enum ProgressOfLocklessStructureChangeTaskStatusMap {
   MONITOR_DATA_TASK_FULL_TRANSFER = 'MONITOR_DATA_TASK_FULL_TRANSFER', //数据迁移任务迁移全量数据'
   MONITOR_DATA_TASK_TRANSFER_APP_SWITCH_FALSE = 'MONITOR_DATA_TASK_TRANSFER_APP_SWITCH_FALSE', //'数据迁移任务迁移增量数据'
   SWAP_TABLE = 'SWAP_TABLE', // '切换中'
-  CLEAR_RESOURCE = 'CLEAR_RESOURCE', // '释放迁移任务资源'
+  CLEAR_RESOURCE = 'CLEAR_RESOURCE' // '释放迁移任务资源'
 }
 
 interface UnfinishedTaskType {

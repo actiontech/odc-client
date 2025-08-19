@@ -24,7 +24,7 @@ import {
   SelectProps,
   Space,
   Tag,
-  Typography,
+  Typography
 } from 'antd';
 import { useState } from 'react';
 import React from 'react';
@@ -52,7 +52,7 @@ export default function SelectItem(props: {
               <Typography.Text type="secondary">
                 {formatMessage({
                   id: 'src.component.ODCSetting.Item.SelectItem.C99AE9F7',
-                  defaultMessage: '默认',
+                  defaultMessage: '默认'
                 })}
               </Typography.Text>
             </Tag>
@@ -67,7 +67,7 @@ export default function SelectItem(props: {
           >
             {formatMessage({
               id: 'src.component.ODCSetting.Item.SelectItem.56CA55CD',
-              defaultMessage: '设为默认值',
+              defaultMessage: '设为默认值'
             })}
           </span>
         </Space>
@@ -85,7 +85,7 @@ export default function SelectItem(props: {
             {selectedValue === tag.value
               ? formatMessage({
                   id: 'src.component.ODCSetting.Item.SelectItem.4A6D93E1',
-                  defaultMessage: '-默认',
+                  defaultMessage: '-默认'
                 })
               : ''}
           </Tag>

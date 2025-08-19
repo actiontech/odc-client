@@ -24,43 +24,45 @@ const columns = [
     dataIndex: 'name',
     title: formatMessage({
       id: 'odc.DataArchiveTask.DetailContent.VariableConfig.VariableName',
-      defaultMessage: '变量名',
+      defaultMessage: '变量名'
     }),
     //变量名
     ellipsis: true,
     width: 190,
-    render: (name) => name || '-',
+    render: (name) => name || '-'
   },
   {
     dataIndex: 'format',
     title: formatMessage({
       id: 'odc.DataArchiveTask.DetailContent.VariableConfig.TimeFormat',
-      defaultMessage: '时间格式',
+      defaultMessage: '时间格式'
     }),
     //时间格式
     ellipsis: true,
     width: 150,
-    render: (name) => name || '-',
+    render: (name) => name || '-'
   },
   {
     dataIndex: 'opration',
     title: formatMessage({
       id: 'odc.src.component.Task.component.VariableConfigTable.Shift',
-      defaultMessage: '时间偏移',
+      defaultMessage: '时间偏移'
     }), //'时间偏移'
     width: 160,
     render: (opration) => {
       let oprationLabel = opration;
       if (oprationLabel?.match(oprationReg)) {
         const unit = oprationLabel?.slice(-1);
-        const unitLabel = timeUnitOptions?.find((item) => item?.value === unit)?.label;
+        const unitLabel = timeUnitOptions?.find(
+          (item) => item?.value === unit
+        )?.label;
         oprationLabel = oprationLabel.replace(unit, unitLabel);
       } else {
         oprationLabel = '-';
       }
       return oprationLabel;
-    },
-  },
+    }
+  }
 ];
 
 const VariableConfigTable: React.FC<{
@@ -75,7 +77,7 @@ const VariableConfigTable: React.FC<{
     return {
       name,
       format,
-      opration,
+      opration
     };
   });
   return (

@@ -17,10 +17,20 @@
 import DragWrapper from '@/component/Dragable/component/DragWrapper';
 import SnippetFormDrawer from '@/component/GrammerHelpSider/component/SnippetForm';
 import { EnumSnippetAction, ISnippet, SnippetStore } from '@/store/snippet';
-import Icon, { CopyOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import Icon, {
+  CopyOutlined,
+  DeleteOutlined,
+  EditOutlined
+} from '@ant-design/icons';
 import { Input, message, Modal, Spin } from 'antd';
 import { inject, observer } from 'mobx-react';
-import { forwardRef, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useState
+} from 'react';
 import ListItem from '../../components/ListItem';
 import styles from './index.less';
 
@@ -35,7 +45,10 @@ import SnippetInfoToolTip from './Info';
 
 export default inject('snippetStore')(
   observer(
-    forwardRef(function Snippet({ snippetStore }: { snippetStore?: SnippetStore }, ref) {
+    forwardRef(function Snippet(
+      { snippetStore }: { snippetStore?: SnippetStore },
+      ref
+    ) {
       const [snipptVisible, setSnipptVisible] = useState(false);
       const [snippet, setSnippet] = useState<ISnippet>(null);
       const [searchValue, setSearchValue] = useState('');
@@ -54,17 +67,19 @@ export default inject('snippetStore')(
             },
             reload() {
               snippetStore.resetSnippets();
-            },
+            }
           };
         },
-        [],
+        []
       );
 
       const data = useMemo(() => {
         return snippetStore.snippets.filter((snippet: ISnippet) => {
           const isMatchkeyWord = !searchValue
             ? true
-            : snippet.prefix.toUpperCase().indexOf(searchValue?.toUpperCase()) !== -1;
+            : snippet.prefix
+                .toUpperCase()
+                .indexOf(searchValue?.toUpperCase()) !== -1;
           return isMatchkeyWord;
         });
       }, [snippetStore?.snippets, searchValue]);
@@ -76,7 +91,7 @@ export default inject('snippetStore')(
               onSearch={(v) => setSearchValue(v)}
               placeholder={formatMessage({
                 id: 'odc.Script.Snippet.SearchForCodeSnippets',
-                defaultMessage: '搜索代码片段',
+                defaultMessage: '搜索代码片段'
               })} /*搜索代码片段*/
             />
           </div>
@@ -97,7 +112,7 @@ export default inject('snippetStore')(
                           setIsDraging(true);
                           snippetStore.snippetDragging = {
                             ...snippet,
-                            body: getWrapedSnippetBody(snippet.body),
+                            body: getWrapedSnippetBody(snippet.body)
                           };
                         }}
                         onEnd={() => {
@@ -112,68 +127,76 @@ export default inject('snippetStore')(
                               icon: CopyOutlined,
                               title: formatMessage({
                                 id: 'odc.Script.Snippet.Copy',
-                                defaultMessage: '复制',
+                                defaultMessage: '复制'
                               }), //复制
                               onClick() {
                                 copyToCB(
                                   `<meta name='_!isODCSnippet_' content='yes' />${getWrapedSnippetBody(
-                                    snippet.body,
+                                    snippet.body
                                   )}`,
                                   {
-                                    format: 'text/html',
-                                  },
+                                    format: 'text/html'
+                                  }
                                 );
                                 message.success(
                                   formatMessage(
                                     {
                                       id: 'odc.component.SnippetCard.SnippetprefixSyntaxHelpsCopySuccessfully',
-                                      defaultMessage: '{snippetPrefix} 代码片段复制成功！',
+                                      defaultMessage:
+                                        '{snippetPrefix} 代码片段复制成功！'
                                     },
-                                    { snippetPrefix: snippet.prefix },
-                                  ), //`${snippet.prefix} 代码片段复制成功！`
+                                    { snippetPrefix: snippet.prefix }
+                                  ) //`${snippet.prefix} 代码片段复制成功！`
                                 );
-                              },
+                              }
                             },
                             {
                               icon: EditOutlined,
-                              title: formatMessage({ id: 'odc.Script.Snippet.Edit' }), //编辑
+                              title: formatMessage({
+                                id: 'odc.Script.Snippet.Edit'
+                              }), //编辑
                               onClick() {
                                 setSnipptVisible(true);
                                 setSnippet(snippet);
-                              },
+                              }
                             },
                             {
                               icon: DeleteOutlined,
-                              title: formatMessage({ id: 'odc.Script.Snippet.Delete' }), //删除
+                              title: formatMessage({
+                                id: 'odc.Script.Snippet.Delete'
+                              }), //删除
                               onClick() {
                                 Modal.confirm({
                                   title: formatMessage(
                                     {
-                                      id: 'odc.component.GrammerHelpSider.AreYouSureYouWant',
+                                      id: 'odc.component.GrammerHelpSider.AreYouSureYouWant'
                                     },
-                                    { snippetPrefix: snippet.prefix },
+                                    { snippetPrefix: snippet.prefix }
                                   ), //`确认删除代码片段：${snippet.prefix}?`
                                   content: snippet.description,
 
                                   async onOk() {
-                                    const res = await snippetStore.deleteCustomerSnippet(snippet);
+                                    const res =
+                                      await snippetStore.deleteCustomerSnippet(
+                                        snippet
+                                      );
 
                                     if (res) {
                                       message.success(
                                         formatMessage(
                                           {
-                                            id: 'odc.component.GrammerHelpSider.TheSyntaxSnippetSnippetprefixHas',
+                                            id: 'odc.component.GrammerHelpSider.TheSyntaxSnippetSnippetprefixHas'
                                           },
-                                          { snippetPrefix: snippet.prefix },
-                                        ), //`代码片段 ${snippet.prefix} 删除成功！`
+                                          { snippetPrefix: snippet.prefix }
+                                        ) //`代码片段 ${snippet.prefix} 删除成功！`
                                       );
                                     }
 
                                     await snippetStore.resetSnippets();
-                                  },
+                                  }
                                 });
-                              },
-                            },
+                              }
+                            }
                           ]}
                           icon={
                             <Icon
@@ -207,6 +230,6 @@ export default inject('snippetStore')(
           />
         </div>
       );
-    }),
-  ),
+    })
+  )
 );

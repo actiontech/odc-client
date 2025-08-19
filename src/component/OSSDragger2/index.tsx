@@ -31,7 +31,7 @@ import React, {
   useEffect,
   useImperativeHandle,
   useRef,
-  useState,
+  useState
 } from 'react';
 import FileList from './FileList';
 import styles from './index.less';
@@ -55,7 +55,14 @@ interface IProps extends DraggerProps {
 
 const ODCDragger: React.FC<IProps> = React.memo(
   forwardRef((props, ref) => {
-    const { onFileChange, clearSuccess, tip, onBeforeUpload, sessionId, defaultFileList } = props;
+    const {
+      onFileChange,
+      clearSuccess,
+      tip,
+      onBeforeUpload,
+      sessionId,
+      defaultFileList
+    } = props;
     const [fileList, setFileList] = useState(defaultFileList);
     const [isSearch, setIsSearch] = useState(false);
     const [searchValue, setSearchValue] = useState('');
@@ -85,7 +92,7 @@ const ODCDragger: React.FC<IProps> = React.memo(
           setFileList(list);
         }
       }, 60),
-      [clearSuccess],
+      [clearSuccess]
     );
 
     const throttledChange500 = useCallback(
@@ -97,7 +104,7 @@ const ODCDragger: React.FC<IProps> = React.memo(
           setFileList(list);
         }
       }, 500),
-      [clearSuccess],
+      [clearSuccess]
     );
 
     useEffect(() => {
@@ -116,7 +123,9 @@ const ODCDragger: React.FC<IProps> = React.memo(
       ref: null,
       onChange(info) {
         const files = info.fileList;
-        const uploadingListLen = files?.filter((file) => file.status === 'uploading')?.length;
+        const uploadingListLen = files?.filter(
+          (file) => file.status === 'uploading'
+        )?.length;
         if (isTaskReady.current) {
           // 上传过程中
           throttledChange500.cancel();
@@ -138,7 +147,7 @@ const ODCDragger: React.FC<IProps> = React.memo(
           isTaskReady.current = true;
           runTask();
         }
-      },
+      }
     };
 
     async function runTask() {
@@ -149,7 +158,7 @@ const ODCDragger: React.FC<IProps> = React.memo(
       }
       if (onBeforeUpload && !onBeforeUpload(task?.file)) {
         task?.onError({
-          isLimit: true,
+          isLimit: true
         });
         runTask();
         return;
@@ -161,14 +170,14 @@ const ODCDragger: React.FC<IProps> = React.memo(
             task.file,
             task.uploadFileOpenAPIName,
             sessionId,
-            task.onProgress,
+            task.onProgress
           );
           task.onSuccess(
             {
-              data: fileName,
+              data: fileName
             },
 
-            task.file,
+            task.file
           );
         } else {
           await request(task);
@@ -187,12 +196,12 @@ const ODCDragger: React.FC<IProps> = React.memo(
           update(fileList, {
             $splice: [
               [dragIndex, 1],
-              [hoverIndex, 0, dragFile],
-            ],
-          }),
+              [hoverIndex, 0, dragFile]
+            ]
+          })
         );
       }, 0),
-      [fileList],
+      [fileList]
     );
 
     const handleDelete = useCallback(
@@ -201,7 +210,7 @@ const ODCDragger: React.FC<IProps> = React.memo(
         const files = fileList.filter((item) => item[key] !== file[key]);
         handleFileChange(files);
       },
-      [fileList],
+      [fileList]
     );
 
     function handleSwitchSearch(searchMode: boolean) {
@@ -233,7 +242,7 @@ const ODCDragger: React.FC<IProps> = React.memo(
       },
       resetFields: () => {
         setFileList(defaultFileList);
-      },
+      }
     }));
 
     return (
@@ -243,12 +252,15 @@ const ODCDragger: React.FC<IProps> = React.memo(
             <>
               <div ref={draggerRef} className={styles.toolBar}>
                 {isSearch ? (
-                  <div className={styles.searchMode} onClick={handlePropagation}>
+                  <div
+                    className={styles.searchMode}
+                    onClick={handlePropagation}
+                  >
                     <Input.Search
                       prefix={<SearchOutlined />}
                       placeholder={formatMessage({
                         id: 'odc.component.OSSDragger2.SearchForFileName',
-                        defaultMessage: '搜索文件名称',
+                        defaultMessage: '搜索文件名称'
                       })}
                       /*搜索文件名称*/
                       onSearch={(value, e) => {
@@ -267,7 +279,7 @@ const ODCDragger: React.FC<IProps> = React.memo(
                       {
                         formatMessage({
                           id: 'odc.component.OSSDragger2.Cancel',
-                          defaultMessage: '取消',
+                          defaultMessage: '取消'
                         })
                         /*取消*/
                       }
@@ -281,7 +293,7 @@ const ODCDragger: React.FC<IProps> = React.memo(
                           ? tip
                           : formatMessage({
                               id: 'odc.component.OSSDragger2.SupportsDragAndDropFile',
-                              defaultMessage: '支持拖拽文件上传',
+                              defaultMessage: '支持拖拽文件上传'
                             }) //支持拖拽文件上传
                       }
                     </div>
@@ -290,7 +302,7 @@ const ODCDragger: React.FC<IProps> = React.memo(
                         <Tooltip
                           title={formatMessage({
                             id: 'odc.component.OSSDragger2.Search',
-                            defaultMessage: '搜索',
+                            defaultMessage: '搜索'
                           })}
                           /*搜索*/
                         >
@@ -305,7 +317,7 @@ const ODCDragger: React.FC<IProps> = React.memo(
                       <Tooltip
                         title={formatMessage({
                           id: 'odc.component.OSSDragger2.Add',
-                          defaultMessage: '添加',
+                          defaultMessage: '添加'
                         })}
                         /*添加*/
                       >
@@ -330,7 +342,7 @@ const ODCDragger: React.FC<IProps> = React.memo(
         </Upload.Dragger>
       </div>
     );
-  }),
+  })
 );
 
 export default ODCDragger;

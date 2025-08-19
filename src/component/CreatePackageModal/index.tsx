@@ -27,14 +27,14 @@ interface IProps {
 }
 
 export enum CheckOption {
-  NONE = 'NONE',
+  NONE = 'NONE'
 }
 
 function CreatePackageModal(props: IProps) {
   const { modalStore } = props;
   const { databaseId, dbName } = modalStore.createPackageModalData;
   const initialValues = {
-    packageName: null,
+    packageName: null
   };
 
   const [formRef] = Form.useForm();
@@ -47,7 +47,11 @@ function CreatePackageModal(props: IProps) {
       .validateFields()
       .then(async (data) => {
         const packageName = data?.packageName;
-        const sql = await getPackageCreateSQL(packageName, session?.sessionId, dbName);
+        const sql = await getPackageCreateSQL(
+          packageName,
+          session?.sessionId,
+          dbName
+        );
         openCreatePackagePage(sql, databaseId, dbName);
         modalStore.changeCreatePackageModalVisible(false);
       })
@@ -63,12 +67,12 @@ function CreatePackageModal(props: IProps) {
       destroyOnClose={true}
       title={formatMessage({
         id: 'workspace.window.createPackage.modal.title',
-        defaultMessage: '新建程序包',
+        defaultMessage: '新建程序包'
       })}
       open={modalStore.createPackageModalVisible}
       okText={formatMessage({
         id: 'odc.component.CreatePackageModal.NextConfirmTheSqlStatement',
-        defaultMessage: '下一步：确认 SQL',
+        defaultMessage: '下一步：确认 SQL'
       })} /* 下一步：确认 SQL */
       onOk={save}
       onCancel={() => {
@@ -85,16 +89,16 @@ function CreatePackageModal(props: IProps) {
           name="packageName"
           label={formatMessage({
             id: 'workspace.window.createPackage.packageName',
-            defaultMessage: '程序包名称',
+            defaultMessage: '程序包名称'
           })}
           rules={[
             {
               required: true,
               message: formatMessage({
                 id: 'workspace.window.createPackage.packageName.required',
-                defaultMessage: '程序包不能为空',
-              }),
-            },
+                defaultMessage: '程序包不能为空'
+              })
+            }
           ]}
         >
           <Input
@@ -102,7 +106,7 @@ function CreatePackageModal(props: IProps) {
             autoComplete={'off'}
             placeholder={formatMessage({
               id: 'workspace.window.createPackage.packageName.placeholder',
-              defaultMessage: '请输入程序包名称',
+              defaultMessage: '请输入程序包名称'
             })}
           />
         </Form.Item>

@@ -28,7 +28,12 @@ interface IProps extends IFilterContent {
 }
 
 export const FilterContent: React.FC<IProps> = (props) => {
-  const { params, filters: filterList, enabledSearch = true, searchPlaceholder } = props ?? {};
+  const {
+    params,
+    filters: filterList,
+    enabledSearch = true,
+    searchPlaceholder
+  } = props ?? {};
   const filterValue = params.filters;
 
   function renderFilter(filter, index): React.ReactNode {
@@ -36,7 +41,13 @@ export const FilterContent: React.FC<IProps> = (props) => {
     if (filter?.render) {
       Content = <span key={index}>{filter.render(params)}</span>;
     } else {
-      const { name, title: filterTitle = '', options, defaultValue, dropdownWidth = true } = filter;
+      const {
+        name,
+        title: filterTitle = '',
+        options,
+        defaultValue,
+        dropdownWidth = true
+      } = filter;
       Content = (
         <Space size={0} key={index}>
           {filterTitle && <span>{filterTitle}</span>}

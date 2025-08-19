@@ -4,14 +4,16 @@
 
 import * as monaco from 'monaco-editor';
 
-export default class PlaceholderContentWidget implements monaco.editor.IContentWidget {
+export default class PlaceholderContentWidget
+  implements monaco.editor.IContentWidget
+{
   private static readonly ID = 'editor.widget.placeholderHint';
 
   private domNode: HTMLElement | undefined;
 
   constructor(
     private readonly placeholder: string,
-    private readonly editor: monaco.editor.ICodeEditor,
+    private readonly editor: monaco.editor.ICodeEditor
   ) {
     // register a listener for editor code changes
     editor.onDidChangeModelContent(() => this.onDidChangeModelContent());
@@ -47,7 +49,7 @@ export default class PlaceholderContentWidget implements monaco.editor.IContentW
   getPosition(): monaco.editor.IContentWidgetPosition | null {
     return {
       position: { lineNumber: 1, column: 1 },
-      preference: [monaco.editor.ContentWidgetPositionPreference.EXACT],
+      preference: [monaco.editor.ContentWidgetPositionPreference.EXACT]
     };
   }
 

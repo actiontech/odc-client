@@ -16,7 +16,7 @@ const defaultPrimaryConstraint = {
   name: null,
   columns: [],
   defer: TableConstraintDefer.NOT,
-  enable: true,
+  enable: true
 };
 
 interface IProps {
@@ -28,15 +28,25 @@ interface IProps {
   editMode: boolean;
 }
 const PrimaryConstaint: React.FC<IProps> = (props) => {
-  const { modified, primaryConstraints, columns, session, editMode, setPrimaryConstraints } = props;
-  const gridColumns: any[] = useColumns(columns, session?.connection?.dialectType);
+  const {
+    modified,
+    primaryConstraints,
+    columns,
+    session,
+    editMode,
+    setPrimaryConstraints
+  } = props;
+  const gridColumns: any[] = useColumns(
+    columns,
+    session?.connection?.dialectType
+  );
   const gridRef = useRef<DataGridRef>();
   const [selectedRowsIdx, setSelectedRowIdx] = useState<number[]>([]);
   const rows = useMemo(() => {
     return primaryConstraints?.map((index, idx) => {
       return {
         ...index,
-        key: `${index.name || ''}@@${idx}`,
+        key: `${index.name || ''}@@${idx}`
       };
     });
   }, [primaryConstraints]);
@@ -56,17 +66,25 @@ const PrimaryConstaint: React.FC<IProps> = (props) => {
           <Toolbar>
             <Toolbar.Button
               disabled={editMode}
-              text={formatMessage({ id: 'workspace.header.create', defaultMessage: '新建' })}
+              text={formatMessage({
+                id: 'workspace.header.create',
+                defaultMessage: '新建'
+              })}
               icon={PlusOutlined}
               onClick={() => {
-                setPrimaryConstraints(primaryConstraints.concat(defaultPrimaryConstraint));
+                setPrimaryConstraints(
+                  primaryConstraints.concat(defaultPrimaryConstraint)
+                );
               }}
             />
 
             <Toolbar.Button
               disabled={editMode}
               text={
-                formatMessage({ id: 'odc.TableConstraint.Primary.Delete', defaultMessage: '删除' }) //删除
+                formatMessage({
+                  id: 'odc.TableConstraint.Primary.Delete',
+                  defaultMessage: '删除'
+                }) //删除
               }
               icon={DeleteOutlined}
               onClick={() => {
@@ -96,7 +114,7 @@ const PrimaryConstaint: React.FC<IProps> = (props) => {
           setSelectedRowIdx(
             keys.map((key) => {
               return rows.findIndex((row) => row.key === key);
-            }),
+            })
           );
         }}
         gridRef={gridRef}

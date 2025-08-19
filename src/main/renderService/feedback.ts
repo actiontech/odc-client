@@ -28,18 +28,18 @@ export default async function () {
   files.push({
     path: getJavaLogPath(),
     isDirectory: true,
-    name: 'javaLog',
+    name: 'javaLog'
   });
   files.push({
     path: log.transports.file.getFile().path,
-    name: 'main.log',
+    name: 'main.log'
   });
   log.info(files);
   log.info(app.getPath('logs'));
   const fileName = 'odc_feedback_' + Date.now() + '.zip';
   const result = await dialog.showSaveDialog({
     defaultPath: path.join(app.getPath('desktop'), fileName),
-    title: '保存ODC反馈文件',
+    title: '保存ODC反馈文件'
   });
   if (!result?.filePath) {
     return;
@@ -76,7 +76,7 @@ export default async function () {
         version: ${pkg?.version}
         env: ${JSON.stringify(process.env)}
         `,
-    { name: 'odc.txt' },
+    { name: 'odc.txt' }
   );
   archive.finalize();
   log.info('压缩结束');

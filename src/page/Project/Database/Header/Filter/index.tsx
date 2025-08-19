@@ -25,7 +25,7 @@ const Filter: React.FC<IProps> = function ({}) {
     context.setFilterParams({
       connectType: [],
       environmentId: [],
-      type: [],
+      type: []
     });
   }
   const { connectType, type, environmentId } = context?.filterParams;
@@ -46,17 +46,30 @@ const Filter: React.FC<IProps> = function ({}) {
           padding: '4px 8px',
           lineHeight: '20px',
           color: 'var(--text-color-secondary)',
-          background: 'var(--hover-color)',
+          background: 'var(--hover-color)'
         }}
       >
         {selectedNames.slice(0, 3)?.join(';')}
         {selectedNames?.length > 3 ? '...' : ''}
         <span style={{ marginLeft: 3 }}>
-          {formatMessage({ id: 'odc.Header.Filter.Total', defaultMessage: '共' }) /*共*/}
+          {
+            formatMessage({
+              id: 'odc.Header.Filter.Total',
+              defaultMessage: '共'
+            }) /*共*/
+          }
           {selectedNames?.length}
-          {formatMessage({ id: 'odc.Header.Filter.Item', defaultMessage: '项' }) /*项*/}
+          {
+            formatMessage({
+              id: 'odc.Header.Filter.Item',
+              defaultMessage: '项'
+            }) /*项*/
+          }
         </span>
-        <CloseOutlined onClick={clear} style={{ cursor: 'pointer', marginLeft: 15 }} />
+        <CloseOutlined
+          onClick={clear}
+          style={{ cursor: 'pointer', marginLeft: 15 }}
+        />
       </div>
     );
   }
@@ -70,17 +83,22 @@ const Filter: React.FC<IProps> = function ({}) {
           style={{
             display: 'flex',
             justifyContent: 'space-between',
-            alignItems: 'center',
+            alignItems: 'center'
           }}
         >
           <Typography.Text strong>
             {formatMessage({
               id: 'src.page.Project.Database.Header.Filter.3C4103AA',
-              defaultMessage: '筛选',
+              defaultMessage: '筛选'
             })}
           </Typography.Text>
           <a onClick={clear}>
-            {formatMessage({ id: 'odc.Header.Filter.Clear', defaultMessage: '清空' }) /*清空*/}
+            {
+              formatMessage({
+                id: 'odc.Header.Filter.Clear',
+                defaultMessage: '清空'
+              }) /*清空*/
+            }
           </a>
         </div>
       }
@@ -91,7 +109,7 @@ const Filter: React.FC<IProps> = function ({}) {
               <Typography.Text type="secondary">
                 {formatMessage({
                   id: 'src.page.Project.Database.Header.Filter.ADA9E6A7',
-                  defaultMessage: '数据源类型',
+                  defaultMessage: '数据源类型'
                 })}
               </Typography.Text>
               <CheckboxTag
@@ -102,7 +120,7 @@ const Filter: React.FC<IProps> = function ({}) {
                 onChange={(v) => {
                   context.setFilterParams({
                     ...context?.filterParams,
-                    connectType: v as ConnectType[],
+                    connectType: v as ConnectType[]
                   });
                 }}
               />
@@ -112,7 +130,7 @@ const Filter: React.FC<IProps> = function ({}) {
                 <Typography.Text type="secondary">
                   {formatMessage({
                     id: 'src.page.Project.Database.Header.Filter.BCBEF8AA',
-                    defaultMessage: '数据库类型',
+                    defaultMessage: '数据库类型'
                   })}
                 </Typography.Text>
                 <CheckboxTag
@@ -123,7 +141,7 @@ const Filter: React.FC<IProps> = function ({}) {
                   onChange={(v) => {
                     context.setFilterParams({
                       ...context?.filterParams,
-                      type: v as DBType[],
+                      type: v as DBType[]
                     });
                   }}
                 />
@@ -133,16 +151,18 @@ const Filter: React.FC<IProps> = function ({}) {
               <Typography.Text type="secondary">
                 {formatMessage({
                   id: 'src.page.Project.Database.Header.Filter.F048B0EE',
-                  defaultMessage: '环境',
+                  defaultMessage: '环境'
                 })}
               </Typography.Text>
               <CheckboxTag
                 value={context?.filterParams?.environmentId}
-                options={[].concat(context?.envList).map((v) => ({ label: v?.name, value: v?.id }))}
+                options={[]
+                  .concat(context?.envList)
+                  .map((v) => ({ label: v?.name, value: v?.id }))}
                 onChange={(v) => {
                   context.setFilterParams({
                     ...context?.filterParams,
-                    environmentId: v as number[],
+                    environmentId: v as number[]
                   });
                 }}
               />

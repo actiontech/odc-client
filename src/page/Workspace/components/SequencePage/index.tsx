@@ -34,7 +34,7 @@ import {
   AlignLeftOutlined,
   CloudDownloadOutlined,
   EditOutlined,
-  SyncOutlined,
+  SyncOutlined
 } from '@ant-design/icons';
 import { Layout, Spin, Tabs } from 'antd';
 import { inject, observer } from 'mobx-react';
@@ -50,7 +50,7 @@ const ToolbarButton = Toolbar.Button;
 export enum PropsTab {
   INFO = 'INFO',
   PARAMS = 'PARAMS',
-  DDL = 'DDL',
+  DDL = 'DDL'
 }
 
 interface IProps {
@@ -72,13 +72,16 @@ interface IState {
 
 @inject('sqlStore', 'pageStore', 'sessionManagerStore', 'modalStore')
 @observer
-class SequencePage extends Component<IProps & { session: SessionStore }, IState> {
+class SequencePage extends Component<
+  IProps & { session: SessionStore },
+  IState
+> {
   public editor: IEditor;
 
   public readonly state: IState = {
     propsTab: this.props.params.propsTab || PropsTab.INFO,
     formated: false,
-    sequence: null,
+    sequence: null
   };
 
   public UNSAFE_componentWillReceiveProps(nextProps: IProps) {
@@ -89,7 +92,7 @@ class SequencePage extends Component<IProps & { session: SessionStore }, IState>
       nextProps.params.propsTab !== this.state.propsTab
     ) {
       this.setState({
-        propsTab: nextProps.params.propsTab,
+        propsTab: nextProps.params.propsTab
       });
     }
   }
@@ -106,23 +109,27 @@ class SequencePage extends Component<IProps & { session: SessionStore }, IState>
       {},
       {
         sequenceName: sequence.name,
-        propsTab,
-      },
+        propsTab
+      }
     );
   };
 
   public reloadSequence = async (sequenceName: string) => {
     const { session } = this.props;
-    const sequence = await getSequence(sequenceName, session?.sessionId, session?.database?.dbName);
+    const sequence = await getSequence(
+      sequenceName,
+      session?.sessionId,
+      session?.database?.dbName
+    );
     sequence &&
       this.setState({
-        sequence,
+        sequence
       });
   };
 
   public async componentDidMount() {
     const {
-      params: { sequenceName },
+      params: { sequenceName }
     } = this.props;
 
     await this.reloadSequence(sequenceName);
@@ -137,7 +144,7 @@ class SequencePage extends Component<IProps & { session: SessionStore }, IState>
       this.editor.setValue(sequence?.ddl || '');
     }
     this.setState({
-      formated: !formated,
+      formated: !formated
     });
   };
 
@@ -147,7 +154,7 @@ class SequencePage extends Component<IProps & { session: SessionStore }, IState>
       isEdit: true,
       data: sequence,
       databaseId: this.props.session?.odcDatabase?.id,
-      dbName: this.props.session?.odcDatabase?.name,
+      dbName: this.props.session?.odcDatabase?.name
     });
   };
 
@@ -169,7 +176,7 @@ class SequencePage extends Component<IProps & { session: SessionStore }, IState>
                 key: PropsTab.INFO,
                 label: formatMessage({
                   id: 'workspace.window.sequence.propstab.info',
-                  defaultMessage: '基本信息',
+                  defaultMessage: '基本信息'
                 }),
                 children: (
                   <>
@@ -177,7 +184,7 @@ class SequencePage extends Component<IProps & { session: SessionStore }, IState>
                       <Toolbar.Button
                         text={formatMessage({
                           id: 'workspace.window.session.button.edit',
-                          defaultMessage: '编辑',
+                          defaultMessage: '编辑'
                         })}
                         icon={<EditOutlined />}
                         onClick={this.showSequenceEditModal}
@@ -186,10 +193,13 @@ class SequencePage extends Component<IProps & { session: SessionStore }, IState>
                       <ToolbarButton
                         text={formatMessage({
                           id: 'workspace.window.session.button.refresh',
-                          defaultMessage: '刷新',
+                          defaultMessage: '刷新'
                         })}
                         icon={<SyncOutlined />}
-                        onClick={this.reloadSequence.bind(this, params.sequenceName)}
+                        onClick={this.reloadSequence.bind(
+                          this,
+                          params.sequenceName
+                        )}
                       />
                     </Toolbar>
                     <ObjectInfoView
@@ -197,102 +207,102 @@ class SequencePage extends Component<IProps & { session: SessionStore }, IState>
                         {
                           label: formatMessage({
                             id: 'odc.components.SequencePage.SequenceName',
-                            defaultMessage: '序列名称',
+                            defaultMessage: '序列名称'
                           }),
                           // 序列名称
-                          content: sequence.name,
+                          content: sequence.name
                         },
 
                         {
                           label: formatMessage({
                             id: 'odc.components.SequencePage.NextBufferValue',
-                            defaultMessage: '下一个缓冲值',
+                            defaultMessage: '下一个缓冲值'
                           }),
                           // 下一个缓冲值
-                          content: sequence.nextCacheValue,
+                          content: sequence.nextCacheValue
                         },
 
                         {
                           label: formatMessage({
                             id: 'odc.components.SequencePage.Incremental',
-                            defaultMessage: '增量',
+                            defaultMessage: '增量'
                           }),
                           // 增量
-                          content: sequence.increament,
+                          content: sequence.increament
                         },
 
                         {
                           label: formatMessage({
                             id: 'odc.components.SequencePage.ValidValues',
-                            defaultMessage: '取值范围',
+                            defaultMessage: '取值范围'
                           }),
                           // 取值范围
-                          content: `${sequence.minValue} ~ ${sequence.maxValue}`,
+                          content: `${sequence.minValue} ~ ${sequence.maxValue}`
                         },
 
                         {
                           label: formatMessage({
                             id: 'odc.components.SequencePage.CacheSettings',
-                            defaultMessage: '缓存设置',
+                            defaultMessage: '缓存设置'
                           }),
                           // 缓存设置
                           content: sequence.cached
                             ? formatMessage({
                                 id: 'odc.components.SequencePage.Cache',
-                                defaultMessage: '缓存',
+                                defaultMessage: '缓存'
                               }) +
                               // `缓存 `
                               sequence.cacheSize
                             : formatMessage({
                                 id: 'odc.components.SequencePage.NoCache',
-                                defaultMessage: '不缓存',
-                              }),
+                                defaultMessage: '不缓存'
+                              })
                           // 不缓存
                         },
                         {
                           label: formatMessage({
                             id: 'odc.components.SequencePage.Sort',
-                            defaultMessage: '是否排序',
+                            defaultMessage: '是否排序'
                           }),
                           // 是否排序
                           content: sequence.orderd
                             ? formatMessage({
                                 id: 'odc.components.SequencePage.Is',
-                                defaultMessage: '是',
+                                defaultMessage: '是'
                               }) // 是
                             : formatMessage({
                                 id: 'odc.components.SequencePage.No',
-                                defaultMessage: '否',
-                              }), // 否
+                                defaultMessage: '否'
+                              }) // 否
                         },
                         {
                           label: formatMessage({
                             id: 'odc.components.SequencePage.LoopOrNot',
-                            defaultMessage: '是否循环',
+                            defaultMessage: '是否循环'
                           }),
                           // 是否循环
                           content: sequence.cycled
                             ? formatMessage({
                                 id: 'odc.components.SequencePage.Is',
-                                defaultMessage: '是',
+                                defaultMessage: '是'
                               }) // 是
                             : formatMessage({
                                 id: 'odc.components.SequencePage.No',
-                                defaultMessage: '否',
-                              }), // 否
+                                defaultMessage: '否'
+                              }) // 否
                         },
                         {
                           label: formatMessage({
                             id: 'odc.components.SequencePage.Owner',
-                            defaultMessage: '所有者',
+                            defaultMessage: '所有者'
                           }),
                           // 所有者
-                          content: sequence.user,
-                        },
+                          content: sequence.user
+                        }
                       ]}
                     />
                   </>
-                ),
+                )
               },
               {
                 key: PropsTab.DDL,
@@ -304,7 +314,7 @@ class SequencePage extends Component<IProps & { session: SessionStore }, IState>
                         text={
                           formatMessage({
                             id: 'odc.components.SequencePage.Download',
-                            defaultMessage: '下载',
+                            defaultMessage: '下载'
                           }) //下载
                         }
                         icon={<CloudDownloadOutlined />}
@@ -313,7 +323,7 @@ class SequencePage extends Component<IProps & { session: SessionStore }, IState>
                             sequence?.name,
                             'SEQUENCE',
                             sequence?.ddl,
-                            this.props.session?.odcDatabase?.name,
+                            this.props.session?.odcDatabase?.name
                           );
                         }}
                       />
@@ -323,12 +333,12 @@ class SequencePage extends Component<IProps & { session: SessionStore }, IState>
                           formated
                             ? formatMessage({
                                 id: 'odc.components.SequencePage.Unformat',
-                                defaultMessage: '取消格式化',
+                                defaultMessage: '取消格式化'
                               })
                             : // 取消格式化
                               formatMessage({
                                 id: 'odc.components.SequencePage.Formatting',
-                                defaultMessage: '格式化',
+                                defaultMessage: '格式化'
                               })
 
                           // 格式化
@@ -341,25 +351,36 @@ class SequencePage extends Component<IProps & { session: SessionStore }, IState>
                       <ToolbarButton
                         text={formatMessage({
                           id: 'workspace.window.session.button.refresh',
-                          defaultMessage: '刷新',
+                          defaultMessage: '刷新'
                         })}
                         icon={<SyncOutlined />}
-                        onClick={this.reloadSequence.bind(this, params.sequenceName)}
+                        onClick={this.reloadSequence.bind(
+                          this,
+                          params.sequenceName
+                        )}
                       />
                     </Toolbar>
-                    <div style={{ height: `calc(100% - 38px)`, position: 'relative' }}>
+                    <div
+                      style={{
+                        height: `calc(100% - 38px)`,
+                        position: 'relative'
+                      }}
+                    >
                       <SQLCodePreviewer
                         readOnly
                         defaultValue={(sequence && sequence.ddl) || ''}
-                        language={getDataSourceModeConfig(session?.connection?.type)?.sql?.language}
+                        language={
+                          getDataSourceModeConfig(session?.connection?.type)
+                            ?.sql?.language
+                        }
                         onEditorCreated={(editor: IEditor) => {
                           this.editor = editor;
                         }}
                       />
                     </div>
                   </>
-                ),
-              },
+                )
+              }
             ]}
           />
         </Content>
@@ -382,5 +403,5 @@ export default WrapSessionPage(
   },
   true,
   false,
-  true,
+  true
 );

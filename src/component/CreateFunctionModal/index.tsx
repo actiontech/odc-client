@@ -25,7 +25,16 @@ import { openCreateFunctionPageByRemote } from '@/store/helper/page';
 import type { ModalStore } from '@/store/modal';
 import { SessionManagerStore } from '@/store/sessionManager';
 import { useDBSession } from '@/store/sessionManager/hooks';
-import { AutoComplete, Col, Form, Input, message, Modal, Row, Spin } from 'antd';
+import {
+  AutoComplete,
+  Col,
+  Form,
+  Input,
+  message,
+  Modal,
+  Row,
+  Spin
+} from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import ExtraOptions from '../ProcedureParam/ExtraOptions';
 
@@ -36,12 +45,12 @@ interface IProps {
 }
 
 export enum CheckOption {
-  NONE = 'NONE',
+  NONE = 'NONE'
 }
 
 const CreateFunctionModal: React.FC<IProps> = inject(
   'modalStore',
-  'sessionManagerStore',
+  'sessionManagerStore'
 )(
   observer((props: IProps) => {
     const { modalStore, model, sessionManagerStore } = props;
@@ -59,15 +68,15 @@ const CreateFunctionModal: React.FC<IProps> = inject(
       Modal.confirm({
         title: formatMessage({
           id: 'odc.component.CreateFunctionModal.ConfirmToClose',
-          defaultMessage: '确认关闭',
+          defaultMessage: '确认关闭'
         }), // 确认关闭
         content: formatMessage({
           id: 'odc.component.CreateFunctionModal.CurrentPopUpDataWill',
-          defaultMessage: '当前弹窗数据将清空',
+          defaultMessage: '当前弹窗数据将清空'
         }), // 当前弹窗数据将清空
         onOk: () => {
           modalStore.changeCreateFunctionModalVisible(false);
-        },
+        }
       });
     }, [modalStore]);
 
@@ -77,11 +86,11 @@ const CreateFunctionModal: React.FC<IProps> = inject(
           func,
           session?.sessionId,
           dbName,
-          session?.odcDatabase?.id,
+          session?.odcDatabase?.id
         );
         modalStore.changeCreateFunctionModalVisible(false);
       },
-      [modalStore, session, dbName],
+      [modalStore, session, dbName]
     );
 
     const save = useCallback(async () => {
@@ -96,24 +105,28 @@ const CreateFunctionModal: React.FC<IProps> = inject(
       // }
 
       // 有空的字段
-      if (data.params.filter((p: { paramName: any }) => !p.paramName).length > 0) {
+      if (
+        data.params.filter((p: { paramName: any }) => !p.paramName).length > 0
+      ) {
         message.error(
           formatMessage({
             id: 'workspace.window.createFunction.params.validation',
-            defaultMessage: '请填写参数名称',
-          }),
+            defaultMessage: '请填写参数名称'
+          })
         );
 
         return;
       }
 
       // 有空的数据类型
-      if (data.params.filter((p: { dataType: any }) => !p.dataType).length > 0) {
+      if (
+        data.params.filter((p: { dataType: any }) => !p.dataType).length > 0
+      ) {
         message.error(
           formatMessage({
             id: 'workspace.window.createFunction.dataType.validation',
-            defaultMessage: '请填写数据类型',
-          }),
+            defaultMessage: '请填写数据类型'
+          })
         );
 
         return;
@@ -133,39 +146,44 @@ const CreateFunctionModal: React.FC<IProps> = inject(
         destroyOnClose={true}
         title={formatMessage({
           id: 'workspace.window.createFunction.modal.title',
-          defaultMessage: '新建函数',
+          defaultMessage: '新建函数'
         })}
         open={visible}
         onOk={save}
         onCancel={onCancel}
       >
         <Spin spinning={loading}>
-          <Form requiredMark="optional" layout="vertical" form={form} initialValues={{ ...model }}>
+          <Form
+            requiredMark="optional"
+            layout="vertical"
+            form={form}
+            initialValues={{ ...model }}
+          >
             <Row>
               <Col span={12}>
                 <Form.Item
                   name="funName"
                   label={formatMessage({
                     id: 'workspace.window.createFunction.funName',
-                    defaultMessage: '函数名称',
+                    defaultMessage: '函数名称'
                   })}
                   rules={[
                     {
                       required: true,
                       message: formatMessage({
                         id: 'workspace.window.createFunction.funName.validation',
-                        defaultMessage: '请输入函数名称',
-                      }),
-                    },
+                        defaultMessage: '请输入函数名称'
+                      })
+                    }
                   ]}
                 >
                   <Input
                     style={{
-                      width: 320,
+                      width: 320
                     }}
                     placeholder={formatMessage({
                       id: 'workspace.window.createFunction.funName.placeholder',
-                      defaultMessage: '请输入函数名称',
+                      defaultMessage: '请输入函数名称'
                     })}
                   />
                 </Form.Item>
@@ -175,42 +193,47 @@ const CreateFunctionModal: React.FC<IProps> = inject(
                   name="returnType"
                   label={formatMessage({
                     id: 'workspace.window.createFunction.returnType',
-                    defaultMessage: '返回类型',
+                    defaultMessage: '返回类型'
                   })}
                   rules={[
                     {
                       required: true,
                       message: formatMessage({
                         id: 'workspace.window.createFunction.returnType.validation',
-                        defaultMessage: '请输入函数返回值',
-                      }),
-                    },
+                        defaultMessage: '请输入函数返回值'
+                      })
+                    }
                   ]}
                 >
                   <AutoComplete
                     style={{
-                      width: 160,
+                      width: 160
                     }}
                     options={session?.dataTypes
                       ?.map((d) =>
                         dbMode === ConnectionMode.OB_ORACLE
                           ? d.databaseType.replace('(', '').replace(')', '')
-                          : d.databaseType,
+                          : d.databaseType
                       )
                       .map((a) => ({ value: a }))}
                     filterOption={(inputValue, option) =>
                       // @ts-ignore
-                      option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                      option.value
+                        .toUpperCase()
+                        .indexOf(inputValue.toUpperCase()) !== -1
                     }
                   />
                 </Form.Item>
               </Col>
             </Row>
-            <ExtraOptions connectType={session?.connection?.type} dbType={DbObjectType.function} />
+            <ExtraOptions
+              connectType={session?.connection?.type}
+              dbType={DbObjectType.function}
+            />
             <Form.Item
               label={formatMessage({
                 id: 'odc.component.CreateFunctionModal.Parameter',
-                defaultMessage: '参数',
+                defaultMessage: '参数'
               })}
               /* 参数 */ required
             >
@@ -227,7 +250,7 @@ const CreateFunctionModal: React.FC<IProps> = inject(
         </Spin>
       </Modal>
     );
-  }),
+  })
 );
 
 export default CreateFunctionModal;

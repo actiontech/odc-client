@@ -34,10 +34,13 @@ export function convertTimestamp(timestamp: number) {
   const milliseconds = date.getMilliseconds();
 
   // Formatting the date and time using template literals
-  const formattedDate = `${('0' + date.getDate()).slice(-2)}-${('0' + (date.getMonth() + 1)).slice(
-    -2,
-  )}-${date.getFullYear()} ${('0' + hours).slice(-2)}:${('0' + minutes).slice(-2)}:${(
-    '0' + seconds
-  ).slice(-2)}.${('00' + milliseconds).slice(-3)} ${amPm}`;
+  const formattedDate = `${('0' + date.getDate()).slice(-2)}-${(
+    '0' +
+    (date.getMonth() + 1)
+  ).slice(-2)}-${date.getFullYear()} ${('0' + hours).slice(-2)}:${(
+    '0' + minutes
+  ).slice(-2)}:${('0' + seconds).slice(-2)}.${('00' + milliseconds).slice(
+    -3
+  )} ${amPm}`;
   return `to_timestamp('${formattedDate}', 'DD-MM-YYYY HH:MI:SS.FF3 ${amPm}')`;
 }

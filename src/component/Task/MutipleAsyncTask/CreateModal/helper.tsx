@@ -12,44 +12,47 @@ export interface IProps {
 }
 export enum ErrorStrategy {
   CONTINUE = 'CONTINUE',
-  ABORT = 'ABORT',
+  ABORT = 'ABORT'
 }
 export const flatArray = (array: any[]): any[] => {
-  return array?.reduce?.((pre, cur) => pre?.concat(Array.isArray(cur) ? flatArray(cur) : cur), []);
+  return array?.reduce?.(
+    (pre, cur) => pre?.concat(Array.isArray(cur) ? flatArray(cur) : cur),
+    []
+  );
 };
 export enum SiderTabKeys {
   SELECT_DATABASE = 'SELECT_DATABASE',
   SQL_CONTENT = 'SQL_CONTENT',
   ROLLBACK_CONTENT = 'ROLLBACK_CONTENT',
-  MORE_SETTINGS = 'MORE_SETTINGS',
+  MORE_SETTINGS = 'MORE_SETTINGS'
 }
 export const items = [
   {
     label: formatMessage({
       id: 'src.component.Task.MutipleAsyncTask.CreateModal.C0D9B0C7',
-      defaultMessage: '数据库选择',
+      defaultMessage: '数据库选择'
     }),
-    key: SiderTabKeys.SELECT_DATABASE,
+    key: SiderTabKeys.SELECT_DATABASE
   },
   {
     label: formatMessage({
       id: 'src.component.Task.MutipleAsyncTask.CreateModal.AC5189F0',
-      defaultMessage: 'SQL 内容',
+      defaultMessage: 'SQL 内容'
     }),
-    key: SiderTabKeys.SQL_CONTENT,
+    key: SiderTabKeys.SQL_CONTENT
   },
   {
     label: formatMessage({
       id: 'src.component.Task.MutipleAsyncTask.CreateModal.453929F9',
-      defaultMessage: '回滚内容',
+      defaultMessage: '回滚内容'
     }),
-    key: SiderTabKeys.ROLLBACK_CONTENT,
+    key: SiderTabKeys.ROLLBACK_CONTENT
   },
   {
     label: formatMessage({
       id: 'src.component.Task.MutipleAsyncTask.CreateModal.0D0BC691',
-      defaultMessage: '更多设置',
+      defaultMessage: '更多设置'
     }),
-    key: SiderTabKeys.MORE_SETTINGS,
-  },
+    key: SiderTabKeys.MORE_SETTINGS
+  }
 ];

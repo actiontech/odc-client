@@ -59,7 +59,13 @@ const RiskLevelLabel: React.FC<{
   color: string;
   content?: string;
   extra?: string;
-}> = ({ iconMode = false, level = -1, color = 'grey', content = '', extra = '' }) => {
+}> = ({
+  iconMode = false,
+  level = -1,
+  color = 'grey',
+  content = '',
+  extra = ''
+}) => {
   return level === -1 && !content?.length ? (
     <span>-</span>
   ) : iconMode ? (
@@ -75,7 +81,7 @@ const RiskLevelLabel: React.FC<{
       <Tag
         style={{
           background: EnvColorMap[color?.toUpperCase()]?.background,
-          color: EnvColorMap[color?.toUpperCase()]?.textColor,
+          color: EnvColorMap[color?.toUpperCase()]?.textColor
         }}
         color={''}
       >
@@ -98,7 +104,7 @@ export const ODCRiskLevelLabel: React.FC<{
   level = -1,
   color = 'grey',
   content = '',
-  extra = '',
+  extra = ''
 }) => {
   if (iconMode) {
     return (
@@ -126,7 +132,7 @@ export const ODCTag: React.FC<{
       <Tag
         style={{
           background: EnvColorMap[color?.toUpperCase()]?.background,
-          color: EnvColorMap[color?.toUpperCase()]?.textColor,
+          color: EnvColorMap[color?.toUpperCase()]?.textColor
         }}
         color={''}
       >

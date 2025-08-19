@@ -3,7 +3,15 @@ import { Tooltip } from 'antd';
 import { EdgeLabelRenderer } from 'reactflow';
 import { getEdgeWidth, getUnit } from '../utils';
 
-const CustomEdge = ({ id, sourceX, sourceY, targetX, targetY, style = {}, data }) => {
+const CustomEdge = ({
+  id,
+  sourceX,
+  sourceY,
+  targetX,
+  targetY,
+  style = {},
+  data
+}) => {
   // 转折离target 20px
   const TURNNG_LINE_GAP = 20;
   // 箭头svg id
@@ -38,7 +46,10 @@ const CustomEdge = ({ id, sourceX, sourceY, targetX, targetY, style = {}, data }
               markerUnits="userSpaceOnUse"
             >
               {/* 绘制箭头形状 */}
-              <path d="M 10 0 L 0 3.5 L 10 7 L 10 0" fill="var(--profile-line-color)" />
+              <path
+                d="M 10 0 L 0 3.5 L 10 7 L 10 0"
+                fill="var(--profile-line-color)"
+              />
             </marker>
           </defs>
         </svg>
@@ -53,7 +64,7 @@ const CustomEdge = ({ id, sourceX, sourceY, targetX, targetY, style = {}, data }
           style={{
             stroke: 'var(--profile-line-color)',
             strokeWidth: getEdgeWidth(data.weight),
-            ...style,
+            ...style
           }}
           id={id}
         />
@@ -75,14 +86,14 @@ const CustomEdge = ({ id, sourceX, sourceY, targetX, targetY, style = {}, data }
             backgroundColor: 'var(--profile-secondry-background-color)',
             border: '1px solid var(--profile-border-color)',
             borderRadius: 2,
-            padding: 2,
+            padding: 2
           }}
         >
           <Tooltip
             title={
               formatMessage({
                 id: 'src.component.ProfileFlow.customComponents.F4F9EB2A',
-                defaultMessage: '数据量:',
+                defaultMessage: '数据量:'
               }) + data?.weight
             }
           >

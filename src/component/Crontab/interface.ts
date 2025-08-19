@@ -22,18 +22,18 @@ export enum CronInputName {
   hour = 'hour',
   dayOfMonth = 'dayOfMonth',
   month = 'month',
-  dayOfWeek = 'dayOfWeek',
+  dayOfWeek = 'dayOfWeek'
 }
 
 export enum CrontabMode {
   custom = 'custom',
-  default = 'default',
+  default = 'default'
 }
 
 export enum CrontabDateType {
   daily = 'DAY',
   weekly = 'WEEK',
-  monthly = 'MONTH',
+  monthly = 'MONTH'
 }
 
 export interface ICrontab {

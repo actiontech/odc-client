@@ -26,15 +26,20 @@ export const ODC_VERSION_SEP = '.';
  * @param secondVersion
  * @returns 1 | 0 | -1
  */
-export function OBCompareVersions(firstVersion: string, secondVersion: string): 1 | 0 | -1 {
+export function OBCompareVersions(
+  firstVersion: string,
+  secondVersion: string
+): 1 | 0 | -1 {
   const firstVersionSlice = firstVersion?.split(ODC_VERSION_SEP) || [];
   const secondVersionSlice = secondVersion?.split(ODC_VERSION_SEP) || [];
   if (firstVersionSlice?.length < secondVersionSlice?.length) {
-    throw Error(`fisrtVersion's version is short than secondVersion, please check firstVersion.`);
+    throw Error(
+      `fisrtVersion's version is short than secondVersion, please check firstVersion.`
+    );
   } else if (firstVersionSlice?.length >= secondVersionSlice?.length) {
     return compareVersions(
       firstVersionSlice?.slice(0, secondVersionSlice?.length)?.join(''),
-      secondVersionSlice?.join(''),
+      secondVersionSlice?.join('')
     );
   } else {
     return compareVersions(firstVersion, secondVersion);
@@ -50,17 +55,19 @@ export function OBCompareVersions(firstVersion: string, secondVersion: string): 
 export function OBCompare(
   firstVersion: string,
   secondVersion: string,
-  operator: compareVersions.CompareOperator,
+  operator: compareVersions.CompareOperator
 ): boolean {
   const firstVersionSlice = firstVersion?.split(ODC_VERSION_SEP) || [];
   const secondVersionSlice = secondVersion?.split(ODC_VERSION_SEP) || [];
   if (firstVersionSlice?.length < secondVersionSlice?.length) {
-    throw Error(`fisrtVersion's version is short than secondVersion, please check firstVersion.`);
+    throw Error(
+      `fisrtVersion's version is short than secondVersion, please check firstVersion.`
+    );
   } else if (firstVersionSlice?.length >= secondVersionSlice?.length) {
     return compare(
       firstVersionSlice?.slice(0, secondVersionSlice?.length)?.join(''),
       secondVersionSlice?.join(''),
-      operator,
+      operator
     );
   } else {
     return compare(firstVersion, secondVersion, operator);

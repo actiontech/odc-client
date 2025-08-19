@@ -3,7 +3,7 @@
 import {
   GetSqlDEVRecordListFilterSourceEnum,
   GetSqlDEVRecordListSortFieldEnum,
-  GetSqlDEVRecordListSortOrderEnum,
+  GetSqlDEVRecordListSortOrderEnum
 } from './index.enum';
 
 import { IGetSqlDEVRecordListResp } from '../common.type';

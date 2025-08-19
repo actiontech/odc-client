@@ -30,33 +30,35 @@ const scriptActions: ToolBarActions = {
   SNIPPET: {
     name: formatMessage({
       id: 'odc.EditorToolBar.actions.script.SyntaxHelp',
-      defaultMessage: '代码片段',
+      defaultMessage: '代码片段'
     }), // 代码片段
     icon: 'SNIPPET',
     statusFunc: (ctx) => {
-      return ctx.state.showGrammerHelpSider ? IConStatus.ACTIVE : IConStatus.INIT;
+      return ctx.state.showGrammerHelpSider
+        ? IConStatus.ACTIVE
+        : IConStatus.INIT;
     },
 
     async action(ctx: any) {
       ctx.setState({
-        showGrammerHelpSider: !ctx.state.showGrammerHelpSider,
+        showGrammerHelpSider: !ctx.state.showGrammerHelpSider
       });
-    },
+    }
   },
 
   SNIPPET_SECTION_GROUP: {
     name: formatMessage({
       id: 'odc.EditorToolBar.actions.script.Placeholder',
-      defaultMessage: '占位符',
+      defaultMessage: '占位符'
     }), // 占位符
     icon: 'ADD_SNIPPET_SECTION',
-    menu: ['ADD_SNIPPET_SECTION', 'REMOVE_SNIPPET_SECTION'],
+    menu: ['ADD_SNIPPET_SECTION', 'REMOVE_SNIPPET_SECTION']
   },
 
   ADD_SNIPPET_SECTION: {
     name: formatMessage({
       id: 'odc.EditorToolBar.actions.script.AddPlaceholder',
-      defaultMessage: '添加占位符',
+      defaultMessage: '添加占位符'
     }),
     // 添加占位符
     icon: 'ADD_SNIPPET_SECTION',
@@ -72,30 +74,30 @@ const scriptActions: ToolBarActions = {
             startLineNumber: position.lineNumber,
             startColumn: position.column,
             endLineNumber: position.lineNumber,
-            endColumn: position.column,
+            endColumn: position.column
           },
 
-          text: snipptSectionText,
-        },
+          text: snipptSectionText
+        }
       ]);
       import('monaco-editor').then((monaco) => {
         const range = new monaco.Range(
           position.lineNumber,
           position.column + 4,
           position.lineNumber,
-          position.column + 10,
+          position.column + 10
         );
 
         codeEditor.setSelection(range);
         ctx.editor?.focus();
       });
-    },
+    }
   },
 
   REMOVE_SNIPPET_SECTION: {
     name: formatMessage({
       id: 'odc.EditorToolBar.actions.script.DeletePlaceholder',
-      defaultMessage: '删除占位符',
+      defaultMessage: '删除占位符'
     }),
     // 删除占位符
     icon: 'REMOVE_SNIPPET_SECTION',
@@ -112,30 +114,30 @@ const scriptActions: ToolBarActions = {
           selection.startLineNumber,
           selection.startColumn,
           selection.endLineNumber,
-          selection.endColumn,
+          selection.endColumn
         );
 
         const op = {
           identifier: {
             major: 1,
-            minor: 1,
+            minor: 1
           },
 
           range,
           text: capitalizeText,
-          forceMoveMarkers: true,
+          forceMoveMarkers: true
         };
 
         codeEditor.executeEdits('REMOVE_SNIPPET_SECTION', [op]);
         ctx.editor?.focus();
       });
-    },
+    }
   },
 
   DOWNLOAD: {
     name: formatMessage({
       id: 'odc.EditorToolBar.actions.script.Download',
-      defaultMessage: '下载',
+      defaultMessage: '下载'
     }), //下载
     icon: CloudDownloadOutlined,
     async action(ctx: PLPage) {
@@ -147,10 +149,15 @@ const scriptActions: ToolBarActions = {
       } else if (params?.plPageType === PLPageType.plEdit) {
         downloadPLDDL(params?.plName, params?.plType, text, dbName);
       } else {
-        downloadPLDDL(params?.plSchema?.plName, params?.plSchema?.plType, text, dbName);
+        downloadPLDDL(
+          params?.plSchema?.plName,
+          params?.plSchema?.plType,
+          text,
+          dbName
+        );
       }
-    },
-  },
+    }
+  }
 };
 
 export default scriptActions;

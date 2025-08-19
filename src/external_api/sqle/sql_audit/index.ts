@@ -14,28 +14,56 @@ import {
   IDirectAuditFilesV2Params,
   IDirectAuditFilesV2Return,
   IDirectAuditV2Params,
-  IDirectAuditV2Return,
+  IDirectAuditV2Return
 } from './index.type';
 
 class SqlAuditService extends ServiceBase {
-  public directAuditFilesV1(params: IDirectAuditFilesV1Params, options?: AxiosRequestConfig) {
+  public directAuditFilesV1(
+    params: IDirectAuditFilesV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
-    return this.post<IDirectAuditFilesV1Return>('/v1/audit_files', paramsData, options);
+    return this.post<IDirectAuditFilesV1Return>(
+      '/v1/audit_files',
+      paramsData,
+      options
+    );
   }
 
-  public directAuditV1(params: IDirectAuditV1Params, options?: AxiosRequestConfig) {
+  public directAuditV1(
+    params: IDirectAuditV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
-    return this.post<IDirectAuditV1Return>('/v1/sql_audit', paramsData, options);
+    return this.post<IDirectAuditV1Return>(
+      '/v1/sql_audit',
+      paramsData,
+      options
+    );
   }
 
-  public directAuditFilesV2(params: IDirectAuditFilesV2Params, options?: AxiosRequestConfig) {
+  public directAuditFilesV2(
+    params: IDirectAuditFilesV2Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
-    return this.post<IDirectAuditFilesV2Return>('/v2/audit_files', paramsData, options);
+    return this.post<IDirectAuditFilesV2Return>(
+      '/v2/audit_files',
+      paramsData,
+      options
+    );
   }
 
-  public directAuditV2(params: IDirectAuditV2Params, options?: AxiosRequestConfig) {
+  public directAuditV2(
+    params: IDirectAuditV2Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
-    return this.post<IDirectAuditV2Return>('/v2/sql_audit', paramsData, options);
+    return this.post<IDirectAuditV2Return>(
+      '/v2/sql_audit',
+      paramsData,
+      options
+    );
   }
 }
 

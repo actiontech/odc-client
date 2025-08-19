@@ -41,11 +41,11 @@ export default function ({ column, onChange }: any) {
       <Form.Item
         label={formatMessage({
           id: 'odc.Columns.ColumnExtraInfo.Enum.EnumeratedValues',
-          defaultMessage: '枚举值',
+          defaultMessage: '枚举值'
         })}
         /*枚举值*/ extra={formatMessage({
           id: 'odc.Columns.ColumnExtraInfo.Enum.EnterTheEnumerationValueAnd',
-          defaultMessage: '录入枚举值按“回车 Enter”确认',
+          defaultMessage: '录入枚举值按“回车 Enter”确认'
         })} /*录入枚举值按“回车 enter”确认*/
       >
         <Select
@@ -56,7 +56,7 @@ export default function ({ column, onChange }: any) {
           onChange={(v) => {
             onChange({
               ...column,
-              enumMembers: v,
+              enumMembers: v
             });
           }}
         />
@@ -66,7 +66,7 @@ export default function ({ column, onChange }: any) {
           <Form.Item
             label={formatMessage({
               id: 'odc.Columns.ColumnExtraInfo.Enum.CharacterSet',
-              defaultMessage: '字符集',
+              defaultMessage: '字符集'
             })} /*字符集*/
           >
             <Select
@@ -76,7 +76,7 @@ export default function ({ column, onChange }: any) {
                 onChange({
                   ...column,
                   character: v,
-                  collation: getDefaultCollation(v, collations),
+                  collation: getDefaultCollation(v, collations)
                 });
               }}
             >
@@ -92,7 +92,7 @@ export default function ({ column, onChange }: any) {
           <Form.Item
             label={formatMessage({
               id: 'odc.Columns.ColumnExtraInfo.Enum.SortingRules',
-              defaultMessage: '排序规则',
+              defaultMessage: '排序规则'
             })} /*排序规则*/
           >
             <Select
@@ -101,7 +101,7 @@ export default function ({ column, onChange }: any) {
               onChange={(v) => {
                 onChange({
                   ...column,
-                  collation: v,
+                  collation: v
                 });
               }}
             >

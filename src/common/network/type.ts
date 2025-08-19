@@ -28,13 +28,13 @@ export async function getType(
   typeName: string,
   ignoreError?: boolean,
   dbName?: string,
-  sessionId?: string,
+  sessionId?: string
 ) {
   const sid = generateTypeSid(typeName, sessionId, dbName);
   const res = await request.get(`/api/v1/type/${sid}`, {
     params: {
-      ignoreError,
-    },
+      ignoreError
+    }
   });
   return res?.data;
 }
@@ -43,11 +43,11 @@ export async function getTypeCreateSQL(
   typeName: string,
   type: Partial<ITypeForm>,
   sessionId: string,
-  dbName: string,
+  dbName: string
 ) {
   const sid = generateTypeSid(typeName, sessionId, dbName);
   const res = await request.post(`/api/v1/type/getCreateSql/${sid}`, {
-    data: type,
+    data: type
   });
   return res?.data?.sql;
 }

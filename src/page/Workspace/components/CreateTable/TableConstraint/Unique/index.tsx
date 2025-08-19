@@ -34,7 +34,7 @@ const defaultUniqueConstraints: TableUniqueConstraint = {
   name: null,
   columns: [],
   defer: TableConstraintDefer.NOT,
-  enable: true,
+  enable: true
 };
 
 interface IProps {
@@ -46,14 +46,14 @@ const UniqueConstraints: React.FC<IProps> = function ({ modified }) {
   const [selectedRowsIdx, setSelectedRowIdx] = useState<number[]>([]);
   const gridColumns: any[] = useColumns(
     tableContext.columns,
-    tableContext?.session?.connection?.dialectType,
+    tableContext?.session?.connection?.dialectType
   );
   const gridRef = useRef<DataGridRef>();
   const rows = useMemo(() => {
     return tableContext.uniqueConstraints.map((index, idx) => {
       return {
         ...index,
-        key: `${index.name || ''}@@${idx}`,
+        key: `${index.name || ''}@@${idx}`
       };
     });
   }, [tableContext.uniqueConstraints]);
@@ -72,12 +72,15 @@ const UniqueConstraints: React.FC<IProps> = function ({ modified }) {
         <EditToolbar modified={modified}>
           <Toolbar>
             <Toolbar.Button
-              text={formatMessage({ id: 'workspace.header.create', defaultMessage: '新建' })}
+              text={formatMessage({
+                id: 'workspace.header.create',
+                defaultMessage: '新建'
+              })}
               icon={PlusOutlined}
               onClick={() => {
                 const row = {
                   ...defaultUniqueConstraints,
-                  key: generateUniqKey(),
+                  key: generateUniqKey()
                 };
                 gridRef.current?.addRows([row]);
               }}
@@ -85,7 +88,10 @@ const UniqueConstraints: React.FC<IProps> = function ({ modified }) {
 
             <Toolbar.Button
               text={
-                formatMessage({ id: 'odc.TableConstraint.Unique.Delete', defaultMessage: '删除' }) //删除
+                formatMessage({
+                  id: 'odc.TableConstraint.Unique.Delete',
+                  defaultMessage: '删除'
+                }) //删除
               }
               icon={DeleteOutlined}
               disabled={!selectedRowsIdx?.length}
@@ -112,7 +118,7 @@ const UniqueConstraints: React.FC<IProps> = function ({ modified }) {
           setSelectedRowIdx(
             keys.map((key) => {
               return rows.findIndex((row) => row.key === key);
-            }),
+            })
           );
         }}
         gridRef={gridRef}

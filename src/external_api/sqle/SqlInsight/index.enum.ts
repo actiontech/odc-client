@@ -7,7 +7,7 @@ export enum GetSqlPerformanceInsightsMetricNameEnum {
 
   'top_sql_trend' = 'top_sql_trend',
 
-  'active_session_trend' = 'active_session_trend',
+  'active_session_trend' = 'active_session_trend'
 }
 
 export enum GetSqlPerformanceInsightsRelatedSQLFilterSourceEnum {
@@ -15,5 +15,5 @@ export enum GetSqlPerformanceInsightsRelatedSQLFilterSourceEnum {
 
   'sql_manage' = 'sql_manage',
 
-  'workbench' = 'workbench',
+  'workbench' = 'workbench'
 }

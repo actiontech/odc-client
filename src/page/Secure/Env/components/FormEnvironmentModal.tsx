@@ -14,13 +14,26 @@
  * limitations under the License.
  */
 
-import { createEnvironment, getEnvironmentExists, updateEnvironment } from '@/common/network/env';
+import {
+  createEnvironment,
+  getEnvironmentExists,
+  updateEnvironment
+} from '@/common/network/env';
 import HelpDoc from '@/component/helpDoc';
 import { EnvColorMap } from '@/constant';
 import { IEnvironment } from '@/d.ts/environment';
 import { formatMessage } from '@/util/intl';
 import { CheckOutlined } from '@ant-design/icons';
-import { Button, Form, Input, message, Modal, Select, SelectProps, Tag } from 'antd';
+import {
+  Button,
+  Form,
+  Input,
+  message,
+  Modal,
+  Select,
+  SelectProps,
+  Tag
+} from 'antd';
 import { useForm } from 'antd/lib/form/Form';
 import { useEffect, useState } from 'react';
 import styles from './index.less';
@@ -38,7 +51,7 @@ export const FormEnvironmentModal: React.FC<{
   formEnvironmentModalOpen,
   options = [],
   handleCancelFormModal,
-  callback,
+  callback
 }) => {
   const [formRef] = useForm();
   const [loading, setLoading] = useState<boolean>(false);
@@ -48,7 +61,9 @@ export const FormEnvironmentModal: React.FC<{
     }
     let result;
     if (isEdit) {
-      const formData = await formRef.validateFields(['style', 'description'])?.catch();
+      const formData = await formRef
+        .validateFields(['style', 'description'])
+        ?.catch();
       setLoading(true);
       result = await updateEnvironment(currentEnvironment?.id, formData);
       setLoading(false);
@@ -64,12 +79,12 @@ export const FormEnvironmentModal: React.FC<{
         currentEnvironment
           ? formatMessage({
               id: 'src.page.Secure.Env.components.6BD18E5A',
-              defaultMessage: '保存成功',
+              defaultMessage: '保存成功'
             })
           : formatMessage({
               id: 'src.page.Secure.Env.components.CEAD4978',
-              defaultMessage: '新建成功',
-            }),
+              defaultMessage: '新建成功'
+            })
       );
       currentEnvironment && (await callback?.(result?.data?.id));
       return;
@@ -78,12 +93,12 @@ export const FormEnvironmentModal: React.FC<{
       currentEnvironment
         ? formatMessage({
             id: 'src.page.Secure.Env.components.D02D681D',
-            defaultMessage: '保存失败',
+            defaultMessage: '保存失败'
           })
         : formatMessage({
             id: 'src.page.Secure.Env.components.053B9E17',
-            defaultMessage: '新建失败',
-          }),
+            defaultMessage: '新建失败'
+          })
     );
   };
 
@@ -103,12 +118,12 @@ export const FormEnvironmentModal: React.FC<{
         formRef.setFieldsValue({
           name: currentEnvironment?.name,
           style: currentEnvironment?.style,
-          description: currentEnvironment?.description,
+          description: currentEnvironment?.description
         });
       } else {
         formRef.setFieldsValue({
           style: items?.[0],
-          copiedRulesetId: options?.[0]?.value,
+          copiedRulesetId: options?.[0]?.value
         });
       }
     } else {
@@ -122,11 +137,11 @@ export const FormEnvironmentModal: React.FC<{
         isEdit
           ? formatMessage({
               id: 'src.page.Secure.Env.components.ABDA4206',
-              defaultMessage: '编辑环境',
+              defaultMessage: '编辑环境'
             })
           : formatMessage({
               id: 'src.page.Secure.Env.components.C9BFC3C7',
-              defaultMessage: '新建环境',
+              defaultMessage: '新建环境'
             })
       }
       width={580}
@@ -138,19 +153,24 @@ export const FormEnvironmentModal: React.FC<{
             {
               formatMessage({
                 id: 'src.page.Secure.Env.components.EECB6084' /*取消*/,
-                defaultMessage: '取消',
+                defaultMessage: '取消'
               }) /* 取消 */
             }
           </Button>
-          <Button type="primary" loading={loading} disabled={loading} onClick={handleSubmit}>
+          <Button
+            type="primary"
+            loading={loading}
+            disabled={loading}
+            onClick={handleSubmit}
+          >
             {isEdit
               ? formatMessage({
                   id: 'src.page.Secure.Env.components.7496F3B7',
-                  defaultMessage: '保存',
+                  defaultMessage: '保存'
                 })
               : formatMessage({
                   id: 'src.page.Secure.Env.components.B742B1F8',
-                  defaultMessage: '新建',
+                  defaultMessage: '新建'
                 })}
           </Button>
         </div>
@@ -161,7 +181,7 @@ export const FormEnvironmentModal: React.FC<{
           label={
             formatMessage({
               id: 'src.page.Secure.Env.components.E2B289C4',
-              defaultMessage: '环境名称',
+              defaultMessage: '环境名称'
             }) /*"环境名称"*/
           }
           required
@@ -176,30 +196,30 @@ export const FormEnvironmentModal: React.FC<{
                 required: true,
                 message: formatMessage({
                   id: 'src.page.Secure.Env.components.E20FE25C',
-                  defaultMessage: '请输入环境名称',
-                }), //'请输入环境名称'
+                  defaultMessage: '请输入环境名称'
+                }) //'请输入环境名称'
               },
               {
                 max: 8,
                 message: formatMessage({
                   id: 'src.page.Secure.Env.components.1C970EDD',
-                  defaultMessage: '已超过 8 个字符',
-                }), //'已超过 8 个字符'
+                  defaultMessage: '已超过 8 个字符'
+                }) //'已超过 8 个字符'
               },
               {
                 message: formatMessage({
                   id: 'src.page.Secure.Env.components.3C766EC6',
-                  defaultMessage: '名称首位存在空格',
+                  defaultMessage: '名称首位存在空格'
                 }), //'名称首位存在空格'
                 validator: async (ruler, value) => {
                   if (value?.startsWith(' ')) {
                     throw new Error();
                   }
-                },
+                }
               },
               {
-                validator: checkNameRepeat,
-              },
+                validator: checkNameRepeat
+              }
             ]}
           >
             <Input
@@ -207,7 +227,7 @@ export const FormEnvironmentModal: React.FC<{
               style={{ width: '240px' }}
               placeholder={formatMessage({
                 id: 'src.page.Secure.Env.components.228DEEEE',
-                defaultMessage: '请输入，8个字符以内',
+                defaultMessage: '请输入，8个字符以内'
               })}
             />
           </Form.Item>
@@ -215,7 +235,7 @@ export const FormEnvironmentModal: React.FC<{
             {
               formatMessage({
                 id: 'src.page.Secure.Env.components.D11CF27F' /*新建之后无法修改*/,
-                defaultMessage: '新建之后无法修改',
+                defaultMessage: '新建之后无法修改'
               }) /* 新建之后无法修改 */
             }
           </div>
@@ -224,7 +244,7 @@ export const FormEnvironmentModal: React.FC<{
           label={
             formatMessage({
               id: 'src.page.Secure.Env.components.4AE714EA',
-              defaultMessage: '标签样式',
+              defaultMessage: '标签样式'
             }) /*"标签样式"*/
           }
           name="style"
@@ -233,9 +253,9 @@ export const FormEnvironmentModal: React.FC<{
               required: true,
               message: formatMessage({
                 id: 'src.page.Secure.Env.components.B98439D0',
-                defaultMessage: '请选择标签样式',
-              }), //'请选择标签样式'
-            },
+                defaultMessage: '请选择标签样式'
+              }) //'请选择标签样式'
+            }
           ]}
         >
           <TagSelector />
@@ -248,7 +268,7 @@ export const FormEnvironmentModal: React.FC<{
                 {
                   formatMessage({
                     id: 'src.page.Secure.Env.components.977B9386' /*引用环境*/,
-                    defaultMessage: '引用环境',
+                    defaultMessage: '引用环境'
                   }) /* 引用环境 */
                 }
               </HelpDoc>
@@ -259,9 +279,9 @@ export const FormEnvironmentModal: React.FC<{
                 required: true,
                 message: formatMessage({
                   id: 'src.page.Secure.Env.components.351C7EB6',
-                  defaultMessage: '请选择引用环境',
-                }), //'请选择引用环境'
-              },
+                  defaultMessage: '请选择引用环境'
+                }) //'请选择引用环境'
+              }
             ]}
           >
             <Select style={{ width: '240px' }} options={options} />
@@ -272,7 +292,7 @@ export const FormEnvironmentModal: React.FC<{
           label={
             formatMessage({
               id: 'src.page.Secure.Env.components.B264828F',
-              defaultMessage: '描述',
+              defaultMessage: '描述'
             }) /*"描述"*/
           }
           name="description"
@@ -281,22 +301,22 @@ export const FormEnvironmentModal: React.FC<{
               max: 200,
               message: formatMessage({
                 id: 'src.page.Secure.Env.components.63B256F5',
-                defaultMessage: '描述内容最大长度为200个字符',
-              }), //'最大长度为200'
-            },
+                defaultMessage: '描述内容最大长度为200个字符'
+              }) //'最大长度为200'
+            }
           ]}
         >
           <Input.TextArea
             placeholder={
               formatMessage({
                 id: 'src.page.Secure.Env.components.279CC9E7',
-                defaultMessage: '请输入描述',
+                defaultMessage: '请输入描述'
               }) /*"请输入描述"*/
             }
             maxLength={200}
             rows={5}
             style={{
-              resize: 'none',
+              resize: 'none'
             }}
           />
         </Form.Item>
@@ -334,11 +354,13 @@ const TagSelector: React.FC<{
               borderColor: EnvColorMap[item?.toUpperCase()]?.borderColor,
               display: 'flex',
               justifyContent: 'center',
-              alignItems: 'center',
+              alignItems: 'center'
             }}
             color={item?.toLocaleLowerCase()}
           >
-            {item === tag && <CheckOutlined style={{ color: 'var(--text-color-secondary)' }} />}
+            {item === tag && (
+              <CheckOutlined style={{ color: 'var(--text-color-secondary)' }} />
+            )}
           </Tag>
         );
       })}

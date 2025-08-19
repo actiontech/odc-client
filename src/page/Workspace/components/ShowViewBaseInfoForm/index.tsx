@@ -21,7 +21,7 @@ import { useEffect } from 'react';
 import styles from './index.less';
 
 enum CheckOption {
-  NONE = 'NONE',
+  NONE = 'NONE'
 }
 
 interface IProps {
@@ -35,7 +35,7 @@ function ShowViewBaseInfoForm({ model }: IProps) {
   const [form] = Form.useForm();
   const formItemLayout = {
     labelCol: { span: 6 },
-    wrapperCol: { span: 14 },
+    wrapperCol: { span: 14 }
   };
 
   useEffect(() => {
@@ -47,7 +47,7 @@ function ShowViewBaseInfoForm({ model }: IProps) {
       viewName: viewName,
       checkOption: checkOption || CheckOption.NONE,
       definer: definer,
-      comment,
+      comment
     });
   }, [model]);
 
@@ -61,14 +61,14 @@ function ShowViewBaseInfoForm({ model }: IProps) {
         name="viewName"
         label={formatMessage({
           id: 'workspace.window.createView.viewName',
-          defaultMessage: '视图名称',
+          defaultMessage: '视图名称'
         })}
       >
         <Input
           disabled={true}
           placeholder={formatMessage({
             id: 'workspace.window.createView.viewName.placeholder',
-            defaultMessage: '请填写视图名称',
+            defaultMessage: '请填写视图名称'
           })}
         />
       </Form.Item>
@@ -76,7 +76,7 @@ function ShowViewBaseInfoForm({ model }: IProps) {
         name="checkOption"
         label={formatMessage({
           id: 'workspace.window.createView.checkOption',
-          defaultMessage: '检查项',
+          defaultMessage: '检查项'
         })}
       >
         <Select disabled={true}>
@@ -87,7 +87,7 @@ function ShowViewBaseInfoForm({ model }: IProps) {
         name="definer"
         label={formatMessage({
           id: 'workspace.window.createView.definer',
-          defaultMessage: '创建人',
+          defaultMessage: '创建人'
         })}
       >
         <Input disabled={true} />
@@ -96,7 +96,7 @@ function ShowViewBaseInfoForm({ model }: IProps) {
         name="comment"
         label={formatMessage({
           id: 'src.page.Workspace.components.ShowViewBaseInfoForm.BAFEE497',
-          defaultMessage: '注释',
+          defaultMessage: '注释'
         })}
       >
         <Input.TextArea autoSize={{ minRows: 3, maxRows: 3 }} disabled={true} />

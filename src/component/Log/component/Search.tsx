@@ -20,7 +20,7 @@ import {
   ArrowDownOutlined,
   ArrowUpOutlined,
   CloseOutlined,
-  SearchOutlined,
+  SearchOutlined
 } from '@ant-design/icons';
 import { Button, Col, Input, Row, Space } from 'antd';
 import classNames from 'classnames';
@@ -83,7 +83,7 @@ const SearchComponent: React.FC<SearchComponentProps> = ({
   onChange,
   manualSearch,
   controlled,
-  loading,
+  loading
 }) => {
   const prefixCls = getPrefixCls('log');
   return (
@@ -92,7 +92,7 @@ const SearchComponent: React.FC<SearchComponentProps> = ({
         <Input
           onChange={(e) => onChange(e.target.value)}
           className={classNames(`${prefixCls}-search-input`, {
-            [`${prefixCls}-search-input-controlled`]: controlled,
+            [`${prefixCls}-search-input-controlled`]: controlled
           })}
           allowClear
           suffix={controlled ? null : <SearchOutlined />}
@@ -108,7 +108,7 @@ const SearchComponent: React.FC<SearchComponentProps> = ({
             {
               formatMessage({
                 id: 'odc.Log.component.Search.FindClips',
-                defaultMessage: '查找片段',
+                defaultMessage: '查找片段'
               }) /*查找片段*/
             }
           </Button>
@@ -119,7 +119,7 @@ const SearchComponent: React.FC<SearchComponentProps> = ({
         <Space size={16}>
           <span
             className={classNames(`${prefixCls}-search-count-info`, {
-              [`${prefixCls}-searched-count-info`]: !!total,
+              [`${prefixCls}-searched-count-info`]: !!total
             })}
           >
             {total ? `${current + 1}/${total}` : 0}

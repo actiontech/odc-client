@@ -24,10 +24,10 @@ export async function updateRiskDetectRule(
     riskLevelId: number;
     riskLevel: IRiskLevel;
     rootNode: RootNode;
-  },
+  }
 ): Promise<boolean> {
   const res = await request.put(`/api/v2/regulation/riskDetectRules/${id}`, {
-    data,
+    data
   });
   return res?.successful || false;
 }
@@ -36,10 +36,10 @@ export async function listRiskDetectRules(
   params: Partial<{
     riskLevelId: number;
     name: string;
-  }>,
+  }>
 ): Promise<IRiskDetectRule> {
   const ret = await request.get(`/api/v2/regulation/riskDetectRules/`, {
-    params,
+    params
   });
   return ret?.data?.contents?.[0];
 }
@@ -54,10 +54,10 @@ export async function createRiskDetectRules(
     riskLevelId: number;
     riskLevel: IRiskLevel;
     rootNode: RootNode;
-  }>,
+  }>
 ): Promise<boolean> {
   const res = await request.post(`/api/v2/regulation/riskDetectRules`, {
-    data,
+    data
   });
   return res?.successful || false;
 }

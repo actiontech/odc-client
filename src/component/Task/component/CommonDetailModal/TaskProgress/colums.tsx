@@ -21,71 +21,75 @@ const getColumns = (params: {
       <div>
         {formatMessage({
           id: 'src.component.Task.component.CommonDetailModal.TaskProgress.BD5053CC',
-          defaultMessage: 'ODC无锁结构变更功能包含如下步骤，步骤按照先后执行',
+          defaultMessage: 'ODC无锁结构变更功能包含如下步骤，步骤按照先后执行'
         })}
       </div>
       <div>
         {formatMessage({
           id: 'src.component.Task.component.CommonDetailModal.TaskProgress.D7170E72',
-          defaultMessage: '1.创建影子表.该阶段为创建命名规则为 _$',
+          defaultMessage: '1.创建影子表.该阶段为创建命名规则为 _$'
         })}
         {'{'}
         {formatMessage({
           id: 'src.component.Task.component.CommonDetailModal.TaskProgress.5E1F4A52',
-          defaultMessage: '原始表名',
+          defaultMessage: '原始表名'
         })}
         {'}'}
         {formatMessage({
           id: 'src.component.Task.component.CommonDetailModal.TaskProgress.B2A83585',
-          defaultMessage: '_osc_new_ 的影子表',
+          defaultMessage: '_osc_new_ 的影子表'
         })}
       </div>
       <div>
         {formatMessage({
           id: 'src.component.Task.component.CommonDetailModal.TaskProgress.9EB23593',
           defaultMessage:
-            '2.创建数据迁移任务.该阶段为创建数据迁移服务.无锁结构变更依赖数据迁移服务进行原表到影子表的数据复制',
+            '2.创建数据迁移任务.该阶段为创建数据迁移服务.无锁结构变更依赖数据迁移服务进行原表到影子表的数据复制'
         })}
       </div>
       <div>
         {formatMessage({
           id: 'src.component.Task.component.CommonDetailModal.TaskProgress.E054491C',
-          defaultMessage: '3.数据迁移任务预检查.该阶段为数据迁移服务检查用户数据库是否满足迁移条件',
+          defaultMessage:
+            '3.数据迁移任务预检查.该阶段为数据迁移服务检查用户数据库是否满足迁移条件'
         })}
       </div>
       <div>
         {formatMessage({
           id: 'src.component.Task.component.CommonDetailModal.TaskProgress.A0022050',
-          defaultMessage: '4.数据迁移任务迁移全量数据. 该阶段为数据迁移服务复制静态数据到影子表',
+          defaultMessage:
+            '4.数据迁移任务迁移全量数据. 该阶段为数据迁移服务复制静态数据到影子表'
         })}
       </div>
       <div>
         {formatMessage({
           id: 'src.component.Task.component.CommonDetailModal.TaskProgress.0E8BD1DF',
-          defaultMessage: '5.数据迁移服务补齐增量数据.该阶段为数据迁移服务应用增量变更数据到影子表',
+          defaultMessage:
+            '5.数据迁移服务补齐增量数据.该阶段为数据迁移服务应用增量变更数据到影子表'
         })}
       </div>
       <div>
         {formatMessage({
           id: 'src.component.Task.component.CommonDetailModal.TaskProgress.FA8BFF19',
           defaultMessage:
-            '6.切换表结构.该阶段为表切换阶段，在保证数据一致的前提下，原表重命名到 _$',
+            '6.切换表结构.该阶段为表切换阶段，在保证数据一致的前提下，原表重命名到 _$'
         })}
         {'{'}
         {formatMessage({
           id: 'src.component.Task.component.CommonDetailModal.TaskProgress.BE01B8C6',
-          defaultMessage: '原始表名',
+          defaultMessage: '原始表名'
         })}
         {'}'}
         {formatMessage({
           id: 'src.component.Task.component.CommonDetailModal.TaskProgress.CFC86411',
-          defaultMessage: '_osc_old_, 影子表重命名为原表',
+          defaultMessage: '_osc_old_, 影子表重命名为原表'
         })}
       </div>
       <div>
         {formatMessage({
           id: 'src.component.Task.component.CommonDetailModal.TaskProgress.D35FDAA6',
-          defaultMessage: '7.释放数据迁移任务资源.该阶段为释放数据迁移服务的相关资源',
+          defaultMessage:
+            '7.释放数据迁移任务资源.该阶段为释放数据迁移服务的相关资源'
         })}
       </div>
     </div>
@@ -95,32 +99,36 @@ const getColumns = (params: {
     {
       dataIndex: 'resultJson',
       title: formatMessage({
-        id: 'odc.component.CommonDetailModal.TaskProgress.SourceTable',
+        id: 'odc.component.CommonDetailModal.TaskProgress.SourceTable'
       }),
       //源表
       ellipsis: true,
       render: (resultJson) => {
         return <span>{JSON.parse(resultJson ?? '{}')?.originTableName}</span>;
-      },
+      }
     },
     {
       dataIndex: 'status',
       title: formatMessage({
-        id: 'odc.component.CommonDetailModal.TaskProgress.ExecutionStatus',
+        id: 'odc.component.CommonDetailModal.TaskProgress.ExecutionStatus'
       }),
       //执行状态
       ellipsis: true,
       width: 140,
       render: (status, record) => {
         return (
-          <StatusLabel isSubTask status={status} progress={Math.floor(record.progressPercentage)} />
+          <StatusLabel
+            isSubTask
+            status={status}
+            progress={Math.floor(record.progressPercentage)}
+          />
         );
-      },
+      }
     },
     {
       dataIndex: 'action',
       title: formatMessage({
-        id: 'odc.component.CommonDetailModal.TaskProgress.Operation',
+        id: 'odc.component.CommonDetailModal.TaskProgress.Operation'
       }),
       //操作
       ellipsis: true,
@@ -128,7 +136,9 @@ const getColumns = (params: {
       render: (_, record) => {
         const { status } = record;
         const resultJson = JSON.parse(record?.resultJson);
-        const isTaskExecuting = [TaskStatus.EXECUTING]?.includes(params.taskStatus);
+        const isTaskExecuting = [TaskStatus.EXECUTING]?.includes(
+          params.taskStatus
+        );
         return (
           <Space>
             <Action.Link
@@ -138,7 +148,7 @@ const getColumns = (params: {
             >
               {formatMessage({
                 id: 'src.component.Task.component.CommonDetailModal.TaskProgress.1AA009D5',
-                defaultMessage: '查看结构',
+                defaultMessage: '查看结构'
               })}
             </Action.Link>
             {resultJson?.manualSwapTableEnabled &&
@@ -151,7 +161,7 @@ const getColumns = (params: {
                 >
                   {
                     formatMessage({
-                      id: 'odc.src.component.Task.component.CommonDetailModal.WatchNameSwitch',
+                      id: 'odc.src.component.Task.component.CommonDetailModal.WatchNameSwitch'
                     }) /*
             表名切换
             */
@@ -159,7 +169,9 @@ const getColumns = (params: {
                 </Action.Link>
               )}
             {/* 进行中和异常状态可查看进度 */}
-            {[SubTaskStatus.RUNNING, SubTaskStatus.ABNORMAL].includes(status) && (
+            {[SubTaskStatus.RUNNING, SubTaskStatus.ABNORMAL].includes(
+              status
+            ) && (
               <Space size={2}>
                 <Action.Link
                   onClick={async () => {
@@ -168,7 +180,7 @@ const getColumns = (params: {
                 >
                   {formatMessage({
                     id: 'src.component.Task.component.CommonDetailModal.TaskProgress.D1ECE614',
-                    defaultMessage: '查看进度',
+                    defaultMessage: '查看进度'
                   })}
                 </Action.Link>
                 <Tooltip placement={'bottomRight'} title={viewProgressTooltip}>
@@ -178,38 +190,42 @@ const getColumns = (params: {
             )}
           </Space>
         );
-      },
-    },
+      }
+    }
   ];
 };
-const getMultipleAsyncColumns = (params: { handleMultipleAsyncOpen: (taskId: number) => void }) => {
+const getMultipleAsyncColumns = (params: {
+  handleMultipleAsyncOpen: (taskId: number) => void;
+}) => {
   return [
     {
       title: formatMessage({
         id: 'src.component.Task.component.CommonDetailModal.FC1C254D',
-        defaultMessage: '执行顺序',
+        defaultMessage: '执行顺序'
       }),
       dataIndex: 'nodeIndex',
       width: 100,
       render: (nodeIndex) => nodeIndex + 1,
       onCell: (record, index) => {
         return {
-          rowSpan: record?.needMerge ? record?.rowSpan : 0,
+          rowSpan: record?.needMerge ? record?.rowSpan : 0
         };
-      },
+      }
     },
     {
       title: formatMessage({
         id: 'src.component.Task.component.CommonDetailModal.9A136568',
-        defaultMessage: '数据库',
+        defaultMessage: '数据库'
       }),
       dataIndex: 'database',
       width: 200,
       ellipsis: {
-        showTitle: true,
+        showTitle: true
       },
       render: (_, record) => {
-        const icon = getDataSourceStyleByConnectType(record?.database?.dataSource?.type);
+        const icon = getDataSourceStyleByConnectType(
+          record?.database?.dataSource?.type
+        );
         return (
           <Popover
             content={
@@ -225,7 +241,7 @@ const getMultipleAsyncColumns = (params: { handleMultipleAsyncOpen: (taskId: num
                     style={{
                       color: icon?.icon?.color,
                       fontSize: 16,
-                      marginRight: 4,
+                      marginRight: 4
                     }}
                   />
 
@@ -249,7 +265,7 @@ const getMultipleAsyncColumns = (params: { handleMultipleAsyncOpen: (taskId: num
                   style={{
                     color: icon?.icon?.color,
                     fontSize: 16,
-                    marginRight: 4,
+                    marginRight: 4
                   }}
                 />
 
@@ -261,12 +277,12 @@ const getMultipleAsyncColumns = (params: { handleMultipleAsyncOpen: (taskId: num
             </Space>
           </Popover>
         );
-      },
+      }
     },
     {
       title: formatMessage({
         id: 'src.component.Task.component.CommonDetailModal.0DAC1A06',
-        defaultMessage: '开始时间',
+        defaultMessage: '开始时间'
       }),
       dataIndex: 'createTime',
       width: 178,
@@ -276,13 +292,13 @@ const getMultipleAsyncColumns = (params: { handleMultipleAsyncOpen: (taskId: num
             ? getLocalFormatDateTime(record?.flowInstanceDetailResp?.createTime)
             : '-'}
         </div>
-      ),
+      )
     },
     {
       dataIndex: 'status',
       title: formatMessage({
         id: 'src.component.Task.component.CommonDetailModal.B46A5216',
-        defaultMessage: '执行状态',
+        defaultMessage: '执行状态'
       }),
       ellipsis: true,
       width: 120,
@@ -290,16 +306,18 @@ const getMultipleAsyncColumns = (params: { handleMultipleAsyncOpen: (taskId: num
         return (
           <StatusLabel
             status={record?.status}
-            progress={Math.floor(record?.flowInstanceDetailResp?.progressPercentage)}
+            progress={Math.floor(
+              record?.flowInstanceDetailResp?.progressPercentage
+            )}
           />
         );
-      },
+      }
     },
     {
       dataIndex: 'action',
       title: formatMessage({
         id: 'src.component.Task.component.CommonDetailModal.1DB56DDA',
-        defaultMessage: '操作',
+        defaultMessage: '操作'
       }),
       ellipsis: true,
       width: 90,
@@ -309,19 +327,21 @@ const getMultipleAsyncColumns = (params: { handleMultipleAsyncOpen: (taskId: num
             <Action.Link
               disabled={!record?.flowInstanceDetailResp}
               onClick={async () => {
-                params?.handleMultipleAsyncOpen(record?.flowInstanceDetailResp?.id);
+                params?.handleMultipleAsyncOpen(
+                  record?.flowInstanceDetailResp?.id
+                );
               }}
             >
               {
                 formatMessage({
-                  id: 'odc.component.CommonDetailModal.TaskProgress.View',
+                  id: 'odc.component.CommonDetailModal.TaskProgress.View'
                 }) /*查看*/
               }
             </Action.Link>
           </>
         );
-      },
-    },
+      }
+    }
   ];
 };
 
@@ -334,12 +354,12 @@ export const getColumnsByTaskType = (
     handleProgressDetailVisible;
   },
   status: TaskStatus,
-  haveOperationPermission: boolean,
+  haveOperationPermission: boolean
 ) => {
   switch (type) {
     case TaskType.MULTIPLE_ASYNC: {
       return getMultipleAsyncColumns({
-        handleMultipleAsyncOpen: params?.handleMultipleAsyncOpen,
+        handleMultipleAsyncOpen: params?.handleMultipleAsyncOpen
       });
     }
     case TaskType.ONLINE_SCHEMA_CHANGE: {
@@ -348,7 +368,7 @@ export const getColumnsByTaskType = (
         onSwapTable: params?.handleSwapTable,
         handleProgressDetailVisible: params?.handleProgressDetailVisible,
         taskStatus: status,
-        haveOperationPermission,
+        haveOperationPermission
       });
     }
   }

@@ -1,7 +1,7 @@
 /* tslint:disable no-duplicate-string */
 
 export enum ListOpPermissionsOrderByEnum {
-  'name' = 'name',
+  'name' = 'name'
 }
 
 export enum ListOpPermissionsFilterByTargetEnum {
@@ -11,11 +11,11 @@ export enum ListOpPermissionsFilterByTargetEnum {
 
   'member' = 'member',
 
-  'project' = 'project',
+  'project' = 'project'
 }
 
 export enum ListOpPermissionsServiceEnum {
   'dms' = 'dms',
 
-  'sqle' = 'sqle',
+  'sqle' = 'sqle'
 }

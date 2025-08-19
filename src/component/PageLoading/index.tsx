@@ -46,7 +46,7 @@ export default (props: {
             {
               formatMessage({
                 id: 'odc.src.layout.LoadingPage.SystemLoadingFailedPleaseReload',
-                defaultMessage: '系统加载失败，请重新加载',
+                defaultMessage: '系统加载失败，请重新加载'
               })
               // 系统加载失败，请重新加载
             }
@@ -56,13 +56,17 @@ export default (props: {
           ? formatMessage(
               {
                 id: 'odc.component.PageLoading.ThereAreStillPropsqueuewaitnumberPeople',
-                defaultMessage: '前方{propsQueueWaitNumber}人排队中，请耐心等待。',
+                defaultMessage:
+                  '前方{propsQueueWaitNumber}人排队中，请耐心等待。'
               },
-              { propsQueueWaitNumber: props.queue.waitNumber },
+              { propsQueueWaitNumber: props.queue.waitNumber }
             ) //`前方还有${props.queue.waitNumber}人正在排队中，请耐心等待。`
           : null}
       </div>
-      <img className={styles['ob-loading-icon']} src={window.publicPath + 'img/ob_logo.svg'} />
+      <img
+        className={styles['ob-loading-icon']}
+        src={window.publicPath + 'img/ob_logo.svg'}
+      />
     </div>
   );
 };

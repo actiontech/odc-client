@@ -18,7 +18,12 @@ import { ConnectionMode, ConnectType, DatasourceGroup } from '@/d.ts';
 import { encrypt } from '@/util/utils';
 import { getDataSourceGroupByConnectType } from '@/common/datasource';
 
-const encryptKeys = ['password', 'sysTenantPassword', 'readonlyPassword', 'sysUserPassword'];
+const encryptKeys = [
+  'password',
+  'sysTenantPassword',
+  'readonlyPassword',
+  'sysUserPassword'
+];
 
 /**
  * 提供租户的连接帐户，格式有两种：“用户名@租户名#集群名”或者“集群名:租户名:用户名”
@@ -47,7 +52,7 @@ export function resolveUnionDbUser(unionDbUser: string): {
   return {
     dbUser,
     tenant,
-    cluster,
+    cluster
   };
 }
 
@@ -57,8 +62,12 @@ export function isConnectTypeBeShardingType(connectType: ConnectType): boolean {
 }
 
 /** 是否是对象存储类型 */
-export function isConnectTypeBeFileSystemGroup(connectType: ConnectType): boolean {
-  return getDataSourceGroupByConnectType(connectType) === DatasourceGroup.FileSystem;
+export function isConnectTypeBeFileSystemGroup(
+  connectType: ConnectType
+): boolean {
+  return (
+    getDataSourceGroupByConnectType(connectType) === DatasourceGroup.FileSystem
+  );
 }
 
 export function isPgDataDataSource(connectType: ConnectType): boolean {

@@ -25,7 +25,11 @@ interface IProps {
   visible: boolean;
   onClose: () => void;
 }
-const DBPermissionTableDrawer: React.FC<IProps> = function ({ visible, dataSource, onClose }) {
+const DBPermissionTableDrawer: React.FC<IProps> = function ({
+  visible,
+  dataSource,
+  onClose
+}) {
   return (
     <Drawer
       zIndex={1003}
@@ -35,20 +39,20 @@ const DBPermissionTableDrawer: React.FC<IProps> = function ({ visible, dataSourc
       title={
         formatMessage({
           id: 'src.page.Workspace.components.SQLResultSet.B81C8729',
-          defaultMessage: '权限检查结果',
+          defaultMessage: '权限检查结果'
         }) /*'权限检查结果'*/
       }
       footer={
         <Space
           style={{
-            float: 'right',
+            float: 'right'
           }}
         >
           <Button onClick={onClose}>
             {
               formatMessage({
                 id: 'src.page.Workspace.components.SQLResultSet.2C272DCF' /*关闭*/,
-                defaultMessage: '关闭',
+                defaultMessage: '关闭'
               }) /* 关闭 */
             }
           </Button>

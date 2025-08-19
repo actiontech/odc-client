@@ -45,7 +45,7 @@ const FileSelecterPanel: React.FC<IProps> = function ({
   form,
   isSingleImport,
   projectId,
-  onSessionChange,
+  onSessionChange
 }) {
   const [tables, setTables] = useState([]);
   const databaseId = Form.useWatch('databaseId', form);
@@ -67,7 +67,7 @@ const FileSelecterPanel: React.FC<IProps> = function ({
     }
     onSessionChange({
       sessionId: session?.sessionId,
-      databaseName,
+      databaseName
     });
     fetchTable(databaseName);
   }, [databaseName]);
@@ -83,24 +83,27 @@ const FileSelecterPanel: React.FC<IProps> = function ({
           const importFileName = getFieldValue('importFileName');
           const importContent = getFieldValue('importContent');
           const transferData = importContent !== EXPORT_CONTENT.STRUCT;
-          const { containsData, containsSchema } = importFileName?.[0]?.response?.data || {};
+          const { containsData, containsSchema } =
+            importFileName?.[0]?.response?.data || {};
           return (
             <>
               <FormItem
                 label={formatMessage({
                   id: 'odc.ImportDrawer.ImportForm.ImportContent',
-                  defaultMessage: '导入内容',
+                  defaultMessage: '导入内容'
                 })}
                 name="importContent"
-                style={{ display: isZipFileType || isDIRFileType ? 'block' : 'none' }}
+                style={{
+                  display: isZipFileType || isDIRFileType ? 'block' : 'none'
+                }}
                 rules={[
                   {
                     required: true,
                     message: formatMessage({
                       id: 'odc.ImportDrawer.ImportForm.SelectImportContent',
-                      defaultMessage: '请选择导入内容',
-                    }),
-                  },
+                      defaultMessage: '请选择导入内容'
+                    })
+                  }
                 ]}
               >
                 <Radio.Group>
@@ -110,19 +113,25 @@ const FileSelecterPanel: React.FC<IProps> = function ({
                   >
                     {formatMessage({
                       id: 'odc.ImportDrawer.ImportForm.ImportStructuresAndData',
-                      defaultMessage: '导入结构和数据',
+                      defaultMessage: '导入结构和数据'
                     })}
                   </Radio.Button>
-                  <Radio.Button disabled={!containsData} value={EXPORT_CONTENT.DATA}>
+                  <Radio.Button
+                    disabled={!containsData}
+                    value={EXPORT_CONTENT.DATA}
+                  >
                     {formatMessage({
                       id: 'odc.ImportDrawer.ImportForm.ImportDataOnly',
-                      defaultMessage: '仅导入数据',
+                      defaultMessage: '仅导入数据'
                     })}
                   </Radio.Button>
-                  <Radio.Button disabled={!containsSchema} value={EXPORT_CONTENT.STRUCT}>
+                  <Radio.Button
+                    disabled={!containsSchema}
+                    value={EXPORT_CONTENT.STRUCT}
+                  >
                     {formatMessage({
                       id: 'odc.ImportDrawer.ImportForm.ImportStructureOnly',
-                      defaultMessage: '仅导入结构',
+                      defaultMessage: '仅导入结构'
                     })}
                   </Radio.Button>
                 </Radio.Group>
@@ -134,7 +143,7 @@ const FileSelecterPanel: React.FC<IProps> = function ({
                   label={
                     formatMessage({
                       id: 'odc.ImportForm.ConfigPanel.ImportTargetTable',
-                      defaultMessage: '导入目标表',
+                      defaultMessage: '导入目标表'
                     })
                     //导入目标表
                   }
@@ -144,10 +153,10 @@ const FileSelecterPanel: React.FC<IProps> = function ({
                       required: isCsvFileType,
                       message: formatMessage({
                         id: 'odc.ImportForm.ConfigPanel.TheImportTargetTableCannot',
-                        defaultMessage: '导入目标表不能为空',
-                      }),
+                        defaultMessage: '导入目标表不能为空'
+                      })
                       //导入目标表不能为空
-                    },
+                    }
                   ]}
                 >
                   <Select
@@ -157,7 +166,7 @@ const FileSelecterPanel: React.FC<IProps> = function ({
                     options={tables?.map((item) => {
                       return {
                         label: item.tableName,
-                        value: item.tableName,
+                        value: item.tableName
                       };
                     })}
                   />
@@ -185,7 +194,7 @@ const FileSelecterPanel: React.FC<IProps> = function ({
               <FormItemPanel
                 label={formatMessage({
                   id: 'odc.ImportForm.ConfigPanel.TaskSettings',
-                  defaultMessage: '任务设置',
+                  defaultMessage: '任务设置'
                 })}
                 /*任务设置*/ keepExpand
               >
@@ -194,7 +203,7 @@ const FileSelecterPanel: React.FC<IProps> = function ({
                     required={false}
                     label={formatMessage({
                       id: 'odc.ImportDrawer.ImportForm.TaskErrorHandling',
-                      defaultMessage: '任务错误处理',
+                      defaultMessage: '任务错误处理'
                     })}
                     /* 任务错误处理 */ name="stopWhenError"
                   >
@@ -203,7 +212,7 @@ const FileSelecterPanel: React.FC<IProps> = function ({
                         {
                           formatMessage({
                             id: 'odc.ImportDrawer.ImportForm.StopATask',
-                            defaultMessage: '停止任务',
+                            defaultMessage: '停止任务'
                           })
 
                           /* 停止任务 */
@@ -213,7 +222,7 @@ const FileSelecterPanel: React.FC<IProps> = function ({
                         {
                           formatMessage({
                             id: 'odc.ImportDrawer.ImportForm.IgnoreErrorsContinueTasks',
-                            defaultMessage: '忽略错误继续任务',
+                            defaultMessage: '忽略错误继续任务'
                           })
 
                           /* 忽略错误继续任务 */
@@ -240,13 +249,15 @@ const FileSelecterPanel: React.FC<IProps> = function ({
               } else if (existSys) {
                 return formatMessage({
                   id: 'odc.ImportForm.ConfigPanel.TheAccountConfiguredForThe',
-                  defaultMessage: '默认使用连接设置的账号，若连接失败，建议修改密码用于此次导入',
+                  defaultMessage:
+                    '默认使用连接设置的账号，若连接失败，建议修改密码用于此次导入'
                 });
                 //默认使用连接设置的账号，若连接失败，建议修改密码用于此次导入
               } else {
                 return formatMessage({
                   id: 'odc.ImportForm.ConfigPanel.PleaseConfigureTheSysTenant',
-                  defaultMessage: '请配置 sys 租户账号，该账号信息仅用于此次导入',
+                  defaultMessage:
+                    '请配置 sys 租户账号，该账号信息仅用于此次导入'
                 });
                 //请配置 sys 租户账号，该账号信息仅用于此次导入
               }

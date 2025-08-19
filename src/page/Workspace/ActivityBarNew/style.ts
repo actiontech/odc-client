@@ -3,7 +3,9 @@ import { styled } from '@mui/material/styles';
 const COLLAPSED_WIDTH = '48px';
 const EXPANDED_WIDTH = '220px';
 
-export const ActivityBarRootStyleWrapper = styled('div')<{ $collapsed: boolean }>`
+export const ActivityBarRootStyleWrapper = styled('div')<{
+  $collapsed: boolean;
+}>`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -57,8 +59,11 @@ export const NavItemStyleWrapper = styled('div')<{
   padding-right: 6px;
   cursor: pointer;
   color: ${({ $active, theme }) =>
-    $active ? theme.sharedTheme.uiToken.colorPrimary : theme.sharedTheme.uiToken.colorTextBase};
-  background-color: ${({ $active }) => ($active ? 'var(--focus-color)' : 'transparent')};
+    $active
+      ? theme.sharedTheme.uiToken.colorPrimary
+      : theme.sharedTheme.uiToken.colorTextBase};
+  background-color: ${({ $active }) =>
+    $active ? 'var(--focus-color)' : 'transparent'};
   transition: background-color 120ms ease, color 120ms ease;
   &:hover {
     color: var(--text-color-primary);

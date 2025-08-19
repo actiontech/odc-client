@@ -3,7 +3,7 @@ import { Form, Radio } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react';
 import {
   DirtyRowActionEnum,
-  DirtyRowActionLabelMap,
+  DirtyRowActionLabelMap
 } from '@/component/ExecuteSqlDetailModal/constant';
 
 interface IProps {
@@ -13,7 +13,7 @@ const DirtyRowAction: React.FC<IProps> = ({ dependentField }: IProps) => {
   const option = Object.keys(DirtyRowActionEnum)?.map((i) => {
     return {
       value: i,
-      label: DirtyRowActionLabelMap[i],
+      label: DirtyRowActionLabelMap[i]
     };
   });
 
@@ -41,12 +41,16 @@ const DirtyRowAction: React.FC<IProps> = ({ dependentField }: IProps) => {
           style={{ marginBottom: 24 }}
           label={formatMessage({
             id: 'src.component.Task.component.DirtyRowAction.EA3C7E86',
-            defaultMessage: '源端目标端数据不一致处理',
+            defaultMessage: '源端目标端数据不一致处理'
           })}
           name="dirtyRowAction"
           required={true}
         >
-          <Radio.Group defaultValue={DirtyRowActionEnum.SKIP} size="small" optionType="default">
+          <Radio.Group
+            defaultValue={DirtyRowActionEnum.SKIP}
+            size="small"
+            optionType="default"
+          >
             {option?.map((i) => {
               return (
                 <Radio.Button value={i.value} key={i?.value}>

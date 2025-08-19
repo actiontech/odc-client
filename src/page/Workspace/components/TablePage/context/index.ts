@@ -28,13 +28,13 @@ interface ITablePageContext {
     tableName: any,
     onSuccess,
     tip?: string,
-    callback?: () => void,
+    callback?: () => void
   ) => Promise<boolean>;
 }
 const TablePageContext = React.createContext<ITablePageContext>({
   table: null,
   onRefresh: () => {},
-  editMode: false,
+  editMode: false
 });
 
 export default TablePageContext;

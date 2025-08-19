@@ -37,7 +37,7 @@ export default () => {
           {
             formatMessage({
               id: 'odc.page.Exception.403.LogOnAgain',
-              defaultMessage: '重新登录',
+              defaultMessage: '重新登录'
             }) /*重新登录*/
           }
         </Button>

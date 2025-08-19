@@ -38,13 +38,17 @@ export default function ChangeOwnerModal({
   databaseList,
   close,
   onSuccess,
-  projectId,
+  projectId
 }: IProps) {
   const [notSetAdmin, setNotSetAdmin] = useState(true);
-  const { run: startUpdateDataBase, loading: saveOwnerLoading } = useRequest(updateDataBaseOwner, {
-    manual: true,
-  });
-  const [databaseOptions, setDatabaseOptions] = useState<{ label: string; value: number }[]>();
+  const { run: startUpdateDataBase, loading: saveOwnerLoading } = useRequest(
+    updateDataBaseOwner,
+    {
+      manual: true
+    }
+  );
+  const [databaseOptions, setDatabaseOptions] =
+    useState<{ label: string; value: number }[]>();
   const [form] = Form.useForm<{ ownerIds: number[]; databaseList: number[] }>();
 
   const loadData = async () => {
@@ -57,16 +61,16 @@ export default function ChangeOwnerModal({
       null,
       login.isPrivateSpace(),
       true,
-      true,
+      true
     );
     if (res) {
       setDatabaseOptions(
         res?.contents?.map((i) => {
           return {
             label: i.name,
-            value: i.id,
+            value: i.id
           };
-        }),
+        })
       );
     }
   };
@@ -83,23 +87,34 @@ export default function ChangeOwnerModal({
   const handleSubmitForm = useCallback(async () => {
     const value = await form.validateFields();
     const databaseList = value?.databaseList || [database?.id];
-    const isSuccess = await startUpdateDataBase(databaseList, projectId, value.ownerIds);
+    const isSuccess = await startUpdateDataBase(
+      databaseList,
+      projectId,
+      value.ownerIds
+    );
     if (isSuccess) {
       message.success(
         formatMessage({
           id: 'src.page.Project.Database.ChangeOwnerModal.22191CF9',
-          defaultMessage: '修改数据库管理员成功',
-        }),
+          defaultMessage: '修改数据库管理员成功'
+        })
       );
       form.resetFields();
       close();
       onSuccess();
     }
-  }, [form, startUpdateDataBase, database?.id, database?.project?.id, close, onSuccess]);
+  }, [
+    form,
+    startUpdateDataBase,
+    database?.id,
+    database?.project?.id,
+    close,
+    onSuccess
+  ]);
 
   const setFormOwnerIds = (value: number[]) => {
     form.setFieldsValue({
-      ownerIds: value,
+      ownerIds: value
     });
   };
   useEffect(() => {
@@ -108,7 +123,7 @@ export default function ChangeOwnerModal({
       setFormOwnerIds(owner_ids);
       setNotSetAdmin(!owner_ids.length);
       form.setFieldsValue({
-        databaseList: databaseList || undefined,
+        databaseList: databaseList || undefined
       });
     }
   }, [database?.owners, form, visible]);
@@ -118,7 +133,7 @@ export default function ChangeOwnerModal({
       maskClosable={false}
       title={formatMessage({
         id: 'src.page.Project.Database.ChangeOwnerModal.2EFFDBF5',
-        defaultMessage: '设置库管理员',
+        defaultMessage: '设置库管理员'
       })}
       open={visible}
       confirmLoading={saveOwnerLoading}
@@ -129,12 +144,17 @@ export default function ChangeOwnerModal({
       onOk={handleSubmitForm}
       destroyOnClose
     >
-      <Form requiredMark="optional" form={form} layout="vertical" className={styles.roleForm}>
+      <Form
+        requiredMark="optional"
+        form={form}
+        layout="vertical"
+        className={styles.roleForm}
+      >
         {!database ? (
           <Form.Item
             label={formatMessage({
               id: 'src.page.Project.Database.components.ChangeOwnerModal.99FD4EBF',
-              defaultMessage: '数据库',
+              defaultMessage: '数据库'
             })}
             name="databaseList"
             rules={[
@@ -142,9 +162,9 @@ export default function ChangeOwnerModal({
                 required: true,
                 message: formatMessage({
                   id: 'odc.src.component.SysFormItem.PleaseSelectTheDatabase',
-                  defaultMessage: '请选择数据库',
-                }), //'请选择数据库'
-              },
+                  defaultMessage: '请选择数据库'
+                }) //'请选择数据库'
+              }
             ]}
           >
             <Select
@@ -153,7 +173,7 @@ export default function ChangeOwnerModal({
               style={{ width: '100%' }}
               placeholder={formatMessage({
                 id: 'src.page.Project.Database.components.ChangeOwnerModal.E92E5B77',
-                defaultMessage: '请选择数据库',
+                defaultMessage: '请选择数据库'
               })}
               options={databaseOptions}
             />
@@ -163,7 +183,7 @@ export default function ChangeOwnerModal({
             {
               formatMessage({
                 id: 'odc.Info.ChangeOwnerModal.DatabaseName',
-                defaultMessage: '数据库名称：',
+                defaultMessage: '数据库名称：'
               }) /*数据库名称*/
             }
 

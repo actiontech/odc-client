@@ -9,7 +9,7 @@ import {
   IListMemberGroupTipsReply,
   IGetMemberGroupReply,
   IUpdateMemberGroupReq,
-  IGenericResp,
+  IGenericResp
 } from '../common.type';
 
 export interface IListMemberGroupsParams {

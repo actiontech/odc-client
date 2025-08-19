@@ -51,13 +51,13 @@ const ParseURLItem: React.FC<IProps> = function (props) {
             if (unionUser) {
               newData = {
                 ...newData,
-                username: newData?.user,
+                username: newData?.user
               };
             } else {
               const user = getOBUser(newData?.user);
               newData = {
                 ...newData,
-                ...user,
+                ...user
               };
             }
             delete newData.user;
@@ -70,7 +70,7 @@ const ParseURLItem: React.FC<IProps> = function (props) {
           newData = {
             password: '',
             clusterName: '',
-            ...newData,
+            ...newData
           };
           formContext.form?.setFieldsValue(newData);
         }
@@ -86,21 +86,21 @@ const ParseURLItem: React.FC<IProps> = function (props) {
     <Form.Item
       label={formatMessage({
         id: 'odc.AddConnectionDrawer.AddConnectionForm.IntelligentResolution',
-        defaultMessage: '智能解析',
+        defaultMessage: '智能解析'
       })}
     >
       <Input.TextArea
         placeholder={formatMessage({
           id: 'odc.AddConnectionDrawer.AddConnectionForm.PasteTheConnectionStringInformation',
           defaultMessage:
-            "粘贴连接串信息，自动识别连接信息，如：obclient -h 10.210.2.51 -P2883 -uroot@tenantname#clustername -p'oBpasswORd'",
+            "粘贴连接串信息，自动识别连接信息，如：obclient -h 10.210.2.51 -P2883 -uroot@tenantname#clustername -p'oBpasswORd'"
         })}
         style={{
-          width: '100%',
+          width: '100%'
         }}
         autoSize={{
           minRows: 4,
-          maxRows: 4,
+          maxRows: 4
         }}
         value={parserUrl}
         onChange={(e) => {
@@ -114,11 +114,13 @@ const ParseURLItem: React.FC<IProps> = function (props) {
         ) : (
           <a
             onClick={autoParse}
-            className={classNames(parserUrl ? styles.parserUrl : styles.parserUrlDisabled)}
+            className={classNames(
+              parserUrl ? styles.parserUrl : styles.parserUrlDisabled
+            )}
           >
             {formatMessage({
               id: 'odc.AddConnectionDrawer.AddConnectionForm.IntelligentResolution',
-              defaultMessage: '智能解析',
+              defaultMessage: '智能解析'
             })}
           </a>
         )}

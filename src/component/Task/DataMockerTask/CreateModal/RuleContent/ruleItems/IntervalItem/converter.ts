@@ -22,7 +22,7 @@ import { IntervalRuleType } from './index';
 
 export const ruleTypeToGenerator = {
   [IntervalRuleType.NORMAL]: MockGenerator.FIX_CHAR_GENERATOR,
-  [IntervalRuleType.SKIP]: MockGenerator.SKIP_GENERATOR,
+  [IntervalRuleType.SKIP]: MockGenerator.SKIP_GENERATOR
 };
 
 const g2r = {};
@@ -35,7 +35,9 @@ function generatorToRuleType(column: IServerMockColumn): IntervalRuleType {
   return g2r[generator];
 }
 
-export function convertFormDataToServerData(formData: IMockFormColumn): IServerMockColumn {
+export function convertFormDataToServerData(
+  formData: IMockFormColumn
+): IServerMockColumn {
   let lowValue, highValue;
   let generator = ruleTypeToGenerator[formData.rule];
   formData = cloneDeep(formData);
@@ -49,12 +51,14 @@ export function convertFormDataToServerData(formData: IMockFormColumn): IServerM
       highValue,
       genParams,
       generator,
-      scale: formData.columnObj?.scale,
-    },
+      scale: formData.columnObj?.scale
+    }
   };
 }
 
-export function convertServerDataToFormData(formData: IServerMockColumn): IMockFormColumn {
+export function convertServerDataToFormData(
+  formData: IServerMockColumn
+): IMockFormColumn {
   let rule = generatorToRuleType(formData);
   formData = cloneDeep(formData);
   let genParams = formData?.typeConfig?.genParams;
@@ -68,7 +72,7 @@ export function convertServerDataToFormData(formData: IServerMockColumn): IMockF
     typeConfig: {
       range,
       genParams,
-      order,
-    },
+      order
+    }
   };
 }

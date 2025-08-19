@@ -15,12 +15,18 @@
  */
 
 import { actionTypes } from '@/component/Acess';
-import { DbObjectType, ITrigger, PageType, TriggerPropsTab, TriggerState } from '@/d.ts';
+import {
+  DbObjectType,
+  ITrigger,
+  PageType,
+  TriggerPropsTab,
+  TriggerState
+} from '@/d.ts';
 import {
   openBatchCompilePLPage,
   openCreateTriggerPage,
   openTriggerEditPageByName,
-  openTriggerViewPage,
+  openTriggerViewPage
 } from '@/store/helper/page';
 import { formatMessage } from '@/util/intl';
 import { ResourceNodeType } from '../../type';
@@ -35,60 +41,77 @@ import modal from '@/store/modal';
 import pageStore from '@/store/page';
 import { ReactComponent as BatchCompileSvg } from '@/svgr/batch-compile-all.svg';
 import { downloadPLDDL } from '@/util/sqlExport';
-import { PlusOutlined, QuestionCircleFilled, ReloadOutlined } from '@ant-design/icons';
+import {
+  PlusOutlined,
+  QuestionCircleFilled,
+  ReloadOutlined
+} from '@ant-design/icons';
 import { message, Modal } from 'antd';
 import { isSupportExport, isSupportPLEdit } from './helper';
 
-export const triggerMenusConfig: Partial<Record<ResourceNodeType, IMenuItemConfig[]>> = {
+export const triggerMenusConfig: Partial<
+  Record<ResourceNodeType, IMenuItemConfig[]>
+> = {
   [ResourceNodeType.TriggerRoot]: [
     {
       key: 'BATCH_COMPILE',
       text: [
         formatMessage({
           id: 'odc.TreeNodeMenu.config.trigger.BatchCompilation',
-          defaultMessage: '批量编译',
-        }), //批量编译
+          defaultMessage: '批量编译'
+        }) //批量编译
       ],
       icon: BatchCompileSvg,
       actionType: actionTypes.create,
       isHide(session, node) {
-        return !getDataSourceModeConfig(session?.connection?.type)?.features?.compile;
+        return !getDataSourceModeConfig(session?.connection?.type)?.features
+          ?.compile;
       },
       run(session, node) {
         openBatchCompilePLPage(
           PageType.BATCH_COMPILE_TRIGGER,
           DbObjectType.trigger,
-          formatMessage({ id: 'odc.components.ResourceTree.Trigger', defaultMessage: '触发器' }),
+          formatMessage({
+            id: 'odc.components.ResourceTree.Trigger',
+            defaultMessage: '触发器'
+          }),
           session?.odcDatabase?.id,
-          session?.database?.dbName,
+          session?.database?.dbName
         );
-      },
+      }
     },
     {
       key: 'CREATE_TRIGGER',
       text: [
         formatMessage({
           id: 'odc.ResourceTree.actions.CreateATrigger',
-          defaultMessage: '新建触发器',
-        }),
+          defaultMessage: '新建触发器'
+        })
       ],
       actionType: actionTypes.create,
       icon: PlusOutlined,
       run(session, node) {
-        openCreateTriggerPage(null, session?.odcDatabase?.id, session?.database?.dbName);
-      },
+        openCreateTriggerPage(
+          null,
+          session?.odcDatabase?.id,
+          session?.database?.dbName
+        );
+      }
     },
     {
       key: 'REFRESH',
       text: [
-        formatMessage({ id: 'odc.ResourceTree.actions.Refresh', defaultMessage: '刷新' }), //刷新
+        formatMessage({
+          id: 'odc.ResourceTree.actions.Refresh',
+          defaultMessage: '刷新'
+        }) //刷新
       ],
       icon: ReloadOutlined,
       actionType: actionTypes.read,
       async run(session, node) {
         await session.database.getTriggerList();
-      },
-    },
+      }
+    }
   ],
 
   [ResourceNodeType.Trigger]: [
@@ -97,8 +120,8 @@ export const triggerMenusConfig: Partial<Record<ResourceNodeType, IMenuItemConfi
       text: [
         formatMessage({
           id: 'odc.ResourceTree.actions.ViewTriggers',
-          defaultMessage: '查看触发器',
-        }),
+          defaultMessage: '查看触发器'
+        })
       ],
       ellipsis: true,
       run(session, node) {
@@ -109,15 +132,18 @@ export const triggerMenusConfig: Partial<Record<ResourceNodeType, IMenuItemConfi
           trigger?.enableState,
           null,
           session?.odcDatabase?.id,
-          session?.database?.dbName,
+          session?.database?.dbName
         );
-      },
+      }
     },
 
     {
       key: 'EDIT_TRIGGER',
       text: [
-        formatMessage({ id: 'odc.ResourceTree.actions.Editing', defaultMessage: '编辑' }), //编辑
+        formatMessage({
+          id: 'odc.ResourceTree.actions.Editing',
+          defaultMessage: '编辑'
+        }) //编辑
       ],
       actionType: actionTypes.update,
       ellipsis: true,
@@ -130,39 +156,48 @@ export const triggerMenusConfig: Partial<Record<ResourceNodeType, IMenuItemConfi
           trigger?.triggerName,
           session?.sessionId,
           session?.database?.dbName,
-          session?.odcDatabase?.id,
+          session?.odcDatabase?.id
         );
-      },
+      }
     },
     {
       key: 'COMPILE_TRIGGER',
       ellipsis: true,
       text: [
-        formatMessage({ id: 'odc.ResourceTree.actions.Compile', defaultMessage: '编译' }), //编译
+        formatMessage({
+          id: 'odc.ResourceTree.actions.Compile',
+          defaultMessage: '编译'
+        }) //编译
       ],
       isHide(session, node) {
-        return !getDataSourceModeConfig(session?.connection?.type)?.features?.compile;
+        return !getDataSourceModeConfig(session?.connection?.type)?.features
+          ?.compile;
       },
       disabled(session) {
         return !session?.supportFeature.enableTriggerCompile;
       },
       run(session, node) {
         return false;
-      },
+      }
     },
     {
       key: 'ENABLE_TRIGGER',
       ellipsis: true,
       text: [
-        formatMessage({ id: 'odc.ResourceTree.actions.Enable', defaultMessage: '启用' }), //启用
+        formatMessage({
+          id: 'odc.ResourceTree.actions.Enable',
+          defaultMessage: '启用'
+        }) //启用
       ],
       isHide(session, node) {
-        return getDataSourceModeConfig(session?.connection?.type)?.features?.disableTriggerSwitch;
+        return getDataSourceModeConfig(session?.connection?.type)?.features
+          ?.disableTriggerSwitch;
       },
       disabled(session, node) {
         const trigger: ITrigger = node.data;
         return (
-          !session.supportFeature.enableTriggerAlterStatus || trigger?.enableState === 'ENABLED'
+          !session.supportFeature.enableTriggerAlterStatus ||
+          trigger?.enableState === 'ENABLED'
         );
       },
       actionType: actionTypes.update,
@@ -173,28 +208,36 @@ export const triggerMenusConfig: Partial<Record<ResourceNodeType, IMenuItemConfi
           triggerName,
           TriggerState.enabled,
           session?.sessionId,
-          session?.database?.dbName,
+          session?.database?.dbName
         );
         await session.database.getTriggerList();
-        pageStore.updatePageColor(triggerName, enableState === TriggerState.disabled);
-      },
+        pageStore.updatePageColor(
+          triggerName,
+          enableState === TriggerState.disabled
+        );
+      }
     },
     {
       key: 'DISABLE_TRIGGER',
       ellipsis: true,
       text: [
-        formatMessage({ id: 'odc.ResourceTree.actions.Disable', defaultMessage: '禁用' }), //禁用
+        formatMessage({
+          id: 'odc.ResourceTree.actions.Disable',
+          defaultMessage: '禁用'
+        }) //禁用
       ],
       disabled(session, node) {
         const trigger: ITrigger = node.data;
         return (
-          !session.supportFeature.enableTriggerAlterStatus || trigger?.enableState !== 'ENABLED'
+          !session.supportFeature.enableTriggerAlterStatus ||
+          trigger?.enableState !== 'ENABLED'
         );
       },
       isHide(session, node) {
         return (
           !session.supportFeature.enableTriggerAlterStatus ||
-          getDataSourceModeConfig(session?.connection?.type)?.features?.disableTriggerSwitch
+          getDataSourceModeConfig(session?.connection?.type)?.features
+            ?.disableTriggerSwitch
         );
       },
       actionType: actionTypes.update,
@@ -206,18 +249,24 @@ export const triggerMenusConfig: Partial<Record<ResourceNodeType, IMenuItemConfi
           triggerName,
           TriggerState.disabled,
           session?.sessionId,
-          session?.database?.dbName,
+          session?.database?.dbName
         );
         await session.database.getTriggerList();
-        pageStore.updatePageColor(triggerName, enableState === TriggerState.enabled);
-      },
+        pageStore.updatePageColor(
+          triggerName,
+          enableState === TriggerState.enabled
+        );
+      }
     },
 
     {
       key: 'EXPORT',
       ellipsis: true,
       text: [
-        formatMessage({ id: 'odc.ResourceTree.actions.Export', defaultMessage: '导出' }), //导出
+        formatMessage({
+          id: 'odc.ResourceTree.actions.Export',
+          defaultMessage: '导出'
+        }) //导出
       ],
       disabled: (session) => {
         return !hasExportPermission(session);
@@ -230,15 +279,18 @@ export const triggerMenusConfig: Partial<Record<ResourceNodeType, IMenuItemConfi
         modal.changeExportModal(true, {
           type: DbObjectType.trigger,
           name: trigger?.triggerName,
-          databaseId: session?.database.databaseId,
+          databaseId: session?.database.databaseId
         });
-      },
+      }
     },
     {
       key: 'DOWNLOAD',
       ellipsis: true,
       text: [
-        formatMessage({ id: 'odc.ResourceTree.actions.Download', defaultMessage: '下载' }), //下载
+        formatMessage({
+          id: 'odc.ResourceTree.actions.Download',
+          defaultMessage: '下载'
+        }) //下载
       ],
       hasDivider: true,
       async run(session, node) {
@@ -246,20 +298,28 @@ export const triggerMenusConfig: Partial<Record<ResourceNodeType, IMenuItemConfi
         const obj = await getTriggerByName(
           trigger?.triggerName,
           session?.sessionId,
-          session?.database?.dbName,
+          session?.database?.dbName
         );
         const ddl = obj?.ddl;
         if (ddl) {
-          downloadPLDDL(trigger?.triggerName, PLType.TRIGGER, ddl, session?.database?.dbName);
+          downloadPLDDL(
+            trigger?.triggerName,
+            PLType.TRIGGER,
+            ddl,
+            session?.database?.dbName
+          );
         }
-      },
+      }
     },
 
     {
       key: 'DELETE_TRIGGER',
       ellipsis: true,
       text: [
-        formatMessage({ id: 'odc.ResourceTree.actions.Delete', defaultMessage: '删除' }), //删除
+        formatMessage({
+          id: 'odc.ResourceTree.actions.Delete',
+          defaultMessage: '删除'
+        }) //删除
       ],
       actionType: actionTypes.delete,
       disabled: (session) => {
@@ -271,15 +331,18 @@ export const triggerMenusConfig: Partial<Record<ResourceNodeType, IMenuItemConfi
           title: formatMessage(
             {
               id: 'odc.components.ResourceTree.TriggerTree.AreYouSureYouWant',
-              defaultMessage: '是否确定删除触发器{title}？',
+              defaultMessage: '是否确定删除触发器{title}？'
             },
-            { title: trigger?.triggerName },
+            { title: trigger?.triggerName }
           ), // `确定要删除触发器${title}吗？`
-          okText: formatMessage({ id: 'app.button.ok', defaultMessage: '确定' }),
+          okText: formatMessage({
+            id: 'app.button.ok',
+            defaultMessage: '确定'
+          }),
 
           cancelText: formatMessage({
             id: 'app.button.cancel',
-            defaultMessage: '取消',
+            defaultMessage: '取消'
           }),
 
           centered: true,
@@ -288,7 +351,7 @@ export const triggerMenusConfig: Partial<Record<ResourceNodeType, IMenuItemConfi
             const isSuccess = await dropObject(
               trigger?.triggerName,
               DbObjectType.trigger,
-              session?.sessionId,
+              session?.sessionId
             );
             if (!isSuccess) {
               return;
@@ -298,34 +361,37 @@ export const triggerMenusConfig: Partial<Record<ResourceNodeType, IMenuItemConfi
             message.success(
               formatMessage({
                 id: 'odc.components.ResourceTree.TriggerTree.DeletedSuccessfully',
-                defaultMessage: '删除成功',
-              }),
+                defaultMessage: '删除成功'
+              })
               // 删除成功
             );
 
             const openedPages = pageStore?.pages.filter(
               (p) =>
                 p.title === trigger?.triggerName &&
-                (p.type === PageType.TRIGGER || p.type === PageType.PL),
+                (p.type === PageType.TRIGGER || p.type === PageType.PL)
             );
 
             if (openedPages?.length) {
               openedPages.forEach((page) => pageStore.close(page.key));
             }
-          },
+          }
         });
-      },
+      }
     },
     {
       key: 'REFRESH_TRIGGER',
       ellipsis: true,
       text: [
-        formatMessage({ id: 'odc.ResourceTree.actions.Refresh', defaultMessage: '刷新' }), //刷新
+        formatMessage({
+          id: 'odc.ResourceTree.actions.Refresh',
+          defaultMessage: '刷新'
+        }) //刷新
       ],
       actionType: actionTypes.create,
       async run(session, node) {
         await session.database.getTriggerList();
-      },
-    },
-  ],
+      }
+    }
+  ]
 };

@@ -24,7 +24,7 @@ import {
   IDelUserParams,
   IDelUserReturn,
   IGetUserOpPermissionParams,
-  IGetUserOpPermissionReturn,
+  IGetUserOpPermissionReturn
 } from './index.type';
 
 class UserService extends ServiceBase {
@@ -33,9 +33,16 @@ class UserService extends ServiceBase {
     return this.get<IListUsersReturn>('/v1/dms/users', paramsData, options);
   }
 
-  public UpdateCurrentUser(params: IUpdateCurrentUserParams, options?: AxiosRequestConfig) {
+  public UpdateCurrentUser(
+    params: IUpdateCurrentUserParams,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
-    return this.put<IUpdateCurrentUserReturn>('/v1/dms/users', paramsData, options);
+    return this.put<IUpdateCurrentUserReturn>(
+      '/v1/dms/users',
+      paramsData,
+      options
+    );
   }
 
   public AddUser(params: IAddUserParams, options?: AxiosRequestConfig) {
@@ -43,17 +50,27 @@ class UserService extends ServiceBase {
     return this.post<IAddUserReturn>('/v1/dms/users', paramsData, options);
   }
 
-  public GenAccessToken(params: IGenAccessTokenParams, options?: AxiosRequestConfig) {
+  public GenAccessToken(
+    params: IGenAccessTokenParams,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
-    return this.post<IGenAccessTokenReturn>('/v1/dms/users/gen_token', paramsData, options);
+    return this.post<IGenAccessTokenReturn>(
+      '/v1/dms/users/gen_token',
+      paramsData,
+      options
+    );
   }
 
-  public VerifyUserLogin(params: IVerifyUserLoginParams, options?: AxiosRequestConfig) {
+  public VerifyUserLogin(
+    params: IVerifyUserLoginParams,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     return this.post<IVerifyUserLoginReturn>(
       '/v1/dms/users/verify_user_login',
       paramsData,
-      options,
+      options
     );
   }
 
@@ -62,7 +79,11 @@ class UserService extends ServiceBase {
     const user_uid = paramsData.user_uid;
     delete paramsData.user_uid;
 
-    return this.get<IGetUserReturn>(`/v1/dms/users/${user_uid}`, paramsData, options);
+    return this.get<IGetUserReturn>(
+      `/v1/dms/users/${user_uid}`,
+      paramsData,
+      options
+    );
   }
 
   public UpdateUser(params: IUpdateUserParams, options?: AxiosRequestConfig) {
@@ -70,7 +91,11 @@ class UserService extends ServiceBase {
     const user_uid = paramsData.user_uid;
     delete paramsData.user_uid;
 
-    return this.put<IUpdateUserReturn>(`/v1/dms/users/${user_uid}`, paramsData, options);
+    return this.put<IUpdateUserReturn>(
+      `/v1/dms/users/${user_uid}`,
+      paramsData,
+      options
+    );
   }
 
   public DelUser(params: IDelUserParams, options?: AxiosRequestConfig) {
@@ -78,10 +103,17 @@ class UserService extends ServiceBase {
     const user_uid = paramsData.user_uid;
     delete paramsData.user_uid;
 
-    return this.delete<IDelUserReturn>(`/v1/dms/users/${user_uid}`, paramsData, options);
+    return this.delete<IDelUserReturn>(
+      `/v1/dms/users/${user_uid}`,
+      paramsData,
+      options
+    );
   }
 
-  public GetUserOpPermission(params: IGetUserOpPermissionParams, options?: AxiosRequestConfig) {
+  public GetUserOpPermission(
+    params: IGetUserOpPermissionParams,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const user_uid = paramsData.user_uid;
     delete paramsData.user_uid;
@@ -89,7 +121,7 @@ class UserService extends ServiceBase {
     return this.get<IGetUserOpPermissionReturn>(
       `/v1/dms/users/${user_uid}/op_permission`,
       paramsData,
-      options,
+      options
     );
   }
 }

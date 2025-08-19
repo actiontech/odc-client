@@ -4,7 +4,7 @@ import {
   ZoomInOutlined,
   ZoomOutOutlined,
   OneToOneOutlined,
-  CompressOutlined,
+  CompressOutlined
 } from '@ant-design/icons';
 import { initCenter } from '../utils';
 import { Tooltip } from 'antd';
@@ -19,7 +19,7 @@ export default function Flow() {
           <Tooltip
             title={formatMessage({
               id: 'src.component.ProfileFlow.customComponents.12BFFE42',
-              defaultMessage: '缩小',
+              defaultMessage: '缩小'
             })}
           >
             <ZoomOutOutlined size={12} />
@@ -29,7 +29,7 @@ export default function Flow() {
           <Tooltip
             title={formatMessage({
               id: 'src.component.ProfileFlow.customComponents.3057F753',
-              defaultMessage: '放大',
+              defaultMessage: '放大'
             })}
           >
             <ZoomInOutlined size={12} />
@@ -43,7 +43,7 @@ export default function Flow() {
           <Tooltip
             title={formatMessage({
               id: 'src.component.ProfileFlow.customComponents.89BEEE9E',
-              defaultMessage: '实际尺寸',
+              defaultMessage: '实际尺寸'
             })}
           >
             <OneToOneOutlined size={12} />
@@ -53,7 +53,7 @@ export default function Flow() {
           <Tooltip
             title={formatMessage({
               id: 'src.component.ProfileFlow.customComponents.B32C7D03',
-              defaultMessage: '适应宽度',
+              defaultMessage: '适应宽度'
             })}
           >
             {' '}

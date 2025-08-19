@@ -36,7 +36,7 @@ const ApplyPermissionTaskContent: React.FC<IProps> = (props) => {
           label={
             formatMessage({
               id: 'odc.src.component.Task.ApplyPermission.DetailContent.TaskNumber',
-              defaultMessage: '任务编号',
+              defaultMessage: '任务编号'
             }) /* 任务编号 */
           }
         >
@@ -46,14 +46,14 @@ const ApplyPermissionTaskContent: React.FC<IProps> = (props) => {
           label={
             formatMessage({
               id: 'odc.src.component.Task.ApplyPermission.DetailContent.Type',
-              defaultMessage: '任务类型',
+              defaultMessage: '任务类型'
             }) /* 任务类型 */
           }
         >
           {
             formatMessage({
               id: 'odc.src.component.Task.ApplyPermission.DetailContent.ApplicationProjectPermissions',
-              defaultMessage: '申请项目权限',
+              defaultMessage: '申请项目权限'
             }) /* 申请项目权限 */
           }
         </Descriptions.Item>
@@ -61,7 +61,7 @@ const ApplyPermissionTaskContent: React.FC<IProps> = (props) => {
           label={
             formatMessage({
               id: 'odc.src.component.Task.ApplyPermission.DetailContent.ApplicationProject',
-              defaultMessage: '申请项目',
+              defaultMessage: '申请项目'
             }) /* 申请项目 */
           }
         >
@@ -71,7 +71,7 @@ const ApplyPermissionTaskContent: React.FC<IProps> = (props) => {
           label={
             formatMessage({
               id: 'odc.src.component.Task.ApplyPermission.DetailContent.ApplicationProjectRole',
-              defaultMessage: '申请项目角色',
+              defaultMessage: '申请项目角色'
             }) /* 申请项目角色 */
           }
         >
@@ -82,7 +82,7 @@ const ApplyPermissionTaskContent: React.FC<IProps> = (props) => {
           label={
             formatMessage({
               id: 'odc.src.component.Task.ApplyPermission.DetailContent.Cause',
-              defaultMessage: '申请原因',
+              defaultMessage: '申请原因'
             }) /* 申请原因 */
           }
         >
@@ -91,7 +91,7 @@ const ApplyPermissionTaskContent: React.FC<IProps> = (props) => {
       </Descriptions>
       <Divider
         style={{
-          marginTop: 4,
+          marginTop: 4
         }}
       />
 
@@ -100,7 +100,7 @@ const ApplyPermissionTaskContent: React.FC<IProps> = (props) => {
           label={
             formatMessage({
               id: 'odc.src.component.Task.ApplyPermission.DetailContent.Founder',
-              defaultMessage: '创建人',
+              defaultMessage: '创建人'
             }) /* 创建人 */
           }
         >
@@ -110,7 +110,7 @@ const ApplyPermissionTaskContent: React.FC<IProps> = (props) => {
           label={
             formatMessage({
               id: 'odc.src.component.Task.ApplyPermission.DetailContent.CreationTime',
-              defaultMessage: '创建时间',
+              defaultMessage: '创建时间'
             }) /* 创建时间 */
           }
         >

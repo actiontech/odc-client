@@ -11,21 +11,25 @@ import {
   IGetOperationRecordListV1Return,
   IGetExportOperationRecordListV1Params,
   IGetOperationActionListReturn,
-  IGetOperationTypeNameListReturn,
+  IGetOperationTypeNameListReturn
 } from './index.type';
 
 class OperationRecordService extends ServiceBase {
   public getOperationRecordListV1(
     params: IGetOperationRecordListV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
-    return this.get<IGetOperationRecordListV1Return>('/v1/operation_records', paramsData, options);
+    return this.get<IGetOperationRecordListV1Return>(
+      '/v1/operation_records',
+      paramsData,
+      options
+    );
   }
 
   public getExportOperationRecordListV1(
     params: IGetExportOperationRecordListV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     return this.get<any>('/v1/operation_records/exports', paramsData, options);
@@ -35,7 +39,7 @@ class OperationRecordService extends ServiceBase {
     return this.get<IGetOperationActionListReturn>(
       '/v1/operation_records/operation_actions',
       undefined,
-      options,
+      options
     );
   }
 
@@ -43,7 +47,7 @@ class OperationRecordService extends ServiceBase {
     return this.get<IGetOperationTypeNameListReturn>(
       '/v1/operation_records/operation_type_names',
       undefined,
-      options,
+      options
     );
   }
 }

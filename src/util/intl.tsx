@@ -35,7 +35,9 @@ function getLocale() {
   let browserLang;
   const isNavigatorLanguageValid =
     typeof navigator !== 'undefined' && typeof navigator.language === 'string';
-  browserLang = isNavigatorLanguageValid ? navigator.language.split('-').join('-') : '';
+  browserLang = isNavigatorLanguageValid
+    ? navigator.language.split('-').join('-')
+    : '';
   return lang || browserLang || 'en-US';
 }
 
@@ -70,7 +72,13 @@ export function getLocalDocs(hash?: string) {
   if (!existLocal.includes(local)) {
     local = defaultLocale;
   }
-  return window.publicPath + 'help-doc/' + local + '/index.html' + (hash ? `#/${hash}` : '');
+  return (
+    window.publicPath +
+    'help-doc/' +
+    local +
+    '/index.html' +
+    (hash ? `#/${hash}` : '')
+  );
 }
 
 export function getOBDocsUrl(key?: string) {
@@ -111,7 +119,7 @@ export async function initIntl() {
   }
   intl = createIntl({
     locale,
-    messages,
+    messages
   });
   isInitialized = true;
   return true;

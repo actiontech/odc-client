@@ -16,7 +16,11 @@ import { formatMessage } from '@/util/intl';
  */
 import { getDataSourceStyleByConnectType } from '@/common/datasource';
 import RiskLevelLabel from '@/component/RiskLevelLabel';
-import { levelMap, RiskLevelEnum, RiskLevelTextMap } from '@/page/Secure/interface';
+import {
+  levelMap,
+  RiskLevelEnum,
+  RiskLevelTextMap
+} from '@/page/Secure/interface';
 import { ReactComponent as alertSvg } from '@/svgr/alert.svg';
 import { ReactComponent as errorSvg } from '@/svgr/error.svg';
 import { ReactComponent as safetySvg } from '@/svgr/safety.svg';
@@ -28,40 +32,40 @@ const getColumns = (
   showLocate: boolean,
   sqlChanged: boolean,
   ctx: IEditor,
-  baseOffset?: number,
+  baseOffset?: number
 ) => {
   return [
     {
       title: formatMessage({
         id: 'odc.src.page.Workspace.components.SQLResultSet.SerialNumber',
-        defaultMessage: '序号',
+        defaultMessage: '序号'
       }),
       //'序号'
       dataIndex: 'row',
       key: 'row',
-      width: 60,
+      width: 60
     },
     {
       title: formatMessage({
         id: 'odc.src.page.Workspace.components.SQLResultSet.SQLStatement',
-        defaultMessage: 'SQL 语句',
+        defaultMessage: 'SQL 语句'
       }),
       //'SQL 语句'
       dataIndex: 'sql',
       key: 'sql',
       ellipsis: {
-        showTitle: false,
+        showTitle: false
       },
       render: (text) => (
         <Tooltip placement="left" title={text}>
           {text}
         </Tooltip>
-      ),
+      )
     },
     {
       title: formatMessage({
         id: 'odc.src.page.Workspace.components.SQLResultSet.AgainstTheRules',
-        defaultMessage: '检查结果',
+        defaultMessage: '检查结果'
       }),
       //'违反规则'
       dataIndex: 'rules',
@@ -69,16 +73,20 @@ const getColumns = (
       filters: [
         {
           text: <LintLabel level={RiskLevelEnum.MUST} needLevelMap noPadding />,
-          value: RiskLevelEnum.MUST,
+          value: RiskLevelEnum.MUST
         },
         {
-          text: <LintLabel level={RiskLevelEnum.SUGGEST} needLevelMap noPadding />,
-          value: RiskLevelEnum.SUGGEST,
+          text: (
+            <LintLabel level={RiskLevelEnum.SUGGEST} needLevelMap noPadding />
+          ),
+          value: RiskLevelEnum.SUGGEST
         },
         {
-          text: <LintLabel level={RiskLevelEnum.DEFAULT} needLevelMap noPadding />,
-          value: RiskLevelEnum.DEFAULT,
-        },
+          text: (
+            <LintLabel level={RiskLevelEnum.DEFAULT} needLevelMap noPadding />
+          ),
+          value: RiskLevelEnum.DEFAULT
+        }
       ],
 
       filterMultiple: true,
@@ -95,11 +103,15 @@ const getColumns = (
                   key={index}
                   content={
                     <div>
-                      <LintLabel level={key} needLevelMap extra={`(${rules?.[key]?.length})`} />
+                      <LintLabel
+                        level={key}
+                        needLevelMap
+                        extra={`(${rules?.[key]?.length})`}
+                      />
                       <div
                         style={{
                           overflowY: 'scroll',
-                          maxHeight: '350px',
+                          maxHeight: '350px'
                         }}
                       >
                         {rules?.[key]?.map((rule, index) => (
@@ -108,7 +120,7 @@ const getColumns = (
                               display: 'flex',
                               justifyContent: 'space-between',
                               gap: '8px',
-                              alignItems: 'baseline',
+                              alignItems: 'baseline'
                             }}
                             key={`${index}-${index}`}
                           >
@@ -122,7 +134,7 @@ const getColumns = (
                                     ? formatMessage({
                                         id: 'odc.src.page.Workspace.components.SQLResultSet.SQLContentHasBeenModified',
                                         defaultMessage:
-                                          'SQL 内容已修改，已无法定位原问题行，请重新执行 SQL 语句或发起预检查',
+                                          'SQL 内容已修改，已无法定位原问题行，请重新执行 SQL 语句或发起预检查'
                                       }) //'SQL内容已修改，已无法定位原问题行，请重新执行SQL语句或发起预检查'
                                     : ''
                                 }
@@ -130,7 +142,7 @@ const getColumns = (
                                 <Button
                                   type="link"
                                   style={{
-                                    padding: '0px',
+                                    padding: '0px'
                                   }}
                                   disabled={sqlChanged}
                                   onClick={async () => {
@@ -139,18 +151,18 @@ const getColumns = (
                                       ctx,
                                       rule?.start + rule?.offset + baseOffset,
                                       rule?.stop + rule?.offset + baseOffset,
-                                      levelMap?.[key],
+                                      levelMap?.[key]
                                     );
                                     await utils.setPositionAndScroll(
                                       ctx,
                                       rule?.start + rule?.offset + baseOffset,
-                                      false,
+                                      false
                                     );
                                   }}
                                 >
                                   {formatMessage({
                                     id: 'src.page.Workspace.components.SQLResultSet.27AA04C0',
-                                    defaultMessage: '定位',
+                                    defaultMessage: '定位'
                                   })}
                                 </Button>
                               </Tooltip>
@@ -163,7 +175,7 @@ const getColumns = (
                 >
                   <div
                     style={{
-                      cursor: 'pointer',
+                      cursor: 'pointer'
                     }}
                     className={styles.lintLabel}
                   >
@@ -174,8 +186,8 @@ const getColumns = (
             })}
           </Space>
         );
-      },
-    },
+      }
+    }
   ];
 };
 
@@ -183,39 +195,41 @@ export const getMultipleAsyncColumns = (
   showLocate: boolean,
   sqlChanged: boolean,
   ctx: IEditor,
-  baseOffset?: number,
+  baseOffset?: number
 ) => {
   return [
     {
       title: formatMessage({
         id: 'odc.src.page.Workspace.components.SQLResultSet.SQLStatement',
-        defaultMessage: 'SQL 语句',
+        defaultMessage: 'SQL 语句'
       }),
       //'SQL 语句'
       dataIndex: 'sql',
       key: 'sql',
       ellipsis: {
-        showTitle: false,
+        showTitle: false
       },
       render: (text) => (
         <Tooltip placement="left" title={text}>
           {text}
         </Tooltip>
-      ),
+      )
     },
     {
       title: formatMessage({
         id: 'src.page.Workspace.components.SQLResultSet.4F0CD429',
-        defaultMessage: '执行数据库',
+        defaultMessage: '执行数据库'
       }),
       dataIndex: 'databaseIds',
       key: 'databaseIds',
       width: 264,
       ellipsis: {
-        showTitle: true,
+        showTitle: true
       },
       render: (_, record) => {
-        const icon = getDataSourceStyleByConnectType(record?.database?.dataSource?.type);
+        const icon = getDataSourceStyleByConnectType(
+          record?.database?.dataSource?.type
+        );
         return (
           <Popover
             content={
@@ -231,7 +245,7 @@ export const getMultipleAsyncColumns = (
                     style={{
                       color: icon?.icon?.color,
                       fontSize: 16,
-                      marginRight: 4,
+                      marginRight: 4
                     }}
                   />
 
@@ -255,7 +269,7 @@ export const getMultipleAsyncColumns = (
                   style={{
                     color: icon?.icon?.color,
                     fontSize: 16,
-                    marginRight: 4,
+                    marginRight: 4
                   }}
                 />
 
@@ -267,28 +281,32 @@ export const getMultipleAsyncColumns = (
             </Space>
           </Popover>
         );
-      },
+      }
     },
     {
       title: formatMessage({
         id: 'src.page.Workspace.components.SQLResultSet.CB2CF731',
-        defaultMessage: '检查结果',
+        defaultMessage: '检查结果'
       }),
       dataIndex: 'rules',
       key: 'rules',
       filters: [
         {
           text: <LintLabel level={RiskLevelEnum.MUST} needLevelMap noPadding />,
-          value: RiskLevelEnum.MUST,
+          value: RiskLevelEnum.MUST
         },
         {
-          text: <LintLabel level={RiskLevelEnum.SUGGEST} needLevelMap noPadding />,
-          value: RiskLevelEnum.SUGGEST,
+          text: (
+            <LintLabel level={RiskLevelEnum.SUGGEST} needLevelMap noPadding />
+          ),
+          value: RiskLevelEnum.SUGGEST
         },
         {
-          text: <LintLabel level={RiskLevelEnum.DEFAULT} needLevelMap noPadding />,
-          value: RiskLevelEnum.DEFAULT,
-        },
+          text: (
+            <LintLabel level={RiskLevelEnum.DEFAULT} needLevelMap noPadding />
+          ),
+          value: RiskLevelEnum.DEFAULT
+        }
       ],
 
       filterMultiple: true,
@@ -305,11 +323,15 @@ export const getMultipleAsyncColumns = (
                   key={index}
                   content={
                     <div>
-                      <LintLabel level={key} needLevelMap extra={`(${rules?.[key]?.length})`} />
+                      <LintLabel
+                        level={key}
+                        needLevelMap
+                        extra={`(${rules?.[key]?.length})`}
+                      />
                       <div
                         style={{
                           overflowY: 'scroll',
-                          maxHeight: '350px',
+                          maxHeight: '350px'
                         }}
                       >
                         {rules?.[key]?.map((rule, index) => (
@@ -318,7 +340,7 @@ export const getMultipleAsyncColumns = (
                               display: 'flex',
                               justifyContent: 'space-between',
                               gap: '8px',
-                              alignItems: 'baseline',
+                              alignItems: 'baseline'
                             }}
                             key={`${index}-${index}`}
                           >
@@ -332,7 +354,7 @@ export const getMultipleAsyncColumns = (
                                     ? formatMessage({
                                         id: 'odc.src.page.Workspace.components.SQLResultSet.SQLContentHasBeenModified',
                                         defaultMessage:
-                                          'SQL 内容已修改，已无法定位原问题行，请重新执行 SQL 语句或发起预检查',
+                                          'SQL 内容已修改，已无法定位原问题行，请重新执行 SQL 语句或发起预检查'
                                       }) //'SQL内容已修改，已无法定位原问题行，请重新执行SQL语句或发起预检查'
                                     : ''
                                 }
@@ -340,7 +362,7 @@ export const getMultipleAsyncColumns = (
                                 <Button
                                   type="link"
                                   style={{
-                                    padding: '0px',
+                                    padding: '0px'
                                   }}
                                   disabled={sqlChanged}
                                   onClick={async () => {
@@ -349,18 +371,18 @@ export const getMultipleAsyncColumns = (
                                       ctx,
                                       rule?.start + rule?.offset + baseOffset,
                                       rule?.stop + rule?.offset + baseOffset,
-                                      levelMap?.[key],
+                                      levelMap?.[key]
                                     );
                                     await utils.setPositionAndScroll(
                                       ctx,
                                       rule?.start + rule?.offset + baseOffset,
-                                      false,
+                                      false
                                     );
                                   }}
                                 >
                                   {formatMessage({
                                     id: 'src.page.Workspace.components.SQLResultSet.3753C098',
-                                    defaultMessage: '定位',
+                                    defaultMessage: '定位'
                                   })}
                                 </Button>
                               </Tooltip>
@@ -373,7 +395,7 @@ export const getMultipleAsyncColumns = (
                 >
                   <div
                     style={{
-                      cursor: 'pointer',
+                      cursor: 'pointer'
                     }}
                     className={styles.lintLabel}
                   >
@@ -384,8 +406,8 @@ export const getMultipleAsyncColumns = (
             })}
           </Space>
         );
-      },
-    },
+      }
+    }
   ];
 };
 export const LintResultIcon: React.FC<{
@@ -418,7 +440,7 @@ export const LintLabel: React.FC<{
       size={4}
       style={{
         minWidth: '42px',
-        padding: noPadding ? 0 : 4,
+        padding: noPadding ? 0 : 4
       }}
     >
       <div>

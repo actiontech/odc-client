@@ -23,9 +23,8 @@ import { isClient } from '@/util/env';
 import { formatMessage, getLocalDocs } from '@/util/intl';
 import tracert from '@/util/tracert';
 import React, { useState } from 'react';
-import DropMenu from '../DropMenu';
-import classNames from 'classnames';
-import { PopoverInnerStyleWrapper } from '@actiontech/dms-kit';
+import ContextMenu from '../ContextMenu';
+import { ContextMenuItem } from '../ContextMenu/index.type';
 
 interface IProps {}
 
@@ -35,83 +34,82 @@ const HelpItem: React.FC<IProps> = function ({ children }) {
 
   const HELP_MENUS = [
     !isClient() && {
-      title: formatMessage({ id: 'odc.Sider.HelpItem.Features', defaultMessage: '功能介绍' }), //功能介绍
+      title: formatMessage({
+        id: 'odc.Sider.HelpItem.Features',
+        defaultMessage: '功能介绍'
+      }), //功能介绍
       key: 'versionInfo',
       action() {
         tracert.click('a3112.b46782.c330849.d367361');
         modal.changeVersionModalVisible(true);
-      },
+      }
     },
 
     {
-      title: formatMessage({ id: 'odc.Sider.HelpItem.HelpDocument', defaultMessage: '帮助文档' }), //帮助文档
+      title: formatMessage({
+        id: 'odc.Sider.HelpItem.HelpDocument',
+        defaultMessage: '帮助文档'
+      }), //帮助文档
       key: 'pdf',
       action() {
         tracert.click('a3112.b46782.c330849.d367362');
         window.open(odc.appConfig.docs.url || getLocalDocs());
-      },
+      }
     },
 
     {
       title: formatMessage({
         id: 'odc.component.GlobalHeader.AboutDeveloperCenter',
-        defaultMessage: '关于开发者中心',
+        defaultMessage: '关于开发者中心'
       }),
 
       key: 'about',
       action() {
         tracert.click('a3112.b46782.c330849.d367363');
         setShowModalAbout(true);
-      },
+      }
     },
 
     {
       title: formatMessage({
         id: 'odc.component.GlobalHeader.Feedback',
-        defaultMessage: '意见反馈',
+        defaultMessage: '意见反馈'
       }),
       key: 'feedback',
       action() {
         tracert.click('a3112.b46782.c330849.d367364');
         setShowModalFeedback(true);
-      },
-    },
+      }
+    }
   ].filter(Boolean);
 
-  const getHelpMenus = () => {
-    return (
-      <PopoverInnerStyleWrapper>
-        <div className="content">
-          {HELP_MENUS.map((menu) => {
-            return (
-              <div
-                key={menu.key}
-                className={classNames('content-item')}
-                onClick={(e) => {
-                  menu.action?.();
-                }}
-              >
-                <div className="content-item-text">{menu.title}</div>
-              </div>
-            );
-          })}
-        </div>
-      </PopoverInnerStyleWrapper>
-    );
+  const getHelpMenus = (): ContextMenuItem[] => {
+    return HELP_MENUS.map((menu) => {
+      return {
+        key: menu.key,
+        text: menu.title,
+        onClick: (e) => {
+          menu.action?.();
+        }
+      };
+    });
   };
 
   return (
     <>
-      <DropMenu
-        onOpenChange={(v: boolean) => {
-          if (v) {
-            tracert.expo('a3112.b46782.c330849');
+      <ContextMenu
+        popoverProps={{
+          placement: 'right',
+          onOpenChange: (v) => {
+            if (v) {
+              tracert.expo('a3112.b46782.c330849');
+            }
           }
         }}
-        menu={getHelpMenus()}
+        items={getHelpMenus()}
       >
         {children}
-      </DropMenu>
+      </ContextMenu>
 
       <ModalHelpAbout
         showModal={showModalAbout}

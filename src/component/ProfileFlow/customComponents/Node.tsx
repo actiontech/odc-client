@@ -11,7 +11,9 @@ import { IProfileNodeStatus } from '@/d.ts';
 
 const nodeStatusIconMap = {
   [IProfileNodeStatus.RUNNING]: (
-    <LoadingOutlined style={{ color: 'var(--profile-progress-primary-color)' }} />
+    <LoadingOutlined
+      style={{ color: 'var(--profile-progress-primary-color)' }}
+    />
   ),
   [IProfileNodeStatus.PREPARING]: (
     <Icon
@@ -19,7 +21,7 @@ const nodeStatusIconMap = {
       style={{ fontSize: 14, color: 'var(--profile-icon-unready-color)' }}
     />
   ),
-  [IProfileNodeStatus.FINISHED]: null,
+  [IProfileNodeStatus.FINISHED]: null
 };
 
 function TextUpdaterNode({ data, id, isConnectable }) {
@@ -35,19 +37,19 @@ function TextUpdaterNode({ data, id, isConnectable }) {
         <>
           <div
             className={classNames(styles.node, styles.nodeOverlap1, {
-              [styles.active]: data?.isSelected,
+              [styles.active]: data?.isSelected
             })}
           ></div>
           <div
             className={classNames(styles.node, styles.nodeOverlap2, {
-              [styles.active]: data?.isSelected,
+              [styles.active]: data?.isSelected
             })}
           ></div>
         </>
       ) : null}
       <div
         className={classNames(styles.node, styles.nodeOverlap3, {
-          [styles.active]: data?.isSelected,
+          [styles.active]: data?.isSelected
         })}
         onClick={() => {
           data?.setSelectedNode(data);
@@ -65,8 +67,12 @@ function TextUpdaterNode({ data, id, isConnectable }) {
         <div className={styles.subTitle} title={data?.title}>
           {data?.title || '-'}
           <span className={styles.params}>
-            {formatTimeTemplate(BigNumber(data?.duration).div(1000000).toNumber())}{' '}
-            {data && data.percentageInAll === '' ? '' : `(${data?.percentageInAll}%)`}
+            {formatTimeTemplate(
+              BigNumber(data?.duration).div(1000000).toNumber()
+            )}{' '}
+            {data && data.percentageInAll === ''
+              ? ''
+              : `(${data?.percentageInAll}%)`}
           </span>
         </div>
         {data.percentageInAll === '' ? (

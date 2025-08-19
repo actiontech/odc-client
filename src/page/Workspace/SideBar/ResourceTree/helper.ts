@@ -27,14 +27,14 @@ import { ConnectTypeText } from '@/constant/label';
 
 export async function loadNode(
   sessionManagerStore: SessionManagerStore,
-  treeNode: EventDataNode<TreeDataNode>,
+  treeNode: EventDataNode<TreeDataNode>
 ) {
   const { type, data, sessionId, packageName } = treeNode;
   // 是否为外表
   const isExternalTable = [
     ResourceNodeType.ExternalTableRoot,
     ResourceNodeType.ExternalTable,
-    ResourceNodeType.ExternalTableColumnRoot,
+    ResourceNodeType.ExternalTableColumnRoot
   ].includes(type);
   switch (type) {
     case ResourceNodeType.GroupNodeProject:
@@ -225,30 +225,52 @@ export async function loadNode(
 
 export type GroupResult = {
   [DatabaseGroup.project]: { mapId: number; groupName: string; tip?: string };
-  [DatabaseGroup.environment]: { mapId: number; groupName: string; tip?: string };
-  [DatabaseGroup.dataSource]: { mapId: number; groupName: string; tip?: string };
-  [DatabaseGroup.connectType]: { mapId: ConnectType; groupName: string; tip?: string };
+  [DatabaseGroup.environment]: {
+    mapId: number;
+    groupName: string;
+    tip?: string;
+  };
+  [DatabaseGroup.dataSource]: {
+    mapId: number;
+    groupName: string;
+    tip?: string;
+  };
+  [DatabaseGroup.connectType]: {
+    mapId: ConnectType;
+    groupName: string;
+    tip?: string;
+  };
   [DatabaseGroup.cluster]: { mapId: string; groupName: string; tip?: string };
   [DatabaseGroup.tenant]: { mapId: string; groupName: string; tip?: string };
   [DatabaseGroup.none]: undefined;
 };
-export type secondGroupType = Map<number, GroupWithDatabases[DatabaseGroup.dataSource]>;
+export type secondGroupType = Map<
+  number,
+  GroupWithDatabases[DatabaseGroup.dataSource]
+>;
 
 export type GroupWithDatabases = {
-  [K in keyof GroupResult as K extends DatabaseGroup.none ? never : K]: GroupResult[K] & {
+  [K in keyof GroupResult as K extends DatabaseGroup.none
+    ? never
+    : K]: GroupResult[K] & {
     databases: IDatabase[];
     dataSource?: IConnection;
   };
 };
 
 export type GroupWithSecondGroup = {
-  [K in keyof GroupResult as K extends DatabaseGroup.none ? never : K]: GroupResult[K] & {
+  [K in keyof GroupResult as K extends DatabaseGroup.none
+    ? never
+    : K]: GroupResult[K] & {
     secondGroup: secondGroupType;
   };
 };
 
 /** 获取 db 分组信息 */
-export const getMapIdByDB = <T extends DatabaseGroup>(db: IDatabase, type: T): GroupResult[T] => {
+export const getMapIdByDB = <T extends DatabaseGroup>(
+  db: IDatabase,
+  type: T
+): GroupResult[T] => {
   if (!db || !type) return;
   const { environment, dataSource, connectType, project } = db;
   const { clusterName, tenantName } = dataSource || {};
@@ -272,7 +294,7 @@ export const getMapIdByDB = <T extends DatabaseGroup>(db: IDatabase, type: T): G
         mapId = 0;
         groupName = formatMessage({
           id: 'src.page.Workspace.SideBar.ResourceTree.9E33C6EC',
-          defaultMessage: '逻辑库',
+          defaultMessage: '逻辑库'
         });
       }
       break;
@@ -287,13 +309,13 @@ export const getMapIdByDB = <T extends DatabaseGroup>(db: IDatabase, type: T): G
         clusterName ||
         formatMessage({
           id: 'src.page.Workspace.SideBar.ResourceTree.F79830BF',
-          defaultMessage: '无集群',
+          defaultMessage: '无集群'
         });
       groupName =
         clusterName ||
         formatMessage({
           id: 'src.page.Workspace.SideBar.ResourceTree.E04CDD3A',
-          defaultMessage: '无集群',
+          defaultMessage: '无集群'
         });
       break;
     }
@@ -301,7 +323,7 @@ export const getMapIdByDB = <T extends DatabaseGroup>(db: IDatabase, type: T): G
       mapId = !tenantName
         ? formatMessage({
             id: 'src.page.Workspace.SideBar.ResourceTree.D70F1953',
-            defaultMessage: '无租户',
+            defaultMessage: '无租户'
           })
         : clusterName
         ? `${tenantName}@${clusterName}`
@@ -310,7 +332,7 @@ export const getMapIdByDB = <T extends DatabaseGroup>(db: IDatabase, type: T): G
         ? tenantName
         : formatMessage({
             id: 'src.page.Workspace.SideBar.ResourceTree.F827EE1E',
-            defaultMessage: '无租户',
+            defaultMessage: '无租户'
           });
       tip = clusterName;
       break;
@@ -319,15 +341,23 @@ export const getMapIdByDB = <T extends DatabaseGroup>(db: IDatabase, type: T): G
   return {
     mapId,
     groupName,
-    tip,
+    tip
   } as GroupResult[T];
 };
 
 export const getMapIdByDataSource = <T extends DatabaseGroup>(
   dataSource: IConnection,
-  groupType: T,
+  groupType: T
 ): GroupResult[T] => {
-  const { id, name, environmentId, environmentName, type, clusterName, tenantName } = dataSource;
+  const {
+    id,
+    name,
+    environmentId,
+    environmentName,
+    type,
+    clusterName,
+    tenantName
+  } = dataSource;
   let mapId, groupName, tip;
   switch (groupType) {
     case DatabaseGroup.dataSource: {
@@ -350,13 +380,13 @@ export const getMapIdByDataSource = <T extends DatabaseGroup>(
         clusterName ||
         formatMessage({
           id: 'src.page.Workspace.SideBar.ResourceTree.8C3BC0E3',
-          defaultMessage: '无集群',
+          defaultMessage: '无集群'
         });
       groupName =
         clusterName ||
         formatMessage({
           id: 'src.page.Workspace.SideBar.ResourceTree.F8428567',
-          defaultMessage: '无集群',
+          defaultMessage: '无集群'
         });
       break;
     }
@@ -364,6 +394,6 @@ export const getMapIdByDataSource = <T extends DatabaseGroup>(
   return {
     mapId,
     groupName,
-    tip,
+    tip
   } as GroupResult[T];
 };

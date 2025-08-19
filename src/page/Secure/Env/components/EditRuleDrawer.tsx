@@ -18,7 +18,17 @@ import HelpDoc from '@/component/helpDoc';
 import { IManagerIntegration } from '@/d.ts';
 import { ComponentType, IRule, RuleType } from '@/d.ts/rule';
 import { formatMessage } from '@/util/intl';
-import { Button, Checkbox, Col, Descriptions, Drawer, Form, Radio, Row, Switch } from 'antd';
+import {
+  Button,
+  Checkbox,
+  Col,
+  Descriptions,
+  Drawer,
+  Form,
+  Radio,
+  Row,
+  Switch
+} from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import React, { useEffect, useState } from 'react';
 import { RiskLevelEnum, RiskLevelTextMap } from '../../interface';
@@ -42,14 +52,14 @@ const EditRuleDrawer: React.FC<EditRuleDrawerProps> = ({
   rule,
   integrations,
   handleCloseModal,
-  handleUpdateEnvironment,
+  handleUpdateEnvironment
 }) => {
   const [formRef] = useForm();
   const [initData, setInitData] = useState();
   const options = integrations?.map(({ id, name }) => {
     return {
       value: id,
-      label: name,
+      label: name
     };
   });
   const onClose = () => {
@@ -58,18 +68,21 @@ const EditRuleDrawer: React.FC<EditRuleDrawerProps> = ({
   const onOk = async () => {
     const rawData = await formRef.validateFields().catch();
     const { appliedDialectTypes = [], level = 1 } = rawData;
-    const activeKeys = Object.keys(rawData).filter((key) => key.includes('activeKey')) || [];
+    const activeKeys =
+      Object.keys(rawData).filter((key) => key.includes('activeKey')) || [];
     const activeProperties = {};
     activeKeys.forEach((activeKey) => {
       if (
         rule.metadata.propertyMetadatas?.[activeKey.slice(9)]?.componentType ===
         ComponentType.INPUT_STRING
       ) {
-        activeProperties[`${rule.metadata.propertyMetadatas?.[activeKey.slice(9)]?.name}`] =
-          rawData[activeKey] ? rawData[activeKey] : null;
+        activeProperties[
+          `${rule.metadata.propertyMetadatas?.[activeKey.slice(9)]?.name}`
+        ] = rawData[activeKey] ? rawData[activeKey] : null;
       } else {
-        activeProperties[`${rule.metadata.propertyMetadatas?.[activeKey.slice(9)]?.name}`] =
-          rawData[activeKey] !== -1 ? rawData[activeKey] : null;
+        activeProperties[
+          `${rule.metadata.propertyMetadatas?.[activeKey.slice(9)]?.name}`
+        ] = rawData[activeKey] !== -1 ? rawData[activeKey] : null;
       }
     });
     const editedRule: Partial<IRule> = {
@@ -78,9 +91,9 @@ const EditRuleDrawer: React.FC<EditRuleDrawerProps> = ({
       level,
       properties: {
         ...rule.properties,
-        ...activeProperties,
+        ...activeProperties
       },
-      enabled: rawData?.enabled,
+      enabled: rawData?.enabled
     };
     handleUpdateEnvironment(editedRule as IRule, formRef.resetFields);
   };
@@ -91,12 +104,12 @@ const EditRuleDrawer: React.FC<EditRuleDrawerProps> = ({
         level = 0,
         metadata: { propertyMetadatas },
         properties,
-        enabled,
+        enabled
       } = rule;
       const newInitData = {
         appliedDialectTypes,
         level,
-        enabled,
+        enabled
       };
       setting.getSpaceConfig();
       propertyMetadatas.forEach((pm, index) => {
@@ -105,17 +118,19 @@ const EditRuleDrawer: React.FC<EditRuleDrawerProps> = ({
           options.unshift({
             label: formatMessage({
               id: 'odc.src.page.Secure.Env.components.Null',
-              defaultMessage: '空',
+              defaultMessage: '空'
             }), //'空'
-            value: -1,
+            value: -1
           });
           newInitData[`options${index}`] = options;
         } else {
           if (pm?.candidates) {
-            newInitData[`options${index}`] = pm?.candidates?.map((candidate) => ({
-              value: candidate,
-              label: candidate,
-            }));
+            newInitData[`options${index}`] = pm?.candidates?.map(
+              (candidate) => ({
+                value: candidate,
+                label: candidate
+              })
+            );
           } else {
             newInitData[`options${index}`] = [];
           }
@@ -131,7 +146,7 @@ const EditRuleDrawer: React.FC<EditRuleDrawerProps> = ({
       title={
         formatMessage({
           id: 'odc.Env.components.EditRuleDrawer.Edit',
-          defaultMessage: '编辑',
+          defaultMessage: '编辑'
         }) //编辑
       }
       width={480}
@@ -143,14 +158,14 @@ const EditRuleDrawer: React.FC<EditRuleDrawerProps> = ({
           style={{
             display: 'flex',
             justifyContent: 'flex-end',
-            columnGap: '8px',
+            columnGap: '8px'
           }}
         >
           <Button onClick={onClose}>
             {
               formatMessage({
                 id: 'odc.Env.components.EditRuleDrawer.Cancel',
-                defaultMessage: '取消',
+                defaultMessage: '取消'
               }) /*取消*/
             }
           </Button>
@@ -158,7 +173,7 @@ const EditRuleDrawer: React.FC<EditRuleDrawerProps> = ({
             {
               formatMessage({
                 id: 'odc.Env.components.EditRuleDrawer.Submit',
-                defaultMessage: '提交',
+                defaultMessage: '提交'
               }) /*提交*/
             }
           </Button>
@@ -170,7 +185,7 @@ const EditRuleDrawer: React.FC<EditRuleDrawerProps> = ({
           label={
             formatMessage({
               id: 'odc.Env.components.EditRuleDrawer.RuleName',
-              defaultMessage: '规则名称',
+              defaultMessage: '规则名称'
             }) //规则名称
           }
         >
@@ -180,7 +195,7 @@ const EditRuleDrawer: React.FC<EditRuleDrawerProps> = ({
           label={
             formatMessage({
               id: 'odc.Env.components.EditRuleDrawer.RuleDescription',
-              defaultMessage: '规则描述',
+              defaultMessage: '规则描述'
             }) //规则描述
           }
         >
@@ -190,7 +205,7 @@ const EditRuleDrawer: React.FC<EditRuleDrawerProps> = ({
           label={
             formatMessage({
               id: 'odc.Env.components.EditRuleDrawer.RuleType',
-              defaultMessage: '规则类型',
+              defaultMessage: '规则类型'
             }) //规则类型
           }
         >
@@ -204,7 +219,7 @@ const EditRuleDrawer: React.FC<EditRuleDrawerProps> = ({
         initialValues={{
           level: 0,
           appliedDialectTypes: [],
-          activeKey: rule?.properties?.[rule?.metadata?.name],
+          activeKey: rule?.properties?.[rule?.metadata?.name]
         }}
       >
         <Form.Item
@@ -212,18 +227,21 @@ const EditRuleDrawer: React.FC<EditRuleDrawerProps> = ({
           label={
             formatMessage({
               id: 'odc.Env.components.EditRuleDrawer.SupportsDataSources',
-              defaultMessage: '支持数据源',
+              defaultMessage: '支持数据源'
             }) //支持数据源
           }
           name={'appliedDialectTypes'}
         >
           <Checkbox.Group style={{ width: '100%' }}>
             {Array.from({
-              length: Math.ceil(rule?.metadata?.supportedDialectTypes?.length / 2),
+              length: Math.ceil(
+                rule?.metadata?.supportedDialectTypes?.length / 2
+              )
             })?.map((_, index) => {
               const sdt1 = rule?.metadata?.supportedDialectTypes[2 * index];
               const sdt2 = rule?.metadata?.supportedDialectTypes[2 * index + 1];
-              const inRange = 2 * index + 1 < rule?.metadata?.supportedDialectTypes?.length; // inRange 为false，已经超出数组长度，不渲染多余的空checkbox
+              const inRange =
+                2 * index + 1 < rule?.metadata?.supportedDialectTypes?.length; // inRange 为false，已经超出数组长度，不渲染多余的空checkbox
               return (
                 <div style={{ display: 'flex', width: '100%' }}>
                   <div style={{ flex: 1 }}>
@@ -260,7 +278,7 @@ const EditRuleDrawer: React.FC<EditRuleDrawerProps> = ({
             label={
               formatMessage({
                 id: 'odc.Env.components.EditRuleDrawer.ImprovementLevel',
-                defaultMessage: '改进等级',
+                defaultMessage: '改进等级'
               }) //改进等级
             }
             name={'level'}
@@ -269,9 +287,9 @@ const EditRuleDrawer: React.FC<EditRuleDrawerProps> = ({
                 required: true,
                 message: formatMessage({
                   id: 'odc.Env.components.EditRuleDrawer.SelectAnImprovementLevel',
-                  defaultMessage: '请选择改进等级',
-                }), //请选择改进等级
-              },
+                  defaultMessage: '请选择改进等级'
+                }) //请选择改进等级
+              }
             ]}
           >
             <Radio.Group>
@@ -280,7 +298,7 @@ const EditRuleDrawer: React.FC<EditRuleDrawerProps> = ({
                   leftText
                   title={formatMessage({
                     id: 'odc.Env.components.EditRuleDrawer.AllowExecution',
-                    defaultMessage: '允许执行',
+                    defaultMessage: '允许执行'
                   })} /*允许执行*/
                 >
                   {RiskLevelTextMap()[RiskLevelEnum.DEFAULT]}
@@ -291,7 +309,7 @@ const EditRuleDrawer: React.FC<EditRuleDrawerProps> = ({
                   leftText
                   title={formatMessage({
                     id: 'odc.Env.components.EditRuleDrawer.ApprovalRequiredBeforeExecution',
-                    defaultMessage: '执行之前需要审批',
+                    defaultMessage: '执行之前需要审批'
                   })} /*执行之前需要审批*/
                 >
                   {RiskLevelTextMap()[RiskLevelEnum.SUGGEST]}
@@ -302,7 +320,7 @@ const EditRuleDrawer: React.FC<EditRuleDrawerProps> = ({
                   leftText
                   title={formatMessage({
                     id: 'odc.Env.components.EditRuleDrawer.ExecutionIsProhibitedAndApproval',
-                    defaultMessage: '禁止执行，无法发起审批',
+                    defaultMessage: '禁止执行，无法发起审批'
                   })} /*禁止执行，无法发起审批*/
                 >
                   {RiskLevelTextMap()[RiskLevelEnum.MUST]}
@@ -317,7 +335,7 @@ const EditRuleDrawer: React.FC<EditRuleDrawerProps> = ({
           label={
             formatMessage({
               id: 'src.page.Secure.Env.components.074ED6D7',
-              defaultMessage: '是否启用',
+              defaultMessage: '是否启用'
             }) /*"是否启用"*/
           }
           required

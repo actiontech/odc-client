@@ -53,7 +53,7 @@ const BatchImportModal: React.FC<IProps> = (props) => {
     previewContent,
     onSubmit,
     onClose,
-    onChange,
+    onChange
   } = props;
   const [result, setResult] = useState([]);
   const [form] = useForm();
@@ -94,10 +94,10 @@ const BatchImportModal: React.FC<IProps> = (props) => {
           errors: [
             formatMessage({
               id: 'odc.component.BatchImportButton.modal.TheFileExceedsTheLimit',
-              defaultMessage: '文件超过限制',
-            }), //文件超过限制
-          ],
-        },
+              defaultMessage: '文件超过限制'
+            }) //文件超过限制
+          ]
+        }
       ]);
     }
     return isLimit;
@@ -107,7 +107,7 @@ const BatchImportModal: React.FC<IProps> = (props) => {
     const result = onChange(fileList);
     setResult(result);
     form.setFieldsValue({
-      contentFile: result,
+      contentFile: result
     });
   };
 
@@ -122,7 +122,7 @@ const BatchImportModal: React.FC<IProps> = (props) => {
       width={520}
       title={formatMessage({
         id: 'odc.component.BatchImportButton.modal.BatchImport',
-        defaultMessage: '批量导入',
+        defaultMessage: '批量导入'
       })} /*批量导入*/
       footer={
         <Space>
@@ -130,15 +130,19 @@ const BatchImportModal: React.FC<IProps> = (props) => {
             {
               formatMessage({
                 id: 'odc.component.BatchImportButton.modal.Cancel',
-                defaultMessage: '取消',
+                defaultMessage: '取消'
               }) /*取消*/
             }
           </Button>
-          <Button type="primary" onClick={handleSubmit} disabled={disableSubmit}>
+          <Button
+            type="primary"
+            onClick={handleSubmit}
+            disabled={disableSubmit}
+          >
             {
               formatMessage({
                 id: 'odc.component.BatchImportButton.modal.Import',
-                defaultMessage: '导入',
+                defaultMessage: '导入'
               }) /*导入*/
             }
           </Button>
@@ -148,7 +152,7 @@ const BatchImportModal: React.FC<IProps> = (props) => {
       open={visible}
       onClose={handleCancel}
       footerStyle={{
-        textAlign: 'right',
+        textAlign: 'right'
       }}
     >
       <Alert
@@ -161,14 +165,17 @@ const BatchImportModal: React.FC<IProps> = (props) => {
             <Button
               type="link"
               href={
-                (odc.appConfig.network?.baseUrl?.() || '') + templatePath + '?lang=' + getLocale()
+                (odc.appConfig.network?.baseUrl?.() || '') +
+                templatePath +
+                '?lang=' +
+                getLocale()
               }
               download={true}
             >
               {
                 formatMessage({
                   id: 'odc.component.BatchImportButton.modal.DownloadTemplate',
-                  defaultMessage: '下载模版',
+                  defaultMessage: '下载模版'
                 }) /*下载模版*/
               }
             </Button>
@@ -176,7 +183,12 @@ const BatchImportModal: React.FC<IProps> = (props) => {
         }
       />
 
-      <Form form={form} layout="vertical" requiredMark="optional" style={{ marginTop: '12px' }}>
+      <Form
+        form={form}
+        layout="vertical"
+        requiredMark="optional"
+        style={{ marginTop: '12px' }}
+      >
         <Form.Item className={styles['batch-import']} name="contentFile">
           <ODCDragger
             accept=".xls,.xlsx"
@@ -189,7 +201,7 @@ const BatchImportModal: React.FC<IProps> = (props) => {
             headers={{
               'X-XSRF-TOKEN': Cookies.get('XSRF-TOKEN') || '',
               'Accept-Language': getLocale(),
-              currentOrganizationId: login.organizationId?.toString(),
+              currentOrganizationId: login.organizationId?.toString()
             }}
             fileList={result}
             onChange={handleFileChange}
@@ -198,7 +210,7 @@ const BatchImportModal: React.FC<IProps> = (props) => {
               {
                 formatMessage({
                   id: 'odc.component.BatchImportButton.modal.ClickOrDragTheFile',
-                  defaultMessage: '点击或将文件拖拽到这里上传',
+                  defaultMessage: '点击或将文件拖拽到这里上传'
                 }) /*点击或将文件拖拽到这里上传*/
               }
             </p>
@@ -206,7 +218,7 @@ const BatchImportModal: React.FC<IProps> = (props) => {
               {
                 formatMessage({
                   id: 'odc.component.BatchImportButton.modal.SupportedExtensionExtension',
-                  defaultMessage: '支持扩展名：.xls，.xlsx',
+                  defaultMessage: '支持扩展名：.xls，.xlsx'
                 }) /*支持扩展名：.xls，.xlsx*/
               }
             </p>
@@ -216,7 +228,7 @@ const BatchImportModal: React.FC<IProps> = (props) => {
           <Form.Item
             label={formatMessage({
               id: 'odc.component.BatchImportButton.modal.ImportObjectPreview',
-              defaultMessage: '导入对象预览',
+              defaultMessage: '导入对象预览'
             })}
             /*导入对象预览*/ required
           >

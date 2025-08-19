@@ -14,14 +14,19 @@
  * limitations under the License.
  */
 
-import { ConnectionMode, INlsObject, IResultSet, ISqlExecuteResultStatus } from '@/d.ts';
+import {
+  ConnectionMode,
+  INlsObject,
+  IResultSet,
+  ISqlExecuteResultStatus
+} from '@/d.ts';
 import { getNlsValueKey, isNlsColumn } from '@/util/column';
 import { generateUniqKey } from '@/util/utils';
 
 export function generateResultSetColumns(
   record,
   dbMode: ConnectionMode,
-  oldKey?: string,
+  oldKey?: string
 ): IResultSet[] {
   if (!record) {
     return null;
@@ -29,38 +34,46 @@ export function generateResultSetColumns(
   return record
     .map((r) => {
       let columnList = r?.resultSetMetaData?.columnList;
-      const columns = r?.resultSetMetaData?.fieldMetaDataList?.map((field, index) => {
-        return {
-          key: `${field.columnName}_${index}`,
-          name: field.columnLabel,
-          columnName: field.columnName,
-          columnType: field.columnTypeName.replace(/\s/g, '_'),
-          columnIndex: index,
-          columnComment: field.columnComment,
-          internal: field.internal,
-          readonly: field.editable === false,
-          masked: field.masked,
-          tableName: field.tableName,
-        };
-      });
-      if (!r || !columns?.length || r.status !== ISqlExecuteResultStatus.SUCCESS) {
+      const columns = r?.resultSetMetaData?.fieldMetaDataList?.map(
+        (field, index) => {
+          return {
+            key: `${field.columnName}_${index}`,
+            name: field.columnLabel,
+            columnName: field.columnName,
+            columnType: field.columnTypeName.replace(/\s/g, '_'),
+            columnIndex: index,
+            columnComment: field.columnComment,
+            internal: field.internal,
+            readonly: field.editable === false,
+            masked: field.masked,
+            tableName: field.tableName
+          };
+        }
+      );
+      if (
+        !r ||
+        !columns?.length ||
+        r.status !== ISqlExecuteResultStatus.SUCCESS
+      ) {
         return null;
       }
       if (!columnList && r?.resultSetMetaData?.fieldMetaDataList) {
         // 在关闭“获取结果集列信息”场景下，resultSetMetaData?.columnList 为 null，经和后端确定，使用 fieldMetaDataList 替代之前的 columnList，个别关键字段做兼容，如下:
         // 关键字段(/api/v1/data/batchGetModifySql 场景): columnName, dataType, primaryKey(前端不必传给后端)
-        columnList = r?.resultSetMetaData?.fieldMetaDataList?.map(({ columnTypeName, ...rest }) => {
-          return {
-            dataType: columnTypeName,
-            ...rest,
-          };
-        }) as any[];
+        columnList = r?.resultSetMetaData?.fieldMetaDataList?.map(
+          ({ columnTypeName, ...rest }) => {
+            return {
+              dataType: columnTypeName,
+              ...rest
+            };
+          }
+        ) as any[];
       }
       return {
         ...r,
         resultSetMetaData: {
           ...r?.resultSetMetaData,
-          columnList,
+          columnList
         },
         schemaName: record?.table?.tableName,
         columns,
@@ -69,7 +82,10 @@ export function generateResultSetColumns(
             (newRowMap, value, rowIdx) => {
               const column = columns[rowIdx];
               const columnKey = column.key;
-              const isNlsColumnType = isNlsColumn(columns[rowIdx]?.columnType, dbMode);
+              const isNlsColumnType = isNlsColumn(
+                columns[rowIdx]?.columnType,
+                dbMode
+              );
               if (isNlsColumnType && !column.masked) {
                 /**
                  * 脱敏之后的当字符串处理
@@ -81,11 +97,11 @@ export function generateResultSetColumns(
               }
               return newRowMap;
             },
-            { _rowIndex: i },
+            { _rowIndex: i }
           );
         }),
         uniqKey: oldKey || r.sqlId || generateUniqKey('resultset'),
-        initialSql: r.executeSql,
+        initialSql: r.executeSql
       };
     })
     .filter(Boolean);

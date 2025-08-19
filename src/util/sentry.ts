@@ -27,6 +27,6 @@ export function initSentry() {
     dsn: 'https://98fb52ab508043bf94a763dc51d5a2e0@obc-sentry.oceanbase.com/6',
     debug: false,
     release: ODC_VERSION,
-    transport: Sentry.makeXHRTransport,
+    transport: Sentry.makeXHRTransport
   });
 }

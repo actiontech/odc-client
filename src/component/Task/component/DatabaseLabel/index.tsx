@@ -27,7 +27,9 @@ interface IProps {
 
 const DatabaseLabel: React.FC<IProps> = (props) => {
   const { database } = props;
-  const dbIcon = getDataSourceStyleByConnectType(database?.dataSource?.type)?.dbIcon;
+  const dbIcon = getDataSourceStyleByConnectType(
+    database?.dataSource?.type
+  )?.dbIcon;
 
   return (
     <Space size={1}>

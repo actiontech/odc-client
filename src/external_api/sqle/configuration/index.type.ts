@@ -25,22 +25,27 @@ import {
   IUpdateWechatConfigurationReqV1,
   ITestWechatConfigurationReqV1,
   ITestWechatConfigResV1,
-  IGetDriversRes,
+  IGetDriversRes
 } from '../common.type';
 
-export interface IGetCodingConfigurationV1Return extends IGetCodingConfigurationResV1 {}
+export interface IGetCodingConfigurationV1Return
+  extends IGetCodingConfigurationResV1 {}
 
-export interface IUpdateCodingConfigurationV1Params extends IUpdateCodingConfigurationReqV1 {}
+export interface IUpdateCodingConfigurationV1Params
+  extends IUpdateCodingConfigurationReqV1 {}
 
 export interface IUpdateCodingConfigurationV1Return extends IBaseRes {}
 
-export interface ITestCodingConfigV1Params extends ITestCodingConfigurationReqV1 {}
+export interface ITestCodingConfigV1Params
+  extends ITestCodingConfigurationReqV1 {}
 
 export interface ITestCodingConfigV1Return extends ITestCodingConfigResV1 {}
 
-export interface IGetDingTalkConfigurationV1Return extends IGetDingTalkConfigurationResV1 {}
+export interface IGetDingTalkConfigurationV1Return
+  extends IGetDingTalkConfigurationResV1 {}
 
-export interface IUpdateDingTalkConfigurationV1Params extends IUpdateDingTalkConfigurationReqV1 {}
+export interface IUpdateDingTalkConfigurationV1Params
+  extends IUpdateDingTalkConfigurationReqV1 {}
 
 export interface IUpdateDingTalkConfigurationV1Return extends IBaseRes {}
 
@@ -48,15 +53,19 @@ export interface ITestDingTalkConfigV1Return extends ITestDingTalkConfigResV1 {}
 
 export interface IGetDriversV1Return extends IGetDriversResV1 {}
 
-export interface IGetFeishuAuditConfigurationV1Return extends IGetFeishuAuditConfigurationResV1 {}
+export interface IGetFeishuAuditConfigurationV1Return
+  extends IGetFeishuAuditConfigurationResV1 {}
 
-export interface IUpdateFeishuAuditConfigurationV1Params extends IUpdateFeishuConfigurationReqV1 {}
+export interface IUpdateFeishuAuditConfigurationV1Params
+  extends IUpdateFeishuConfigurationReqV1 {}
 
 export interface IUpdateFeishuAuditConfigurationV1Return extends IBaseRes {}
 
-export interface ITestFeishuAuditConfigV1Params extends ITestFeishuConfigurationReqV1 {}
+export interface ITestFeishuAuditConfigV1Params
+  extends ITestFeishuConfigurationReqV1 {}
 
-export interface ITestFeishuAuditConfigV1Return extends ITestFeishuConfigResV1 {}
+export interface ITestFeishuAuditConfigV1Return
+  extends ITestFeishuConfigResV1 {}
 
 export interface ITestGitConnectionV1Params extends ITestGitConnectionReqV1 {}
 
@@ -82,18 +91,23 @@ export interface IGenSSHPublicKeyReturn extends IBaseRes {}
 
 export interface IGetSystemVariablesV1Return extends IGetSystemVariablesResV1 {}
 
-export interface IUpdateSystemVariablesV1Params extends IUpdateSystemVariablesReqV1 {}
+export interface IUpdateSystemVariablesV1Params
+  extends IUpdateSystemVariablesReqV1 {}
 
 export interface IUpdateSystemVariablesV1Return extends IBaseRes {}
 
-export interface IGetWechatAuditConfigurationV1Return extends IGetWechatAuditConfigurationResV1 {}
+export interface IGetWechatAuditConfigurationV1Return
+  extends IGetWechatAuditConfigurationResV1 {}
 
-export interface IUpdateWechatAuditConfigurationV1Params extends IUpdateWechatConfigurationReqV1 {}
+export interface IUpdateWechatAuditConfigurationV1Params
+  extends IUpdateWechatConfigurationReqV1 {}
 
 export interface IUpdateWechatAuditConfigurationV1Return extends IBaseRes {}
 
-export interface ITestWechatAuditConfigV1Params extends ITestWechatConfigurationReqV1 {}
+export interface ITestWechatAuditConfigV1Params
+  extends ITestWechatConfigurationReqV1 {}
 
-export interface ITestWechatAuditConfigV1Return extends ITestWechatConfigResV1 {}
+export interface ITestWechatAuditConfigV1Return
+  extends ITestWechatConfigResV1 {}
 
 export interface IGetDriversV2Return extends IGetDriversRes {}

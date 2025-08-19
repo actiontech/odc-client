@@ -15,7 +15,12 @@
  */
 
 import { formatMessage } from '@/util/intl';
-import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState
+} from 'react';
 
 import { EXPORT_CONTENT, ExportFormData, TaskDetail } from '@/d.ts';
 // compatible
@@ -34,7 +39,7 @@ import dayjs from 'dayjs';
 
 export enum FormType {
   ObjSelecter,
-  Config,
+  Config
 }
 interface IExportFormProps {
   modalStore?: ModalStore;
@@ -53,7 +58,7 @@ const ExportForm: React.FC<IExportFormProps> = inject('modalStore')(
       const [form] = useForm<ExportFormData>();
       const databaseId = Form.useWatch('databaseId', form);
       const { data, run } = useRequest(getDatabase, {
-        manual: true,
+        manual: true
       });
       const database = data?.data;
       const connection = database?.dataSource;
@@ -78,8 +83,8 @@ const ExportForm: React.FC<IExportFormProps> = inject('modalStore')(
             message.warning(
               formatMessage({
                 id: 'odc.ExportDrawer.ExportForm.SelectExportObjects',
-                defaultMessage: '请选择导出对象',
-              }),
+                defaultMessage: '请选择导出对象'
+              })
             );
 
             callback(true, values);
@@ -110,17 +115,19 @@ const ExportForm: React.FC<IExportFormProps> = inject('modalStore')(
 
       const getTaskDetailFoTaskId = async () => {
         if (taskId) {
-          const detailRes = (await getTaskDetail(taskId)) as TaskDetail<ExportFormData>;
+          const detailRes = (await getTaskDetail(
+            taskId
+          )) as TaskDetail<ExportFormData>;
           const exportContent = getExportContent(
             detailRes?.parameters?.transferDDL,
-            detailRes?.parameters?.transferData,
+            detailRes?.parameters?.transferData
           );
           const withColumnTitle = !detailRes?.parameters?.csvConfig?.skipHeader;
           const exportFileMaxSize =
             detailRes?.parameters?.exportFileMaxSize === -1
               ? formatMessage({
                   id: 'odc.components.ExportDrawer.Unlimited',
-                  defaultMessage: '无限制',
+                  defaultMessage: '无限制'
                 })
               : detailRes?.parameters?.exportFileMaxSize;
           onFormValueChange('exportDbObjects', {
@@ -128,7 +135,7 @@ const ExportForm: React.FC<IExportFormProps> = inject('modalStore')(
             ...detailRes?.parameters?.csvConfig,
             exportContent,
             exportFileMaxSize,
-            withColumnTitle,
+            withColumnTitle
           });
           form.setFieldsValue({
             ...detailRes?.parameters,
@@ -137,11 +144,12 @@ const ExportForm: React.FC<IExportFormProps> = inject('modalStore')(
             description: detailRes?.description,
             executionStrategy: detailRes?.executionStrategy,
             executionTime:
-              detailRes?.executionTime && detailRes?.executionTime > new Date().getTime()
+              detailRes?.executionTime &&
+              detailRes?.executionTime > new Date().getTime()
                 ? dayjs(detailRes?.executionTime)
                 : null,
             ...detailRes?.parameters?.csvConfig,
-            withColumnTitle,
+            withColumnTitle
           });
         }
       };
@@ -149,13 +157,19 @@ const ExportForm: React.FC<IExportFormProps> = inject('modalStore')(
       useImperativeHandle(ref, () => {
         return {
           valid,
-          resetFields: form.resetFields,
+          resetFields: form.resetFields
         };
       });
       function renderFormItem() {
         switch (formType) {
           case FormType.ObjSelecter: {
-            return <ObjSelecterPanel form={form} projectId={projectId} database={database} />;
+            return (
+              <ObjSelecterPanel
+                form={form}
+                projectId={projectId}
+                database={database}
+              />
+            );
           }
           case FormType.Config: {
             return <ConfigPanel form={form} connection={connection} />;
@@ -177,7 +191,7 @@ const ExportForm: React.FC<IExportFormProps> = inject('modalStore')(
             if (c?.exportAllObjects) {
               newValues.exportDbObjects = [];
               form.setFieldsValue({
-                exportDbObjects: [],
+                exportDbObjects: []
               });
             }
             onFormValueChange?.(c, newValues);
@@ -187,8 +201,8 @@ const ExportForm: React.FC<IExportFormProps> = inject('modalStore')(
           {renderFormItem()}
         </Form>
       );
-    }),
-  ),
+    })
+  )
 );
 
 export default ExportForm;

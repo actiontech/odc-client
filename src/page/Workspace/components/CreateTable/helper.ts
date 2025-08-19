@@ -24,5 +24,7 @@ export function getDefaultCollation(character: string, collations) {
 }
 
 export function removeGridParams(rows: any[]) {
-  return rows.map((row) => Object.assign({}, row, { _originRow: null, key: null }));
+  return rows.map((row) =>
+    Object.assign({}, row, { _originRow: null, key: null })
+  );
 }

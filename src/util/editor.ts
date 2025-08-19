@@ -24,7 +24,7 @@ export enum EHighLight {
   INFO = 'info',
   DEFAULT = 'default',
   SUGGEST = 'suggest',
-  MUST = 'must',
+  MUST = 'must'
 }
 
 export function getClassNameByType(type: EHighLight) {
@@ -72,10 +72,10 @@ const utils = {
           range: new monaco.Range(lineNumber, 1, lineNumber, 1),
           options: {
             isWholeLine: false,
-            linesDecorationsClassName: 'editor-breakpoints',
-          },
-        },
-      ],
+            linesDecorationsClassName: 'editor-breakpoints'
+          }
+        }
+      ]
     );
   },
 
@@ -92,8 +92,8 @@ const utils = {
         range: new monaco.Range(lineNum, 1, lineNum, 1),
         options: {
           isWholeLine: false,
-          linesDecorationsClassName: 'editor-breakpoints',
-        },
+          linesDecorationsClassName: 'editor-breakpoints'
+        }
       };
     });
     console.log(breakpoints);
@@ -110,7 +110,9 @@ const utils = {
     const decorations = model.getLineDecorations(lineNumber);
     const ids = [];
     for (let decoration of decorations) {
-      if (decoration.options.linesDecorationsClassName === 'editor-breakpoints') {
+      if (
+        decoration.options.linesDecorationsClassName === 'editor-breakpoints'
+      ) {
         ids.push(decoration.id);
       }
     }
@@ -127,7 +129,9 @@ const utils = {
     const decorations = model.getAllDecorations();
     const ids = [];
     for (let decoration of decorations) {
-      if (decoration.options.linesDecorationsClassName === 'editor-breakpoints') {
+      if (
+        decoration.options.linesDecorationsClassName === 'editor-breakpoints'
+      ) {
         ids.push(decoration.id);
       }
     }
@@ -140,7 +144,9 @@ const utils = {
     const codeEditor = editor;
     let decorations = codeEditor.getLineDecorations(line);
     for (let decoration of decorations) {
-      if (decoration.options.linesDecorationsClassName === 'editor-breakpoints') {
+      if (
+        decoration.options.linesDecorationsClassName === 'editor-breakpoints'
+      ) {
         return true;
       }
     }
@@ -155,13 +161,19 @@ const utils = {
     const decorations = model.getAllDecorations();
     const ids = [];
     for (let decoration of decorations) {
-      if (decoration.options.linesDecorationsClassName === 'editor-breakpoints-fake') {
+      if (
+        decoration.options.linesDecorationsClassName ===
+        'editor-breakpoints-fake'
+      ) {
         ids.push(decoration.id);
       }
     }
     let value = {
       range: new monaco.Range(line, 1, line, 1),
-      options: { isWholeLine: true, linesDecorationsClassName: 'editor-breakpoints-fake' },
+      options: {
+        isWholeLine: true,
+        linesDecorationsClassName: 'editor-breakpoints-fake'
+      }
     };
     codeEditor.deltaDecorations(ids, [value]);
   },
@@ -175,13 +187,21 @@ const utils = {
     const decorations = model.getAllDecorations();
     const ids = [];
     for (let decoration of decorations) {
-      if (decoration.options.linesDecorationsClassName === 'editor-breakpoints-fake') {
+      if (
+        decoration.options.linesDecorationsClassName ===
+        'editor-breakpoints-fake'
+      ) {
         ids.push(decoration.id);
       }
     }
     codeEditor.deltaDecorations(ids, []);
   },
-  async addHighlight(editor: IEditor, begin: number, end: number, type: EHighLight) {
+  async addHighlight(
+    editor: IEditor,
+    begin: number,
+    end: number,
+    type: EHighLight
+  ) {
     const monaco = await getMonaco();
 
     const beginPosition = editor.getModel().getPositionAt(begin);
@@ -197,11 +217,11 @@ const utils = {
             beginPosition.lineNumber,
             beginPosition.column,
             endPosition.lineNumber,
-            endPosition.column,
+            endPosition.column
           ),
-          options: { inlineClassName: className },
-        },
-      ],
+          options: { inlineClassName: className }
+        }
+      ]
     );
   },
   async removeHighlight(editor: IEditor) {
@@ -213,7 +233,10 @@ const utils = {
     const decorations = model.getAllDecorations();
     const ids = [];
     for (let decoration of decorations) {
-      if (decoration.options.inlineClassName?.indexOf('editor-selection-stmt') > -1) {
+      if (
+        decoration.options.inlineClassName?.indexOf('editor-selection-stmt') >
+        -1
+      ) {
         ids.push(decoration.id);
       }
     }
@@ -231,7 +254,8 @@ const utils = {
     if (!model) {
       return;
     }
-    const decorations: monaco.editor.IModelDecoration[] = model.getAllDecorations();
+    const decorations: monaco.editor.IModelDecoration[] =
+      model.getAllDecorations();
     const ids = [];
     let isExist = false;
     for (let decoration of decorations) {
@@ -252,9 +276,9 @@ const utils = {
         : [
             {
               range: new monaco.Range(lineNum, 1, lineNum, 1),
-              options: { isWholeLine: true, className: 'editor-highlight-line' },
-            },
-          ],
+              options: { isWholeLine: true, className: 'editor-highlight-line' }
+            }
+          ]
     );
   },
 
@@ -273,9 +297,9 @@ const utils = {
       [
         {
           range: new monaco.Range(lineNum, 1, lineNum, 1),
-          options: { isWholeLine: true, className: 'editor-shine-line' },
-        },
-      ],
+          options: { isWholeLine: true, className: 'editor-shine-line' }
+        }
+      ]
     );
     setTimeout(() => {
       codeEditor.deltaDecorations(ids, []);
@@ -300,7 +324,10 @@ const utils = {
   },
 
   // 光标位置 - 通过鼠标坐标更新编辑器光标位置
-  async updateEditorCursorPositionByClientPosition(editor: IEditor, { clientX, clientY }) {
+  async updateEditorCursorPositionByClientPosition(
+    editor: IEditor,
+    { clientX, clientY }
+  ) {
     const monaco = await getMonaco();
     if (!editor) {
       return;
@@ -316,12 +343,16 @@ const utils = {
         position.lineNumber,
         position.column,
         position.lineNumber,
-        position.column,
-      ),
+        position.column
+      )
     );
   },
 
-  async setPositionAndScroll(editor: IEditor, offset: number, needUpdatePosition: boolean = true) {
+  async setPositionAndScroll(
+    editor: IEditor,
+    offset: number,
+    needUpdatePosition: boolean = true
+  ) {
     const codeEditor = editor;
     codeEditor.focus();
     if (needUpdatePosition) {
@@ -340,7 +371,11 @@ const utils = {
     snippetController.insert(snippetText);
   },
   // text - 在编辑器光标处插入 text
-  async insertTextToCurrectPosition(editor: IEditor, text, targetPosition?: monaco.IPosition) {
+  async insertTextToCurrectPosition(
+    editor: IEditor,
+    text,
+    targetPosition?: monaco.IPosition
+  ) {
     const monaco = await getMonaco();
     if (!editor) {
       return;
@@ -349,7 +384,12 @@ const utils = {
     const position = targetPosition || codeEditor.getPosition();
     const { lineNumber, column } = position;
     const range = new monaco.Range(lineNumber, column, lineNumber, column);
-    const op = { identifier: { major: 1, minor: 1 }, range, text, forceMoveMarkers: true };
+    const op = {
+      identifier: { major: 1, minor: 1 },
+      range,
+      text,
+      forceMoveMarkers: true
+    };
     codeEditor.executeEdits('instert-text', [op]);
   },
   insertTextToNewLine(editor, text) {
@@ -357,11 +397,13 @@ const utils = {
       return;
     }
     const codeEditor = editor as IEditor;
-    const position = codeEditor.getModel().getPositionAt(codeEditor.getValue().length);
+    const position = codeEditor
+      .getModel()
+      .getPositionAt(codeEditor.getValue().length);
     this.insertTextToCurrectPosition(
       editor,
       '\n' + text,
-      position.with(position.lineNumber + 1, 0),
+      position.with(position.lineNumber + 1, 0)
     );
   },
   async replaceText(editor, text) {
@@ -370,10 +412,17 @@ const utils = {
       return;
     }
     const codeEditor = editor as IEditor;
-    const position = codeEditor.getModel().getPositionAt(codeEditor.getValue().length);
+    const position = codeEditor
+      .getModel()
+      .getPositionAt(codeEditor.getValue().length);
     const range = new monaco.Range(0, 0, position.lineNumber, position.column);
 
-    const op = { identifier: { major: 1, minor: 1 }, range, text, forceMoveMarkers: true };
+    const op = {
+      identifier: { major: 1, minor: 1 },
+      range,
+      text,
+      forceMoveMarkers: true
+    };
     codeEditor.executeEdits('replace-text', [op]);
   },
   async getCurrentSelectRange(editor: IEditor) {
@@ -384,9 +433,9 @@ const utils = {
     const codeEditor = editor as IEditor;
     return {
       begin: codeEditor.getModel().getOffsetAt(selecttion.getPosition()),
-      end: codeEditor.getModel().getOffsetAt(selecttion.getEndPosition()),
+      end: codeEditor.getModel().getOffsetAt(selecttion.getEndPosition())
     };
-  },
+  }
 };
 
 export default utils;

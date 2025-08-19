@@ -1,17 +1,30 @@
 import { formatMessage } from '@/util/intl';
-import { getSchedulePreviewResult, startSchedulePreviewTask } from '@/common/network/task';
+import {
+  getSchedulePreviewResult,
+  startSchedulePreviewTask
+} from '@/common/network/task';
 // import user from '@/store/user';
 import {
   IImportDatabaseView,
   IImportScheduleTaskView,
-  IScheduleTaskImportRequest,
+  IScheduleTaskImportRequest
 } from '@/d.ts/importTask';
-import { Alert, Button, Form, Input, Modal, Select, Space, Spin, Typography } from 'antd';
+import {
+  Alert,
+  Button,
+  Form,
+  Input,
+  Modal,
+  Select,
+  Space,
+  Spin,
+  Typography
+} from 'antd';
 import {
   CheckCircleFilled,
   CloseCircleFilled,
   DownOutlined,
-  PlusOutlined,
+  PlusOutlined
 } from '@ant-design/icons';
 import { getLocale } from '@umijs/max';
 import { useRequest } from 'ahooks';
@@ -37,7 +50,7 @@ interface IImportModalProps {
   onOk: (
     scheduleTaskImportRequest: IScheduleTaskImportRequest,
     previewData: IImportScheduleTaskView[],
-    projectId?: string,
+    projectId?: string
   ) => void;
   taskType: TaskType;
 }
@@ -48,7 +61,12 @@ export interface IDatasourceInfo {
   matchedList: IImportDatabaseView[];
   createdList: IImportDatabaseView[];
 }
-const ImportModal: React.FC<IImportModalProps> = ({ open, onCancel, onOk, taskType }) => {
+const ImportModal: React.FC<IImportModalProps> = ({
+  open,
+  onCancel,
+  onOk,
+  taskType
+}) => {
   const [form] = Form.useForm();
   const [scheduleTaskImportRequest, setScheduleTaskImportRequest] =
     useState<IScheduleTaskImportRequest>();
@@ -59,17 +77,20 @@ const ImportModal: React.FC<IImportModalProps> = ({ open, onCancel, onOk, taskTy
     matchedCount: 0,
     createdCount: 0,
     matchedList: [],
-    createdList: [],
+    createdList: []
   });
-  const [uploadStatus, setUploadStatus] = useState<UploadFileStatus | 'default'>('default');
-  const [addProjectDropVisible, setAddProjectDropVisible] = useState<boolean>(false);
+  const [uploadStatus, setUploadStatus] = useState<
+    UploadFileStatus | 'default'
+  >('default');
+  const [addProjectDropVisible, setAddProjectDropVisible] =
+    useState<boolean>(false);
   const { data: projects, run: loadProjects } = useRequest(listProjects, {
     defaultParams: [null, 1, 9999],
-    manual: true,
+    manual: true
   });
   const projectOptions = projects?.contents?.map(({ name, id }) => ({
     label: name,
-    value: id?.toString(),
+    value: id?.toString()
   }));
   const { run: getPreviewResult, cancel } = useRequest(
     async (id, params) => {
@@ -79,12 +100,19 @@ const ImportModal: React.FC<IImportModalProps> = ({ open, onCancel, onOk, taskTy
           form.setFields([
             {
               name:
-                (previewResult as { errCode: string; errMsg: string; isError: boolean })
-                  ?.errCode === 'InvalidSignature'
+                (
+                  previewResult as {
+                    errCode: string;
+                    errMsg: string;
+                    isError: boolean;
+                  }
+                )?.errCode === 'InvalidSignature'
                   ? ['secretKey']
                   : ['importFile'],
-              errors: [(previewResult as { errMsg: string; isError: boolean })?.errMsg],
-            },
+              errors: [
+                (previewResult as { errMsg: string; isError: boolean })?.errMsg
+              ]
+            }
           ]);
           cancel();
           setLoading(false);
@@ -97,7 +125,7 @@ const ImportModal: React.FC<IImportModalProps> = ({ open, onCancel, onOk, taskTy
             ...params,
             importableExportRowId: (previewResult as IImportScheduleTaskView[])
               ?.map((i) => (i.importable ? i?.exportRowId : null))
-              ?.filter(Boolean),
+              ?.filter(Boolean)
           });
           setPreviewData((previewResult as IImportScheduleTaskView[]) || []);
           setDatasourceInfo(
@@ -105,25 +133,31 @@ const ImportModal: React.FC<IImportModalProps> = ({ open, onCancel, onOk, taskTy
               ?.filter?.((i) => i?.importable)
               ?.reduce(
                 (acc, curr: IImportScheduleTaskView) => {
-                  [curr.databaseView, curr.targetDatabaseView].forEach((view) => {
-                    if (view) {
-                      if (view.matchedDatasourceName) {
-                        const matchKey = view.matchedDatasourceName;
-                        if (!acc.matchedNames.has(matchKey)) {
-                          acc.matchedCount += 1;
-                          (acc.matchedList as IImportDatabaseView[]).push(view);
-                          acc.matchedNames.add(matchKey);
-                        }
-                      } else {
-                        const nameKey = view.name;
-                        if (!acc.createdNames.has(nameKey)) {
-                          acc.createdCount += 1;
-                          (acc.createdList as IImportDatabaseView[]).push(view);
-                          acc.createdNames.add(nameKey);
+                  [curr.databaseView, curr.targetDatabaseView].forEach(
+                    (view) => {
+                      if (view) {
+                        if (view.matchedDatasourceName) {
+                          const matchKey = view.matchedDatasourceName;
+                          if (!acc.matchedNames.has(matchKey)) {
+                            acc.matchedCount += 1;
+                            (acc.matchedList as IImportDatabaseView[]).push(
+                              view
+                            );
+                            acc.matchedNames.add(matchKey);
+                          }
+                        } else {
+                          const nameKey = view.name;
+                          if (!acc.createdNames.has(nameKey)) {
+                            acc.createdCount += 1;
+                            (acc.createdList as IImportDatabaseView[]).push(
+                              view
+                            );
+                            acc.createdNames.add(nameKey);
+                          }
                         }
                       }
                     }
-                  });
+                  );
                   return acc;
                 },
                 {
@@ -132,17 +166,17 @@ const ImportModal: React.FC<IImportModalProps> = ({ open, onCancel, onOk, taskTy
                   matchedList: [],
                   createdList: [],
                   matchedNames: new Set<string>(),
-                  createdNames: new Set<string>(),
-                },
-              ),
+                  createdNames: new Set<string>()
+                }
+              )
           );
           setStep('preview');
         }
       }
     },
     {
-      pollingInterval: 1000,
-    },
+      pollingInterval: 1000
+    }
   );
 
   const handlePreview = async () => {
@@ -150,11 +184,13 @@ const ImportModal: React.FC<IImportModalProps> = ({ open, onCancel, onOk, taskTy
       setLoading(true);
       const values = await form.validateFields();
       const params = {
-        bucketName: values?.importFile?.file?.response?.data?.contents?.[0]?.bucketName,
-        objectId: values?.importFile?.file?.response?.data?.contents?.[0]?.objectId,
+        bucketName:
+          values?.importFile?.file?.response?.data?.contents?.[0]?.bucketName,
+        objectId:
+          values?.importFile?.file?.response?.data?.contents?.[0]?.objectId,
         decryptKey: values.secretKey,
         scheduleType: taskType,
-        projectId: values?.projectId,
+        projectId: values?.projectId
       };
       const res = await startSchedulePreviewTask(params);
       if (res) {
@@ -175,8 +211,8 @@ const ImportModal: React.FC<IImportModalProps> = ({ open, onCancel, onOk, taskTy
     form.setFields([
       {
         name: ['importFile'],
-        errors: errorMessage ? [errorMessage] : [],
-      },
+        errors: errorMessage ? [errorMessage] : []
+      }
     ]);
   };
 
@@ -194,55 +230,63 @@ const ImportModal: React.FC<IImportModalProps> = ({ open, onCancel, onOk, taskTy
         title: () =>
           formatMessage({
             id: 'src.component.Task.component.ImportModal.81501FC4',
-            defaultMessage: '将文件拖放到此处或单击上传',
+            defaultMessage: '将文件拖放到此处或单击上传'
           }),
         content: formatMessage({
           id: 'src.component.Task.component.ImportModal.55291F5C',
-          defaultMessage: '仅支持 .zip 格式文件',
+          defaultMessage: '仅支持 .zip 格式文件'
         }),
-        button: null,
+        button: null
       },
       uploading: {
         icon: <Spin size="small" style={{ padding: 11 }} />,
         title: (fileName: string) => fileName,
         content: formatMessage({
           id: 'src.component.Task.component.ImportModal.9DB50C91',
-          defaultMessage: '仅支持 .zip 格式文件',
+          defaultMessage: '仅支持 .zip 格式文件'
         }),
-        button: null,
+        button: null
       },
       done: {
-        icon: <CheckCircleFilled style={{ fontSize: 24, padding: 12, color: '#0ac185' }} />,
+        icon: (
+          <CheckCircleFilled
+            style={{ fontSize: 24, padding: 12, color: '#0ac185' }}
+          />
+        ),
         title: (fileName: string) => fileName,
         content: null,
         button: (
           <Typography.Link onClick={onRemove}>
             {formatMessage({
               id: 'src.component.Task.component.ImportModal.C730ABBA',
-              defaultMessage: '移除',
+              defaultMessage: '移除'
             })}
           </Typography.Link>
-        ),
+        )
       },
       error: {
-        icon: <CloseCircleFilled style={{ fontSize: 24, padding: 12, color: '#f93939' }} />,
+        icon: (
+          <CloseCircleFilled
+            style={{ fontSize: 24, padding: 12, color: '#f93939' }}
+          />
+        ),
         title: (fileName: string) => fileName,
         content: null,
         button: (
           <Typography.Link onClick={onRemove}>
             {formatMessage({
               id: 'src.component.Task.component.ImportModal.E2C3412D',
-              defaultMessage: '移除',
+              defaultMessage: '移除'
             })}
           </Typography.Link>
-        ),
+        )
       },
       removed: {
         icon: null,
         title: () => null,
         content: null,
-        button: null,
-      },
+        button: null
+      }
     };
   }, []);
 
@@ -255,7 +299,7 @@ const ImportModal: React.FC<IImportModalProps> = ({ open, onCancel, onOk, taskTy
       matchedCount: 0,
       createdCount: 0,
       matchedList: [],
-      createdList: [],
+      createdList: []
     });
     setPreviewData([]);
   };
@@ -272,9 +316,9 @@ const ImportModal: React.FC<IImportModalProps> = ({ open, onCancel, onOk, taskTy
         title={formatMessage(
           {
             id: 'src.component.Task.component.ImportModal.1825A3A5',
-            defaultMessage: '导入{TaskTypeMapTaskType}',
+            defaultMessage: '导入{TaskTypeMapTaskType}'
           },
-          { TaskTypeMapTaskType: TaskTypeMap[taskType] },
+          { TaskTypeMapTaskType: TaskTypeMap[taskType] }
         )}
         destroyOnClose
         open={open}
@@ -285,7 +329,7 @@ const ImportModal: React.FC<IImportModalProps> = ({ open, onCancel, onOk, taskTy
               <Button onClick={onReset}>
                 {formatMessage({
                   id: 'src.component.Task.component.ImportModal.B6BCF0C0',
-                  defaultMessage: '取消',
+                  defaultMessage: '取消'
                 })}
               </Button>
               <Button
@@ -296,7 +340,7 @@ const ImportModal: React.FC<IImportModalProps> = ({ open, onCancel, onOk, taskTy
               >
                 {formatMessage({
                   id: 'src.component.Task.component.ImportModal.2F42ECBC',
-                  defaultMessage: '下一步: 预览',
+                  defaultMessage: '下一步: 预览'
                 })}
               </Button>
             </Space>
@@ -305,7 +349,7 @@ const ImportModal: React.FC<IImportModalProps> = ({ open, onCancel, onOk, taskTy
               <Button onClick={() => setStep('upload')}>
                 {formatMessage({
                   id: 'src.component.Task.component.ImportModal.9FFF1F71',
-                  defaultMessage: '上一步: 上传文件',
+                  defaultMessage: '上一步: 上传文件'
                 })}
               </Button>
               <Button
@@ -315,16 +359,18 @@ const ImportModal: React.FC<IImportModalProps> = ({ open, onCancel, onOk, taskTy
                   onOk(
                     scheduleTaskImportRequest as IScheduleTaskImportRequest,
                     previewData?.filter((i) => i.importable),
-                    currentProjectId,
+                    currentProjectId
                   );
                   onReset();
                 }}
                 type="primary"
-                disabled={previewData?.filter((i) => i?.importable)?.length === 0}
+                disabled={
+                  previewData?.filter((i) => i?.importable)?.length === 0
+                }
               >
                 {formatMessage({
                   id: 'src.component.Task.component.ImportModal.81026A36',
-                  defaultMessage: '导入',
+                  defaultMessage: '导入'
                 })}
               </Button>
             </Space>
@@ -340,7 +386,7 @@ const ImportModal: React.FC<IImportModalProps> = ({ open, onCancel, onOk, taskTy
             message={formatMessage({
               id: 'src.component.Task.component.ImportModal.0C3395D0',
               defaultMessage:
-                '仅支持导入由阿里云 OceanBase 数据研发导出的配置文件；\n请确认作业关联的实例已切换至 OB Cloud 当前项目中，系统将根据实例信息匹配或新建对应的数据源。',
+                '仅支持导入由阿里云 OceanBase 数据研发导出的配置文件；\n请确认作业关联的实例已切换至 OB Cloud 当前项目中，系统将根据实例信息匹配或新建对应的数据源。'
             })}
           />
 
@@ -352,9 +398,9 @@ const ImportModal: React.FC<IImportModalProps> = ({ open, onCancel, onOk, taskTy
                   required: true,
                   message: formatMessage({
                     id: 'src.component.Task.component.ImportModal.D8DFA444',
-                    defaultMessage: '请上传',
-                  }),
-                },
+                    defaultMessage: '请上传'
+                  })
+                }
               ]}
             >
               <ODCDragger
@@ -362,16 +408,20 @@ const ImportModal: React.FC<IImportModalProps> = ({ open, onCancel, onOk, taskTy
                 onChange={({ file }: { file: UploadFile<any> }) => {
                   console.log(file);
                   setUploadStatus(file.status as UploadFileStatus);
-                  if (!file?.response?.data?.contents && file.status === 'done') {
+                  if (
+                    !file?.response?.data?.contents &&
+                    file.status === 'done'
+                  ) {
                     setUploadStatus('error');
                     setFormStatus(
                       formatMessage(
                         {
                           id: 'src.component.Task.component.ImportModal.7B17FBF4',
-                          defaultMessage: '文件上传失败，失败原因：{fileResponseDataErrMsg}',
+                          defaultMessage:
+                            '文件上传失败，失败原因：{fileResponseDataErrMsg}'
                         },
-                        { fileResponseDataErrMsg: file?.response?.data?.errMsg },
-                      ),
+                        { fileResponseDataErrMsg: file?.response?.data?.errMsg }
+                      )
                     );
                   }
                 }}
@@ -383,13 +433,13 @@ const ImportModal: React.FC<IImportModalProps> = ({ open, onCancel, onOk, taskTy
                 headers={{
                   'X-XSRF-TOKEN': Cookies.get('XSRF-TOKEN') || '',
                   'Accept-Language': getLocale(),
-                  currentOrganizationId: login?.organizationId?.toString(),
+                  currentOrganizationId: login?.organizationId?.toString()
                 }}
               >
                 {uploadInfoMap[uploadStatus]?.icon}
                 <p className="ant-upload-text">
                   {uploadInfoMap[uploadStatus]?.title?.(
-                    form?.getFieldValue('importFile')?.file?.name,
+                    form?.getFieldValue('importFile')?.file?.name
                   )}
                 </p>
                 <p className="ant-upload-hint">
@@ -402,26 +452,27 @@ const ImportModal: React.FC<IImportModalProps> = ({ open, onCancel, onOk, taskTy
               name="secretKey"
               label={formatMessage({
                 id: 'src.component.Task.component.ImportModal.3CEE142A',
-                defaultMessage: '文件密钥',
+                defaultMessage: '文件密钥'
               })}
               rules={[
                 {
                   required: true,
                   message: formatMessage({
                     id: 'src.component.Task.component.ImportModal.B7DE2218',
-                    defaultMessage: '请输入',
-                  }),
-                },
+                    defaultMessage: '请输入'
+                  })
+                }
               ]}
               tooltip={formatMessage({
                 id: 'src.component.Task.component.ImportModal.9198FEFA',
-                defaultMessage: '从阿里云 OceanBase 中导出配置文件时，由系统自动生成的文件密钥',
+                defaultMessage:
+                  '从阿里云 OceanBase 中导出配置文件时，由系统自动生成的文件密钥'
               })}
             >
               <Input.Password
                 placeholder={formatMessage({
                   id: 'src.component.Task.component.ImportModal.C6AC4C4C',
-                  defaultMessage: '请输入',
+                  defaultMessage: '请输入'
                 })}
               />
             </Form.Item>
@@ -429,23 +480,23 @@ const ImportModal: React.FC<IImportModalProps> = ({ open, onCancel, onOk, taskTy
               name="projectId"
               label={formatMessage({
                 id: 'src.component.Task.component.ImportModal.889B80AD',
-                defaultMessage: '导入项目',
+                defaultMessage: '导入项目'
               })}
               rules={[
                 {
                   required: true,
                   message: formatMessage({
                     id: 'src.component.Task.component.ImportModal.30D6697A',
-                    defaultMessage: '请选择',
-                  }),
-                },
+                    defaultMessage: '请选择'
+                  })
+                }
               ]}
               extra={
                 <>
                   <span>
                     {formatMessage({
                       id: 'src.component.Task.component.ImportModal.B3686BE9',
-                      defaultMessage: '请确认相关数据源已加至项目',
+                      defaultMessage: '请确认相关数据源已加至项目'
                     })}
                   </span>
                   <NewDatasourceButton onSuccess={() => {}}>
@@ -454,7 +505,7 @@ const ImportModal: React.FC<IImportModalProps> = ({ open, onCancel, onOk, taskTy
                         <Space>
                           {formatMessage({
                             id: 'src.component.Task.component.ImportModal.1E47B6CE',
-                            defaultMessage: '新建数据源',
+                            defaultMessage: '新建数据源'
                           })}
 
                           <DownOutlined />
@@ -469,11 +520,13 @@ const ImportModal: React.FC<IImportModalProps> = ({ open, onCancel, onOk, taskTy
                 options={projectOptions}
                 placeholder={formatMessage({
                   id: 'src.component.Task.component.ImportModal.E82DB6D1',
-                  defaultMessage: '请选择',
+                  defaultMessage: '请选择'
                 })}
                 showSearch
                 filterOption={(input, option) =>
-                  (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                  (option?.label ?? '')
+                    .toLowerCase()
+                    .includes(input.toLowerCase())
                 }
                 open={addProjectDropVisible}
                 onDropdownVisibleChange={setAddProjectDropVisible}
@@ -483,11 +536,13 @@ const ImportModal: React.FC<IImportModalProps> = ({ open, onCancel, onOk, taskTy
                     {
                       <CreateProjectDrawer
                         buttonChildren={
-                          <Space onClick={() => setAddProjectDropVisible(false)}>
+                          <Space
+                            onClick={() => setAddProjectDropVisible(false)}
+                          >
                             <PlusOutlined />
                             {formatMessage({
                               id: 'src.component.Task.component.ImportModal.68180A60',
-                              defaultMessage: '新建项目',
+                              defaultMessage: '新建项目'
                             })}
                           </Space>
                         }

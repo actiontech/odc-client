@@ -4,7 +4,7 @@ import { action, observable } from 'mobx';
 const GUIDE_CACHE_KEY = 'GUIDE_CACHE_KEY';
 
 export const guideCacheMap = {
-  executePlan: 'executePlan',
+  executePlan: 'executePlan'
 };
 
 export class GuideCacheStore {

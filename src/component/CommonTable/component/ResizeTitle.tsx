@@ -42,7 +42,7 @@ export function ResizeTitle(props) {
         onMouseUp: () => {
           setIsDrag(false);
         },
-        onClick: (e) => !isDrag && onClick?.(e),
+        onClick: (e) => !isDrag && onClick?.(e)
       }}
     >
       <th {...restProps} />

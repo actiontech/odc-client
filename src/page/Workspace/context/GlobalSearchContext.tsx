@@ -39,7 +39,11 @@ interface IGlobalSearchContext {
   actions?: {
     openSql: (e: React.MouseEvent<any>, db: IDatabase) => void;
     applyPermission: (e: React.MouseEvent<any>, db: IDatabase) => void;
-    applyTablePermission: (e: React.MouseEvent<any>, object: any, type: DbObjectType) => void;
+    applyTablePermission: (
+      e: React.MouseEvent<any>,
+      object: any,
+      type: DbObjectType
+    ) => void;
     applyDbPermission: (e: React.MouseEvent<any>, db: any) => void;
     openTree: (e: React.MouseEvent<any>, db: any) => void;
     positionResourceTree: (parmas: {
@@ -61,7 +65,7 @@ const GlobalSearchContext = React.createContext<IGlobalSearchContext>({
   datasourceList: [],
   database: null,
   project: null,
-  dataSource: null,
+  dataSource: null
 });
 
 export default GlobalSearchContext;

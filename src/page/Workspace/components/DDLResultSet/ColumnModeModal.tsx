@@ -20,7 +20,10 @@ import React, { useContext, useEffect, useMemo, useRef } from 'react';
 
 import type { ResultSetColumn } from '@/d.ts';
 import { LeftSquareOutlined, RightSquareOutlined } from '@ant-design/icons';
-import type { DataGridRef, FormatterProps } from '@oceanbase-odc/ob-react-data-grid';
+import type {
+  DataGridRef,
+  FormatterProps
+} from '@oceanbase-odc/ob-react-data-grid';
 import type { RowType } from '../EditableTable';
 import EditableTable from '../EditableTable';
 import TextFormatter from './hooks/components/TextFormatter';
@@ -53,7 +56,7 @@ function Formatter(props: FormatterProps<DataInColumnMode, any>) {
     row.columnType,
     false,
     true,
-    context?.session?.connection?.dialectType,
+    context?.session?.connection?.dialectType
   );
   if (FormatterComponent) {
     return <FormatterComponent {...props} />;
@@ -70,7 +73,7 @@ const ColumnModeModal: React.FC<IProps> = function (props) {
     total,
     currentIdx,
     setSelectedRowIndex,
-    onClose,
+    onClose
   } = props;
 
   const resultContext = useContext(ResultContext);
@@ -81,34 +84,34 @@ const ColumnModeModal: React.FC<IProps> = function (props) {
       {
         name: formatMessage({
           id: 'odc.components.DDLResultSet.ColumnModeModal.ColumnName',
-          defaultMessage: '列名',
+          defaultMessage: '列名'
         }),
 
         // 列名
         key: 'columnName',
-        width: 200,
+        width: 200
       },
 
       {
         name: formatMessage({
           id: 'odc.components.DDLResultSet.ColumnModeModal.Value',
-          defaultMessage: '值',
+          defaultMessage: '值'
         }),
 
         // 值
         key: 'columnValue',
-        formatter: Formatter,
+        formatter: Formatter
       },
 
       {
         name: formatMessage({
           id: 'odc.components.DDLResultSet.ColumnModeModal.Comment',
-          defaultMessage: '注释',
+          defaultMessage: '注释'
         }), //注释
         key: 'columnComment',
         width: 200,
-        formatter: TextFormatter,
-      },
+        formatter: TextFormatter
+      }
     ];
   }, []);
 
@@ -124,7 +127,7 @@ const ColumnModeModal: React.FC<IProps> = function (props) {
         // 展示时使用 name 而非 key
         columnValue: selectedRow[uniqueColumnName],
         columnComment: c.columnComment ?? '',
-        columnType: c.columnType,
+        columnType: c.columnType
       };
     });
   }
@@ -140,25 +143,25 @@ const ColumnModeModal: React.FC<IProps> = function (props) {
       destroyOnClose
       width={'90%'}
       bodyStyle={{
-        paddingBottom: 0,
+        paddingBottom: 0
       }}
       title={formatMessage({
         id: 'workspace.window.sql.button.columnMode',
-        defaultMessage: '列模式',
+        defaultMessage: '列模式'
       })}
       open={visible}
       onCancel={() => onClose()}
       footer={[
         <Button key="close" type="primary" onClick={() => onClose()}>
           {formatMessage({ id: 'app.button.close', defaultMessage: '关闭' })}
-        </Button>,
+        </Button>
       ]}
     >
       <ResultContext.Provider
         value={{
           ...resultContext,
           isEditing: false,
-          isColumnMode: true,
+          isColumnMode: true
         }}
       >
         <EditableTable
@@ -178,34 +181,45 @@ const ColumnModeModal: React.FC<IProps> = function (props) {
           {formatMessage(
             {
               id: 'workspace.window.sql.result.pagination.current',
-              defaultMessage: '第 {current} 行',
+              defaultMessage: '第 {current} 行'
             },
             {
-              current: currentIdx + 1,
-            },
+              current: currentIdx + 1
+            }
           )}
           /
           {formatMessage(
-            { id: 'workspace.window.sql.result.pagination.total', defaultMessage: '共 {total} 行' },
             {
-              total,
+              id: 'workspace.window.sql.result.pagination.total',
+              defaultMessage: '共 {total} 行'
             },
+            {
+              total
+            }
           )}
         </span>
         <span>
           <LeftSquareOutlined
             style={{
               fontSize: 14,
-              marginRight: 8,
+              marginRight: 8
             }}
-            onClick={() => setSelectedRowIndex(currentIdx - 1 < 0 ? total - 1 : currentIdx - 1)}
+            onClick={() =>
+              setSelectedRowIndex(
+                currentIdx - 1 < 0 ? total - 1 : currentIdx - 1
+              )
+            }
           />
 
           <RightSquareOutlined
             style={{
-              fontSize: 14,
+              fontSize: 14
             }}
-            onClick={() => setSelectedRowIndex(currentIdx + 1 > total - 1 ? 0 : currentIdx + 1)}
+            onClick={() =>
+              setSelectedRowIndex(
+                currentIdx + 1 > total - 1 ? 0 : currentIdx + 1
+              )
+            }
           />
         </span>
       </footer>

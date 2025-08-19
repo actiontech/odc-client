@@ -22,14 +22,14 @@ export enum ProjectTabType {
   /** 全部项目 */
   ALL = 'all',
   /** 归档项目 */
-  ARCHIVED = 'archived',
+  ARCHIVED = 'archived'
 }
 export enum ProjectRole {
   DEVELOPER = 'DEVELOPER',
   DBA = 'DBA',
   OWNER = 'OWNER',
   SECURITY_ADMINISTRATOR = 'SECURITY_ADMINISTRATOR',
-  PARTICIPANT = 'PARTICIPANT',
+  PARTICIPANT = 'PARTICIPANT'
 }
 
 export interface ProjectUser {
@@ -65,19 +65,19 @@ export enum PermissionSourceType {
   // 用户授权
   USER_AUTHORIZATION = 'USER_AUTHORIZATION',
   // 工单申请
-  TICKET_APPLICATION = 'TICKET_APPLICATION',
+  TICKET_APPLICATION = 'TICKET_APPLICATION'
 }
 
 export enum DatabasePermissionStatus {
   EXPIRED = 'EXPIRED',
   EXPIRING = 'EXPIRING',
-  NOT_EXPIRED = 'NOT_EXPIRED',
+  NOT_EXPIRED = 'NOT_EXPIRED'
 }
 
 export enum TablePermissionStatus {
   EXPIRED = 'EXPIRED',
   EXPIRING = 'EXPIRING',
-  NOT_EXPIRED = 'NOT_EXPIRED',
+  NOT_EXPIRED = 'NOT_EXPIRED'
 }
 
 export interface IDatabasePermission {

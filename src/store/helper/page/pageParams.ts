@@ -39,7 +39,11 @@ export interface IPLPageParams extends Partial<IScriptMeta> {
 
 export type ISQLPageParams = SQLPage['pageParams'];
 
-export function createPackageHeadPageParams(packageName: string, sql: string, scriptId?: string) {
+export function createPackageHeadPageParams(
+  packageName: string,
+  sql: string,
+  scriptId?: string
+) {
   return {
     packageName: packageName,
     scriptText: sql,
@@ -47,12 +51,16 @@ export function createPackageHeadPageParams(packageName: string, sql: string, sc
     plSchema: {
       packageName,
       plName: `${packageName}.head`,
-      plType: plType.PKG_HEAD,
-    },
+      plType: plType.PKG_HEAD
+    }
   };
 }
 
-export function createPackageBodyPageParams(packageName: string, sql: string, scriptId?: string) {
+export function createPackageBodyPageParams(
+  packageName: string,
+  sql: string,
+  scriptId?: string
+) {
   return {
     packageName: packageName,
     scriptText: sql,
@@ -60,7 +68,7 @@ export function createPackageBodyPageParams(packageName: string, sql: string, sc
     plSchema: {
       packageName,
       plName: `${packageName}.body`,
-      plType: plType.PKG_BODY,
-    },
+      plType: plType.PKG_BODY
+    }
   };
 }

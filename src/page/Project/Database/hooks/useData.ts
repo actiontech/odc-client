@@ -21,35 +21,43 @@ const useData = (id) => {
   const [filterParams, setFilterParams] = useState<IFilterParams>({
     environmentId: null,
     connectType: null,
-    type: null,
+    type: null
   });
   const [data, setData] = useState<IDatabase[]>([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-  const [selectedTempRowKeys, setSelectedTempRowKeys] = useState<React.Key[] | string[]>([]);
+  const [selectedTempRowKeys, setSelectedTempRowKeys] = useState<
+    React.Key[] | string[]
+  >([]);
   const [visible, setVisible] = useState(false);
   /**
    * 修改管理员弹窗显示与隐藏
    */
   const [changeOwnerModalVisible, setChangeOwnerModalVisible] = useState(false);
-  const [openLogicialDatabase, setOpenLogicialDatabase] = useState<boolean>(false);
+  const [openLogicialDatabase, setOpenLogicialDatabase] =
+    useState<boolean>(false);
   const [openObjectStorage, setOpenObjectStorage] = useState<boolean>(false);
-  const [openManageLogicDatabase, setOpenManageLogicDatabase] = useState<boolean>(false);
+  const [openManageLogicDatabase, setOpenManageLogicDatabase] =
+    useState<boolean>(false);
   const [database, setDatabase] = useState<IDatabase>(null);
-  const [searchValue, setSearchValue] = useState<{ value: string; type: SearchType }>({
+  const [searchValue, setSearchValue] = useState<{
+    value: string;
+    type: SearchType;
+  }>({
     value: null,
-    type: SearchType.DATABASE,
+    type: SearchType.DATABASE
   });
 
   const { loading, run: fetchDatabases } = useRequest(listDatabases, {
-    manual: true,
+    manual: true
   });
 
-  const { loading: fetchEnvLoading, data: envList } = useRequest(listEnvironments);
+  const { loading: fetchEnvLoading, data: envList } =
+    useRequest(listEnvironments);
 
   const loadData = async (
     environmentId = filterParams?.environmentId,
     connectType = filterParams?.connectType,
-    type = filterParams.type,
+    type = filterParams.type
   ) => {
     const res = await fetchDatabases(
       parseInt(id),
@@ -65,17 +73,17 @@ const useData = (id) => {
       connectType,
       searchValue.type === SearchType.DATASOURCE ? searchValue.value : null,
       searchValue.type === SearchType.CLUSTER ? searchValue.value : null,
-      searchValue.type === SearchType.TENANT ? searchValue.value : null,
+      searchValue.type === SearchType.TENANT ? searchValue.value : null
     );
     if (res) {
       datasourceStatus.asyncUpdateStatus(
         res?.contents
           ?.filter((item) => item.type !== 'LOGICAL' && !!item.dataSource?.id)
-          ?.map((item) => item?.dataSource?.id),
+          ?.map((item) => item?.dataSource?.id)
       );
       setData(res?.contents);
       const hasLoginDatabaseAuth = res.contents?.some(
-        (item) => !!item.authorizedPermissionTypes.length,
+        (item) => !!item.authorizedPermissionTypes.length
       );
       setHasLoginDatabaseAuth?.(hasLoginDatabaseAuth);
     }
@@ -86,20 +94,37 @@ const useData = (id) => {
   }
 
   const dataGroup = useMemo(() => {
-    const environmentGroup: Map<number, { groupName: string; databases: IDatabase[] }> = new Map();
-    const connectTypeGruop: Map<ConnectType, { groupName: string; databases: IDatabase[] }> =
-      new Map();
-    const datasourceGruop: Map<number, { groupName: string; databases: IDatabase[] }> = new Map();
-    const clusterGroup: Map<string, { groupName: string; databases: IDatabase[] }> = new Map();
-    const tenantGroup: Map<string, { groupName: string; databases: IDatabase[] }> = new Map();
+    const environmentGroup: Map<
+      number,
+      { groupName: string; databases: IDatabase[] }
+    > = new Map();
+    const connectTypeGruop: Map<
+      ConnectType,
+      { groupName: string; databases: IDatabase[] }
+    > = new Map();
+    const datasourceGruop: Map<
+      number,
+      { groupName: string; databases: IDatabase[] }
+    > = new Map();
+    const clusterGroup: Map<
+      string,
+      { groupName: string; databases: IDatabase[] }
+    > = new Map();
+    const tenantGroup: Map<
+      string,
+      { groupName: string; databases: IDatabase[] }
+    > = new Map();
     data?.forEach((db) => {
       const { environment, dataSource, connectType } = db;
       // 环境分组
       if (environment) {
-        const { mapId, groupName } = getMapIdByDB(db, DatabaseGroup.environment);
+        const { mapId, groupName } = getMapIdByDB(
+          db,
+          DatabaseGroup.environment
+        );
         const environmentDatabases = environmentGroup.get(mapId) || {
           groupName,
-          databases: [],
+          databases: []
         };
         if (db.type === 'LOGICAL') {
           environmentDatabases.databases.unshift(db);
@@ -113,7 +138,7 @@ const useData = (id) => {
         const { mapId, groupName } = getMapIdByDB(db, DatabaseGroup.dataSource);
         const datasourceDatabases = datasourceGruop.get(mapId) || {
           groupName,
-          databases: [],
+          databases: []
         };
         if (db.type === 'LOGICAL') {
           datasourceDatabases.databases.unshift(db);
@@ -124,10 +149,13 @@ const useData = (id) => {
       }
       // 类型分组
       if (connectType) {
-        const { mapId, groupName } = getMapIdByDB(db, DatabaseGroup.connectType);
+        const { mapId, groupName } = getMapIdByDB(
+          db,
+          DatabaseGroup.connectType
+        );
         const connectTypeDatabases = connectTypeGruop.get(mapId) || {
           groupName,
-          databases: [],
+          databases: []
         };
         if (db.type === 'LOGICAL') {
           connectTypeDatabases.databases.unshift(db);
@@ -141,7 +169,7 @@ const useData = (id) => {
         const { mapId, groupName } = getMapIdByDB(db, DatabaseGroup.cluster);
         const clusterDatabases = clusterGroup.get(mapId) || {
           groupName,
-          databases: [],
+          databases: []
         };
         if (db.type === 'LOGICAL') {
           clusterDatabases.databases.unshift(db);
@@ -152,11 +180,14 @@ const useData = (id) => {
       }
       // 租户分组
       {
-        const { mapId, groupName, tip } = getMapIdByDB(db, DatabaseGroup.tenant);
+        const { mapId, groupName, tip } = getMapIdByDB(
+          db,
+          DatabaseGroup.tenant
+        );
         const tenantDatabases = tenantGroup.get(mapId) || {
           groupName,
           tip,
-          databases: [],
+          databases: []
         };
         if (db.type === 'LOGICAL') {
           tenantDatabases.databases.unshift(db);
@@ -172,7 +203,7 @@ const useData = (id) => {
       datasourceGruop,
       connectTypeGruop,
       clusterGroup,
-      tenantGroup,
+      tenantGroup
     };
   }, [data]);
 
@@ -181,7 +212,7 @@ const useData = (id) => {
     [DatabaseGroup.environment]: dataGroup.environmentGroup,
     [DatabaseGroup.dataSource]: dataGroup.datasourceGruop,
     [DatabaseGroup.cluster]: dataGroup.clusterGroup,
-    [DatabaseGroup.tenant]: dataGroup.tenantGroup,
+    [DatabaseGroup.tenant]: dataGroup.tenantGroup
   };
 
   const treeData = useMemo(() => {
@@ -200,7 +231,7 @@ const useData = (id) => {
           id: `${GroupKey}_${groupMode}_${i}`,
           tip: metaArr[i].tip,
           groudMapId: getGroupMapId(metaArr[i].databases[0], groupMode),
-          children: metaArr[i].databases,
+          children: metaArr[i].databases
         });
       }
       return treeData;
@@ -218,18 +249,18 @@ const useData = (id) => {
         /* 当前数据库分页没有这一条数据 */
         !data?.find((_db) => _db?.id === key) ||
         /* 当前数据库分页有这一条数据且类型相同 */
-        data?.find((_db) => _db?.id === key)?.connectType === initDialectType,
+        data?.find((_db) => _db?.id === key)?.connectType === initDialectType
     );
   }, [selectedRowKeys, data]);
 
   const isOwner = project?.currentUserResourceRoles?.some((role) =>
-    [ProjectRole.OWNER].includes(role),
+    [ProjectRole.OWNER].includes(role)
   );
 
   const haveOperationPermission = useMemo(() => {
     return (
       project?.currentUserResourceRoles?.some((item) =>
-        [ProjectRole.DBA, ProjectRole.OWNER].includes(item),
+        [ProjectRole.DBA, ProjectRole.OWNER].includes(item)
       ) || project?.creator?.id === userStore?.user?.id
     );
   }, [project?.currentUserResourceRoles]);
@@ -254,7 +285,7 @@ const useData = (id) => {
           return false;
         }
         return true;
-      }),
+      })
     );
   }, [selectedTempRowKeys]);
 
@@ -263,7 +294,7 @@ const useData = (id) => {
     setSelectedTempRowKeys(
       selectedTempRowKeys.filter((item) => {
         return !isGroupColumn(item);
-      }),
+      })
     );
   }, [groupMode]);
 
@@ -297,7 +328,7 @@ const useData = (id) => {
     disabledMultiDBChanges,
     isOwner,
     clearSelectedRowKeys,
-    haveOperationPermission,
+    haveOperationPermission
   };
 };
 

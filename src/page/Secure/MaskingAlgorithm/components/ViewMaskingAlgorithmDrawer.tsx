@@ -14,18 +14,34 @@
  * limitations under the License.
  */
 
-import { detailMaskingAlgorithm, testMaskingAlgorithm } from '@/common/network/maskingAlgorithm';
+import {
+  detailMaskingAlgorithm,
+  testMaskingAlgorithm
+} from '@/common/network/maskingAlgorithm';
 import { IMaskingAlgorithm } from '@/d.ts/maskingAlgorithm';
 import { formatMessage } from '@/util/intl';
 import { QuestionCircleOutlined } from '@ant-design/icons';
-import { Button, Descriptions, Drawer, Input, message, Tooltip, Typography } from 'antd';
+import {
+  Button,
+  Descriptions,
+  Drawer,
+  Input,
+  message,
+  Tooltip,
+  Typography
+} from 'antd';
 import { useEffect, useState } from 'react';
 import { maskRuleTypeMap } from '..';
-const ViewMaskingAlgorithmDrawer = ({ visible, selectedData, handleViewDrawerClose }) => {
+const ViewMaskingAlgorithmDrawer = ({
+  visible,
+  selectedData,
+  handleViewDrawerClose
+}) => {
   const [searchText, setSearchText] = useState<string>('');
   const [testResult, setTestResult] = useState<string>('');
   const [showResult, setShowResult] = useState<boolean>(false);
-  const [detailMaskingAlgorithmData, setDetailMaskingAlgorithmData] = useState<IMaskingAlgorithm>();
+  const [detailMaskingAlgorithmData, setDetailMaskingAlgorithmData] =
+    useState<IMaskingAlgorithm>();
   const handleSearchTextChange = async (e) => {
     setSearchText(e.target.value);
   };
@@ -38,13 +54,16 @@ const ViewMaskingAlgorithmDrawer = ({ visible, selectedData, handleViewDrawerClo
       return message.error(
         formatMessage({
           id: 'odc.MaskingAlgorithm.components.ViewMaskingAlgorithmDrawer.TestDataCannotBeEmpty',
-          defaultMessage: '测试数据不能为空',
-        }), //测试数据不能为空
+          defaultMessage: '测试数据不能为空'
+        }) //测试数据不能为空
       );
     }
 
     setShowResult(true);
-    const result = await testMaskingAlgorithm(detailMaskingAlgorithmData.id, searchText);
+    const result = await testMaskingAlgorithm(
+      detailMaskingAlgorithmData.id,
+      searchText
+    );
     setTestResult(result?.maskedContent);
   };
   const reset = () => {
@@ -72,7 +91,7 @@ const ViewMaskingAlgorithmDrawer = ({ visible, selectedData, handleViewDrawerClo
       title={
         formatMessage({
           id: 'odc.src.page.Secure.MaskingAlgorithm.components.DesertensitivityAlgorithmDetails',
-          defaultMessage: '脱敏算法详情',
+          defaultMessage: '脱敏算法详情'
         }) //'脱敏算法详情'
       }
       onClose={handleViewDrawerClose}
@@ -82,14 +101,14 @@ const ViewMaskingAlgorithmDrawer = ({ visible, selectedData, handleViewDrawerClo
         <div
           style={{
             display: 'flex',
-            justifyContent: 'flex-end',
+            justifyContent: 'flex-end'
           }}
         >
           <Button onClick={handleViewDrawerClose}>
             {
               formatMessage({
                 id: 'odc.MaskingAlgorithm.components.ViewMaskingAlgorithmDrawer.Close',
-                defaultMessage: '关闭',
+                defaultMessage: '关闭'
               }) /*关闭*/
             }
           </Button>
@@ -101,7 +120,7 @@ const ViewMaskingAlgorithmDrawer = ({ visible, selectedData, handleViewDrawerClo
           label={
             formatMessage({
               id: 'odc.MaskingAlgorithm.components.ViewMaskingAlgorithmDrawer.RuleName',
-              defaultMessage: '规则名称',
+              defaultMessage: '规则名称'
             }) //规则名称
           }
         >
@@ -111,7 +130,7 @@ const ViewMaskingAlgorithmDrawer = ({ visible, selectedData, handleViewDrawerClo
           label={
             formatMessage({
               id: 'odc.MaskingAlgorithm.components.ViewMaskingAlgorithmDrawer.RuleStatus',
-              defaultMessage: '规则状态',
+              defaultMessage: '规则状态'
             }) //规则状态
           }
         >
@@ -119,11 +138,11 @@ const ViewMaskingAlgorithmDrawer = ({ visible, selectedData, handleViewDrawerClo
             selectedData?.enabled
               ? formatMessage({
                   id: 'odc.MaskingAlgorithm.components.ViewMaskingAlgorithmDrawer.Enable',
-                  defaultMessage: '启用',
+                  defaultMessage: '启用'
                 }) //启用
               : formatMessage({
                   id: 'odc.MaskingAlgorithm.components.ViewMaskingAlgorithmDrawer.NotEnabled',
-                  defaultMessage: '未启用',
+                  defaultMessage: '未启用'
                 }) //未启用
           }
         </Descriptions.Item>
@@ -131,7 +150,7 @@ const ViewMaskingAlgorithmDrawer = ({ visible, selectedData, handleViewDrawerClo
           label={
             formatMessage({
               id: 'odc.MaskingAlgorithm.components.ViewMaskingAlgorithmDrawer.DesensitizationMethod',
-              defaultMessage: '脱敏方式',
+              defaultMessage: '脱敏方式'
             }) //脱敏方式
           }
         >
@@ -142,7 +161,7 @@ const ViewMaskingAlgorithmDrawer = ({ visible, selectedData, handleViewDrawerClo
             <Typography.Text>
               {formatMessage({
                 id: 'odc.MaskingAlgorithm.components.ViewMaskingAlgorithmDrawer.DesensitizationEffect',
-                defaultMessage: '脱敏效果',
+                defaultMessage: '脱敏效果'
               })}
             </Typography.Text>
           }
@@ -156,21 +175,21 @@ const ViewMaskingAlgorithmDrawer = ({ visible, selectedData, handleViewDrawerClo
           flexDirection: 'column',
           rowGap: '8px',
           backgroundColor: '#F7F9FB',
-          padding: '16px',
+          padding: '16px'
         }}
       >
         <div
           style={{
             display: 'flex',
             flexDirection: 'column',
-            rowGap: '8px',
+            rowGap: '8px'
           }}
         >
           <span>
             {
               formatMessage({
                 id: 'odc.src.page.Secure.MaskingAlgorithm.components.TestData',
-                defaultMessage: '\n            测试数据\n            ',
+                defaultMessage: '\n            测试数据\n            '
               }) /* 
             测试数据
             */
@@ -180,7 +199,7 @@ const ViewMaskingAlgorithmDrawer = ({ visible, selectedData, handleViewDrawerClo
               title={
                 formatMessage({
                   id: 'odc.src.page.Secure.MaskingAlgorithm.components.TheMaximumLength',
-                  defaultMessage: '长度不超过 128 个字符',
+                  defaultMessage: '长度不超过 128 个字符'
                 }) /* 最长长度 <= 128 */
               }
             >
@@ -188,7 +207,7 @@ const ViewMaskingAlgorithmDrawer = ({ visible, selectedData, handleViewDrawerClo
                 style={{
                   marginLeft: '8px',
                   cursor: 'pointer',
-                  color: 'var(--icon-color-normal)',
+                  color: 'var(--icon-color-normal)'
                 }}
               />
             </Tooltip>
@@ -196,7 +215,7 @@ const ViewMaskingAlgorithmDrawer = ({ visible, selectedData, handleViewDrawerClo
           <div
             style={{
               display: 'flex',
-              columnGap: '8px',
+              columnGap: '8px'
             }}
           >
             <Input
@@ -204,17 +223,17 @@ const ViewMaskingAlgorithmDrawer = ({ visible, selectedData, handleViewDrawerClo
               {...(selectedData?.id === 19
                 ? {
                     // 数值取整 这里要用InputNumbe
-                    type: 'number',
+                    type: 'number'
                   }
                 : {})}
               maxLength={128}
               onChange={handleSearchTextChange}
               placeholder={formatMessage({
                 id: 'odc.MaskingAlgorithm.components.ViewMaskingAlgorithmDrawer.PleaseEnter',
-                defaultMessage: '请输入',
+                defaultMessage: '请输入'
               })}
               /*请输入*/ style={{
-                width: '240px',
+                width: '240px'
               }}
             />
 
@@ -222,7 +241,7 @@ const ViewMaskingAlgorithmDrawer = ({ visible, selectedData, handleViewDrawerClo
               {
                 formatMessage({
                   id: 'odc.MaskingAlgorithm.components.ViewMaskingAlgorithmDrawer.DesensitizationVerification',
-                  defaultMessage: '脱敏验证',
+                  defaultMessage: '脱敏验证'
                 }) /*脱敏验证*/
               }
             </Button>
@@ -232,30 +251,30 @@ const ViewMaskingAlgorithmDrawer = ({ visible, selectedData, handleViewDrawerClo
           style={{
             display: 'flex',
             flexDirection: 'column',
-            rowGap: '8px',
+            rowGap: '8px'
           }}
         >
           <span>
             {
               formatMessage({
                 id: 'odc.MaskingAlgorithm.components.ViewMaskingAlgorithmDrawer.ResultPreview',
-                defaultMessage: '结果预览',
+                defaultMessage: '结果预览'
               }) /*结果预览*/
             }
           </span>
           <div
             style={{
               display: 'flex',
-              columnGap: '8px',
+              columnGap: '8px'
             }}
           >
             <Input
               placeholder={formatMessage({
                 id: 'odc.MaskingAlgorithm.components.ViewMaskingAlgorithmDrawer.PleaseEnter',
-                defaultMessage: '请输入',
+                defaultMessage: '请输入'
               })}
               /*请输入*/ style={{
-                width: '240px',
+                width: '240px'
               }}
               value={testResult}
               readOnly={!showResult}

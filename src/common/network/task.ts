@@ -44,11 +44,15 @@ import {
   TaskStatus,
   TaskType,
   ICycleTaskStatRecord,
-  ICycleTaskStatParam,
+  ICycleTaskStatParam
 } from '@/d.ts';
 import { ISchemaChangeRecord } from '@/d.ts/logicalDatabase';
 import { IProject } from '@/d.ts/project';
-import { EOperationType, IComparisonResultData, IStructrueComparisonDetail } from '@/d.ts/task';
+import {
+  EOperationType,
+  IComparisonResultData,
+  IStructrueComparisonDetail
+} from '@/d.ts/task';
 import setting from '@/store/setting';
 import request from '@/util/request';
 import { downloadFile } from '@/util/utils';
@@ -61,17 +65,20 @@ import {
   IImportTaskResult,
   IScheduleTaskImportRequest,
   IScheduleTerminateCmd,
-  IScheduleTerminateResult,
+  IScheduleTerminateResult
 } from '@/d.ts/importTask';
 import odc from '@/plugins/odc';
 
 /**
  * 根据函数获取ddl sql
  */
-export async function getFunctionCreateSQL(funName: string, func: Partial<IFunction>) {
+export async function getFunctionCreateSQL(
+  funName: string,
+  func: Partial<IFunction>
+) {
   const sid = generateFunctionSid(funName);
   const ret = await request.patch(`/api/v1/function/getCreateSql/${sid}`, {
-    data: func,
+    data: func
   });
   return ret?.data?.sql;
 }
@@ -80,9 +87,11 @@ export async function getFunctionCreateSQL(funName: string, func: Partial<IFunct
  * 新建任务
  * 任务：涵盖 导入，导出，异步，模拟数据，权限申请共计 5 种类型
  */
-export async function createTask(data: Partial<CreateTaskRecord>): Promise<number> {
+export async function createTask(
+  data: Partial<CreateTaskRecord>
+): Promise<number> {
   const res = await request.post(`/api/v2/flow/flowInstances/`, {
-    data,
+    data
   });
   return res?.data?.contents?.length || 0;
 }
@@ -92,7 +101,7 @@ export async function createTask(data: Partial<CreateTaskRecord>): Promise<numbe
  */
 export async function previewPartitionPlans(
   sessionId: string,
-  data: IPartitionTablePreviewConfig,
+  data: IPartitionTablePreviewConfig
 ): Promise<
   IResponseData<{
     partitionName: string;
@@ -103,8 +112,8 @@ export async function previewPartitionPlans(
   const res = await request.post(
     `/api/v2/datasource/sessions/${sessionId}/partitionPlans/latest/preview`,
     {
-      data,
-    },
+      data
+    }
   );
   return res?.data || [];
 }
@@ -123,7 +132,7 @@ export async function previewSqlStatements(data: {
   }[];
 }): Promise<string[]> {
   const res = await request.post('api/v2/dlm/previewSqlStatements', {
-    data,
+    data
   });
   return res?.data?.contents;
 }
@@ -134,10 +143,10 @@ export async function previewSqlStatements(data: {
  * @returns boolean
  */
 export async function createStructureComparisonTask(
-  data: Partial<CreateStructureComparisonTaskRecord>,
+  data: Partial<CreateStructureComparisonTaskRecord>
 ) {
   const res = await request.post(`/api/v2/flow/flowInstances/`, {
-    data,
+    data
   });
   return res?.data?.contents?.length > 0;
 }
@@ -164,7 +173,7 @@ export async function getTaskList<T>(params: {
   projectId?: number[] | number;
 }): Promise<IResponseData<TaskRecord<T>>> {
   const res = await request.get('/api/v2/flow/flowInstances/', {
-    params,
+    params
   });
   return res?.data;
 }
@@ -172,8 +181,12 @@ export async function getTaskList<T>(params: {
 /**
  * 查询未完成的任务列表
  */
-export async function getUnfinishedTickets(projectId: number): Promise<UnfinishedTickets> {
-  const res = await request.get(`/api/v2/collaboration/projects/${projectId}/unfinishedTickets`);
+export async function getUnfinishedTickets(
+  projectId: number
+): Promise<UnfinishedTickets> {
+  const res = await request.get(
+    `/api/v2/collaboration/projects/${projectId}/unfinishedTickets`
+  );
   return res.data;
 }
 
@@ -196,7 +209,7 @@ export async function getCycleTaskList<T>(params: {
   size?: number;
 }): Promise<IResponseData<ICycleTaskRecord<T>>> {
   const res = await request.get('/api/v2/schedule/scheduleConfigs', {
-    params,
+    params
   });
   return res?.data;
 }
@@ -205,10 +218,10 @@ export async function getCycleTaskList<T>(params: {
  * 查询周期任务状态
  */
 export async function getScheduleStat<T>(
-  params: ICycleTaskStatParam,
+  params: ICycleTaskStatParam
 ): Promise<ICycleTaskStatRecord[]> {
   const res = await request.get('/api/v2/schedule/schedules/stats', {
-    params,
+    params
   });
   return res?.data?.contents;
 }
@@ -218,7 +231,7 @@ export async function getDatabasesHistories(params: {
   limit: number;
 }): Promise<IDatabase[]> {
   const res = await request.get('/api/v2/database/databaseAccessHistories', {
-    params,
+    params
   });
   return res?.data?.contents;
 }
@@ -226,11 +239,13 @@ export async function getDatabasesHistories(params: {
 /**
  * 查询任务实例的状态
  */
-export async function getTaskStatus(ids: number[]): Promise<Record<number, TaskStatus>> {
+export async function getTaskStatus(
+  ids: number[]
+): Promise<Record<number, TaskStatus>> {
   const res = await request.get('/api/v2/flow/flowInstances/status', {
     params: {
-      id: ids,
-    },
+      id: ids
+    }
   });
   return res?.data;
 }
@@ -238,7 +253,9 @@ export async function getTaskStatus(ids: number[]): Promise<Record<number, TaskS
 /**
  * 查询周期任务详情
  */
-export async function getCycleTaskDetail<T>(id: number): Promise<CycleTaskDetail<T>> {
+export async function getCycleTaskDetail<T>(
+  id: number
+): Promise<CycleTaskDetail<T>> {
   const res = await request.get(`/api/v2/schedule/scheduleConfigs/${id}`);
   return res?.data;
 }
@@ -248,10 +265,10 @@ export async function getCycleTaskDetail<T>(id: number): Promise<CycleTaskDetail
  */
 export async function getCycleSubTaskDetail(
   scheduleId: number,
-  scheduleTaskId: number,
+  scheduleTaskId: number
 ): Promise<ICycleSubTaskDetailRecord> {
   const res = await request.get(
-    `/api/v2/schedule/scheduleConfigs/${scheduleId}/scheduleTask/${scheduleTaskId}`,
+    `/api/v2/schedule/scheduleConfigs/${scheduleId}/scheduleTask/${scheduleTaskId}`
   );
   return res?.data;
 }
@@ -261,12 +278,12 @@ export async function getCycleSubTaskDetail(
  */
 export async function getTaskDetail(
   id: number,
-  ignoreError: boolean = false,
+  ignoreError: boolean = false
 ): Promise<TaskDetail<TaskRecordParameters>> {
   const res = await request.get(`/api/v2/flow/flowInstances/${id}`, {
     params: {
-      ignoreError,
-    },
+      ignoreError
+    }
   });
   return res?.data;
 }
@@ -274,17 +291,22 @@ export async function getTaskDetail(
  * 查询任务运行结果（仅限"异步任务"，即 TaskType === ASYNC）
  */
 export async function getTaskResult(id: number): Promise<ITaskResult> {
-  const res = await request.get(`/api/v2/flow/flowInstances/${id}/tasks/result`);
+  const res = await request.get(
+    `/api/v2/flow/flowInstances/${id}/tasks/result`
+  );
   return res?.data?.contents?.[0] ?? null;
 }
 /**
  * 查询任务日志
  */
-export async function getTaskLog(id: number, logType: CommonTaskLogType): Promise<string> {
+export async function getTaskLog(
+  id: number,
+  logType: CommonTaskLogType
+): Promise<string> {
   const res = await request.get(`/api/v2/flow/flowInstances/${id}/tasks/log`, {
     params: {
-      logType,
-    },
+      logType
+    }
   });
   return res?.data;
 }
@@ -295,13 +317,16 @@ export async function getTaskLog(id: number, logType: CommonTaskLogType): Promis
 export async function getCycleTaskLog(
   scheduleId: number,
   taskId: number,
-  logType: CommonTaskLogType,
+  logType: CommonTaskLogType
 ): Promise<string> {
-  const res = await request.get(`/api/v2/schedule/schedules/${scheduleId}/tasks/${taskId}/log`, {
-    params: {
-      logType,
-    },
-  });
+  const res = await request.get(
+    `/api/v2/schedule/schedules/${scheduleId}/tasks/${taskId}/log`,
+    {
+      params: {
+        logType
+      }
+    }
+  );
   return res?.data;
 }
 
@@ -310,7 +335,7 @@ export async function getCycleTaskLog(
  */
 export async function getDownloadUrl(scheduleId: number, taskId: number) {
   const res = await request.post(
-    `/api/v2/schedule/schedules/${scheduleId}/tasks/${taskId}/log/getDownloadUrl`,
+    `/api/v2/schedule/schedules/${scheduleId}/tasks/${taskId}/log/getDownloadUrl`
   );
   return res?.data;
 }
@@ -318,8 +343,12 @@ export async function getDownloadUrl(scheduleId: number, taskId: number) {
 /**
  * 操作列表
  */
-export async function getOperationList(scheduleId: number): Promise<IResponseData<Operation>> {
-  const res = await request.get(`/api/v2/schedule/schedules/${scheduleId}/changes`);
+export async function getOperationList(
+  scheduleId: number
+): Promise<IResponseData<Operation>> {
+  const res = await request.get(
+    `/api/v2/schedule/schedules/${scheduleId}/changes`
+  );
   return res?.data;
 }
 
@@ -328,10 +357,10 @@ export async function getOperationList(scheduleId: number): Promise<IResponseDat
  */
 export async function getOperationDetail(
   scheduleId: number,
-  scheduleChangeLogId: number,
+  scheduleChangeLogId: number
 ): Promise<Operation> {
   const res = await request.get(
-    `/api/v2/schedule/schedules/${scheduleId}/changes/${scheduleChangeLogId}`,
+    `/api/v2/schedule/schedules/${scheduleId}/changes/${scheduleChangeLogId}`
   );
   return res?.data;
 }
@@ -340,29 +369,37 @@ export async function getOperationDetail(
  * 回滚任务
  */
 export async function rollbackTask(id: number): Promise<boolean> {
-  const res = await request.post(`/api/v2/flow/flowInstances/${id}/tasks/rollback`);
+  const res = await request.post(
+    `/api/v2/flow/flowInstances/${id}/tasks/rollback`
+  );
   return !!res?.data;
 }
 
 /**
  * 审批（拒绝）任务
  */
-export async function rejectTask(id: number, comment: string): Promise<boolean> {
+export async function rejectTask(
+  id: number,
+  comment: string
+): Promise<boolean> {
   const res = await request.post(`/api/v2/flow/flowInstances/${id}/reject`, {
     data: {
-      comment,
-    },
+      comment
+    }
   });
   return !!res?.data;
 }
 /**
  * 审批（通过）任务
  */
-export async function approveTask(id: number, comment: string): Promise<boolean> {
+export async function approveTask(
+  id: number,
+  comment: string
+): Promise<boolean> {
   const res = await request.post(`/api/v2/flow/flowInstances/${id}/approve`, {
     data: {
-      comment,
-    },
+      comment
+    }
   });
   return !!res?.data;
 }
@@ -377,7 +414,9 @@ export async function stopTask(id: number): Promise<boolean> {
  * 执行任务
  */
 export async function executeTask(id: number): Promise<boolean> {
-  const res = await request.post(`/api/v2/flow/flowInstances/${id}/tasks/execute`);
+  const res = await request.post(
+    `/api/v2/flow/flowInstances/${id}/tasks/execute`
+  );
   return !!res?.data;
 }
 
@@ -388,8 +427,8 @@ export async function getTaskExist(name: string): Promise<boolean> {
   const res = await request.get(`/api/v1/task/tasks/exist/`, {
     params: {
       name,
-      type: TaskType.ASYNC,
-    },
+      type: TaskType.ASYNC
+    }
   });
   return res?.data;
 }
@@ -420,8 +459,8 @@ export async function downloadTaskFlow(id: number, fileName?: string) {
     const res = await request.post('/api/v2/cloud/specific/Download', {
       data: {
         flowInstanceId: id,
-        fileName: fileName,
-      },
+        fileName: fileName
+      }
     });
     if (res?.data) {
       downloadFile(res?.data);
@@ -431,15 +470,19 @@ export async function downloadTaskFlow(id: number, fileName?: string) {
   downloadFile(
     odc.appConfig.network?.baseUrl?.() +
       `/api/v2/flow/flowInstances/${id}/tasks/download` +
-      (fileName ? `?fileName=${fileName}` : ''),
+      (fileName ? `?fileName=${fileName}` : '')
   );
 }
 
 /**
  * 查询任务执行结果
  */
-export async function getAsyncResultSet(id: number): Promise<IAsyncTaskResultSet[]> {
-  const res = await request.get(`/api/v2/flow/flowInstances/${id}/tasks/asyncExecuteResult`);
+export async function getAsyncResultSet(
+  id: number
+): Promise<IAsyncTaskResultSet[]> {
+  const res = await request.get(
+    `/api/v2/flow/flowInstances/${id}/tasks/asyncExecuteResult`
+  );
   return res?.data?.contents;
 }
 
@@ -448,24 +491,30 @@ export async function postTaskFile(data: {
   usage: 'import' | 'obclient' | 'async';
 }): Promise<boolean> {
   const res = await request.post(`/api/v2/file/files`, {
-    data,
+    data
   });
   return !!res?.data;
 }
 
 export function getAsyncTaskUploadUrl() {
-  return odc.appConfig.network?.baseUrl?.() + '/api/v2/objectstorage/async/files/batchUpload';
+  return (
+    odc.appConfig.network?.baseUrl?.() +
+    '/api/v2/objectstorage/async/files/batchUpload'
+  );
 }
 
 /**
  * 下载文件
  */
-export async function getTaskFile(taskId: number, objectId: string[]): Promise<string[]> {
+export async function getTaskFile(
+  taskId: number,
+  objectId: string[]
+): Promise<string[]> {
   const downloadInfo = await request.post(
     `/api/v2/flow/flowInstances/${taskId}/tasks/async/batchGetDownloadUrl`,
     {
-      data: objectId,
-    },
+      data: objectId
+    }
   );
   return downloadInfo?.data?.contents ?? [];
 }
@@ -473,12 +522,15 @@ export async function getTaskFile(taskId: number, objectId: string[]): Promise<s
 /**
  * 下载文件（周期任务）
  */
-export async function getCycleTaskFile(taskId: number, objectId: string[]): Promise<string[]> {
+export async function getCycleTaskFile(
+  taskId: number,
+  objectId: string[]
+): Promise<string[]> {
   const downloadInfo = await request.post(
     `/api/v2/schedule/${taskId}/jobs/async/batchGetDownloadUrl`,
     {
-      data: objectId,
-    },
+      data: objectId
+    }
   );
   return downloadInfo?.data?.contents ?? [];
 }
@@ -491,13 +543,13 @@ export async function getCycleTaskFile(taskId: number, objectId: string[]): Prom
  */
 export async function getStructureComparisonTaskFile(
   taskId: number,
-  objectId: string[],
+  objectId: string[]
 ): Promise<string[]> {
   const downloadInfo = await request.post(
     `/api/v2/flow/flowInstances/${taskId}/tasks/structure-comparison/batchGetDownloadUrl`,
     {
-      data: objectId,
-    },
+      data: objectId
+    }
   );
   return downloadInfo?.data?.contents ?? [];
 }
@@ -507,16 +559,16 @@ export async function getStructureComparisonTaskFile(
  */
 export async function getPartitionPlanTables(
   sessionId: string,
-  databaseId: number,
+  databaseId: number
 ): Promise<IResponseData<IPartitionPlanTable>> {
   const res = await request.get(
     `/api/v2/connect/sessions/${sessionId}/databases/${databaseId}/candidatePartitionPlanTables`,
     {
       params: {
         sessionId,
-        databaseId,
-      },
-    },
+        databaseId
+      }
+    }
   );
   return res?.data;
 }
@@ -527,7 +579,7 @@ export async function getPartitionPlanTables(
 export async function getPartitionPlanKeyDataTypes(
   sessionId: string,
   databaseId: number,
-  tableName: string,
+  tableName: string
 ): Promise<IResponseData<IPartitionPlanKeyType>> {
   const res = await request.get(
     `/api/v2/connect/sessions/${sessionId}/databases/${databaseId}/candidatePartitionPlanTables/${tableName}/getPartitionKeyDataTypes`,
@@ -535,9 +587,9 @@ export async function getPartitionPlanKeyDataTypes(
       params: {
         sessionId,
         databaseId,
-        tableName,
-      },
-    },
+        tableName
+      }
+    }
   );
   return res?.data;
 }
@@ -545,14 +597,16 @@ export async function getPartitionPlanKeyDataTypes(
 /**
  * 查询分区策略详情
  */
-export async function getPartitionPlan(taskId: number): Promise<IPartitionPlan> {
+export async function getPartitionPlan(
+  taskId: number
+): Promise<IPartitionPlan> {
   const res = await request.get(
     `/api/v2/flow/flowInstances/${taskId}/tasks/partitionPlans/getDetail`,
     {
       params: {
-        id: taskId,
-      },
-    },
+        id: taskId
+      }
+    }
   );
   return res?.data;
 }
@@ -564,15 +618,15 @@ export async function startShadowSyncAnalysis(
   databaseId: number,
   connectionId: number,
   originTableNames: string[],
-  destTableNames: string[],
+  destTableNames: string[]
 ) {
   const result = await request.post('/api/v2/schema-sync/shadowTableSyncs', {
     data: {
       connectionId,
       databaseId,
       originTableNames,
-      destTableNames,
-    },
+      destTableNames
+    }
   });
   return result?.data;
 }
@@ -580,9 +634,11 @@ export async function startShadowSyncAnalysis(
  * 获取结构同步任务的结果
  */
 export async function getShadowSyncAnalysisResult(
-  taskId: string,
+  taskId: string
 ): Promise<IShadowSyncAnalysisResult> {
-  const result = await request.get(`/api/v2/schema-sync/shadowTableSyncs/${taskId}`);
+  const result = await request.get(
+    `/api/v2/schema-sync/shadowTableSyncs/${taskId}`
+  );
   return result?.data;
 }
 
@@ -591,10 +647,10 @@ export async function getShadowSyncAnalysisResult(
  */
 export async function getShadowSyncAnalysisRecordResult(
   taskId: string,
-  recordId: number,
+  recordId: number
 ): Promise<IShadowSyncAnalysisResult['tables'][number]> {
   const result = await request.get(
-    `/api/v2/schema-sync/shadowTableSyncs/${taskId}/tables/${recordId}`,
+    `/api/v2/schema-sync/shadowTableSyncs/${taskId}/tables/${recordId}`
   );
   return result?.data;
 }
@@ -602,22 +658,24 @@ export async function getShadowSyncAnalysisRecordResult(
 export async function setShadowSyncRecordStatus(
   taskId: string,
   tableComparingIds: number[],
-  skip: boolean,
+  skip: boolean
 ) {
   const res = await request.post(
     `/api/v2/schema-sync/shadowTableSyncs/${taskId}/tables/batchSetSkipped`,
     {
       data: {
         setSkip: skip,
-        tableComparingIds,
-      },
-    },
+        tableComparingIds
+      }
+    }
   );
   return res?.data?.contents;
 }
 
 export async function getFlowSQLLintResult(flowId: number, nodeId: number) {
-  const res = await request.get(`/api/v2/flow/flowInstances/${flowId}/tasks/${nodeId}/result`);
+  const res = await request.get(
+    `/api/v2/flow/flowInstances/${flowId}/tasks/${nodeId}/result`
+  );
   return res?.data?.contents?.[0];
 }
 
@@ -629,10 +687,10 @@ export async function getDataArchiveSubTask(
   params?: {
     page?: number;
     size?: number;
-  },
+  }
 ): Promise<IResponseData<ICycleSubTaskRecord>> {
   const res = await request.get(`/api/v2/schedule/schedules/${taskId}/tasks`, {
-    params,
+    params
   });
   return res?.data;
 }
@@ -642,28 +700,43 @@ export async function getDataArchiveSubTask(
  */
 export async function getScheduleTaskDetail(
   taskId: number,
-  jobId: number,
+  jobId: number
 ): Promise<ICycleTaskJobRecord<ISchemaChangeRecord[]>> {
-  const res = await request.get(`/api/v2/schedule/schedules/${taskId}/tasks/${jobId}`);
+  const res = await request.get(
+    `/api/v2/schedule/schedules/${taskId}/tasks/${jobId}`
+  );
   return res?.data;
 }
 
 /**
  * 更新分区计划
  */
-export async function rollbackDataArchiveSubTask(taskId: number, subTaskId): Promise<boolean> {
-  const res = await request.put(`/api/v2/schedule/schedules/${taskId}/tasks/${subTaskId}/rollback`);
-  return !!res?.data;
-}
-
-export async function startDataArchiveSubTask(taskId: number, subTaskId): Promise<boolean> {
-  const res = await request.put(`/api/v2/schedule/schedules/${taskId}/tasks/${subTaskId}/start`);
-  return !!res?.data;
-}
-
-export async function stopDataArchiveSubTask(taskId: number, subTaskId): Promise<boolean> {
+export async function rollbackDataArchiveSubTask(
+  taskId: number,
+  subTaskId
+): Promise<boolean> {
   const res = await request.put(
-    `/api/v2/schedule/schedules/${taskId}/tasks/${subTaskId}/interrupt`,
+    `/api/v2/schedule/schedules/${taskId}/tasks/${subTaskId}/rollback`
+  );
+  return !!res?.data;
+}
+
+export async function startDataArchiveSubTask(
+  taskId: number,
+  subTaskId
+): Promise<boolean> {
+  const res = await request.put(
+    `/api/v2/schedule/schedules/${taskId}/tasks/${subTaskId}/start`
+  );
+  return !!res?.data;
+}
+
+export async function stopDataArchiveSubTask(
+  taskId: number,
+  subTaskId
+): Promise<boolean> {
+  const res = await request.put(
+    `/api/v2/schedule/schedules/${taskId}/tasks/${subTaskId}/interrupt`
   );
   return !!res?.data;
 }
@@ -671,8 +744,12 @@ export async function stopDataArchiveSubTask(taskId: number, subTaskId): Promise
 /**
  * 查询无锁结构变更的子任务
  */
-export async function getSubTask(id: number): Promise<IResponseData<ISubTaskRecords>> {
-  const res = await request.get(`/api/v2/flow/flowInstances/${id}/tasks/result`);
+export async function getSubTask(
+  id: number
+): Promise<IResponseData<ISubTaskRecords>> {
+  const res = await request.get(
+    `/api/v2/flow/flowInstances/${id}/tasks/result`
+  );
   return res?.data;
 }
 
@@ -688,20 +765,24 @@ export async function swapTableName(taskId: number): Promise<boolean> {
  * 获取数据源用户列表
  */
 export async function getDatasourceUsers(
-  datasourceId: number,
+  datasourceId: number
 ): Promise<IResponseData<IDatasourceUser>> {
-  const res = await request.get(`/api/v2/datasource/datasources/${datasourceId}/users`);
+  const res = await request.get(
+    `/api/v2/datasource/datasources/${datasourceId}/users`
+  );
   return res?.data;
 }
 
 /**
  * 查询项目列表
  */
-export async function getProjectList(archived: boolean): Promise<IResponseData<IProject>> {
+export async function getProjectList(
+  archived: boolean
+): Promise<IResponseData<IProject>> {
   const res = await request.get('/api/v2/collaboration/projects/basic', {
     params: {
-      archived,
-    },
+      archived
+    }
   });
   return res?.data;
 }
@@ -714,7 +795,9 @@ export async function getLockDatabaseUserRequired(databaseId: number): Promise<{
   isDbEnableLockPriorityFlagSet: boolean; // 是否能锁表
   databaseId: number;
 }> {
-  const res = await request.get(`/api/v2/osc/lockDatabaseUserRequired/${databaseId}`);
+  const res = await request.get(
+    `/api/v2/osc/lockDatabaseUserRequired/${databaseId}`
+  );
   return res?.data;
 }
 /**
@@ -725,11 +808,14 @@ export async function updateLimiterConfig(
   data: {
     rowLimit?: number;
     dataSizeLimit?: number;
-  },
+  }
 ): Promise<boolean> {
-  const res = await request.put(`/api/v2/schedule/schedules/${taskId}/dlmRateLimitConfiguration`, {
-    data,
-  });
+  const res = await request.put(
+    `/api/v2/schedule/schedules/${taskId}/dlmRateLimitConfiguration`,
+    {
+      data
+    }
+  );
   return !!res?.data;
 }
 
@@ -741,13 +827,13 @@ export async function updateThrottleConfig(
   rateLimitConfig: {
     rowLimit?: number;
     dataSizeLimit?: number;
-  },
+  }
 ): Promise<boolean> {
   const res = await request.post(`/api/v2/osc/updateRateLimitConfig`, {
     data: {
       flowInstanceId,
-      rateLimitConfig,
-    },
+      rateLimitConfig
+    }
   });
   return !!res?.data;
 }
@@ -764,11 +850,14 @@ export async function getStructrueComparison(
     operationType?: EOperationType;
     page?: number;
     size?: number;
-  },
+  }
 ): Promise<IComparisonResultData> {
-  const res = await request.get(`/api/v2/schema-sync/structureComparison/${taskId}`, {
-    params,
-  });
+  const res = await request.get(
+    `/api/v2/schema-sync/structureComparison/${taskId}`,
+    {
+      params
+    }
+  );
   return res?.data;
 }
 /**
@@ -779,10 +868,10 @@ export async function getStructrueComparison(
  */
 export async function getStructrueComparisonDetail(
   taskId: number,
-  structureComparisonId: number,
+  structureComparisonId: number
 ): Promise<IStructrueComparisonDetail> {
   const res = await request.get(
-    `/api/v2/schema-sync/structureComparison/${taskId}/${structureComparisonId}`,
+    `/api/v2/schema-sync/structureComparison/${taskId}/${structureComparisonId}`
   );
   return res?.data;
 }
@@ -791,7 +880,9 @@ export async function getStructrueComparisonDetail(
  * 重试
  * 无锁结构变更 执行异常时发起重试
  */
-export async function againTask(data: Partial<AgainTaskRecord>): Promise<number> {
+export async function againTask(
+  data: Partial<AgainTaskRecord>
+): Promise<number> {
   const res = await request.post(`/api/v2/osc/${data.id}/resume`);
 
   return res?.successful;
@@ -809,7 +900,7 @@ export async function queryOmsWorkerInstance(): Promise<{
   if (res.successful) {
     return {
       successful: res.successful,
-      data: JSON.parse(res.data || {}),
+      data: JSON.parse(res.data || {})
     };
   }
   return res;
@@ -825,7 +916,7 @@ export async function exportSchedulesTask(params: {
   scheduleType: TaskType;
 }): Promise<string> {
   const res = await request.post(`/api/v2/export/exportSchedule`, {
-    data: params,
+    data: params
   });
   return res?.data;
 }
@@ -838,7 +929,7 @@ export async function getExportListView(params: {
   scheduleType: TaskType;
 }): Promise<ScheduleExportListView[]> {
   const res = await request.post(`/api/v2/export/getExportListView`, {
-    data: params,
+    data: params
   });
   return res?.data;
 }
@@ -847,8 +938,12 @@ export async function getExportListView(params: {
  * 获取导出任务的结果
  * @returns
  */
-export async function getExportSchedulesResult(exportId: number): Promise<FileExportResponse> {
-  const res = await request.get(`/api/v2/export/getExportResult?exportId=${exportId}`);
+export async function getExportSchedulesResult(
+  exportId: number
+): Promise<FileExportResponse> {
+  const res = await request.get(
+    `/api/v2/export/getExportResult?exportId=${exportId}`
+  );
   return res?.data;
 }
 
@@ -856,8 +951,14 @@ export async function getExportSchedulesResult(exportId: number): Promise<FileEx
  * 获取导出任务的日志
  * @returns
  */
-export async function getExportTaskLog({ exportId }: { exportId: string }): Promise<string> {
-  const res = await request.get(`/api/v2/export/getExportLog?exportId=${exportId}`);
+export async function getExportTaskLog({
+  exportId
+}: {
+  exportId: string;
+}): Promise<string> {
+  const res = await request.get(
+    `/api/v2/export/getExportLog?exportId=${exportId}`
+  );
   return res?.data;
 }
 
@@ -865,10 +966,10 @@ export async function getExportTaskLog({ exportId }: { exportId: string }): Prom
  * 提交预览导入任务
  */
 export async function startSchedulePreviewTask(
-  params: IScheduleTaskImportRequest,
+  params: IScheduleTaskImportRequest
 ): Promise<string> {
   const res = await request.post('/api/v2/import/startSchedulePreviewTask', {
-    data: params,
+    data: params
   });
   return res?.data;
 }
@@ -877,11 +978,14 @@ export async function startSchedulePreviewTask(
  * 预览详情
  */
 export async function getSchedulePreviewResult(
-  previewId: string,
+  previewId: string
 ): Promise<IImportScheduleTaskView[] | { errMsg: string; isError: boolean }> {
-  const res = await request.get(`/api/v2/import/getSchedulePreviewResult?previewId=${previewId}`, {
-    params: { ignoreError: true },
-  });
+  const res = await request.get(
+    `/api/v2/import/getSchedulePreviewResult?previewId=${previewId}`,
+    {
+      params: { ignoreError: true }
+    }
+  );
   if (res?.isError) {
     return res;
   }
@@ -891,9 +995,11 @@ export async function getSchedulePreviewResult(
 /**
  * 发起导入
  */
-export async function startScheduleImportTask(params: IScheduleTaskImportRequest): Promise<string> {
+export async function startScheduleImportTask(
+  params: IScheduleTaskImportRequest
+): Promise<string> {
   const res = await request.post(`/api/v2/import/startScheduleImportTask`, {
-    data: params,
+    data: params
   });
   return res?.data;
 }
@@ -901,9 +1007,11 @@ export async function startScheduleImportTask(params: IScheduleTaskImportRequest
 /**
  * 导入详情
  */
-export async function getScheduleImportResult(importTaskId: string): Promise<IImportTaskResult[]> {
+export async function getScheduleImportResult(
+  importTaskId: string
+): Promise<IImportTaskResult[]> {
   const res = await request.get(
-    `/api/v2/import/getScheduleImportResult?importTaskId=${importTaskId}`,
+    `/api/v2/import/getScheduleImportResult?importTaskId=${importTaskId}`
   );
   return res?.data;
 }
@@ -911,8 +1019,12 @@ export async function getScheduleImportResult(importTaskId: string): Promise<IIm
 /**
  * 导入日志
  */
-export async function getScheduleImportLog(importTaskId: string): Promise<string> {
-  const res = await request.get(`/api/v2/import/getScheduleImportLog?importTaskId=${importTaskId}`);
+export async function getScheduleImportLog(
+  importTaskId: string
+): Promise<string> {
+  const res = await request.get(
+    `/api/v2/import/getScheduleImportLog?importTaskId=${importTaskId}`
+  );
   return res?.data;
 }
 
@@ -921,9 +1033,11 @@ export async function getScheduleImportLog(importTaskId: string): Promise<string
 /**
  * 工单任务终止-发起
  */
-export async function cancelFlowInstance(flowInstanceId: number[]): Promise<string> {
+export async function cancelFlowInstance(
+  flowInstanceId: number[]
+): Promise<string> {
   const res = await request.post(`/api/v2/flow/flowInstances/asyncCancel`, {
-    data: flowInstanceId,
+    data: flowInstanceId
   });
   return res?.data;
 }
@@ -932,10 +1046,10 @@ export async function cancelFlowInstance(flowInstanceId: number[]): Promise<stri
  * 工单任务终止-查看
  */
 export async function getBatchCancelResult(
-  terminateId: string,
+  terminateId: string
 ): Promise<IBatchTerminateFlowResult[]> {
   const res = await request.get(
-    `/api/v2/flow/flowInstances/asyncCancelResult?terminateId=${terminateId}`,
+    `/api/v2/flow/flowInstances/asyncCancelResult?terminateId=${terminateId}`
   );
   return res?.data;
 }
@@ -945,7 +1059,7 @@ export async function getBatchCancelResult(
  */
 export async function getBatchCancelLog(terminateId: string): Promise<string> {
   const res = await request.get(
-    `/api/v2/flow/flowInstances/asyncCancelLog?terminateId=${terminateId}`,
+    `/api/v2/flow/flowInstances/asyncCancelLog?terminateId=${terminateId}`
   );
   return res?.data;
 }
@@ -953,9 +1067,11 @@ export async function getBatchCancelLog(terminateId: string): Promise<string> {
 /**
  * 计划任务终止-发起
  */
-export async function batchTerminateScheduleAndTask(data: IScheduleTerminateCmd): Promise<string> {
+export async function batchTerminateScheduleAndTask(
+  data: IScheduleTerminateCmd
+): Promise<string> {
   const res = await request.post(`/api/v2/schedule/schedules/asyncTerminate`, {
-    data,
+    data
   });
   return res?.data;
 }
@@ -964,10 +1080,10 @@ export async function batchTerminateScheduleAndTask(data: IScheduleTerminateCmd)
  * 工单任务终止-查看
  */
 export async function getTerminateScheduleResult(
-  terminateId: string,
+  terminateId: string
 ): Promise<IScheduleTerminateResult[]> {
   const res = await request.get(
-    `/api/v2/schedule/schedules/asyncTerminateResult?terminateId=${terminateId}`,
+    `/api/v2/schedule/schedules/asyncTerminateResult?terminateId=${terminateId}`
   );
   return res?.data;
 }
@@ -975,9 +1091,11 @@ export async function getTerminateScheduleResult(
 /**
  * 工单任务终止-查看日志
  */
-export async function getTerminateScheduleLog(terminateId: string): Promise<string> {
+export async function getTerminateScheduleLog(
+  terminateId: string
+): Promise<string> {
   const res = await request.get(
-    `/api/v2/schedule/schedules/asyncTerminateLog?terminateId=${terminateId}`,
+    `/api/v2/schedule/schedules/asyncTerminateLog?terminateId=${terminateId}`
   );
   return res?.data;
 }

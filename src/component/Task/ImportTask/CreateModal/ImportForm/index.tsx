@@ -15,7 +15,12 @@
  */
 
 import { formatMessage } from '@/util/intl';
-import React, { forwardRef, useContext, useEffect, useImperativeHandle } from 'react';
+import React, {
+  forwardRef,
+  useContext,
+  useEffect,
+  useImperativeHandle
+} from 'react';
 
 import {
   CsvColumnMapping,
@@ -23,7 +28,7 @@ import {
   ImportFormData,
   IMPORT_CONTENT,
   IMPORT_TYPE,
-  TaskDetail,
+  TaskDetail
 } from '@/d.ts';
 // compatible
 import type { ModalStore } from '@/store/modal';
@@ -56,8 +61,14 @@ interface IImportFormProps {
 const ImportForm: React.FC<IImportFormProps> = inject('modalStore')(
   observer(
     forwardRef(function (props, ref) {
-      const { modalStore, formData, formType, projectId, onFormValueChange, onSessionChange } =
-        props;
+      const {
+        modalStore,
+        formData,
+        formType,
+        projectId,
+        onFormValueChange,
+        onSessionChange
+      } = props;
       const { taskId } = formData;
       const [form] = useForm();
       const formConfigContext = useContext(FormConfigContext);
@@ -75,8 +86,8 @@ const ImportForm: React.FC<IImportFormProps> = inject('modalStore')(
             message.warning(
               formatMessage({
                 id: 'odc.ImportDrawer.ImportForm.FileUploading',
-                defaultMessage: '文件上传中',
-              }), //文件上传中
+                defaultMessage: '文件上传中'
+              }) //文件上传中
             );
             return;
           }
@@ -105,32 +116,37 @@ const ImportForm: React.FC<IImportFormProps> = inject('modalStore')(
 
       const getTaskDetailFoTaskId = async () => {
         if (taskId) {
-          const detailRes = (await getTaskDetail(taskId)) as TaskDetail<ImportFormData>;
+          const detailRes = (await getTaskDetail(
+            taskId
+          )) as TaskDetail<ImportFormData>;
           // 文件对象转换
-          const importFileName = detailRes?.parameters?.importFileName?.map((_f) => {
-            return {
-              status: 'done',
-              name: _f,
-              response: {
-                data: {
-                  fileName: _f,
-                  containsData: detailRes?.parameters?.transferData,
-                  containsSchema: detailRes?.parameters?.transferDDL,
-                  format: detailRes?.parameters?.dataTransferFormat,
-                },
-              },
-            };
-          });
+          const importFileName = detailRes?.parameters?.importFileName?.map(
+            (_f) => {
+              return {
+                status: 'done',
+                name: _f,
+                response: {
+                  data: {
+                    fileName: _f,
+                    containsData: detailRes?.parameters?.transferData,
+                    containsSchema: detailRes?.parameters?.transferDDL,
+                    format: detailRes?.parameters?.dataTransferFormat
+                  }
+                }
+              };
+            }
+          );
           const databaseId = detailRes?.database?.id;
           const executionStrategy = detailRes?.executionStrategy;
           const executionTime =
-            detailRes?.executionTime && detailRes?.executionTime > new Date().getTime()
+            detailRes?.executionTime &&
+            detailRes?.executionTime > new Date().getTime()
               ? dayjs(detailRes?.executionTime)
               : null;
           // importContent 转换
           const importContent = getExportContent(
             detailRes?.parameters?.transferDDL,
-            detailRes?.parameters?.transferData,
+            detailRes?.parameters?.transferData
           );
           const formData = {
             ...detailRes?.parameters,
@@ -141,13 +157,13 @@ const ImportForm: React.FC<IImportFormProps> = inject('modalStore')(
             importContent,
             ...detailRes?.parameters?.csvConfig,
             tableName: detailRes?.parameters?.exportDbObjects?.[0]?.objectName,
-            description: detailRes?.description,
+            description: detailRes?.description
           };
           form.setFieldsValue({
-            ...formData,
+            ...formData
           });
           onFormValueChange({
-            ...formData,
+            ...formData
           });
         }
       };
@@ -168,7 +184,9 @@ const ImportForm: React.FC<IImportFormProps> = inject('modalStore')(
       function renderFormItem() {
         switch (formType) {
           case 'fileSelecter': {
-            return <FileSelecterPanel isSingleImport={isSingleImport} form={form} />;
+            return (
+              <FileSelecterPanel isSingleImport={isSingleImport} form={form} />
+            );
           }
           case 'config': {
             return (
@@ -192,7 +210,8 @@ const ImportForm: React.FC<IImportFormProps> = inject('modalStore')(
           /**
            * 转换结构已存在的数据格式
            */
-          newValues.truncateTableBeforeImport = changedValues.replaceSchemaWhenExists;
+          newValues.truncateTableBeforeImport =
+            changedValues.replaceSchemaWhenExists;
         }
         if ('databaseName' in changedValues) {
           newValues.tableName = null;
@@ -208,7 +227,7 @@ const ImportForm: React.FC<IImportFormProps> = inject('modalStore')(
             'columnDelimiter',
             'lineSeparator',
             'importFileName',
-            'encoding',
+            'encoding'
           ].find((key) => {
             return key in changedValues;
           })
@@ -245,7 +264,7 @@ const ImportForm: React.FC<IImportFormProps> = inject('modalStore')(
         form.setFieldsValue(newValues);
         onFormValueChange({
           ...changedValues,
-          ...newValues,
+          ...newValues
         });
       }
       return (
@@ -263,15 +282,15 @@ const ImportForm: React.FC<IImportFormProps> = inject('modalStore')(
               updateFormData(newValues) {
                 form.setFieldsValue(newValues);
                 onFormValueChange(newValues);
-              },
+              }
             }}
           >
             {renderFormItem()}
           </FormContext.Provider>
         </Form>
       );
-    }),
-  ),
+    })
+  )
 );
 
 export default ImportForm;

@@ -14,7 +14,7 @@ import {
   IUpdateRoleParams,
   IUpdateRoleReturn,
   IDelRoleParams,
-  IDelRoleReturn,
+  IDelRoleReturn
 } from './index.type';
 
 class RoleService extends ServiceBase {
@@ -33,7 +33,11 @@ class RoleService extends ServiceBase {
     const role_uid = paramsData.role_uid;
     delete paramsData.role_uid;
 
-    return this.put<IUpdateRoleReturn>(`/v1/dms/roles/${role_uid}`, paramsData, options);
+    return this.put<IUpdateRoleReturn>(
+      `/v1/dms/roles/${role_uid}`,
+      paramsData,
+      options
+    );
   }
 
   public DelRole(params: IDelRoleParams, options?: AxiosRequestConfig) {
@@ -41,7 +45,11 @@ class RoleService extends ServiceBase {
     const role_uid = paramsData.role_uid;
     delete paramsData.role_uid;
 
-    return this.delete<IDelRoleReturn>(`/v1/dms/roles/${role_uid}`, paramsData, options);
+    return this.delete<IDelRoleReturn>(
+      `/v1/dms/roles/${role_uid}`,
+      paramsData,
+      options
+    );
   }
 }
 

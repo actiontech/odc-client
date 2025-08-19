@@ -45,14 +45,14 @@ const _MySQL: Language = {
     ['NUMERIC', true, true],
     ['DEC', true, true],
     'FLOAT',
-    'DOUBLE',
+    'DOUBLE'
   ],
   string: [
     ['CHAR', true, false],
     ['VARCHAR', true, false],
     ['BINARY', true, false],
     ['VARBINARY', true, false],
-    'ENUM',
+    'ENUM'
   ],
   bigType: [
     'BLOB',
@@ -62,9 +62,9 @@ const _MySQL: Language = {
     'TEXT',
     'TINYTEXT',
     'MEDIUMTEXT',
-    'LONGTEXT',
+    'LONGTEXT'
   ],
-  date: ['DATE', 'DATETIME', 'TIMESTAMP', 'TIME', 'YEAR'],
+  date: ['DATE', 'DATETIME', 'TIMESTAMP', 'TIME', 'YEAR']
 };
 
 const _Oracle: Language = {
@@ -73,14 +73,14 @@ const _Oracle: Language = {
     'INTEGER',
     'BINARY_FLOAT',
     'BINARY_DOUBLE',
-    ['FLOAT', true, false],
+    ['FLOAT', true, false]
   ],
   string: [
     ['CHAR', true, false],
     ['NCHAR', true, false],
     ['NVARCHAR2', true, false],
     ['VARCHAR', true, false],
-    ['VARCHAR2', true, false],
+    ['VARCHAR2', true, false]
   ],
   bigType: [['RAW', true, false], 'BLOB', 'CLOB'],
   date: [
@@ -89,8 +89,8 @@ const _Oracle: Language = {
     'TIMESTAMP WITH TIME ZONE',
     'TIMESTAMP WITH LOCAL TIME ZONE',
     'INTERVAL YEAR TO MONTH',
-    'INTERVAL DAY TO SECOND',
-  ],
+    'INTERVAL DAY TO SECOND'
+  ]
 };
 
 function getAllType(lang: Language) {
@@ -129,13 +129,13 @@ function getHaveDataLengthFunc(lang: Language) {
 export const MySQL = {
   ..._MySQL,
   allType: getAllType(_MySQL),
-  haveDataLength: getHaveDataLengthFunc(_MySQL),
+  haveDataLength: getHaveDataLengthFunc(_MySQL)
 };
 
 export const Oracle = {
   ..._Oracle,
   allType: getAllType(_Oracle),
-  haveDataLength: getHaveDataLengthFunc(_Oracle),
+  haveDataLength: getHaveDataLengthFunc(_Oracle)
 };
 
 /**
@@ -145,7 +145,7 @@ export function mergeDataType(
   dbMode: ConnectionMode,
   dataType: string,
   dataLength: string | number,
-  precision: string | number,
+  precision: string | number
 ) {
   if (!/\w/.test(dataType)) {
     /**
@@ -164,13 +164,13 @@ export function parseDataType(dataType: string) {
   const result = {
     dataType: null,
     dataLength: null,
-    precision: null,
+    precision: null
   };
   const arr = /([\w]+)(\(([\w\s]+)(,([\w\s]+))?\))?/.exec(dataType);
   return {
     dataType: arr[1],
     dataLength: arr[3],
-    precision: arr[5],
+    precision: arr[5]
   };
 }
 
@@ -178,7 +178,7 @@ class DataTypes {
   public dataTypes: Partial<Record<ConnectionMode, IDataTypes>> = {
     [ConnectionMode.OB_MYSQL]: MySQLDataTypes,
     [ConnectionMode.MYSQL]: MySQLDataTypes,
-    [ConnectionMode.OB_ORACLE]: OracleDataTypes,
+    [ConnectionMode.OB_ORACLE]: OracleDataTypes
   };
   public getParamsCount(mode: ConnectionMode, dataTypeName: string) {
     if (!dataTypeName) {

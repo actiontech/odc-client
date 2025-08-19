@@ -31,7 +31,7 @@ type ScriptId = string | number;
  */
 export async function getScriptList(): Promise<IScriptMeta[]> {
   const res = await request.get(`/api/v2/script/scripts`, {
-    params: { pageable: false },
+    params: { pageable: false }
   });
   return res?.data?.contents ?? [];
 }
@@ -48,7 +48,7 @@ export async function getScript(scriptId: ScriptId): Promise<IScript> {
  */
 export async function newScript(
   files: File[],
-  openApiName?: string,
+  openApiName?: string
 ): Promise<IScriptMeta[] | null> {
   const formData = new FormData();
   files.forEach((file) => {
@@ -59,13 +59,15 @@ export async function newScript(
     return result?.contents;
   }
   const result = await request.post(`/api/v2/script/scripts/batchUpload`, {
-    data: formData,
+    data: formData
   });
 
   return result?.data?.contents;
 }
 
-export async function downloadScript(scriptIds: ScriptId | ScriptId[]): Promise<void> {
+export async function downloadScript(
+  scriptIds: ScriptId | ScriptId[]
+): Promise<void> {
   const MAX_DOWNLOAD_COUNT = 10;
   scriptIds = isArray(scriptIds) ? scriptIds : [scriptIds];
   if (scriptIds.length > MAX_DOWNLOAD_COUNT) {
@@ -73,15 +75,15 @@ export async function downloadScript(scriptIds: ScriptId | ScriptId[]): Promise<
       formatMessage(
         {
           id: 'odc.common.network.script.YouCannotDownloadMoreThan',
-          defaultMessage: '不能同时下载超过 {MAXDOWNLOADCOUNT} 个文件',
+          defaultMessage: '不能同时下载超过 {MAXDOWNLOADCOUNT} 个文件'
         },
-        { MAXDOWNLOADCOUNT: MAX_DOWNLOAD_COUNT },
-      ), //`不能同时下载超过 ${MAX_DOWNLOAD_COUNT} 个文件`
+        { MAXDOWNLOADCOUNT: MAX_DOWNLOAD_COUNT }
+      ) //`不能同时下载超过 ${MAX_DOWNLOAD_COUNT} 个文件`
     );
     return;
   }
   const res = await request.post(`/api/v2/script/scripts/batchGetDownloadUrl`, {
-    data: scriptIds,
+    data: scriptIds
   });
 
   const urls = res?.data?.contents;
@@ -97,26 +99,32 @@ export async function downloadScript(scriptIds: ScriptId | ScriptId[]): Promise<
   }
 }
 
-export async function batchDownloadScript(scriptIds: ScriptId[]): Promise<void> {
+export async function batchDownloadScript(
+  scriptIds: ScriptId[]
+): Promise<void> {
   const MAX_DOWNLOAD_COUNT = 200;
   if (scriptIds.length > MAX_DOWNLOAD_COUNT) {
     Modal.error({
-      title: formatMessage({ id: 'src.common.network.7B0A4820', defaultMessage: '批量下载失败' }),
+      title: formatMessage({
+        id: 'src.common.network.7B0A4820',
+        defaultMessage: '批量下载失败'
+      }),
       content: formatMessage(
         {
           id: 'src.common.network.F390612A',
-          defaultMessage: '最多支持批量下载{MAX_DOWNLOAD_COUNT}个脚本，建议先取消选择部分脚本',
+          defaultMessage:
+            '最多支持批量下载{MAX_DOWNLOAD_COUNT}个脚本，建议先取消选择部分脚本'
         },
-        { MAX_DOWNLOAD_COUNT },
-      ),
+        { MAX_DOWNLOAD_COUNT }
+      )
     });
     return;
   }
   await request.post(`/api/v2/script/scripts/batchDownload`, {
     data: scriptIds,
     params: {
-      download: true,
-    },
+      download: true
+    }
   });
 }
 
@@ -126,13 +134,13 @@ export async function batchDownloadScript(scriptIds: ScriptId[]): Promise<void> 
 export async function updateScript(
   scriptId: ScriptId,
   content: string,
-  name: string,
+  name: string
 ): Promise<IScriptMeta | null> {
   const res = await request.put(`/api/v2/script/scripts/${scriptId}`, {
     data: {
       name,
-      content,
-    },
+      content
+    }
   });
 
   return res?.data?.scriptMeta;
@@ -143,7 +151,7 @@ export async function updateScript(
  */
 export async function deleteScript(scriptIds: ScriptId[]): Promise<boolean> {
   const res = await request.post(`/api/v2/script/scripts/batchDelete`, {
-    data: scriptIds,
+    data: scriptIds
   });
 
   return !!res?.data?.contents;

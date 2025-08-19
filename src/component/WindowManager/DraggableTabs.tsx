@@ -30,15 +30,15 @@ const cardTarget = {
 
     props.moveTabNode(dragKey, hoverKey);
     monitor.getItem().index = hoverKey;
-  },
+  }
 };
 const cardSource = {
   beginDrag(props) {
     return {
       id: props.id,
-      index: props.index,
+      index: props.index
     };
-  },
+  }
 };
 
 class TabNode extends React.PureComponent<any, any> {
@@ -50,20 +50,23 @@ class TabNode extends React.PureComponent<any, any> {
 }
 
 const WrapTabNode = DropTarget('DND_NODE', cardTarget, (connect) => ({
-  connectDropTarget: connect.dropTarget(),
+  connectDropTarget: connect.dropTarget()
 }))(
   DragSource('DND_NODE', cardSource, (connect, monitor) => ({
     connectDragSource: connect.dragSource(),
-    isDragging: monitor.isDragging(),
-  }))(TabNode),
+    isDragging: monitor.isDragging()
+  }))(TabNode)
 );
 
 interface IDraggableTabsProps extends TabsProps {
   moveTabNode: (dragKey: string, hoverKey: string) => void;
 }
-export default class DraggableTabs extends React.PureComponent<IDraggableTabsProps, any> {
+export default class DraggableTabs extends React.PureComponent<
+  IDraggableTabsProps,
+  any
+> {
   state = {
-    order: [],
+    order: []
   };
 
   moveTabNode = (dragKey, hoverKey) => {
@@ -83,7 +86,7 @@ export default class DraggableTabs extends React.PureComponent<IDraggableTabsPro
     newOrder.splice(hoverIndex, 0, dragKey);
 
     this.setState({
-      order: newOrder,
+      order: newOrder
     });
   };
 
@@ -92,7 +95,11 @@ export default class DraggableTabs extends React.PureComponent<IDraggableTabsPro
     return (
       <DefaultTabBar {...restProps}>
         {(node) => (
-          <WrapTabNode key={node.key} index={node.key} moveTabNode={this.props.moveTabNode}>
+          <WrapTabNode
+            key={node.key}
+            index={node.key}
+            moveTabNode={this.props.moveTabNode}
+          >
             {node}
           </WrapTabNode>
         )}

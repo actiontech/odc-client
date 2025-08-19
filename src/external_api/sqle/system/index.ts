@@ -9,7 +9,7 @@ import { AxiosRequestConfig } from 'axios';
 import {
   IGetSystemModuleRedDotsReturn,
   IGetSystemModuleStatusParams,
-  IGetSystemModuleStatusReturn,
+  IGetSystemModuleStatusReturn
 } from './index.type';
 
 class SystemService extends ServiceBase {
@@ -17,13 +17,20 @@ class SystemService extends ServiceBase {
     return this.get<IGetSystemModuleRedDotsReturn>(
       '/v1/system/module_red_dots',
       undefined,
-      options,
+      options
     );
   }
 
-  public getSystemModuleStatus(params: IGetSystemModuleStatusParams, options?: AxiosRequestConfig) {
+  public getSystemModuleStatus(
+    params: IGetSystemModuleStatusParams,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
-    return this.get<IGetSystemModuleStatusReturn>('/v1/system/module_status', paramsData, options);
+    return this.get<IGetSystemModuleStatusReturn>(
+      '/v1/system/module_status',
+      paramsData,
+      options
+    );
   }
 }
 

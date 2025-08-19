@@ -26,16 +26,16 @@ const IOStatistics: React.FC<{
     <Card
       title={formatMessage({
         id: 'workspace.window.sql.explain.tab.detail.card.io.title',
-        defaultMessage: 'I/O 统计',
+        defaultMessage: 'I/O 统计'
       })}
       headStyle={{
         padding: '0 16px',
         fontSize: 14,
-        border: 'none',
+        border: 'none'
       }}
       bodyStyle={{
         height: 158,
-        padding: 16,
+        padding: 16
       }}
       className={classNames([styles.card, styles.ioCard])}
     >
@@ -44,7 +44,7 @@ const IOStatistics: React.FC<{
           <Statistic
             title={formatMessage({
               id: 'workspace.window.sql.explain.tab.detail.card.io.rpcCount',
-              defaultMessage: 'RPC（次）',
+              defaultMessage: 'RPC（次）'
             })}
             value={sqlExecuteDetailToShow?.rpcCount}
             valueStyle={{ fontSize: '24px' }}
@@ -54,7 +54,7 @@ const IOStatistics: React.FC<{
           <Statistic
             title={formatMessage({
               id: 'workspace.window.sql.explain.tab.detail.card.io.physicalRead',
-              defaultMessage: '物理读（次）',
+              defaultMessage: '物理读（次）'
             })}
             value={sqlExecuteDetailToShow?.physicalRead}
             valueStyle={{ fontSize: '24px' }}
@@ -64,7 +64,7 @@ const IOStatistics: React.FC<{
           <Statistic
             title={formatMessage({
               id: 'workspace.window.sql.explain.tab.detail.card.io.ssstoreRead',
-              defaultMessage: 'SSSTORE 中读取（行）',
+              defaultMessage: 'SSSTORE 中读取（行）'
             })}
             value={sqlExecuteDetailToShow?.ssstoreRead}
             valueStyle={{ fontSize: '24px' }}

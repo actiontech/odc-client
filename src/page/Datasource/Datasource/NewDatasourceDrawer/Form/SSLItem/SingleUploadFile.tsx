@@ -32,10 +32,10 @@ interface IProps {
 const SingleUpload: React.FC<IProps> = function ({
   label = formatMessage({
     id: 'odc.AddConnectionForm.SSLItem.SingleUploadFile.UploadAPemFile',
-    defaultMessage: '上传 PEM 文件',
+    defaultMessage: '上传 PEM 文件'
   }), //上传 PEM 文件
   value,
-  onChange,
+  onChange
 }) {
   const [innerFile, _setInnerFile] = useState<UploadFile>(null);
   function setInnerFile(file: UploadFile) {
@@ -51,8 +51,8 @@ const SingleUpload: React.FC<IProps> = function ({
         uid: value,
         name: formatMessage({
           id: 'odc.AddConnectionForm.SSLItem.SingleUploadFile.UploadedFile',
-          defaultMessage: '已上传文件',
-        }), //已上传文件
+          defaultMessage: '已上传文件'
+        }) //已上传文件
       });
     } else {
       _setInnerFile(null);
@@ -66,7 +66,7 @@ const SingleUpload: React.FC<IProps> = function ({
       fileList={fileList}
       headers={{
         'X-XSRF-TOKEN': Cookies.get('XSRF-TOKEN') || '',
-        'Accept-Language': getLocale(),
+        'Accept-Language': getLocale()
       }}
       onChange={(info) => {
         const { file, fileList } = info;

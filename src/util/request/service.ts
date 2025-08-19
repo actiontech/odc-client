@@ -22,7 +22,7 @@ const service: AxiosInstance = axios.create({
   withCredentials: true,
   paramsSerializer: function (params) {
     return qs.stringify(params, { arrayFormat: 'repeat' });
-  },
+  }
 });
 
 // 错误处理器
@@ -35,20 +35,24 @@ const errorHandler = (error) => {
     // TODO：处理超时错误
     // @see aone/issue/22417174
     msg =
-      msg || formatMessage({ id: 'request.execute.ddl.timeout', defaultMessage: '执行 DDL 超时' });
+      msg ||
+      formatMessage({
+        id: 'request.execute.ddl.timeout',
+        defaultMessage: '执行 DDL 超时'
+      });
   } else if (!config?.params?.ignoreError) {
     notification.error({
       track: msg,
       supportRepeat: false,
       holdErrorTip: (config?.params as any)?.holdErrorTip,
-      requestId: data?.requestId,
+      requestId: data?.requestId
     });
   }
   return {
     errCode,
     errMsg: msg,
     isError: true,
-    data: null,
+    data: null
   };
 };
 
@@ -66,14 +70,14 @@ service.interceptors.request.use((config) => {
     params: {
       currentOrganizationId: login?.organizationId,
       ...extraParams,
-      ...config?.params,
+      ...config?.params
     },
     headers: {
       ...(config?.headers || {}),
       'X-XSRF-TOKEN': Cookies?.get('XSRF-TOKEN') || '',
       'Accept-Language': getLocale(),
-      'X-Request-ID': requestId,
-    },
+      'X-Request-ID': requestId
+    }
   };
 });
 
@@ -88,7 +92,7 @@ service.interceptors.response.use(
           status: response?.status,
           statusText: response?.statusText,
           // @ts-ignore
-          headers: (response?.headers as AxiosHeaders)?.toJSON(),
+          headers: (response?.headers as AxiosHeaders)?.toJSON()
         });
         await download(downloadResponse, (params as any)?.originalHref);
         return;
@@ -108,7 +112,7 @@ service.interceptors.response.use(
         errCode: 'FORMAT_ERROR',
         errMsg: formatMessage({
           id: 'odc.util.request.private.AnErrorOccurredWhileParsing',
-          defaultMessage: '解析结果出错，请检查部署配置',
+          defaultMessage: '解析结果出错，请检查部署配置'
         }),
         data: null,
         requestId,
@@ -118,9 +122,9 @@ service.interceptors.response.use(
             requestUrl: response?.config.url,
             responseStatusCode: status,
             responseContentType: response?.headers['content-type'],
-            reponseBody: text?.slice(0, 200),
-          },
-        },
+            reponseBody: text?.slice(0, 200)
+          }
+        }
       };
     }
     odc?.responseJsonResolver?.(
@@ -128,9 +132,9 @@ service.interceptors.response.use(
         status: response?.status,
         statusText: response?.statusText,
         // @ts-ignore
-        headers: (response?.headers as AxiosHeaders)?.toJSON(),
+        headers: (response?.headers as AxiosHeaders)?.toJSON()
       }),
-      json,
+      json
     );
     return response?.data;
   },
@@ -154,7 +158,7 @@ service.interceptors.response.use(
     }
     const result = errorHandler(error);
     return result;
-  },
+  }
 );
 
 export default service;

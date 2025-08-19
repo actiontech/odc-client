@@ -14,13 +14,13 @@ import {
   IListDataExportTaskSQLsParams,
   IListDataExportTaskSQLsReturn,
   IDownloadDataExportTaskSQLsParams,
-  IDownloadDataExportTaskParams,
+  IDownloadDataExportTaskParams
 } from './index.type';
 
 class DataExportTaskService extends ServiceBase {
   public BatchGetDataExportTask(
     params: IBatchGetDataExportTaskParams,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_uid = paramsData.project_uid;
@@ -29,11 +29,14 @@ class DataExportTaskService extends ServiceBase {
     return this.get<IBatchGetDataExportTaskReturn>(
       `/v1/dms/projects/${project_uid}/data_export_tasks`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public AddDataExportTask(params: IAddDataExportTaskParams, options?: AxiosRequestConfig) {
+  public AddDataExportTask(
+    params: IAddDataExportTaskParams,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_uid = paramsData.project_uid;
     delete paramsData.project_uid;
@@ -41,13 +44,13 @@ class DataExportTaskService extends ServiceBase {
     return this.post<IAddDataExportTaskReturn>(
       `/v1/dms/projects/${project_uid}/data_export_tasks`,
       paramsData,
-      options,
+      options
     );
   }
 
   public ListDataExportTaskSQLs(
     params: IListDataExportTaskSQLsParams,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_uid = paramsData.project_uid;
@@ -59,13 +62,13 @@ class DataExportTaskService extends ServiceBase {
     return this.get<IListDataExportTaskSQLsReturn>(
       `/v1/dms/projects/${project_uid}/data_export_tasks/${data_export_task_uid}/data_export_task_sqls`,
       paramsData,
-      options,
+      options
     );
   }
 
   public DownloadDataExportTaskSQLs(
     params: IDownloadDataExportTaskSQLsParams,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_uid = paramsData.project_uid;
@@ -77,13 +80,13 @@ class DataExportTaskService extends ServiceBase {
     return this.get(
       `/v1/dms/projects/${project_uid}/data_export_tasks/${data_export_task_uid}/data_export_task_sqls/download`,
       paramsData,
-      options,
+      options
     );
   }
 
   public DownloadDataExportTask(
     params: IDownloadDataExportTaskParams,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_uid = paramsData.project_uid;
@@ -95,7 +98,7 @@ class DataExportTaskService extends ServiceBase {
     return this.get(
       `/v1/dms/projects/${project_uid}/data_export_tasks/${data_export_task_uid}/download`,
       paramsData,
-      options,
+      options
     );
   }
 }

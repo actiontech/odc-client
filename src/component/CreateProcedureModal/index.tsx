@@ -38,7 +38,7 @@ interface IProps {
 
 const CreateProcedureModal: React.FC<IProps> = inject(
   'modalStore',
-  'sessionManagerStore',
+  'sessionManagerStore'
 )(
   observer((props) => {
     const { modalStore } = props;
@@ -56,28 +56,33 @@ const CreateProcedureModal: React.FC<IProps> = inject(
       Modal.confirm({
         title: formatMessage({
           id: 'odc.component.CreateProcedureModal.ConfirmToClose',
-          defaultMessage: '确认关闭',
+          defaultMessage: '确认关闭'
         }), // 确认关闭
         content: formatMessage({
           id: 'odc.component.CreateProcedureModal.CurrentPopUpDataWill',
-          defaultMessage: '当前弹窗数据将清空',
+          defaultMessage: '当前弹窗数据将清空'
         }), // 当前弹窗数据将清空
         onOk: () => {
           modalStore.changeCreateProcedureModalVisible(false);
-        },
+        }
       });
     }, [modalStore]);
 
     const onSave = useCallback(
       async (prod: IProcedure) => {
-        const sql = await getProcedureCreateSQL(prod.proName, prod, sessionId, dbName);
+        const sql = await getProcedureCreateSQL(
+          prod.proName,
+          prod,
+          sessionId,
+          dbName
+        );
         if (!sql) {
           return;
         }
         await openCreateProcedurePage(sql, session?.odcDatabase?.id, dbName);
         modalStore.changeCreateProcedureModalVisible(false);
       },
-      [modalStore, sessionId, dbName],
+      [modalStore, sessionId, dbName]
     );
 
     const save = useCallback(async () => {
@@ -91,8 +96,8 @@ const CreateProcedureModal: React.FC<IProps> = inject(
         message.error(
           formatMessage({
             id: 'workspace.window.createFunction.params.validation',
-            defaultMessage: '请填写参数名称',
-          }),
+            defaultMessage: '请填写参数名称'
+          })
         );
         return;
       }
@@ -102,8 +107,8 @@ const CreateProcedureModal: React.FC<IProps> = inject(
         message.error(
           formatMessage({
             id: 'workspace.window.createFunction.dataType.validation',
-            defaultMessage: '请填写数据类型',
-          }),
+            defaultMessage: '请填写数据类型'
+          })
         );
         return;
       }
@@ -122,7 +127,7 @@ const CreateProcedureModal: React.FC<IProps> = inject(
         destroyOnClose={true}
         title={formatMessage({
           id: 'workspace.window.createProcedure.modal.title',
-          defaultMessage: '新建存储过程',
+          defaultMessage: '新建存储过程'
         })}
         open={visible}
         onOk={save}
@@ -134,33 +139,36 @@ const CreateProcedureModal: React.FC<IProps> = inject(
               name="proName"
               label={formatMessage({
                 id: 'workspace.window.createProcedure.proName',
-                defaultMessage: '存储过程名称',
+                defaultMessage: '存储过程名称'
               })}
               rules={[
                 {
                   required: true,
                   message: formatMessage({
                     id: 'workspace.window.createProcedure.proName.validation',
-                    defaultMessage: '请输入存储过程名称',
-                  }),
-                },
+                    defaultMessage: '请输入存储过程名称'
+                  })
+                }
               ]}
             >
               <Input
                 style={{
-                  width: 320,
+                  width: 320
                 }}
                 placeholder={formatMessage({
                   id: 'workspace.window.createProcedure.proName.placeholder',
-                  defaultMessage: '请输入存储过程名称',
+                  defaultMessage: '请输入存储过程名称'
                 })}
               />
             </Form.Item>
-            <ExtraOptions dbType={DbObjectType.procedure} connectType={session?.connection?.type} />
+            <ExtraOptions
+              dbType={DbObjectType.procedure}
+              connectType={session?.connection?.type}
+            />
             <Form.Item
               label={formatMessage({
                 id: 'workspace.window.createFunction.params',
-                defaultMessage: '参数',
+                defaultMessage: '参数'
               })}
             >
               {session ? (
@@ -176,7 +184,7 @@ const CreateProcedureModal: React.FC<IProps> = inject(
         </Spin>
       </Modal>
     );
-  }),
+  })
 );
 
 export default CreateProcedureModal;

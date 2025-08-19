@@ -45,7 +45,7 @@ import {
   IUpdateWeChatConfigurationParams,
   IUpdateWeChatConfigurationReturn,
   ITestWeChatConfigurationParams,
-  ITestWeChatConfigurationReturn,
+  ITestWeChatConfigurationReturn
 } from './index.type';
 
 class ConfigurationService extends ServiceBase {
@@ -53,52 +53,60 @@ class ConfigurationService extends ServiceBase {
     return this.get<IGetFeishuConfigurationReturn>(
       '/v1/dms/configurations/feishu',
       undefined,
-      options,
+      options
     );
   }
 
   public UpdateFeishuConfiguration(
     params: IUpdateFeishuConfigurationParams,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     return this.patch<IUpdateFeishuConfigurationReturn>(
       '/v1/dms/configurations/feishu',
       paramsData,
-      options,
+      options
     );
   }
 
   public TestFeishuConfiguration(
     params: ITestFeishuConfigurationParams,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     return this.post<ITestFeishuConfigurationReturn>(
       '/v1/dms/configurations/feishu/test',
       paramsData,
-      options,
+      options
     );
   }
 
   public GetLDAPConfiguration(options?: AxiosRequestConfig) {
-    return this.get<IGetLDAPConfigurationReturn>('/v1/dms/configurations/ldap', undefined, options);
+    return this.get<IGetLDAPConfigurationReturn>(
+      '/v1/dms/configurations/ldap',
+      undefined,
+      options
+    );
   }
 
   public UpdateLDAPConfiguration(
     params: IUpdateLDAPConfigurationParams,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     return this.patch<IUpdateLDAPConfigurationReturn>(
       '/v1/dms/configurations/ldap',
       paramsData,
-      options,
+      options
     );
   }
 
   public GetLicense(options?: AxiosRequestConfig) {
-    return this.get<IGetLicenseReturn>('/v1/dms/configurations/license', undefined, options);
+    return this.get<IGetLicenseReturn>(
+      '/v1/dms/configurations/license',
+      undefined,
+      options
+    );
   }
 
   public SetLicense(params: ISetLicenseParams, options?: AxiosRequestConfig) {
@@ -107,7 +115,7 @@ class ConfigurationService extends ServiceBase {
     config.headers = {
       ...headers,
 
-      'Content-Type': 'multipart/form-data',
+      'Content-Type': 'multipart/form-data'
     };
 
     const paramsData = new FormData();
@@ -116,16 +124,23 @@ class ConfigurationService extends ServiceBase {
       paramsData.append('license_file', params.license_file as any);
     }
 
-    return this.post<ISetLicenseReturn>('/v1/dms/configurations/license', paramsData, config);
+    return this.post<ISetLicenseReturn>(
+      '/v1/dms/configurations/license',
+      paramsData,
+      config
+    );
   }
 
-  public CheckLicense(params: ICheckLicenseParams, options?: AxiosRequestConfig) {
+  public CheckLicense(
+    params: ICheckLicenseParams,
+    options?: AxiosRequestConfig
+  ) {
     const config = options || {};
     const headers = config.headers ? config.headers : {};
     config.headers = {
       ...headers,
 
-      'Content-Type': 'multipart/form-data',
+      'Content-Type': 'multipart/form-data'
     };
 
     const paramsData = new FormData();
@@ -137,7 +152,7 @@ class ConfigurationService extends ServiceBase {
     return this.post<ICheckLicenseReturn>(
       '/v1/dms/configurations/license/check',
       paramsData,
-      config,
+      config
     );
   }
 
@@ -149,93 +164,111 @@ class ConfigurationService extends ServiceBase {
     return this.get<IGetLicenseUsageReturn>(
       '/v1/dms/configurations/license/usage',
       undefined,
-      options,
+      options
     );
   }
 
   public UpdateLoginConfiguration(
     params: IUpdateLoginConfigurationParams,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     return this.patch<IUpdateLoginConfigurationReturn>(
       '/v1/dms/configurations/login',
       paramsData,
-      options,
+      options
     );
   }
 
   public GetLoginTips(options?: AxiosRequestConfig) {
-    return this.get<IGetLoginTipsReturn>('/v1/dms/configurations/login/tips', undefined, options);
+    return this.get<IGetLoginTipsReturn>(
+      '/v1/dms/configurations/login/tips',
+      undefined,
+      options
+    );
   }
 
   public GetOauth2Configuration(options?: AxiosRequestConfig) {
     return this.get<IGetOauth2ConfigurationReturn>(
       '/v1/dms/configurations/oauth2',
       undefined,
-      options,
+      options
     );
   }
 
   public UpdateOauth2Configuration(
     params: IUpdateOauth2ConfigurationParams,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     return this.patch<IUpdateOauth2ConfigurationReturn>(
       '/v1/dms/configurations/oauth2',
       paramsData,
-      options,
+      options
     );
   }
 
   public GetSmsConfiguration(options?: AxiosRequestConfig) {
-    return this.get<IGetSmsConfigurationReturn>('/v1/dms/configurations/sms', undefined, options);
+    return this.get<IGetSmsConfigurationReturn>(
+      '/v1/dms/configurations/sms',
+      undefined,
+      options
+    );
   }
 
   public UpdateSmsConfiguration(
     params: IUpdateSmsConfigurationParams,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     return this.patch<IUpdateSmsConfigurationReturn>(
       '/v1/dms/configurations/sms',
       paramsData,
-      options,
+      options
     );
   }
 
-  public TestSmsConfiguration(params: ITestSmsConfigurationParams, options?: AxiosRequestConfig) {
+  public TestSmsConfiguration(
+    params: ITestSmsConfigurationParams,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     return this.post<ITestSmsConfigurationReturn>(
       '/v1/dms/configurations/sms/test',
       paramsData,
-      options,
+      options
     );
   }
 
   public GetSMTPConfiguration(options?: AxiosRequestConfig) {
-    return this.get<IGetSMTPConfigurationReturn>('/v1/dms/configurations/smtp', undefined, options);
+    return this.get<IGetSMTPConfigurationReturn>(
+      '/v1/dms/configurations/smtp',
+      undefined,
+      options
+    );
   }
 
   public UpdateSMTPConfiguration(
     params: IUpdateSMTPConfigurationParams,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     return this.patch<IUpdateSMTPConfigurationReturn>(
       '/v1/dms/configurations/smtp',
       paramsData,
-      options,
+      options
     );
   }
 
-  public TestSMTPConfiguration(params: ITestSMTPConfigurationParams, options?: AxiosRequestConfig) {
+  public TestSMTPConfiguration(
+    params: ITestSMTPConfigurationParams,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     return this.post<ITestSMTPConfigurationReturn>(
       '/v1/dms/configurations/smtp/test',
       paramsData,
-      options,
+      options
     );
   }
 
@@ -243,19 +276,19 @@ class ConfigurationService extends ServiceBase {
     return this.get<IGetWebHookConfigurationReturn>(
       '/v1/dms/configurations/webhook',
       undefined,
-      options,
+      options
     );
   }
 
   public UpdateWebHookConfiguration(
     params: IUpdateWebHookConfigurationParams,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     return this.patch<IUpdateWebHookConfigurationReturn>(
       '/v1/dms/configurations/webhook',
       paramsData,
-      options,
+      options
     );
   }
 
@@ -263,7 +296,7 @@ class ConfigurationService extends ServiceBase {
     return this.post<ITestWebHookConfigurationReturn>(
       '/v1/dms/configurations/webhook/test',
       undefined,
-      options,
+      options
     );
   }
 
@@ -271,31 +304,31 @@ class ConfigurationService extends ServiceBase {
     return this.get<IGetWeChatConfigurationReturn>(
       '/v1/dms/configurations/wechat',
       undefined,
-      options,
+      options
     );
   }
 
   public UpdateWeChatConfiguration(
     params: IUpdateWeChatConfigurationParams,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     return this.patch<IUpdateWeChatConfigurationReturn>(
       '/v1/dms/configurations/wechat',
       paramsData,
-      options,
+      options
     );
   }
 
   public TestWeChatConfiguration(
     params: ITestWeChatConfigurationParams,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     return this.post<ITestWeChatConfigurationReturn>(
       '/v1/dms/configurations/wechat/test',
       paramsData,
-      options,
+      options
     );
   }
 }

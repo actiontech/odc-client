@@ -6,7 +6,7 @@ import {
   IGenericResp,
   IGetGatewayTipsReply,
   IGetGatewayReply,
-  IUpdateGatewayReq,
+  IUpdateGatewayReq
 } from '../common.type';
 
 export interface IListGatewaysParams {

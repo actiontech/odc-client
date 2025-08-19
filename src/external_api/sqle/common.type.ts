@@ -110,7 +110,7 @@ import {
   WorkflowResV2ExecModeEnum,
   WorkflowResV2ModeEnum,
   WorkflowStepResV2StateEnum,
-  WorkflowStepResV2TypeEnum,
+  WorkflowStepResV2TypeEnum
 } from './common.enum';
 
 export interface IBaseRes {

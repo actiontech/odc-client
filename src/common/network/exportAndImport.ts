@@ -25,7 +25,7 @@ import {
   ImportFormData,
   IMPORT_CONTENT,
   IMPORT_TYPE,
-  TaskType,
+  TaskType
 } from '@/d.ts';
 import odc from '@/plugins/odc';
 import request from '@/util/request';
@@ -35,7 +35,7 @@ import { isNil } from 'lodash';
 export async function getExportObjects(
   databaseId: number,
   type?: DbObjectType,
-  cid?: number,
+  cid?: number
 ): Promise<{
   [key in DbObjectType]: string[];
 }> {
@@ -43,8 +43,8 @@ export async function getExportObjects(
     params: {
       connectionId: cid,
       databaseId,
-      objectType: type,
-    },
+      objectType: type
+    }
   });
   const r = result?.data || {};
   Object.keys(r).forEach((key) => {
@@ -90,12 +90,12 @@ export async function createBatchExportTask(formData: ExportFormData) {
             columnSeparator: formData.columnSeparator,
             columnDelimiter: formData.columnDelimiter,
             lineSeparator: stringSeparatorToCRLF(formData.lineSeparator),
-            encoding: formData.encoding,
+            encoding: formData.encoding
           }
         : null,
     sysUser: formData.useSys ? formData.sysUser : null,
     sysPassword: formData.useSys ? encrypt(formData.sysUserPassword) : null,
-    overwriteSysConfig: formData.overwriteSysConfig,
+    overwriteSysConfig: formData.overwriteSysConfig
   };
   // 单表导入需要传递表名
   const ret = await request.post('/api/v2/flow/flowInstances/', {
@@ -108,9 +108,9 @@ export async function createBatchExportTask(formData: ExportFormData) {
       executionTime: formData?.executionTime,
       description: formData?.description,
       parameters: {
-        ...serverParams,
-      },
-    },
+        ...serverParams
+      }
+    }
   });
   return ret && ret.data;
 }
@@ -118,7 +118,7 @@ export async function createBatchExportTask(formData: ExportFormData) {
 export async function createBatchImportTask(
   formData: ImportFormData,
   tableName?: string,
-  csvColumnMappings?: CsvColumnMapping[],
+  csvColumnMappings?: CsvColumnMapping[]
 ) {
   let dataTransferFormat = formData.importFileName?.[0]?.response?.data?.format;
   /**
@@ -130,7 +130,8 @@ export async function createBatchImportTask(
    */
   const haveSkipDataType =
     importData &&
-    (IMPORT_TYPE.CSV == formData.fileType || formData.dataTransferFormat === FILE_DATA_TYPE.CSV);
+    (IMPORT_TYPE.CSV == formData.fileType ||
+      formData.dataTransferFormat === FILE_DATA_TYPE.CSV);
   const importStruct = formData.importContent !== IMPORT_CONTENT.DATA;
   const isSqlFileType = formData.fileType == IMPORT_TYPE.SQL;
   const isCsvFileType = formData.fileType == IMPORT_TYPE.CSV;
@@ -148,7 +149,9 @@ export async function createBatchImportTask(
     }),
     stopWhenError: formData.stopWhenError,
     fileType: formData.fileType,
-    transferDDL: !isNil(formData.importContent) && formData.importContent !== IMPORT_CONTENT.DATA,
+    transferDDL:
+      !isNil(formData.importContent) &&
+      formData.importContent !== IMPORT_CONTENT.DATA,
     transferData: formData.importContent !== IMPORT_CONTENT.STRUCT,
     sysUser: formData.useSys ? formData.sysUser : null,
     sysPassword: formData.useSys ? encrypt(formData.sysUserPassword) : null,
@@ -157,10 +160,10 @@ export async function createBatchImportTask(
       ? [
           {
             dbObjectType: DbObjectType.table,
-            objectName: tableName,
-          },
+            objectName: tableName
+          }
         ]
-      : null,
+      : null
   };
   /**
    * SQL文件不需要下列的参数
@@ -169,9 +172,13 @@ export async function createBatchImportTask(
     serverParams = Object.assign(serverParams, {
       ...serverParams,
       batchCommitNum: importData ? formData.batchCommitNum : undefined,
-      truncateTableBeforeImport: importData ? formData.truncateTableBeforeImport : undefined,
+      truncateTableBeforeImport: importData
+        ? formData.truncateTableBeforeImport
+        : undefined,
       skippedDataType: haveSkipDataType ? formData.skippedDataType : undefined,
-      replaceSchemaWhenExists: importStruct ? formData.replaceSchemaWhenExists : undefined,
+      replaceSchemaWhenExists: importStruct
+        ? formData.replaceSchemaWhenExists
+        : undefined
     });
   }
   if (isCsvFileType) {
@@ -184,9 +191,9 @@ export async function createBatchImportTask(
         columnDelimiter: formData.columnDelimiter,
         lineSeparator: stringSeparatorToCRLF(formData.lineSeparator),
         fileName: serverParams.importFileName?.[0],
-        encoding: serverParams.encoding,
+        encoding: serverParams.encoding
       },
-      csvColumnMappings,
+      csvColumnMappings
     });
   }
   const ret = await request.post('/api/v2/flow/flowInstances/', {
@@ -199,9 +206,9 @@ export async function createBatchImportTask(
       executionTime: formData?.executionTime,
       description: formData?.description,
       parameters: {
-        ...serverParams,
-      },
-    },
+        ...serverParams
+      }
+    }
   });
   return ret && ret.data;
 }
@@ -222,8 +229,8 @@ export async function getCsvFileInfo(params: {
   const ret = await request.post(`/api/v2/dataTransfer/getCsvFileInfo`, {
     data: {
       ...params,
-      lineSeparator: stringSeparatorToCRLF(params.lineSeparator),
-    },
+      lineSeparator: stringSeparatorToCRLF(params.lineSeparator)
+    }
   });
   return ret?.data;
 }
@@ -231,44 +238,47 @@ export async function getCsvFileInfo(params: {
 export async function deleteTask(taskId: number) {
   const res = await request.delete(`/api/v1/data/transfer/delete`, {
     data: {
-      taskIdList: [taskId],
-    },
+      taskIdList: [taskId]
+    }
   });
   return res?.data;
 }
 export async function killTask(taskId: number) {
   const res = await request.put(`/api/v1/data/transfer/cancel`, {
     data: {
-      taskIdList: [taskId],
-    },
+      taskIdList: [taskId]
+    }
   });
   return res?.data;
 }
 export async function retryTask(taskId: number) {
   const res = await request.put(`/api/v1/data/transfer/retry`, {
     data: {
-      taskIdList: [taskId],
-    },
+      taskIdList: [taskId]
+    }
   });
   return res?.data;
 }
 
 export async function getTaskInfoAndLog(
   taskId: number,
-  logType: DataTransferTaskLogType = DataTransferTaskLogType.ALL,
+  logType: DataTransferTaskLogType = DataTransferTaskLogType.ALL
 ) {
   const res = await request.get(`/api/v1/data/transfer/detail`, {
     params: {
       taskId,
-      logType,
-    },
+      logType
+    }
   });
   return res?.data;
 }
 
-export async function getImportFileMeta(filePath: string, fileType: IMPORT_TYPE) {
+export async function getImportFileMeta(
+  filePath: string,
+  fileType: IMPORT_TYPE
+) {
   const res = await request.get(`/api/v2/dataTransfer/getMetaInfo`, {
-    params: { fileName: filePath, fileType: fileType },
+    params: { fileName: filePath, fileType: fileType }
   });
   return res?.data;
 }

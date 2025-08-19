@@ -20,23 +20,32 @@ import { IODCSetting, ODCSettingGroup } from '../../config';
 import RadioItem from '../../Item/RadioItem';
 
 const accountGroup: ODCSettingGroup = {
-  label: formatMessage({ id: 'src.component.ODCSetting.config.01FFDFB6', defaultMessage: '账号' }), //'账号'
-  key: 'account',
+  label: formatMessage({
+    id: 'src.component.ODCSetting.config.01FFDFB6',
+    defaultMessage: '账号'
+  }), //'账号'
+  key: 'account'
 };
 const accountSpaceGroup: ODCSettingGroup = {
-  label: formatMessage({ id: 'src.component.ODCSetting.config.2D3DF155', defaultMessage: '空间' }), //'空间'
-  key: 'accountSpace',
+  label: formatMessage({
+    id: 'src.component.ODCSetting.config.2D3DF155',
+    defaultMessage: '空间'
+  }), //'空间'
+  key: 'accountSpace'
 };
 const accountPrivacyGroup: ODCSettingGroup = {
-  label: formatMessage({ id: 'src.component.ODCSetting.config.CE327E25', defaultMessage: '隐私' }), //'隐私'
-  key: 'accountPrivacy',
+  label: formatMessage({
+    id: 'src.component.ODCSetting.config.CE327E25',
+    defaultMessage: '隐私'
+  }), //'隐私'
+  key: 'accountPrivacy'
 };
 
 const accountSettings: IODCSetting[] = [
   {
     label: formatMessage({
       id: 'src.component.ODCSetting.config.099F3C40',
-      defaultMessage: '默认空间',
+      defaultMessage: '默认空间'
     }), //'默认空间'
     key: 'odc.account.defaultOrganizationType',
     locationKey: 'defaultOrganizationType',
@@ -51,28 +60,28 @@ const accountSettings: IODCSetting[] = [
             {
               label: formatMessage({
                 id: 'src.component.ODCSetting.config.A846B841',
-                defaultMessage: '团队空间',
+                defaultMessage: '团队空间'
               }), //'团队空间'
-              value: SpaceType.SYNERGY,
+              value: SpaceType.SYNERGY
             },
             {
               label: formatMessage({
                 id: 'src.component.ODCSetting.config.5C426BEE',
-                defaultMessage: '个人空间',
+                defaultMessage: '个人空间'
               }), //'个人空间'
-              value: SpaceType.PRIVATE,
-            },
+              value: SpaceType.PRIVATE
+            }
           ]}
           value={value}
           onChange={onChange}
         />
       );
-    },
+    }
   },
   {
     label: formatMessage({
       id: 'src.component.ODCSetting.config.7925A54D',
-      defaultMessage: '用户行为分析',
+      defaultMessage: '用户行为分析'
     }), //'用户行为分析'
     key: 'odc.account.userBehaviorAnalysisEnabled',
     locationKey: 'userBehaviorAnalysisEnabled',
@@ -87,24 +96,24 @@ const accountSettings: IODCSetting[] = [
             {
               label: formatMessage({
                 id: 'src.component.ODCSetting.config.E78E7A5E',
-                defaultMessage: '开启',
+                defaultMessage: '开启'
               }), //'开启'
-              value: 'true',
+              value: 'true'
             },
             {
               label: formatMessage({
                 id: 'src.component.ODCSetting.config.BE020520',
-                defaultMessage: '关闭',
+                defaultMessage: '关闭'
               }), //'关闭'
-              value: 'false',
-            },
+              value: 'false'
+            }
           ]}
           value={value}
           onChange={onChange}
         />
       );
-    },
-  },
+    }
+  }
 ];
 
 export default accountSettings;

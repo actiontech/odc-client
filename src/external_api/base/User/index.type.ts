@@ -15,7 +15,7 @@ import {
   IGetUserReply,
   IUpdateUserReq,
   IUserOpPermission,
-  IGetUserOpPermissionReply,
+  IGetUserOpPermissionReply
 } from '../common.type';
 
 export interface IListUsersParams {

@@ -1,6 +1,9 @@
 import { formatMessage } from '@/util/intl';
 import React, { useEffect, useState } from 'react';
-import type { FileExportResponse, ScheduleExportListView } from '@/d.ts/migrateTask';
+import type {
+  FileExportResponse,
+  ScheduleExportListView
+} from '@/d.ts/migrateTask';
 import { AsyncTaskType, TripartiteExportTaskStatus } from '@/d.ts/migrateTask';
 import { Button, notification, Typography, Space } from 'antd';
 import { createTaskManager } from '@/store/migrationTaskManager';
@@ -14,7 +17,7 @@ import {
   getBatchCancelLog,
   batchTerminateScheduleAndTask,
   getTerminateScheduleResult,
-  getTerminateScheduleLog,
+  getTerminateScheduleLog
 } from '@/common/network/task';
 import { LoadingOutlined } from '@ant-design/icons';
 import type { AsyncTaskModalConfig } from './hooks/useTaskTable';
@@ -23,7 +26,7 @@ import { TaskRecord, TaskRecordParameters, TaskType } from '@/d.ts';
 import {
   IBatchTerminateFlowResult,
   IScheduleTerminateCmd,
-  IScheduleTerminateResult,
+  IScheduleTerminateResult
 } from '@/d.ts/importTask';
 
 const SubmitTripartiteTaskButton = (props: {
@@ -66,13 +69,14 @@ const SubmitTripartiteTaskButton = (props: {
       getSubmitParams: () => {
         return {
           ids: props.tasks?.map((item) => item.id),
-          scheduleType: props.tasks?.[0]?.scheduleType,
+          scheduleType: props.tasks?.[0]?.scheduleType
         };
       },
       isTaskCompleted: (result: FileExportResponse) => {
-        return [TripartiteExportTaskStatus.SUCCESS, TripartiteExportTaskStatus.FAILED]?.includes(
-          result?.status,
-        );
+        return [
+          TripartiteExportTaskStatus.SUCCESS,
+          TripartiteExportTaskStatus.FAILED
+        ]?.includes(result?.status);
       },
       notificationHandler: {
         handleResult: (rawResult: FileExportResponse, exportId: string) => {
@@ -89,21 +93,22 @@ const SubmitTripartiteTaskButton = (props: {
               notification.success({
                 message: formatMessage({
                   id: 'src.component.Task.component.AsyncTaskOperationButton.410023EB',
-                  defaultMessage: '导出定时任务已完成',
+                  defaultMessage: '导出定时任务已完成'
                 }),
                 description: (
                   <Space direction="vertical">
                     <Typography.Text>
                       {formatMessage({
                         id: 'src.component.Task.component.AsyncTaskOperationButton.40B3DA3C',
-                        defaultMessage: '请妥善保存文件密钥，后续导入时需要使用:',
+                        defaultMessage:
+                          '请妥善保存文件密钥，后续导入时需要使用:'
                       })}
                     </Typography.Text>
                     <Space direction="vertical">
                       <span>
                         {formatMessage({
                           id: 'src.component.Task.component.AsyncTaskOperationButton.2F172E80',
-                          defaultMessage: '文件:',
+                          defaultMessage: '文件:'
                         })}
                         {rawResult.fileName}
                       </span>
@@ -111,12 +116,12 @@ const SubmitTripartiteTaskButton = (props: {
                         ellipsis={true}
                         style={{ width: 260 }}
                         copyable={{
-                          text: rawResult.secret,
+                          text: rawResult.secret
                         }}
                       >
                         {formatMessage({
                           id: 'src.component.Task.component.AsyncTaskOperationButton.726D13A8',
-                          defaultMessage: '密钥:',
+                          defaultMessage: '密钥:'
                         })}
 
                         {rawResult.secret}
@@ -125,7 +130,7 @@ const SubmitTripartiteTaskButton = (props: {
                   </Space>
                 ),
 
-                duration: null,
+                duration: null
               });
               props?.onReload?.();
               break;
@@ -138,13 +143,13 @@ const SubmitTripartiteTaskButton = (props: {
               notification.error({
                 message: formatMessage({
                   id: 'src.component.Task.component.AsyncTaskOperationButton.26B47A2E',
-                  defaultMessage: '导出定时任务失败',
+                  defaultMessage: '导出定时任务失败'
                 }),
                 description: (
                   <Typography.Text style={{ textAlign: 'center' }}>
                     {formatMessage({
                       id: 'src.component.Task.component.AsyncTaskOperationButton.45245510',
-                      defaultMessage: '如需了解导出详情，可',
+                      defaultMessage: '如需了解导出详情，可'
                     })}
 
                     <Typography.Link
@@ -153,17 +158,17 @@ const SubmitTripartiteTaskButton = (props: {
                     >
                       {formatMessage({
                         id: 'src.component.Task.component.AsyncTaskOperationButton.0FD76940',
-                        defaultMessage: '下载日志',
+                        defaultMessage: '下载日志'
                       })}
                     </Typography.Link>
                     {formatMessage({
                       id: 'src.component.Task.component.AsyncTaskOperationButton.D813FC16',
-                      defaultMessage: '查看',
+                      defaultMessage: '查看'
                     })}
                   </Typography.Text>
                 ),
 
-                duration: null,
+                duration: null
               });
               props?.onReload?.();
               break;
@@ -179,9 +184,9 @@ const SubmitTripartiteTaskButton = (props: {
           notification.error({
             message: formatMessage({
               id: 'src.component.Task.component.AsyncTaskOperationButton.622B32EB',
-              defaultMessage: '导出错误',
+              defaultMessage: '导出错误'
             }),
-            description: error.message,
+            description: error.message
           });
           props?.onReload?.();
         },
@@ -191,21 +196,21 @@ const SubmitTripartiteTaskButton = (props: {
             key: notificationId,
             message: formatMessage({
               id: 'src.component.Task.component.AsyncTaskOperationButton.02135262',
-              defaultMessage: '导出定时任务',
+              defaultMessage: '导出定时任务'
             }),
             description: formatMessage(
               {
                 id: 'src.component.Task.component.AsyncTaskOperationButton.EB1F7F39',
-                defaultMessage: '{idsLength}个定时任务正在导出中...',
+                defaultMessage: '{idsLength}个定时任务正在导出中...'
               },
-              { idsLength: ids.length },
+              { idsLength: ids.length }
             ),
             icon: <LoadingOutlined style={{ color: '#108ee9' }} />,
-            duration: 0,
+            duration: 0
           });
           return notificationId;
-        },
-      },
+        }
+      }
     },
     [AsyncTaskType.terminateTask]: {
       api: (terminateId: number) => {
@@ -218,28 +223,38 @@ const SubmitTripartiteTaskButton = (props: {
         return props.tasks?.map((item) => item.id);
       },
       isTaskCompleted: (result: IBatchTerminateFlowResult[]) => {
-        return result?.length > 0 && result?.every((i) => i?.terminateSucceed || i?.failReason);
+        return (
+          result?.length > 0 &&
+          result?.every((i) => i?.terminateSucceed || i?.failReason)
+        );
       },
       notificationHandler: {
-        handleResult: (rawResult: IBatchTerminateFlowResult[], taskId: string) => {
+        handleResult: (
+          rawResult: IBatchTerminateFlowResult[],
+          taskId: string
+        ) => {
           setTaskId(undefined);
-          const failedCount = rawResult?.filter((item) => !item.terminateSucceed).length;
-          const succeedCount = rawResult?.filter((item) => item.terminateSucceed).length;
+          const failedCount = rawResult?.filter(
+            (item) => !item.terminateSucceed
+          ).length;
+          const succeedCount = rawResult?.filter(
+            (item) => item.terminateSucceed
+          ).length;
 
           if (succeedCount === rawResult?.length) {
             notification.success({
               message: formatMessage({
                 id: 'src.component.Task.component.AsyncTaskOperationButton.C2AF7DD4',
-                defaultMessage: '终止任务已完成',
+                defaultMessage: '终止任务已完成'
               }),
               description: formatMessage(
                 {
                   id: 'src.component.Task.component.AsyncTaskOperationButton.348E6976',
-                  defaultMessage: '{rawResultLength} 个任务已终止。',
+                  defaultMessage: '{rawResultLength} 个任务已终止。'
                 },
-                { rawResultLength: rawResult?.length },
+                { rawResultLength: rawResult?.length }
               ),
-              duration: null,
+              duration: null
             });
             props?.onReload?.();
           } else {
@@ -250,7 +265,7 @@ const SubmitTripartiteTaskButton = (props: {
             notification.error({
               message: formatMessage({
                 id: 'src.component.Task.component.AsyncTaskOperationButton.C20458AD',
-                defaultMessage: '终止任务已完成',
+                defaultMessage: '终止任务已完成'
               }),
               description: (
                 <Typography.Text style={{ textAlign: 'center' }}>
@@ -258,24 +273,27 @@ const SubmitTripartiteTaskButton = (props: {
                     {
                       id: 'src.component.Task.component.AsyncTaskOperationButton.96306F17',
                       defaultMessage:
-                        '{succeedCount} 个任务已终止，{failedCount} 个任务终止失败。如需了解导出详情，可',
+                        '{succeedCount} 个任务已终止，{failedCount} 个任务终止失败。如需了解导出详情，可'
                     },
-                    { succeedCount, failedCount },
+                    { succeedCount, failedCount }
                   )}
-                  <Typography.Link onClick={downloadLog} style={{ padding: '0 8px' }}>
+                  <Typography.Link
+                    onClick={downloadLog}
+                    style={{ padding: '0 8px' }}
+                  >
                     {formatMessage({
                       id: 'src.component.Task.component.AsyncTaskOperationButton.FBB89FF3',
-                      defaultMessage: '下载日志',
+                      defaultMessage: '下载日志'
                     })}
                   </Typography.Link>
                   {formatMessage({
                     id: 'src.component.Task.component.AsyncTaskOperationButton.89DB8E51',
-                    defaultMessage: '查看',
+                    defaultMessage: '查看'
                   })}
                 </Typography.Text>
               ),
 
-              duration: null,
+              duration: null
             });
             props?.onReload?.();
           }
@@ -285,9 +303,9 @@ const SubmitTripartiteTaskButton = (props: {
           notification.error({
             message: formatMessage({
               id: 'src.component.Task.component.AsyncTaskOperationButton.75E93A96',
-              defaultMessage: '终止错误',
+              defaultMessage: '终止错误'
             }),
-            description: error.message,
+            description: error.message
           });
           props?.onReload?.();
         },
@@ -297,21 +315,21 @@ const SubmitTripartiteTaskButton = (props: {
             key: notificationId,
             message: formatMessage({
               id: 'src.component.Task.component.AsyncTaskOperationButton.AC3DA902',
-              defaultMessage: '终止任务',
+              defaultMessage: '终止任务'
             }),
             description: formatMessage(
               {
                 id: 'src.component.Task.component.AsyncTaskOperationButton.24B587C3',
-                defaultMessage: '{idsLength}个任务正在终止中...',
+                defaultMessage: '{idsLength}个任务正在终止中...'
               },
-              { idsLength: ids.length },
+              { idsLength: ids.length }
             ),
             icon: <LoadingOutlined style={{ color: '#108ee9' }} />,
-            duration: null,
+            duration: null
           });
           return notificationId;
-        },
-      },
+        }
+      }
     },
     [AsyncTaskType.terminateSchedule]: {
       api: (taskId: string) => {
@@ -323,31 +341,41 @@ const SubmitTripartiteTaskButton = (props: {
       getSubmitParams: () => {
         return {
           ids: props.tasks?.map((item) => item.id),
-          scheduleType: props.tasks?.[0]?.scheduleType,
+          scheduleType: props.tasks?.[0]?.scheduleType
         };
       },
       isTaskCompleted: (result: IScheduleTerminateResult[]) => {
-        return result?.length > 0 && result?.every((i) => i?.terminateSucceed || i?.failReason);
+        return (
+          result?.length > 0 &&
+          result?.every((i) => i?.terminateSucceed || i?.failReason)
+        );
       },
       notificationHandler: {
-        handleResult: (rawResult: IScheduleTerminateResult[], taskId: string) => {
+        handleResult: (
+          rawResult: IScheduleTerminateResult[],
+          taskId: string
+        ) => {
           setTaskId(undefined);
-          const failedCount = rawResult?.filter((item) => !item.terminateSucceed).length;
-          const succeedCount = rawResult?.filter((item) => item.terminateSucceed).length;
+          const failedCount = rawResult?.filter(
+            (item) => !item.terminateSucceed
+          ).length;
+          const succeedCount = rawResult?.filter(
+            (item) => item.terminateSucceed
+          ).length;
           if (succeedCount === rawResult?.length) {
             notification.success({
               message: formatMessage({
                 id: 'src.component.Task.component.AsyncTaskOperationButton.E7A1ECD2',
-                defaultMessage: '终止任务已完成',
+                defaultMessage: '终止任务已完成'
               }),
               description: formatMessage(
                 {
                   id: 'src.component.Task.component.AsyncTaskOperationButton.66B5F8B4',
-                  defaultMessage: '{rawResultLength} 个任务已终止。',
+                  defaultMessage: '{rawResultLength} 个任务已终止。'
                 },
-                { rawResultLength: rawResult?.length },
+                { rawResultLength: rawResult?.length }
               ),
-              duration: null,
+              duration: null
             });
             props?.onReload?.();
           } else {
@@ -358,7 +386,7 @@ const SubmitTripartiteTaskButton = (props: {
             notification.error({
               message: formatMessage({
                 id: 'src.component.Task.component.AsyncTaskOperationButton.FEAC6AAB',
-                defaultMessage: '终止任务已完成',
+                defaultMessage: '终止任务已完成'
               }),
               description: (
                 <Typography.Text style={{ textAlign: 'center' }}>
@@ -366,24 +394,27 @@ const SubmitTripartiteTaskButton = (props: {
                     {
                       id: 'src.component.Task.component.AsyncTaskOperationButton.D27AC971',
                       defaultMessage:
-                        '{succeedCount} 个任务已终止，{failedCount} 个任务终止失败。如需了解导出详情，可',
+                        '{succeedCount} 个任务已终止，{failedCount} 个任务终止失败。如需了解导出详情，可'
                     },
-                    { succeedCount, failedCount },
+                    { succeedCount, failedCount }
                   )}
-                  <Typography.Link onClick={downloadLog} style={{ padding: '0 8px' }}>
+                  <Typography.Link
+                    onClick={downloadLog}
+                    style={{ padding: '0 8px' }}
+                  >
                     {formatMessage({
                       id: 'src.component.Task.component.AsyncTaskOperationButton.2E9AB925',
-                      defaultMessage: '下载日志',
+                      defaultMessage: '下载日志'
                     })}
                   </Typography.Link>
                   {formatMessage({
                     id: 'src.component.Task.component.AsyncTaskOperationButton.091E3B93',
-                    defaultMessage: '查看',
+                    defaultMessage: '查看'
                   })}
                 </Typography.Text>
               ),
 
-              duration: null,
+              duration: null
             });
             props?.onReload?.();
           }
@@ -393,9 +424,9 @@ const SubmitTripartiteTaskButton = (props: {
           notification.error({
             message: formatMessage({
               id: 'src.component.Task.component.AsyncTaskOperationButton.89CE28F7',
-              defaultMessage: '终止错误',
+              defaultMessage: '终止错误'
             }),
-            description: error.message,
+            description: error.message
           });
           props?.onReload?.();
         },
@@ -405,38 +436,43 @@ const SubmitTripartiteTaskButton = (props: {
             key: notificationId,
             message: formatMessage({
               id: 'src.component.Task.component.AsyncTaskOperationButton.08EE66D0',
-              defaultMessage: '终止任务',
+              defaultMessage: '终止任务'
             }),
             description: formatMessage(
               {
                 id: 'src.component.Task.component.AsyncTaskOperationButton.5E6481EB',
-                defaultMessage: '{idsLength}个任务正在终止中...',
+                defaultMessage: '{idsLength}个任务正在终止中...'
               },
-              { idsLength: ids.length },
+              { idsLength: ids.length }
             ),
             icon: <LoadingOutlined style={{ color: '#108ee9' }} />,
-            duration: null,
+            duration: null
           });
           return notificationId;
-        },
-      },
-    },
+        }
+      }
+    }
   };
 
-  const getAsyncTaskConfigByTaskType = (asyncTaskType: AsyncTaskType): TaskConfig => {
+  const getAsyncTaskConfigByTaskType = (
+    asyncTaskType: AsyncTaskType
+  ): TaskConfig => {
     return {
       asyncTaskType,
       api: {
         fetchStatus: (taskId) => asyncTaskMap[asyncTaskType]?.api?.(taskId),
-        submit: (params) => asyncTaskMap[asyncTaskType]?.submitApi?.(params),
+        submit: (params) => asyncTaskMap[asyncTaskType]?.submitApi?.(params)
       },
       getSubmitParams: () => asyncTaskMap[asyncTaskType]?.getSubmitParams?.(),
-      isTaskCompleted: (result) => asyncTaskMap[asyncTaskType]?.isTaskCompleted?.(result),
-      notificationHandler: asyncTaskMap[asyncTaskType]?.notificationHandler,
+      isTaskCompleted: (result) =>
+        asyncTaskMap[asyncTaskType]?.isTaskCompleted?.(result),
+      notificationHandler: asyncTaskMap[asyncTaskType]?.notificationHandler
     };
   };
 
-  const asyncTask = createTaskManager(getAsyncTaskConfigByTaskType(props.asyncTaskType));
+  const asyncTask = createTaskManager(
+    getAsyncTaskConfigByTaskType(props.asyncTaskType)
+  );
 
   const { run: debounceSubmit } = useDebounceFn(
     async () => {
@@ -454,14 +490,14 @@ const SubmitTripartiteTaskButton = (props: {
           props?.closeModal();
           await asyncTask.startTask(res, props.asyncTaskType, {
             taskId: res,
-            ids: props.tasks?.map((item) => item.id),
+            ids: props.tasks?.map((item) => item.id)
           });
         }
       } finally {
         setIsSubmitting(false);
       }
     },
-    { wait: 300 },
+    { wait: 300 }
   );
 
   const handleSumbit = () => {
@@ -477,14 +513,20 @@ const SubmitTripartiteTaskButton = (props: {
 
   useEffect(() => {
     props.setIsSubmitButtonLoading(
-      isSubmitting || (!!taskId && !asyncTask?.isTaskFinished(taskId.toString())),
+      isSubmitting ||
+        (!!taskId && !asyncTask?.isTaskFinished(taskId.toString()))
     );
   }, [isSubmitting, taskId]);
   return (
     <Button
       onClick={handleSumbit}
-      loading={isSubmitting || (!!taskId && !asyncTask?.isTaskFinished(taskId.toString()))}
-      type={props.config.confirmButtonType === 'primary' ? 'primary' : 'default'}
+      loading={
+        isSubmitting ||
+        (!!taskId && !asyncTask?.isTaskFinished(taskId.toString()))
+      }
+      type={
+        props.config.confirmButtonType === 'primary' ? 'primary' : 'default'
+      }
       disabled={props.disabled || isSubmitting}
       danger={props.config.confirmButtonType === 'danger'}
     >

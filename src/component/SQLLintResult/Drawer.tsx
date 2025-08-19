@@ -33,19 +33,19 @@ const LintDrawer: React.FC<IProps> = function ({ data, visible, closePage }) {
       open={visible}
       title={formatMessage({
         id: 'odc.component.SQLLintResult.Drawer.CheckResult',
-        defaultMessage: '检查结果',
+        defaultMessage: '检查结果'
       })}
       /*检查结果*/ footer={
         <Space
           style={{
-            float: 'right',
+            float: 'right'
           }}
         >
           <Button onClick={closePage}>
             {
               formatMessage({
                 id: 'odc.src.component.SQLLintResult.Closure',
-                defaultMessage: '关闭',
+                defaultMessage: '关闭'
               }) /* 关闭 */
             }
           </Button>
@@ -55,7 +55,11 @@ const LintDrawer: React.FC<IProps> = function ({ data, visible, closePage }) {
         closePage();
       }}
     >
-      <LintResultTable hasExtraOpt={false} showLocate={false} lintResultSet={data} />
+      <LintResultTable
+        hasExtraOpt={false}
+        showLocate={false}
+        lintResultSet={data}
+      />
     </Drawer>
   );
 };

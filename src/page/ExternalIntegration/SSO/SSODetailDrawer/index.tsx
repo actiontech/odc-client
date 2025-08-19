@@ -29,7 +29,7 @@ interface IProps {
 
 export default function SSODetailDrawer({ visible, id, close }: IProps) {
   const { data, loading, run, cancel } = useRequest(getIntegrationDetail, {
-    manual: true,
+    manual: true
   });
 
   const configJson: ISSOConfig = useMemo(() => {
@@ -115,7 +115,7 @@ export default function SSODetailDrawer({ visible, id, close }: IProps) {
               label={
                 formatMessage({
                   id: 'src.page.ExternalIntegration.SSO.SSODetailDrawer.F86DB093',
-                  defaultMessage: '用户 DN',
+                  defaultMessage: '用户 DN'
                 }) /*"用户 DN"*/
               }
             >
@@ -160,7 +160,7 @@ export default function SSODetailDrawer({ visible, id, close }: IProps) {
             <Descriptions.Item
               label={formatMessage({
                 id: 'src.page.ExternalIntegration.SSO.SSODetailDrawer.C1180202',
-                defaultMessage: '绑定方法',
+                defaultMessage: '绑定方法'
               })}
             >
               {configJson?.ssoParameter?.singlesignon?.binding || '-'}
@@ -168,23 +168,23 @@ export default function SSODetailDrawer({ visible, id, close }: IProps) {
             <Descriptions.Item
               label={formatMessage({
                 id: 'src.page.ExternalIntegration.SSO.SSODetailDrawer.726E9DA6',
-                defaultMessage: '登录请求',
+                defaultMessage: '登录请求'
               })}
             >
               {configJson?.ssoParameter?.singlesignon?.signRequest
                 ? formatMessage({
                     id: 'src.page.ExternalIntegration.SSO.SSODetailDrawer.DD9B8A8C',
-                    defaultMessage: '是',
+                    defaultMessage: '是'
                   })
                 : formatMessage({
                     id: 'src.page.ExternalIntegration.SSO.SSODetailDrawer.064D2CFE',
-                    defaultMessage: '否',
+                    defaultMessage: '否'
                   })}
             </Descriptions.Item>
             <Descriptions.Item
               label={formatMessage({
                 id: 'src.page.ExternalIntegration.SSO.SSODetailDrawer.C7659EBA',
-                defaultMessage: '签名配置',
+                defaultMessage: '签名配置'
               })}
             >
               {configJson?.ssoParameter?.signing?.certificate || '-'}
@@ -192,7 +192,7 @@ export default function SSODetailDrawer({ visible, id, close }: IProps) {
             <Descriptions.Item
               label={formatMessage({
                 id: 'src.page.ExternalIntegration.SSO.SSODetailDrawer.502C8F41',
-                defaultMessage: '认证配置',
+                defaultMessage: '认证配置'
               })}
             >
               {configJson?.ssoParameter?.verification?.certificate || '-'}
@@ -200,7 +200,7 @@ export default function SSODetailDrawer({ visible, id, close }: IProps) {
             <Descriptions.Item
               label={formatMessage({
                 id: 'src.page.ExternalIntegration.SSO.SSODetailDrawer.2335A558',
-                defaultMessage: '解密配置',
+                defaultMessage: '解密配置'
               })}
             >
               {configJson?.ssoParameter?.decryption.certificate || '-'}
@@ -219,13 +219,18 @@ export default function SSODetailDrawer({ visible, id, close }: IProps) {
       width={520}
       title={formatMessage({
         id: 'src.page.ExternalIntegration.SSO.SSODetailDrawer.EBD42949',
-        defaultMessage: '查看登录集成配置',
+        defaultMessage: '查看登录集成配置'
       })}
       open={visible}
       onClose={() => close()}
       footer={
         <Button style={{ float: 'right' }} onClick={() => close()}>
-          {formatMessage({ id: 'odc.SSO.SSODetailDrawer.Close', defaultMessage: '关闭' }) /*关闭*/}
+          {
+            formatMessage({
+              id: 'odc.SSO.SSODetailDrawer.Close',
+              defaultMessage: '关闭'
+            }) /*关闭*/
+          }
         </Button>
       }
     >
@@ -235,13 +240,13 @@ export default function SSODetailDrawer({ visible, id, close }: IProps) {
             column={1}
             title={formatMessage({
               id: 'odc.SSO.SSODetailDrawer.BasicInformation',
-              defaultMessage: '基本信息',
+              defaultMessage: '基本信息'
             })} /*基本信息*/
           >
             <Descriptions.Item
               label={formatMessage({
                 id: 'odc.SSO.SSODetailDrawer.ConfigurationName',
-                defaultMessage: '配置名称',
+                defaultMessage: '配置名称'
               })} /*配置名称*/
             >
               {data?.name}
@@ -249,19 +254,25 @@ export default function SSODetailDrawer({ visible, id, close }: IProps) {
             <Descriptions.Item
               label={formatMessage({
                 id: 'odc.SSO.SSODetailDrawer.Status',
-                defaultMessage: '状态',
+                defaultMessage: '状态'
               })} /*状态*/
             >
               {
                 data?.enabled
-                  ? formatMessage({ id: 'odc.SSO.SSODetailDrawer.Start', defaultMessage: '启动' }) //启动
-                  : formatMessage({ id: 'odc.SSO.SSODetailDrawer.Close', defaultMessage: '关闭' }) //关闭
+                  ? formatMessage({
+                      id: 'odc.SSO.SSODetailDrawer.Start',
+                      defaultMessage: '启动'
+                    }) //启动
+                  : formatMessage({
+                      id: 'odc.SSO.SSODetailDrawer.Close',
+                      defaultMessage: '关闭'
+                    }) //关闭
               }
             </Descriptions.Item>
             <Descriptions.Item
               label={formatMessage({
                 id: 'odc.SSO.SSODetailDrawer.Type',
-                defaultMessage: '类型',
+                defaultMessage: '类型'
               })} /*类型*/
             >
               {configJson?.type}
@@ -272,14 +283,14 @@ export default function SSODetailDrawer({ visible, id, close }: IProps) {
             column={2}
             title={formatMessage({
               id: 'odc.SSO.SSODetailDrawer.UserFieldMapping',
-              defaultMessage: '用户字段映射',
+              defaultMessage: '用户字段映射'
             })} /*用户字段映射*/
           >
             {!isLdap && (
               <Descriptions.Item
                 label={formatMessage({
                   id: 'odc.SSO.SSODetailDrawer.UsernameField',
-                  defaultMessage: '用户名字段',
+                  defaultMessage: '用户名字段'
                 })} /*用户名字段*/
               >
                 {configJson?.mappingRule?.userAccountNameField}
@@ -289,7 +300,7 @@ export default function SSODetailDrawer({ visible, id, close }: IProps) {
             <Descriptions.Item
               label={formatMessage({
                 id: 'odc.SSO.SSODetailDrawer.UserNicknameField',
-                defaultMessage: '用户昵称字段',
+                defaultMessage: '用户昵称字段'
               })} /*用户昵称字段*/
             >
               {configJson?.mappingRule?.userNickNameField}
@@ -297,7 +308,7 @@ export default function SSODetailDrawer({ visible, id, close }: IProps) {
             <Descriptions.Item
               label={formatMessage({
                 id: 'odc.SSO.SSODetailDrawer.UserInformationDataStructureType',
-                defaultMessage: '用户信息数据结构类型',
+                defaultMessage: '用户信息数据结构类型'
               })} /*用户信息数据结构类型*/
             >
               {configJson?.mappingRule?.userProfileViewType}
@@ -306,7 +317,7 @@ export default function SSODetailDrawer({ visible, id, close }: IProps) {
               <Descriptions.Item
                 label={formatMessage({
                   id: 'odc.SSO.SSODetailDrawer.ObtainNestedUserData',
-                  defaultMessage: '获取嵌套用户数据',
+                  defaultMessage: '获取嵌套用户数据'
                 })} /*获取嵌套用户数据*/
               >
                 {data?.name}
@@ -318,7 +329,7 @@ export default function SSODetailDrawer({ visible, id, close }: IProps) {
               column={1}
               title={formatMessage({
                 id: 'odc.SSO.SSODetailDrawer.CustomFields',
-                defaultMessage: '自定义字段',
+                defaultMessage: '自定义字段'
               })} /*自定义字段*/
             >
               {configJson?.mappingRule?.extraInfo?.map((item) => {

@@ -15,32 +15,43 @@
  */
 
 import dayjs from 'dayjs';
-import { addComment, getPLScriptTemplate, removeComment, removeTableQuote } from '../sql';
+import {
+  addComment,
+  getPLScriptTemplate,
+  removeComment,
+  removeTableQuote
+} from '../sql';
 
 describe('test sql utils', () => {
   it('addComment', () => {
     const date = dayjs(new Date()).format('YYYY/MM/DD');
     expect(
-      addComment(['select * from test;', 'select * from test2;'].join('\n'), 'userName'),
+      addComment(
+        ['select * from test;', 'select * from test2;'].join('\n'),
+        'userName'
+      )
     ).toEqual(
-      `/* comment added by userName ${date}\n* select * from test;\n* select * from test2;\n*/`,
+      `/* comment added by userName ${date}\n* select * from test;\n* select * from test2;\n*/`
     );
     expect(
-      addComment(['select * from test;', 'select * from test2;', ''].join('\n'), 'userName'),
+      addComment(
+        ['select * from test;', 'select * from test2;', ''].join('\n'),
+        'userName'
+      )
     ).toEqual(
-      `/* comment added by userName ${date}\n* select * from test;\n* select * from test2;\n*/\n`,
+      `/* comment added by userName ${date}\n* select * from test;\n* select * from test2;\n*/\n`
     );
     expect(addComment('', 'userName')).toEqual('');
   });
   it('removeComment', () => {
     expect(
       removeComment(
-        `/* comment added by userName ${1}\n* select * from test;\n* select * from test2;\n*/`,
-      ),
+        `/* comment added by userName ${1}\n* select * from test;\n* select * from test2;\n*/`
+      )
     ).toEqual(['select * from test;', 'select * from test2;'].join('\n'));
-    expect(removeComment(`/*select * from test;\n* select * from test2;\n*/`)).toEqual(
-      ['select * from test;', 'select * from test2;'].join('\n'),
-    );
+    expect(
+      removeComment(`/*select * from test;\n* select * from test2;\n*/`)
+    ).toEqual(['select * from test;', 'select * from test2;'].join('\n'));
   });
   it('getPLScriptTemplate', () => {
     expect(getPLScriptTemplate()).toEqual(
@@ -51,8 +62,8 @@ describe('test sql utils', () => {
         'BEGIN',
         '  -- Test statements here',
         "  dbms_output.put_line('Hello World!');",
-        'END;',
-      ].join('\n'),
+        'END;'
+      ].join('\n')
     );
   });
   it('removeTableQuote', () => {

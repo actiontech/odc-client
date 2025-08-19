@@ -23,48 +23,48 @@ export enum SearchType {
   NAME,
   CLUSTER,
   TENANT,
-  HOST,
+  HOST
 }
 
 export const SearchTypeText = {
   [SearchType.ALL]: formatMessage({
     id: 'odc.Connecion.ConnectionList.ParamContext.All',
-    defaultMessage: '全部',
+    defaultMessage: '全部'
   }), //全部
   [SearchType.NAME]: formatMessage({
     id: 'odc.Datasource.Datasource.ParamContext.DataSourceName',
-    defaultMessage: '数据源名',
+    defaultMessage: '数据源名'
   }), //数据源名
   [SearchType.CLUSTER]: formatMessage({
     id: 'odc.Connecion.ConnectionList.ParamContext.Cluster',
-    defaultMessage: '集群',
+    defaultMessage: '集群'
   }), //集群
   [SearchType.TENANT]: formatMessage({
     id: 'odc.Connecion.ConnectionList.ParamContext.Tenant',
-    defaultMessage: '租户',
+    defaultMessage: '租户'
   }), //租户
   [SearchType.HOST]: formatMessage({
     id: 'odc.Connecion.ConnectionList.ParamContext.HostPort',
-    defaultMessage: '主机端口',
-  }), //主机端口
+    defaultMessage: '主机端口'
+  }) //主机端口
 };
 
 export enum SortType {
   CREATE_TIME = 'createTime,asc',
   UPDATE_TIME = 'updateTime,asc',
   NAME_AZ = 'name,asc',
-  NAME_ZA = 'name,desc',
+  NAME_ZA = 'name,desc'
 }
 
 export const PermissionText = {
   [actionTypes.writeAndReadConnect]: formatMessage({
     id: 'odc.Connecion.ConnectionList.ParamContext.PublicReadWriteConnection',
-    defaultMessage: '公共读写连接',
+    defaultMessage: '公共读写连接'
   }), //公共读写连接
   [actionTypes.readonlyconnect]: formatMessage({
     id: 'odc.Connecion.ConnectionList.ParamContext.PublicReadOnlyConnection',
-    defaultMessage: '公共只读连接',
-  }), //公共只读连接
+    defaultMessage: '公共只读连接'
+  }) //公共只读连接
 };
 
 interface IParamContext {
@@ -82,7 +82,7 @@ interface IParamContext {
 const ParamContext: React.Context<IParamContext> = React.createContext({
   searchValue: null,
   sortType: null,
-  connectType: [],
+  connectType: []
 });
 
 export default ParamContext;

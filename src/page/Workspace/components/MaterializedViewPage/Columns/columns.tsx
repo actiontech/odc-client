@@ -6,30 +6,30 @@ export function useColumns() {
       key: 'name',
       name: formatMessage({
         id: 'src.page.Workspace.components.MaterializedViewPage.Columns.81E9C43F',
-        defaultMessage: '列名称',
+        defaultMessage: '列名称'
       }),
-      resizable: true,
+      resizable: true
     },
 
     {
       key: 'type',
       name: formatMessage({
         id: 'workspace.window.createTable.column.dataType',
-        defaultMessage: '数据类型',
+        defaultMessage: '数据类型'
       }),
       resizable: true,
-      filterable: false,
+      filterable: false
     },
 
     {
       key: 'comment',
       name: formatMessage({
         id: 'src.page.Workspace.components.MaterializedViewPage.Columns.60269134',
-        defaultMessage: '列注释',
+        defaultMessage: '列注释'
       }),
       resizable: true,
-      filterable: false,
-    },
+      filterable: false
+    }
   ].filter(Boolean);
   return columns;
 }

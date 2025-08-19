@@ -28,7 +28,7 @@ interface IProps {
 
 class SaveSQLModal extends Component<IProps> {
   state: Readonly<{ saving: boolean }> = {
-    saving: false,
+    saving: false
   };
   public formRef = React.createRef<FormInstance>();
 
@@ -38,16 +38,16 @@ class SaveSQLModal extends Component<IProps> {
       .validateFields()
       .then(async (data) => {
         this.setState({
-          saving: true,
+          saving: true
         });
         await onSave(data);
         this.setState({
-          saving: false,
+          saving: false
         });
       })
       .catch((error) => {
         this.setState({
-          saving: false,
+          saving: false
         });
         console.error(JSON.stringify(error));
       });
@@ -57,17 +57,20 @@ class SaveSQLModal extends Component<IProps> {
     const { visible, onCancel } = this.props;
     const formItemLayout = {
       labelCol: { span: 6 },
-      wrapperCol: { span: 14 },
+      wrapperCol: { span: 14 }
     };
     const initialValues = {
-      objectName: '',
+      objectName: ''
     };
 
     return (
       <Modal
         destroyOnClose
         title={
-          formatMessage({ id: 'odc.component.SaveSQLModal.SaveScript', defaultMessage: '保存脚本' }) //保存脚本
+          formatMessage({
+            id: 'odc.component.SaveSQLModal.SaveScript',
+            defaultMessage: '保存脚本'
+          }) //保存脚本
         }
         open={visible}
         confirmLoading={this.state.saving}
@@ -75,14 +78,18 @@ class SaveSQLModal extends Component<IProps> {
         onCancel={onCancel}
         centered
       >
-        <Form {...formItemLayout} initialValues={initialValues} ref={this.formRef}>
+        <Form
+          {...formItemLayout}
+          initialValues={initialValues}
+          ref={this.formRef}
+        >
           <Form.Item
             required
             name="objectName"
             label={
               formatMessage({
                 id: 'odc.component.SaveSQLModal.ScriptName',
-                defaultMessage: '脚本名称',
+                defaultMessage: '脚本名称'
               }) //脚本名称
             }
             rules={[
@@ -90,23 +97,23 @@ class SaveSQLModal extends Component<IProps> {
                 required: true,
                 message: formatMessage({
                   id: 'odc.component.SaveSQLModal.TheScriptNameMustBe',
-                  defaultMessage: '脚本名称不能为空',
-                }), //脚本名称不能为空
+                  defaultMessage: '脚本名称不能为空'
+                }) //脚本名称不能为空
               },
               {
                 pattern: /^[\S]*$/,
                 message: formatMessage({
                   id: 'odc.component.SaveSQLModal.CannotContainBlankCharacters',
-                  defaultMessage: '不能含有空白字符',
-                }),
-              },
+                  defaultMessage: '不能含有空白字符'
+                })
+              }
             ]}
           >
             <Input
               placeholder={
                 formatMessage({
                   id: 'odc.component.SaveSQLModal.EnterAScriptName',
-                  defaultMessage: '请输入脚本名称',
+                  defaultMessage: '请输入脚本名称'
                 })
                 //请输入脚本名称
               }

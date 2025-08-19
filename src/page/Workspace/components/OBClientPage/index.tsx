@@ -64,7 +64,7 @@ class OBClient extends React.PureComponent<IOBClientProps, IOBClientState> {
   private session: SessionStore;
 
   state: IOBClientState = {
-    isClosed: false,
+    isClosed: false
   };
 
   componentDidMount() {
@@ -81,7 +81,7 @@ class OBClient extends React.PureComponent<IOBClientProps, IOBClientState> {
   componentDidUpdate(
     prevProps: Readonly<IOBClientProps>,
     prevState: Readonly<IOBClientState>,
-    snapshot?: any,
+    snapshot?: any
   ): void {
     if (prevProps.theme !== this.props.theme && this.xtermInstance) {
       this.xtermInstance.options.theme =
@@ -90,7 +90,7 @@ class OBClient extends React.PureComponent<IOBClientProps, IOBClientState> {
               foreground: 'black', // 字体
               background: '#fff', // 背景色
               cursor: '#888', // 设置光标
-              selection: '#87bffd', // 选中区域的背景色
+              selection: '#87bffd' // 选中区域的背景色
             }
           : {};
     }
@@ -108,7 +108,10 @@ class OBClient extends React.PureComponent<IOBClientProps, IOBClientState> {
     if (!dom) {
       return;
     }
-    const session = await sessionManager.createSession(datasourceId, databaseId);
+    const session = await sessionManager.createSession(
+      datasourceId,
+      databaseId
+    );
     if (session === 'NotFound') {
       return;
     }
@@ -127,9 +130,9 @@ class OBClient extends React.PureComponent<IOBClientProps, IOBClientState> {
               foreground: 'black', // 字体
               background: '#fff', // 背景色
               cursor: '#888', // 设置光标
-              selection: '#87bffd', // 选中区域的背景色
+              selection: '#87bffd' // 选中区域的背景色
             }
-          : {},
+          : {}
     });
     this.xtermInstance.attachCustomKeyEventHandler((e) => {
       if (e.key === 'v' && e.ctrlKey) {
@@ -142,7 +145,7 @@ class OBClient extends React.PureComponent<IOBClientProps, IOBClientState> {
 
     let url = new URL(
       `/api/v1/webSocket/obclient/${generateSessionSid(session?.sessionId)}`,
-      odc.appConfig.network?.baseUrl?.() || window.location.href,
+      odc.appConfig.network?.baseUrl?.() || window.location.href
     );
     url.protocol = url.protocol.replace('http', 'ws');
     console.log(url);
@@ -151,10 +154,10 @@ class OBClient extends React.PureComponent<IOBClientProps, IOBClientState> {
       this.xtermInstance.write(
         formatMessage({
           id: 'odc.components.OBClientPage.NetworkException',
-          defaultMessage: '网络异常:',
+          defaultMessage: '网络异常:'
         }) +
           e.type +
-          '\r\n',
+          '\r\n'
       );
 
       console.log(e);
@@ -162,56 +165,61 @@ class OBClient extends React.PureComponent<IOBClientProps, IOBClientState> {
     this.xtermInstance.write(
       formatMessage({
         id: 'odc.components.OBClientPage.EstablishingConnection',
-        defaultMessage: '建立连接中....',
-      }) + '\r\n',
+        defaultMessage: '建立连接中....'
+      }) + '\r\n'
     );
     this.ws.onclose = (e) => {
       console.log(e);
       this.xtermInstance.write(
         formatMessage({
           id: 'odc.components.OBClientPage.ConnectionFailed',
-          defaultMessage: '***连接失败***',
-        }) + '\r\n',
+          defaultMessage: '***连接失败***'
+        }) + '\r\n'
       );
     };
     this.ws.onopen = (e) => {
       this.xtermInstance.write(
         formatMessage({
           id: 'odc.components.OBClientPage.ConnectionEstablished',
-          defaultMessage: '建立连接成功....',
-        }) + '\r\n',
+          defaultMessage: '建立连接成功....'
+        }) + '\r\n'
       );
       console.log('ws opened!');
       const warnMsg = [
         formatMessage({
           id: 'odc.components.OBClientPage.ToAvoidGarbledCodesKeep',
-          defaultMessage: '为避免乱码问题，请保持数据库客户端编码和操作系统编码一致。',
+          defaultMessage:
+            '为避免乱码问题，请保持数据库客户端编码和操作系统编码一致。'
         }), // 为避免乱码问题，请保持数据库客户端编码和操作系统编码一致。
         formatMessage({
           id: 'odc.components.OBClientPage.GenerallyTheLinuxOperatingSystem',
           defaultMessage:
-            '（一般情况下 Linux 操作系统默认字符编码为 UTF8，Windows 操作系统默认字符编码为 GBK，具体以实际情况为准）',
-        }), // （一般情况linux操作系统为UTF8，windows操作系统为GBK，具体以实际情况为准）
+            '（一般情况下 Linux 操作系统默认字符编码为 UTF8，Windows 操作系统默认字符编码为 GBK，具体以实际情况为准）'
+        }) // （一般情况linux操作系统为UTF8，windows操作系统为GBK，具体以实际情况为准）
       ];
 
       const prefixLength = Math.max(...warnMsg.map((i) => i.length)) + 5;
-      this.xtermInstance.write(`${new Array(prefixLength).fill('*').join('')}\r\n`);
+      this.xtermInstance.write(
+        `${new Array(prefixLength).fill('*').join('')}\r\n`
+      );
       warnMsg.forEach((m) => {
         this.xtermInstance.write(`${m}\r\n`);
       });
-      this.xtermInstance.write(`${new Array(prefixLength).fill('*').join('')}\r\n`);
+      this.xtermInstance.write(
+        `${new Array(prefixLength).fill('*').join('')}\r\n`
+      );
       this.startPingLoop();
       this.ws.onclose = (e) => {
         console.log(e);
         this.xtermInstance.write(
           formatMessage({
             id: 'odc.components.OBClientPage.TheConnectionHasBeenDisconnected',
-            defaultMessage: '***连接已断开***',
-          }) + '\r\n',
+            defaultMessage: '***连接已断开***'
+          }) + '\r\n'
         );
         clearTimeout(this._pingClock);
         this.setState({
-          isClosed: true,
+          isClosed: true
         });
       };
     };
@@ -222,7 +230,7 @@ class OBClient extends React.PureComponent<IOBClientProps, IOBClientState> {
     this.xtermFitAddon.fit();
     this.xtermInstance.focus();
     this.setState({
-      isClosed: false,
+      isClosed: false
     });
   };
 
@@ -231,8 +239,8 @@ class OBClient extends React.PureComponent<IOBClientProps, IOBClientState> {
       this.ws.send(
         JSON.stringify({
           id: generateUniqKey(),
-          method: 'ping',
-        }),
+          method: 'ping'
+        })
       );
 
       this._pingClock = setTimeout(() => {
@@ -271,7 +279,7 @@ class OBClient extends React.PureComponent<IOBClientProps, IOBClientState> {
         {
           formatMessage({
             id: 'odc.components.OBClientPage.NoteToReferenceAScript',
-            defaultMessage: '提示：如需引用脚本，可在脚本管理中上传脚本后引用',
+            defaultMessage: '提示：如需引用脚本，可在脚本管理中上传脚本后引用'
           })
           /* 提示：如需引用脚本，可在脚本管理中上传脚本后引用 */
         }
@@ -287,7 +295,7 @@ class OBClient extends React.PureComponent<IOBClientProps, IOBClientState> {
           {
             formatMessage({
               id: 'odc.components.OBClientPage.Reconnect',
-              defaultMessage: '重新连接',
+              defaultMessage: '重新连接'
             }) /*重新连接*/
           }
         </Button>
@@ -297,7 +305,7 @@ class OBClient extends React.PureComponent<IOBClientProps, IOBClientState> {
       <div
         style={{
           display: 'flex',
-          alignItems: 'center',
+          alignItems: 'center'
         }}
       >
         {isClosed ? (
@@ -305,7 +313,7 @@ class OBClient extends React.PureComponent<IOBClientProps, IOBClientState> {
             {
               formatMessage({
                 id: 'odc.components.OBClientPage.Reconnect',
-                defaultMessage: '重新连接',
+                defaultMessage: '重新连接'
               })
               /* 重新连接 */
             }
@@ -320,14 +328,19 @@ class OBClient extends React.PureComponent<IOBClientProps, IOBClientState> {
       <Card
         bordered={false}
         size="small"
-        title={!this.props.simpleHeader ? this.rendertitle() : this.renderExtra()}
+        title={
+          !this.props.simpleHeader ? this.rendertitle() : this.renderExtra()
+        }
         extra={!this.props.simpleHeader ? this.renderExtra() : null}
         className={classNames(styles.main, {
-          [styles.simpleHeader]: this.props.simpleHeader,
+          [styles.simpleHeader]: this.props.simpleHeader
         })}
         bodyStyle={{ paddingBottom: '0px' }}
       >
-        <div style={{ height: '100%', width: '100%', position: 'relative' }} ref={this.xtermRef} />
+        <div
+          style={{ height: '100%', width: '100%', position: 'relative' }}
+          ref={this.xtermRef}
+        />
       </Card>
     );
   }

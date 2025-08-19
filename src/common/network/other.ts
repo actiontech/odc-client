@@ -24,8 +24,8 @@ import request from '@/util/request';
 export async function decrypt(data: string): Promise<string> {
   const ret = await request.post(`/api/v2/bastion/encryption/decrypt`, {
     data: {
-      data,
-    },
+      data
+    }
   });
   return ret?.data;
 }
@@ -43,7 +43,9 @@ export async function getServerSystemInfo(): Promise<ServerSystemInfo> {
  * 获取非对称加密的公钥
  */
 export async function getPublicKey(): Promise<string> {
-  const res = await request.get('/api/v2/encryption/publicKey', { params: { notLogin: true } });
+  const res = await request.get('/api/v2/encryption/publicKey', {
+    params: { notLogin: true }
+  });
   return res?.data;
 }
 
@@ -60,7 +62,7 @@ export async function getDurationTimes(): Promise<{
   return {
     start: clientNow,
     duration: Date.now() - clientNow,
-    utc: result?.data,
+    utc: result?.data
   };
 }
 
@@ -100,4 +102,5 @@ export const odcServerLoginUrl = '/api/v1/sso-login';
 export const odcServerLogoutUrl = '/api/v1/sso-logout';
 
 export const uploadSSLFileUrl =
-  odc.appConfig.network?.baseUrl?.() + `/api/v2/objectstorage/ssl/files/batchUpload`;
+  odc.appConfig.network?.baseUrl?.() +
+  `/api/v2/objectstorage/ssl/files/batchUpload`;

@@ -7,7 +7,7 @@ export enum MaterializedViewTabType {
   COLUMN = 'column',
   INDEX = 'index',
   CONSTRAINT = 'constranint',
-  PARTITION = 'partition',
+  PARTITION = 'partition'
 }
 
 export interface MaterializedViewInfo {
@@ -31,7 +31,7 @@ export enum TableSelectorNode {
   tableRoot = 'tableRoot',
   table = 'table',
   materializedViewRoot = 'materializedViewRoot',
-  materializedView = 'materializedView',
+  materializedView = 'materializedView'
 }
 
 export interface MvColumns {
@@ -53,5 +53,5 @@ export interface MviewUnits {
 
 export enum StartStrategy {
   START_AT = 'START_AT',
-  START_NOW = 'START_NOW',
+  START_NOW = 'START_NOW'
 }

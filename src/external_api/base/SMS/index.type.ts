@@ -4,7 +4,7 @@ import {
   ISendSmsCodeReq,
   ISendSmsCodeReply,
   IVerifySmsCodeReq,
-  IVerifySmsCodeReply,
+  IVerifySmsCodeReply
 } from '../common.type';
 
 export interface ISendSmsCodeParams extends ISendSmsCodeReq {}

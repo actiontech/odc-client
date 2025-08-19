@@ -22,13 +22,13 @@ export enum MaskingRuleType {
   PSEUDO = 'PSEUDO',
   HASH = 'HASH',
   ROUND = 'ROUND',
-  NULL = 'NULL',
+  NULL = 'NULL'
 }
 export enum MaskSegmentType {
   DIGIT = 'DIGIT',
   DIGIT_PERCENTAGE = 'DIGIT_PERCENTAGE',
   LEFT_OVER = 'LEFT_OVER',
-  DELIMITER = 'DELIMITER',
+  DELIMITER = 'DELIMITER'
 }
 export interface MaskSegment {
   mask: boolean;
@@ -42,7 +42,7 @@ export enum MaskingRuleHashType {
   MD5 = 'MD5',
   SHA256 = 'SHA256',
   SHA512 = 'SHA512',
-  SM3 = 'SM3',
+  SM3 = 'SM3'
 }
 export interface IMaskingRule {
   id?: number;

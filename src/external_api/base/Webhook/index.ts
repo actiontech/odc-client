@@ -6,12 +6,22 @@
 import ServiceBase from '../Service.base';
 import { AxiosRequestConfig } from 'axios';
 
-import { IWebHookSendMessageParams, IWebHookSendMessageReturn } from './index.type';
+import {
+  IWebHookSendMessageParams,
+  IWebHookSendMessageReturn
+} from './index.type';
 
 class WebhookService extends ServiceBase {
-  public WebHookSendMessage(params: IWebHookSendMessageParams, options?: AxiosRequestConfig) {
+  public WebHookSendMessage(
+    params: IWebHookSendMessageParams,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
-    return this.post<IWebHookSendMessageReturn>('/v1/dms/webhooks', paramsData, options);
+    return this.post<IWebHookSendMessageReturn>(
+      '/v1/dms/webhooks',
+      paramsData,
+      options
+    );
   }
 }
 

@@ -29,15 +29,15 @@ export class CreateTablePage extends Page {
     this.pageTitle =
       formatMessage({
         id: 'workspace.header.create',
-        defaultMessage: '新建',
+        defaultMessage: '新建'
       }) +
       formatMessage({
         id: 'workspace.header.create.table',
-        defaultMessage: '表',
+        defaultMessage: '表'
       });
     this.pageType = PageType.CREATE_TABLE;
     this.pageParams = {
-      databaseId,
+      databaseId
     };
   }
 }
@@ -51,11 +51,11 @@ export class CreateViewPage extends Page {
     this.pageKey = `createViewPage-${generateUniqKey()}`;
     this.pageTitle = formatMessage({
       id: 'workspace.window.createView.modal.title',
-      defaultMessage: '新建视图',
+      defaultMessage: '新建视图'
     });
     this.pageType = PageType.CREATE_VIEW;
     this.pageParams = {
-      databaseId,
+      databaseId
     };
   }
 }
@@ -70,11 +70,11 @@ export class CreateMaterializedViewPage extends Page {
     this.pageKey = `createMaterializedViewPage-${generateUniqKey()}`;
     this.pageTitle = formatMessage({
       id: 'src.store.helper.page.pages.1690882C',
-      defaultMessage: '新建物化视图',
+      defaultMessage: '新建物化视图'
     });
     this.pageType = PageType.CREATE_MATERIALIZED_VIEW;
     this.pageParams = {
-      databaseId,
+      databaseId
     };
   }
 }
@@ -93,12 +93,12 @@ export class SQLConfirmPage extends Page {
     if (params?.isPackageBody) {
       return formatMessage({
         id: 'workspace.window.createPackageBody.modal.title',
-        defaultMessage: '新建程序包体',
+        defaultMessage: '新建程序包体'
       });
     }
     return formatMessage({
       id: 'workspace.window.createPackage.modal.title',
-      defaultMessage: '新建程序包',
+      defaultMessage: '新建程序包'
     });
   }
   constructor(
@@ -108,7 +108,7 @@ export class SQLConfirmPage extends Page {
     sql: string,
     isPackageBody: boolean = false,
     preData?: ITriggerFormData,
-    synonymType?: SynonymType,
+    synonymType?: SynonymType
   ) {
     super();
     this.pageKey = `sqlconfirmpage-type:${type}-${generateUniqKey()}`;
@@ -121,7 +121,7 @@ export class SQLConfirmPage extends Page {
       isPackageBody,
       preData,
       hasPre: !!preData,
-      synonymType,
+      synonymType
     };
   }
 }
@@ -136,13 +136,13 @@ export class CreateTriggerPage extends Page {
     super();
     (this.pageTitle = formatMessage({
       id: 'odc.helper.page.openPage.CreateATrigger',
-      defaultMessage: '新建触发器',
+      defaultMessage: '新建触发器'
     })), // 新建触发器
       (this.pageKey = `createTrigger-${generateUniqKey()}`);
     this.pageType = PageType.CREATE_TRIGGER;
     this.pageParams = {
       preData,
-      databaseId,
+      databaseId
     };
   }
 }

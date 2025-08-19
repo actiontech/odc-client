@@ -40,7 +40,11 @@ interface IProps {
 }
 
 export default inject('userStore')(
-  observer(function ScriptFile({ userStore, uploadFiles, setUploadFiles }: IProps) {
+  observer(function ScriptFile({
+    userStore,
+    uploadFiles,
+    setUploadFiles
+  }: IProps) {
     const [loading, setLoading] = useState(false);
     const [searchVaue, setSearchVaue] = useState('');
     const [editingScriptId, setEditingScriptId] = useState(null);
@@ -61,13 +65,19 @@ export default inject('userStore')(
 
     const filteredUploadFiles = useMemo(() => {
       return uploadFiles.filter((file) => {
-        return !searchVaue || file.name?.toUpperCase()?.includes(searchVaue?.toUpperCase());
+        return (
+          !searchVaue ||
+          file.name?.toUpperCase()?.includes(searchVaue?.toUpperCase())
+        );
       });
     }, [searchVaue, uploadFiles]);
 
     const filteredScripts = useMemo(() => {
       return userStore?.scriptStore?.scripts.filter((script) => {
-        return !searchVaue || script.objectName?.toUpperCase()?.includes(searchVaue?.toUpperCase());
+        return (
+          !searchVaue ||
+          script.objectName?.toUpperCase()?.includes(searchVaue?.toUpperCase())
+        );
       });
     }, [searchVaue, userStore?.scriptStore?.scripts]);
 
@@ -102,8 +112,12 @@ export default inject('userStore')(
 
     const selectByShiftPressed = (script) => {
       const preScriptId = activeFileList?.[activeFileList?.length - 1];
-      const preScriptIndex = filteredScripts.findIndex((item) => item.id === preScriptId);
-      const targetScriptIndex = filteredScripts.findIndex((item) => item.id === script.id);
+      const preScriptIndex = filteredScripts.findIndex(
+        (item) => item.id === preScriptId
+      );
+      const targetScriptIndex = filteredScripts.findIndex(
+        (item) => item.id === script.id
+      );
       let intervalTemp;
       let preActiveFileList = [...(activeFileList || [])];
       if (preScriptIndex < targetScriptIndex) {
@@ -123,7 +137,9 @@ export default inject('userStore')(
       }
       setInterval(intervalTemp);
       setActiveFileList(
-        Array.from(new Set([...(intervalTemp || []), ...(preActiveFileList || [])])),
+        Array.from(
+          new Set([...(intervalTemp || []), ...(preActiveFileList || [])])
+        )
       );
       return;
     };
@@ -131,12 +147,16 @@ export default inject('userStore')(
     const selectByCrtlorCommand = (script) => {
       if (activeFileList?.includes(script.id)) {
         // command + 单击已选中脚本：取消选择当前
-        const newActiveFileList = activeFileList.filter((item) => item !== script.id);
+        const newActiveFileList = activeFileList.filter(
+          (item) => item !== script.id
+        );
         setInterval([]);
         setActiveFileList(newActiveFileList);
       } else {
         // command + 单击未选中脚本：选中多个
-        setActiveFileList(Array.from(new Set([...(activeFileList || []), script.id])));
+        setActiveFileList(
+          Array.from(new Set([...(activeFileList || []), script.id]))
+        );
         setInterval([]);
       }
     };
@@ -147,13 +167,13 @@ export default inject('userStore')(
         {
           label: formatMessage({
             id: 'src.page.Workspace.SideBar.Script.ScriptFile.4903D296',
-            defaultMessage: '批量下载',
+            defaultMessage: '批量下载'
           }),
           key: 'bacthDownload',
           onClick: () => {
             batchDownloadScript(activeFileList);
-          },
-        },
+          }
+        }
       ];
     }, [activeFileList]);
 
@@ -165,7 +185,7 @@ export default inject('userStore')(
             onBlur={(e) => setSearchVaue(e.target.value)}
             placeholder={formatMessage({
               id: 'odc.Script.ScriptFile.SearchScript',
-              defaultMessage: '搜索脚本',
+              defaultMessage: '搜索脚本'
             })}
           />
         </div>
@@ -182,11 +202,13 @@ export default inject('userStore')(
                       file?.response?.errMsg ||
                       formatMessage({
                         id: 'odc.component.OSSDragger2.FileListItem.UploadFailed',
-                        defaultMessage: '上传失败',
+                        defaultMessage: '上传失败'
                       })
                     }
                     removeUploadFile={() => {
-                      setUploadFiles(uploadFiles.filter((file) => file !== file));
+                      setUploadFiles(
+                        uploadFiles.filter((file) => file !== file)
+                      );
                     }}
                   />
                 );
@@ -231,5 +253,5 @@ export default inject('userStore')(
         />
       </div>
     );
-  }),
+  })
 );

@@ -26,7 +26,8 @@ const Sync: React.FC<IProps> = (props) => {
   const { session } = props;
   const [parallelismDegree, setParallelismDegree] = useState<number>();
   const [syncing, setSyncing] = useState<boolean>(false);
-  const [openSyncRecordDrawer, setOpenSyncRecordDrawer] = useState<boolean>(false);
+  const [openSyncRecordDrawer, setOpenSyncRecordDrawer] =
+    useState<boolean>(false);
   const { materializedView } = useContext(MaterializedViewPageContext);
 
   const synchronizeOptions: MenuItemGroupType[] = useMemo(() => {
@@ -36,22 +37,26 @@ const Sync: React.FC<IProps> = (props) => {
         type: 'group',
         label: formatMessage({
           id: 'src.page.Workspace.components.DDLResultSet.Sync.88BF23AB',
-          defaultMessage: '选择刷新方式',
+          defaultMessage: '选择刷新方式'
         }),
         children: [
           RefreshMethod.REFRESH_FAST,
           RefreshMethod.REFRESH_COMPLETE,
-          RefreshMethod.REFRESH_FORCE,
+          RefreshMethod.REFRESH_FORCE
         ].map((item) => ({
           label: (
-            <Tooltip title={synchronizeText?.[item]?.tip}>{synchronizeText?.[item]?.label}</Tooltip>
+            <Tooltip title={synchronizeText?.[item]?.tip}>
+              {synchronizeText?.[item]?.label}
+            </Tooltip>
           ),
 
           key: item,
           disabled:
-            !refreshMethodAllowsSyncMethods[materializedView?.info?.refreshMethod]?.includes(item),
-        })),
-      },
+            !refreshMethodAllowsSyncMethods[
+              materializedView?.info?.refreshMethod
+            ]?.includes(item)
+        }))
+      }
     ];
 
     return options;
@@ -65,7 +70,7 @@ const Sync: React.FC<IProps> = (props) => {
           <p className={styles.parallelismDegreeLabel}>
             {formatMessage({
               id: 'src.page.Workspace.components.DDLResultSet.Sync.F802A21B',
-              defaultMessage: '设置并行度',
+              defaultMessage: '设置并行度'
             })}
           </p>
           <InputNumber
@@ -83,7 +88,7 @@ const Sync: React.FC<IProps> = (props) => {
         >
           {formatMessage({
             id: 'src.page.Workspace.components.DDLResultSet.Sync.38BDFD2B',
-            defaultMessage: '查看刷新记录',
+            defaultMessage: '查看刷新记录'
           })}
         </Button>
       </>
@@ -97,14 +102,14 @@ const Sync: React.FC<IProps> = (props) => {
       sessionId: session?.sessionId,
       method,
       parallelismDegree,
-      materializedViewName: pageStore?.activePage?.params?.materializedViewName,
+      materializedViewName: pageStore?.activePage?.params?.materializedViewName
     });
     if (res) {
       message.success(
         formatMessage({
           id: 'src.page.Workspace.components.DDLResultSet.Sync.F3681DA6',
-          defaultMessage: '刷新数据成功',
-        }),
+          defaultMessage: '刷新数据成功'
+        })
       );
     }
     setSyncing(false);
@@ -124,16 +129,19 @@ const Sync: React.FC<IProps> = (props) => {
               title: formatMessage(
                 {
                   id: 'src.page.Workspace.components.DDLResultSet.Sync.E5C0001D',
-                  defaultMessage: '确认要{synchronizeTextInfoKeyLabel}吗',
+                  defaultMessage: '确认要{synchronizeTextInfoKeyLabel}吗'
                 },
-                { synchronizeTextInfoKeyLabel: synchronizeText?.[info.key]?.label },
+                {
+                  synchronizeTextInfoKeyLabel:
+                    synchronizeText?.[info.key]?.label
+                }
               ),
               icon: <ExclamationCircleFilled />,
               content: synchronizeText?.[info.key]?.descriptions,
               onOk: () => handleSyncMaterializedView(info.key as RefreshMethod),
-              onCancel() {},
+              onCancel() {}
             });
-          },
+          }
         }}
         overlayClassName={styles.synchronizeDropdown}
         dropdownRender={(menu) => (
@@ -147,7 +155,11 @@ const Sync: React.FC<IProps> = (props) => {
           <ToolbarButton
             icon={
               <LoadingOutlined
-                style={{ fontSize: 13, cursor: 'pointer', color: 'var(--icon-color-focus)' }}
+                style={{
+                  fontSize: 13,
+                  cursor: 'pointer',
+                  color: 'var(--icon-color-focus)'
+                }}
               />
             }
           />

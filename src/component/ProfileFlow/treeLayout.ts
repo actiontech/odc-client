@@ -1,4 +1,9 @@
-import { NODE_WIDTH, NODE_X_INTERVAL, NODE_HEIGTH, NODE_Y_INTERVAL } from './constant';
+import {
+  NODE_WIDTH,
+  NODE_X_INTERVAL,
+  NODE_HEIGTH,
+  NODE_Y_INTERVAL
+} from './constant';
 
 // 节点类
 export class Node {
@@ -19,7 +24,14 @@ export class Node {
   // 初始横坐标
   public ox: number;
 
-  constructor(data: any, parent: Node, layer: number, index: number, x: number, y: number) {
+  constructor(
+    data: any,
+    parent: Node,
+    layer: number,
+    index: number,
+    x: number,
+    y: number
+  ) {
     this.data = data;
     this.parent = parent;
     this.layer = layer;
@@ -111,7 +123,11 @@ export class Tree {
 
     // 位移所有子节点
     for (let i = 0; i < node.child.length; i++) {
-      this.translateTree(node.child[i], node.child[i].x + dx, node.child[i].y + dy);
+      this.translateTree(
+        node.child[i],
+        node.child[i].x + dx,
+        node.child[i].y + dy
+      );
     }
   }
 
@@ -222,7 +238,8 @@ export class Tree {
     if (parent.child.length > 1) {
       dx =
         parent.x -
-        (parent.child[0].x + (parent.child[parent.child.length - 1].x - parent.child[0].x) / 2);
+        (parent.child[0].x +
+          (parent.child[parent.child.length - 1].x - parent.child[0].x) / 2);
     }
     // 若要移动的距离不为0
     if (dx) {

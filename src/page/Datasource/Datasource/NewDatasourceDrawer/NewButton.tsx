@@ -17,7 +17,7 @@
 import {
   getAllConnectTypes,
   getDataSourceStyleByConnectType,
-  getDataSourceGroupByConnectType,
+  getDataSourceGroupByConnectType
 } from '@/common/datasource';
 import { batchImportPrivateConnection } from '@/common/network/connection';
 import BatchImportButton from '@/component/BatchImportButton';
@@ -38,7 +38,7 @@ import {
   Tooltip,
   Typography,
   UploadFile,
-  Divider,
+  Divider
 } from 'antd';
 import { MenuItemGroupType } from 'antd/es/menu/interface';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -79,11 +79,14 @@ const NewDatasourceButton: React.FC<{
     ...(getAllConnectTypes(IDataSourceType.ALIYUNOSS) || []),
     ...(getAllConnectTypes(IDataSourceType.QCLOUD) || []),
     ...(getAllConnectTypes(IDataSourceType.HUAWEI) || []),
-    ...(getAllConnectTypes(IDataSourceType.AWSS3) || []),
+    ...(getAllConnectTypes(IDataSourceType.AWSS3) || [])
   ];
 
   useEffect(() => {
-    runAction({ actionType: URL_ACTION.newDatasource, callback: () => setDropdownOpen(true) });
+    runAction({
+      actionType: URL_ACTION.newDatasource,
+      callback: () => setDropdownOpen(true)
+    });
   }, []);
 
   const handleDropdownVisibleChange = (open: boolean) => {
@@ -96,14 +99,16 @@ const NewDatasourceButton: React.FC<{
   }>();
   const handleBatchImportSubmit = async (files: UploadFile[]) => {
     const connections: IDatasource[] = getResultByFiles(files);
-    const data = connections?.map((item) => encryptConnection<IDatasource>(item));
+    const data = connections?.map((item) =>
+      encryptConnection<IDatasource>(item)
+    );
     const res = await batchImportPrivateConnection(data);
     if (res) {
       message.success(
         formatMessage({
           id: 'odc.Content.TitleButton.BatchImportSucceeded',
-          defaultMessage: '批量导入成功',
-        }), //批量导入成功
+          defaultMessage: '批量导入成功'
+        }) //批量导入成功
       );
 
       batchImportRef.current.closeModal();
@@ -112,14 +117,16 @@ const NewDatasourceButton: React.FC<{
   };
 
   const results: MenuItemGroupType[] = useMemo(() => {
-    let results: MenuItemGroupType[] = Object.values(DatasourceGroup).map((item) => {
-      return {
-        label: GruopTypeText[item],
-        key: item,
-        type: 'group',
-        children: [],
-      };
-    });
+    let results: MenuItemGroupType[] = Object.values(DatasourceGroup).map(
+      (item) => {
+        return {
+          label: GruopTypeText[item],
+          key: item,
+          type: 'group',
+          children: []
+        };
+      }
+    );
     results.forEach((at) => {
       connectTypes.forEach((item) => {
         if (getDataSourceGroupByConnectType(item) === at.key) {
@@ -128,13 +135,15 @@ const NewDatasourceButton: React.FC<{
             key: item,
             icon: (
               <Icon
-                component={getDataSourceStyleByConnectType(item)?.icon?.component}
+                component={
+                  getDataSourceStyleByConnectType(item)?.icon?.component
+                }
                 style={{
                   color: getDataSourceStyleByConnectType(item)?.icon?.color,
-                  fontSize: '16px',
+                  fontSize: '16px'
                 }}
               />
-            ),
+            )
           });
         }
       });
@@ -153,12 +162,14 @@ const NewDatasourceButton: React.FC<{
           <Space style={{ padding: 8 }}>
             <Button
               type="text"
-              icon={<ImportOutlined style={{ color: 'var(--icon-color-normal)' }} />}
+              icon={
+                <ImportOutlined style={{ color: 'var(--icon-color-normal)' }} />
+              }
               onClick={batchImport}
             >
               {formatMessage({
                 id: 'odc.component.BatchImportButton.BatchImport',
-                defaultMessage: '批量导入',
+                defaultMessage: '批量导入'
               })}
             </Button>
           </Space>
@@ -176,7 +187,7 @@ const NewDatasourceButton: React.FC<{
       const res = item.response;
       if (res) {
         const result = {
-          ...item,
+          ...item
         };
         const errorMessage = res?.data?.errorMessage;
         if (errorMessage) {
@@ -203,7 +214,7 @@ const NewDatasourceButton: React.FC<{
           items: results,
           onClick(info) {
             newDataSource(info.key);
-          },
+          }
         }}
         onOpenChange={handleDropdownVisibleChange}
         dropdownRender={(menu) => (
@@ -218,7 +229,7 @@ const NewDatasourceButton: React.FC<{
             {
               formatMessage({
                 id: 'odc.Datasource.NewDatasourceDrawer.NewButton.CreateADataSource',
-                defaultMessage: '新建数据源',
+                defaultMessage: '新建数据源'
               }) /*新建数据源*/
             }
 
@@ -235,12 +246,12 @@ const NewDatasourceButton: React.FC<{
           formatMessage({
             id: 'odc.src.page.Datasource.Datasource.Content.TitleButton.TheFileNeedsToInclude',
             defaultMessage:
-              '文件需包含类型、主机端口、租户名、数据库账号等相关数据源信息，建议使用数据源配置模版',
+              '文件需包含类型、主机端口、租户名、数据库账号等相关数据源信息，建议使用数据源配置模版'
           }) /* 文件需包含类型、主机端口、租户名、数据库账号等相关数据源信息，建议使用数据源配置模版 */
         }
         templatePath="/api/v2/datasource/datasources/template"
         data={{
-          visibleScope: IConnectionType.PRIVATE,
+          visibleScope: IConnectionType.PRIVATE
         }}
         previewContent={(data: IDatasource[]) => {
           if (!data?.length) {
@@ -249,7 +260,7 @@ const NewDatasourceButton: React.FC<{
                 description={
                   formatMessage({
                     id: 'odc.src.page.Datasource.Datasource.Content.TitleButton.NoValidDataSourceInformation',
-                    defaultMessage: '暂无有效数据源信息',
+                    defaultMessage: '暂无有效数据源信息'
                   }) /* 暂无有效数据源信息 */
                 }
               />
@@ -263,7 +274,7 @@ const NewDatasourceButton: React.FC<{
                   <div key={index} className={styles['pre-item']}>
                     <ConIcon
                       style={{
-                        marginRight: '4px',
+                        marginRight: '4px'
                       }}
                     />
 
@@ -273,7 +284,7 @@ const NewDatasourceButton: React.FC<{
                           <Typography.Text>{item.name}</Typography.Text>
                           <ExclamationCircleFilled
                             style={{
-                              color: 'var(--icon-orange-color)',
+                              color: 'var(--icon-orange-color)'
                             }}
                           />
                         </Space>
@@ -282,7 +293,12 @@ const NewDatasourceButton: React.FC<{
                       <Popover
                         overlayClassName={styles.connectionPopover}
                         placement="right"
-                        content={<ConnectionPopover connection={item} showType={false} />}
+                        content={
+                          <ConnectionPopover
+                            connection={item}
+                            showType={false}
+                          />
+                        }
                       >
                         <Typography.Text>{item.name}</Typography.Text>
                       </Popover>

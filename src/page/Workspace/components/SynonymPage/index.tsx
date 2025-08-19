@@ -67,14 +67,14 @@ class SynonymPage extends Component<
   public readonly state = {
     propsTab: this.props.params.propsTab || SynonymPropsTab.DDL,
     synonym: null,
-    formated: false,
+    formated: false
   };
 
   public editor: IEditor;
 
   public async componentDidMount() {
     const {
-      params: { synonymName, synonymType },
+      params: { synonymName, synonymType }
     } = this.props;
     await this.reloadsynonym(synonymName, synonymType);
   }
@@ -87,7 +87,7 @@ class SynonymPage extends Component<
       nextProps.params.propsTab !== this.state.propsTab
     ) {
       this.setState({
-        propsTab: nextProps.params.propsTab,
+        propsTab: nextProps.params.propsTab
       });
     }
   }
@@ -96,7 +96,7 @@ class SynonymPage extends Component<
     const { pageStore, pageKey } = this.props;
     const { synonym } = this.state;
     this.setState({
-      propsTab,
+      propsTab
     });
 
     // 更新 url
@@ -107,29 +107,32 @@ class SynonymPage extends Component<
 
       {
         synonymName: synonym.synonymName,
-        propsTab,
-      },
+        propsTab
+      }
     );
   };
-  private reloadsynonym = async (synonymName: string, synonymType: SynonymType) => {
+  private reloadsynonym = async (
+    synonymName: string,
+    synonymType: SynonymType
+  ) => {
     const { session } = this.props;
     const synonym = await getSynonym(
       synonymName,
       synonymType,
       session?.sessionId,
-      session?.odcDatabase?.name,
+      session?.odcDatabase?.name
     );
 
     if (synonym) {
       this.setState({
-        synonym,
+        synonym
       });
     } else {
       message.error(
         formatMessage({
           id: 'odc.components.SynonymPage.FailedToLoadSynonyms',
-          defaultMessage: '加载同义词失败',
-        }), // 加载同义词失败
+          defaultMessage: '加载同义词失败'
+        }) // 加载同义词失败
       );
     }
   };
@@ -142,7 +145,7 @@ class SynonymPage extends Component<
       this.editor.setValue(synonym?.ddl || '');
     }
     this.setState({
-      formated: !formated,
+      formated: !formated
     });
   };
 
@@ -162,7 +165,7 @@ class SynonymPage extends Component<
                   key: SynonymPropsTab.BASE_INFO,
                   label: formatMessage({
                     id: 'odc.components.SynonymPage.BasicInformation',
-                    defaultMessage: '基本信息',
+                    defaultMessage: '基本信息'
                   }),
                   children: (
                     <ToolPageTextFromWrapper>
@@ -171,46 +174,52 @@ class SynonymPage extends Component<
                           {
                             formatMessage({
                               id: 'odc.components.SynonymPage.Name',
-                              defaultMessage: '名称：',
+                              defaultMessage: '名称：'
                             })
 
                             /* 名称: */
                           }
                         </span>
-                        <span className={`${preTextForm}-content`}>{synonym.synonymName}</span>
+                        <span className={`${preTextForm}-content`}>
+                          {synonym.synonymName}
+                        </span>
                       </div>
                       <div className={`${preTextForm}-line`}>
                         <span className={`${preTextForm}-label`}>
                           {
                             formatMessage({
                               id: 'odc.components.SynonymPage.ObjectOwner',
-                              defaultMessage: '对象所有者:',
+                              defaultMessage: '对象所有者:'
                             })
 
                             /* 对象所有者: */
                           }
                         </span>
-                        <span className={`${preTextForm}-content`}>{synonym.tableOwner}</span>
+                        <span className={`${preTextForm}-content`}>
+                          {synonym.tableOwner}
+                        </span>
                       </div>
                       <div className={`${preTextForm}-line`}>
                         <span className={`${preTextForm}-label`}>
                           {
                             formatMessage({
                               id: 'odc.components.SynonymPage.ObjectName',
-                              defaultMessage: '对象名称：',
+                              defaultMessage: '对象名称：'
                             })
 
                             /* 对象名称: */
                           }
                         </span>
-                        <span className={`${preTextForm}-content`}>{synonym.tableName}</span>
+                        <span className={`${preTextForm}-content`}>
+                          {synonym.tableName}
+                        </span>
                       </div>
                       <div className={`${preTextForm}-line`}>
                         <span className={`${preTextForm}-label`}>
                           {
                             formatMessage({
                               id: 'odc.components.SynonymPage.Created',
-                              defaultMessage: '创建时间:',
+                              defaultMessage: '创建时间:'
                             })
 
                             /* 创建时间: */
@@ -225,18 +234,20 @@ class SynonymPage extends Component<
                           {
                             formatMessage({
                               id: 'odc.components.SynonymPage.ModificationTime',
-                              defaultMessage: '修改时间:',
+                              defaultMessage: '修改时间:'
                             })
 
                             /* 修改时间: */
                           }
                         </span>
                         <span className={`${preTextForm}-content`}>
-                          {dayjs(synonym.lastDdlTime).format('YYYY-MM-DD HH:mm:ss')}
+                          {dayjs(synonym.lastDdlTime).format(
+                            'YYYY-MM-DD HH:mm:ss'
+                          )}
                         </span>
                       </div>
                     </ToolPageTextFromWrapper>
-                  ),
+                  )
                 },
                 {
                   key: SynonymPropsTab.DDL,
@@ -248,7 +259,7 @@ class SynonymPage extends Component<
                           text={
                             formatMessage({
                               id: 'odc.components.SynonymPage.Download',
-                              defaultMessage: '下载',
+                              defaultMessage: '下载'
                             }) //下载
                           }
                           icon={<CloudDownloadOutlined />}
@@ -257,7 +268,7 @@ class SynonymPage extends Component<
                               synonym?.synonymName,
                               PLType.SYNONYM,
                               synonym?.ddl,
-                              session?.odcDatabase?.name,
+                              session?.odcDatabase?.name
                             );
                           }}
                         />
@@ -267,26 +278,34 @@ class SynonymPage extends Component<
                             formated
                               ? formatMessage({
                                   id: 'odc.components.SynonymPage.Unformat',
-                                  defaultMessage: '取消格式化',
+                                  defaultMessage: '取消格式化'
                                 })
                               : // 取消格式化
                                 formatMessage({
                                   id: 'odc.components.SynonymPage.Formatting',
-                                  defaultMessage: '格式化',
+                                  defaultMessage: '格式化'
                                 })
                             // 格式化
                           }
                           icon={<AlignLeftOutlined />}
                           onClick={this.handleFormat}
-                          status={formated ? IConStatus.ACTIVE : IConStatus.INIT}
+                          status={
+                            formated ? IConStatus.ACTIVE : IConStatus.INIT
+                          }
                         />
                       </Toolbar>
-                      <div style={{ height: `calc(100% - 38px)`, position: 'relative' }}>
+                      <div
+                        style={{
+                          height: `calc(100% - 38px)`,
+                          position: 'relative'
+                        }}
+                      >
                         <SQLCodePreviewer
                           readOnly
                           defaultValue={(synonym && synonym.ddl) || ''}
                           language={
-                            getDataSourceModeConfig(session?.connection?.type)?.sql?.language
+                            getDataSourceModeConfig(session?.connection?.type)
+                              ?.sql?.language
                           }
                           onEditorCreated={(editor: IEditor) => {
                             this.editor = editor;
@@ -294,8 +313,8 @@ class SynonymPage extends Component<
                         />
                       </div>
                     </>
-                  ),
-                },
+                  )
+                }
               ]}
             />
           </Content>
@@ -316,5 +335,5 @@ export default WrapSessionPage(
   },
   true,
   false,
-  true,
+  true
 );

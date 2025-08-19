@@ -23,7 +23,8 @@ import { IReactionDisposer, reaction } from 'mobx';
 function getOrganizationKey() {
   const userId = login?.user?.id;
   const organizationId = login?.organizationId;
-  const tabKey = /sqlworkspace\/(.+)/.exec(history.location.pathname)?.[1] || '';
+  const tabKey =
+    /sqlworkspace\/(.+)/.exec(history.location.pathname)?.[1] || '';
   const key = tabKey
     ? `tmp-${tabKey}-${userId}-organization-${organizationId}`
     : `${userId}-organization-${organizationId}`;
@@ -56,7 +57,7 @@ const saveToDB = throttle(async function () {
       const oldData = (await getMetaStoreInstance().getItem(key)) || {};
       await getMetaStoreInstance().setItem(key, {
         ...oldData,
-        ...value,
+        ...value
       });
       console.log('over', key);
     }
@@ -80,7 +81,7 @@ async function updateDB(key, value, propertyDBKey) {
   }
   cacheValue = {
     ...cacheValue,
-    [propertyDBKey]: value,
+    [propertyDBKey]: value
   };
   // logger.debug(JSON.stringify(cacheValue, null, 4), key);
   modifyCache.set(key, cacheValue);
@@ -91,7 +92,7 @@ export async function autoSave(
   obj: any,
   property: string,
   propertyDBKey: string,
-  defaultValue: any,
+  defaultValue: any
 ): Promise<() => void> {
   let timer;
   let mobxDisposer: IReactionDisposer;
@@ -122,7 +123,9 @@ export async function autoSave(
       obj[property] = data;
       return;
     }
-    const dbValue = (await (await getMetaStoreInstance()).getItem(key))?.[propertyDBKey];
+    const dbValue = (await (await getMetaStoreInstance()).getItem(key))?.[
+      propertyDBKey
+    ];
     if (isNil(dbValue)) {
       data = defaultValue;
     } else {
@@ -138,7 +141,7 @@ export async function autoSave(
       () => obj[property],
       () => {
         updateDB(key, obj[property], propertyDBKey);
-      },
+      }
     );
     return;
   }

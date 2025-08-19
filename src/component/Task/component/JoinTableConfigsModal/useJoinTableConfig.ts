@@ -19,7 +19,7 @@ export default function useJoinTableConfig(form?: FormInstance) {
     form.setFieldsValue({
       tables: form
         .getFieldValue('tables')
-        .map((item, i) => (i === currentIndex ? { ...item, ...values } : item)),
+        .map((item, i) => (i === currentIndex ? { ...item, ...values } : item))
     });
     close();
   };
@@ -29,6 +29,6 @@ export default function useJoinTableConfig(form?: FormInstance) {
     currentIndex,
     open,
     close,
-    handleSubmit,
+    handleSubmit
   };
 }

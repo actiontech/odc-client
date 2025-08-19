@@ -9,17 +9,17 @@ import { AccountType, IConnectionTestErrorType, ConnectType } from '@/d.ts';
 
 const placeholder = {
   [ConnectType.OSS]: {
-    placeholder: 'oss://obcloud-samples/document',
+    placeholder: 'oss://obcloud-samples/document'
   },
   [ConnectType.COS]: {
-    placeholder: 'cos://obcloud-samples/document',
+    placeholder: 'cos://obcloud-samples/document'
   },
   [ConnectType.OBS]: {
-    placeholder: 'obs://obcloud-samples/document',
+    placeholder: 'obs://obcloud-samples/document'
   },
   [ConnectType.S3A]: {
-    placeholder: 's3://obcloud-samples/document',
-  },
+    placeholder: 's3://obcloud-samples/document'
+  }
 };
 
 interface CloudStorageFormProps {
@@ -41,14 +41,20 @@ const CloudStorageForm: React.FC<CloudStorageFormProps> = (props) => {
       console.error('Validation failed:', error);
       return;
     }
-    const params = form.getFieldsValue(['username', 'password', 'region', 'type', 'host']);
+    const params = form.getFieldsValue([
+      'username',
+      'password',
+      'region',
+      'type',
+      'host'
+    ]);
     const res = await testConnection(params, AccountType.MAIN, true);
     if (res?.errMsg) {
       setTestResult({
         errorCode: IConnectionTestErrorType.UNKNOWN,
         errorMessage: res?.errMsg,
         active: false,
-        type: null,
+        type: null
       });
       return;
     }
@@ -59,8 +65,8 @@ const CloudStorageForm: React.FC<CloudStorageFormProps> = (props) => {
           form.setFields([
             {
               errors: [res?.data?.errorMessage],
-              name: ['username'],
-            },
+              name: ['username']
+            }
           ]);
           break;
         }
@@ -68,8 +74,8 @@ const CloudStorageForm: React.FC<CloudStorageFormProps> = (props) => {
           form.setFields([
             {
               errors: [res?.data?.errorMessage],
-              name: ['password'],
-            },
+              name: ['password']
+            }
           ]);
           break;
         }
@@ -78,8 +84,8 @@ const CloudStorageForm: React.FC<CloudStorageFormProps> = (props) => {
       message.success(
         formatMessage({
           id: 'src.page.Datasource.Datasource.NewDatasourceDrawer.Form.CloudStorageForm.79FBC953',
-          defaultMessage: '测试连接成功',
-        }),
+          defaultMessage: '测试连接成功'
+        })
       );
     }
     setTestResult(res?.data);
@@ -91,7 +97,7 @@ const CloudStorageForm: React.FC<CloudStorageFormProps> = (props) => {
     } else if (
       [
         IConnectionTestErrorType.SIGNATURE_DOES_NOT_MATCH,
-        IConnectionTestErrorType.UNKNOWN,
+        IConnectionTestErrorType.UNKNOWN
       ].includes(testResult?.errorCode)
     ) {
       return 'error';
@@ -105,7 +111,7 @@ const CloudStorageForm: React.FC<CloudStorageFormProps> = (props) => {
       [
         IConnectionTestErrorType.ACCESS_DENIED,
         IConnectionTestErrorType.INVALID_ACCESSKEY_ID,
-        IConnectionTestErrorType.UNKNOWN,
+        IConnectionTestErrorType.UNKNOWN
       ].includes(testResult?.errorCode)
     ) {
       return 'error';
@@ -117,35 +123,39 @@ const CloudStorageForm: React.FC<CloudStorageFormProps> = (props) => {
       <Form.Item
         label={formatMessage({
           id: 'src.page.Datasource.Datasource.NewDatasourceDrawer.Form.CloudStorageForm.7C7CBA83',
-          defaultMessage: '文件 URL',
+          defaultMessage: '文件 URL'
         })}
         name={'host'}
         tooltip={formatMessage({
           id: 'src.page.Datasource.Datasource.NewDatasourceDrawer.Form.CloudStorageForm.105ECDDE',
-          defaultMessage: '访问对象文件的路径地址',
+          defaultMessage: '访问对象文件的路径地址'
         })}
         rules={[
           {
-            required: true,
-          },
+            required: true
+          }
         ]}
       >
-        <Input autoComplete="off" disabled={isEdit} placeholder={placeholder[Type]?.placeholder} />
+        <Input
+          autoComplete="off"
+          disabled={isEdit}
+          placeholder={placeholder[Type]?.placeholder}
+        />
       </Form.Item>
       <Form.Item
         label={formatMessage({
           id: 'src.page.Datasource.Datasource.NewDatasourceDrawer.Form.CloudStorageForm.CE7555C1',
-          defaultMessage: '地域',
+          defaultMessage: '地域'
         })}
         name={'region'}
         tooltip={formatMessage({
           id: 'src.page.Datasource.Datasource.NewDatasourceDrawer.Form.CloudStorageForm.47E5C6F0',
-          defaultMessage: '用于标识数据存储的具体地理位置区域',
+          defaultMessage: '用于标识数据存储的具体地理位置区域'
         })}
         rules={[
           {
-            required: true,
-          },
+            required: true
+          }
         ]}
       >
         <Input
@@ -153,7 +163,7 @@ const CloudStorageForm: React.FC<CloudStorageFormProps> = (props) => {
           disabled={isEdit}
           placeholder={formatMessage({
             id: 'src.page.Datasource.Datasource.NewDatasourceDrawer.Form.CloudStorageForm.FEA72F35',
-            defaultMessage: '示例: cn-north-1',
+            defaultMessage: '示例: cn-north-1'
           })}
         />
       </Form.Item>
@@ -161,15 +171,15 @@ const CloudStorageForm: React.FC<CloudStorageFormProps> = (props) => {
         <Form.Item
           label={formatMessage({
             id: 'src.page.Datasource.Datasource.NewDatasourceDrawer.Form.CloudStorageForm.B04CC70F',
-            defaultMessage: '访问密钥 ID',
+            defaultMessage: '访问密钥 ID'
           })}
           validateStatus={usernameValidStatus}
           hasFeedback={!!usernameValidStatus}
           name={'username'}
           rules={[
             {
-              required: true,
-            },
+              required: true
+            }
           ]}
         >
           <Input
@@ -177,22 +187,22 @@ const CloudStorageForm: React.FC<CloudStorageFormProps> = (props) => {
             style={{ width: 224 }}
             placeholder={formatMessage({
               id: 'src.page.Datasource.Datasource.NewDatasourceDrawer.Form.CloudStorageForm.990704A2',
-              defaultMessage: '请输入',
+              defaultMessage: '请输入'
             })}
           />
         </Form.Item>
         <Form.Item
           label={formatMessage({
             id: 'src.page.Datasource.Datasource.NewDatasourceDrawer.Form.CloudStorageForm.9E9AD5FC',
-            defaultMessage: '访问密钥',
+            defaultMessage: '访问密钥'
           })}
           name={'password'}
           validateStatus={passwordValidStatus}
           hasFeedback={!!passwordValidStatus}
           rules={[
             {
-              required: true,
-            },
+              required: true
+            }
           ]}
         >
           <Input.Password
@@ -200,7 +210,7 @@ const CloudStorageForm: React.FC<CloudStorageFormProps> = (props) => {
             style={{ width: 224 }}
             placeholder={formatMessage({
               id: 'src.page.Datasource.Datasource.NewDatasourceDrawer.Form.CloudStorageForm.E1CB23D0',
-              defaultMessage: '请输入',
+              defaultMessage: '请输入'
             })}
           />
         </Form.Item>
@@ -216,7 +226,7 @@ const CloudStorageForm: React.FC<CloudStorageFormProps> = (props) => {
           >
             {formatMessage({
               id: 'portal.connection.form.test',
-              defaultMessage: '测试连接',
+              defaultMessage: '测试连接'
             })}
           </Action.Link>
         </Space>

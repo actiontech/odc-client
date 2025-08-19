@@ -43,7 +43,7 @@ function EditPLParamsModal({
   plSchema,
   defaultAnonymousBlockDdl,
   connectionMode,
-  plAction,
+  plAction
 }: IProps) {
   const [loading, setLoading] = useState(false);
   const [anonymousBlockDdl, setAnonymousBlockDdl] = useState('');
@@ -58,7 +58,8 @@ function EditPLParamsModal({
        */
       if (connectionMode === ConnectionMode.OB_ORACLE) {
         setAnonymousBlockDdl(
-          defaultAnonymousBlockDdl || getPLDebugExecuteSql(plSchema, plAction === 'DEBUG'),
+          defaultAnonymousBlockDdl ||
+            getPLDebugExecuteSql(plSchema, plAction === 'DEBUG')
         );
       }
     }
@@ -76,30 +77,33 @@ function EditPLParamsModal({
         width: 36,
         render(_, __, index) {
           return index + 1;
-        },
+        }
       },
       {
         title: formatMessage({
           id: 'odc.component.EditPLParamsModal.Parameter',
-          defaultMessage: '参数名',
+          defaultMessage: '参数名'
         }),
         width: 160,
         dataIndex: 'paramName',
-        key: 'paramName',
+        key: 'paramName'
       },
 
       {
         title: formatMessage({
           id: 'odc.component.EditPLParamsModal.DataType',
-          defaultMessage: '数据类型',
+          defaultMessage: '数据类型'
         }),
         width: 136,
         dataIndex: 'dataType',
-        key: 'dataType',
+        key: 'dataType'
       },
 
       {
-        title: formatMessage({ id: 'odc.component.EditPLParamsModal.Value', defaultMessage: '值' }),
+        title: formatMessage({
+          id: 'odc.component.EditPLParamsModal.Value',
+          defaultMessage: '值'
+        }),
         dataIndex: 'defaultValue',
         key: 'defaultValue',
         render(value: any, record: any) {
@@ -119,13 +123,13 @@ function EditPLParamsModal({
               <ValueInput connectionMode={connectionMode} />
             </Form.Item>
           );
-        },
-      },
+        }
+      }
     ];
   }
   const columns = getColumns();
   const dataSource = params?.filter(
-    (param) => param.paramMode && /IN/.test(param.paramMode.toUpperCase()),
+    (param) => param.paramMode && /IN/.test(param.paramMode.toUpperCase())
   );
 
   const isOracle = connectionMode === ConnectionMode.OB_ORACLE;
@@ -143,8 +147,8 @@ function EditPLParamsModal({
           message.warning(
             formatMessage({
               id: 'odc.component.EditPLParamsModal.StatementCannotBeEmpty',
-              defaultMessage: '语句不能为空',
-            }), //语句不能为空
+              defaultMessage: '语句不能为空'
+            }) //语句不能为空
           );
           return;
         }
@@ -186,7 +190,7 @@ function EditPLParamsModal({
       destroyOnClose
       title={formatMessage({
         id: 'odc.component.EditPLParamsModal.SetParameters',
-        defaultMessage: '设置参数',
+        defaultMessage: '设置参数'
       })}
       open={visible}
       onOk={handleSubmit}

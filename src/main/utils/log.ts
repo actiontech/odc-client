@@ -27,9 +27,9 @@ log.catchErrors({
   showDialog: false,
   onError(error, versions, submitIssue) {
     log.error(
-      `Unhandle Error!!!!!!${error.stack}\n os:${versions.os} | app:${versions.app} | os:${versions.os}`,
+      `Unhandle Error!!!!!!${error.stack}\n os:${versions.os} | app:${versions.app} | os:${versions.os}`
     );
-  },
+  }
 });
 
 export default log;

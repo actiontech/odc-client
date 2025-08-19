@@ -27,29 +27,29 @@ import {
   TaskPageType,
   TriggerPropsTab,
   TriggerState,
-  TypePropsTab,
+  TypePropsTab
 } from '@/d.ts';
 import {
   PropsTab as FunctionPropsTab,
-  TopTab as FunctionTopTab,
+  TopTab as FunctionTopTab
 } from '@/page/Workspace/components/FunctionPage';
 import { PropsTab, TopTab } from '@/page/Workspace/components/PackagePage';
 import {
   PropsTab as ProcedurePropsTab,
-  TopTab as ProcedureTopTab,
+  TopTab as ProcedureTopTab
 } from '@/page/Workspace/components/ProcedurePage';
 import { PropsTab as SequencePropsTab } from '@/page/Workspace/components/SequencePage';
 import {
   PropsTab as TablePropsTab,
-  TopTab as TableTopTab,
+  TopTab as TableTopTab
 } from '@/page/Workspace/components/TablePage';
 import {
   PropsTab as ViewPropsTab,
-  TopTab as ViewTopTab,
+  TopTab as ViewTopTab
 } from '@/page/Workspace/components/ViewPage';
 import {
   PropsTab as MaterializedViewPropsTab,
-  TopTab as MaterializedViewTopTab,
+  TopTab as MaterializedViewTopTab
 } from '@/page/Workspace/components/MaterializedViewPage';
 import page from '@/store/page';
 import { formatMessage } from '@/util/intl';
@@ -67,7 +67,7 @@ export class PackageViewPage extends Page {
     databaseId: number,
     packageName: string,
     topTab: TopTab = TopTab.HEAD,
-    propsTab: PropsTab = PropsTab.PACKAGE_HEAD_CODE,
+    propsTab: PropsTab = PropsTab.PACKAGE_HEAD_CODE
   ) {
     super();
     this.pageType = PageType.PACKAGE;
@@ -76,7 +76,7 @@ export class PackageViewPage extends Page {
       packageName,
       topTab,
       propsTab,
-      databaseId,
+      databaseId
     };
     this.pageTitle = packageName;
   }
@@ -98,7 +98,7 @@ export class SQLPage extends Page {
     }
     return formatMessage({
       id: 'workspace.header.create.sql',
-      defaultMessage: 'SQL 窗口',
+      defaultMessage: 'SQL 窗口'
     });
   }
   public findCurrentNum() {
@@ -125,7 +125,7 @@ export class SQLPage extends Page {
         ...script?.scriptMeta,
         scriptText: script.content,
         scriptId: script.scriptMeta?.id,
-        cid: databaseId,
+        cid: databaseId
       };
     } else {
       const pageIndex = this.findCurrentNum();
@@ -135,7 +135,7 @@ export class SQLPage extends Page {
         pageIndex: pageIndex,
         scriptText: '',
         cid: databaseId,
-        fromTask,
+        fromTask
       };
     }
   }
@@ -154,7 +154,7 @@ export class TutorialPage extends Page {
     this.pageParams = {
       docId,
       cid: databaseId,
-      scriptText: '',
+      scriptText: ''
     };
   }
 }
@@ -165,10 +165,10 @@ export class TaskPage extends Page {
     this.pageType = PageType.TASKS;
     this.pageTitle = formatMessage({
       id: 'odc.src.store.helper.page.pages.WorkOrder',
-      defaultMessage: '工单',
+      defaultMessage: '工单'
     }); //'工单'
     this.pageParams = {
-      type,
+      type
     };
   }
 }
@@ -182,10 +182,10 @@ export class SessionManagePage extends Page {
     this.pageType = PageType.SESSION_MANAGEMENT;
     this.pageTitle = formatMessage({
       id: 'workspace.header.session.management',
-      defaultMessage: '会话管理',
+      defaultMessage: '会话管理'
     });
     this.pageParams = {
-      cid,
+      cid
     };
   }
 }
@@ -199,7 +199,7 @@ export class SessionParamsPage extends Page {
     this.pageType = PageType.SESSION_PARAM;
     this.pageTitle = '--';
     this.pageParams = {
-      cid,
+      cid
     };
   }
 }
@@ -213,10 +213,10 @@ export class RecycleBinPage extends Page {
     this.pageType = PageType.RECYCLE_BIN;
     this.pageTitle = formatMessage({
       id: 'workspace.header.recycle',
-      defaultMessage: '回收站',
+      defaultMessage: '回收站'
     });
     this.pageParams = {
-      cid,
+      cid
     };
   }
 }
@@ -235,7 +235,7 @@ export class TablePage extends Page {
     topTab: TableTopTab = TableTopTab.PROPS,
     propsTab: TablePropsTab = TablePropsTab.INFO,
     tableId: number,
-    isExternalTable?: boolean,
+    isExternalTable?: boolean
   ) {
     super();
     this.pageType = PageType.TABLE;
@@ -247,7 +247,7 @@ export class TablePage extends Page {
       topTab,
       propsTab,
       tableId,
-      isExternalTable,
+      isExternalTable
     };
   }
 }
@@ -262,7 +262,7 @@ export class ViewPage extends Page {
     databaseId: number,
     viewName: string,
     topTab: ViewTopTab = ViewTopTab.PROPS,
-    propsTab: ViewPropsTab = ViewPropsTab.INFO,
+    propsTab: ViewPropsTab = ViewPropsTab.INFO
   ) {
     super();
     this.pageType = PageType.VIEW;
@@ -272,7 +272,7 @@ export class ViewPage extends Page {
       viewName,
       topTab,
       propsTab,
-      databaseId,
+      databaseId
     };
   }
 }
@@ -290,7 +290,7 @@ export class MaterializedViewPage extends Page {
     materializedViewName: string,
     topTab: MaterializedViewTopTab = MaterializedViewTopTab.PROPS,
     propsTab: MaterializedViewPropsTab = MaterializedViewPropsTab.INFO,
-    dbName: string,
+    dbName: string
   ) {
     super();
     this.pageType = PageType.MATERIALIZED_VIEW;
@@ -301,7 +301,7 @@ export class MaterializedViewPage extends Page {
       materializedViewName,
       topTab,
       propsTab,
-      dbName,
+      dbName
     };
   }
 }
@@ -317,7 +317,7 @@ export class FunctionPage extends Page {
     databaseId: number,
     functionName: string,
     topTab: FunctionTopTab = FunctionTopTab.PROPS,
-    propsTab: FunctionPropsTab = FunctionPropsTab.INFO,
+    propsTab: FunctionPropsTab = FunctionPropsTab.INFO
   ) {
     super();
     this.pageType = PageType.FUNCTION;
@@ -327,7 +327,7 @@ export class FunctionPage extends Page {
       databaseId,
       funName: functionName,
       topTab,
-      propsTab,
+      propsTab
     };
   }
 }
@@ -342,7 +342,7 @@ export class ProcedurePage extends Page {
     databaseId: number,
     procedureName: string,
     topTab: ProcedureTopTab = ProcedureTopTab.PROPS,
-    propsTab: ProcedurePropsTab = ProcedurePropsTab.INFO,
+    propsTab: ProcedurePropsTab = ProcedurePropsTab.INFO
   ) {
     super();
     this.pageType = PageType.PROCEDURE;
@@ -352,7 +352,7 @@ export class ProcedurePage extends Page {
       databaseId,
       proName: procedureName,
       topTab,
-      propsTab,
+      propsTab
     };
   }
 }
@@ -365,7 +365,7 @@ export class SequencePage extends Page {
   constructor(
     databaseId: number,
     sequenceName: string,
-    propsTab: SequencePropsTab = SequencePropsTab.INFO,
+    propsTab: SequencePropsTab = SequencePropsTab.INFO
   ) {
     super();
     this.pageType = PageType.SEQUENCE;
@@ -374,7 +374,7 @@ export class SequencePage extends Page {
     this.pageParams = {
       databaseId,
       sequenceName,
-      propsTab,
+      propsTab
     };
   }
 }
@@ -391,7 +391,7 @@ export class TriggerPage extends Page {
     triggerName: string,
     triggerState: TriggerState,
     propsTab: TriggerPropsTab = TriggerPropsTab.DDL,
-    triggerData?: ITrigger,
+    triggerData?: ITrigger
   ) {
     super();
     this.pageType = PageType.TRIGGER;
@@ -402,7 +402,7 @@ export class TriggerPage extends Page {
       triggerName,
       triggerData,
       propsTab,
-      isDisabled: triggerState === TriggerState.disabled,
+      isDisabled: triggerState === TriggerState.disabled
     };
   }
 }
@@ -413,7 +413,11 @@ export class SynonymPage extends Page {
     propsTab: SynonymPropsTab;
     synonymType: SynonymType;
   };
-  constructor(databaseId: number, synonymName: string, synonymType: SynonymType) {
+  constructor(
+    databaseId: number,
+    synonymName: string,
+    synonymType: SynonymType
+  ) {
     super();
     this.pageType = PageType.SYNONYM;
     this.pageKey = `synonympage-synonymName:${synonymName}-dbid:${databaseId}`;
@@ -422,7 +426,7 @@ export class SynonymPage extends Page {
       databaseId,
       synonymName,
       synonymType,
-      propsTab: SynonymPropsTab.DDL,
+      propsTab: SynonymPropsTab.DDL
     };
   }
 }
@@ -440,7 +444,7 @@ export class TypePage extends Page {
     this.pageParams = {
       databaseId,
       typeName,
-      propsTab,
+      propsTab
     };
   }
 }
@@ -454,14 +458,18 @@ export class BatchCompilePage extends Page {
     return formatMessage(
       {
         id: 'odc.helper.page.openPage.BatchCompilationLabel',
-        defaultMessage: '批量编译{label}',
+        defaultMessage: '批量编译{label}'
       },
       {
-        label: PLPageMap?.[params?.type]?.label ?? '',
-      },
+        label: PLPageMap?.[params?.type]?.label ?? ''
+      }
     );
   }
-  constructor(pageType: PageType, dbObjectType: DbObjectType, databaseId: number) {
+  constructor(
+    pageType: PageType,
+    dbObjectType: DbObjectType,
+    databaseId: number
+  ) {
     super();
     this.pageKey = `batchcompile-databaseId:${databaseId}-pageType:${pageType}`;
     this.pageTitle = '--';
@@ -469,7 +477,7 @@ export class BatchCompilePage extends Page {
     this.pageParams = {
       dbObjectType,
       type: pageType,
-      databaseId,
+      databaseId
     };
   }
 }
@@ -479,7 +487,12 @@ export class SQLResultSetPage extends Page {
     databaseId: number;
     sqlContent: string;
   };
-  constructor(databaseId: number, resultSets: IResultSet[], title: string, sqlContent: string) {
+  constructor(
+    databaseId: number,
+    resultSets: IResultSet[],
+    title: string,
+    sqlContent: string
+  ) {
     super();
     this.pageKey = 'sql_resultset_view-' + generateUniqKey();
     this.pageTitle = title;
@@ -487,7 +500,7 @@ export class SQLResultSetPage extends Page {
     this.pageParams = {
       resultSets,
       databaseId,
-      sqlContent,
+      sqlContent
     };
   }
 }
@@ -502,7 +515,7 @@ export class OBClientPage extends Page {
     return (
       formatMessage({
         id: 'odc.helper.page.openPage.CommandLineWindow',
-        defaultMessage: '命令行窗口_',
+        defaultMessage: '命令行窗口_'
       }) + params?.index
     );
   }
@@ -515,7 +528,7 @@ export class OBClientPage extends Page {
       time: Date.now(),
       index: currentNum,
       dataSourceId,
-      databaseId,
+      databaseId
     };
   }
 }

@@ -10,7 +10,11 @@ import { IListMaskingRulesReturn } from './index.type';
 
 class MaskingService extends ServiceBase {
   public ListMaskingRules(options?: AxiosRequestConfig) {
-    return this.get<IListMaskingRulesReturn>('/v1/dms/masking/rules', undefined, options);
+    return this.get<IListMaskingRulesReturn>(
+      '/v1/dms/masking/rules',
+      undefined,
+      options
+    );
   }
 }
 

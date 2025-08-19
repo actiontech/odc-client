@@ -12,13 +12,13 @@ import {
   IGetSqlPerformanceInsightsRelatedSQLParams,
   IGetSqlPerformanceInsightsRelatedSQLReturn,
   IGetSqlPerformanceInsightsRelatedTransactionParams,
-  IGetSqlPerformanceInsightsRelatedTransactionReturn,
+  IGetSqlPerformanceInsightsRelatedTransactionReturn
 } from './index.type';
 
 class SqlInsightService extends ServiceBase {
   public GetSqlPerformanceInsights(
     params: IGetSqlPerformanceInsightsParams,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -27,13 +27,13 @@ class SqlInsightService extends ServiceBase {
     return this.get<IGetSqlPerformanceInsightsReturn>(
       `/v1/projects/${project_name}/sql_performance_insights`,
       paramsData,
-      options,
+      options
     );
   }
 
   public GetSqlPerformanceInsightsRelatedSQL(
     params: IGetSqlPerformanceInsightsRelatedSQLParams,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -42,13 +42,13 @@ class SqlInsightService extends ServiceBase {
     return this.get<IGetSqlPerformanceInsightsRelatedSQLReturn>(
       `/v1/projects/${project_name}/sql_performance_insights/related_sql`,
       paramsData,
-      options,
+      options
     );
   }
 
   public GetSqlPerformanceInsightsRelatedTransaction(
     params: IGetSqlPerformanceInsightsRelatedTransactionParams,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -57,7 +57,7 @@ class SqlInsightService extends ServiceBase {
     return this.get<IGetSqlPerformanceInsightsRelatedTransactionReturn>(
       `/v1/projects/${project_name}/sql_performance_insights/related_sql/related_transaction`,
       paramsData,
-      options,
+      options
     );
   }
 }

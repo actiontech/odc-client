@@ -18,7 +18,7 @@ import {
   MaterializedViewInfo,
   MvColumns,
   MviewUnits,
-  StartStrategy,
+  StartStrategy
 } from './interface';
 import notification from '@/util/notification';
 import BaseInfo from './BaseInfo';
@@ -34,7 +34,7 @@ import page from '@/store/page';
 import { cloneDeep } from 'lodash';
 import {
   TablePrimaryConstraint,
-  TablePartition,
+  TablePartition
 } from '@/page/Workspace/components/CreateTable/interface';
 import { ISQLLintReuslt } from '@/component/SQLLintResult/type';
 import dayjs from 'dayjs';
@@ -50,10 +50,10 @@ const defaultInfo: MaterializedViewInfo = {
   columnGroups: [ColumnStoreType.ROW],
   refreshMethod: RefreshMethod.REFRESH_FORCE,
   refreshSchedule: {
-    startStrategy: false,
+    startStrategy: false
   },
   enableQueryRewrite: false,
-  enableQueryComputation: false,
+  enableQueryComputation: false
 };
 
 const CreateMaterializedView: React.FC<IProps> = (props) => {
@@ -62,9 +62,13 @@ const CreateMaterializedView: React.FC<IProps> = (props) => {
   const [operations, setOperations] = useState<string[]>([]);
   const [viewUnits, setViewUnits] = useState<MviewUnits[]>([]);
   const [columns, setColumns] = useState<MvColumns[]>([]);
-  const [activetab, setActiveTab] = useState<MaterializedViewTabType>(MaterializedViewTabType.INFO);
+  const [activetab, setActiveTab] = useState<MaterializedViewTabType>(
+    MaterializedViewTabType.INFO
+  );
   const [partitions, setPartitions] = useState<TablePartition>(null);
-  const [primaryConstraints, setPrimaryConstraints] = useState<TablePrimaryConstraint[]>([]);
+  const [primaryConstraints, setPrimaryConstraints] = useState<
+    TablePrimaryConstraint[]
+  >([]);
   const [DDL, setDDL] = useState<string>('');
   const [status, setStatus] = useState<EStatus>(null);
   const [lintResultSet, setLintResultSet] = useState<ISQLLintReuslt[]>([]);
@@ -79,8 +83,8 @@ const CreateMaterializedView: React.FC<IProps> = (props) => {
   const { loading, run: runCreateMaterializedViewDDL } = useRequest(
     generateCreateMaterializedViewSql,
     {
-      manual: true,
-    },
+      manual: true
+    }
   );
 
   const { session } = useContext(SessionContext);
@@ -98,11 +102,16 @@ const CreateMaterializedView: React.FC<IProps> = (props) => {
     ) {
       _isComplete = _isComplete && false;
     }
-    if (info?.refreshSchedule?.startStrategy && !info?.refreshSchedule?.interval) {
+    if (
+      info?.refreshSchedule?.startStrategy &&
+      !info?.refreshSchedule?.interval
+    ) {
       _isComplete = _isComplete && false;
     }
     // 检查列是否合法
-    _isComplete = _isComplete && !Object.values(warningColumns)?.some((item) => item.isWarning);
+    _isComplete =
+      _isComplete &&
+      !Object.values(warningColumns)?.some((item) => item.isWarning);
     return _isComplete;
   }, [info, columns]);
 
@@ -113,10 +122,12 @@ const CreateMaterializedView: React.FC<IProps> = (props) => {
       partitions,
       operations,
       primaryConstraints,
-      viewUnits,
+      viewUnits
     });
     if (!!data.info?.refreshSchedule?.startWith) {
-      data.info.refreshSchedule.startWith = dayjs(info.refreshSchedule.startWith).valueOf();
+      data.info.refreshSchedule.startWith = dayjs(
+        info.refreshSchedule.startWith
+      ).valueOf();
     }
     if (!data.info?.refreshSchedule?.startStrategy) {
       data.info.refreshSchedule = undefined;
@@ -125,7 +136,7 @@ const CreateMaterializedView: React.FC<IProps> = (props) => {
       materializedViewName: info.name,
       sessionId: session.sessionId,
       dbName: session.database.dbName,
-      data,
+      data
     });
     if (sql) {
       setDDL(sql);
@@ -142,7 +153,7 @@ const CreateMaterializedView: React.FC<IProps> = (props) => {
             <InfoCircleOutlined />
             {formatMessage({
               id: 'src.page.Workspace.components.CreateMaterializedView.268F51A8',
-              defaultMessage: '基本信息为必填项，其他选填',
+              defaultMessage: '基本信息为必填项，其他选填'
             })}
           </Space>
         </Typography.Text>
@@ -155,15 +166,20 @@ const CreateMaterializedView: React.FC<IProps> = (props) => {
                 ? null
                 : formatMessage({
                     id: 'src.page.Workspace.components.CreateMaterializedView.9C08B5A3',
-                    defaultMessage: '请检查基本信息和列',
+                    defaultMessage: '请检查基本信息和列'
                   })
             }
           >
-            <Button type="primary" disabled={!isComplete} loading={loading} onClick={handleSubmit}>
+            <Button
+              type="primary"
+              disabled={!isComplete}
+              loading={loading}
+              onClick={handleSubmit}
+            >
               {
                 formatMessage({
                   id: 'odc.components.CreateTable.SubmitAndConfirmSql',
-                  defaultMessage: '提交并确认 SQL',
+                  defaultMessage: '提交并确认 SQL'
                 })
                 /*提交并确认 SQL*/
               }
@@ -189,7 +205,7 @@ const CreateMaterializedView: React.FC<IProps> = (props) => {
           setOperations,
           setViewUnits,
           setPrimaryConstraints,
-          setWarningColumns,
+          setWarningColumns
         }}
       >
         <Tabs
@@ -204,42 +220,42 @@ const CreateMaterializedView: React.FC<IProps> = (props) => {
               key: MaterializedViewTabType.INFO,
               label: formatMessage({
                 id: 'odc.components.CreateTable.BasicInformation',
-                defaultMessage: '基本信息',
+                defaultMessage: '基本信息'
               }),
-              children: <BaseInfo />,
+              children: <BaseInfo />
             },
             {
               key: MaterializedViewTabType.INDEX,
               label: formatMessage({
                 id: 'src.page.Workspace.components.CreateMaterializedView.CE333264',
-                defaultMessage: '基表',
+                defaultMessage: '基表'
               }),
-              children: <TableSelector />,
+              children: <TableSelector />
             },
             {
               key: MaterializedViewTabType.COLUMN,
               label: formatMessage({
                 id: 'odc.components.CreateTable.Column',
-                defaultMessage: '列',
+                defaultMessage: '列'
               }),
-              children: <Columns />,
+              children: <Columns />
             },
             {
               key: MaterializedViewTabType.CONSTRAINT,
               label: formatMessage({
                 id: 'odc.components.CreateTable.Constraints',
-                defaultMessage: '约束',
+                defaultMessage: '约束'
               }),
-              children: <Constraint />,
+              children: <Constraint />
             },
             {
               key: MaterializedViewTabType.PARTITION,
               label: formatMessage({
                 id: 'odc.components.CreateTable.Partition',
-                defaultMessage: '分区',
+                defaultMessage: '分区'
               }),
-              children: <Partition />,
-            },
+              children: <Partition />
+            }
           ]}
         />
 
@@ -269,15 +285,19 @@ const CreateMaterializedView: React.FC<IProps> = (props) => {
               updateSQL,
               session?.sessionId,
               session?.odcDatabase?.name,
-              false,
+              false
             );
             if (results?.unauthorizedDBResources?.length) {
-              return { unauthorizedDBResources: results?.unauthorizedDBResources };
+              return {
+                unauthorizedDBResources: results?.unauthorizedDBResources
+              };
             }
             if (!hasExecuted) {
               if (results?.status !== EStatus.SUBMIT) {
                 setLintResultSet(results?.lintResultSet);
-                modal.updateCreateAsyncTaskModal({ activePageKey: page.activePageKey });
+                modal.updateCreateAsyncTaskModal({
+                  activePageKey: page.activePageKey
+                });
                 setStatus(results?.status);
                 setHasExecuted(true);
                 return;
@@ -286,8 +306,9 @@ const CreateMaterializedView: React.FC<IProps> = (props) => {
               if (results?.status === EStatus.APPROVAL) {
                 modal.changeCreateAsyncTaskModal(true, {
                   sql: updateSQL,
-                  databaseId: sessionManager.sessionMap.get(session?.sessionId).odcDatabase?.id,
-                  rules: lintResultSet,
+                  databaseId: sessionManager.sessionMap.get(session?.sessionId)
+                    .odcDatabase?.id,
+                  rules: lintResultSet
                 });
               }
               setStatus(null);
@@ -312,8 +333,9 @@ const CreateMaterializedView: React.FC<IProps> = (props) => {
               if (results?.status === EStatus.APPROVAL) {
                 modal.changeCreateAsyncTaskModal(true, {
                   sql: updateSQL,
-                  databaseId: sessionManager.sessionMap.get(session?.sessionId).odcDatabase?.id,
-                  rules: lintResultSet,
+                  databaseId: sessionManager.sessionMap.get(session?.sessionId)
+                    .odcDatabase?.id,
+                  rules: lintResultSet
                 });
               }
               setStatus(null);
@@ -324,7 +346,9 @@ const CreateMaterializedView: React.FC<IProps> = (props) => {
               setDDL('');
               return;
             }
-            const result = results?.executeResult?.find((result) => result.track);
+            const result = results?.executeResult?.find(
+              (result) => result.track
+            );
             if (!result?.track) {
               // 关闭创建页面
               page.close(pageKey);
@@ -333,8 +357,8 @@ const CreateMaterializedView: React.FC<IProps> = (props) => {
               message.success(
                 formatMessage({
                   id: 'portal.connection.form.save.success',
-                  defaultMessage: '保存成功',
-                }),
+                  defaultMessage: '保存成功'
+                })
               );
             } else {
               notification.error(result);
@@ -348,5 +372,5 @@ const CreateMaterializedView: React.FC<IProps> = (props) => {
 
 export default inject(
   'sessionManagerStore',
-  'modalStore',
+  'modalStore'
 )(observer(WrapSessionPage(CreateMaterializedView, false, true)));

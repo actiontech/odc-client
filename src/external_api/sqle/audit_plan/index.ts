@@ -52,20 +52,34 @@ import {
   IFullSyncAuditPlanSQLsV2Params,
   IFullSyncAuditPlanSQLsV2Return,
   IPartialSyncAuditPlanSQLsV2Params,
-  IPartialSyncAuditPlanSQLsV2Return,
+  IPartialSyncAuditPlanSQLsV2Return
 } from './index.type';
 
 class AuditPlanService extends ServiceBase {
-  public getAuditPlanMetasV1(params: IGetAuditPlanMetasV1Params, options?: AxiosRequestConfig) {
+  public getAuditPlanMetasV1(
+    params: IGetAuditPlanMetasV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
-    return this.get<IGetAuditPlanMetasV1Return>('/v1/audit_plan_metas', paramsData, options);
+    return this.get<IGetAuditPlanMetasV1Return>(
+      '/v1/audit_plan_metas',
+      paramsData,
+      options
+    );
   }
 
   public getAuditPlanTypesV1(options?: AxiosRequestConfig) {
-    return this.get<IGetAuditPlanTypesV1Return>('/v1/audit_plan_types', undefined, options);
+    return this.get<IGetAuditPlanTypesV1Return>(
+      '/v1/audit_plan_types',
+      undefined,
+      options
+    );
   }
 
-  public getAuditPlansV1(params: IGetAuditPlansV1Params, options?: AxiosRequestConfig) {
+  public getAuditPlansV1(
+    params: IGetAuditPlansV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -73,11 +87,14 @@ class AuditPlanService extends ServiceBase {
     return this.get<IGetAuditPlansV1Return>(
       `/v1/projects/${project_name}/audit_plans`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public createAuditPlanV1(params: ICreateAuditPlanV1Params, options?: AxiosRequestConfig) {
+  public createAuditPlanV1(
+    params: ICreateAuditPlanV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -85,11 +102,14 @@ class AuditPlanService extends ServiceBase {
     return this.post<ICreateAuditPlanV1Return>(
       `/v1/projects/${project_name}/audit_plans`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public getAuditPlanV1(params: IGetAuditPlanV1Params, options?: AxiosRequestConfig) {
+  public getAuditPlanV1(
+    params: IGetAuditPlanV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -100,11 +120,14 @@ class AuditPlanService extends ServiceBase {
     return this.get<IGetAuditPlanV1Return>(
       `/v1/projects/${project_name}/audit_plans/${audit_plan_name}/`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public deleteAuditPlanV1(params: IDeleteAuditPlanV1Params, options?: AxiosRequestConfig) {
+  public deleteAuditPlanV1(
+    params: IDeleteAuditPlanV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -115,11 +138,14 @@ class AuditPlanService extends ServiceBase {
     return this.delete<IDeleteAuditPlanV1Return>(
       `/v1/projects/${project_name}/audit_plans/${audit_plan_name}/`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public updateAuditPlanV1(params: IUpdateAuditPlanV1Params, options?: AxiosRequestConfig) {
+  public updateAuditPlanV1(
+    params: IUpdateAuditPlanV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -130,13 +156,13 @@ class AuditPlanService extends ServiceBase {
     return this.patch<IUpdateAuditPlanV1Return>(
       `/v1/projects/${project_name}/audit_plans/${audit_plan_name}/`,
       paramsData,
-      options,
+      options
     );
   }
 
   public getAuditPlanNotifyConfigV1(
     params: IGetAuditPlanNotifyConfigV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -148,13 +174,13 @@ class AuditPlanService extends ServiceBase {
     return this.get<IGetAuditPlanNotifyConfigV1Return>(
       `/v1/projects/${project_name}/audit_plans/${audit_plan_name}/notify_config`,
       paramsData,
-      options,
+      options
     );
   }
 
   public updateAuditPlanNotifyConfigV1(
     params: IUpdateAuditPlanNotifyConfigV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -166,13 +192,13 @@ class AuditPlanService extends ServiceBase {
     return this.patch<IUpdateAuditPlanNotifyConfigV1Return>(
       `/v1/projects/${project_name}/audit_plans/${audit_plan_name}/notify_config`,
       paramsData,
-      options,
+      options
     );
   }
 
   public testAuditPlanNotifyConfigV1(
     params: ITestAuditPlanNotifyConfigV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -184,11 +210,14 @@ class AuditPlanService extends ServiceBase {
     return this.get<ITestAuditPlanNotifyConfigV1Return>(
       `/v1/projects/${project_name}/audit_plans/${audit_plan_name}/notify_config/test`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public getAuditPlanReportsV1(params: IGetAuditPlanReportsV1Params, options?: AxiosRequestConfig) {
+  public getAuditPlanReportsV1(
+    params: IGetAuditPlanReportsV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -199,11 +228,14 @@ class AuditPlanService extends ServiceBase {
     return this.get<IGetAuditPlanReportsV1Return>(
       `/v1/projects/${project_name}/audit_plans/${audit_plan_name}/reports`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public getAuditPlanReportV1(params: IGetAuditPlanReportV1Params, options?: AxiosRequestConfig) {
+  public getAuditPlanReportV1(
+    params: IGetAuditPlanReportV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -217,13 +249,13 @@ class AuditPlanService extends ServiceBase {
     return this.get<IGetAuditPlanReportV1Return>(
       `/v1/projects/${project_name}/audit_plans/${audit_plan_name}/reports/${audit_plan_report_id}/`,
       paramsData,
-      options,
+      options
     );
   }
 
   public exportAuditPlanReportV1(
     params: IExportAuditPlanReportV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -238,13 +270,13 @@ class AuditPlanService extends ServiceBase {
     return this.get<any>(
       `/v1/projects/${project_name}/audit_plans/${audit_plan_name}/reports/${audit_plan_report_id}/export`,
       paramsData,
-      options,
+      options
     );
   }
 
   public getAuditPlanReportsSQLsV1(
     params: IGetAuditPlanReportsSQLsV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -259,11 +291,14 @@ class AuditPlanService extends ServiceBase {
     return this.get<IGetAuditPlanReportsSQLsV1Return>(
       `/v1/projects/${project_name}/audit_plans/${audit_plan_name}/reports/${audit_plan_report_id}/sqls`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public getTaskAnalysisData(params: IGetTaskAnalysisDataParams, options?: AxiosRequestConfig) {
+  public getTaskAnalysisData(
+    params: IGetTaskAnalysisDataParams,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -280,11 +315,14 @@ class AuditPlanService extends ServiceBase {
     return this.get<IGetTaskAnalysisDataReturn>(
       `/v1/projects/${project_name}/audit_plans/${audit_plan_name}/reports/${audit_plan_report_id}/sqls/${number}/analysis`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public getAuditPlanSQLsV1(params: IGetAuditPlanSQLsV1Params, options?: AxiosRequestConfig) {
+  public getAuditPlanSQLsV1(
+    params: IGetAuditPlanSQLsV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -295,13 +333,13 @@ class AuditPlanService extends ServiceBase {
     return this.get<IGetAuditPlanSQLsV1Return>(
       `/v1/projects/${project_name}/audit_plans/${audit_plan_name}/sqls`,
       paramsData,
-      options,
+      options
     );
   }
 
   public fullSyncAuditPlanSQLsV1(
     params: IFullSyncAuditPlanSQLsV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -313,13 +351,13 @@ class AuditPlanService extends ServiceBase {
     return this.post<IFullSyncAuditPlanSQLsV1Return>(
       `/v1/projects/${project_name}/audit_plans/${audit_plan_name}/sqls/full`,
       paramsData,
-      options,
+      options
     );
   }
 
   public partialSyncAuditPlanSQLsV1(
     params: IPartialSyncAuditPlanSQLsV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -331,11 +369,14 @@ class AuditPlanService extends ServiceBase {
     return this.post<IPartialSyncAuditPlanSQLsV1Return>(
       `/v1/projects/${project_name}/audit_plans/${audit_plan_name}/sqls/partial`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public triggerAuditPlanV1(params: ITriggerAuditPlanV1Params, options?: AxiosRequestConfig) {
+  public triggerAuditPlanV1(
+    params: ITriggerAuditPlanV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -346,11 +387,14 @@ class AuditPlanService extends ServiceBase {
     return this.post<ITriggerAuditPlanV1Return>(
       `/v1/projects/${project_name}/audit_plans/${audit_plan_name}/trigger`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public getAuditPlansV2(params: IGetAuditPlansV2Params, options?: AxiosRequestConfig) {
+  public getAuditPlansV2(
+    params: IGetAuditPlansV2Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -358,13 +402,13 @@ class AuditPlanService extends ServiceBase {
     return this.get<IGetAuditPlansV2Return>(
       `/v2/projects/${project_name}/audit_plans`,
       paramsData,
-      options,
+      options
     );
   }
 
   public getAuditPlanReportsSQLs(
     params: IGetAuditPlanReportsSQLsParams,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -379,13 +423,13 @@ class AuditPlanService extends ServiceBase {
     return this.get<IGetAuditPlanReportsSQLsReturn>(
       `/v2/projects/${project_name}/audit_plans/${audit_plan_name}/reports/${audit_plan_report_id}/sqls`,
       paramsData,
-      options,
+      options
     );
   }
 
   public getAuditPlantAnalysisDataV2(
     params: IGetAuditPlantAnalysisDataV2Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -403,13 +447,13 @@ class AuditPlanService extends ServiceBase {
     return this.get<IGetAuditPlantAnalysisDataV2Return>(
       `/v2/projects/${project_name}/audit_plans/${audit_plan_name}/reports/${audit_plan_report_id}/sqls/${number}/analysis`,
       paramsData,
-      options,
+      options
     );
   }
 
   public fullSyncAuditPlanSQLsV2(
     params: IFullSyncAuditPlanSQLsV2Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -421,13 +465,13 @@ class AuditPlanService extends ServiceBase {
     return this.post<IFullSyncAuditPlanSQLsV2Return>(
       `/v2/projects/${project_name}/audit_plans/${audit_plan_name}/sqls/full`,
       paramsData,
-      options,
+      options
     );
   }
 
   public partialSyncAuditPlanSQLsV2(
     params: IPartialSyncAuditPlanSQLsV2Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -439,7 +483,7 @@ class AuditPlanService extends ServiceBase {
     return this.post<IPartialSyncAuditPlanSQLsV2Return>(
       `/v2/projects/${project_name}/audit_plans/${audit_plan_name}/sqls/partial`,
       paramsData,
-      options,
+      options
     );
   }
 }

@@ -9,7 +9,7 @@ import {
   IListMembersForInternalReply,
   IListMemberTipsReply,
   IUpdateMemberReq,
-  IGenericResp,
+  IGenericResp
 } from '../common.type';
 
 export interface IListMembersParams {
@@ -40,7 +40,8 @@ export interface IListMembersForInternalParams {
   project_uid: string;
 }
 
-export interface IListMembersForInternalReturn extends IListMembersForInternalReply {}
+export interface IListMembersForInternalReturn
+  extends IListMembersForInternalReply {}
 
 export interface IListMemberTipsParams {
   project_uid: string;

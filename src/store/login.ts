@@ -74,7 +74,8 @@ export class UserStore {
 
   public isPrivateSpace() {
     return (
-      this.organizations?.find((o) => o.id === this.organizationId)?.type === SpaceType.PRIVATE
+      this.organizations?.find((o) => o.id === this.organizationId)?.type ===
+      SpaceType.PRIVATE
     );
   }
 
@@ -95,11 +96,11 @@ export class UserStore {
     if (token) {
       result = await request.post('/api/v2/bastion/login', {
         data: {
-          token,
+          token
         },
         params: {
-          ignoreError: true,
-        },
+          ignoreError: true
+        }
       });
     } else {
       const form = new URLSearchParams();
@@ -110,18 +111,18 @@ export class UserStore {
       result = await request.post('/api/v2/iam/login', {
         data: form,
         params: {
-          ignoreError: true,
+          ignoreError: true
         },
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
       });
     }
 
     return {
       success: !result?.isError,
       message: result?.errMsg,
-      errCode: result?.errCode,
+      errCode: result?.errCode
     };
   }
 
@@ -141,11 +142,11 @@ export class UserStore {
     let result = await request.post(`/api/v2/iam/ldap/login`, {
       data: form,
       params: {
-        ignoreError: true,
+        ignoreError: true
       },
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
     });
     return result;
   }
@@ -156,8 +157,8 @@ export class UserStore {
     await sessionManager.destoryStore(true);
     const res = await request.post('/api/v2/iam/logout', {
       params: {
-        wantCatchError: true,
-      },
+        wantCatchError: true
+      }
     });
     this.user = null;
     this.organizations = [];
@@ -184,7 +185,7 @@ export class UserStore {
       user = Object.assign({}, user, { password: encrypt(user.password) });
     }
     const result = await request.post('/api/v1/user/create', {
-      data: user,
+      data: user
     });
     return result && result.data;
   }
@@ -198,26 +199,33 @@ export class UserStore {
     if (data) {
       data = Object.assign({}, data, {
         newPassword: encrypt(data.newPassword),
-        currentPassword: encrypt(data.currentPassword),
+        currentPassword: encrypt(data.currentPassword)
       });
     }
     const result = await request.post('/api/v2/iam/users/me/changePassword', {
-      data,
+      data
     });
     return result && result.data;
   }
 
   @action
-  public async activate(data: { currentPassword: string; newPassword: string; username?: string }) {
+  public async activate(data: {
+    currentPassword: string;
+    newPassword: string;
+    username?: string;
+  }) {
     if (data) {
       data = Object.assign({}, data, {
         newPassword: encrypt(data.newPassword),
-        currentPassword: encrypt(data.currentPassword),
+        currentPassword: encrypt(data.currentPassword)
       });
     }
-    const result = await request.post(`/api/v2/iam/users/${data.username}/activate`, {
-      data,
-    });
+    const result = await request.post(
+      `/api/v2/iam/users/${data.username}/activate`,
+      {
+        data
+      }
+    );
     return result && result.data;
   }
 
@@ -229,7 +237,8 @@ export class UserStore {
       this.user = user;
       tracert.setUser(this.user.id);
       if (
-        setting.configurations['odc.account.userBehaviorAnalysisEnabled'] === 'true' &&
+        setting.configurations['odc.account.userBehaviorAnalysisEnabled'] ===
+          'true' &&
         odc.appConfig.spm.enable
       ) {
         initTracert();
@@ -257,7 +266,7 @@ export class UserStore {
   public async switchCurrentOrganization(
     id?: number,
     getDefaultOrganization?: () => Promise<number>,
-    beforeOrganizationSwitch?: () => void,
+    beforeOrganizationSwitch?: () => void
   ) {
     await setting.getUserConfig();
     id = id || (await this.getDefaultOrganization(getDefaultOrganization))?.id;
@@ -275,20 +284,24 @@ export class UserStore {
     return isSuccess;
   }
 
-  public async getDefaultOrganization(getDefaultOrganization?: () => Promise<number>) {
+  public async getDefaultOrganization(
+    getDefaultOrganization?: () => Promise<number>
+  ) {
     let sessionOrganizationId = parseInt(sessionStorage.getItem(sessionKey));
     if (!sessionOrganizationId && getDefaultOrganization) {
       sessionOrganizationId = await getDefaultOrganization();
     }
     const sessionOrganization = this.organizations?.find(
-      (item) => item.id === sessionOrganizationId,
+      (item) => item.id === sessionOrganizationId
     );
     if (sessionOrganization) {
       return sessionOrganization;
     }
 
     const firstOrganization = this.organizations?.find(
-      (item) => item.type === setting?.configurations?.['odc.account.defaultOrganizationType'],
+      (item) =>
+        item.type ===
+        setting?.configurations?.['odc.account.defaultOrganizationType']
     );
     let defaultOrganization = firstOrganization || this.organizations?.[0];
     return defaultOrganization;
@@ -296,14 +309,16 @@ export class UserStore {
 
   @action
   public async isUserExists(userName: string) {
-    const r = await request.get(`/api/v1/user/isUserExists?userName=${userName}`);
+    const r = await request.get(
+      `/api/v1/user/isUserExists?userName=${userName}`
+    );
     return r && r.data;
   }
 
   @action
   public async validateUserPassword(user: Partial<IUser>) {
     const r = await request.post('/api/v1/user/userValidate', {
-      data: user,
+      data: user
     });
     return r && r.data;
   }
@@ -313,14 +328,14 @@ export class UserStore {
     const r = await request.get(odcServerLoginUrl, {
       params: {
         odc_back_url: location.href,
-        notLogin: true,
-      },
+        notLogin: true
+      }
     });
     if (r.data) {
       window.location.href = r.data;
     } else {
       history.push({
-        pathname: '/login',
+        pathname: '/login'
       });
     }
   }
@@ -337,17 +352,23 @@ export class UserStore {
     } else {
       const searchParamsObj = new URLSearchParams();
       const query = history.location.search || '';
-      if (query.includes('redirectTo') || history.location.pathname === '/login') {
+      if (
+        query.includes('redirectTo') ||
+        history.location.pathname === '/login'
+      ) {
         history.push({
           pathname: '/login',
-          search: query,
+          search: query
         });
         return;
       }
-      searchParamsObj.append('redirectTo', encodeURIComponent(history.location.pathname) + query);
+      searchParamsObj.append(
+        'redirectTo',
+        encodeURIComponent(history.location.pathname) + query
+      );
       history.push({
         pathname: '/login',
-        search: searchParamsObj.toString(),
+        search: searchParamsObj.toString()
       });
     }
   }
@@ -359,7 +380,7 @@ export class UserStore {
       window.location.href = r.data;
     } else {
       history.push({
-        pathname: '/login',
+        pathname: '/login'
       });
     }
   }

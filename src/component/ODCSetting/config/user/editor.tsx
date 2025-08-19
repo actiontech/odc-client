@@ -24,27 +24,30 @@ import SelectItem from '../../Item/SelectItem';
 const editorGroup: ODCSettingGroup = {
   label: formatMessage({
     id: 'src.component.ODCSetting.config.239D3F16',
-    defaultMessage: '编辑器',
+    defaultMessage: '编辑器'
   }), //'编辑器'
-  key: 'editor',
+  key: 'editor'
 };
 const editorPreferenceGroup: ODCSettingGroup = {
-  label: formatMessage({ id: 'src.component.ODCSetting.config.FCD07871', defaultMessage: '样式' }), //'样式'
-  key: 'editorPreference',
+  label: formatMessage({
+    id: 'src.component.ODCSetting.config.FCD07871',
+    defaultMessage: '样式'
+  }), //'样式'
+  key: 'editorPreference'
 };
 const editorKeymapGroup: ODCSettingGroup = {
   label: formatMessage({
     id: 'src.component.ODCSetting.config.0D4063E6',
-    defaultMessage: '快捷键',
+    defaultMessage: '快捷键'
   }), //'快捷键'
-  key: 'editorKeymap',
+  key: 'editorKeymap'
 };
 
 const editorSettings: IODCSetting[] = [
   {
     label: formatMessage({
       id: 'src.component.ODCSetting.config.DD62F7C6',
-      defaultMessage: '主题',
+      defaultMessage: '主题'
     }), //'主题'
     key: 'odc.editor.style.theme',
     locationKey: 'theme',
@@ -57,35 +60,35 @@ const editorSettings: IODCSetting[] = [
           options={[
             {
               label: 'OceanBase',
-              value: 'OceanBase',
+              value: 'OceanBase'
             },
             {
               label: 'VSCode',
-              value: 'VSCode',
+              value: 'VSCode'
             },
             {
               label: 'VSCode-HC',
-              value: 'VSCode-HC',
+              value: 'VSCode-HC'
             },
             {
               label: 'GitHub',
-              value: 'GitHub',
+              value: 'GitHub'
             },
             {
               label: 'Monokai',
-              value: 'Monokai',
-            },
+              value: 'Monokai'
+            }
           ]}
           value={value}
           onChange={onChange}
         />
       );
-    },
+    }
   },
   {
     label: formatMessage({
       id: 'src.component.ODCSetting.config.D9835833',
-      defaultMessage: '字体',
+      defaultMessage: '字体'
     }), //'字体'
     key: 'odc.editor.style.fontSize',
     locationKey: 'fontSize',
@@ -99,35 +102,35 @@ const editorSettings: IODCSetting[] = [
             {
               label: formatMessage({
                 id: 'src.component.ODCSetting.config.D6D77D8C',
-                defaultMessage: '小',
+                defaultMessage: '小'
               }), //'小'
-              value: 'Small',
+              value: 'Small'
             },
             {
               label: formatMessage({
                 id: 'src.component.ODCSetting.config.80241964',
-                defaultMessage: '正常',
+                defaultMessage: '正常'
               }), //'正常'
-              value: 'Normal',
+              value: 'Normal'
             },
             {
               label: formatMessage({
                 id: 'src.component.ODCSetting.config.6D389EE6',
-                defaultMessage: '大',
+                defaultMessage: '大'
               }), //'大'
-              value: 'Large',
-            },
+              value: 'Large'
+            }
           ]}
           value={value}
           onChange={onChange}
         />
       );
-    },
+    }
   },
   {
     label: formatMessage({
       id: 'src.component.ODCSetting.config.88E11A59',
-      defaultMessage: '运行 SQL',
+      defaultMessage: '运行 SQL'
     }), //'运行 SQL'
     key: 'odc.editor.shortcut.executeStatement',
     locationKey: 'executeStatement',
@@ -138,18 +141,18 @@ const editorSettings: IODCSetting[] = [
       {
         validator(rule, value, callback) {
           return validForEditorKeymap(value);
-        },
-      },
+        }
+      }
     ],
 
     render: (value, onChange) => {
       return <KeymapInput value={value} onChange={onChange} />;
-    },
+    }
   },
   {
     label: formatMessage({
       id: 'src.component.ODCSetting.config.663436E6',
-      defaultMessage: '运行所选 SQL',
+      defaultMessage: '运行所选 SQL'
     }), //'运行所选 SQL'
     key: 'odc.editor.shortcut.executeCurrentStatement',
     locationKey: 'executeCurrentStatement',
@@ -159,15 +162,15 @@ const editorSettings: IODCSetting[] = [
       {
         validator(rule, value, callback) {
           return validForEditorKeymap(value);
-        },
-      },
+        }
+      }
     ],
 
     storeType: 'server',
     render: (value, onChange) => {
       return <KeymapInput value={value} onChange={onChange} />;
-    },
-  },
+    }
+  }
 ];
 
 export default editorSettings;

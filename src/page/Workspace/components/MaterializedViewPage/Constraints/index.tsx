@@ -11,10 +11,15 @@ import { useColumns } from './columns';
 
 interface IProps {}
 const MvViewConstraints: React.FC<IProps> = () => {
-  const { materializedView, session, onRefresh } = useContext(MaterializedViewPageContext);
+  const { materializedView, session, onRefresh } = useContext(
+    MaterializedViewPageContext
+  );
   const gridRef = useRef<DataGridRef>();
 
-  const gridColumns: any[] = useColumns(materializedView.columns, session?.connection?.dialectType);
+  const gridColumns: any[] = useColumns(
+    materializedView.columns,
+    session?.connection?.dialectType
+  );
   useEffect(() => {
     gridRef.current?.setColumns?.(gridColumns ?? []);
   }, [gridColumns]);
@@ -23,7 +28,7 @@ const MvViewConstraints: React.FC<IProps> = () => {
     return materializedView.primaryConstraints.map((index, idx) => {
       return {
         ...index,
-        key: `${index.name || ''}@@${idx}`,
+        key: `${index.name || ''}@@${idx}`
       };
     });
   }, [materializedView.primaryConstraints]);
@@ -37,7 +42,7 @@ const MvViewConstraints: React.FC<IProps> = () => {
               icon={<PlusOutlined />}
               text={formatMessage({
                 id: 'src.page.Workspace.components.MaterializedViewPage.Constraints.12B20B8D',
-                defaultMessage: '暂不支持',
+                defaultMessage: '暂不支持'
               })}
               disabled
             />
@@ -45,7 +50,7 @@ const MvViewConstraints: React.FC<IProps> = () => {
               icon={<DeleteOutlined />}
               text={formatMessage({
                 id: 'src.page.Workspace.components.MaterializedViewPage.Constraints.7EB7A258',
-                defaultMessage: '暂不支持',
+                defaultMessage: '暂不支持'
               })}
               disabled
             />

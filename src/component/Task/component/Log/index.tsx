@@ -41,7 +41,7 @@ const TaskLog: React.FC<{
     logType,
     isLoading,
     downloadUrl,
-    settingStore: { enableDataExport },
+    settingStore: { enableDataExport }
   } = props;
   return (
     <Tabs
@@ -55,7 +55,7 @@ const TaskLog: React.FC<{
         {
           label: formatMessage({
             id: 'odc.component.CommonTaskDetailModal.TaskLog.AllLogs',
-            defaultMessage: '全部日志',
+            defaultMessage: '全部日志'
           }),
           key: CommonTaskLogType.ALL,
           children: (
@@ -72,12 +72,12 @@ const TaskLog: React.FC<{
               style={{ height: '100%' }}
               loading={isLoading}
             />
-          ),
+          )
         },
         {
           label: formatMessage({
             id: 'odc.component.CommonTaskDetailModal.TaskLog.AlertLogs',
-            defaultMessage: '告警日志',
+            defaultMessage: '告警日志'
           }),
           key: CommonTaskLogType.WARN,
           children: (
@@ -94,8 +94,8 @@ const TaskLog: React.FC<{
               style={{ height: '100%' }}
               loading={isLoading}
             />
-          ),
-        },
+          )
+        }
       ]}
     />
   );

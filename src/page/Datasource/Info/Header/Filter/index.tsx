@@ -1,4 +1,7 @@
-import { DatabaseAvailableTypeText, DatabaseBelongsToProjectTypeText } from '@/constant/label';
+import {
+  DatabaseAvailableTypeText,
+  DatabaseBelongsToProjectTypeText
+} from '@/constant/label';
 import { formatMessage } from '@/util/intl';
 import { CloseOutlined, FilterOutlined } from '@ant-design/icons';
 import { Popover, Space, Typography } from 'antd';
@@ -7,7 +10,7 @@ import ParamContext from '../../ParamContext';
 import FilterIcon from '@/page/Datasource/Datasource/Header/FIlterIcon';
 import {
   getIsDBAvailableInDataSourceTypes,
-  getIsDBBelongsToProjectsInDataSourceTypes,
+  getIsDBBelongsToProjectsInDataSourceTypes
 } from '@/common/datasource';
 import RadioTag from '@/component/RadioTag';
 
@@ -24,15 +27,18 @@ const Filter: React.FC<IProps> = function ({}) {
   function clear() {
     context.setFilterParams({
       existed: undefined,
-      belongsToProject: undefined,
+      belongsToProject: undefined
     });
   }
   const { existed, belongsToProject } = context?.filterParams;
   let selectedNames = [];
 
-  existed !== undefined && selectedNames.push(DatabaseAvailableTypeText[String(existed)]);
+  existed !== undefined &&
+    selectedNames.push(DatabaseAvailableTypeText[String(existed)]);
   belongsToProject !== undefined &&
-    selectedNames.push(DatabaseBelongsToProjectTypeText[String(belongsToProject)]);
+    selectedNames.push(
+      DatabaseBelongsToProjectTypeText[String(belongsToProject)]
+    );
 
   if (selectedNames.length) {
     displayDom = (
@@ -41,17 +47,30 @@ const Filter: React.FC<IProps> = function ({}) {
           padding: '4px 8px',
           lineHeight: '20px',
           color: 'var(--text-color-secondary)',
-          background: 'var(--hover-color)',
+          background: 'var(--hover-color)'
         }}
       >
         {selectedNames.slice(0, 3)?.join(';')}
         {selectedNames?.length > 3 ? '...' : ''}
         <span style={{ marginLeft: 3 }}>
-          {formatMessage({ id: 'odc.Header.Filter.Total', defaultMessage: '共' }) /*共*/}
+          {
+            formatMessage({
+              id: 'odc.Header.Filter.Total',
+              defaultMessage: '共'
+            }) /*共*/
+          }
           {selectedNames?.length}
-          {formatMessage({ id: 'odc.Header.Filter.Item', defaultMessage: '项' }) /*项*/}
+          {
+            formatMessage({
+              id: 'odc.Header.Filter.Item',
+              defaultMessage: '项'
+            }) /*项*/
+          }
         </span>
-        <CloseOutlined onClick={clear} style={{ cursor: 'pointer', marginLeft: 15 }} />
+        <CloseOutlined
+          onClick={clear}
+          style={{ cursor: 'pointer', marginLeft: 15 }}
+        />
       </div>
     );
   }
@@ -65,17 +84,22 @@ const Filter: React.FC<IProps> = function ({}) {
           style={{
             display: 'flex',
             justifyContent: 'space-between',
-            alignItems: 'center',
+            alignItems: 'center'
           }}
         >
           <Typography.Text strong>
             {formatMessage({
               id: 'src.page.Datasource.Info.Header.Filter.881015FF',
-              defaultMessage: '筛选',
+              defaultMessage: '筛选'
             })}
           </Typography.Text>
           <a onClick={clear}>
-            {formatMessage({ id: 'odc.Header.Filter.Clear', defaultMessage: '清空' }) /*清空*/}
+            {
+              formatMessage({
+                id: 'odc.Header.Filter.Clear',
+                defaultMessage: '清空'
+              }) /*清空*/
+            }
           </a>
         </div>
       }
@@ -86,18 +110,21 @@ const Filter: React.FC<IProps> = function ({}) {
               <Typography.Text type="secondary">
                 {formatMessage({
                   id: 'src.page.Datasource.Info.Header.Filter.AB1F0599',
-                  defaultMessage: '数据库状态',
+                  defaultMessage: '数据库状态'
                 })}
               </Typography.Text>
               <RadioTag
                 value={context?.filterParams?.existed}
                 options={[]
                   .concat(getIsDBAvailableInDataSourceTypes())
-                  .map((v) => ({ label: DatabaseAvailableTypeText[v], value: v }))}
+                  .map((v) => ({
+                    label: DatabaseAvailableTypeText[v],
+                    value: v
+                  }))}
                 onChange={(v) => {
                   context.setFilterParams({
                     ...context?.filterParams,
-                    existed: v,
+                    existed: v
                   });
                 }}
               />
@@ -107,18 +134,21 @@ const Filter: React.FC<IProps> = function ({}) {
               <Typography.Text type="secondary">
                 {formatMessage({
                   id: 'src.page.Datasource.Info.Header.Filter.7A10CB43',
-                  defaultMessage: '数据库分配',
+                  defaultMessage: '数据库分配'
                 })}
               </Typography.Text>
               <RadioTag
                 value={context?.filterParams?.belongsToProject}
                 options={[]
                   .concat(getIsDBBelongsToProjectsInDataSourceTypes())
-                  .map((v) => ({ label: DatabaseBelongsToProjectTypeText[v], value: v }))}
+                  .map((v) => ({
+                    label: DatabaseBelongsToProjectTypeText[v],
+                    value: v
+                  }))}
                 onChange={(v) => {
                   context.setFilterParams({
                     ...context?.filterParams,
-                    belongsToProject: v,
+                    belongsToProject: v
                   });
                 }}
               />

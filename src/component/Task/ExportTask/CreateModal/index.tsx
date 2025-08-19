@@ -25,7 +25,7 @@ import {
   TaskExecStrategy,
   TaskPageScope,
   TaskPageType,
-  TaskDetail,
+  TaskDetail
 } from '@/d.ts';
 import { openTasksPage } from '@/store/helper/page';
 import login from '@/store/login';
@@ -34,7 +34,16 @@ import { selectFolder } from '@/util/client';
 import { isClient } from '@/util/env';
 import { formatMessage } from '@/util/intl';
 import { safeParseJson } from '@/util/utils';
-import { Alert, Button, Checkbox, Drawer, message, Modal, Space, Tooltip } from 'antd';
+import {
+  Alert,
+  Button,
+  Checkbox,
+  Drawer,
+  message,
+  Modal,
+  Space,
+  Tooltip
+} from 'antd';
 import { inject, observer } from 'mobx-react';
 import React from 'react';
 import ExportForm, { FormType } from './ExportForm';
@@ -67,15 +76,15 @@ class CreateModal extends React.Component<IProps, IState> {
       submitting: false,
       isFormChanged: false,
       isSaveDefaultConfig: false,
-      formData: this.getDefaultFormData(),
+      formData: this.getDefaultFormData()
     };
 
     if (modalStore.exportModalData) {
       this.state.formData.exportDbObjects = [
         {
           objectName: modalStore.exportModalData.name,
-          dbObjectType: modalStore.exportModalData.type,
-        },
+          dbObjectType: modalStore.exportModalData.type
+        }
       ];
 
       if (
@@ -84,7 +93,7 @@ class CreateModal extends React.Component<IProps, IState> {
       ) {
         this.state.formData.exportDbObjects.push({
           objectName: modalStore.exportModalData.name,
-          dbObjectType: DbObjectType.package_body,
+          dbObjectType: DbObjectType.package_body
         });
       }
     }
@@ -96,26 +105,26 @@ class CreateModal extends React.Component<IProps, IState> {
     {
       label: formatMessage({
         id: 'odc.components.ExportDrawer.SelectObject',
-        defaultMessage: '选择对象',
+        defaultMessage: '选择对象'
       }),
       //选择对象
-      key: FormType.ObjSelecter,
+      key: FormType.ObjSelecter
     },
     {
       label: formatMessage({
         id: 'odc.components.ExportDrawer.ExportSettings',
-        defaultMessage: '导出设置',
+        defaultMessage: '导出设置'
       }),
       //导出设置
-      key: FormType.Config,
-    },
+      key: FormType.Config
+    }
   ];
 
   private handleClose = () => {
     this.props.modalStore.changeExportModal(false);
     this.resetFormData();
     this.setState({
-      isSaveDefaultConfig: false,
+      isSaveDefaultConfig: false
     });
   };
   private closeSelf = () => {
@@ -126,12 +135,12 @@ class CreateModal extends React.Component<IProps, IState> {
     Modal.confirm({
       title: formatMessage({
         id: 'odc.components.ExportDrawer.AreYouSureYouWant',
-        defaultMessage: '是否确定取消导出？',
+        defaultMessage: '是否确定取消导出？'
       }),
       centered: true,
       onOk: () => {
         this.handleClose();
-      },
+      }
     });
   };
   private submit = () => {
@@ -148,13 +157,13 @@ class CreateModal extends React.Component<IProps, IState> {
         }
         try {
           this.setState({
-            submitting: true,
+            submitting: true
           });
           const formData = {
             ...this.state.formData,
             ...values,
             projectId,
-            exportFilePath,
+            exportFilePath
           };
           const { exportContent, exportFileMaxSize } = formData;
           // 当用户选择"仅导出结构"后点击下一步，勾选结构文件设置中任一选项后再点击上一步，选择"导出结构和数据"或者"仅导出数据"后，点击下一步，再点击导出时，会携带"仅导出结构"时才可用的参数，导致导出文件和预期不符。
@@ -169,7 +178,7 @@ class CreateModal extends React.Component<IProps, IState> {
                   exportFileMaxSize ===
                   formatMessage({
                     id: 'odc.components.ExportDrawer.Unlimited',
-                    defaultMessage: '无限制',
+                    defaultMessage: '无限制'
                   }) //无限制
                     ? -1
                     : parseInt(exportFileMaxSize as string);
@@ -184,7 +193,7 @@ class CreateModal extends React.Component<IProps, IState> {
                   exportFileMaxSize ===
                   formatMessage({
                     id: 'odc.components.ExportDrawer.Unlimited',
-                    defaultMessage: '无限制',
+                    defaultMessage: '无限制'
                   }) //无限制
                     ? -1
                     : parseInt(exportFileMaxSize as string);
@@ -210,19 +219,22 @@ class CreateModal extends React.Component<IProps, IState> {
             message.success(
               formatMessage({
                 id: 'src.component.Task.ExportTask.CreateModal.133432E8' /*'工单创建成功'*/,
-                defaultMessage: '工单创建成功',
-              }),
+                defaultMessage: '工单创建成功'
+              })
             );
             if (this.state.isSaveDefaultConfig) {
               this.saveCurrentConfig();
               this.setDefaultConfig();
             }
             this.handleClose();
-            openTasksPage(TaskPageType.EXPORT, TaskPageScope.CREATED_BY_CURRENT_USER);
+            openTasksPage(
+              TaskPageType.EXPORT,
+              TaskPageScope.CREATED_BY_CURRENT_USER
+            );
           }
         } finally {
           this.setState({
-            submitting: false,
+            submitting: false
           });
         }
       }
@@ -233,7 +245,7 @@ class CreateModal extends React.Component<IProps, IState> {
     this._formRef.current.valid(async (haveError, values) => {
       if (!haveError) {
         this.setState({
-          stepIndex: this.state.stepIndex + 1,
+          stepIndex: this.state.stepIndex + 1
         });
       }
     });
@@ -255,10 +267,13 @@ class CreateModal extends React.Component<IProps, IState> {
     const formData = {
       databaseId: this.props.modalStore.exportModalData?.databaseId,
       taskId: this.props.modalStore.exportModalData?.taskId,
-      executionStrategy: this.defaultConfig?.executionStrategy ?? TaskExecStrategy.AUTO,
+      executionStrategy:
+        this.defaultConfig?.executionStrategy ?? TaskExecStrategy.AUTO,
       taskName: null,
-      dataTransferFormat: this.defaultConfig?.dataTransferFormat ?? EXPORT_TYPE.CSV,
-      exportContent: this.defaultConfig?.exportContent ?? EXPORT_CONTENT.DATA_AND_STRUCT,
+      dataTransferFormat:
+        this.defaultConfig?.dataTransferFormat ?? EXPORT_TYPE.CSV,
+      exportContent:
+        this.defaultConfig?.exportContent ?? EXPORT_CONTENT.DATA_AND_STRUCT,
       batchCommit: this.defaultConfig?.batchCommit ?? false,
       batchCommitNum: this.defaultConfig?.batchCommitNum ?? null,
       skippedDataType: this.defaultConfig?.skippedDataType ?? [],
@@ -274,14 +289,14 @@ class CreateModal extends React.Component<IProps, IState> {
         this.defaultConfig?.exportFileMaxSize ??
         formatMessage({
           id: 'odc.components.ExportDrawer.Unlimited',
-          defaultMessage: '无限制',
+          defaultMessage: '无限制'
         }),
       //无限制
       columnDelimiter: this.defaultConfig?.columnDelimiter ?? '"',
       lineSeparator: this.defaultConfig?.lineSeparator ?? '\r\n',
       useSys: false,
       exportAllObjects: this.defaultConfig?.exportAllObjects ?? false,
-      exportDbObjects: [],
+      exportDbObjects: []
     };
 
     return formData;
@@ -289,7 +304,7 @@ class CreateModal extends React.Component<IProps, IState> {
   private resetFormData = () => {
     this.setState({
       stepIndex: 0,
-      formData: this.getDefaultFormData(),
+      formData: this.getDefaultFormData()
     });
   };
   static getDerivedStateFromProps(props, state) {
@@ -299,24 +314,24 @@ class CreateModal extends React.Component<IProps, IState> {
       const formData = {
         ...state.formData,
         databaseId,
-        taskId,
+        taskId
       };
       if (name) {
         formData.exportDbObjects = [
           {
             objectName: name,
-            dbObjectType: type,
-          },
+            dbObjectType: type
+          }
         ];
       }
       if (type === DbObjectType.package && exportPkgBody) {
         formData.exportDbObjects.push({
           objectName: name,
-          dbObjectType: DbObjectType.package_body,
+          dbObjectType: DbObjectType.package_body
         });
       }
       return {
-        formData,
+        formData
       };
     }
     return null;
@@ -337,7 +352,7 @@ class CreateModal extends React.Component<IProps, IState> {
     const nextTip = isNextStepDisabled
       ? formatMessage({
           id: 'odc.components.ExportDrawer.SelectAtLeastOneExport',
-          defaultMessage: '至少选择一个导出对象',
+          defaultMessage: '至少选择一个导出对象'
         })
       : //至少选择一个导出对象
         null;
@@ -347,7 +362,7 @@ class CreateModal extends React.Component<IProps, IState> {
         title={
           formatMessage({
             id: 'odc.components.ExportDrawer.Export',
-            defaultMessage: '导出',
+            defaultMessage: '导出'
           }) //导出
         }
         open={modalStore.exportModalVisible}
@@ -359,7 +374,7 @@ class CreateModal extends React.Component<IProps, IState> {
           {!isClient() && (
             <Alert
               style={{
-                marginBottom: 12,
+                marginBottom: 12
               }}
               type="info"
               showIcon
@@ -368,7 +383,7 @@ class CreateModal extends React.Component<IProps, IState> {
                   {formatMessage({
                     id: 'odc.components.ExportDrawer.TheMaximumDataSizeCannot',
                     defaultMessage:
-                      '数据最大不能超过 2GB，如需导出大量数据，请使用导数工具 OBDUMPER',
+                      '数据最大不能超过 2GB，如需导出大量数据，请使用导数工具 OBDUMPER'
                   })}
                   <a
                     style={{ marginLeft: 4 }}
@@ -378,7 +393,7 @@ class CreateModal extends React.Component<IProps, IState> {
                     {
                       formatMessage({
                         id: 'src.component.Task.ExportTask.CreateModal.5DF92911' /*详情*/,
-                        defaultMessage: '详情',
+                        defaultMessage: '详情'
                       }) /* 详情 */
                     }
                   </a>
@@ -391,7 +406,7 @@ class CreateModal extends React.Component<IProps, IState> {
 
           <FormContext.Provider
             value={{
-              dfaultConfig: this.defaultConfig,
+              dfaultConfig: this.defaultConfig
             }}
           >
             <ExportForm
@@ -400,8 +415,8 @@ class CreateModal extends React.Component<IProps, IState> {
                   isFormChanged: true,
                   formData: {
                     ...this.state.formData,
-                    ...values,
-                  },
+                    ...values
+                  }
                 });
               }}
               formData={formData}
@@ -416,14 +431,14 @@ class CreateModal extends React.Component<IProps, IState> {
             checked={isSaveDefaultConfig}
             onChange={(e) =>
               this.setState({
-                isSaveDefaultConfig: e.target.checked,
+                isSaveDefaultConfig: e.target.checked
               })
             }
           >
             {
               formatMessage({
                 id: 'odc.components.ExportDrawer.RetainTheCurrentConfiguration',
-                defaultMessage: '保留当前配置',
+                defaultMessage: '保留当前配置'
               }) /*保留当前配置*/
             }
 
@@ -433,26 +448,26 @@ class CreateModal extends React.Component<IProps, IState> {
             <Button
               onClick={this.closeSelf}
               style={{
-                marginRight: 8,
+                marginRight: 8
               }}
             >
               {formatMessage({
                 id: 'app.button.cancel',
-                defaultMessage: '取消',
+                defaultMessage: '取消'
               })}
             </Button>
             {prevStep ? (
               <Button
                 onClick={() => {
                   this.setState({
-                    stepIndex: stepIndex - 1,
+                    stepIndex: stepIndex - 1
                   });
                 }}
               >
                 {
                   formatMessage({
                     id: 'odc.components.ExportDrawer.PreviousStep',
-                    defaultMessage: '上一步：',
+                    defaultMessage: '上一步：'
                   })
 
                   /*上一步:*/
@@ -463,11 +478,15 @@ class CreateModal extends React.Component<IProps, IState> {
             ) : null}
             {nextStep ? (
               <Tooltip title={nextTip}>
-                <Button type="primary" onClick={this.nextStep} disabled={isNextStepDisabled}>
+                <Button
+                  type="primary"
+                  onClick={this.nextStep}
+                  disabled={isNextStepDisabled}
+                >
                   {
                     formatMessage({
                       id: 'odc.components.ExportDrawer.NextStep',
-                      defaultMessage: '下一步:',
+                      defaultMessage: '下一步:'
                     })
 
                     /*下一步:*/
@@ -481,7 +500,7 @@ class CreateModal extends React.Component<IProps, IState> {
               <Button loading={submitting} onClick={this.submit} type="primary">
                 {formatMessage({
                   id: 'workspace.header.tools.export',
-                  defaultMessage: '导出',
+                  defaultMessage: '导出'
                 })}
               </Button>
             ) : null}

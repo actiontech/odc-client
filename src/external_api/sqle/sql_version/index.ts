@@ -28,11 +28,14 @@ import {
   IBatchAssociateWorkflowsWithVersionV1Params,
   IBatchAssociateWorkflowsWithVersionV1Return,
   IGetDependenciesBetweenStageInstanceV1Params,
-  IGetDependenciesBetweenStageInstanceV1Return,
+  IGetDependenciesBetweenStageInstanceV1Return
 } from './index.type';
 
 class SqlVersionService extends ServiceBase {
-  public getSqlVersionListV1(params: IGetSqlVersionListV1Params, options?: AxiosRequestConfig) {
+  public getSqlVersionListV1(
+    params: IGetSqlVersionListV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -40,11 +43,14 @@ class SqlVersionService extends ServiceBase {
     return this.get<IGetSqlVersionListV1Return>(
       `/v1/projects/${project_name}/sql_versions`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public createSqlVersionV1(params: ICreateSqlVersionV1Params, options?: AxiosRequestConfig) {
+  public createSqlVersionV1(
+    params: ICreateSqlVersionV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -52,11 +58,14 @@ class SqlVersionService extends ServiceBase {
     return this.post<ICreateSqlVersionV1Return>(
       `/v1/projects/${project_name}/sql_versions`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public getSqlVersionDetailV1(params: IGetSqlVersionDetailV1Params, options?: AxiosRequestConfig) {
+  public getSqlVersionDetailV1(
+    params: IGetSqlVersionDetailV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -67,11 +76,14 @@ class SqlVersionService extends ServiceBase {
     return this.get<IGetSqlVersionDetailV1Return>(
       `/v1/projects/${project_name}/sql_versions/${sql_version_id}/`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public deleteSqlVersionV1(params: IDeleteSqlVersionV1Params, options?: AxiosRequestConfig) {
+  public deleteSqlVersionV1(
+    params: IDeleteSqlVersionV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -82,11 +94,14 @@ class SqlVersionService extends ServiceBase {
     return this.delete<IDeleteSqlVersionV1Return>(
       `/v1/projects/${project_name}/sql_versions/${sql_version_id}/`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public updateSqlVersionV1(params: IUpdateSqlVersionV1Params, options?: AxiosRequestConfig) {
+  public updateSqlVersionV1(
+    params: IUpdateSqlVersionV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -97,13 +112,13 @@ class SqlVersionService extends ServiceBase {
     return this.patch<IUpdateSqlVersionV1Return>(
       `/v1/projects/${project_name}/sql_versions/${sql_version_id}/`,
       paramsData,
-      options,
+      options
     );
   }
 
   public batchExecuteWorkflowsV1(
     params: IBatchExecuteWorkflowsV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -115,13 +130,13 @@ class SqlVersionService extends ServiceBase {
     return this.post<IBatchExecuteWorkflowsV1Return>(
       `/v1/projects/${project_name}/sql_versions/${sql_version_id}/batch_execute_workflows`,
       paramsData,
-      options,
+      options
     );
   }
 
   public batchReleaseWorkflowsV1(
     params: IBatchReleaseWorkflowsV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -133,11 +148,14 @@ class SqlVersionService extends ServiceBase {
     return this.post<IBatchReleaseWorkflowsV1Return>(
       `/v1/projects/${project_name}/sql_versions/${sql_version_id}/batch_release_workflows`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public lockSqlVersionV1(params: ILockSqlVersionV1Params, options?: AxiosRequestConfig) {
+  public lockSqlVersionV1(
+    params: ILockSqlVersionV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -148,13 +166,13 @@ class SqlVersionService extends ServiceBase {
     return this.post<ILockSqlVersionV1Return>(
       `/v1/projects/${project_name}/sql_versions/${sql_version_id}/lock`,
       paramsData,
-      options,
+      options
     );
   }
 
   public GetWorkflowsThatCanBeAssociatedToVersionV1(
     params: IGetWorkflowsThatCanBeAssociatedToVersionV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -169,13 +187,13 @@ class SqlVersionService extends ServiceBase {
     return this.get<IGetWorkflowsThatCanBeAssociatedToVersionV1Return>(
       `/v1/projects/${project_name}/sql_versions/${sql_version_id}/sql_version_stages/${sql_version_stage_id}/associate_workflows`,
       paramsData,
-      options,
+      options
     );
   }
 
   public batchAssociateWorkflowsWithVersionV1(
     params: IBatchAssociateWorkflowsWithVersionV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -190,13 +208,13 @@ class SqlVersionService extends ServiceBase {
     return this.post<IBatchAssociateWorkflowsWithVersionV1Return>(
       `/v1/projects/${project_name}/sql_versions/${sql_version_id}/sql_version_stages/${sql_version_stage_id}/associate_workflows`,
       paramsData,
-      options,
+      options
     );
   }
 
   public getDependenciesBetweenStageInstanceV1(
     params: IGetDependenciesBetweenStageInstanceV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -211,7 +229,7 @@ class SqlVersionService extends ServiceBase {
     return this.get<IGetDependenciesBetweenStageInstanceV1Return>(
       `/v1/projects/${project_name}/sql_versions/${sql_version_id}/sql_version_stages/${sql_version_stage_id}/dependencies`,
       paramsData,
-      options,
+      options
     );
   }
 }

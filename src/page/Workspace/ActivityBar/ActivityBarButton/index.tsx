@@ -34,7 +34,7 @@ const ActivityBarButton: React.FC<IProps> = function ({
   isActive = false,
   style,
   title,
-  onClick,
+  onClick
 }) {
   return (
     <Tooltip placement="right" title={title}>

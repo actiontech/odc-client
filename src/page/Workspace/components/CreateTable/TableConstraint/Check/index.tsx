@@ -34,7 +34,7 @@ const defaultCheckConstraint: TableCheckConstraint = {
   name: null,
   check: '',
   enable: true,
-  defer: TableConstraintDefer.NOT,
+  defer: TableConstraintDefer.NOT
 };
 
 interface IProps {
@@ -44,13 +44,15 @@ interface IProps {
 const CheckConstraint: React.FC<IProps> = function ({ modified }) {
   const tableContext = useContext(TableContext);
   const [selectedRowsIdx, setSelectedRowIdx] = useState<number[]>([]);
-  const gridColumns: any[] = useColumns(tableContext?.session?.connection?.dialectType);
+  const gridColumns: any[] = useColumns(
+    tableContext?.session?.connection?.dialectType
+  );
   const gridRef = useRef<DataGridRef>();
   const rows = useMemo(() => {
     return tableContext.checkConstraints.map((index, idx) => {
       return {
         ...index,
-        key: `${index.name || ''}@@${idx}`,
+        key: `${index.name || ''}@@${idx}`
       };
     });
   }, [tableContext.checkConstraints]);
@@ -69,12 +71,15 @@ const CheckConstraint: React.FC<IProps> = function ({ modified }) {
         <EditToolbar modified={modified}>
           <Toolbar>
             <Toolbar.Button
-              text={formatMessage({ id: 'workspace.header.create', defaultMessage: '新建' })}
+              text={formatMessage({
+                id: 'workspace.header.create',
+                defaultMessage: '新建'
+              })}
               icon={PlusOutlined}
               onClick={() => {
                 const row = {
                   ...defaultCheckConstraint,
-                  key: generateUniqKey(),
+                  key: generateUniqKey()
                 };
                 gridRef.current?.addRows([row]);
               }}
@@ -83,7 +88,7 @@ const CheckConstraint: React.FC<IProps> = function ({ modified }) {
             <Toolbar.Button
               text={formatMessage({
                 id: 'odc.TableConstraint.Primary.Delete',
-                defaultMessage: '删除',
+                defaultMessage: '删除'
               })}
               icon={DeleteOutlined}
               disabled={!selectedRowsIdx?.length}
@@ -110,7 +115,7 @@ const CheckConstraint: React.FC<IProps> = function ({ modified }) {
           setSelectedRowIdx(
             keys.map((key) => {
               return rows.findIndex((row) => row.key === key);
-            }),
+            })
           );
         }}
         gridRef={gridRef}

@@ -25,7 +25,7 @@ import {
   ITableListColumnsPartition,
   ITableListPartition,
   ITableRangeColumnsPartition,
-  ITableRangePartition,
+  ITableRangePartition
 } from '../../../CreateTable/interface';
 import TablePageContext from '../../context';
 
@@ -33,12 +33,19 @@ interface IProps {
   session: SessionStore;
 }
 
-const AddPartitionWithTableNameModal = forwardRef<any, IProps>(function ({ session }, ref) {
+const AddPartitionWithTableNameModal = forwardRef<any, IProps>(function (
+  { session },
+  ref
+) {
   const modalRef = useRef<any>();
   const [table, setTable] = useState(null);
 
   async function onRefresh(tableName) {
-    const table = await getTableInfo(tableName, session?.database?.dbName, session?.sessionId);
+    const table = await getTableInfo(
+      tableName,
+      session?.database?.dbName,
+      session?.sessionId
+    );
     if (table) {
       setTable(table);
     }
@@ -65,8 +72,8 @@ const AddPartitionWithTableNameModal = forwardRef<any, IProps>(function ({ sessi
                     newPartitions as ITableListPartition
                   ).partitions.concat(
                     values.partitions?.map((part) =>
-                      Object.assign({ key: generateUniqKey() }, part),
-                    ),
+                      Object.assign({ key: generateUniqKey() }, part)
+                    )
                   );
                   newValues = newPartitions;
                   break;
@@ -76,8 +83,8 @@ const AddPartitionWithTableNameModal = forwardRef<any, IProps>(function ({ sessi
                     newPartitions as ITableRangePartition
                   ).partitions.concat(
                     values.partitions?.map((part) =>
-                      Object.assign({ key: generateUniqKey() }, part),
-                    ),
+                      Object.assign({ key: generateUniqKey() }, part)
+                    )
                   );
                   newValues = newPartitions;
                   break;
@@ -87,8 +94,8 @@ const AddPartitionWithTableNameModal = forwardRef<any, IProps>(function ({ sessi
                     newPartitions as ITableListColumnsPartition
                   ).partitions.concat(
                     values.partitions?.map((part) =>
-                      Object.assign({ key: generateUniqKey() }, part),
-                    ),
+                      Object.assign({ key: generateUniqKey() }, part)
+                    )
                   );
                   newValues = newPartitions;
                   break;
@@ -98,8 +105,8 @@ const AddPartitionWithTableNameModal = forwardRef<any, IProps>(function ({ sessi
                     newPartitions as ITableRangeColumnsPartition
                   ).partitions.concat(
                     values.partitions?.map((part) =>
-                      Object.assign({ key: generateUniqKey() }, part),
-                    ),
+                      Object.assign({ key: generateUniqKey() }, part)
+                    )
                   );
                   newValues = newPartitions;
                   break;
@@ -108,26 +115,26 @@ const AddPartitionWithTableNameModal = forwardRef<any, IProps>(function ({ sessi
               const { sql: updateTableDML, tip } = await generateUpdateTableDDL(
                 {
                   ...table,
-                  partitions: newValues,
+                  partitions: newValues
                 },
                 table,
                 session?.sessionId,
-                session?.database?.dbName,
+                session?.database?.dbName
               );
               return updateTableDML;
             }
           }
-        },
+        }
       };
     },
-    [modalRef],
+    [modalRef]
   );
 
   return (
     <TablePageContext.Provider
       value={{
         table,
-        onRefresh: () => {},
+        onRefresh: () => {}
       }}
     >
       <AddPartitionModal ref={modalRef} />

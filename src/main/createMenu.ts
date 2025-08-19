@@ -22,19 +22,19 @@ export default function createMenu(app: App) {
     submenu: [
       {
         label: 'About Application',
-        selector: 'orderFrontStandardAboutPanel:',
+        selector: 'orderFrontStandardAboutPanel:'
       },
       {
-        type: 'separator' as MenuItemConstructorOptions['type'],
+        type: 'separator' as MenuItemConstructorOptions['type']
       },
       {
         label: 'Quit',
         accelerator: 'Command+Q',
         click: () => {
           app.quit();
-        },
-      },
-    ],
+        }
+      }
+    ]
   };
 
   const edit = {
@@ -43,37 +43,37 @@ export default function createMenu(app: App) {
       {
         label: 'Undo',
         accelerator: 'CmdOrCtrl+Z',
-        selector: 'undo:',
+        selector: 'undo:'
       },
       {
         label: 'Redo',
         accelerator: 'Shift+CmdOrCtrl+Z',
-        selector: 'redo:',
+        selector: 'redo:'
       },
       {
-        type: 'separator' as MenuItemConstructorOptions['type'],
+        type: 'separator' as MenuItemConstructorOptions['type']
       },
       {
         label: 'Cut',
         accelerator: 'CmdOrCtrl+X',
-        selector: 'cut:',
+        selector: 'cut:'
       },
       {
         label: 'Copy',
         accelerator: 'CmdOrCtrl+C',
-        selector: 'copy:',
+        selector: 'copy:'
       },
       {
         label: 'Paste',
         accelerator: 'CmdOrCtrl+V',
-        selector: 'paste:',
+        selector: 'paste:'
       },
       {
         label: 'Select All',
         accelerator: 'CmdOrCtrl+A',
-        selector: 'selectAll:',
-      },
-    ],
+        selector: 'selectAll:'
+      }
+    ]
   };
 
   const template: MenuItemConstructorOptions[] = [application, edit];

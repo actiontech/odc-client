@@ -8,9 +8,14 @@ import {
   EmitterKey,
   LocalStorageWrapper,
   StorageKey,
-  getRecentlySelectedZone,
+  getRecentlySelectedZone
 } from '@actiontech/dms-kit';
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosHeaders } from 'axios';
+import axios, {
+  AxiosInstance,
+  AxiosRequestConfig,
+  AxiosResponse,
+  AxiosHeaders
+} from 'axios';
 import { eventEmitter } from '@/util/utils';
 import type { NotificationInstanceKeyType } from '@/hooks/useNotificationContext';
 import { formatMessage } from '@/util/intl';
@@ -43,7 +48,9 @@ class ApiBase {
       }
       Download.downloadByCreateElementA(res.data, filename);
     } else if (
-      (res.status === 200 && code !== ResponseCode.SUCCESS && !isFileStreamResponse(res)) ||
+      (res.status === 200 &&
+        code !== ResponseCode.SUCCESS &&
+        !isFileStreamResponse(res)) ||
       res.status !== 200
     ) {
       const message = await getResponseErrorMessage(res);
@@ -53,13 +60,15 @@ class ApiBase {
         {
           message: formatMessage({
             id: 'odc.src.util.notification.RequestFailed',
-            defaultMessage: '请求失败',
+            defaultMessage: '请求失败'
           }),
-          description: message,
-        },
+          description: message
+        }
       );
       if (code === ResponseCode.CurrentAvailabilityZoneError) {
-        eventEmitter.emit(EmitterKey.DMS_CLEAR_AVAILABILITY_ZONE_AND_RELOAD_INITIAL_DATA);
+        eventEmitter.emit(
+          EmitterKey.DMS_CLEAR_AVAILABILITY_ZONE_AND_RELOAD_INITIAL_DATA
+        );
       }
     }
     return res;
@@ -76,10 +85,10 @@ class ApiBase {
         {
           message: formatMessage({
             id: 'odc.src.util.notification.RequestFailed',
-            defaultMessage: '请求失败',
+            defaultMessage: '请求失败'
           }),
-          description: message,
-        },
+          description: message
+        }
       );
     }
     return Promise.reject(error);
@@ -95,7 +104,9 @@ class ApiBase {
 
       // 修剪 data/params 中的字符串（仅处理普通对象）
       const trimTarget: Record<string, unknown> | undefined =
-        config.data && typeof config.data === 'object' && !(config.data instanceof FormData)
+        config.data &&
+        typeof config.data === 'object' &&
+        !(config.data instanceof FormData)
           ? (config.data as Record<string, unknown>)
           : config.params && typeof config.params === 'object'
           ? (config.params as Record<string, unknown>)
@@ -125,7 +136,7 @@ class ApiBase {
       },
       (error) => {
         return ApiBase.errorHandle(error);
-      },
+      }
     );
   }
 
@@ -136,12 +147,17 @@ class ApiBase {
     ApiBase._interceptorsReady = true;
   }
 
-  static request<T = any>(config: AxiosRequestConfig): Promise<AxiosResponse<T>> {
+  static request<T = any>(
+    config: AxiosRequestConfig
+  ): Promise<AxiosResponse<T>> {
     ApiBase.ensureReady();
     return ApiBase.instance.request<T>(config);
   }
 
-  static get<T = any>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
+  static get<T = any>(
+    url: string,
+    config?: AxiosRequestConfig
+  ): Promise<AxiosResponse<T>> {
     ApiBase.ensureReady();
     return ApiBase.instance.get<T>(url, config);
   }
@@ -149,13 +165,16 @@ class ApiBase {
   static post<T = any>(
     url: string,
     data?: any,
-    config?: AxiosRequestConfig,
+    config?: AxiosRequestConfig
   ): Promise<AxiosResponse<T>> {
     ApiBase.ensureReady();
     return ApiBase.instance.post<T>(url, data, config);
   }
 
-  static delete<T = any>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
+  static delete<T = any>(
+    url: string,
+    config?: AxiosRequestConfig
+  ): Promise<AxiosResponse<T>> {
     ApiBase.ensureReady();
     return ApiBase.instance.delete<T>(url, config);
   }
@@ -163,7 +182,7 @@ class ApiBase {
   static put<T = any>(
     url: string,
     data?: any,
-    config?: AxiosRequestConfig,
+    config?: AxiosRequestConfig
   ): Promise<AxiosResponse<T>> {
     ApiBase.ensureReady();
     return ApiBase.instance.put<T>(url, data, config);
@@ -172,7 +191,7 @@ class ApiBase {
   static patch<T = any>(
     url: string,
     data?: any,
-    config?: AxiosRequestConfig,
+    config?: AxiosRequestConfig
   ): Promise<AxiosResponse<T>> {
     ApiBase.ensureReady();
     return ApiBase.instance.patch<T>(url, data, config);

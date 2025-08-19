@@ -23,20 +23,23 @@ import React from 'react';
 import styles from './index.less';
 import {
   INCREAMENT_FIELD_TYPE,
-  increamentFieldTypeLabelMap,
+  increamentFieldTypeLabelMap
 } from '../PartitionPolicyFormTable/const';
 
-const getFromCurrentTimeLabel = (fromCurrentTime: boolean, baseTimestampMillis: number) => {
+const getFromCurrentTimeLabel = (
+  fromCurrentTime: boolean,
+  baseTimestampMillis: number
+) => {
   const labels = [
     fromCurrentTime
       ? formatMessage({
           id: 'src.component.Task.component.PartitionPolicyTable.02D5A436',
-          defaultMessage: '当前时间',
+          defaultMessage: '当前时间'
         })
       : formatMessage({
           id: 'src.component.Task.component.PartitionPolicyTable.C5755BD5',
-          defaultMessage: '指定时间',
-        }),
+          defaultMessage: '指定时间'
+        })
   ];
 
   if (baseTimestampMillis) {
@@ -50,29 +53,33 @@ const columns = [
     dataIndex: 'partitionKey',
     title: formatMessage({
       id: 'src.component.Task.component.PartitionPolicyTable.8086D142',
-      defaultMessage: '分区键',
+      defaultMessage: '分区键'
     }), //'分区键'
     ellipsis: true,
     width: 100,
     render: (partitionKey) => {
       return partitionKey || '-';
-    },
+    }
   },
   {
     dataIndex: 'partitionOption',
     title: formatMessage({
       id: 'src.component.Task.component.PartitionPolicyTable.B25F63D5',
-      defaultMessage: '创建细则',
+      defaultMessage: '创建细则'
     }), //'创建细则'
     ellipsis: true,
     render: (_, record) => {
       const intervalGenerateExpr =
-        record?.partitionKeyInvokerParameters?.generateParameter?.intervalGenerateExpr;
-      const interval = record?.partitionKeyInvokerParameters?.generateParameter?.interval;
+        record?.partitionKeyInvokerParameters?.generateParameter
+          ?.intervalGenerateExpr;
+      const interval =
+        record?.partitionKeyInvokerParameters?.generateParameter?.interval;
       const intervalPrecision =
-        record?.partitionKeyInvokerParameters?.generateParameter?.intervalPrecision;
+        record?.partitionKeyInvokerParameters?.generateParameter
+          ?.intervalPrecision;
       const numberInterval =
-        record?.partitionKeyInvokerParameters?.generateParameter?.numberInterval;
+        record?.partitionKeyInvokerParameters?.generateParameter
+          ?.numberInterval;
       const incrementFieldType =
         record?.partitionKeyInvokerParameters?.generateParameter?.fieldType;
       const incrementFieldTimeFormat =
@@ -83,61 +90,75 @@ const columns = [
             label={
               formatMessage({
                 id: 'src.component.Task.component.PartitionPolicyTable.D94AE82A',
-                defaultMessage: '创建方式',
+                defaultMessage: '创建方式'
               }) /*"创建方式"*/
             }
           >
-            {record?.partitionKeyInvoker === PARTITION_KEY_INVOKER.CUSTOM_GENERATOR
+            {record?.partitionKeyInvoker ===
+            PARTITION_KEY_INVOKER.CUSTOM_GENERATOR
               ? formatMessage({
                   id: 'src.component.Task.component.PartitionPolicyTable.C9467B5B',
-                  defaultMessage: '自定义',
+                  defaultMessage: '自定义'
                 })
               : formatMessage({
                   id: 'src.component.Task.component.PartitionPolicyTable.F057FAAF',
-                  defaultMessage: '顺序递增',
+                  defaultMessage: '顺序递增'
                 })}
           </Descriptions.Item>
           {!!incrementFieldType ? (
             <Descriptions.Item
               label={formatMessage({
                 id: 'src.component.Task.component.PartitionPolicyTable.D136FFC8',
-                defaultMessage: '含义',
+                defaultMessage: '含义'
               })}
             >
               {increamentFieldTypeLabelMap[incrementFieldType]}
-              {incrementFieldTimeFormat ? `(${incrementFieldTimeFormat})` : null}
+              {incrementFieldTimeFormat
+                ? `(${incrementFieldTimeFormat})`
+                : null}
             </Descriptions.Item>
           ) : null}
-          {(!!record?.partitionKeyInvokerParameters?.generateParameter?.baseTimestampMillis ||
-            !!record?.partitionKeyInvokerParameters?.generateParameter?.fromCurrentTime) &&
+          {(!!record?.partitionKeyInvokerParameters?.generateParameter
+            ?.baseTimestampMillis ||
+            !!record?.partitionKeyInvokerParameters?.generateParameter
+              ?.fromCurrentTime) &&
           incrementFieldType !== INCREAMENT_FIELD_TYPE.NUMBER ? (
             <Descriptions.Item
               label={
                 formatMessage({
                   id: 'src.component.Task.component.PartitionPolicyTable.FD28073C',
-                  defaultMessage: '起始',
+                  defaultMessage: '起始'
                 }) /*"起始"*/
               }
             >
               {getFromCurrentTimeLabel(
-                record?.partitionKeyInvokerParameters?.generateParameter?.fromCurrentTime,
-                record?.partitionKeyInvokerParameters?.generateParameter?.baseTimestampMillis,
+                record?.partitionKeyInvokerParameters?.generateParameter
+                  ?.fromCurrentTime,
+                record?.partitionKeyInvokerParameters?.generateParameter
+                  ?.baseTimestampMillis
               )}
             </Descriptions.Item>
           ) : null}
-          {!!record?.partitionKeyInvokerParameters?.generateParameter?.generateExpr ? (
+          {!!record?.partitionKeyInvokerParameters?.generateParameter
+            ?.generateExpr ? (
             <Descriptions.Item
               label={
                 formatMessage({
                   id: 'src.component.Task.component.PartitionPolicyTable.2C76F5F5',
-                  defaultMessage: '表达式',
+                  defaultMessage: '表达式'
                 }) /*"表达式"*/
               }
             >
               <Tooltip
-                title={record?.partitionKeyInvokerParameters?.generateParameter?.generateExpr}
+                title={
+                  record?.partitionKeyInvokerParameters?.generateParameter
+                    ?.generateExpr
+                }
               >
-                {record?.partitionKeyInvokerParameters?.generateParameter?.generateExpr}
+                {
+                  record?.partitionKeyInvokerParameters?.generateParameter
+                    ?.generateExpr
+                }
               </Tooltip>
             </Descriptions.Item>
           ) : null}
@@ -146,7 +167,7 @@ const columns = [
               label={
                 formatMessage({
                   id: 'src.component.Task.component.PartitionPolicyTable.D509725F',
-                  defaultMessage: '间隔',
+                  defaultMessage: '间隔'
                 }) /*"间隔"*/
               }
             >
@@ -157,7 +178,7 @@ const columns = [
             <Descriptions.Item
               label={formatMessage({
                 id: 'src.component.Task.component.PartitionPolicyTable.8AA131EB',
-                defaultMessage: '间隔(数值)',
+                defaultMessage: '间隔(数值)'
               })}
             >
               {numberInterval}
@@ -168,18 +189,22 @@ const columns = [
               label={
                 formatMessage({
                   id: 'src.component.Task.component.PartitionPolicyTable.D509725F',
-                  defaultMessage: '间隔',
+                  defaultMessage: '间隔'
                 }) /*"间隔"*/
               }
             >
               {interval}
-              {intervalPrecisionOptions.find((i) => i.value === intervalPrecision)?.label}
+              {
+                intervalPrecisionOptions.find(
+                  (i) => i.value === intervalPrecision
+                )?.label
+              }
             </Descriptions.Item>
           )}
         </Descriptions>
       );
-    },
-  },
+    }
+  }
 ];
 
 interface IProps {

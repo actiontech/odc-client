@@ -17,11 +17,13 @@
 import { ConnectType, ConnectionMode } from '@/d.ts';
 import {
   getDataSourceModeConfig,
-  getDataSourceModeConfigByConnectionMode,
+  getDataSourceModeConfigByConnectionMode
 } from '@/common/datasource';
 
 export function useTableConfig(dialectType: ConnectionMode) {
-  return getDataSourceModeConfigByConnectionMode(dialectType)?.schema?.table || {};
+  return (
+    getDataSourceModeConfigByConnectionMode(dialectType)?.schema?.table || {}
+  );
 }
 
 export function useDataSourceConfig(type: ConnectType) {

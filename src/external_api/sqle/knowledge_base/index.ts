@@ -11,22 +11,40 @@ import {
   IGetKnowledgeBaseListReturn,
   IGetKnowledgeGraphParams,
   IGetKnowledgeGraphReturn,
-  IGetKnowledgeBaseTagListReturn,
+  IGetKnowledgeBaseTagListReturn
 } from './index.type';
 
 class KnowledgeBaseService extends ServiceBase {
-  public getKnowledgeBaseList(params: IGetKnowledgeBaseListParams, options?: AxiosRequestConfig) {
+  public getKnowledgeBaseList(
+    params: IGetKnowledgeBaseListParams,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
-    return this.get<IGetKnowledgeBaseListReturn>('/v1/knowledge_bases', paramsData, options);
+    return this.get<IGetKnowledgeBaseListReturn>(
+      '/v1/knowledge_bases',
+      paramsData,
+      options
+    );
   }
 
-  public getKnowledgeGraph(params: IGetKnowledgeGraphParams, options?: AxiosRequestConfig) {
+  public getKnowledgeGraph(
+    params: IGetKnowledgeGraphParams,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
-    return this.get<IGetKnowledgeGraphReturn>('/v1/knowledge_bases/graph', paramsData, options);
+    return this.get<IGetKnowledgeGraphReturn>(
+      '/v1/knowledge_bases/graph',
+      paramsData,
+      options
+    );
   }
 
   public getKnowledgeBaseTagList(options?: AxiosRequestConfig) {
-    return this.get<IGetKnowledgeBaseTagListReturn>('/v1/knowledge_bases/tags', undefined, options);
+    return this.get<IGetKnowledgeBaseTagListReturn>(
+      '/v1/knowledge_bases/tags',
+      undefined,
+      options
+    );
   }
 }
 

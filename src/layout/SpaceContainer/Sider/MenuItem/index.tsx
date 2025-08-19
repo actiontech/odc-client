@@ -15,11 +15,10 @@
  */
 
 import Icon from '@ant-design/icons';
-import { Badge, Tooltip } from 'antd';
+import { Badge } from 'antd';
 import classNames from 'classnames';
-
-import styles from './index.less';
 import { BasicToolTip } from '@actiontech/dms-kit';
+import { MenuItemIconStyleWrapper, MenuItemStyleWrapper } from './style';
 
 interface IProps {
   collapsed: boolean;
@@ -31,7 +30,7 @@ interface IProps {
   onClick?: () => void;
 }
 
-export default function ({
+const MenuItem: React.FC<IProps> = ({
   collapsed,
   icon,
   label,
@@ -40,15 +39,15 @@ export default function ({
   showDot,
   onClick,
   ...rest
-}: IProps) {
+}) => {
   if (collapsed) {
     if (disableTip) {
       return (
-        <Icon
+        <MenuItemIconStyleWrapper
           {...rest}
           onClick={onClick}
-          className={classNames(styles.collapsedIcon, {
-            [styles.selected]: selected,
+          className={classNames('collapsedIcon', {
+            selected: selected
           })}
           component={icon}
         />
@@ -57,10 +56,11 @@ export default function ({
     return (
       <BasicToolTip title={label} placement="right">
         <Badge dot={showDot}>
-          <Icon
+          <MenuItemIconStyleWrapper
+            {...rest}
             onClick={onClick}
-            className={classNames(styles.collapsedIcon, {
-              [styles.selected]: selected,
+            className={classNames('collapsedIcon', {
+              selected: selected
             })}
             component={icon}
           />
@@ -69,13 +69,15 @@ export default function ({
     );
   }
   return (
-    <div
+    <MenuItemStyleWrapper
       {...rest}
       onClick={onClick}
-      className={classNames(styles.item, { [styles.selected]: selected })}
+      className={classNames('item', { selected: selected })}
     >
       <Icon style={{ fontSize: 14 }} component={icon} />
       <span style={{ marginLeft: 12, lineHeight: 1, flex: 1 }}>{label}</span>
-    </div>
+    </MenuItemStyleWrapper>
   );
-}
+};
+
+export default MenuItem;

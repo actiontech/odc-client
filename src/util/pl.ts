@@ -17,7 +17,11 @@
 import PLTYPE from '@/constant/plType';
 import { getRealNameInDatabase } from './sql';
 
-export function getPLName(plType: any, entryName: string, packageName?: string) {
+export function getPLName(
+  plType: any,
+  entryName: string,
+  packageName?: string
+) {
   switch (plType) {
     case PLTYPE.FUNCTION:
     case PLTYPE.PROCEDURE: {
@@ -51,7 +55,11 @@ function removePkgBodyAndHead(plName, plType) {
   return plName;
 }
 
-export function getEntryNameFromPLName(plType: any, plName: string, fromPackage: boolean = false) {
+export function getEntryNameFromPLName(
+  plType: any,
+  plName: string,
+  fromPackage: boolean = false
+) {
   switch (plType) {
     case PLTYPE.FUNCTION:
     case PLTYPE.PROCEDURE:
@@ -73,7 +81,7 @@ export function checkPLNameChanged(
   newPLName: string,
   plType: any,
   fromPackage: boolean = false,
-  dbName: string,
+  dbName: string
 ) {
   let entryName = removePkgBodyAndHead(plName, plType);
   const newEntryName = getEntryNameFromPLName(plType, newPLName, fromPackage);
@@ -87,10 +95,16 @@ export function checkPLNameChanged(
   } else {
     if (newEntryNameArr.length > 1) {
       const newPLName = newEntryNameArr.slice(1).join('.');
-      if (dbName?.toUpperCase() === newEntryNameArr[0] && entryName === newPLName) {
+      if (
+        dbName?.toUpperCase() === newEntryNameArr[0] &&
+        entryName === newPLName
+      ) {
         return null;
       } else {
-        return [dbName?.toUpperCase() + '.' + entryName, newEntryNameArr.join('.')];
+        return [
+          dbName?.toUpperCase() + '.' + entryName,
+          newEntryNameArr.join('.')
+        ];
       }
     }
   }

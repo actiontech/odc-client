@@ -39,7 +39,7 @@ export default class DDLResultSetFilter extends Component<
     visible: false,
     filtered: false,
     searchKey: '',
-    selectedValues: this.props.filteredValues || [],
+    selectedValues: this.props.filteredValues || []
   };
 
   public handleSearch = (searchKey: string) => {
@@ -52,9 +52,11 @@ export default class DDLResultSetFilter extends Component<
      */
     const values = this.getFilterValues();
 
-    const newValues = new Set([].concat(values || []).concat(this.state.selectedValues || []));
+    const newValues = new Set(
+      [].concat(values || []).concat(this.state.selectedValues || [])
+    );
     this.setState({
-      selectedValues: Array.from(newValues),
+      selectedValues: Array.from(newValues)
     });
   };
 
@@ -71,13 +73,13 @@ export default class DDLResultSetFilter extends Component<
     this.setState({
       selectedValues: this.state.selectedValues.filter((v) => {
         return !filtermap[v];
-      }),
+      })
     });
   };
 
   public handleCheckboxChange = (selectedValues: any[]) => {
     this.setState({
-      selectedValues: selectedValues as string[],
+      selectedValues: selectedValues as string[]
     });
   };
 
@@ -89,7 +91,7 @@ export default class DDLResultSetFilter extends Component<
     this.setState({
       visible: false,
       filtered: false,
-      selectedValues: this.props.filteredValues || [],
+      selectedValues: this.props.filteredValues || []
     });
     this.props.onCancel();
   };
@@ -97,7 +99,7 @@ export default class DDLResultSetFilter extends Component<
   public handleSubmit = () => {
     this.setState({
       visible: false,
-      filtered: !!this.state.selectedValues.length,
+      filtered: !!this.state.selectedValues.length
     });
     this.props.onSubmit(this.state.selectedValues);
   };
@@ -106,8 +108,10 @@ export default class DDLResultSetFilter extends Component<
     const { values } = this.props;
     const { searchKey } = this.state;
     return (
-      values.filter((v) => v && v.toString().toUpperCase().indexOf(searchKey.toUpperCase()) > -1) ||
-      []
+      values.filter(
+        (v) =>
+          v && v.toString().toUpperCase().indexOf(searchKey.toUpperCase()) > -1
+      ) || []
     );
   };
 
@@ -125,7 +129,7 @@ export default class DDLResultSetFilter extends Component<
               size="small"
               placeholder={formatMessage({
                 id: 'workspace.window.table.datatab.placeholder',
-                defaultMessage: '请输入',
+                defaultMessage: '请输入'
               })}
               onChange={(e) => {
                 this.handleSearch(e.target.value);
@@ -143,18 +147,37 @@ export default class DDLResultSetFilter extends Component<
             <div className={styles.footer}>
               <span>
                 <span className={styles.select} onClick={this.handleSelectAll}>
-                  {formatMessage({ id: 'app.button.selectAll', defaultMessage: '全选' })}
+                  {formatMessage({
+                    id: 'app.button.selectAll',
+                    defaultMessage: '全选'
+                  })}
                 </span>
-                <span className={styles.deselect} onClick={this.handleDeselectAll}>
-                  {formatMessage({ id: 'app.button.deselectAll', defaultMessage: '取消全选' })}
+                <span
+                  className={styles.deselect}
+                  onClick={this.handleDeselectAll}
+                >
+                  {formatMessage({
+                    id: 'app.button.deselectAll',
+                    defaultMessage: '取消全选'
+                  })}
                 </span>
               </span>
               <span>
-                <Button size="small" style={{ marginRight: 8 }} onClick={this.handleCancel}>
-                  {formatMessage({ id: 'app.button.cancel', defaultMessage: '取消' })}
+                <Button
+                  size="small"
+                  style={{ marginRight: 8 }}
+                  onClick={this.handleCancel}
+                >
+                  {formatMessage({
+                    id: 'app.button.cancel',
+                    defaultMessage: '取消'
+                  })}
                 </Button>
                 <Button size="small" type="primary" onClick={this.handleSubmit}>
-                  {formatMessage({ id: 'app.button.ok', defaultMessage: '确定' })}
+                  {formatMessage({
+                    id: 'app.button.ok',
+                    defaultMessage: '确定'
+                  })}
                 </Button>
               </span>
             </div>
@@ -164,7 +187,7 @@ export default class DDLResultSetFilter extends Component<
         <FilterOutlined
           className={styles.filter}
           style={{
-            color: filtered || visible ? '#1890ff' : '#bfbfbf',
+            color: filtered || visible ? '#1890ff' : '#bfbfbf'
           }}
         />
       </Popover>

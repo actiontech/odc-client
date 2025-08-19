@@ -25,9 +25,12 @@ const useGlobalSearchData = (params: {
   const [objectlist, setObjectlist] = useState<IDatabaseObject>();
   const [databaseList, setDatabaseList] = useState<IDatabase[]>([]);
 
-  const { run: fetchDatabases, loading: databaseLoading } = useRequest(listDatabases, {
-    manual: true,
-  });
+  const { run: fetchDatabases, loading: databaseLoading } = useRequest(
+    listDatabases,
+    {
+      manual: true
+    }
+  );
 
   const loadDatabaseList = useCallback(async () => {
     const data = await fetchDatabases(
@@ -39,7 +42,7 @@ const useGlobalSearchData = (params: {
       null,
       login.isPrivateSpace(),
       true,
-      true,
+      true
     );
     const databases = data?.contents?.filter((db: IDatabase) => {
       const config = getDataSourceModeConfig(db?.dataSource?.type);
@@ -77,12 +80,15 @@ const useGlobalSearchData = (params: {
     }
   }, [activeKey]);
 
-  const { run: fetchObject, loading: objectloading } = useRequest(getDatabaseObject, {
-    manual: true,
-  });
+  const { run: fetchObject, loading: objectloading } = useRequest(
+    getDatabaseObject,
+    {
+      manual: true
+    }
+  );
 
   const { loading: syncAllLoading, run: fetchSyncAll } = useRequest(syncAll, {
-    manual: true,
+    manual: true
   });
 
   const loadDatabaseObject = async (value) => {
@@ -95,7 +101,13 @@ const useGlobalSearchData = (params: {
       projectId = database?.project?.id;
     }
     if (!projectId && !dataSourceId) return;
-    const res = await fetchObject(projectId, dataSourceId, database?.id, objectQueryType, value);
+    const res = await fetchObject(
+      projectId,
+      dataSourceId,
+      database?.id,
+      objectQueryType,
+      value
+    );
     setObjectlist(res?.data);
   };
 
@@ -106,7 +118,7 @@ const useGlobalSearchData = (params: {
     objectloading,
     syncAllLoading,
     databaseLoading,
-    databaseList,
+    databaseList
   };
 };
 

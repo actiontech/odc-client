@@ -4,7 +4,16 @@ import { DbObjectType } from '@/d.ts';
 import { IDatabase } from '@/d.ts/database';
 import { ModalStore } from '@/store/modal';
 import { formatMessage } from '@/util/intl';
-import { Button, Divider, Empty, Spin, Tabs, Tooltip, message, Popover } from 'antd';
+import {
+  Button,
+  Divider,
+  Empty,
+  Spin,
+  Tabs,
+  Tooltip,
+  message,
+  Popover
+} from 'antd';
 import { useContext, useMemo } from 'react';
 import { inject, observer } from 'mobx-react';
 import Icon, { LoadingOutlined } from '@ant-design/icons';
@@ -15,7 +24,7 @@ import {
   DbObjectTypeMap,
   MAX_OBJECT_LENGTH,
   objectTypeConfig,
-  SEARCH_OBJECT_FROM_ALL_DATABASE,
+  SEARCH_OBJECT_FROM_ALL_DATABASE
 } from '../constant';
 import styles from '../index.less';
 interface Iprops {
@@ -36,16 +45,23 @@ const ObjectList = ({ modalStore }: Iprops) => {
     actions,
     syncAllLoading,
     fetchSyncAll,
-    next,
+    next
   } = globalSearchContext;
-  const { positionResourceTree, applyTablePermission, openTree, openSql, applyDbPermission } =
-    actions;
+  const {
+    positionResourceTree,
+    applyTablePermission,
+    openTree,
+    openSql,
+    applyDbPermission
+  } = actions;
   const currentDataSourceType = datasourceList?.find(
-    (item) => item.id === dataSource?.id,
+    (item) => item.id === dataSource?.id
   )?.dialectType;
   const ALL_TAB_MAX_LENGTH = 3;
   const dbType =
-    currentDataSourceType || database?.dataSource?.dialectType || SEARCH_OBJECT_FROM_ALL_DATABASE;
+    currentDataSourceType ||
+    database?.dataSource?.dialectType ||
+    SEARCH_OBJECT_FROM_ALL_DATABASE;
   const { reloadDatabaseList } = useContext(ResourceTreeContext);
   const getTyepBlock = () => {
     const typeList = objectTypeConfig[dbType];
@@ -59,13 +75,15 @@ const ObjectList = ({ modalStore }: Iprops) => {
           return {
             key: i,
             data: objectlist?.dbObjects?.filter((obj) =>
-              [DbObjectType.table, DbObjectType.logical_table].includes(obj.type),
-            ),
+              [DbObjectType.table, DbObjectType.logical_table].includes(
+                obj.type
+              )
+            )
           };
         default:
           return {
             key: i,
-            data: objectlist?.dbObjects?.filter((obj) => obj.type === i),
+            data: objectlist?.dbObjects?.filter((obj) => obj.type === i)
           };
       }
     });
@@ -79,7 +97,11 @@ const ObjectList = ({ modalStore }: Iprops) => {
     return (
       <Icon
         component={component}
-        style={{ fontSize: 14, filter: 'grayscale(1) opacity(0.6)', margin: '0 2px 0 4px' }}
+        style={{
+          fontSize: 14,
+          filter: 'grayscale(1) opacity(0.6)',
+          margin: '0 2px 0 4px'
+        }}
       />
     );
   };
@@ -101,13 +123,13 @@ const ObjectList = ({ modalStore }: Iprops) => {
               <p>
                 {formatMessage({
                   id: 'src.page.Workspace.SideBar.ResourceTree.DatabaseSearchModal.components.32E0FB21',
-                  defaultMessage: '暂无数据',
+                  defaultMessage: '暂无数据'
                 })}
               </p>
               <p>
                 {formatMessage({
                   id: 'src.page.Workspace.SideBar.ResourceTree.DatabaseSearchModal.components.0A19E90A',
-                  defaultMessage: '请尝试',
+                  defaultMessage: '请尝试'
                 })}
 
                 <a
@@ -117,8 +139,8 @@ const ObjectList = ({ modalStore }: Iprops) => {
                       message.success(
                         formatMessage({
                           id: 'src.page.Workspace.SideBar.ResourceTree.DatabaseSearchModal.components.6BFBD33C',
-                          defaultMessage: '同步发起成功',
-                        }),
+                          defaultMessage: '同步发起成功'
+                        })
                       );
                       reloadDatabaseList?.();
                     }
@@ -126,12 +148,12 @@ const ObjectList = ({ modalStore }: Iprops) => {
                 >
                   {formatMessage({
                     id: 'src.page.Workspace.SideBar.ResourceTree.DatabaseSearchModal.components.37A2B88B',
-                    defaultMessage: '同步数据库',
+                    defaultMessage: '同步数据库'
                   })}
                 </a>
                 {formatMessage({
                   id: 'src.page.Workspace.SideBar.ResourceTree.DatabaseSearchModal.components.6B9FDF51',
-                  defaultMessage: '，或联系管理员',
+                  defaultMessage: '，或联系管理员'
                 })}
               </p>
             </div>
@@ -154,7 +176,8 @@ const ObjectList = ({ modalStore }: Iprops) => {
         const { name: databaseName, dataSource } = database;
         if (!dataSource) return;
         const { name: dataSourceName, dialectType } = dataSource;
-        const dialectTypeIcon = getDataSourceStyleByConnectType(dialectType)?.icon;
+        const dialectTypeIcon =
+          getDataSourceStyleByConnectType(dialectType)?.icon;
         const dbIcon = getDataSourceStyleByConnectType(dialectType)?.dbIcon;
         return (
           <>
@@ -165,7 +188,13 @@ const ObjectList = ({ modalStore }: Iprops) => {
             {divider}
 
             <Tooltip title={tableName}>
-              <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              <span
+                style={{
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                }}
+              >
                 {tableName}
               </span>
             </Tooltip>
@@ -176,7 +205,8 @@ const ObjectList = ({ modalStore }: Iprops) => {
         const { dataSource } = item;
         if (!dataSource) return;
         const { name: dataSourceName, dialectType } = dataSource;
-        const dialectTypeIcon = getDataSourceStyleByConnectType(dialectType)?.icon;
+        const dialectTypeIcon =
+          getDataSourceStyleByConnectType(dialectType)?.icon;
         return (
           <>
             {datasourceIcon(dialectTypeIcon?.component)}
@@ -189,14 +219,21 @@ const ObjectList = ({ modalStore }: Iprops) => {
         const { name: databaseName, dataSource } = database;
         if (!dataSource) return;
         const { name: dataSourceName, dialectType } = dataSource;
-        const dialectTypeIcon = getDataSourceStyleByConnectType(dialectType)?.icon;
+        const dialectTypeIcon =
+          getDataSourceStyleByConnectType(dialectType)?.icon;
         return (
           <>
             {datasourceIcon(dialectTypeIcon?.component)}
             <Tooltip title={dataSourceName}>{dataSourceName}</Tooltip>
             {divider}
             <Tooltip title={databaseName}>
-              <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              <span
+                style={{
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                }}
+              >
                 {databaseName}
               </span>
             </Tooltip>
@@ -226,10 +263,12 @@ const ObjectList = ({ modalStore }: Iprops) => {
                       style={{
                         display: 'flex',
                         justifyContent: 'space-between',
-                        alignItems: 'center',
+                        alignItems: 'center'
                       }}
                     >
-                      <div className={styles.objectTypeTitle}>{DbObjectTypeMap[i.key]?.label}</div>
+                      <div className={styles.objectTypeTitle}>
+                        {DbObjectTypeMap[i.key]?.label}
+                      </div>
                       {i.data.length > ALL_TAB_MAX_LENGTH ? (
                         <Button
                           className={styles.objectTypeItemMore}
@@ -238,7 +277,7 @@ const ObjectList = ({ modalStore }: Iprops) => {
                         >
                           {formatMessage({
                             id: 'src.page.Workspace.SideBar.ResourceTree.DatabaseSearchModal.components.5DDBC7F0',
-                            defaultMessage: '全部搜索结果',
+                            defaultMessage: '全部搜索结果'
                           })}
                         </Button>
                       ) : null}
@@ -267,7 +306,7 @@ const ObjectList = ({ modalStore }: Iprops) => {
                                     type: undefined,
                                     database: undefined,
                                     name: undefined,
-                                    objectName: undefined,
+                                    objectName: undefined
                                   };
                                   params.type = i?.key as DbObjectType;
                                   switch (i?.key) {
@@ -276,27 +315,37 @@ const ObjectList = ({ modalStore }: Iprops) => {
                                       break;
                                     }
                                     case DbObjectType.column: {
-                                      params.database = object.dbObject.database as IDatabase;
+                                      params.database = object.dbObject
+                                        .database as IDatabase;
                                       params.name = object.name;
                                       params.objectName = object.dbObject.name;
                                       break;
                                     }
                                     default: {
                                       params.name = object.name;
-                                      params.database = object.database as IDatabase;
+                                      params.database =
+                                        object.database as IDatabase;
                                       break;
                                     }
                                   }
                                   positionResourceTree?.(params);
-                                  isDatabase ? openSql?.(e, object) : openTree?.(e, object);
+                                  isDatabase
+                                    ? openSql?.(e, object)
+                                    : openTree?.(e, object);
                                 }}
                               >
-                                <div style={{ overflow: 'hidden', display: 'flex', width: '100%' }}>
+                                <div
+                                  style={{
+                                    overflow: 'hidden',
+                                    display: 'flex',
+                                    width: '100%'
+                                  }}
+                                >
                                   {isDatabase ? (
                                     <Icon
                                       component={
                                         getDataSourceStyleByConnectType(
-                                          object?.dataSource?.dialectType,
+                                          object?.dataSource?.dialectType
                                         )?.dbIcon?.component
                                       }
                                       style={{ fontSize: 14, marginRight: 4 }}
@@ -307,19 +356,21 @@ const ObjectList = ({ modalStore }: Iprops) => {
                                       style={{
                                         color: 'var(--brand-blue6-color)',
                                         paddingRight: 4,
-                                        fontSize: 14,
+                                        fontSize: 14
                                       }}
                                     />
                                   )}
 
-                                  <span style={{ paddingRight: 4 }}>{object?.name}</span>
+                                  <span style={{ paddingRight: 4 }}>
+                                    {object?.name}
+                                  </span>
                                   <span
                                     style={{
                                       color: 'var(--icon-color-disable)',
                                       overflow: 'hidden',
                                       whiteSpace: 'nowrap',
                                       display: 'flex',
-                                      alignContent: 'center',
+                                      alignContent: 'center'
                                     }}
                                   >
                                     {getSubTitle(object, i?.key)}
@@ -336,7 +387,7 @@ const ObjectList = ({ modalStore }: Iprops) => {
                     </div>
                     <Divider
                       style={{
-                        margin: '8px 0',
+                        margin: '8px 0'
                       }}
                     />
                   </div>
@@ -359,16 +410,22 @@ const ObjectList = ({ modalStore }: Iprops) => {
   const permissionBtn = (object, type: DbObjectType) => {
     if (hasPermission(object)) return;
     const isTableColumn =
-      [DbObjectType.table, DbObjectType.view, DbObjectType.external_table]?.includes(
-        object?.dbObject?.type,
-      ) ||
-      [DbObjectType.table, DbObjectType.view, DbObjectType.external_table]?.includes(object?.type);
+      [
+        DbObjectType.table,
+        DbObjectType.view,
+        DbObjectType.external_table
+      ]?.includes(object?.dbObject?.type) ||
+      [
+        DbObjectType.table,
+        DbObjectType.view,
+        DbObjectType.external_table
+      ]?.includes(object?.type);
     if (
       [
         DbObjectType.column,
         DbObjectType.table,
         DbObjectType.view,
-        DbObjectType.external_table,
+        DbObjectType.external_table
       ].includes(type) &&
       isTableColumn
     ) {
@@ -381,7 +438,7 @@ const ObjectList = ({ modalStore }: Iprops) => {
         >
           {formatMessage({
             id: 'src.page.Workspace.SideBar.ResourceTree.DatabaseSearchModal.components.4DE0929F',
-            defaultMessage: '申请表/视图权限',
+            defaultMessage: '申请表/视图权限'
           })}
         </Button>
       );
@@ -395,7 +452,7 @@ const ObjectList = ({ modalStore }: Iprops) => {
       >
         {formatMessage({
           id: 'src.page.Workspace.SideBar.ResourceTree.DatabaseSearchModal.components.DB7526F7',
-          defaultMessage: '申请库权限',
+          defaultMessage: '申请库权限'
         })}
       </Button>
     );
@@ -411,13 +468,13 @@ const ObjectList = ({ modalStore }: Iprops) => {
           onClick={(e) => {
             e.stopPropagation();
             next?.({
-              database: object,
+              database: object
             });
           }}
         >
           {formatMessage({
             id: 'src.page.Workspace.SideBar.ResourceTree.DatabaseSearchModal.components.E74A1569',
-            defaultMessage: '继续搜索',
+            defaultMessage: '继续搜索'
           })}
         </Button>
       );
@@ -431,7 +488,7 @@ const ObjectList = ({ modalStore }: Iprops) => {
       >
         {formatMessage({
           id: 'src.page.Workspace.SideBar.ResourceTree.DatabaseSearchModal.components.64F32480',
-          defaultMessage: '申请库权限',
+          defaultMessage: '申请库权限'
         })}
       </Button>
     );
@@ -469,7 +526,7 @@ const ObjectList = ({ modalStore }: Iprops) => {
                         type: undefined,
                         database: undefined,
                         name: undefined,
-                        objectName: undefined,
+                        objectName: undefined
                       };
                       params.type = currentObjectList.key as DbObjectType;
                       if (isDatabasetab) {
@@ -483,15 +540,24 @@ const ObjectList = ({ modalStore }: Iprops) => {
                         params.database = object.database as IDatabase;
                       }
                       positionResourceTree?.(params);
-                      isDatabasetab ? openSql?.(e, object) : openTree?.(e, object);
+                      isDatabasetab
+                        ? openSql?.(e, object)
+                        : openTree?.(e, object);
                     }}
                   >
-                    <div style={{ overflow: 'hidden', display: 'flex', width: '100%' }}>
+                    <div
+                      style={{
+                        overflow: 'hidden',
+                        display: 'flex',
+                        width: '100%'
+                      }}
+                    >
                       {isDatabasetab ? (
                         <Icon
                           component={
-                            getDataSourceStyleByConnectType(object?.dataSource?.dialectType)?.dbIcon
-                              ?.component
+                            getDataSourceStyleByConnectType(
+                              object?.dataSource?.dialectType
+                            )?.dbIcon?.component
                           }
                           style={{ fontSize: 14, marginRight: 4 }}
                         />
@@ -501,7 +567,7 @@ const ObjectList = ({ modalStore }: Iprops) => {
                           style={{
                             color: 'var(--brand-blue6-color)',
                             paddingRight: 4,
-                            fontSize: 14,
+                            fontSize: 14
                           }}
                         />
                       )}
@@ -513,7 +579,7 @@ const ObjectList = ({ modalStore }: Iprops) => {
                           overflow: 'hidden',
                           whiteSpace: 'nowrap',
                           display: 'flex',
-                          alignContent: 'center',
+                          alignContent: 'center'
                         }}
                       >
                         {getSubTitle(object, type)}
@@ -531,12 +597,12 @@ const ObjectList = ({ modalStore }: Iprops) => {
                 <span style={{ color: 'var(--icon-color-disable)' }}>
                   {formatMessage({
                     id: 'src.page.Workspace.SideBar.ResourceTree.DatabaseSearchModal.components.625700F8',
-                    defaultMessage: '最多展示',
+                    defaultMessage: '最多展示'
                   })}
                   {MAX_OBJECT_LENGTH}
                   {formatMessage({
                     id: 'src.page.Workspace.SideBar.ResourceTree.DatabaseSearchModal.components.D45537CC',
-                    defaultMessage: '条结果',
+                    defaultMessage: '条结果'
                   })}
                 </span>
               </Divider>
@@ -556,18 +622,22 @@ const ObjectList = ({ modalStore }: Iprops) => {
         </span>
       ),
 
-      children: renderAllTab(),
-    },
+      children: renderAllTab()
+    }
   ]
     .concat(
       objectTypeConfig[dbType]?.map((i) => {
         if (i === DbObjectType.database && database) return;
         return {
           key: i,
-          label: <span style={{ padding: '0 6px', margin: 0 }}>{DbObjectTypeMap?.[i]?.label}</span>,
-          children: renderObjectTypeTabs(i),
+          label: (
+            <span style={{ padding: '0 6px', margin: 0 }}>
+              {DbObjectTypeMap?.[i]?.label}
+            </span>
+          ),
+          children: renderObjectTypeTabs(i)
         };
-      }),
+      })
     )
     ?.filter(Boolean);
 

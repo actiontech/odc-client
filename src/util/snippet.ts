@@ -16,11 +16,11 @@
 
 const SNIPPET_BODY_TAG = {
   BEGIN: '<com.oceanbase.odc.snippet>',
-  END: '</com.oceanbase.odc.snippet>',
+  END: '</com.oceanbase.odc.snippet>'
 };
 
 export const REG_SNIPPET = new RegExp(
-  `${SNIPPET_BODY_TAG.BEGIN}([\\s\\S]*?)${SNIPPET_BODY_TAG.END}`,
+  `${SNIPPET_BODY_TAG.BEGIN}([\\s\\S]*?)${SNIPPET_BODY_TAG.END}`
 );
 
 export function getWrapedSnippetBody(text) {

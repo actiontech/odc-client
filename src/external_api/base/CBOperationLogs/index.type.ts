@@ -1,6 +1,9 @@
 /* eslint-disable */
 // @ts-nocheck
-import { IListCBOperationLogsReply, IGetCBOperationLogTipsReply } from '../common.type';
+import {
+  IListCBOperationLogsReply,
+  IGetCBOperationLogTipsReply
+} from '../common.type';
 
 export interface IListCBOperationLogsParams {
   project_uid: string;
@@ -44,4 +47,5 @@ export interface IGetCBOperationLogTipsParams {
   project_uid: string;
 }
 
-export interface IGetCBOperationLogTipsReturn extends IGetCBOperationLogTipsReply {}
+export interface IGetCBOperationLogTipsReturn
+  extends IGetCBOperationLogTipsReply {}

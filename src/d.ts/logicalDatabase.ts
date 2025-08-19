@@ -55,7 +55,7 @@ export enum SchemaChangeRecordStatus {
   SKIPPING = 'SKIPPING',
   SKIPPED = 'SKIPPED',
   TERMINATING = 'TERMINATING',
-  TERMINATE_FAILED = 'TERMINATE_FAILED',
+  TERMINATE_FAILED = 'TERMINATE_FAILED'
 }
 
 export interface IPreviewSql {

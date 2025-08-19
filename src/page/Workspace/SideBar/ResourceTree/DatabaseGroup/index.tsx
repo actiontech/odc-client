@@ -12,51 +12,51 @@ const items: MenuProps['items'] = [
     key: DatabaseGroup.none,
     label: formatMessage({
       id: 'src.page.Workspace.SideBar.ResourceTree.DatabaseGroup.3C8E637D',
-      defaultMessage: '不分组',
-    }),
+      defaultMessage: '不分组'
+    })
   },
   {
     key: DatabaseGroup.project,
     label: formatMessage({
       id: 'src.page.Workspace.SideBar.ResourceTree.DatabaseGroup.EE74D94F',
-      defaultMessage: '按项目分组',
-    }),
+      defaultMessage: '按项目分组'
+    })
   },
   {
     key: DatabaseGroup.dataSource,
     label: formatMessage({
       id: 'src.page.Workspace.SideBar.ResourceTree.DatabaseGroup.14AB54E9',
-      defaultMessage: '按数据源分组',
-    }),
+      defaultMessage: '按数据源分组'
+    })
   },
   {
     key: DatabaseGroup.environment,
     label: formatMessage({
       id: 'src.page.Workspace.SideBar.ResourceTree.DatabaseGroup.499C395F',
-      defaultMessage: '按环境分组',
-    }),
+      defaultMessage: '按环境分组'
+    })
   },
   {
     key: DatabaseGroup.connectType,
     label: formatMessage({
       id: 'src.page.Workspace.SideBar.ResourceTree.DatabaseGroup.347628AC',
-      defaultMessage: '按类型分组',
-    }),
+      defaultMessage: '按类型分组'
+    })
   },
   {
     key: DatabaseGroup.cluster,
     label: formatMessage({
       id: 'src.page.Workspace.SideBar.ResourceTree.DatabaseGroup.BD2C3E80',
-      defaultMessage: '按集群分组',
-    }),
+      defaultMessage: '按集群分组'
+    })
   },
   {
     key: DatabaseGroup.tenant,
     label: formatMessage({
       id: 'src.page.Workspace.SideBar.ResourceTree.DatabaseGroup.63870CFD',
-      defaultMessage: '按租户分组',
-    }),
-  },
+      defaultMessage: '按租户分组'
+    })
+  }
 ];
 
 interface IProps {
@@ -73,7 +73,9 @@ const Group: React.FC<IProps> = function (props) {
   const usesItems = items.filter((menuItem) => {
     if (
       userStore?.isPrivateSpace() &&
-      [DatabaseGroup.project, DatabaseGroup.none].includes(menuItem.key as DatabaseGroup)
+      [DatabaseGroup.project, DatabaseGroup.none].includes(
+        menuItem.key as DatabaseGroup
+      )
     ) {
       return false;
     }
@@ -84,7 +86,7 @@ const Group: React.FC<IProps> = function (props) {
       menu={{
         selectedKeys: [groupMode],
         items: usesItems,
-        onClick: handleSelectGroupBy,
+        onClick: handleSelectGroupBy
       }}
     >
       <Icon

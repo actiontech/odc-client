@@ -35,7 +35,7 @@ const Detail: React.FC<{
     creatorName,
     createTime,
     updateTime,
-    configuration,
+    configuration
   } = data;
 
   return (
@@ -47,9 +47,9 @@ const Detail: React.FC<{
             formatMessage(
               {
                 id: 'odc.component.DetailContent.TitleName',
-                defaultMessage: '{title}名称',
+                defaultMessage: '{title}名称'
               },
-              { title },
+              { title }
             ) //`${title}名称`
           }
         >
@@ -60,9 +60,9 @@ const Detail: React.FC<{
             formatMessage(
               {
                 id: 'odc.component.DetailContent.TitleStatus',
-                defaultMessage: '{title}状态',
+                defaultMessage: '{title}状态'
               },
-              { title },
+              { title }
             ) //`${title}状态`
           }
         >
@@ -70,9 +70,12 @@ const Detail: React.FC<{
             enabled
               ? formatMessage({
                   id: 'odc.component.DetailContent.Enable.1',
-                  defaultMessage: '启用',
+                  defaultMessage: '启用'
                 }) //启用
-              : formatMessage({ id: 'odc.component.DetailContent.Disable', defaultMessage: '停用' }) //停用
+              : formatMessage({
+                  id: 'odc.component.DetailContent.Disable',
+                  defaultMessage: '停用'
+                }) //停用
           }
         </Descriptions.Item>
         <Descriptions.Item>
@@ -80,9 +83,9 @@ const Detail: React.FC<{
             formatMessage(
               {
                 id: 'odc.component.DetailContent.TitleConfiguration',
-                defaultMessage: '{title}配置',
+                defaultMessage: '{title}配置'
               },
-              { title },
+              { title }
             ) //`${title}配置`
           }
         </Descriptions.Item>
@@ -93,13 +96,17 @@ const Detail: React.FC<{
         </Descriptions.Item>
         {
           <Descriptions.Item>
-            <Space direction="vertical" size={5} className={styles['block-wrapper']}>
+            <Space
+              direction="vertical"
+              size={5}
+              className={styles['block-wrapper']}
+            >
               <Space>
                 <span>
                   {
                     formatMessage({
                       id: 'odc.component.DetailContent.EncryptionStatus',
-                      defaultMessage: '加密状态',
+                      defaultMessage: '加密状态'
                     }) /*加密状态*/
                   }
                 </span>
@@ -108,11 +115,11 @@ const Detail: React.FC<{
                     encryption?.enabled
                       ? formatMessage({
                           id: 'odc.component.DetailContent.Enable.1',
-                          defaultMessage: '启用',
+                          defaultMessage: '启用'
                         }) //启用
                       : formatMessage({
                           id: 'odc.component.DetailContent.NotEnabled',
-                          defaultMessage: '未启用',
+                          defaultMessage: '未启用'
                         }) //未启用
                   }
                 </span>
@@ -123,7 +130,7 @@ const Detail: React.FC<{
                     {
                       formatMessage({
                         id: 'odc.component.DetailContent.EncryptionAlgorithm',
-                        defaultMessage: '加密算法',
+                        defaultMessage: '加密算法'
                       }) /*加密算法*/
                     }
                   </span>
@@ -137,7 +144,7 @@ const Detail: React.FC<{
         <Descriptions.Item
           label={formatMessage({
             id: 'odc.component.DetailContent.Remarks',
-            defaultMessage: '备注',
+            defaultMessage: '备注'
           })} /*备注*/
         >
           {description || '-'}
@@ -148,7 +155,7 @@ const Detail: React.FC<{
         <Descriptions.Item
           label={formatMessage({
             id: 'odc.component.DetailContent.Founder',
-            defaultMessage: '创建人',
+            defaultMessage: '创建人'
           })} /*创建人*/
         >
           {creatorName}
@@ -156,7 +163,7 @@ const Detail: React.FC<{
         <Descriptions.Item
           label={formatMessage({
             id: 'odc.component.DetailContent.CreationTime',
-            defaultMessage: '创建时间',
+            defaultMessage: '创建时间'
           })} /*创建时间*/
         >
           {getLocalFormatDateTime(createTime)}
@@ -164,7 +171,7 @@ const Detail: React.FC<{
         <Descriptions.Item
           label={formatMessage({
             id: 'odc.component.DetailContent.UpdateTime',
-            defaultMessage: '更新时间',
+            defaultMessage: '更新时间'
           })} /*更新时间*/
         >
           {getLocalFormatDateTime(updateTime)}

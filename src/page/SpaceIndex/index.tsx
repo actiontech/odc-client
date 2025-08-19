@@ -40,10 +40,15 @@ const SpaceSelectModal: React.FC<IProps> = ({ userStore }) => {
     history.push(value);
   };
 
-  const switchOriganization = async (id: number, type: IOrganization['type']) => {
+  const switchOriganization = async (
+    id: number,
+    type: IOrganization['type']
+  ) => {
     const isSuccess = await userStore.switchCurrentOrganization(id);
     if (isSuccess) {
-      type === SpaceType.PRIVATE ? handleGoto('/sqlworkspace') : handleGoto('/project');
+      type === SpaceType.PRIVATE
+        ? handleGoto('/sqlworkspace')
+        : handleGoto('/project');
     }
   };
 
@@ -60,7 +65,7 @@ const SpaceSelectModal: React.FC<IProps> = ({ userStore }) => {
           {
             formatMessage({
               id: 'odc.page.SpaceIndex.SelectYourWorkspace',
-              defaultMessage: '选择你的工作空间',
+              defaultMessage: '选择你的工作空间'
             }) /*选择你的工作空间*/
           }
         </h2>
@@ -68,7 +73,7 @@ const SpaceSelectModal: React.FC<IProps> = ({ userStore }) => {
           {
             formatMessage({
               id: 'odc.page.SpaceIndex.YouCanSwitchBetweenPersonal',
-              defaultMessage: '可在个人设置中切换，此处的选择不影响正常使用',
+              defaultMessage: '可在个人设置中切换，此处的选择不影响正常使用'
             }) /*可在个人设置中切换，此处的选择不影响正常使用*/
           }
         </p>

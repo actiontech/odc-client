@@ -40,7 +40,7 @@ const CheckboxTag: React.FC<IProps> = function ({ options, value, onChange }) {
         return (
           <span
             className={classNames(styles.tag, {
-              [styles.selected]: isSelected,
+              [styles.selected]: isSelected
             })}
             key={index}
             onClick={(v) => {

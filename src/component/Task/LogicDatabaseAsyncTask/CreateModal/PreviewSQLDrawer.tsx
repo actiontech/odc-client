@@ -25,11 +25,13 @@ const PreviewSQLDrawer: React.FC<{
   const getPreviewData = async () => {
     const params = {
       sql: sqlContent,
-      delimiter: delimiter,
+      delimiter: delimiter
     };
     const res = await previewSqls(databaseId, params);
     setPreviewList(res);
-    datasourceStatus.asyncUpdateStatus(res?.map((a) => a.database?.dataSource?.id));
+    datasourceStatus.asyncUpdateStatus(
+      res?.map((a) => a.database?.dataSource?.id)
+    );
   };
 
   const handleCancel = () => {
@@ -41,7 +43,7 @@ const PreviewSQLDrawer: React.FC<{
       key: 'sql',
       title: formatMessage({
         id: 'src.component.Task.LogicDatabaseAsyncTask.CreateModal.7909813D',
-        defaultMessage: '实际 SQL',
+        defaultMessage: '实际 SQL'
       }),
       dataIndex: 'sql',
       width: 440,
@@ -52,7 +54,7 @@ const PreviewSQLDrawer: React.FC<{
             overlayInnerStyle={{
               whiteSpace: 'pre-wrap',
               maxHeight: '500px',
-              overflowY: 'auto',
+              overflowY: 'auto'
             }}
             title={value}
           >
@@ -61,26 +63,28 @@ const PreviewSQLDrawer: React.FC<{
                 width: 430,
                 textOverflow: 'ellipsis',
                 overflow: 'hidden',
-                whiteSpace: 'nowrap',
+                whiteSpace: 'nowrap'
               }}
             >
               {value}
             </div>
           </Tooltip>
         );
-      },
+      }
     },
     {
       key: 'database',
       title: formatMessage({
         id: 'src.component.Task.LogicDatabaseAsyncTask.CreateModal.2570043F',
-        defaultMessage: '执行数据库',
+        defaultMessage: '执行数据库'
       }),
       dataIndex: 'database',
-      filters: Array.from(new Set(previewList?.map((item) => item.database?.id)))?.map((i) => {
+      filters: Array.from(
+        new Set(previewList?.map((item) => item.database?.id))
+      )?.map((i) => {
         return {
           text: previewList?.find((j) => j?.database?.id === i)?.database?.name,
-          value: i,
+          value: i
         };
       }),
       onFilter: (value, record) => {
@@ -93,15 +97,15 @@ const PreviewSQLDrawer: React.FC<{
             {value?.name}
           </Space>
         );
-      },
-    },
+      }
+    }
   ];
 
   return (
     <Drawer
       title={formatMessage({
         id: 'src.component.Task.LogicDatabaseAsyncTask.CreateModal.8C0ECF89',
-        defaultMessage: '预览实际 SQL',
+        defaultMessage: '预览实际 SQL'
       })}
       width={720}
       open={open}

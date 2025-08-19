@@ -37,13 +37,13 @@ export const RenderLevel: React.FC<{
     //无需改进
     [RiskLevelEnum.SUGGEST]: RiskLevelTextMap()[RiskLevelEnum.SUGGEST],
     //建议改进
-    [RiskLevelEnum.MUST]: RiskLevelTextMap()[RiskLevelEnum.MUST], //必须改进
+    [RiskLevelEnum.MUST]: RiskLevelTextMap()[RiskLevelEnum.MUST] //必须改进
   };
 
   const colorMap = {
     [RiskLevelEnum.DEFAULT]: 'green',
     [RiskLevelEnum.SUGGEST]: 'orange',
-    [RiskLevelEnum.MUST]: 'red',
+    [RiskLevelEnum.MUST]: 'red'
   };
   return (
     <RiskLevelLabel
@@ -73,30 +73,33 @@ const InnerEnvironment: React.FC<InnerEnvironmentProps> = ({
   setRuleType,
   initEnvironment,
   handleUpdateEnvironment,
-  handleDeleteEnvironment,
+  handleDeleteEnvironment
 }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const handleTabClick = (
     key: string,
-    event: React.KeyboardEvent<Element> | React.MouseEvent<Element, MouseEvent>,
+    event: React.KeyboardEvent<Element> | React.MouseEvent<Element, MouseEvent>
   ) => {
     setRuleType(key as RuleType);
   };
   const handleSwitchEnvEnabled = async () => {
     setLoading(true);
-    const successful = await setEnabled(currentEnvironment?.id, !currentEnvironment.enabled);
+    const successful = await setEnabled(
+      currentEnvironment?.id,
+      !currentEnvironment.enabled
+    );
     setLoading(false);
     if (successful) {
       message.success(
         currentEnvironment.enabled
           ? formatMessage({
               id: 'src.page.Secure.Env.components.E525BC4C',
-              defaultMessage: '禁用成功',
+              defaultMessage: '禁用成功'
             })
           : formatMessage({
               id: 'src.page.Secure.Env.components.213BB360',
-              defaultMessage: '启用成功',
-            }),
+              defaultMessage: '启用成功'
+            })
       );
       await initEnvironment(currentEnvironment?.id);
       return;
@@ -105,12 +108,12 @@ const InnerEnvironment: React.FC<InnerEnvironmentProps> = ({
       currentEnvironment.enabled
         ? formatMessage({
             id: 'src.page.Secure.Env.components.F65C4578',
-            defaultMessage: '禁用失败',
+            defaultMessage: '禁用失败'
           })
         : formatMessage({
             id: 'src.page.Secure.Env.components.DF240284',
-            defaultMessage: '启用失败',
-          }),
+            defaultMessage: '启用失败'
+          })
     );
   };
   return (
@@ -134,28 +137,28 @@ const InnerEnvironment: React.FC<InnerEnvironmentProps> = ({
             key: RuleType.SQL_CHECK,
             label: formatMessage({
               id: 'odc.src.page.Secure.Env.components.SQLCheckSpecification',
-              defaultMessage: 'SQL 检查规范',
-            }),
+              defaultMessage: 'SQL 检查规范'
+            })
           },
           {
             key: RuleType.SQL_CONSOLE,
             label: formatMessage({
               id: 'odc.src.page.Secure.Env.components.SQLWindowSpecification',
-              defaultMessage: 'SQL 窗口规范',
-            }),
-          },
+              defaultMessage: 'SQL 窗口规范'
+            })
+          }
         ]}
       />
 
       <div
         style={{
           height: '100%',
-          flexGrow: 1,
+          flexGrow: 1
         }}
       >
         <div
           style={{
-            height: '8px',
+            height: '8px'
           }}
         ></div>
         <EnvironmentTable

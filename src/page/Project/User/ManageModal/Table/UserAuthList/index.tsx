@@ -20,7 +20,7 @@ import CommonTable from '@/component/CommonTable';
 import {
   CommonTableMode,
   ITableInstance,
-  ITableLoadOptions,
+  ITableLoadOptions
 } from '@/component/CommonTable/interface';
 import SearchFilter from '@/component/SearchFilter';
 import { getExpireTimeLabel } from '@/component/Task/ApplyTablePermission';
@@ -32,7 +32,7 @@ import React from 'react';
 import {
   tablePermissionStatusFilters,
   tablePermissionTypeFilters,
-  tablePermissionTypeMap,
+  tablePermissionTypeMap
 } from '../';
 import StatusLabel from '../Status';
 
@@ -46,7 +46,7 @@ const getColumns = (params: {
       dataIndex: 'tableName',
       title: formatMessage({
         id: 'src.page.Project.User.ManageModal.Table.UserAuthList.F4C863B4',
-        defaultMessage: '表/视图',
+        defaultMessage: '表/视图'
       }),
       ellipsis: true,
       width: 140,
@@ -57,7 +57,7 @@ const getColumns = (params: {
             selectedKeys={filters?.tableName}
             placeholder={formatMessage({
               id: 'src.page.Project.User.ManageModal.Table.UserAuthList.E7BFBCC8',
-              defaultMessage: '请输入',
+              defaultMessage: '请输入'
             })}
           />
         );
@@ -65,19 +65,19 @@ const getColumns = (params: {
       filterIcon: (filtered) => (
         <SearchOutlined
           style={{
-            color: filtered ? 'var(--icon-color-focus)' : undefined,
+            color: filtered ? 'var(--icon-color-focus)' : undefined
           }}
         />
       ),
 
       filteredValue: filters?.tableName || null,
-      filters: [],
+      filters: []
     },
     {
       dataIndex: 'databaseName',
       title: formatMessage({
         id: 'src.page.Project.User.ManageModal.Table.UserAuthList.AB937C7D',
-        defaultMessage: '所属数据库',
+        defaultMessage: '所属数据库'
       }),
       width: 208,
       ellipsis: true,
@@ -88,7 +88,7 @@ const getColumns = (params: {
             selectedKeys={filters?.databaseName}
             placeholder={formatMessage({
               id: 'src.page.Project.User.ManageModal.Table.UserAuthList.26E39901',
-              defaultMessage: '请输入',
+              defaultMessage: '请输入'
             })}
           />
         );
@@ -96,19 +96,19 @@ const getColumns = (params: {
       filterIcon: (filtered) => (
         <SearchOutlined
           style={{
-            color: filtered ? 'var(--icon-color-focus)' : undefined,
+            color: filtered ? 'var(--icon-color-focus)' : undefined
           }}
         />
       ),
 
       filteredValue: filters?.databaseName || null,
-      filters: [],
+      filters: []
     },
     {
       dataIndex: 'dataSourceName',
       title: formatMessage({
         id: 'src.page.Project.User.ManageModal.Table.UserAuthList.41C6A809',
-        defaultMessage: '所属数据源',
+        defaultMessage: '所属数据源'
       }),
       ellipsis: true,
       width: 188,
@@ -119,7 +119,7 @@ const getColumns = (params: {
             selectedKeys={filters?.dataSourceName}
             placeholder={formatMessage({
               id: 'src.page.Project.User.ManageModal.Table.UserAuthList.A644DA9A',
-              defaultMessage: '请输入',
+              defaultMessage: '请输入'
             })}
           />
         );
@@ -127,7 +127,7 @@ const getColumns = (params: {
       filterIcon: (filtered) => (
         <SearchOutlined
           style={{
-            color: filtered ? 'var(--icon-color-focus)' : undefined,
+            color: filtered ? 'var(--icon-color-focus)' : undefined
           }}
         />
       ),
@@ -136,45 +136,45 @@ const getColumns = (params: {
       filters: [],
       render(_) {
         return _ || '-';
-      },
+      }
     },
     {
       dataIndex: 'type',
       title: formatMessage({
         id: 'src.page.Project.User.ManageModal.Table.UserAuthList.12F7A572',
-        defaultMessage: '权限类型',
+        defaultMessage: '权限类型'
       }),
       width: 120,
       filters: tablePermissionTypeFilters,
       filteredValue: filters?.type || null,
-      render: (type) => tablePermissionTypeMap[type].text,
+      render: (type) => tablePermissionTypeMap[type].text
     },
     {
       dataIndex: 'expireTime',
       title: formatMessage({
         id: 'src.page.Project.User.ManageModal.Table.UserAuthList.A02EBD96',
-        defaultMessage: '过期时间',
+        defaultMessage: '过期时间'
       }),
       width: 138,
       sorter: true,
-      render: getExpireTimeLabel,
+      render: getExpireTimeLabel
     },
     {
       dataIndex: 'status',
       title: formatMessage({
         id: 'src.page.Project.User.ManageModal.Table.UserAuthList.40DFC3A2',
-        defaultMessage: '状态',
+        defaultMessage: '状态'
       }),
       width: 104,
       filters: tablePermissionStatusFilters,
       filteredValue: filters?.status || null,
-      render: (status) => <StatusLabel status={status} />,
+      render: (status) => <StatusLabel status={status} />
     },
     {
       dataIndex: 'action',
       title: formatMessage({
         id: 'src.page.Project.User.ManageModal.Table.UserAuthList.D245E1FF',
-        defaultMessage: '操作',
+        defaultMessage: '操作'
       }),
       ellipsis: true,
       width: 65,
@@ -190,7 +190,7 @@ const getColumns = (params: {
               record?.status === TablePermissionStatus.EXPIRED
                 ? formatMessage({
                     id: 'src.page.Project.User.ManageModal.Table.UserAuthList.673AB3C0',
-                    defaultMessage: '过期超三个月后此权限将被清除',
+                    defaultMessage: '过期超三个月后此权限将被清除'
                   })
                 : ''
             }
@@ -198,12 +198,12 @@ const getColumns = (params: {
           >
             {formatMessage({
               id: 'src.page.Project.User.ManageModal.Table.UserAuthList.804D4C5D',
-              defaultMessage: '回收',
+              defaultMessage: '回收'
             })}
           </Action.Link>
         );
-      },
-    },
+      }
+    }
   ];
 };
 
@@ -220,10 +220,19 @@ interface IProps {
 }
 
 const UserAuthList: React.FC<IProps> = (props) => {
-  const { isOwner, dataSource, params, tableRef, onReclaim, onLoad, onChange, isDBA } = props;
+  const {
+    isOwner,
+    dataSource,
+    params,
+    tableRef,
+    onReclaim,
+    onLoad,
+    onChange,
+    isDBA
+  } = props;
   const columns = getColumns({
     paramOptions: params,
-    onReclaim: onReclaim,
+    onReclaim: onReclaim
   });
 
   return (
@@ -234,7 +243,7 @@ const UserAuthList: React.FC<IProps> = (props) => {
         enabledReload={false}
         showToolbar={false}
         filterContent={{
-          enabledSearch: false,
+          enabledSearch: false
         }}
         titleContent={null}
         rowSelecter={
@@ -244,17 +253,17 @@ const UserAuthList: React.FC<IProps> = (props) => {
                   {
                     okText: formatMessage({
                       id: 'src.page.Project.User.ManageModal.Table.UserAuthList.DE0222B0',
-                      defaultMessage: '批量回收',
+                      defaultMessage: '批量回收'
                     }),
-                    onOk: onReclaim,
-                  },
+                    onOk: onReclaim
+                  }
                 ],
 
                 getCheckboxProps: (record: ITablePermission) => {
                   return {
-                    disabled: record?.status === TablePermissionStatus.EXPIRED,
+                    disabled: record?.status === TablePermissionStatus.EXPIRED
                   };
-                },
+                }
               }
             : null
         }
@@ -262,19 +271,19 @@ const UserAuthList: React.FC<IProps> = (props) => {
         onChange={onChange}
         tableProps={{
           columns: columns?.filter((item) =>
-            isOwner || isDBA ? true : item?.dataIndex !== 'action',
+            isOwner || isDBA ? true : item?.dataIndex !== 'action'
           ),
           dataSource: dataSource?.contents ?? [],
           rowKey: 'id',
           scroll: {
             x: 950,
-            y: 800,
+            y: 800
           },
           pagination: {
             current: dataSource?.page?.number,
             pageSize: 10,
-            total: dataSource?.page?.totalElements,
-          },
+            total: dataSource?.page?.totalElements
+          }
         }}
       />
     </>

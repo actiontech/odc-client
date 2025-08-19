@@ -70,7 +70,7 @@ export async function checkJavaVersions(): Promise<boolean> {
         title: '检查Java环境失败',
         message: '检查Java环境失败',
         detail: '请确认Java是否正确安装',
-        cancelId: 1,
+        cancelId: 1
       });
       if (id === 0) {
         resolve(true);
@@ -90,7 +90,8 @@ export async function checkJavaVersions(): Promise<boolean> {
       javaVersion = javaVersion.split('_')[0];
       if (
         compareVersions(javaVersion, minJDKVersion) === -1 ||
-        (javaVersion === minJDKVersion && minJDKReleaseVersion > javaReleaseVersion)
+        (javaVersion === minJDKVersion &&
+          minJDKReleaseVersion > javaReleaseVersion)
       ) {
         const id = dialog.showMessageBoxSync({
           type: 'error',
@@ -99,7 +100,7 @@ export async function checkJavaVersions(): Promise<boolean> {
           title: '检查Java环境失败',
           message: 'Java 版本过低',
           detail: `请安装${minJDKVersion}_${minJDKReleaseVersion}版本以上的Java`,
-          cancelId: 1,
+          cancelId: 1
         });
         if (id === 0) {
           resolve(true);
@@ -115,7 +116,7 @@ export async function checkJavaVersions(): Promise<boolean> {
           title: '检查Java环境失败',
           message: 'Java 版本过高',
           detail: `请安装${maxJDKVersion}版本的Java`,
-          cancelId: 1,
+          cancelId: 1
         });
         if (id === 0) {
           resolve(true);
@@ -134,7 +135,7 @@ export async function checkJavaVersions(): Promise<boolean> {
         title: '检查Java环境失败',
         message: 'Java 未安装',
         detail: `请安装${minJDKVersion}版本以上的Java`,
-        cancelId: 1,
+        cancelId: 1
       });
       if (id === 0) {
         resolve(true);
@@ -203,7 +204,7 @@ export function getJavaPath() {
   const isLinux = process.platform === 'linux';
   let basePath = path.join(
     isDevelopment ? process.cwd() : process.resourcesPath || '',
-    'libraries/jre',
+    'libraries/jre'
   );
   if (isMac) {
     basePath = path.join(basePath, 'Home');
@@ -215,11 +216,13 @@ export function getJavaPath() {
   return {
     JAVA_HOME: basePath,
     javaBin:
-      isMac || isLinux ? path.join(basePath, '/bin/java') : path.join(basePath, '/bin/java.exe'),
+      isMac || isLinux
+        ? path.join(basePath, '/bin/java')
+        : path.join(basePath, '/bin/java.exe'),
     jspawnhelper:
       isMac || isLinux
         ? path.join(basePath, '/lib/jspawnhelper')
-        : path.join(basePath, '/lib/jspawnhelper.exe'),
+        : path.join(basePath, '/lib/jspawnhelper.exe')
   };
 }
 

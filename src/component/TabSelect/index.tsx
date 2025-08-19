@@ -36,7 +36,7 @@ const TabSelect: React.FC<ITabSelectProps> = (props) => {
     projectType,
     onSelectTabChange,
     tabOption,
-    loading,
+    loading
   } = props;
 
   return (
@@ -62,7 +62,7 @@ const TabSelect: React.FC<ITabSelectProps> = (props) => {
               items={tabOption?.map(({ label, value }) => {
                 return {
                   key: value?.toString(),
-                  label: label,
+                  label: label
                 };
               })}
               onChange={(v: ProjectTabType) => {
@@ -70,7 +70,9 @@ const TabSelect: React.FC<ITabSelectProps> = (props) => {
               }}
             />
             {menu}
-            {bottom ? <div className={styles['select-footer']}>{bottom}</div> : null}
+            {bottom ? (
+              <div className={styles['select-footer']}>{bottom}</div>
+            ) : null}
           </div>
         )}
       />

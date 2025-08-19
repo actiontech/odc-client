@@ -20,7 +20,7 @@ import {
   CheckCircleFilled,
   ExclamationCircleFilled,
   LoadingOutlined,
-  StopFilled,
+  StopFilled
 } from '@ant-design/icons';
 
 const statusMap = {
@@ -28,41 +28,41 @@ const statusMap = {
     icon: <LoadingOutlined style={{ color: '#1890ff' }} />,
     text: formatMessage({
       id: 'odc.component.TaskDetailDrawer.status.Waiting',
-      defaultMessage: '等待中',
-    }),
+      defaultMessage: '等待中'
+    })
   },
 
   [ITransferDataObjStatus.SUCCESS]: {
     icon: <CheckCircleFilled style={{ color: '#52c41a' }} />,
     text: formatMessage({
       id: 'odc.component.TaskDetailDrawer.status.Complete',
-      defaultMessage: '完成',
-    }),
+      defaultMessage: '完成'
+    })
   },
 
   [ITransferDataObjStatus.FAILURE]: {
     icon: <ExclamationCircleFilled style={{ color: '#f5222d' }} />,
     text: formatMessage({
       id: 'odc.component.TaskDetailDrawer.status.Failed',
-      defaultMessage: '失败',
-    }),
+      defaultMessage: '失败'
+    })
   },
 
   [ITransferDataObjStatus.KILLED]: {
     icon: <StopFilled style={{ color: '#F5222D' }} />,
     text: formatMessage({
       id: 'odc.component.TaskDetailDrawer.status.Terminated',
-      defaultMessage: '已终止',
-    }),
+      defaultMessage: '已终止'
+    })
   },
 
   [ITransferDataObjStatus.UNKNOWN]: {
     icon: <StopFilled style={{ color: '#F5222D' }} />,
     text: formatMessage({
       id: 'odc.component.TaskDetailDrawer.status.Unknown',
-      defaultMessage: '未知',
-    }),
-  },
+      defaultMessage: '未知'
+    })
+  }
 };
 
 export default statusMap;

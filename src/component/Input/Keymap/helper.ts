@@ -11,7 +11,11 @@ export const validForEditorKeymap = (value: string) => {
   }
   const keys = value.split(',');
   for (const key of keys) {
-    if (![KeyCode.Ctrl, KeyCode.Shift, KeyCode.Alt, KeyCode.Meta].includes(parseInt(key))) {
+    if (
+      ![KeyCode.Ctrl, KeyCode.Shift, KeyCode.Alt, KeyCode.Meta].includes(
+        parseInt(key)
+      )
+    ) {
       return Promise.resolve();
     }
   }
@@ -19,8 +23,8 @@ export const validForEditorKeymap = (value: string) => {
     new Error(
       formatMessage({
         id: 'src.component.Input.Keymap.A2ADE368',
-        defaultMessage: '快捷键不能全部为辅助键',
-      }),
-    ),
+        defaultMessage: '快捷键不能全部为辅助键'
+      })
+    )
   );
 };

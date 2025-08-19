@@ -31,7 +31,7 @@ import {
   UpdateProjectProjectPriorityEnum,
   UpdateProjectV2ProjectPriorityEnum,
   WorkflowRecordStatusEnum,
-  WorkflowStepStateEnum,
+  WorkflowStepStateEnum
 } from './common.enum';
 
 export interface IAccessTokenInfo {

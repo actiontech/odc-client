@@ -59,7 +59,10 @@ const CronInput: React.FC<IProps> = (props) => {
 
   const handleChane = (e) => {
     const targetValue = e.target.value;
-    const width = Math.min(max_input_width, Math.max(default_input_width, targetValue.length * 6));
+    const width = Math.min(
+      max_input_width,
+      Math.max(default_input_width, targetValue.length * 6)
+    );
     let errorMessage = null;
     const fields = cronString.split(' ');
     fields.splice(index, 1, targetValue);
@@ -74,9 +77,9 @@ const CronInput: React.FC<IProps> = (props) => {
       cronString: value,
       error: errorMessage
         ? {
-            [name]: errorMessage,
+            [name]: errorMessage
           }
-        : null,
+        : null
     });
   };
 
@@ -97,7 +100,7 @@ const CronInput: React.FC<IProps> = (props) => {
       direction="vertical"
       className={classnames(styles['input-wrapper'], {
         [styles.active]: isActive && !error,
-        [styles.error]: error,
+        [styles.error]: error
       })}
     >
       <div className={styles['input']}>

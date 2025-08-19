@@ -1,6 +1,9 @@
 /* eslint-disable */
 // @ts-nocheck
-import { IWebHookSendMessageReq, IWebHookSendMessageReply } from '../common.type';
+import {
+  IWebHookSendMessageReq,
+  IWebHookSendMessageReply
+} from '../common.type';
 
 export interface IWebHookSendMessageParams extends IWebHookSendMessageReq {}
 

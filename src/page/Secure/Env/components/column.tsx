@@ -32,7 +32,7 @@ function getConfig(
   rule: IRule,
   integrationsIdMap: {
     [key in string | number]: string;
-  },
+  }
 ): string {
   const { metadata, properties } = rule;
   const { propertyMetadatas } = metadata;
@@ -47,7 +47,9 @@ function getConfig(
     const [pm] = propertyMetadatas;
     if (Array.isArray(properties?.[pm?.name])) {
       content =
-        properties?.[pm?.name]?.length > 0 ? properties?.[pm?.name]?.join(',').toString() : '-';
+        properties?.[pm?.name]?.length > 0
+          ? properties?.[pm?.name]?.join(',').toString()
+          : '-';
     } else {
       content = properties?.[pm?.name]?.toString() || '-';
     }
@@ -82,13 +84,13 @@ export const getColumns = ({
   supportedDialectTypeFilters,
   integrationsIdMap,
   handleSwtichRuleStatus,
-  handleOpenEditModal,
+  handleOpenEditModal
 }) => {
   return [
     {
       title: formatMessage({
         id: 'odc.Env.components.InnerEnvironment.RuleName',
-        defaultMessage: '规则名称',
+        defaultMessage: '规则名称'
       }), //规则名称
       width: 218,
       dataIndex: 'name',
@@ -103,7 +105,7 @@ export const getColumns = ({
             selectedKeys={null}
             placeholder={formatMessage({
               id: 'odc.Env.components.InnerEnvironment.RuleName',
-              defaultMessage: '规则名称',
+              defaultMessage: '规则名称'
             })} //规则名称
           />
         );
@@ -112,7 +114,7 @@ export const getColumns = ({
       filterIcon: (filtered) => (
         <SearchOutlined
           style={{
-            color: filtered ? 'var(--icon-color-focus)' : undefined,
+            color: filtered ? 'var(--icon-color-focus)' : undefined
           }}
         />
       ),
@@ -122,7 +124,7 @@ export const getColumns = ({
           style={{
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'space-between',
+            justifyContent: 'space-between'
           }}
         >
           <TooltipContent content={record?.metadata?.name} maxWdith={180} />
@@ -132,34 +134,38 @@ export const getColumns = ({
             />
           </Tooltip>
         </div>
-      ),
+      )
     },
     {
       title: formatMessage({
         id: 'odc.Env.components.InnerEnvironment.RuleType',
-        defaultMessage: '规则类型',
+        defaultMessage: '规则类型'
       }), //规则类型
       dataIndex: 'subTypes',
       key: 'subTypes',
       filters: subTypeFilters,
       ellipsis: true,
-      render: (text, record) => <TooltipContent content={record?.metadata?.subTypes?.join(',')} />,
+      render: (text, record) => (
+        <TooltipContent content={record?.metadata?.subTypes?.join(',')} />
+      )
     },
     {
       title: formatMessage({
         id: 'odc.Env.components.InnerEnvironment.SupportsDataSources',
-        defaultMessage: '支持数据源',
+        defaultMessage: '支持数据源'
       }), //支持数据源
       dataIndex: 'supportedDialectTypes',
       key: 'supportedDialectTypes',
       filters: supportedDialectTypeFilters,
       ellipsis: true,
-      render: (text, record) => <TooltipContent content={record?.appliedDialectTypes?.join(',')} />,
+      render: (text, record) => (
+        <TooltipContent content={record?.appliedDialectTypes?.join(',')} />
+      )
     },
     {
       title: formatMessage({
         id: 'odc.Env.components.InnerEnvironment.ConfigurationValue',
-        defaultMessage: '配置值',
+        defaultMessage: '配置值'
       }), //配置值
       dataIndex: 'metadata',
       key: 'metadata',
@@ -167,44 +173,55 @@ export const getColumns = ({
       render: (_, record, index) => {
         const content = getConfig(record, integrationsIdMap);
         return <TooltipContent content={content} />;
-      },
+      }
     },
     {
       title: formatMessage({
         id: 'odc.Env.components.InnerEnvironment.ImprovementLevel',
-        defaultMessage: '改进等级',
+        defaultMessage: '改进等级'
       }), //改进等级
       dataIndex: 'level',
       key: 'level',
       filters: [
         {
-          text: <LintLabel level={RiskLevelEnum.DEFAULT} needLevelMap noPadding />,
-          value: RiskLevelEnum.DEFAULT,
+          text: (
+            <LintLabel level={RiskLevelEnum.DEFAULT} needLevelMap noPadding />
+          ),
+          value: RiskLevelEnum.DEFAULT
         },
         {
-          text: <LintLabel level={RiskLevelEnum.SUGGEST} needLevelMap noPadding />,
-          value: RiskLevelEnum.SUGGEST,
+          text: (
+            <LintLabel level={RiskLevelEnum.SUGGEST} needLevelMap noPadding />
+          ),
+          value: RiskLevelEnum.SUGGEST
         },
         {
           text: <LintLabel level={RiskLevelEnum.MUST} needLevelMap noPadding />,
-          value: RiskLevelEnum.MUST,
-        },
+          value: RiskLevelEnum.MUST
+        }
       ],
 
-      render: (_, record) => <LintLabel level={record.level} needLevelMap noPadding />,
+      render: (_, record) => (
+        <LintLabel level={record.level} needLevelMap noPadding />
+      )
     },
     {
       title: formatMessage({
         id: 'odc.Env.components.InnerEnvironment.WhetherToEnable',
-        defaultMessage: '是否启用',
+        defaultMessage: '是否启用'
       }), //是否启用
       dataIndex: 'status',
       key: 'status',
       render: (_, record, index) => {
         return (
           <Acess
-            fallback={<Switch size="small" checked={record?.enabled} disabled />}
-            {...createPermission(IManagerResourceType.ruleset, actionTypes.update)}
+            fallback={
+              <Switch size="small" checked={record?.enabled} disabled />
+            }
+            {...createPermission(
+              IManagerResourceType.ruleset,
+              actionTypes.update
+            )}
           >
             <RuleSwitch
               key={index}
@@ -213,12 +230,12 @@ export const getColumns = ({
             />
           </Acess>
         );
-      },
+      }
     },
     {
       title: formatMessage({
         id: 'odc.Env.components.InnerEnvironment.Operation',
-        defaultMessage: '操作',
+        defaultMessage: '操作'
       }), //操作
       width: 80,
       key: 'action',
@@ -227,7 +244,10 @@ export const getColumns = ({
           <Space>
             <Acess
               fallback={<span>-</span>}
-              {...createPermission(IManagerResourceType.ruleset, actionTypes.update)}
+              {...createPermission(
+                IManagerResourceType.ruleset,
+                actionTypes.update
+              )}
             >
               <Button
                 type="link"
@@ -237,14 +257,14 @@ export const getColumns = ({
                 {
                   formatMessage({
                     id: 'odc.Env.components.InnerEnvironment.Edit',
-                    defaultMessage: '编辑',
+                    defaultMessage: '编辑'
                   }) /*编辑*/
                 }
               </Button>
             </Acess>
           </Space>
         </>
-      ),
-    },
+      )
+    }
   ];
 };

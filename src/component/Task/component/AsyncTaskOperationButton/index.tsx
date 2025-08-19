@@ -28,7 +28,7 @@ export function AsyncTaskOperationButton(props: IAsyncTaskOperationConfig) {
     showModal,
     hideModal,
     exportSpaceScopes,
-    handleExportSpaceScopesChange,
+    handleExportSpaceScopesChange
   } = useAsyncTaskTable();
 
   const [isSubmitButtonLoading, setIsSubmitButtonLoading] = useState(false);
@@ -48,26 +48,30 @@ export function AsyncTaskOperationButton(props: IAsyncTaskOperationConfig) {
     if (isScheduleMigrateTask(scheduleType)) {
       const res = await getExportListView({
         ids: props?.dataSource?.map((i) => i?.id),
-        scheduleType,
+        scheduleType
       });
       setTaskList(
         scheduleType === TaskType.PARTITION_PLAN
           ? res?.map((i) => {
               return {
                 ...i,
-                scheduleStatus: props?.dataSource?.find((_t) => _t?.id === i?.id)?.status,
-                creator: props?.dataSource?.find((_t) => _t?.id === i?.id)?.creator,
+                scheduleStatus: props?.dataSource?.find(
+                  (_t) => _t?.id === i?.id
+                )?.status,
+                creator: props?.dataSource?.find((_t) => _t?.id === i?.id)
+                  ?.creator
               };
             })
           : res?.map((i) => {
               return {
                 ...i,
-                creator: props?.dataSource?.find((_t) => _t?.id === i?.id)?.creator,
+                creator: props?.dataSource?.find((_t) => _t?.id === i?.id)
+                  ?.creator
               };
-            }),
+            })
       );
       datasourceStatus.asyncUpdateStatus(
-        res?.map((a) => a.database?.dataSource?.id)?.filter(Boolean),
+        res?.map((a) => a.database?.dataSource?.id)?.filter(Boolean)
       );
     } else {
       setTaskList(
@@ -82,9 +86,9 @@ export function AsyncTaskOperationButton(props: IAsyncTaskOperationConfig) {
             description: i?.description,
             creatorId: i?.creator?.id,
             creator: i?.creator,
-            createTime: i?.createTime,
+            createTime: i?.createTime
           } as ScheduleExportListView;
-        }),
+        })
       );
     }
   };
@@ -98,8 +102,8 @@ export function AsyncTaskOperationButton(props: IAsyncTaskOperationConfig) {
       message.info(
         formatMessage({
           id: 'src.component.Task.component.AsyncTaskOperationButton.D9D9A882',
-          defaultMessage: '请先选择工单',
-        }),
+          defaultMessage: '请先选择工单'
+        })
       );
       return;
     }
@@ -115,7 +119,11 @@ export function AsyncTaskOperationButton(props: IAsyncTaskOperationConfig) {
   return (
     <>
       <Tooltip title={isSubmitButtonLoading ? props.buttonDisabledText : ''}>
-        <Button type={props.buttonType} onClick={onOpenModal} disabled={isSubmitButtonLoading}>
+        <Button
+          type={props.buttonType}
+          onClick={onOpenModal}
+          disabled={isSubmitButtonLoading}
+        >
           {props.buttonText}
         </Button>
       </Tooltip>
@@ -127,12 +135,18 @@ export function AsyncTaskOperationButton(props: IAsyncTaskOperationConfig) {
         width={960}
         cancelText={formatMessage({
           id: 'src.component.Task.component.AsyncTaskOperationButton.683E8B65',
-          defaultMessage: '取消',
+          defaultMessage: '取消'
         })}
         okText={props.confirmButtonText}
         className={styles.modal}
         footer={
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center'
+            }}
+          >
             {props.needRiskConfirm ? (
               <Checkbox
                 checked={riskConfirmed}
@@ -143,13 +157,13 @@ export function AsyncTaskOperationButton(props: IAsyncTaskOperationConfig) {
                   }
                 }}
                 style={{
-                  color: confirmRiskUnFinished ? 'red' : 'inherit',
+                  color: confirmRiskUnFinished ? 'red' : 'inherit'
                 }}
                 className={confirmRiskUnFinished ? styles.checkboxError : null}
               >
                 {formatMessage({
                   id: 'src.component.Task.component.AsyncTaskOperationButton.2D7C7380',
-                  defaultMessage: '我已确认相关业务风险',
+                  defaultMessage: '我已确认相关业务风险'
                 })}
               </Checkbox>
             ) : (
@@ -159,7 +173,7 @@ export function AsyncTaskOperationButton(props: IAsyncTaskOperationConfig) {
               <Button onClick={() => setVisible(false)}>
                 {formatMessage({
                   id: 'src.component.Task.component.AsyncTaskOperationButton.77F8A0C3',
-                  defaultMessage: '取消',
+                  defaultMessage: '取消'
                 })}
               </Button>
               <SubmitTripartiteTaskButton
@@ -180,7 +194,7 @@ export function AsyncTaskOperationButton(props: IAsyncTaskOperationConfig) {
         <Space direction="vertical" size={16} style={{ width: '100%' }}>
           {props.modalExtra(
             taskListThatCanBeAction?.length,
-            taskList?.filter((i) => !i?.database)?.map((i) => i?.id),
+            taskList?.filter((i) => !i?.database)?.map((i) => i?.id)
           )}
           <Table
             size="small"
@@ -191,12 +205,12 @@ export function AsyncTaskOperationButton(props: IAsyncTaskOperationConfig) {
                 exportSpaceScopes.length === 0
                   ? formatMessage({
                       id: 'src.component.Task.component.AsyncTaskOperationButton.0CF28A22',
-                      defaultMessage: '请选择导出范围',
+                      defaultMessage: '请选择导出范围'
                     })
                   : formatMessage({
                       id: 'src.component.Task.component.AsyncTaskOperationButton.4FFB45A0',
-                      defaultMessage: '暂无数据',
-                    }),
+                      defaultMessage: '暂无数据'
+                    })
             }}
           />
         </Space>

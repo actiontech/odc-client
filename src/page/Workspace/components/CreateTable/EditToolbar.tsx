@@ -35,7 +35,7 @@ const EditToolbar: React.FC<IProps> = function (props) {
         alignItems: 'center',
         paddingRight: 12,
         background: 'var(--background-secondry-color)',
-        height: '100%',
+        height: '100%'
       }}
     >
       {children}
@@ -46,7 +46,7 @@ const EditToolbar: React.FC<IProps> = function (props) {
               {
                 formatMessage({
                   id: 'odc.components.CreateTable.EditToolbar.Cancel',
-                  defaultMessage: '取消',
+                  defaultMessage: '取消'
                 }) /*取消*/
               }
             </Button>
@@ -72,7 +72,7 @@ const EditToolbar: React.FC<IProps> = function (props) {
               {
                 formatMessage({
                   id: 'odc.components.CreateTable.EditToolbar.NextStepConfirmSql',
-                  defaultMessage: '下一步：确认 SQL',
+                  defaultMessage: '下一步：确认 SQL'
                 }) /*下一步：确认 SQL*/
               }
             </Button>

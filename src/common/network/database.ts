@@ -14,7 +14,12 @@
  * limitations under the License.
  */
 
-import { DbObjectType, IResponseData, IManagerResourceType, ConnectType } from '@/d.ts';
+import {
+  DbObjectType,
+  IResponseData,
+  IManagerResourceType,
+  ConnectType
+} from '@/d.ts';
 import { DBType, IDatabase, IDatabaseObject } from '@/d.ts/database';
 import sessionManager from '@/store/sessionManager';
 import notification from '@/util/notification';
@@ -39,7 +44,7 @@ export async function listDatabases(
   connectType?: ConnectType[],
   dataSourceName?: string,
   clusterName?: string,
-  tenantName?: string,
+  tenantName?: string
 ): Promise<IResponseData<IDatabase>> {
   const res = await request.get(`/api/v2/database/databases`, {
     params: {
@@ -56,8 +61,8 @@ export async function listDatabases(
       connectType: connectType,
       dataSourceName,
       clusterName,
-      tenantName,
-    },
+      tenantName
+    }
   });
 
   return res?.data;
@@ -67,13 +72,15 @@ type DeepPartial<T> = {
   [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
 };
 
-export async function createDataBase(database: DeepPartial<IDatabase>): Promise<Boolean> {
+export async function createDataBase(
+  database: DeepPartial<IDatabase>
+): Promise<Boolean> {
   const res = await request.post(`/api/v2/database/databases`, {
     data: {
       ...database,
       projectId: database?.project?.id,
-      dataSourceId: database?.dataSource?.id,
-    },
+      dataSourceId: database?.dataSource?.id
+    }
   });
   return res?.data;
 }
@@ -81,50 +88,59 @@ export async function createDataBase(database: DeepPartial<IDatabase>): Promise<
 export async function updateDataBase(
   databaseIds: number[],
   projectId: number,
-  ownerIds: number[],
+  ownerIds: number[]
 ): Promise<Boolean> {
   const res = await request.post(`/api/v2/database/databases/transfer`, {
     data: {
       databaseIds,
       projectId,
-      ownerIds,
-    },
+      ownerIds
+    }
   });
   return res?.data;
 }
 
-export async function batchUpdateRemarks(databaseIds: number[], databaseRemark: string) {
-  const res = await request.post(`/api/v2/database/databases/batchUpdateRemarks`, {
-    data: {
-      databaseIds,
-      databaseRemark,
-    },
-  });
+export async function batchUpdateRemarks(
+  databaseIds: number[],
+  databaseRemark: string
+) {
+  const res = await request.post(
+    `/api/v2/database/databases/batchUpdateRemarks`,
+    {
+      data: {
+        databaseIds,
+        databaseRemark
+      }
+    }
+  );
   return res?.data;
 }
 
 export async function updateDataBaseOwner(
   databaseIds: number[],
   projectId: number,
-  ownerIds: number[],
+  ownerIds: number[]
 ): Promise<Boolean> {
-  const res = await request.put(`/api/v2/database/databases/owner/${projectId}`, {
-    data: {
-      databaseIds,
-      ownerIds,
-    },
-  });
+  const res = await request.put(
+    `/api/v2/database/databases/owner/${projectId}`,
+    {
+      data: {
+        databaseIds,
+        ownerIds
+      }
+    }
+  );
   return res?.data;
 }
 
 export async function getDatabase(
   databaseId: number,
-  ignoreError?: boolean,
+  ignoreError?: boolean
 ): Promise<{ data?: IDatabase; errCode: string; errMsg: string }> {
   const res = await request.get(`/api/v2/database/databases/${databaseId}`, {
     params: {
-      ignoreError,
-    },
+      ignoreError
+    }
   });
   return res;
 }
@@ -132,23 +148,27 @@ export async function getDatabase(
 export async function deleteDatabase(databaseIds: number[]): Promise<boolean> {
   const res = await request.delete(`/api/v2/database/databases`, {
     data: {
-      databaseIds,
-    },
+      databaseIds
+    }
   });
   return res?.data;
 }
 
-export async function dropObject(objName: string, objType: DbObjectType, sessionId: string) {
+export async function dropObject(
+  objName: string,
+  objType: DbObjectType,
+  sessionId: string
+) {
   const schemaName = sessionManager.sessionMap.get(sessionId)?.database?.dbName;
   const result = await executeSQL(
     getDropSQL(
       objName,
       objType,
       schemaName,
-      sessionManager.sessionMap.get(sessionId)?.connection?.dialectType,
+      sessionManager.sessionMap.get(sessionId)?.connection?.dialectType
     ),
     sessionId,
-    schemaName,
+    schemaName
   );
   const error = result?.executeResult?.find((item) => item.track);
   if (error) {
@@ -162,7 +182,7 @@ export async function getDatabaseObject(
   datasourceId?: number,
   databaseIds?: string | number,
   types?: string | string[],
-  searchKey?: string,
+  searchKey?: string
 ): Promise<{ data?: IDatabaseObject; errCode: string; errMsg: string }> {
   if (searchKey) {
     const res = await request.get(`api/v2/database/object/objects`, {
@@ -171,8 +191,8 @@ export async function getDatabaseObject(
         datasourceId: datasourceId || null,
         databaseIds: databaseIds || null,
         types: types || null,
-        searchKey: searchKey,
-      },
+        searchKey: searchKey
+      }
     });
     return res;
   }
@@ -180,13 +200,13 @@ export async function getDatabaseObject(
 
 export async function syncObject(
   resourceType?: IManagerResourceType,
-  resourceId?: number,
+  resourceId?: number
 ): Promise<{ data?: boolean; errCode: string; errMsg: string }> {
   const res = await request.post(`api/v2/database/object/sync`, {
     data: {
       resourceType,
-      resourceId,
-    },
+      resourceId
+    }
   });
   return res;
 }

@@ -3,27 +3,27 @@ import { IDatabase } from './database';
 
 export enum OrganizationType {
   TEAM = 'TEAM',
-  INDIVIDUAL = 'INDIVIDUAL',
+  INDIVIDUAL = 'INDIVIDUAL'
 }
 
 export enum UnfinishedScheduleListType {
   TEAM = 'TEAM',
   INDIVIDUAL = 'INDIVIDUAL',
-  ALL = 'ALL',
+  ALL = 'ALL'
 }
 
 export enum TripartiteExportTaskStatus {
   CREATED = 'CREATED',
   EXPORTING = 'EXPORTING',
   SUCCESS = 'SUCCESS',
-  FAILED = 'FAILED',
+  FAILED = 'FAILED'
 }
 
 export enum AsyncTaskType {
   export = 'export',
   terminateTask = 'terminateTask',
   terminateSchedule = 'terminateSchedule',
-  import = 'import',
+  import = 'import'
 }
 
 export interface ISwitchOdcTaskListResponse {
@@ -87,7 +87,7 @@ export enum ODCCloudProvider {
   GOOGLE_CLOUD = 'GOOGLE_CLOUD',
   HUAWEI_CLOUD = 'HUAWEI_CLOUD',
   TENCENT_CLOUD = 'TENCENT_CLOUD',
-  UNKNOWN = 'UNKNOWN',
+  UNKNOWN = 'UNKNOWN'
 }
 
 export enum CloudProvider {
@@ -97,26 +97,35 @@ export enum CloudProvider {
   AWSCN = 'AWSCN',
   AWS = 'AWS',
   HUAWEI = 'HUAWEI',
-  GOOGLE = 'GCP',
+  GOOGLE = 'GCP'
 }
 
-export const reverseCloudProviderMapping: Record<CloudProvider, ODCCloudProvider> = {
+export const reverseCloudProviderMapping: Record<
+  CloudProvider,
+  ODCCloudProvider
+> = {
   [CloudProvider.ALIYUN]: ODCCloudProvider.ALIBABA_CLOUD,
   [CloudProvider.QCLOUD]: ODCCloudProvider.TENCENT_CLOUD,
   [CloudProvider.TENCENT]: ODCCloudProvider.TENCENT_CLOUD,
   [CloudProvider.AWSCN]: ODCCloudProvider.AWSCN,
   [CloudProvider.AWS]: ODCCloudProvider.AWS,
   [CloudProvider.HUAWEI]: ODCCloudProvider.HUAWEI_CLOUD,
-  [CloudProvider.GOOGLE]: ODCCloudProvider.GOOGLE_CLOUD,
+  [CloudProvider.GOOGLE]: ODCCloudProvider.GOOGLE_CLOUD
 };
 
-export type FilteredODCCloudProvider = Exclude<ODCCloudProvider, 'NONE' | 'AZURE' | 'UNKNOWN'>;
+export type FilteredODCCloudProvider = Exclude<
+  ODCCloudProvider,
+  'NONE' | 'AZURE' | 'UNKNOWN'
+>;
 
-export const fromODCPRoviderToProvider: Record<FilteredODCCloudProvider, CloudProvider> = {
+export const fromODCPRoviderToProvider: Record<
+  FilteredODCCloudProvider,
+  CloudProvider
+> = {
   [ODCCloudProvider.ALIBABA_CLOUD]: CloudProvider.ALIYUN,
   [ODCCloudProvider.TENCENT_CLOUD]: CloudProvider.QCLOUD,
   [ODCCloudProvider.AWSCN]: CloudProvider.AWSCN,
   [ODCCloudProvider.AWS]: CloudProvider.AWS,
   [ODCCloudProvider.HUAWEI_CLOUD]: CloudProvider.HUAWEI,
-  [ODCCloudProvider.GOOGLE_CLOUD]: CloudProvider.GOOGLE,
+  [ODCCloudProvider.GOOGLE_CLOUD]: CloudProvider.GOOGLE
 };

@@ -30,7 +30,7 @@ const WrapItemWithTitle: React.FC<ISelectWithTitleProps> = (props) => {
     item = React.cloneElement(children, {
       className: styles.inputItem,
       ...rest,
-      ...children.props,
+      ...children.props
     });
   }
   return (

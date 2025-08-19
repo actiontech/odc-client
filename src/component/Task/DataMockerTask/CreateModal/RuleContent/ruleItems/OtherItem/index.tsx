@@ -22,7 +22,7 @@ const Option = Select.Option;
 
 export enum OtherRuleType {
   NULL = 'NULL',
-  SKIP = 'SKIP',
+  SKIP = 'SKIP'
 }
 
 interface IOtherItemProps {
@@ -32,27 +32,28 @@ interface IOtherItemProps {
   ref: React.Ref<FormInstance>;
 }
 
-const OtherItem: React.FC<IOtherItemProps> = forwardRef<FormInstance, IOtherItemProps>(
-  (props, ref) => {
-    const { readonly, ruleType, value } = props;
+const OtherItem: React.FC<IOtherItemProps> = forwardRef<
+  FormInstance,
+  IOtherItemProps
+>((props, ref) => {
+  const { readonly, ruleType, value } = props;
 
-    const [form] = Form.useForm();
+  const [form] = Form.useForm();
 
-    useImperativeHandle(ref, () => {
-      return form;
-    });
+  useImperativeHandle(ref, () => {
+    return form;
+  });
 
-    let items = null;
+  let items = null;
 
-    return readonly ? (
-      items
-    ) : (
-      <Form layout="inline" component={'div'} initialValues={value} form={form}>
-        {items}
-      </Form>
-    );
-  },
-);
+  return readonly ? (
+    items
+  ) : (
+    <Form layout="inline" component={'div'} initialValues={value} form={form}>
+      {items}
+    </Form>
+  );
+});
 
 export default OtherItem;
 

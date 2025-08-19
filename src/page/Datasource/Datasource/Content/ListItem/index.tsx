@@ -46,12 +46,14 @@ const ListItem: React.FC<IProps> = function ({
   action,
   isConnecting,
   env,
-  connectType,
+  connectType
 }) {
   return (
     <Spin spinning={isConnecting}>
       <div className={styles.item}>
-        <div className={classNames(styles.base, styles.connectionName)}>{connectionName}</div>
+        <div className={classNames(styles.base, styles.connectionName)}>
+          {connectionName}
+        </div>
         <Tooltip
           placement="topLeft"
           title={
@@ -60,9 +62,9 @@ const ListItem: React.FC<IProps> = function ({
                 formatMessage(
                   {
                     id: 'odc.Content.ListItem.ClusterCluster',
-                    defaultMessage: '集群: {cluster}',
+                    defaultMessage: '集群: {cluster}'
                   },
-                  { cluster },
+                  { cluster }
                 ) /*集群: {cluster}*/
               }
             </Space>
@@ -83,9 +85,9 @@ const ListItem: React.FC<IProps> = function ({
                 formatMessage(
                   {
                     id: 'odc.Content.ListItem.TenantTenant',
-                    defaultMessage: '租户: {tenant}',
+                    defaultMessage: '租户: {tenant}'
                   },
-                  { tenant },
+                  { tenant }
                 ) /*租户: {tenant}*/
               }
             </Space>
@@ -109,7 +111,7 @@ const ListItem: React.FC<IProps> = function ({
                       <span>
                         {formatMessage({
                           id: 'src.page.Datasource.Datasource.Content.ListItem.0C5CA730',
-                          defaultMessage: '文件URL:',
+                          defaultMessage: '文件URL:'
                         })}
                       </span>
                       <span>{host ?? '-'}</span>
@@ -118,9 +120,9 @@ const ListItem: React.FC<IProps> = function ({
                     formatMessage(
                       {
                         id: 'odc.Content.ListItem.HostPortHost',
-                        defaultMessage: '主机:端口: {host}',
+                        defaultMessage: '主机:端口: {host}'
                       },
-                      { host },
+                      { host }
                     )
                   )
                   /*主机:端口: {host}*/

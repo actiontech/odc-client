@@ -25,7 +25,7 @@ import {
   movePagePostion,
   openNewSQLPage,
   openCreateTablePage,
-  openSQLResultSetViewPage,
+  openSQLResultSetViewPage
 } from '@/store/helper/page';
 import type { UserStore } from '@/store/login';
 import type { ModalStore } from '@/store/modal';
@@ -71,7 +71,14 @@ interface WorkspaceProps {
 }
 
 const Workspace: React.FC<WorkspaceProps> = (props: WorkspaceProps) => {
-  const { pageStore, settingStore, sqlStore, modalStore, taskStore, sessionManagerStore } = props;
+  const {
+    pageStore,
+    settingStore,
+    sqlStore,
+    modalStore,
+    taskStore,
+    sessionManagerStore
+  } = props;
   const { pages = [], activePageKey } = pageStore;
   const { serverSystemInfo } = settingStore;
   const location = useLocation();
@@ -94,7 +101,7 @@ const Workspace: React.FC<WorkspaceProps> = (props: WorkspaceProps) => {
     databaseId &&
       resourceTreeContext?.setCurrentObject({
         value: databaseId,
-        type: ResourceNodeType.Database,
+        type: ResourceNodeType.Database
       });
     if (projectId) {
       resourceTreeContext?.setSelectProjectId(projectId);
@@ -141,7 +148,7 @@ const Workspace: React.FC<WorkspaceProps> = (props: WorkspaceProps) => {
       }
     }
     const isLogicalDb = isLogicalDatabase(
-      resourceTreeContext?.databaseList?.find((_db) => _db?.id === dbId),
+      resourceTreeContext?.databaseList?.find((_db) => _db?.id === dbId)
     );
     openNewSQLPage(isLogicalDb ? null : dbId);
   };
@@ -174,17 +181,17 @@ const Workspace: React.FC<WorkspaceProps> = (props: WorkspaceProps) => {
       Modal.confirm({
         title: formatMessage({
           id: 'odc.page.Workspace.ConfirmCloseWindow',
-          defaultMessage: '是否确认关闭窗口？',
+          defaultMessage: '是否确认关闭窗口？'
         }), // 确认关闭窗口？
         content: formatMessage({
           id: 'odc.page.Workspace.WhenTheOperationIsRunning',
-          defaultMessage: '操作执行中，关闭窗口将终止窗口操作，是否确认关闭？',
+          defaultMessage: '操作执行中，关闭窗口将终止窗口操作，是否确认关闭？'
         }),
 
         // 操作执行中，关闭窗口将终止窗口操作，确认关闭吗？
         onOk: async () => {
           pageStore.close(targetPageKey);
-        },
+        }
       });
     } else {
       pageStore.close(targetPageKey);
@@ -207,11 +214,11 @@ const Workspace: React.FC<WorkspaceProps> = (props: WorkspaceProps) => {
         formatMessage(
           {
             id: 'odc.page.Workspace.DockedpagetitleIsBeingDebuggedAnd',
-            defaultMessage: '{dockedPageTitle}正在调试，无法关闭',
+            defaultMessage: '{dockedPageTitle}正在调试，无法关闭'
           },
 
-          { dockedPageTitle: dockedPage.title },
-        ),
+          { dockedPageTitle: dockedPage.title }
+        )
 
         // `${dockedPage.title}正在调试，无法关闭`
       );
@@ -221,21 +228,21 @@ const Workspace: React.FC<WorkspaceProps> = (props: WorkspaceProps) => {
       Modal.confirm({
         title: formatMessage({
           id: 'odc.page.Workspace.TheTaskIsNotSaved',
-          defaultMessage: '任务未保存',
+          defaultMessage: '任务未保存'
         }),
 
         content: formatMessage({
           id: 'odc.page.Workspace.UnsavedContentWillDisappearAfter',
-          defaultMessage: '关闭之后未保存内容将会消失',
+          defaultMessage: '关闭之后未保存内容将会消失'
         }),
 
         okText: formatMessage({
           id: 'odc.page.Workspace.Closed',
-          defaultMessage: '关闭',
+          defaultMessage: '关闭'
         }),
 
         okType: 'danger',
-        onOk: callback,
+        onOk: callback
       });
     }
   };
@@ -344,7 +351,9 @@ const Workspace: React.FC<WorkspaceProps> = (props: WorkspaceProps) => {
   useEffect(() => {
     const handleKeyDown = (event) => {
       if ((event.ctrlKey || event.metaKey) && ['J', 'j'].includes(event.key)) {
-        modalStore.changeDatabaseSearchModalVisible(!modalStore.databaseSearchModalVisible);
+        modalStore.changeDatabaseSearchModalVisible(
+          !modalStore.databaseSearchModalVisible
+        );
         event.preventDefault();
         event.stopPropagation();
       }
@@ -359,7 +368,6 @@ const Workspace: React.FC<WorkspaceProps> = (props: WorkspaceProps) => {
   return (
     <>
       <WorkBenchLayout
-        activityBar={<ActivityBarNew />}
         sideBar={<SideBar />}
         editorGroup={
           isReady ? (
@@ -400,7 +408,7 @@ const WorkspaceMobxWrap = inject(
   'sqlStore',
   'modalStore',
   'taskStore',
-  'sessionManagerStore',
+  'sessionManagerStore'
 )(observer(Workspace));
 
 export default inject('userStore')(
@@ -420,7 +428,7 @@ export default inject('userStore')(
         <WorkspaceMobxWrap {...props} />
       </WorkspaceStore>
     );
-  }),
+  })
 );
 
 const WorkSpaceExecuteSQLModal: React.FC<{
@@ -436,7 +444,7 @@ const WorkSpaceExecuteSQLModal: React.FC<{
     onSave,
     status = null,
     lintResultSet = null,
-    unauthorizedDBResources,
+    unauthorizedDBResources
   } = workSpaceExecuteSQLModalProps;
   return (
     <ExecuteSQLModal
@@ -454,4 +462,6 @@ const WorkSpaceExecuteSQLModal: React.FC<{
   );
 };
 
-const WrapWorkSpaceExecuteSQLModal = inject('modalStore')(observer(WorkSpaceExecuteSQLModal));
+const WrapWorkSpaceExecuteSQLModal = inject('modalStore')(
+  observer(WorkSpaceExecuteSQLModal)
+);

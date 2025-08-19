@@ -19,33 +19,33 @@ import { PARTITION_KEY_INVOKER } from '@/d.ts';
 
 export enum START_DATE {
   CURRENT_DATE = 'CURRENT_DATE',
-  CUSTOM_DATE = 'CUSTOM_DATE',
+  CUSTOM_DATE = 'CUSTOM_DATE'
 }
 
 export enum INCREAMENT_FIELD_TYPE {
   NUMBER = 'NUMBER',
   TIME_STRING = 'TIME_STRING',
-  TIMESTAMP = 'TIMESTAMP',
+  TIMESTAMP = 'TIMESTAMP'
 }
 
 export const increamentFieldTypeLabelMap = {
   [INCREAMENT_FIELD_TYPE.NUMBER]: formatMessage({
     id: 'src.component.Task.component.PartitionPolicyFormTable.E0F368F6',
-    defaultMessage: '数值',
+    defaultMessage: '数值'
   }),
   [INCREAMENT_FIELD_TYPE.TIME_STRING]: formatMessage({
     id: 'src.component.Task.component.PartitionPolicyFormTable.053D6705',
-    defaultMessage: '日期时间',
+    defaultMessage: '日期时间'
   }),
   [INCREAMENT_FIELD_TYPE.TIMESTAMP]: formatMessage({
     id: 'src.component.Task.component.PartitionPolicyFormTable.FCD94271',
-    defaultMessage: '时间戳',
-  }),
+    defaultMessage: '时间戳'
+  })
 };
 
 export const getPartitionKeyInvokerByIncrementFieldType = (
   partitionKeyInvoker: PARTITION_KEY_INVOKER,
-  incrementFieldType: INCREAMENT_FIELD_TYPE,
+  incrementFieldType: INCREAMENT_FIELD_TYPE
 ) => {
   if (!incrementFieldType) {
     return partitionKeyInvoker;
@@ -65,7 +65,7 @@ export const getPartitionKeyInvokerByIncrementFieldType = (
 
 export const revertPartitionKeyInvokerByIncrementFieldType = (
   partitionKeyInvoker: PARTITION_KEY_INVOKER,
-  incrementFieldType: INCREAMENT_FIELD_TYPE,
+  incrementFieldType: INCREAMENT_FIELD_TYPE
 ) => {
   if (!incrementFieldType) {
     return partitionKeyInvoker;

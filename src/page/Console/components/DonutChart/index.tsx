@@ -9,7 +9,7 @@ const PieChart = ({ progress }) => {
   const chartRef = useRef(null);
   const total = statusType.reduce(
     (sum, key) => sum + (parseInt(progress?.taskStat?.[key]) || 0),
-    0,
+    0
   );
 
   useEffect(() => {
@@ -22,11 +22,11 @@ const PieChart = ({ progress }) => {
           name,
           value: count,
           itemStyle: {
-            color: count > 0 ? statusColor[i] : '#0000000a',
+            color: count > 0 ? statusColor[i] : '#0000000a'
           },
           tooltip: {
-            show: count > 0,
-          },
+            show: count > 0
+          }
         };
       });
 
@@ -66,7 +66,9 @@ const PieChart = ({ progress }) => {
             const centerX = viewWidth / 2;
             const centerY = viewHeight / 2;
             const radius = Math.min(viewWidth, viewHeight) * 0.6; // 饼图半径
-            const distanceToCenter = Math.sqrt((mouseX - centerX) ** 2 + (mouseY - centerY) ** 2);
+            const distanceToCenter = Math.sqrt(
+              (mouseX - centerX) ** 2 + (mouseY - centerY) ** 2
+            );
 
             if (distanceToCenter < radius) {
               // 如果鼠标在饼图内部，则将 tooltip 放置在饼图外部
@@ -109,7 +111,7 @@ const PieChart = ({ progress }) => {
           },
           backgroundColor: 'transparent',
           borderColor: 'transparent',
-          padding: 0,
+          padding: 0
         },
         series: [
           {
@@ -118,22 +120,22 @@ const PieChart = ({ progress }) => {
             center: ['50%', '50%'],
             data,
             label: {
-              show: false,
+              show: false
             },
             emphasis: {
               itemStyle: {
-                opacity: 1,
-              },
+                opacity: 1
+              }
             },
             blur: {
               itemStyle: {
-                opacity: 0.5,
-              },
+                opacity: 0.5
+              }
             },
             scale: 1,
-            hoverAnimation: false,
-          },
-        ],
+            hoverAnimation: false
+          }
+        ]
       };
 
       chart.setOption(option);

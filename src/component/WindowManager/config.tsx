@@ -82,8 +82,8 @@ export const pageMap = {
     icon: <Icon component={ConsoleSQLSvg} />,
     color: 'var(--icon-color-1)',
     params: {
-      scriptType: PageType.SQL,
-    },
+      scriptType: PageType.SQL
+    }
   },
 
   // PL 查询页
@@ -92,226 +92,226 @@ export const pageMap = {
     icon: <Icon component={ConsolePLSvg} />,
     color: 'var(--icon-color-1)',
     params: {
-      scriptType: PageType.PL,
-    },
+      scriptType: PageType.PL
+    }
   },
 
   // 表创建页
   [PageType.CREATE_TABLE]: {
     component: withConfirmModal(CreateTablePage),
     icon: <TableOutlined />,
-    color: 'var(--icon-color-1)',
+    color: 'var(--icon-color-1)'
   },
 
   // 表详情页
   [PageType.TABLE]: {
     component: withConfirmModal(TablePage),
     icon: <TableOutlined />,
-    color: 'var(--icon-color-1)',
+    color: 'var(--icon-color-1)'
   },
 
   // 会话参数页
   [PageType.SESSION_PARAM]: {
     component: withConfirmModal(SessionParamPage),
     icon: <VariableSvg />,
-    color: 'var(--icon-orange-color)',
+    color: 'var(--icon-orange-color)'
   },
 
   // 会话管理页
   [PageType.SESSION_MANAGEMENT]: {
     component: withConfirmModal(SessionManagementPage),
     icon: <SettingOutlined />,
-    color: 'var(--icon-green-color)',
+    color: 'var(--icon-green-color)'
   },
 
   // 回收站页
   [PageType.RECYCLE_BIN]: {
     component: withConfirmModal(RecycleBinPage),
     icon: <DeleteOutlined />,
-    color: 'var(--icon-color-6)',
+    color: 'var(--icon-color-6)'
   },
 
   // 任务管理
   [PageType.TASKS]: {
     component: withConfirmModal(TaskManaerPage),
     icon: <TaskSvg />,
-    color: '#1890FF',
+    color: '#1890FF'
   },
 
   // 视图创建页
   [PageType.CREATE_VIEW]: {
     component: withConfirmModal(CreateViewPage),
     icon: <Icon component={ViewSvg} />,
-    color: 'var(--icon-color-1)',
+    color: 'var(--icon-color-1)'
   },
 
   // 视图详情页
   [PageType.VIEW]: {
     component: withConfirmModal(ViewPage),
     icon: <Icon component={ViewSvg} />,
-    color: 'var(--icon-color-1)',
+    color: 'var(--icon-color-1)'
   },
 
   // 物化视图创建页
   [PageType.CREATE_MATERIALIZED_VIEW]: {
     component: withConfirmModal(CreateMaterializedViewPage),
     icon: <Icon component={ViewSvg} />,
-    color: 'var(--icon-color-5)',
+    color: 'var(--icon-color-5)'
   },
 
   /** 物化视图详情页 */
   [PageType.MATERIALIZED_VIEW]: {
     component: withConfirmModal(MaterializedViewPage),
     icon: <Icon component={ViewSvg} />,
-    color: 'var(--icon-color-5)',
+    color: 'var(--icon-color-5)'
   },
 
   // 函数创建页
   [PageType.CREATE_FUNCTION]: {
     component: withConfirmModal(SQLConfirmPage),
     icon: <Icon component={FunctionSvg} />,
-    color: 'var(--icon-color-2)',
+    color: 'var(--icon-color-2)'
   },
 
   // 函数详情页
   [PageType.FUNCTION]: {
     component: withConfirmModal(FunctionPage),
     icon: <Icon component={FunctionSvg} />,
-    color: 'var(--icon-color-2)',
+    color: 'var(--icon-color-2)'
   },
 
   // 存储过程创建页
   [PageType.CREATE_PROCEDURE]: {
     component: withConfirmModal(SQLConfirmPage),
     icon: <Icon component={ProcedureSvg} />,
-    color: 'var(--icon-color-2)',
+    color: 'var(--icon-color-2)'
   },
 
   // 存储过程详情页
   [PageType.PROCEDURE]: {
     component: withConfirmModal(ProcedurePage),
     icon: <Icon component={ProcedureSvg} />,
-    color: 'var(--icon-color-2)',
+    color: 'var(--icon-color-2)'
   },
 
   // 序列创建页
   [PageType.CREATE_SEQUENCE]: {
     component: withConfirmModal(SQLConfirmPage),
     icon: <Icon component={SequenceSvg} />,
-    color: 'var(--icon-color-5)',
+    color: 'var(--icon-color-5)'
   },
 
   // 序列详情页
   [PageType.SEQUENCE]: {
     component: withConfirmModal(SequencePage),
     icon: <Icon component={SequenceSvg} />,
-    color: 'var(--icon-color-5)',
+    color: 'var(--icon-color-5)'
   },
 
   // 包创建页
   [PageType.CREATE_PACKAGE]: {
     component: withConfirmModal(SQLConfirmPage),
     icon: <Icon component={PackageSvg} />,
-    color: 'var(--icon-color-3)',
+    color: 'var(--icon-color-3)'
   },
 
   // 包详情页
   [PageType.PACKAGE]: {
     component: withConfirmModal(PackagePage),
     icon: <Icon component={PackageSvg} />,
-    color: 'var(--icon-color-3)',
+    color: 'var(--icon-color-3)'
   },
 
   [PageType.OB_CLIENT]: {
     component: withConfirmModal(OBClientPage),
     icon: <Icon component={CommandSvg} />,
-    color: 'var(--icon-color-8)',
+    color: 'var(--icon-color-8)'
   },
   // 触发器创建页
   [PageType.CREATE_TRIGGER]: {
     component: withConfirmModal(CreateTriggerPage),
     icon: <Icon component={TriggerSvg} />,
-    color: 'var(--icon-color-3)',
+    color: 'var(--icon-color-3)'
   },
 
   // 触发器创建SQL确认页
   [PageType.CREATE_TRIGGER_SQL]: {
     component: withConfirmModal(SQLConfirmPage),
     icon: <Icon component={TriggerSvg} />,
-    color: 'var(--icon-color-3)',
+    color: 'var(--icon-color-3)'
   },
 
   // 同义词创建SQL确认页
   [PageType.CREATE_SYNONYM]: {
     component: withConfirmModal(SQLConfirmPage),
     icon: <Icon component={SynonymSvg} />,
-    color: 'var(--icon-color-5)',
+    color: 'var(--icon-color-5)'
   },
 
   // 触发器详情页
   [PageType.TRIGGER]: {
     component: withConfirmModal(TriggerPage),
     icon: <Icon component={TriggerSvg} />,
-    color: 'var(--icon-color-3)',
+    color: 'var(--icon-color-3)'
   },
 
   // 同义词详情页
   [PageType.SYNONYM]: {
     component: withConfirmModal(SynonymPage),
     icon: <Icon component={SynonymSvg} />,
-    color: 'var(--icon-color-5)',
+    color: 'var(--icon-color-5)'
   },
 
   // 类型详情页
   [PageType.TYPE]: {
     component: withConfirmModal(TypePage),
     icon: <Icon component={TypeSvg} />,
-    color: 'var(--icon-color-4)',
+    color: 'var(--icon-color-4)'
   },
 
   // 类型创建SQL确认页
   [PageType.CREATE_TYPE]: {
     component: withConfirmModal(SQLConfirmPage),
     icon: <Icon component={TypeSvg} />,
-    color: 'var(--icon-color-4)',
+    color: 'var(--icon-color-4)'
   },
   [PageType.SQL_RESULTSET_VIEW]: {
     component: SQLResultSetViewPage,
     icon: <Icon component={TypeSvg} />,
-    color: 'var(--icon-color-4)',
+    color: 'var(--icon-color-4)'
   },
 
   [PageType.BATCH_COMPILE_FUNCTION]: {
     component: withConfirmModal(PLBatchCompilePage),
     icon: <Icon component={FunctionSvg} />,
-    color: '#8750d8',
+    color: '#8750d8'
   },
   [PageType.BATCH_COMPILE_PACKAGE]: {
     component: withConfirmModal(PLBatchCompilePage),
     icon: <Icon component={PackageSvg} />,
-    color: '#FAAD14',
+    color: '#FAAD14'
   },
   [PageType.BATCH_COMPILE_PROCEDURE]: {
     component: withConfirmModal(PLBatchCompilePage),
     icon: <Icon component={ProcedureSvg} />,
-    color: '#52C41A',
+    color: '#52C41A'
   },
   [PageType.BATCH_COMPILE_TRIGGER]: {
     component: withConfirmModal(PLBatchCompilePage),
     icon: <Icon component={TriggerSvg} />,
-    color: '#52C41A',
+    color: '#52C41A'
   },
   [PageType.BATCH_COMPILE_TYPE]: {
     component: withConfirmModal(PLBatchCompilePage),
     icon: <Icon component={TypeSvg} />,
-    color: '#1890ff',
+    color: '#1890ff'
   },
   [PageType.TUTORIAL]: {
     component: withConfirmModal(TutorialPage),
     icon: <Icon component={ConsoleSQLSvg} />,
     color: '#35CFC9',
     params: {
-      scriptType: PageType.SQL,
-    },
-  },
+      scriptType: PageType.SQL
+    }
+  }
 };

@@ -9,9 +9,16 @@ import { AxiosRequestConfig } from 'axios';
 import { IGetDashboardV1Params, IGetDashboardV1Return } from './index.type';
 
 class DashboardService extends ServiceBase {
-  public getDashboardV1(params: IGetDashboardV1Params, options?: AxiosRequestConfig) {
+  public getDashboardV1(
+    params: IGetDashboardV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
-    return this.get<IGetDashboardV1Return>('/v1/dashboard', paramsData, options);
+    return this.get<IGetDashboardV1Return>(
+      '/v1/dashboard',
+      paramsData,
+      options
+    );
   }
 }
 

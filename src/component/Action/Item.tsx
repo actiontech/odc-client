@@ -41,7 +41,7 @@ export interface BaseProps {
 export class ActionButton extends React.PureComponent<BaseProps> {
   static __DISPLAY_NAME = 'button';
   state = {
-    loading: false,
+    loading: false
   };
   render() {
     const {
@@ -54,7 +54,7 @@ export class ActionButton extends React.PureComponent<BaseProps> {
       tooltip,
       placement = null,
       loading,
-      danger,
+      danger
     } = this.props;
     return (
       <Tooltip placement={placement || 'top'} title={tooltip}>
@@ -89,7 +89,7 @@ export class ActionLink extends React.PureComponent<BaseProps> {
   static __DISPLAY_NAME = 'link';
   state = {
     loading: false,
-    disabled: false,
+    disabled: false
   };
   render() {
     const {
@@ -101,7 +101,7 @@ export class ActionLink extends React.PureComponent<BaseProps> {
       tooltip,
       loading,
       replaceLoading,
-      placement = 'top',
+      placement = 'top'
     } = this.props;
     return (
       <Typography.Link

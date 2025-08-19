@@ -22,7 +22,7 @@ export enum MaskingAlgorithmType {
   PSEUDO = 'PSEUDO',
   HASH = 'HASH',
   ROUND = 'ROUND',
-  NULL = 'NULL',
+  NULL = 'NULL'
 }
 export enum SegmentType {
   CUSTOM = 'CUSTOM',
@@ -31,13 +31,13 @@ export enum SegmentType {
   PRE_3_POST_4 = 'PRE_3_POST_4',
   ALL = 'ALL',
   PRE_3 = 'PRE_3',
-  POST_4 = 'POST_4',
+  POST_4 = 'POST_4'
 }
 export enum HashType {
   MD5 = 'MD5',
   SHA256 = 'SHA256',
   SHA512 = 'SHA512',
-  SM3 = 'SM3',
+  SM3 = 'SM3'
 }
 export interface IMaskingAlgorithm {
   id?: number;

@@ -17,7 +17,11 @@
 import { Button, Dropdown, Space, Tooltip } from 'antd';
 import React, { useEffect } from 'react';
 import styles from '../index.less';
-import type { IOperationContent, IOperationOption, ITableLoadOptions } from '../interface';
+import type {
+  IOperationContent,
+  IOperationOption,
+  ITableLoadOptions
+} from '../interface';
 import { IOperationOptionType } from '../interface';
 import useUrlAction, { URL_ACTION } from '@/util/hooks/useUrlAction';
 
@@ -33,7 +37,7 @@ const OperationItem: React.FC<IOperationItemProps> = ({ option, onClick }) => {
     isPrimary,
     menu,
     disabled = false,
-    trigger = ['click'],
+    trigger = ['click']
   } = option;
   let operation = null;
   const { runAction } = useUrlAction();
@@ -43,7 +47,7 @@ const OperationItem: React.FC<IOperationItemProps> = ({ option, onClick }) => {
       actionType: URL_ACTION.newDataMock,
       callback: () => {
         onClick(option?.onClick);
-      },
+      }
     });
   }, []);
 
@@ -62,7 +66,12 @@ const OperationItem: React.FC<IOperationItemProps> = ({ option, onClick }) => {
       break;
     case IOperationOptionType.dropdown:
       operation = (
-        <Dropdown trigger={trigger} disabled={disabled} menu={menu} placement="bottomRight">
+        <Dropdown
+          trigger={trigger}
+          disabled={disabled}
+          menu={menu}
+          placement="bottomRight"
+        >
           {content}
         </Dropdown>
       );
@@ -106,7 +115,9 @@ export const OperationContent: React.FC<IProps> = (props) => {
                 <Space>
                   <OperationItem option={item} onClick={onClick} />
                   {otherContent && (
-                    <div style={{ color: 'var(--neutral-black45-color)' }}>{otherContent}</div>
+                    <div style={{ color: 'var(--neutral-black45-color)' }}>
+                      {otherContent}
+                    </div>
                   )}
                 </Space>
               )}
