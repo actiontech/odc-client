@@ -21,7 +21,7 @@ import { UserStore } from '@/store/login';
 import { SettingStore } from '@/store/setting';
 import { haveOCP, isClient } from '@/util/env';
 import { formatMessage } from '@/util/intl';
-import { Menu, message, Tooltip } from 'antd';
+import { Menu, message } from 'antd';
 import { inject, observer } from 'mobx-react';
 import React, { useRef, useState } from 'react';
 import DropMenu from '../DropMenu';
@@ -32,6 +32,8 @@ import { ItemType } from 'antd/es/menu/interface';
 import styles from './index.less';
 import Locale from './Locale';
 import odc from '@/plugins/odc';
+import { BasicToolTip, PopoverInnerStyleWrapper } from '@actiontech/dms-kit';
+import classNames from 'classnames';
 
 interface IProps {
   userStore?: UserStore;
@@ -81,14 +83,19 @@ const MineItem: React.FC<IProps> = function ({ children, userStore, settingStore
     } catch (e) {}
   };
   function getMenu() {
-    let menu: ItemType[] = [];
+    let menu: Array<{
+      label: React.ReactNode;
+      key: string;
+      onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
+      // type?: 'divider';
+    }> = [];
     if (showUserInfo) {
       menu = menu.concat([
         {
           label: (
-            <Tooltip placement="right" title={userName}>
+            <BasicToolTip placement="right" title={userName}>
               <span className={styles.userName}>{userName}</span>
-            </Tooltip>
+            </BasicToolTip>
           ),
 
           key: 'username',
@@ -96,7 +103,7 @@ const MineItem: React.FC<IProps> = function ({ children, userStore, settingStore
         {
           key: 'user-role',
           label: (
-            <Tooltip placement="right" title={RoleNames}>
+            <BasicToolTip placement="right" title={RoleNames}>
               <span className={styles.userRoles}>
                 {formatMessage({
                   id: 'src.layout.SpaceContainer.Sider.MineItem.642BE38F' /*角色：*/,
@@ -104,12 +111,12 @@ const MineItem: React.FC<IProps> = function ({ children, userStore, settingStore
                 })}
                 {RoleNames}
               </span>
-            </Tooltip>
+            </BasicToolTip>
           ),
         },
-        {
-          type: 'divider',
-        },
+        // {
+        //   type: 'divider',
+        // },
       ]);
     }
     if (allowEditUser && havePasswordLogin) {
@@ -158,9 +165,9 @@ const MineItem: React.FC<IProps> = function ({ children, userStore, settingStore
       });
     }
 
-    menu.push({
-      type: 'divider',
-    });
+    // menu.push({
+    //   type: 'divider',
+    // });
     if (allowEditUser) {
       menu.push({
         key: 'exit',
@@ -183,12 +190,29 @@ const MineItem: React.FC<IProps> = function ({ children, userStore, settingStore
           }
         }}
         menu={
-          <Menu
-            selectedKeys={null}
-            key="user"
-            className={!isClient() ? styles.userMenu : ''}
-            items={getMenu()}
-          />
+          // <Menu
+          //   selectedKeys={null}
+          //   key="user"
+          //   className={!isClient() ? styles.userMenu : ''}
+          //   items={getMenu()}
+          // />
+          <PopoverInnerStyleWrapper>
+            <div className="content">
+              {getMenu().map((menu) => {
+                return (
+                  <div
+                    key={menu.key}
+                    className={classNames('content-item')}
+                    onClick={(e) => {
+                      menu.onClick?.(e);
+                    }}
+                  >
+                    <div className="content-item-text">{menu.label}</div>
+                  </div>
+                );
+              })}
+            </div>
+          </PopoverInnerStyleWrapper>
         }
       >
         {children}

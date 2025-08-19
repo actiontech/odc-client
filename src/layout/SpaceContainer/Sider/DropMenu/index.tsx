@@ -15,9 +15,7 @@
  */
 
 import { Popover } from 'antd';
-import classNames from 'classnames';
 import React from 'react';
-import styles from './index.less';
 
 interface IProps {
   menu?: JSX.Element;
@@ -29,8 +27,10 @@ const DropMenu: React.FC<IProps> = function ({ children, menu, small, onOpenChan
   return (
     <Popover
       arrow={false}
-      classNames={{
-        root: classNames(styles.dropmenu, { [styles.small]: small }),
+      styles={{
+        body: {
+          padding: 0,
+        },
       }}
       content={menu}
       trigger={['hover']}

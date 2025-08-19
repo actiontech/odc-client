@@ -53,8 +53,7 @@ import { isLogicalDatabase } from '@/util/database';
 import { DatabaseGroup } from '@/d.ts/database';
 import { ResourceNodeType } from '@/page/Workspace/SideBar/ResourceTree/type';
 import { getAsyncResultSet } from '@/common/network/task';
-import { ConfigProvider } from '@actiontech/dms-kit';
-import DmsKitDemo from './__DmsKitDemo';
+import ActivityBarNew from './ActivityBarNew';
 
 let _closeMsg = '';
 export function changeCloseMsg(t: any) {
@@ -359,39 +358,37 @@ const Workspace: React.FC<WorkspaceProps> = (props: WorkspaceProps) => {
   }, []);
   return (
     <>
-      <ConfigProvider>
-        <WorkBenchLayout
-          activityBar={<ActivityBar />}
-          sideBar={<SideBar />}
-          editorGroup={
-            isReady ? (
-              <WindowManager
-                pages={pages}
-                activeKey={activePageKey}
-                onActivatePage={handleActivatePage}
-                onOpenPage={handleOpenPage}
-                onOpenPageAfterTarget={openPageAfterTargetPage}
-                onClosePage={handleClosePage}
-                onCloseOtherPage={handleCloseOtherPage}
-                onCloseAllPage={handleCloseAllPage}
-                onSavePage={handleSavePage}
-                onStartSavingPage={handleStartSavingPage}
-                onUnsavedChangePage={handelUnsavedChangePage}
-                onCopySQLPage={onCopySQLPage}
-              />
-            ) : null
-          }
-        />
+      <WorkBenchLayout
+        activityBar={<ActivityBarNew />}
+        sideBar={<SideBar />}
+        editorGroup={
+          isReady ? (
+            <WindowManager
+              pages={pages}
+              activeKey={activePageKey}
+              onActivatePage={handleActivatePage}
+              onOpenPage={handleOpenPage}
+              onOpenPageAfterTarget={openPageAfterTargetPage}
+              onClosePage={handleClosePage}
+              onCloseOtherPage={handleCloseOtherPage}
+              onCloseAllPage={handleCloseAllPage}
+              onSavePage={handleSavePage}
+              onStartSavingPage={handleStartSavingPage}
+              onUnsavedChangePage={handelUnsavedChangePage}
+              onCopySQLPage={onCopySQLPage}
+            />
+          ) : null
+        }
+      />
 
-        {isReady && (
-          <>
-            {!!serverSystemInfo?.tutorialEnabled && <WorkspaceSideTip />}
-            <GlobalModals />
-          </>
-        )}
+      {isReady && (
+        <>
+          {!!serverSystemInfo?.tutorialEnabled && <WorkspaceSideTip />}
+          <GlobalModals />
+        </>
+      )}
 
-        <WrapWorkSpaceExecuteSQLModal modalStore={modalStore} />
-      </ConfigProvider>
+      <WrapWorkSpaceExecuteSQLModal modalStore={modalStore} />
     </>
   );
 };

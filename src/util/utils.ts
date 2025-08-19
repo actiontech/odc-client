@@ -33,12 +33,15 @@ import { isSqlEmpty } from './parser/sql';
 import { encodeIdentifiers, splitSql } from './sql';
 import type { RangePickerProps } from 'antd/es/date-picker';
 import { runInAction } from 'mobx';
+import { EventEmitter } from '@actiontech/dms-kit';
 export const invalidRegexpStr = /[°"§%()\[\]{}=\\?´`'#<>|,;.:+_-]/g;
 
 /**
  * 解析 SID 为 key/value
  * @example sid:1000002-1:d:ZJCG:var:session
  */
+
+export const eventEmitter = new EventEmitter();
 
 export function extractResourceId(id: string): {
   [key: string]: string;

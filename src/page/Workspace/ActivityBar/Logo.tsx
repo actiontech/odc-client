@@ -22,6 +22,7 @@ import { Tooltip } from 'antd';
 import { useState } from 'react';
 import styles from './index.less';
 import login from '@/store/login';
+import { BasicToolTip } from '@actiontech/dms-kit';
 
 export default function Logo() {
   const [isHover, setHoverSatate] = useState<boolean>(false);
@@ -33,7 +34,7 @@ export default function Logo() {
       window.open(location.origin + location.pathname);
       return;
     }
-    window.open(location.origin + '/#/project');
+    window.open(location.origin + '/#/');
   };
 
   return (
@@ -44,7 +45,7 @@ export default function Logo() {
       onMouseLeave={() => setHoverSatate(false)}
     >
       {isHover && !isClient() && !login.isPrivateSpace() ? (
-        <Tooltip
+        <BasicToolTip
           title={formatMessage({
             id: 'src.page.Workspace.ActivityBar.F4EC445B',
             defaultMessage: '返回首页',
@@ -60,7 +61,7 @@ export default function Logo() {
               cursor: 'pointer',
             }}
           />
-        </Tooltip>
+        </BasicToolTip>
       ) : (
         <Icon component={ODCBlackSvg} style={{ fontSize: 16, padding: 6 }} />
       )}
