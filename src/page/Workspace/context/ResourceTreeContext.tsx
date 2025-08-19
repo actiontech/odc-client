@@ -51,6 +51,6 @@ const ResourceTreeContext = React.createContext<IResourceTreeContext>({
   selectDatasourceId: null,
   datasourceList: [],
   projectList: [],
-  databaseList: [],
+  databaseList: []
 });
 export default ResourceTreeContext;

@@ -18,11 +18,14 @@ import {
   IUpdatePipelineV1Params,
   IUpdatePipelineV1Return,
   IRefreshPipelineNodeTokenV1Params,
-  IRefreshPipelineNodeTokenV1Return,
+  IRefreshPipelineNodeTokenV1Return
 } from './index.type';
 
 class PipelineService extends ServiceBase {
-  public getPipelinesV1(params: IGetPipelinesV1Params, options?: AxiosRequestConfig) {
+  public getPipelinesV1(
+    params: IGetPipelinesV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -30,11 +33,14 @@ class PipelineService extends ServiceBase {
     return this.get<IGetPipelinesV1Return>(
       `/v1/projects/${project_name}/pipelines`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public createPipelineV1(params: ICreatePipelineV1Params, options?: AxiosRequestConfig) {
+  public createPipelineV1(
+    params: ICreatePipelineV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -42,11 +48,14 @@ class PipelineService extends ServiceBase {
     return this.post<ICreatePipelineV1Return>(
       `/v1/projects/${project_name}/pipelines`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public getPipelineDetailV1(params: IGetPipelineDetailV1Params, options?: AxiosRequestConfig) {
+  public getPipelineDetailV1(
+    params: IGetPipelineDetailV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -57,11 +66,14 @@ class PipelineService extends ServiceBase {
     return this.get<IGetPipelineDetailV1Return>(
       `/v1/projects/${project_name}/pipelines/${pipeline_id}/`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public deletePipelineV1(params: IDeletePipelineV1Params, options?: AxiosRequestConfig) {
+  public deletePipelineV1(
+    params: IDeletePipelineV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -72,11 +84,14 @@ class PipelineService extends ServiceBase {
     return this.delete<IDeletePipelineV1Return>(
       `/v1/projects/${project_name}/pipelines/${pipeline_id}/`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public updatePipelineV1(params: IUpdatePipelineV1Params, options?: AxiosRequestConfig) {
+  public updatePipelineV1(
+    params: IUpdatePipelineV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -87,13 +102,13 @@ class PipelineService extends ServiceBase {
     return this.patch<IUpdatePipelineV1Return>(
       `/v1/projects/${project_name}/pipelines/${pipeline_id}/`,
       paramsData,
-      options,
+      options
     );
   }
 
   public refreshPipelineNodeTokenV1(
     params: IRefreshPipelineNodeTokenV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -108,7 +123,7 @@ class PipelineService extends ServiceBase {
     return this.patch<IRefreshPipelineNodeTokenV1Return>(
       `/v1/projects/${project_name}/pipelines/${pipeline_id}/token/${node_id}/`,
       paramsData,
-      options,
+      options
     );
   }
 }

@@ -14,7 +14,11 @@
  * limitations under the License.
  */
 
-import { ConnectionMode, SchemaComparingResult, TaskExecStrategy } from '@/d.ts';
+import {
+  ConnectionMode,
+  SchemaComparingResult,
+  TaskExecStrategy
+} from '@/d.ts';
 import { formatMessage } from '@/util/intl';
 
 export interface IShaodwSyncData {
@@ -62,7 +66,7 @@ export interface IContentProps {
 
 export enum ErrorStrategy {
   CONTINUE = 'CONTINUE',
-  ABORT = 'ABORT',
+  ABORT = 'ABORT'
 }
 
 export interface ShadowTableSyncTaskResult {
@@ -101,28 +105,28 @@ export enum SchemaSyncExecuteStatus {
   /**
    * 跳过执行
    */
-  SKIP = 'SKIP',
+  SKIP = 'SKIP'
 }
 
 export const SchemaSyncExecuteStatusText = {
   [SchemaSyncExecuteStatus.SUCCESS]: formatMessage({
     id: 'odc.components.CreateShadowSyncModal.interface.SuccessfulExecution',
-    defaultMessage: '执行成功',
+    defaultMessage: '执行成功'
   }), //执行成功
   [SchemaSyncExecuteStatus.FAILED]: formatMessage({
     id: 'odc.components.CreateShadowSyncModal.interface.ExecutionFailed',
-    defaultMessage: '执行失败',
+    defaultMessage: '执行失败'
   }), //执行失败
   [SchemaSyncExecuteStatus.WAITING]: formatMessage({
     id: 'odc.components.CreateShadowSyncModal.interface.PendingExecution',
-    defaultMessage: '待执行',
+    defaultMessage: '待执行'
   }), //待执行
   [SchemaSyncExecuteStatus.EXECUTING]: formatMessage({
     id: 'odc.components.CreateShadowSyncModal.interface.Running',
-    defaultMessage: '执行中',
+    defaultMessage: '执行中'
   }), //执行中
   [SchemaSyncExecuteStatus.SKIP]: formatMessage({
     id: 'odc.components.CreateShadowSyncModal.interface.SkipExecution',
-    defaultMessage: '跳过执行',
-  }), //跳过执行
+    defaultMessage: '跳过执行'
+  }) //跳过执行
 };

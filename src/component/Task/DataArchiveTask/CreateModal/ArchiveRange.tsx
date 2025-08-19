@@ -16,8 +16,21 @@
 
 import { ITable } from '@/d.ts';
 import { formatMessage } from '@/util/intl';
-import { PlusOutlined, SettingOutlined, SettingFilled } from '@ant-design/icons';
-import { Button, Checkbox, Form, Input, Radio, Select, Typography, Tooltip } from 'antd';
+import {
+  PlusOutlined,
+  SettingOutlined,
+  SettingFilled
+} from '@ant-design/icons';
+import {
+  Button,
+  Checkbox,
+  Form,
+  Input,
+  Radio,
+  Select,
+  Typography,
+  Tooltip
+} from 'antd';
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import ArchiveRangeTip from '../../component/ArchiveRangeTip';
@@ -39,15 +52,22 @@ interface IProps {
   targetDatabase?: IDatabase;
 }
 const ArchiveRange: React.FC<IProps> = (props) => {
-  const { tables, enabledTargetTable = false, checkPartition, targetDatabase } = props;
+  const {
+    tables,
+    enabledTargetTable = false,
+    checkPartition,
+    targetDatabase
+  } = props;
   const form = Form.useFormInstance();
-  const [enablePartition, setEnablePartition] = useState<boolean>(checkPartition);
+  const [enablePartition, setEnablePartition] =
+    useState<boolean>(checkPartition);
   const tablesOptions = tables?.map((item) => ({
     label: item.tableName,
-    value: item.tableName,
+    value: item.tableName
   }));
 
-  const { visible, currentIndex, open, close, handleSubmit } = useJoinTableConfig(form);
+  const { visible, currentIndex, open, close, handleSubmit } =
+    useJoinTableConfig(form);
 
   useEffect(() => {
     setEnablePartition(checkPartition);
@@ -56,7 +76,7 @@ const ArchiveRange: React.FC<IProps> = (props) => {
   const handleConfirm = (
     checkList: any[],
     add: (defaultValue?: any, insertIndex?: number) => void,
-    remove: (index: number | number[]) => void,
+    remove: (index: number | number[]) => void
   ) => {
     if (checkList?.length === 0) return;
     const filedList = form.getFieldValue('tables');
@@ -76,7 +96,7 @@ const ArchiveRange: React.FC<IProps> = (props) => {
       <Form.Item
         label={formatMessage({
           id: 'odc.DataArchiveTask.CreateModal.ArchiveRange.ArchiveScope',
-          defaultMessage: '归档范围',
+          defaultMessage: '归档范围'
         })}
         /*归档范围*/ name="archiveRange"
         required
@@ -86,7 +106,7 @@ const ArchiveRange: React.FC<IProps> = (props) => {
             {
               formatMessage({
                 id: 'odc.DataArchiveTask.CreateModal.ArchiveRange.PartialArchive',
-                defaultMessage: '部分归档',
+                defaultMessage: '部分归档'
               }) /*部分归档*/
             }
           </Radio>
@@ -94,7 +114,7 @@ const ArchiveRange: React.FC<IProps> = (props) => {
             {
               formatMessage({
                 id: 'odc.DataArchiveTask.CreateModal.ArchiveRange.ArchiveTheEntireDatabase',
-                defaultMessage: '整库归档',
+                defaultMessage: '整库归档'
               }) /*整库归档*/
             }
           </Radio>
@@ -113,7 +133,7 @@ const ArchiveRange: React.FC<IProps> = (props) => {
                 <div>
                   {formatMessage({
                     id: 'src.component.Task.DataArchiveTask.CreateModal.877C68FB',
-                    defaultMessage: '归档设置',
+                    defaultMessage: '归档设置'
                   })}
                 </div>
                 <div style={{ paddingBottom: 4 }}>
@@ -125,21 +145,21 @@ const ArchiveRange: React.FC<IProps> = (props) => {
                   >
                     {formatMessage({
                       id: 'src.component.Task.DataArchiveTask.CreateModal.AEEF3B7C',
-                      defaultMessage: '指定分区',
+                      defaultMessage: '指定分区'
                     })}
                   </Checkbox>
                 </div>
               </div>
               <div
                 className={classNames(styles.tables, styles.title, {
-                  [styles.delete]: tables?.length > 1,
+                  [styles.delete]: tables?.length > 1
                 })}
               >
                 <div className={styles.tableTitle}>
                   {
                     formatMessage({
                       id: 'odc.src.component.Task.DataArchiveTask.CreateModal.ArchiveTable',
-                      defaultMessage: '归档表',
+                      defaultMessage: '归档表'
                     }) /* 归档表 */
                   }
                 </div>
@@ -149,7 +169,7 @@ const ArchiveRange: React.FC<IProps> = (props) => {
                       {
                         formatMessage({
                           id: 'odc.DataArchiveTask.CreateModal.ArchiveRange.FilterConditions',
-                          defaultMessage: '过滤条件',
+                          defaultMessage: '过滤条件'
                         }) /*过滤条件*/
                       }
                     </span>
@@ -157,7 +177,7 @@ const ArchiveRange: React.FC<IProps> = (props) => {
                       {
                         formatMessage({
                           id: 'odc.DataArchiveTask.CreateModal.ArchiveRange.Optional',
-                          defaultMessage: '(可选)',
+                          defaultMessage: '(可选)'
                         }) /*(可选)*/
                       }
                     </Text>
@@ -165,7 +185,7 @@ const ArchiveRange: React.FC<IProps> = (props) => {
                       label={
                         formatMessage({
                           id: 'odc.src.component.Task.DataArchiveTask.CreateModal.Archive',
-                          defaultMessage: '归档',
+                          defaultMessage: '归档'
                         }) /* 归档 */
                       }
                     />
@@ -175,14 +195,14 @@ const ArchiveRange: React.FC<IProps> = (props) => {
                   <div className={styles.tableTitle}>
                     {formatMessage({
                       id: 'src.component.Task.DataArchiveTask.CreateModal.CC365F6B',
-                      defaultMessage: '高级设置',
+                      defaultMessage: '高级设置'
                     })}
 
                     <Text type="secondary">
                       {
                         formatMessage({
                           id: 'odc.DataArchiveTask.CreateModal.ArchiveRange.Optional',
-                          defaultMessage: '(可选)',
+                          defaultMessage: '(可选)'
                         }) /*(可选)*/
                       }
                     </Text>
@@ -196,7 +216,7 @@ const ArchiveRange: React.FC<IProps> = (props) => {
                       <div
                         key={key}
                         className={classNames(styles.tables, {
-                          [styles.delete]: fields?.length > 1,
+                          [styles.delete]: fields?.length > 1
                         })}
                       >
                         <Form.Item
@@ -207,34 +227,42 @@ const ArchiveRange: React.FC<IProps> = (props) => {
                               required: true,
                               message: formatMessage({
                                 id: 'odc.src.component.Task.DataArchiveTask.CreateModal.PleaseSelectTheTable',
-                                defaultMessage: '请选择表',
-                              }), //'请选择表'
-                            },
+                                defaultMessage: '请选择表'
+                              }) //'请选择表'
+                            }
                           ]}
                         >
                           <Select
                             showSearch
                             placeholder={formatMessage({
                               id: 'odc.DataArchiveTask.CreateModal.ArchiveRange.PleaseSelect',
-                              defaultMessage: '请选择',
+                              defaultMessage: '请选择'
                             })}
                             /*请选择*/ options={tablesOptions}
                             filterOption={(input, option) =>
-                              (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                              (option?.label ?? '')
+                                .toLowerCase()
+                                .includes(input.toLowerCase())
                             }
                           />
                         </Form.Item>
-                        <Form.Item {...restField} name={[name, 'conditionExpression']}>
+                        <Form.Item
+                          {...restField}
+                          name={[name, 'conditionExpression']}
+                        >
                           <Input
                             placeholder={formatMessage({
                               id: 'odc.DataArchiveTask.CreateModal.ArchiveRange.EnterAFilterCondition',
-                              defaultMessage: '请输入过滤条件',
+                              defaultMessage: '请输入过滤条件'
                             })} /*请输入过滤条件*/
                             addonAfter={
                               <>
                                 <JoinTableConfigModal
                                   visible={visible && currentIndex === index}
-                                  initialValues={form.getFieldValue(['tables', index])}
+                                  initialValues={form.getFieldValue([
+                                    'tables',
+                                    index
+                                  ])}
                                   onCancel={close}
                                   onOk={handleSubmit}
                                 />
@@ -242,13 +270,21 @@ const ArchiveRange: React.FC<IProps> = (props) => {
                                 <Tooltip
                                   title={formatMessage({
                                     id: 'src.component.Task.DataArchiveTask.CreateModal.1389EA71',
-                                    defaultMessage: '过滤条件设置（如关联表）',
+                                    defaultMessage: '过滤条件设置（如关联表）'
                                   })}
                                 >
-                                  <div onClick={() => open(index)} style={{ cursor: 'pointer' }}>
-                                    {form.getFieldValue(['tables', name, 'joinTableConfigs'])
-                                      ?.length ? (
-                                      <SettingFilled style={{ color: '#1890ff' }} />
+                                  <div
+                                    onClick={() => open(index)}
+                                    style={{ cursor: 'pointer' }}
+                                  >
+                                    {form.getFieldValue([
+                                      'tables',
+                                      name,
+                                      'joinTableConfigs'
+                                    ])?.length ? (
+                                      <SettingFilled
+                                        style={{ color: '#1890ff' }}
+                                      />
                                     ) : (
                                       <SettingOutlined />
                                     )}
@@ -263,39 +299,50 @@ const ArchiveRange: React.FC<IProps> = (props) => {
                             style={{ display: 'flex', flexDirection: 'column' }}
                             className={styles.multiInputBox}
                           >
-                            <Form.Item {...restField} name={[name, 'targetTableName']}>
+                            <Form.Item
+                              {...restField}
+                              name={[name, 'targetTableName']}
+                            >
                               <Input
                                 addonBefore={
-                                  isConnectTypeBeFileSystemGroup(targetDatabase?.connectType)
+                                  isConnectTypeBeFileSystemGroup(
+                                    targetDatabase?.connectType
+                                  )
                                     ? formatMessage({
                                         id: 'src.component.Task.DataArchiveTask.CreateModal.79D75776',
-                                        defaultMessage: '目标文件',
+                                        defaultMessage: '目标文件'
                                       })
                                     : formatMessage({
                                         id: 'src.component.Task.DataArchiveTask.CreateModal.94BCB0E1',
-                                        defaultMessage: '目标表',
+                                        defaultMessage: '目标表'
                                       })
                                 }
                                 placeholder={
                                   formatMessage({
                                     id: 'src.component.Task.DataArchiveTask.CreateModal.271D9B51',
-                                    defaultMessage: '请输入',
+                                    defaultMessage: '请输入'
                                   }) /*"请输入"*/
                                 }
                               />
                             </Form.Item>
 
                             {enablePartition && (
-                              <PartitionTextArea {...restField} name={[name, 'partitions']} />
+                              <PartitionTextArea
+                                {...restField}
+                                name={[name, 'partitions']}
+                              />
                             )}
                           </div>
                         )}
 
                         {fields?.length > 1 && (
-                          <Link onClick={() => remove(name)} style={{ textAlign: 'center' }}>
+                          <Link
+                            onClick={() => remove(name)}
+                            style={{ textAlign: 'center' }}
+                          >
                             {formatMessage({
                               id: 'src.component.Task.DataArchiveTask.CreateModal.890DB04E',
-                              defaultMessage: '移除',
+                              defaultMessage: '移除'
                             })}
                           </Link>
                         )}
@@ -303,21 +350,27 @@ const ArchiveRange: React.FC<IProps> = (props) => {
                     ))}
                     <Form.Item
                       style={{
-                        marginBottom: 0,
+                        marginBottom: 0
                       }}
                     >
                       <div className={styles.operationContainer}>
-                        <Button onClick={() => add()} type="link" icon={<PlusOutlined />}>
+                        <Button
+                          onClick={() => add()}
+                          type="link"
+                          icon={<PlusOutlined />}
+                        >
                           {
                             formatMessage({
                               id: 'odc.DataArchiveTask.CreateModal.ArchiveRange.Add',
-                              defaultMessage: '添加',
+                              defaultMessage: '添加'
                             }) /*添加*/
                           }
                         </Button>
                         <BatchSelectionPopover
                           options={tablesOptions}
-                          handleConfirm={(checkList) => handleConfirm(checkList, add, remove)}
+                          handleConfirm={(checkList) =>
+                            handleConfirm(checkList, add, remove)
+                          }
                         />
                       </div>
                     </Form.Item>

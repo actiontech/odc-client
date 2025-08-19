@@ -17,7 +17,7 @@ export default ({ height = 268, color }: IProps) => {
         <span style={{ color }}>
           {formatMessage({
             id: 'src.component.Empty.RecentlyDatabaseEmpty.94C7FC75',
-            defaultMessage: '暂无最近访问的数据库',
+            defaultMessage: '暂无最近访问的数据库'
           })}
         </span>
       }

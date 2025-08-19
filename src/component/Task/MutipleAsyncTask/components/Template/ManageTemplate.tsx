@@ -1,9 +1,21 @@
 import { formatMessage } from '@/util/intl';
-import { Template, getTemplateList, deleteTemplate } from '@/common/network/databaseChange';
+import {
+  Template,
+  getTemplateList,
+  deleteTemplate
+} from '@/common/network/databaseChange';
 import CommonTable from '@/component/CommonTable';
 import { ITableLoadOptions } from '@/component/CommonTable/interface';
 import login from '@/store/login';
-import { message, Popover, Space, Drawer, Descriptions, Popconfirm, Tooltip } from 'antd';
+import {
+  message,
+  Popover,
+  Space,
+  Drawer,
+  Descriptions,
+  Popconfirm,
+  Tooltip
+} from 'antd';
 import { useContext, useState, useRef } from 'react';
 import { MultipleAsyncContext } from '../../CreateModal/MultipleAsyncContext';
 import EditTemplate from './EditTemplate';
@@ -18,7 +30,8 @@ const ManageTemplate: React.FC<{
 }> = ({ manageTemplateModalOpen, reload, setManageTemplateModalOpen }) => {
   const { projectId, projectMap } = useContext(MultipleAsyncContext);
   const tableRef = useRef(null);
-  const [editTemplateDrawerOpen, setEditTemplateDrawerOpen] = useState<boolean>(false);
+  const [editTemplateDrawerOpen, setEditTemplateDrawerOpen] =
+    useState<boolean>(false);
   const [editTemplateId, setEditTemplateId] = useState<number>();
   const [templateList, setTemplateList] = useState<Template[]>([]);
   const [pagination, setPagination] = useState<
@@ -35,13 +48,13 @@ const ManageTemplate: React.FC<{
       projectId,
       currentOrganizationId: login.organizationId?.toString(),
       size: pageSize,
-      page: current,
+      page: current
     });
     if (response?.contents?.length) {
       setTemplateList(response?.contents);
       setPagination({
         current: response?.page?.number,
-        total: response?.page?.totalElements,
+        total: response?.page?.totalElements
       });
     } else {
       setTemplateList([]);
@@ -53,21 +66,24 @@ const ManageTemplate: React.FC<{
     setEditTemplateDrawerOpen(open);
   };
   const handleDeleteTemplate = async (id: number) => {
-    const response = await deleteTemplate(id, login?.organizationId?.toString());
+    const response = await deleteTemplate(
+      id,
+      login?.organizationId?.toString()
+    );
     if (response) {
       message.success(
         formatMessage({
           id: 'src.component.Task.MutipleAsyncTask.components.Template.A33F15D9',
-          defaultMessage: '模板删除成功',
-        }),
+          defaultMessage: '模板删除成功'
+        })
       );
       await tableRef?.current?.reload({ page: 1 });
     } else {
       message.error(
         formatMessage({
           id: 'src.component.Task.MutipleAsyncTask.components.Template.F5BFD8B1',
-          defaultMessage: '模版删除失败',
-        }),
+          defaultMessage: '模版删除失败'
+        })
       );
     }
   };
@@ -77,7 +93,7 @@ const ManageTemplate: React.FC<{
         width={520}
         title={formatMessage({
           id: 'src.component.Task.MutipleAsyncTask.components.Template.1A7C5740',
-          defaultMessage: '模版管理',
+          defaultMessage: '模版管理'
         })}
         open={manageTemplateModalOpen}
         onClose={() => {
@@ -91,7 +107,7 @@ const ManageTemplate: React.FC<{
           <Descriptions.Item
             label={formatMessage({
               id: 'src.component.Task.MutipleAsyncTask.components.Template.8C08DC21',
-              defaultMessage: '所属项目',
+              defaultMessage: '所属项目'
             })}
           >
             {projectMap?.[projectId]}
@@ -99,7 +115,7 @@ const ManageTemplate: React.FC<{
         </Descriptions>
         <div
           style={{
-            height: '80%',
+            height: '80%'
           }}
         >
           <CommonTable
@@ -118,7 +134,7 @@ const ManageTemplate: React.FC<{
                   dataIndex: 'name',
                   title: formatMessage({
                     id: 'src.component.Task.MutipleAsyncTask.components.Template.67470F74',
-                    defaultMessage: '模板',
+                    defaultMessage: '模板'
                   }),
                   width: 368,
                   render: (name, template: Template) => {
@@ -128,14 +144,15 @@ const ManageTemplate: React.FC<{
                         databaseIdsMap[item?.id] = item;
                       }, {});
                     });
-                    const orderedDatabaseIds = template?.databaseSequenceList?.map((dbs) => {
-                      return dbs.map((db) => db.id);
-                    });
+                    const orderedDatabaseIds =
+                      template?.databaseSequenceList?.map((dbs) => {
+                        return dbs.map((db) => db.id);
+                      });
                     return template?.enabled ? (
                       <Popover
                         placement="left"
                         overlayInnerStyle={{
-                          padding: '16px',
+                          padding: '16px'
                         }}
                         content={
                           <ShowTemplate
@@ -147,7 +164,7 @@ const ManageTemplate: React.FC<{
                       >
                         <div
                           style={{
-                            cursor: 'pointer',
+                            cursor: 'pointer'
                           }}
                         >
                           {name}
@@ -157,20 +174,20 @@ const ManageTemplate: React.FC<{
                       <Tooltip
                         title={formatMessage({
                           id: 'src.component.Task.MutipleAsyncTask.components.Template.81FA47D5',
-                          defaultMessage: '模版已失效',
+                          defaultMessage: '模版已失效'
                         })}
                         placement="left"
                       >
                         <div className={styles.disabled}>{name}</div>
                       </Tooltip>
                     );
-                  },
+                  }
                 },
                 {
                   key: 'action',
                   title: formatMessage({
                     id: 'src.component.Task.MutipleAsyncTask.components.Template.0D800390',
-                    defaultMessage: '操作',
+                    defaultMessage: '操作'
                   }),
                   render: (_, template: Template) => {
                     return (
@@ -181,7 +198,7 @@ const ManageTemplate: React.FC<{
                               !template?.enabled
                                 ? formatMessage({
                                     id: 'src.component.Task.MutipleAsyncTask.components.Template.72C9630F',
-                                    defaultMessage: '模版已失效',
+                                    defaultMessage: '模版已失效'
                                   })
                                 : null
                             }
@@ -189,7 +206,7 @@ const ManageTemplate: React.FC<{
                             <a
                               style={{ display: 'block' }}
                               className={classNames({
-                                [styles.disabled]: !template?.enabled,
+                                [styles.disabled]: !template?.enabled
                               })}
                               onClick={() => {
                                 if (!template?.enabled) {
@@ -200,7 +217,7 @@ const ManageTemplate: React.FC<{
                             >
                               {formatMessage({
                                 id: 'src.component.Task.MutipleAsyncTask.components.Template.E0648BE6',
-                                defaultMessage: '编辑',
+                                defaultMessage: '编辑'
                               })}
                             </a>
                           </Tooltip>
@@ -210,15 +227,16 @@ const ManageTemplate: React.FC<{
                           onConfirm={() => handleDeleteTemplate(template?.id)}
                           okText={formatMessage({
                             id: 'src.component.Task.MutipleAsyncTask.components.Template.869B1F0B',
-                            defaultMessage: '确认',
+                            defaultMessage: '确认'
                           })}
                           cancelText={formatMessage({
                             id: 'src.component.Task.MutipleAsyncTask.components.Template.D8ACCBE8',
-                            defaultMessage: '取消',
+                            defaultMessage: '取消'
                           })}
                           title={formatMessage({
                             id: 'src.component.Task.MutipleAsyncTask.components.Template.7ADC635A',
-                            defaultMessage: '删除模版不影响已发起的工单，是否确定删除？',
+                            defaultMessage:
+                              '删除模版不影响已发起的工单，是否确定删除？'
                           })}
                           placement="right"
                         >
@@ -226,22 +244,22 @@ const ManageTemplate: React.FC<{
                             <a>
                               {formatMessage({
                                 id: 'src.component.Task.MutipleAsyncTask.components.Template.9BF60D4F',
-                                defaultMessage: '删除',
+                                defaultMessage: '删除'
                               })}
                             </a>
                           </div>
                         </Popconfirm>
                       </Space>
                     );
-                  },
-                },
+                  }
+                }
               ],
 
               dataSource: templateList,
               pagination: pagination,
               scroll: {
-                x: 376,
-              },
+                x: 376
+              }
             }}
           />
         </div>

@@ -46,7 +46,7 @@ const HexEditor: React.FC<IProps> = function (props) {
         width: '100%',
         height: '100%',
         overflowX: 'hidden',
-        overflowY: 'auto',
+        overflowY: 'auto'
       }}
       tabIndex={-1}
       onClick={(e) => {
@@ -54,7 +54,10 @@ const HexEditor: React.FC<IProps> = function (props) {
         e.preventDefault();
         domRef.current?.focus();
         const cell = e.target;
-        if (cell instanceof HTMLSpanElement && cell.getAttribute('role') === 'hexcell') {
+        if (
+          cell instanceof HTMLSpanElement &&
+          cell.getAttribute('role') === 'hexcell'
+        ) {
           const cellIdx = parseInt(cell.getAttribute('data-cellIdx'));
           if (selectCells.begin === cellIdx) {
             setSelectCells({ begin: -1, end: -1 });
@@ -62,7 +65,7 @@ const HexEditor: React.FC<IProps> = function (props) {
           }
           setSelectCells({
             begin: cellIdx,
-            end: cellIdx,
+            end: cellIdx
           });
         } else {
           if (selectCells.begin !== -1 && selectCells.end != -1) {
@@ -108,13 +111,15 @@ const HexEditor: React.FC<IProps> = function (props) {
         >
           {({ index, style }) => {
             const offset = index * lineCount;
-            const isLastLine = index + 1 === Math.ceil(((value?.length || 0) + 1) / lineCount);
+            const isLastLine =
+              index + 1 === Math.ceil(((value?.length || 0) + 1) / lineCount);
             const isShowBtn = isLastLine && !disabled;
             return (
               <div key={index} style={{ ...style, padding: 2 }}>
                 {value?.slice(offset, offset + lineCount).map((str, idx) => {
                   const cellIdx = index * lineCount + idx;
-                  const isCellSelected = selectCells.begin <= cellIdx && selectCells.end >= cellIdx;
+                  const isCellSelected =
+                    selectCells.begin <= cellIdx && selectCells.end >= cellIdx;
                   return (
                     <span
                       key={index + '-' + idx}
@@ -124,12 +129,12 @@ const HexEditor: React.FC<IProps> = function (props) {
                       role={'hexcell'}
                       data-cellIdx={cellIdx}
                       className={classnames(styles.cell, {
-                        [styles.cellSeleced]: isCellSelected,
+                        [styles.cellSeleced]: isCellSelected
                       })}
                       style={{
                         width: cellWidth,
                         height: cellWidth,
-                        lineHeight: cellWidth + 'px',
+                        lineHeight: cellWidth + 'px'
                       }}
                     >
                       {str}
@@ -142,7 +147,7 @@ const HexEditor: React.FC<IProps> = function (props) {
                     style={{
                       width: cellWidth,
                       height: cellWidth,
-                      lineHeight: cellWidth + 'px',
+                      lineHeight: cellWidth + 'px'
                     }}
                     onClick={() => {
                       onChange((value || []).concat('00'));

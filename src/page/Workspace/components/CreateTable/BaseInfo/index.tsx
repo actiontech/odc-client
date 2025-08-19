@@ -74,7 +74,7 @@ const CreateTableBaseInfoForm: React.FC<IProps> = (props) => {
       }
     }
     form.setFieldsValue({
-      columnGroups: cg,
+      columnGroups: cg
     });
   }, [session?.params?.defaultTableStoreFormat]);
 
@@ -83,7 +83,7 @@ const CreateTableBaseInfoForm: React.FC<IProps> = (props) => {
     () => {
       return form;
     },
-    [form],
+    [form]
   );
   return dbType === DBType.LOGICAL ? (
     <LogicTableBaseInfo
@@ -104,7 +104,7 @@ const CreateTableBaseInfoForm: React.FC<IProps> = (props) => {
       onValuesChange={(cValue, values) => {
         if ('character' in cValue) {
           form.setFieldsValue({
-            collation: getDefaultCollation(cValue.character, collations),
+            collation: getDefaultCollation(cValue.character, collations)
           });
         }
         tableContext.setInfo?.(form.getFieldsValue());
@@ -116,16 +116,16 @@ const CreateTableBaseInfoForm: React.FC<IProps> = (props) => {
             name="tableName"
             label={formatMessage({
               id: 'workspace.window.createTable.baseInfo.tableName',
-              defaultMessage: '表名称',
+              defaultMessage: '表名称'
             })}
             rules={[
               {
                 required: true,
                 message: formatMessage({
                   id: 'workspace.window.createTable.baseInfo.tableName.validation',
-                  defaultMessage: '请填写表名称',
-                }),
-              },
+                  defaultMessage: '请填写表名称'
+                })
+              }
             ]}
           >
             <CaseInput
@@ -134,7 +134,7 @@ const CreateTableBaseInfoForm: React.FC<IProps> = (props) => {
               autoFocus
               placeholder={formatMessage({
                 id: 'workspace.window.createTable.baseInfo.tableName.placeholder',
-                defaultMessage: '请填写表名称',
+                defaultMessage: '请填写表名称'
               })}
             />
           </Form.Item>
@@ -146,12 +146,12 @@ const CreateTableBaseInfoForm: React.FC<IProps> = (props) => {
                 name="character"
                 label={formatMessage({
                   id: 'workspace.window.createTable.baseInfo.character',
-                  defaultMessage: '默认字符集',
+                  defaultMessage: '默认字符集'
                 })}
                 rules={[
                   {
-                    required: true,
-                  },
+                    required: true
+                  }
                 ]}
               >
                 <Select
@@ -159,7 +159,7 @@ const CreateTableBaseInfoForm: React.FC<IProps> = (props) => {
                   showSearch
                   onSelect={(v) => {
                     form.setFieldsValue({
-                      collation: getDefaultCollation(v.toString(), collations),
+                      collation: getDefaultCollation(v.toString(), collations)
                     });
                   }}
                 >
@@ -179,23 +179,24 @@ const CreateTableBaseInfoForm: React.FC<IProps> = (props) => {
                       name="collation"
                       label={formatMessage({
                         id: 'workspace.window.createTable.baseInfo.collation',
-                        defaultMessage: '默认排序规则',
+                        defaultMessage: '默认排序规则'
                       })}
                       rules={[
                         {
                           required: true,
                           message: formatMessage({
                             id: 'workspace.window.createTable.baseInfo.tableName.validation',
-                            defaultMessage: '请填写表名称',
-                          }),
-                        },
+                            defaultMessage: '请填写表名称'
+                          })
+                        }
                       ]}
                       shouldUpdate
                     >
                       <Select disabled={isEdit} showSearch>
                         {collations
                           ?.filter((c) => {
-                            const character = getFieldValue('character') || 'utf8mb4';
+                            const character =
+                              getFieldValue('character') || 'utf8mb4';
                             return c.indexOf(character) > -1;
                           })
                           .map((c) => (
@@ -218,7 +219,7 @@ const CreateTableBaseInfoForm: React.FC<IProps> = (props) => {
               name="columnGroups"
               label={formatMessage({
                 id: 'src.page.Workspace.components.CreateTable.BaseInfo.3907128F',
-                defaultMessage: '存储模式',
+                defaultMessage: '存储模式'
               })}
             >
               <Select
@@ -228,9 +229,12 @@ const CreateTableBaseInfoForm: React.FC<IProps> = (props) => {
                 options={[
                   {
                     value: ColumnStoreType.COLUMN,
-                    label: columnGroupsText[ColumnStoreType.COLUMN],
+                    label: columnGroupsText[ColumnStoreType.COLUMN]
                   },
-                  { value: ColumnStoreType.ROW, label: columnGroupsText[ColumnStoreType.ROW] },
+                  {
+                    value: ColumnStoreType.ROW,
+                    label: columnGroupsText[ColumnStoreType.ROW]
+                  }
                 ]}
               />
             </Form.Item>
@@ -242,7 +246,7 @@ const CreateTableBaseInfoForm: React.FC<IProps> = (props) => {
           name="comment"
           label={formatMessage({
             id: 'workspace.window.createTable.baseInfo.comment',
-            defaultMessage: '描述',
+            defaultMessage: '描述'
           })}
           style={{ width: '100%' }}
           required={false}
@@ -252,7 +256,7 @@ const CreateTableBaseInfoForm: React.FC<IProps> = (props) => {
             autoSize={{ maxRows: 3, minRows: 3 }}
             placeholder={formatMessage({
               id: 'workspace.window.createTable.baseInfo.comment.placeholder',
-              defaultMessage: '请填写描述',
+              defaultMessage: '请填写描述'
             })}
           />
         </Form.Item>

@@ -31,7 +31,7 @@ const items = {
   [ActivityBarItemType.Database]: ResourceTree,
   [ActivityBarItemType.Script]: Script,
   [ActivityBarItemType.Task]: Task,
-  [ActivityBarItemType.Manager]: Manager,
+  [ActivityBarItemType.Manager]: Manager
 };
 
 const SideBar: React.FC<IProps> = function () {
@@ -43,21 +43,26 @@ const SideBar: React.FC<IProps> = function () {
 
   return (
     <div className={styles.sideBar}>
-      {Object.entries(items).map(([key, Component]: [ActivityBarItemType, any]) => {
-        if (loadedKeys.current.has(key) || key === activityBarContext?.activeKey) {
-          return (
-            <div
-              key={key}
-              className={classNames(styles.content, {
-                [styles?.active]: key === activityBarContext?.activeKey,
-              })}
-            >
-              <Component />
-            </div>
-          );
+      {Object.entries(items).map(
+        ([key, Component]: [ActivityBarItemType, any]) => {
+          if (
+            loadedKeys.current.has(key) ||
+            key === activityBarContext?.activeKey
+          ) {
+            return (
+              <div
+                key={key}
+                className={classNames(styles.content, {
+                  [styles?.active]: key === activityBarContext?.activeKey
+                })}
+              >
+                <Component />
+              </div>
+            );
+          }
+          return null;
         }
-        return null;
-      })}
+      )}
     </div>
   );
 };

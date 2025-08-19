@@ -4,7 +4,7 @@ import {
   IBatchGetDataExportTaskReply,
   IAddDataExportTaskReq,
   IAddDataExportTaskReply,
-  IListDataExportTaskSQLsReply,
+  IListDataExportTaskSQLsReply
 } from '../common.type';
 
 export interface IBatchGetDataExportTaskParams {
@@ -13,7 +13,8 @@ export interface IBatchGetDataExportTaskParams {
   data_export_task_uids: string;
 }
 
-export interface IBatchGetDataExportTaskReturn extends IBatchGetDataExportTaskReply {}
+export interface IBatchGetDataExportTaskReturn
+  extends IBatchGetDataExportTaskReply {}
 
 export interface IAddDataExportTaskParams extends IAddDataExportTaskReq {
   project_uid: string;
@@ -31,7 +32,8 @@ export interface IListDataExportTaskSQLsParams {
   page_index?: number;
 }
 
-export interface IListDataExportTaskSQLsReturn extends IListDataExportTaskSQLsReply {}
+export interface IListDataExportTaskSQLsReturn
+  extends IListDataExportTaskSQLsReply {}
 
 export interface IDownloadDataExportTaskSQLsParams {
   project_uid: string;

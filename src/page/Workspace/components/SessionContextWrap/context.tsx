@@ -25,12 +25,16 @@ interface ISessionContext {
   projectMode?: boolean;
   datasourceMode?: boolean;
   isLogicalDatabase?: boolean;
-  selectSession: (databaseId: number, datasourceId: number, database?: IDatabase) => void;
+  selectSession: (
+    databaseId: number,
+    datasourceId: number,
+    database?: IDatabase
+  ) => void;
 }
 
 const SessionContext = React.createContext<ISessionContext>({
   session: null,
-  selectSession(databaseId, datasourceId, from) {},
+  selectSession(databaseId, datasourceId, from) {}
 });
 
 export default SessionContext;

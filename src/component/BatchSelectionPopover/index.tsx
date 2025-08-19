@@ -75,7 +75,7 @@ const BatchSelectionPopover: React.FC<BatchSelectionPopoverProps> = (props) => {
         <Input
           placeholder={formatMessage({
             id: 'src.component.BatchSelectionPopover.9DC08FE8',
-            defaultMessage: '搜索关键字',
+            defaultMessage: '搜索关键字'
           })}
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
@@ -91,16 +91,21 @@ const BatchSelectionPopover: React.FC<BatchSelectionPopoverProps> = (props) => {
         <div className={`${styles.flexBetween} ${styles.p12}`}>
           <Checkbox
             checked={
-              filterCheckedList.length && filterOptions?.length === filterCheckedList?.length
+              filterCheckedList.length &&
+              filterOptions?.length === filterCheckedList?.length
             }
             disabled={!filterOptions?.length}
             onChange={(e: CheckboxChangeEvent) => {
-              setCheckedList(e.target.checked ? filterOptions?.map((item) => item?.value) : []);
+              setCheckedList(
+                e.target.checked
+                  ? filterOptions?.map((item) => item?.value)
+                  : []
+              );
             }}
           >
             {formatMessage({
               id: 'src.component.BatchSelectionPopover.080F782E',
-              defaultMessage: '全选',
+              defaultMessage: '全选'
             })}
           </Checkbox>
           <Button
@@ -113,7 +118,7 @@ const BatchSelectionPopover: React.FC<BatchSelectionPopoverProps> = (props) => {
           >
             {formatMessage({
               id: 'src.component.BatchSelectionPopover.EDF3640E',
-              defaultMessage: '确定',
+              defaultMessage: '确定'
             })}
           </Button>
         </div>
@@ -135,7 +140,9 @@ const BatchSelectionPopover: React.FC<BatchSelectionPopoverProps> = (props) => {
                   if (e.target.checked) {
                     setCheckedList([...checkedList, e.target.value]);
                   } else {
-                    setCheckedList(checkedList?.filter((item) => item !== e.target.value));
+                    setCheckedList(
+                      checkedList?.filter((item) => item !== e.target.value)
+                    );
                   }
                 }}
               >
@@ -185,7 +192,7 @@ const BatchSelectionPopover: React.FC<BatchSelectionPopoverProps> = (props) => {
         >
           {formatMessage({
             id: 'src.component.BatchSelectionPopover.F72B9B10',
-            defaultMessage: '批量添加',
+            defaultMessage: '批量添加'
           })}
         </Button>
       </Popover>

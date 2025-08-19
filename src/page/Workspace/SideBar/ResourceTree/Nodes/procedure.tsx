@@ -22,7 +22,10 @@ import { ResourceNodeType, TreeDataNode } from '../type';
 import { TopTab } from '@/page/Workspace/components/PackagePage';
 import { ReactComponent as ParameterSvg } from '@/svgr/Parameter.svg';
 import { IDatabase } from '@/d.ts/database';
-import { openPackageViewPage, openProcedureViewPage } from '@/store/helper/page';
+import {
+  openPackageViewPage,
+  openProcedureViewPage
+} from '@/store/helper/page';
 import { ReactComponent as ProcedureSvg } from '@/svgr/menuProcedure.svg';
 
 const THEME = 'var(--icon-color-2)';
@@ -34,7 +37,7 @@ export function ProcedureTreeNodeData(
   packageName?: string,
   menuKey?: ResourceNodeType,
   pkg?: Partial<IPackage>,
-  index?: number,
+  index?: number
 ): TreeDataNode {
   const funcKey = `${dbSession?.database?.databaseId}-${packageName}-${dbName}-procedure-${packageName}-${proc.proName}-index:${index}`;
   let paramRoot: TreeDataNode;
@@ -44,7 +47,7 @@ export function ProcedureTreeNodeData(
     paramRoot = {
       title: formatMessage({
         id: 'odc.ResourceTree.Nodes.procedure.Parameter',
-        defaultMessage: '参数',
+        defaultMessage: '参数'
       }), //参数
       key: `${funcKey}-param`,
       type: ResourceNodeType.ProcedureParamRoot,
@@ -52,7 +55,7 @@ export function ProcedureTreeNodeData(
         <Icon
           component={ParameterSvg}
           style={{
-            color: THEME,
+            color: THEME
           }}
         />
       ),
@@ -62,9 +65,9 @@ export function ProcedureTreeNodeData(
           title: p.paramName,
           key: `${funcKey}-param-${p.paramName}${p.seqNum}`,
           type: ResourceNodeType.ProcedureParam,
-          isLeaf: true,
+          isLeaf: true
         };
-      }),
+      })
     };
   }
 
@@ -72,13 +75,13 @@ export function ProcedureTreeNodeData(
     variableRoot = {
       title: formatMessage({
         id: 'odc.ResourceTree.Nodes.procedure.Variable',
-        defaultMessage: '变量',
+        defaultMessage: '变量'
       }), //变量
       key: `${funcKey}-variable`,
       icon: (
         <InfoOutlined
           style={{
-            color: THEME,
+            color: THEME
           }}
         />
       ),
@@ -89,9 +92,9 @@ export function ProcedureTreeNodeData(
           title: p.varName,
           key: `${funcKey}-variable-${p.varName}${p.varType}`,
           type: ResourceNodeType.ProcedureVariable,
-          isLeaf: true,
+          isLeaf: true
         };
-      }),
+      })
     };
   }
 
@@ -107,7 +110,7 @@ export function ProcedureTreeNodeData(
       <Icon
         component={ProcedureSvg}
         style={{
-          color: THEME,
+          color: THEME
         }}
       />
     ),
@@ -116,11 +119,21 @@ export function ProcedureTreeNodeData(
       // 程序包中的子程序 双击直接打开所在的程序包详情
       switch (menuKey) {
         case ResourceNodeType.PackageHeadProcedure: {
-          openPackageViewPage(pkg.packageName, TopTab.HEAD, false, session?.database?.databaseId);
+          openPackageViewPage(
+            pkg.packageName,
+            TopTab.HEAD,
+            false,
+            session?.database?.databaseId
+          );
           break;
         }
         case ResourceNodeType.PackageBodyProcedure: {
-          openPackageViewPage(pkg.packageName, TopTab.BODY, false, session?.database?.databaseId);
+          openPackageViewPage(
+            pkg.packageName,
+            TopTab.BODY,
+            false,
+            session?.database?.databaseId
+          );
           break;
         }
         default: {
@@ -129,7 +142,7 @@ export function ProcedureTreeNodeData(
             undefined,
             undefined,
             session?.database?.databaseId,
-            null,
+            null
           );
         }
       }
@@ -138,32 +151,40 @@ export function ProcedureTreeNodeData(
     packageName: packageName,
     data: proc,
     isLeaf: false,
-    children: [paramRoot, variableRoot].filter(Boolean),
+    children: [paramRoot, variableRoot].filter(Boolean)
   };
 }
 
 export function ProcedureTreeData(
   dbSession: SessionStore,
   database: IDatabase,
-  packageName: string = '',
+  packageName: string = ''
 ): TreeDataNode {
   const dbName = database.name;
   const procedures = dbSession?.database?.procedures;
   const treeData: TreeDataNode = {
     title: formatMessage({
       id: 'odc.ResourceTree.Nodes.procedure.StoredProcedure',
-      defaultMessage: '存储过程',
+      defaultMessage: '存储过程'
     }), //存储过程
     key: `${database.id}-${dbName}-procedure`,
     type: ResourceNodeType.ProcedureRoot,
     data: database,
     sessionId: dbSession?.sessionId,
-    isLeaf: false,
+    isLeaf: false
   };
 
   if (procedures?.length) {
     treeData.children = procedures.map((proc, index) => {
-      return ProcedureTreeNodeData(proc, dbSession, dbName, packageName, null, null, index);
+      return ProcedureTreeNodeData(
+        proc,
+        dbSession,
+        dbName,
+        packageName,
+        null,
+        null,
+        index
+      );
     });
   }
   return treeData;

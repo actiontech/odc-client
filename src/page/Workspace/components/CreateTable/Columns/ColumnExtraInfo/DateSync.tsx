@@ -31,7 +31,7 @@ const DataSync: React.FC<IProps> = function ({ column, onChange }) {
       <Form.Item
         label={formatMessage({
           id: 'odc.Columns.ColumnExtraInfo.DateSync.TimeSetting',
-          defaultMessage: '时间设置',
+          defaultMessage: '时间设置'
         })} /*时间设置*/
       >
         <Checkbox
@@ -40,14 +40,14 @@ const DataSync: React.FC<IProps> = function ({ column, onChange }) {
             const v = e.target.checked;
             onChange({
               ...column,
-              currentTime: v,
+              currentTime: v
             });
           }}
         >
           {
             formatMessage({
               id: 'odc.Columns.ColumnExtraInfo.DateSync.UpdateBasedOnTheCurrent',
-              defaultMessage: '根据当前时间戳更新',
+              defaultMessage: '根据当前时间戳更新'
             }) /*根据当前时间戳更新*/
           }
         </Checkbox>

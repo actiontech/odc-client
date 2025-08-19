@@ -25,7 +25,10 @@ interface IProps {}
 
 const splitKey = Symbol('csearch')?.toString();
 
-const RemoveSplitInput = forwardRef(function RemoveSplitInput({ value, ...rest }: any, ref) {
+const RemoveSplitInput = forwardRef(function RemoveSplitInput(
+  { value, ...rest }: any,
+  ref
+) {
   let type;
   if (value) {
     const arr = value.split(splitKey);
@@ -65,29 +68,41 @@ const Search: React.FC<IProps> = function () {
         SearchType.NAME,
         SearchType.CLUSTER,
         SearchType.TENANT,
-        SearchType.HOST,
+        SearchType.HOST
       ]?.map((v) => {
         return {
           value: value + splitKey + v,
           label: (
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between'
+              }}
+            >
               <div
                 style={{
                   flex: 1,
                   overflow: 'hidden',
                   whiteSpace: 'nowrap',
-                  textOverflow: 'ellipsis',
+                  textOverflow: 'ellipsis'
                 }}
               >
                 {value}
               </div>
-              <div style={{ flexShrink: 0, flexGrow: 0, color: 'var(--text-color-hint)' }}>
+              <div
+                style={{
+                  flexShrink: 0,
+                  flexGrow: 0,
+                  color: 'var(--text-color-hint)'
+                }}
+              >
                 {SearchTypeText[v]}
               </div>
             </div>
-          ),
+          )
         };
-      }),
+      })
     );
     return;
   }
@@ -116,7 +131,11 @@ const Search: React.FC<IProps> = function () {
       onChange={(v) => {
         setIsEmpty(!v);
       }}
-      defaultValue={searchValue?.value ? searchValue.value + splitKey + searchValue.type : null}
+      defaultValue={
+        searchValue?.value
+          ? searchValue.value + splitKey + searchValue.type
+          : null
+      }
       defaultActiveFirstOption
       onSearch={getOptions}
       onSelect={(v, option) => {

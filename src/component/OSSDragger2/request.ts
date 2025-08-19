@@ -15,7 +15,11 @@
  */
 
 import login from '@/store/login';
-import type { IProgressEvent, IRequestError, IRequestOption } from './interface';
+import type {
+  IProgressEvent,
+  IRequestError,
+  IRequestOption
+} from './interface';
 import axios from 'axios';
 
 function getError(option: IRequestOption, xhr: XMLHttpRequest) {
@@ -75,10 +79,11 @@ export function request(option: IRequestOption) {
     withCredentials: option.withCredentials,
     onUploadProgress: (progressEvent: IProgressEvent) => {
       if (option.onProgress) {
-        progressEvent.percent = (progressEvent.loaded / progressEvent.total) * 100;
+        progressEvent.percent =
+          (progressEvent.loaded / progressEvent.total) * 100;
         option.onProgress(progressEvent);
       }
-    },
+    }
   };
   return axios(axiosConfig)
     .then((response) => {

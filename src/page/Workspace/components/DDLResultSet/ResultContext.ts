@@ -39,7 +39,7 @@ const ResultContext = React.createContext<{
   sqlId: '',
   sessionId: null,
   isEditing: false,
-  isColumnMode: false,
+  isColumnMode: false
 });
 
 export default ResultContext;

@@ -26,7 +26,9 @@ const SecureLayout: React.FC<EnvProps> = ({ sider, content }) => {
   return (
     <div className={styles.secureLayout}>
       <div className={styles.sider}>{sider}</div>
-      <div className={classNames(styles.content, styles.envDrawer)}>{content}</div>
+      <div className={classNames(styles.content, styles.envDrawer)}>
+        {content}
+      </div>
     </div>
   );
 };

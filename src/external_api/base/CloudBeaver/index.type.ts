@@ -2,4 +2,5 @@
 // @ts-nocheck
 import { IGetSQLQueryConfigurationReply } from '../common.type';
 
-export interface IGetSQLQueryConfigurationReturn extends IGetSQLQueryConfigurationReply {}
+export interface IGetSQLQueryConfigurationReturn
+  extends IGetSQLQueryConfigurationReply {}

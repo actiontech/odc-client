@@ -26,7 +26,7 @@ import { isConnectTypeBeFileSystemGroup } from '@/util/connection';
 
 export default observer(function StatusName({
   item,
-  onClick,
+  onClick
 }: {
   item: IDatabase;
   onClick: () => void;
@@ -39,7 +39,8 @@ export default observer(function StatusName({
   }
   const config = getDataSourceModeConfig(item?.dataSource?.type);
   const notSupport =
-    !config?.features?.groupResourceTree || isConnectTypeBeFileSystemGroup(item?.dataSource?.type);
+    !config?.features?.groupResourceTree ||
+    isConnectTypeBeFileSystemGroup(item?.dataSource?.type);
 
   const renderNotSupportDBWithTip = (name: React.ReactNode) => {
     return <span className={styles.disable}>{name}</span>;
@@ -61,7 +62,9 @@ export default observer(function StatusName({
       );
     }
     case IConnectionStatus.ACTIVE: {
-      return <a onClick={!notSupport ? onClick : null}>{nameRender(item?.name)}</a>;
+      return (
+        <a onClick={!notSupport ? onClick : null}>{nameRender(item?.name)}</a>
+      );
     }
     default: {
       const errorMsg = status?.errorMessage || 'datasource disconnected';

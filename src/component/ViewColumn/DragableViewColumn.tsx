@@ -32,7 +32,7 @@ export interface IDragableViewParamProps extends IDragable {
 }
 
 const Types = {
-  CARD: 'viewColumn',
+  CARD: 'viewColumn'
 };
 
 const DragableViewColumn = ({ props }: { props: IDragableViewParamProps }) => {
@@ -44,23 +44,28 @@ const DragableViewColumn = ({ props }: { props: IDragableViewParamProps }) => {
     isDragging,
     connectDropTarget,
     connectDragSource,
-    connectDragPreview,
+    connectDragPreview
   } = props;
   return connectDragSource(
     <div>
-      <Row className={classNames(styles.row, isDragging ? styles.dragging : null)}>
+      <Row
+        className={classNames(styles.row, isDragging ? styles.dragging : null)}
+      >
         <Col
           span={20}
           style={{
             display: 'flex',
             alignItems: 'center',
-            flex: 1,
+            flex: 1
           }}
         >
           <span style={{ marginRight: 8 }}>
             <Icon component={DragSvg} className={styles.dragHandler} />
           </span>
-          {formatMessage({ id: 'workspace.window.createView.columnName', defaultMessage: '名称' })}
+          {formatMessage({
+            id: 'workspace.window.createView.columnName',
+            defaultMessage: '名称'
+          })}
           ：
           <Input
             value={rule.paramName}
@@ -68,13 +73,16 @@ const DragableViewColumn = ({ props }: { props: IDragableViewParamProps }) => {
             onChange={(e) => handleEdit(index, { paramName: e.target.value })}
           />
         </Col>
-        <CloseCircleFilled className={styles.close} onClick={() => handleDelete(index)} />
+        <CloseCircleFilled
+          className={styles.close}
+          onClick={() => handleDelete(index)}
+        />
       </Row>
-    </div>,
+    </div>
   );
 };
 
 export default Dragable<IDragableViewParamProps>(
   DragableViewColumn,
-  Types.CARD,
+  Types.CARD
 ) as React.ComponentType<any>;

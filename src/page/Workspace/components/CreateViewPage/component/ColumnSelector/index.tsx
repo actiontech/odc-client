@@ -30,7 +30,9 @@ import { convertDataTypeToDataShowType } from '@/util/utils';
 import ColumnItem from './Item';
 import { getTableColumnList } from '@/common/network/table';
 import { getView } from '@/common/network/view';
-import SortableContainer, { DraggableItem } from '@/component/SortableContainer';
+import SortableContainer, {
+  DraggableItem
+} from '@/component/SortableContainer';
 const { TreeNode, DirectoryTree } = Tree;
 
 interface IProps {
@@ -46,7 +48,7 @@ const ColumnIcon = ({ dataShowType }: { dataShowType: ColumnShowType }) => (
       fontSize: 16,
       color: '#3FA3FF',
       marginRight: 4,
-      verticalAlign: 'middle',
+      verticalAlign: 'middle'
     }}
   />
 );
@@ -60,7 +62,7 @@ const TreeSelector: React.FC<IProps> = React.memo((props) => {
     selectMap: {},
     keywords: '',
     autoExpandParent: true,
-    loading: true,
+    loading: true
   });
   useEffect(() => {
     loadTreeData(props.viewUnits);
@@ -69,7 +71,7 @@ const TreeSelector: React.FC<IProps> = React.memo((props) => {
   const handleSelectAll = (e, onItemSelectAll) => {
     const { checked } = e.target;
     const keys = getTreeKeys({
-      children: state.treeData,
+      children: state.treeData
     });
 
     onItemSelectAll(keys, checked);
@@ -99,7 +101,7 @@ const TreeSelector: React.FC<IProps> = React.memo((props) => {
           {
             formatMessage({
               id: 'odc.component.ColumnSelector.AllFields',
-              defaultMessage: '全部字段',
+              defaultMessage: '全部字段'
             }) /* 全部字段 */
           }
         </Checkbox>
@@ -115,7 +117,7 @@ const TreeSelector: React.FC<IProps> = React.memo((props) => {
             setState({
               ...state,
               expandedKeys,
-              autoExpandParent: false,
+              autoExpandParent: false
             });
           }}
           onCheck={(_, item) => {
@@ -135,7 +137,12 @@ const TreeSelector: React.FC<IProps> = React.memo((props) => {
   const renderTargetPanel = () => {
     const { targetKeys, loading } = state;
     if (loading || !targetKeys.length) {
-      return <Empty style={{ marginTop: '60px' }} image={Empty.PRESENTED_IMAGE_SIMPLE} />;
+      return (
+        <Empty
+          style={{ marginTop: '60px' }}
+          image={Empty.PRESENTED_IMAGE_SIMPLE}
+        />
+      );
     }
     return (
       <div style={{ height: '222px', overflow: 'auto' }}>
@@ -180,7 +187,10 @@ const TreeSelector: React.FC<IProps> = React.memo((props) => {
           ICON_VIEW
         ) : (
           <ColumnIcon
-            dataShowType={convertDataTypeToDataShowType(`${dataType}`, session.dataTypes)}
+            dataShowType={convertDataTypeToDataShowType(
+              `${dataType}`,
+              session.dataTypes
+            )}
           />
         );
 
@@ -222,7 +232,7 @@ const TreeSelector: React.FC<IProps> = React.memo((props) => {
         root = {
           key: `d=${dbName}`,
           title: dbName,
-          children: [],
+          children: []
         };
 
         treeData.push(root);
@@ -234,11 +244,13 @@ const TreeSelector: React.FC<IProps> = React.memo((props) => {
         }`,
 
         title: `${tableName || viewName}${aliasName ? `<${aliasName}>` : ''}`,
-        children: [],
+        children: []
       };
 
       if (tableName) {
-        requests.push(getTableColumnList(tableName, dbName, session?.sessionId));
+        requests.push(
+          getTableColumnList(tableName, dbName, session?.sessionId)
+        );
         nodes.push(node);
       } else if (viewName) {
         requests.push(getView(viewName, session?.sessionId, dbName));
@@ -255,14 +267,14 @@ const TreeSelector: React.FC<IProps> = React.memo((props) => {
         node.children = res.map((col) => {
           return {
             key: `${node.key}&c=${col.columnName}&dataType=${col.dataType}`,
-            title: col.columnName,
+            title: col.columnName
           };
         });
       } else if (v) {
         node.children = res.columns.map((col) => {
           return {
             key: `${node.key}&c=${col.columnName}&dataType=${col.dataType}`,
-            title: col.columnName,
+            title: col.columnName
           };
         });
       }
@@ -289,7 +301,7 @@ const TreeSelector: React.FC<IProps> = React.memo((props) => {
         tableOrViewAliasName,
         viewName: v,
         columnName: c || columnName,
-        aliasName,
+        aliasName
       });
     });
     props.onSubmit(columns);
@@ -304,7 +316,10 @@ const TreeSelector: React.FC<IProps> = React.memo((props) => {
         const isMatch = children.find((item) => {
           const upperKeywords = keywords.toUpperCase();
           const upperItemKey = item.key.toUpperCase();
-          return upperItemKey.indexOf(upperKeywords) > -1 || selectedKeys.includes(item.key);
+          return (
+            upperItemKey.indexOf(upperKeywords) > -1 ||
+            selectedKeys.includes(item.key)
+          );
         });
         if (isMatch) {
           expandedKeys.push(node.key);
@@ -325,14 +340,14 @@ const TreeSelector: React.FC<IProps> = React.memo((props) => {
       newKeys = nextTargetKeys;
     }
     newKeys = newKeys.filter(
-      (key) => key.indexOf('c=') > -1 || key.indexOf('odc.customer.column') > -1,
+      (key) => key.indexOf('c=') > -1 || key.indexOf('odc.customer.column') > -1
     );
 
     // 数组去重
     newKeys = Array.from(new Set(newKeys));
     // 存在同字段多选情况，需要 uid 做唯一标识
     newKeys = newKeys.map((key) =>
-      key.indexOf('uid') !== -1 ? key : `${key}&uid=${uniqueId('c_')}`,
+      key.indexOf('uid') !== -1 ? key : `${key}&uid=${uniqueId('c_')}`
     );
 
     setState({ ...state, targetKeys: [...newKeys] });
@@ -356,8 +371,8 @@ const TreeSelector: React.FC<IProps> = React.memo((props) => {
     const updateValue = update(targetKeys, {
       $splice: [
         [dragIndex, 1],
-        [hoverIndex, 0, dragParam],
-      ],
+        [hoverIndex, 0, dragParam]
+      ]
     });
 
     handleTransfer(updateValue, null, null);
@@ -373,7 +388,7 @@ const TreeSelector: React.FC<IProps> = React.memo((props) => {
     }
     setState({
       ...state,
-      selectMap,
+      selectMap
     });
   };
 
@@ -381,7 +396,7 @@ const TreeSelector: React.FC<IProps> = React.memo((props) => {
     const { targetKeys } = state;
     setState({
       ...state,
-      targetKeys: [...targetKeys, uniqueId('odc.customer.column_uid_')],
+      targetKeys: [...targetKeys, uniqueId('odc.customer.column_uid_')]
     });
   };
 
@@ -434,7 +449,7 @@ const TreeSelector: React.FC<IProps> = React.memo((props) => {
               {
                 formatMessage({
                   id: 'odc.component.ColumnSelector.TipYouCanClickCustom',
-                  defaultMessage: '提示：可点击自定义新建字段',
+                  defaultMessage: '提示：可点击自定义新建字段'
                 }) /* 提示：可点击自定义新建字段 */
               }
             </span>
@@ -443,17 +458,17 @@ const TreeSelector: React.FC<IProps> = React.memo((props) => {
               {
                 formatMessage({
                   id: 'odc.component.ColumnSelector.Custom',
-                  defaultMessage: '自定义',
+                  defaultMessage: '自定义'
                 }) /* 自定义 */
               }
             </a>
-          </>,
+          </>
         ]}
         locale={{
           searchPlaceholder: formatMessage({
             id: 'odc.component.ColumnSelector.EnterAFieldName',
-            defaultMessage: '请输入字段名称',
-          }), // 请输入字段名称
+            defaultMessage: '请输入字段名称'
+          }) // 请输入字段名称
         }}
         onChange={handleTransfer}
         onSearch={handleTreeSearch}
@@ -469,11 +484,15 @@ const TreeSelector: React.FC<IProps> = React.memo((props) => {
           }
         }}
       </Transfer>
-      <Button type="primary" onClick={handleSubmit} style={{ marginTop: '20px' }}>
+      <Button
+        type="primary"
+        onClick={handleSubmit}
+        style={{ marginTop: '20px' }}
+      >
         {
           formatMessage({
             id: 'odc.component.ColumnSelector.Determine',
-            defaultMessage: '确定',
+            defaultMessage: '确定'
           }) /* 确定 */
         }
       </Button>

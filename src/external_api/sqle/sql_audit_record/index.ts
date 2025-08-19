@@ -16,11 +16,14 @@ import {
   IGetSQLAuditRecordV1Params,
   IGetSQLAuditRecordV1Return,
   IUpdateSQLAuditRecordV1Params,
-  IUpdateSQLAuditRecordV1Return,
+  IUpdateSQLAuditRecordV1Return
 } from './index.type';
 
 class SqlAuditRecordService extends ServiceBase {
-  public getSQLAuditRecordsV1(params: IGetSQLAuditRecordsV1Params, options?: AxiosRequestConfig) {
+  public getSQLAuditRecordsV1(
+    params: IGetSQLAuditRecordsV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -28,20 +31,20 @@ class SqlAuditRecordService extends ServiceBase {
     return this.get<IGetSQLAuditRecordsV1Return>(
       `/v1/projects/${project_name}/sql_audit_records`,
       paramsData,
-      options,
+      options
     );
   }
 
   public CreateSQLAuditRecordV1(
     params: ICreateSQLAuditRecordV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const config = options || {};
     const headers = config.headers ? config.headers : {};
     config.headers = {
       ...headers,
 
-      'Content-Type': 'multipart/form-data',
+      'Content-Type': 'multipart/form-data'
     };
 
     const paramsData = new FormData();
@@ -71,7 +74,10 @@ class SqlAuditRecordService extends ServiceBase {
     }
 
     if (params.input_mybatis_xml_file != undefined) {
-      paramsData.append('input_mybatis_xml_file', params.input_mybatis_xml_file as any);
+      paramsData.append(
+        'input_mybatis_xml_file',
+        params.input_mybatis_xml_file as any
+      );
     }
 
     if (params.input_zip_file != undefined) {
@@ -99,13 +105,13 @@ class SqlAuditRecordService extends ServiceBase {
     return this.post<ICreateSQLAuditRecordV1Return>(
       `/v1/projects/${project_name}/sql_audit_records`,
       paramsData,
-      config,
+      config
     );
   }
 
   public GetSQLAuditRecordTagTipsV1(
     params: IGetSQLAuditRecordTagTipsV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -114,11 +120,14 @@ class SqlAuditRecordService extends ServiceBase {
     return this.get<IGetSQLAuditRecordTagTipsV1Return>(
       `/v1/projects/${project_name}/sql_audit_records/tag_tips`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public getSQLAuditRecordV1(params: IGetSQLAuditRecordV1Params, options?: AxiosRequestConfig) {
+  public getSQLAuditRecordV1(
+    params: IGetSQLAuditRecordV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -129,13 +138,13 @@ class SqlAuditRecordService extends ServiceBase {
     return this.get<IGetSQLAuditRecordV1Return>(
       `/v1/projects/${project_name}/sql_audit_records/${sql_audit_record_id}/`,
       paramsData,
-      options,
+      options
     );
   }
 
   public updateSQLAuditRecordV1(
     params: IUpdateSQLAuditRecordV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -147,7 +156,7 @@ class SqlAuditRecordService extends ServiceBase {
     return this.patch<IUpdateSQLAuditRecordV1Return>(
       `/v1/projects/${project_name}/sql_audit_records/${sql_audit_record_id}/`,
       paramsData,
-      options,
+      options
     );
   }
 }

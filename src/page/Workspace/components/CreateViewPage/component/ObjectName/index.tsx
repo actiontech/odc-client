@@ -20,7 +20,9 @@ import Icon, { DatabaseOutlined, TableOutlined } from '@ant-design/icons';
 
 export const ICON_DATABASE = <DatabaseOutlined style={{ color: ' #9d7ac7' }} />;
 export const ICON_TABLE = <TableOutlined style={{ color: '#3FA3FF' }} />;
-export const ICON_VIEW = <Icon type="view" component={ViewSvg} style={{ color: '#FA8C15' }} />;
+export const ICON_VIEW = (
+  <Icon type="view" component={ViewSvg} style={{ color: '#FA8C15' }} />
+);
 interface IProps {
   title: any;
   type: EnumObjectType;
@@ -28,7 +30,7 @@ interface IProps {
 
 export enum EnumObjectType {
   TABLE = 'TABLE',
-  VIEW = 'VIEW',
+  VIEW = 'VIEW'
 }
 
 const EditableText: React.FC<IProps> = React.memo((props) => {

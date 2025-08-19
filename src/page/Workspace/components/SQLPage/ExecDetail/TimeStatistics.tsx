@@ -24,16 +24,16 @@ const TimeStatistics: React.FC<{
     <Card
       title={formatMessage({
         id: 'workspace.window.sql.explain.tab.detail.card.time.title',
-        defaultMessage: '耗时统计 (us)',
+        defaultMessage: '耗时统计 (us)'
       })}
       headStyle={{
         padding: '0 16px',
         fontSize: 14,
-        border: 'none',
+        border: 'none'
       }}
       bodyStyle={{
         height: 158,
-        padding: 16,
+        padding: 16
       }}
       className={styles.card}
     >
@@ -42,7 +42,7 @@ const TimeStatistics: React.FC<{
         style={{
           marginTop: -30,
           width: '100%',
-          height: '100%',
+          height: '100%'
         }}
       />
     </Card>

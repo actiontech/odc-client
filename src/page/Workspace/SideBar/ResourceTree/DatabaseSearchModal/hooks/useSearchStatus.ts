@@ -102,7 +102,10 @@ const useSearchStatus = (initSearchStatus: SearchStatus) => {
       case SearchStatus.databaseforObject: {
         if (searchKey) {
           setSearchKey('');
-        } else if (!cacheSearchKeyList.length || cacheSearchKeyList.length === 1) {
+        } else if (
+          !cacheSearchKeyList.length ||
+          cacheSearchKeyList.length === 1
+        ) {
           update(SearchStatus.defalut);
           setDatabase(null);
         } else {
@@ -176,7 +179,7 @@ const useSearchStatus = (initSearchStatus: SearchStatus) => {
     dataSource,
     setDataSource,
     update,
-    cacheSearchKeyList,
+    cacheSearchKeyList
   };
 };
 

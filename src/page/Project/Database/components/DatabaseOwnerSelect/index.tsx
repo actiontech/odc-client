@@ -27,7 +27,7 @@ export const DatabaseOwnerSelect = ({
   setFormOwnerIds,
   hasDefaultSet = true,
   disabled = false,
-  projectInfo,
+  projectInfo
 }: IProps) => {
   let { project } = useContext(ProjectContext);
   project = projectInfo || project;
@@ -44,7 +44,7 @@ export const DatabaseOwnerSelect = ({
           value: id,
           label: name,
           disabled: !userEnabled,
-          role: [role],
+          role: [role]
         });
       } else {
         // 多角色
@@ -52,7 +52,7 @@ export const DatabaseOwnerSelect = ({
           value: userMap.get(id)?.value,
           label: userMap.get(id)?.label,
           disabled: userMap.get(id)?.disabled || !userEnabled,
-          role: [...userMap.get(id)?.role, role],
+          role: [...userMap.get(id)?.role, role]
         });
       }
     });
@@ -69,18 +69,21 @@ export const DatabaseOwnerSelect = ({
               <span style={{ paddingRight: 4 }}>
                 {formatMessage({
                   id: 'src.page.Project.Database.components.DatabaseOwnerSelect.tsx.556A83EA',
-                  defaultMessage: '库管理员',
+                  defaultMessage: '库管理员'
                 })}
               </span>
               <Tooltip
                 title={formatMessage({
                   id: 'src.page.Project.Database.components.DatabaseOwnerSelect.tsx.34B8A74A',
-                  defaultMessage: '库管理员是数据库和表的负责人，可以在审批流程中引用',
+                  defaultMessage:
+                    '库管理员是数据库和表的负责人，可以在审批流程中引用'
                 })}
                 color="#fff"
                 overlayInnerStyle={{ width: 268, color: '#132039' }}
               >
-                <QuestionCircleOutlined style={{ color: 'var(--icon-color-normal)' }} />
+                <QuestionCircleOutlined
+                  style={{ color: 'var(--icon-color-normal)' }}
+                />
               </Tooltip>
             </span>
           }
@@ -91,9 +94,9 @@ export const DatabaseOwnerSelect = ({
                     required: true,
                     message: formatMessage({
                       id: 'src.page.Project.Database.components.DatabaseOwnerSelect.tsx.CBBD314E',
-                      defaultMessage: '请输入',
-                    }),
-                  },
+                      defaultMessage: '请输入'
+                    })
+                  }
                 ]
               : null
           }
@@ -103,10 +106,10 @@ export const DatabaseOwnerSelect = ({
             mode="multiple"
             placeholder={formatMessage({
               id: 'src.page.Project.Database.components.DatabaseOwnerSelect.tsx.094820AF',
-              defaultMessage: '请选择',
+              defaultMessage: '请选择'
             })}
             style={{
-              width: '100%',
+              width: '100%'
             }}
             optionFilterProp="label"
             disabled={notSetAdmin || disabled}
@@ -124,7 +127,7 @@ export const DatabaseOwnerSelect = ({
                       style={{
                         padding: '0 8px',
                         fontSize: 12,
-                        color: 'var(--text-color-hint)',
+                        color: 'var(--text-color-hint)'
                       }}
                     >
                       {item?.role?.map((i) => projectRoleTextMap[i]).join(',')}
@@ -135,12 +138,14 @@ export const DatabaseOwnerSelect = ({
                           item?.disabled
                             ? formatMessage({
                                 id: 'src.page.Project.Database.components.DatabaseOwnerSelect.tsx.A9AFE6EF',
-                                defaultMessage: '用户已禁用',
+                                defaultMessage: '用户已禁用'
                               })
                             : ''
                         }
                       >
-                        <InfoCircleOutlined style={{ color: 'var(--text-color-secondary)' }} />
+                        <InfoCircleOutlined
+                          style={{ color: 'var(--text-color-secondary)' }}
+                        />
                       </Tooltip>
                     ) : (
                       <></>
@@ -164,7 +169,7 @@ export const DatabaseOwnerSelect = ({
           >
             {formatMessage({
               id: 'src.page.Project.Database.components.DatabaseOwnerSelect.tsx.2882064F',
-              defaultMessage: '不设置管理员',
+              defaultMessage: '不设置管理员'
             })}
           </Checkbox>
         </Col>

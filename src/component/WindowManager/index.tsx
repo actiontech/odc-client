@@ -20,7 +20,12 @@ import { movePagePostion, openNewDefaultPLPage } from '@/store/helper/page';
 import { SQLStore } from '@/store/sql';
 import { formatMessage } from '@/util/intl';
 import tracert from '@/util/tracert';
-import { CloseOutlined, DownOutlined, EllipsisOutlined, PlusOutlined } from '@ant-design/icons';
+import {
+  CloseOutlined,
+  DownOutlined,
+  EllipsisOutlined,
+  PlusOutlined
+} from '@ant-design/icons';
 import { Badge, Dropdown, MenuProps, Space, Tooltip } from 'antd';
 import { inject, observer } from 'mobx-react';
 import { MenuInfo } from 'rc-menu/lib/interface';
@@ -121,7 +126,10 @@ const WindowManager: React.FC<IProps> = function (props) {
   };
 
   /** 未保存弹框点击保存触发的事件 */
-  const handleSaveAndClosePage = (targetKey: string, closeImmediately?: boolean) => {
+  const handleSaveAndClosePage = (
+    targetKey: string,
+    closeImmediately?: boolean
+  ) => {
     const { onStartSavingPage } = props;
     onStartSavingPage(targetKey);
     setClosePageKey('');
@@ -131,7 +139,9 @@ const WindowManager: React.FC<IProps> = function (props) {
   };
 
   function getPageTitle(page: IPage): ReactNode {
-    const iconColor = page?.params?.isDisabled ? '#bfbfbf' : pageMap[page.type]?.color;
+    const iconColor = page?.params?.isDisabled
+      ? '#bfbfbf'
+      : pageMap[page.type]?.color;
     const isDocked = page.params.isDocked;
     const pageTitle = getPageTitleText(page);
     const isPageProcessing = props.sqlStore.runningPageKey.has(page.key);
@@ -140,7 +150,7 @@ const WindowManager: React.FC<IProps> = function (props) {
       PageType.BATCH_COMPILE_PACKAGE,
       PageType.BATCH_COMPILE_PROCEDURE,
       PageType.BATCH_COMPILE_TRIGGER,
-      PageType.BATCH_COMPILE_TYPE,
+      PageType.BATCH_COMPILE_TYPE
     ].includes(page.type);
     return (
       <Dropdown
@@ -153,47 +163,47 @@ const WindowManager: React.FC<IProps> = function (props) {
               key: 'closePage',
               label: formatMessage({
                 id: 'odc.component.WindowManager.CloseThisWindow',
-                defaultMessage: '关闭该窗口',
-              }),
+                defaultMessage: '关闭该窗口'
+              })
             },
             {
               key: 'closeOtherPage',
               label: formatMessage({
                 id: 'odc.component.WindowManager.CloseOtherWindows',
-                defaultMessage: '关闭其它窗口',
-              }),
+                defaultMessage: '关闭其它窗口'
+              })
             },
             !isDocked && {
               key: 'closeAllPage',
               label: formatMessage({
                 id: 'odc.component.WindowManager.CloseAllWindows',
-                defaultMessage: '关闭所有窗口',
-              }),
+                defaultMessage: '关闭所有窗口'
+              })
             },
             {
-              type: 'divider',
+              type: 'divider'
             },
             page.type === PageType.SQL && {
               key: 'copyPage',
               label: formatMessage({
                 id: 'odc.src.component.WindowManager.CopyTheSQLWindow',
-                defaultMessage: '复制 SQL 窗口',
-              }),
+                defaultMessage: '复制 SQL 窗口'
+              })
             },
             {
               key: 'openNewPage',
               label: formatMessage({
                 id: 'odc.component.WindowManager.OpenANewSqlWindow',
-                defaultMessage: '打开新的 SQL 窗口',
-              }),
-            },
-          ].filter(Boolean) as MenuProps['items'],
+                defaultMessage: '打开新的 SQL 窗口'
+              })
+            }
+          ].filter(Boolean) as MenuProps['items']
         }}
       >
         <Tooltip
           placement="bottom"
           classNames={{
-            root: styles.tabTooltip,
+            root: styles.tabTooltip
           }}
           arrow={false}
           title={
@@ -205,7 +215,7 @@ const WindowManager: React.FC<IProps> = function (props) {
                     status={'default'}
                     text={formatMessage({
                       id: 'odc.component.WindowManager.NotSaved',
-                      defaultMessage: '未保存',
+                      defaultMessage: '未保存'
                     })} /*未保存*/
                   />
                 </div>
@@ -216,7 +226,7 @@ const WindowManager: React.FC<IProps> = function (props) {
                     status={'processing'}
                     text={formatMessage({
                       id: 'odc.component.WindowManager.Running',
-                      defaultMessage: '运行中',
+                      defaultMessage: '运行中'
                     })} /*运行中*/
                   />
                 </div>
@@ -231,7 +241,7 @@ const WindowManager: React.FC<IProps> = function (props) {
                 display: 'flex',
                 color: `${iconColor}`,
                 lineHeight: 1,
-                fontSize: 14,
+                fontSize: 14
               }}
             >
               {pageMap[page.type].icon}
@@ -251,7 +261,7 @@ const WindowManager: React.FC<IProps> = function (props) {
             {!page.params.isDocked ? (
               <span
                 style={{
-                  width: 16,
+                  width: 16
                 }}
               >
                 <CloseOutlined
@@ -261,14 +271,14 @@ const WindowManager: React.FC<IProps> = function (props) {
                     handleCloseTab(page.key);
                   }}
                   style={{
-                    fontSize: '8px',
+                    fontSize: '8px'
                   }}
                 />
               </span>
             ) : (
               <span
                 style={{
-                  width: '16px',
+                  width: '16px'
                 }}
               />
             )}
@@ -280,7 +290,7 @@ const WindowManager: React.FC<IProps> = function (props) {
 
   const menu: MenuProps = {
     style: {
-      width: '320px',
+      width: '320px'
     },
     selectedKeys: [activeKey],
     onClick: handleSwitchTab,
@@ -295,16 +305,16 @@ const WindowManager: React.FC<IProps> = function (props) {
                 display: 'flex',
                 color: `${pageMap[page.type]?.color}`,
                 lineHeight: 1,
-                fontSize: 14,
+                fontSize: 14
               }}
             >
               {pageMap[page.type].icon}
             </span>
             {getPageTitleText(page)}
           </Space>
-        ),
+        )
       };
-    }),
+    })
   };
   return (
     <>
@@ -325,7 +335,7 @@ const WindowManager: React.FC<IProps> = function (props) {
               justifyContent: 'stretch',
               flexDirection: 'row',
               height: '100%',
-              alignItems: 'center',
+              alignItems: 'center'
             }}
           >
             <PlusOutlined style={{ color: 'var(--icon-color-normal)' }} />
@@ -336,18 +346,18 @@ const WindowManager: React.FC<IProps> = function (props) {
                   {
                     label: formatMessage({
                       id: 'odc.src.component.WindowManager.NewSQLWindow',
-                      defaultMessage: '新建 SQL 窗口',
+                      defaultMessage: '新建 SQL 窗口'
                     }), //'新建 SQL 窗口'
                     key: 'newSQL',
                     onClick: (e) => {
                       e.domEvent.stopPropagation();
                       handleEditPage(null, 'add');
-                    },
+                    }
                   },
                   {
                     label: formatMessage({
                       id: 'odc.src.component.WindowManager.CreateAnonymousBlockWindow',
-                      defaultMessage: '新建匿名块窗口',
+                      defaultMessage: '新建匿名块窗口'
                     }), //'新建匿名块窗口'
                     key: 'newPL',
                     onClick(e) {
@@ -363,12 +373,17 @@ const WindowManager: React.FC<IProps> = function (props) {
                         }
                       }
                       const isLogicalDb = isLogicalDatabase(
-                        treeContext?.databaseList?.find((_db) => _db?.id === dbId),
+                        treeContext?.databaseList?.find(
+                          (_db) => _db?.id === dbId
+                        )
                       );
-                      openNewDefaultPLPage(undefined, isLogicalDb ? null : dbId);
-                    },
-                  },
-                ],
+                      openNewDefaultPLPage(
+                        undefined,
+                        isLogicalDb ? null : dbId
+                      );
+                    }
+                  }
+                ]
               }}
             >
               <div
@@ -396,7 +411,11 @@ const WindowManager: React.FC<IProps> = function (props) {
         items={pages
           .map((page) => {
             const Page = pageMap[page.type].component;
-            const pageParams = Object.assign({}, pageMap[page.type].params || {}, page.params);
+            const pageParams = Object.assign(
+              {},
+              pageMap[page.type].params || {},
+              page.params
+            );
             if (!Page) {
               return null;
             }
@@ -420,7 +439,7 @@ const WindowManager: React.FC<IProps> = function (props) {
                   onSaveAndCloseUnsavedModal={handleSaveAndClosePage}
                   closeSelf={handleCloseTab.bind(null, page.key)}
                 />
-              ),
+              )
             };
           })
           .filter(Boolean)}

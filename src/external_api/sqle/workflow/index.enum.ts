@@ -13,7 +13,7 @@ export enum getGlobalWorkflowsV1FilterStatusListEnum {
 
   'exec_failed' = 'exec_failed',
 
-  'finished' = 'finished',
+  'finished' = 'finished'
 }
 
 export enum getGlobalWorkflowsV1FilterProjectPriorityEnum {
@@ -21,7 +21,7 @@ export enum getGlobalWorkflowsV1FilterProjectPriorityEnum {
 
   'medium' = 'medium',
 
-  'low' = 'low',
+  'low' = 'low'
 }
 
 export enum GetGlobalWorkflowStatisticsFilterStatusListEnum {
@@ -37,7 +37,7 @@ export enum GetGlobalWorkflowStatisticsFilterStatusListEnum {
 
   'exec_failed' = 'exec_failed',
 
-  'finished' = 'finished',
+  'finished' = 'finished'
 }
 
 export enum GetGlobalWorkflowStatisticsFilterProjectPriorityEnum {
@@ -45,7 +45,7 @@ export enum GetGlobalWorkflowStatisticsFilterProjectPriorityEnum {
 
   'medium' = 'medium',
 
-  'low' = 'low',
+  'low' = 'low'
 }
 
 export enum getWorkflowsV1FilterStatusEnum {
@@ -61,7 +61,7 @@ export enum getWorkflowsV1FilterStatusEnum {
 
   'exec_failed' = 'exec_failed',
 
-  'finished' = 'finished',
+  'finished' = 'finished'
 }
 
 export enum exportWorkflowV1FilterStatusEnum {
@@ -77,7 +77,7 @@ export enum exportWorkflowV1FilterStatusEnum {
 
   'exec_failed' = 'exec_failed',
 
-  'finished' = 'finished',
+  'finished' = 'finished'
 }
 
 export enum GetBackupSqlListV1FilterExecStatusEnum {
@@ -97,5 +97,5 @@ export enum GetBackupSqlListV1FilterExecStatusEnum {
 
   'terminate_failed' = 'terminate_failed',
 
-  'execute_rollback' = 'execute_rollback',
+  'execute_rollback' = 'execute_rollback'
 }

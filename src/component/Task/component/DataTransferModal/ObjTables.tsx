@@ -19,7 +19,7 @@ import {
   IExportDbObject,
   ITransferDataObjStatus,
   ITransferObjectInfo,
-  ITransferSchemaInfo,
+  ITransferSchemaInfo
 } from '@/d.ts';
 import { formatMessage } from '@/util/intl';
 import { Table } from 'antd';
@@ -27,32 +27,36 @@ import { ColumnType } from 'antd/es/table';
 import React from 'react';
 import getTaskStatus, { StatusItem } from './status';
 
-function getColumns(transferDDL: boolean, transferData: boolean, isImport: boolean) {
+function getColumns(
+  transferDDL: boolean,
+  transferData: boolean,
+  isImport: boolean
+) {
   let columns: ColumnType<any>[] = [
     {
       title: formatMessage({
         id: 'odc.component.TaskDetailDrawer.ObjTables.ObjectName',
-        defaultMessage: '对象名称',
+        defaultMessage: '对象名称'
       }),
 
       dataIndex: 'objectName',
       ellipsis: true,
       render: (t) => {
         return t;
-      },
+      }
     },
 
     {
       title: formatMessage({
         id: 'odc.component.TaskDetailDrawer.ObjTables.ObjectType',
-        defaultMessage: '对象类型',
+        defaultMessage: '对象类型'
       }),
 
       dataIndex: 'dbObjectType',
       width: 80,
       render: (t) => DbObjectTypeTextMap(t),
-      ellipsis: true,
-    },
+      ellipsis: true
+    }
   ];
 
   columns = columns.concat(
@@ -60,7 +64,7 @@ function getColumns(transferDDL: boolean, transferData: boolean, isImport: boole
       transferDDL && {
         title: formatMessage({
           id: 'odc.component.TaskDetailDrawer.ObjTables.StructureProcessingStatus',
-          defaultMessage: '结构处理状态',
+          defaultMessage: '结构处理状态'
         }),
 
         dataIndex: ['schemaInfo', 'status'],
@@ -72,32 +76,32 @@ function getColumns(transferDDL: boolean, transferData: boolean, isImport: boole
         filters: [
           ITransferDataObjStatus.INITIAL,
           ITransferDataObjStatus.SUCCESS,
-          ITransferDataObjStatus.FAILURE,
+          ITransferDataObjStatus.FAILURE
         ].map((status) => {
           return {
             text: getTaskStatus[status]?.text,
-            value: status,
+            value: status
           };
         }),
         onFilter: (value, record) => {
           return value == record.schemaInfo?.status;
-        },
+        }
       },
 
       transferData && {
         title: formatMessage({
           id: 'odc.component.TaskDetailDrawer.ObjTables.ActualProcessingQuantity',
-          defaultMessage: '实际处理数量',
+          defaultMessage: '实际处理数量'
         }), // 实际处理数量
         dataIndex: ['dataInfo', 'count'],
         width: 100,
-        ellipsis: true,
+        ellipsis: true
       },
 
       transferData && {
         title: formatMessage({
           id: 'odc.component.TaskDetailDrawer.ObjTables.DataProcessingStatus',
-          defaultMessage: '数据处理状态',
+          defaultMessage: '数据处理状态'
         }),
         ellipsis: true,
 
@@ -109,18 +113,18 @@ function getColumns(transferDDL: boolean, transferData: boolean, isImport: boole
         filters: [
           ITransferDataObjStatus.INITIAL,
           ITransferDataObjStatus.SUCCESS,
-          ITransferDataObjStatus.FAILURE,
+          ITransferDataObjStatus.FAILURE
         ].map((status) => {
           return {
             text: getTaskStatus[status]?.text,
-            value: status,
+            value: status
           };
         }),
         onFilter: (value, record) => {
           return value == record.dataInfo?.status;
-        },
-      },
-    ].filter(Boolean),
+        }
+      }
+    ].filter(Boolean)
   );
   return columns;
 }
@@ -129,7 +133,7 @@ function unionData(
   data: IExportDbObject[],
   dataInfo: ITransferObjectInfo[],
   schemaInfo: ITransferSchemaInfo[],
-  isImport: boolean,
+  isImport: boolean
 ) {
   const dataInfoMap = {};
   const schemaInfoMap = {};
@@ -139,14 +143,16 @@ function unionData(
   schemaInfo?.forEach((data) => {
     schemaInfoMap[data.name + '%$%' + data.type] = data;
   });
-  const allNames = Array.from(new Set(Object.keys(dataInfoMap).concat(Object.keys(schemaInfoMap))));
+  const allNames = Array.from(
+    new Set(Object.keys(dataInfoMap).concat(Object.keys(schemaInfoMap)))
+  );
   return allNames.map((nameAndType) => {
     const [name, type] = nameAndType.split('%$%');
     return {
       objectName: name,
       dbObjectType: type,
       dataInfo: dataInfoMap[nameAndType],
-      schemaInfo: schemaInfoMap[nameAndType],
+      schemaInfo: schemaInfoMap[nameAndType]
     };
   });
 }
@@ -159,14 +165,17 @@ const ObjTable: React.FC<{
   transferDDL: boolean;
   transferData: boolean;
 }> = function (props) {
-  const { transferData, transferDDL, data, dataInfo, schemaInfo, isImport } = props;
+  const { transferData, transferDDL, data, dataInfo, schemaInfo, isImport } =
+    props;
   const columns = getColumns(transferDDL, transferData, isImport);
   const dataSource = unionData(data, dataInfo, schemaInfo, isImport);
   return (
     <Table
       bordered
       className="o-mini-table o-mini-table--no-border"
-      rowClassName={(record, i) => (i % 2 === 0 ? 'o-min-table-even' : 'o-min-table-odd')}
+      rowClassName={(record, i) =>
+        i % 2 === 0 ? 'o-min-table-even' : 'o-min-table-odd'
+      }
       rowKey={(record) => {
         return `${record.objectName}_${record.dbObjectType}`;
       }}

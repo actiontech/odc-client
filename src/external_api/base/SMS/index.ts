@@ -10,7 +10,7 @@ import {
   ISendSmsCodeParams,
   ISendSmsCodeReturn,
   IVerifySmsCodeParams,
-  IVerifySmsCodeReturn,
+  IVerifySmsCodeReturn
 } from './index.type';
 
 class SMSService extends ServiceBase {
@@ -19,16 +19,19 @@ class SMSService extends ServiceBase {
     return this.post<ISendSmsCodeReturn>(
       '/v1/dms/configurations/sms/send_code',
       paramsData,
-      options,
+      options
     );
   }
 
-  public VerifySmsCode(params: IVerifySmsCodeParams, options?: AxiosRequestConfig) {
+  public VerifySmsCode(
+    params: IVerifySmsCodeParams,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     return this.post<IVerifySmsCodeReturn>(
       '/v1/dms/configurations/sms/verify_code',
       paramsData,
-      options,
+      options
     );
   }
 }

@@ -29,35 +29,35 @@ const periodUnits = [
   {
     label: formatMessage({
       id: 'src.component.Task.component.PartitionPolicyTable.8EFB4C32',
-      defaultMessage: '年',
+      defaultMessage: '年'
     }), //'年'
-    value: 1,
+    value: 1
   },
   {
     label: formatMessage({
       id: 'src.component.Task.component.PartitionPolicyTable.CD3BF6C6',
-      defaultMessage: '月',
+      defaultMessage: '月'
     }), //'月'
-    value: 2,
+    value: 2
   },
   {
     label: formatMessage({
       id: 'src.component.Task.component.PartitionPolicyTable.42293F67',
-      defaultMessage: '日',
+      defaultMessage: '日'
     }), //'日'
-    value: 5,
-  },
+    value: 5
+  }
 ];
 
 const partitionBoundDescriptions: Record<PartitionBound, string> = {
   [PartitionBound.PARTITION_UPPER_BOUND]: formatMessage({
     id: 'src.component.Task.component.PartitionPolicyTable.CBBEA962',
-    defaultMessage: '分区上界',
+    defaultMessage: '分区上界'
   }),
   [PartitionBound.PARTITION_LOWER_BOUND]: formatMessage({
     id: 'src.component.Task.component.PartitionPolicyTable.E9F0CC43',
-    defaultMessage: '分区下界',
-  }),
+    defaultMessage: '分区下界'
+  })
 };
 
 interface IProps {
@@ -73,34 +73,37 @@ const ConfigDrawer: React.FC<IProps> = (props) => {
   const { visible, config, onClose } = props;
   const { partitionNameInvokerParameters } = config;
   const dropKeyConfig = config?.partitionKeyConfigs?.find(
-    (item) => item?.strategy === TaskPartitionStrategy.DROP,
+    (item) => item?.strategy === TaskPartitionStrategy.DROP
   );
   const createKeyConfigs = config?.partitionKeyConfigs?.filter(
-    (item) => item?.strategy === TaskPartitionStrategy.CREATE,
+    (item) => item?.strategy === TaskPartitionStrategy.CREATE
   );
 
   const getNamingSuffix = () => {
     const suffixExpression =
-      partitionNameInvokerParameters?.partitionNameGeneratorConfig?.namingSuffixExpression;
+      partitionNameInvokerParameters?.partitionNameGeneratorConfig
+        ?.namingSuffixExpression;
     const refPartitionKey =
-      partitionNameInvokerParameters?.partitionNameGeneratorConfig?.refPartitionKey;
+      partitionNameInvokerParameters?.partitionNameGeneratorConfig
+        ?.refPartitionKey;
     const suffix = [`${refPartitionKey ?? '-'}`];
     if (suffixExpression) {
       suffix.push(
         formatMessage(
           {
             id: 'src.component.Task.component.PartitionPolicyTable.6C49E8F4',
-            defaultMessage: '时间格式: {suffixExpression}',
+            defaultMessage: '时间格式: {suffixExpression}'
           },
-          { suffixExpression },
-        ),
+          { suffixExpression }
+        )
       ); //`时间格式: ${suffixExpression}`
     }
     return suffix.filter(Boolean).join(', ');
   };
   const getNamingSuffixStrategy = () => {
     const namingSuffixStrategy =
-      partitionNameInvokerParameters?.partitionNameGeneratorConfig?.namingSuffixStrategy;
+      partitionNameInvokerParameters?.partitionNameGeneratorConfig
+        ?.namingSuffixStrategy;
     return partitionBoundDescriptions[namingSuffixStrategy] || '-';
   };
 
@@ -111,14 +114,17 @@ const ConfigDrawer: React.FC<IProps> = (props) => {
   const handleClose = () => {
     onClose();
   };
-  const unitLabel = getUnitLabel(dropKeyConfig?.partitionKeyInvokerParameters?.periodUnit);
-  const expirePeriod = dropKeyConfig?.partitionKeyInvokerParameters?.expirePeriod;
+  const unitLabel = getUnitLabel(
+    dropKeyConfig?.partitionKeyInvokerParameters?.periodUnit
+  );
+  const expirePeriod =
+    dropKeyConfig?.partitionKeyInvokerParameters?.expirePeriod;
   return (
     <Drawer
       title={
         formatMessage({
           id: 'src.component.Task.component.PartitionPolicyTable.17F930BB',
-          defaultMessage: '分区策略详情',
+          defaultMessage: '分区策略详情'
         }) /*"分区策略详情"*/
       }
       open={visible}
@@ -132,7 +138,7 @@ const ConfigDrawer: React.FC<IProps> = (props) => {
             {
               formatMessage({
                 id: 'src.component.Task.component.PartitionPolicyTable.A342B96D' /*关闭*/,
-                defaultMessage: '关闭',
+                defaultMessage: '关闭'
               }) /* 关闭 */
             }
           </Button>
@@ -144,7 +150,7 @@ const ConfigDrawer: React.FC<IProps> = (props) => {
           label={
             formatMessage({
               id: 'src.component.Task.component.PartitionPolicyTable.15852854',
-              defaultMessage: '分区表',
+              defaultMessage: '分区表'
             }) /*"分区表"*/
           }
         >
@@ -154,7 +160,7 @@ const ConfigDrawer: React.FC<IProps> = (props) => {
           label={
             formatMessage({
               id: 'src.component.Task.component.PartitionPolicyTable.D5F89EFF',
-              defaultMessage: '分区类型',
+              defaultMessage: '分区类型'
             }) /*"分区类型"*/
           }
         >
@@ -164,7 +170,7 @@ const ConfigDrawer: React.FC<IProps> = (props) => {
           label={
             formatMessage({
               id: 'src.component.Task.component.PartitionPolicyTable.CD23EBEA',
-              defaultMessage: '分区策略',
+              defaultMessage: '分区策略'
             }) /*"分区策略"*/
           }
         >
@@ -178,11 +184,14 @@ const ConfigDrawer: React.FC<IProps> = (props) => {
               label={
                 formatMessage({
                   id: 'src.component.Task.component.PartitionPolicyTable.8BC770B0',
-                  defaultMessage: '预创建数量',
+                  defaultMessage: '预创建数量'
                 }) /*"预创建数量"*/
               }
             >
-              {config?.partitionKeyConfigs?.[0]?.partitionKeyInvokerParameters?.generateCount}
+              {
+                config?.partitionKeyConfigs?.[0]?.partitionKeyInvokerParameters
+                  ?.generateCount
+              }
             </Descriptions.Item>
           </Descriptions>
           <SimpleTextItem
@@ -190,7 +199,7 @@ const ConfigDrawer: React.FC<IProps> = (props) => {
             label={
               formatMessage({
                 id: 'src.component.Task.component.PartitionPolicyTable.AD71486A',
-                defaultMessage: '创建规则',
+                defaultMessage: '创建规则'
               }) /*"创建规则"*/
             }
             content={
@@ -208,24 +217,28 @@ const ConfigDrawer: React.FC<IProps> = (props) => {
             showSplit={false}
             label={formatMessage({
               id: 'src.component.Task.component.PartitionPolicyTable.E4B505E8',
-              defaultMessage: '命名规则',
+              defaultMessage: '命名规则'
             })}
             content={
-              config?.partitionNameInvokerParameters?.partitionNameGeneratorConfig?.namingPrefix ? (
+              config?.partitionNameInvokerParameters
+                ?.partitionNameGeneratorConfig?.namingPrefix ? (
                 <>
                   <Descriptions column={1}>
                     <Descriptions.Item
                       label={formatMessage({
                         id: 'src.component.Task.component.PartitionPolicyTable.E44DF129',
-                        defaultMessage: '前缀',
+                        defaultMessage: '前缀'
                       })}
                     >
-                      {partitionNameInvokerParameters?.partitionNameGeneratorConfig?.namingPrefix}
+                      {
+                        partitionNameInvokerParameters
+                          ?.partitionNameGeneratorConfig?.namingPrefix
+                      }
                     </Descriptions.Item>
                     <Descriptions.Item
                       label={formatMessage({
                         id: 'src.component.Task.component.PartitionPolicyTable.9D6EB3A7',
-                        defaultMessage: '后缀',
+                        defaultMessage: '后缀'
                       })}
                     >
                       {getNamingSuffix()}
@@ -233,7 +246,7 @@ const ConfigDrawer: React.FC<IProps> = (props) => {
                     <Descriptions.Item
                       label={formatMessage({
                         id: 'src.component.Task.component.PartitionPolicyTable.6131695C',
-                        defaultMessage: '取值策略',
+                        defaultMessage: '取值策略'
                       })}
                     >
                       {getNamingSuffixStrategy()}
@@ -245,12 +258,13 @@ const ConfigDrawer: React.FC<IProps> = (props) => {
                   {
                     id: 'src.component.Task.component.PartitionPolicyTable.F6F3B2EC',
                     defaultMessage:
-                      '自定义：{partitionNameInvokerParametersPartitionNameGeneratorConfigGenerateExpr}',
+                      '自定义：{partitionNameInvokerParametersPartitionNameGeneratorConfigGenerateExpr}'
                   },
                   {
                     partitionNameInvokerParametersPartitionNameGeneratorConfigGenerateExpr:
-                      partitionNameInvokerParameters?.partitionNameGeneratorConfig?.generateExpr,
-                  },
+                      partitionNameInvokerParameters
+                        ?.partitionNameGeneratorConfig?.generateExpr
+                  }
                 )
               )
             }
@@ -263,7 +277,7 @@ const ConfigDrawer: React.FC<IProps> = (props) => {
           label={
             formatMessage({
               id: 'src.component.Task.component.PartitionPolicyTable.C395F5C1',
-              defaultMessage: '删除规则',
+              defaultMessage: '删除规则'
             }) /*"删除规则"*/
           }
           content={
@@ -274,9 +288,10 @@ const ConfigDrawer: React.FC<IProps> = (props) => {
                   formatMessage(
                     {
                       id: 'src.component.Task.component.PartitionPolicyTable.A6ED90AD',
-                      defaultMessage: '保留最近{expirePeriod}个{unitLabel}的分区，不重建全局索引',
+                      defaultMessage:
+                        '保留最近{expirePeriod}个{unitLabel}的分区，不重建全局索引'
                     },
-                    { expirePeriod, unitLabel },
+                    { expirePeriod, unitLabel }
                   ) /*`保留最近${expirePeriod}个${unitLabel}的分区，不重建全局索引`*/
                 }
               </div>
@@ -287,23 +302,25 @@ const ConfigDrawer: React.FC<IProps> = (props) => {
                       {
                         id: 'src.component.Task.component.PartitionPolicyTable.E664CA38',
                         defaultMessage:
-                          '保留最近{dropKeyConfigPartitionKeyInvokerParametersKeepLatestCount}个分区，重建全局索引',
+                          '保留最近{dropKeyConfigPartitionKeyInvokerParametersKeepLatestCount}个分区，重建全局索引'
                       },
                       {
                         dropKeyConfigPartitionKeyInvokerParametersKeepLatestCount:
-                          dropKeyConfig?.partitionKeyInvokerParameters?.keepLatestCount,
-                      },
+                          dropKeyConfig?.partitionKeyInvokerParameters
+                            ?.keepLatestCount
+                      }
                     )
                   : formatMessage(
                       {
                         id: 'src.component.Task.component.PartitionPolicyTable.F0A2151E',
                         defaultMessage:
-                          '保留最近{dropKeyConfigPartitionKeyInvokerParametersKeepLatestCount}个分区，不重建全局索引',
+                          '保留最近{dropKeyConfigPartitionKeyInvokerParametersKeepLatestCount}个分区，不重建全局索引'
                       },
                       {
                         dropKeyConfigPartitionKeyInvokerParametersKeepLatestCount:
-                          dropKeyConfig?.partitionKeyInvokerParameters?.keepLatestCount,
-                      },
+                          dropKeyConfig?.partitionKeyInvokerParameters
+                            ?.keepLatestCount
+                      }
                     )}
               </div>
             )

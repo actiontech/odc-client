@@ -14,22 +14,27 @@ import { convertDataTypeToDataShowType } from '@/util/utils';
 import { fieldIconMap } from '@/constant';
 import sessionManager from '@/store/sessionManager';
 
-export const MaterializedViewTreeData = (dbSession: SessionStore, database: IDatabase) => {
+export const MaterializedViewTreeData = (
+  dbSession: SessionStore,
+  database: IDatabase
+) => {
   const dbName = database.name;
   const materializedViews = dbSession?.database?.materializedView;
   const treeData: TreeDataNode = {
     title: formatMessage({
       id: 'src.page.Workspace.SideBar.ResourceTree.Nodes.844D4AF7',
-      defaultMessage: '物化视图',
+      defaultMessage: '物化视图'
     }),
     key: `${database.id}-${dbName}-materializedView`,
     type: ResourceNodeType.MaterializedViewRoot,
     data: database,
     sessionId: dbSession?.sessionId,
-    isLeaf: false,
+    isLeaf: false
   };
   if (materializedViews) {
-    const dataTypes = sessionManager.sessionMap.get(dbSession?.sessionId)?.dataTypes;
+    const dataTypes = sessionManager.sessionMap.get(
+      dbSession?.sessionId
+    )?.dataTypes;
     treeData.children = materializedViews.map((item) => {
       const materializedViewKey = `${database.id}-${dbName}-materializedView-${item?.info?.name}`;
       let MaterializedViewColumnRoot: TreeDataNode;
@@ -37,7 +42,7 @@ export const MaterializedViewTreeData = (dbSession: SessionStore, database: IDat
         MaterializedViewColumnRoot = {
           title: formatMessage({
             id: 'src.page.Workspace.SideBar.ResourceTree.Nodes.25929E55',
-            defaultMessage: '列',
+            defaultMessage: '列'
           }),
           type: ResourceNodeType.MaterializedViewColumnRoot,
           key: `${materializedViewKey}-column`,
@@ -46,7 +51,7 @@ export const MaterializedViewTreeData = (dbSession: SessionStore, database: IDat
           icon: (
             <FolderOpenFilled
               style={{
-                color: 'var(--icon-color-5)',
+                color: 'var(--icon-color-5)'
               }}
             />
           ),
@@ -60,16 +65,20 @@ export const MaterializedViewTreeData = (dbSession: SessionStore, database: IDat
               sessionId: dbSession?.sessionId,
               icon: convertDataTypeToDataShowType(c.type, dataTypes) && (
                 <Icon
-                  component={fieldIconMap[convertDataTypeToDataShowType(c.type, dataTypes)]}
+                  component={
+                    fieldIconMap[
+                      convertDataTypeToDataShowType(c.type, dataTypes)
+                    ]
+                  }
                   style={{
-                    color: 'var(--icon-color-5)',
+                    color: 'var(--icon-color-5)'
                   }}
                 />
               ),
 
-              isLeaf: true,
+              isLeaf: true
             };
-          }),
+          })
         };
       }
       let indexRoot: TreeDataNode;
@@ -77,7 +86,7 @@ export const MaterializedViewTreeData = (dbSession: SessionStore, database: IDat
         indexRoot = {
           title: formatMessage({
             id: 'odc.ResourceTree.Nodes.table.Index',
-            defaultMessage: '索引',
+            defaultMessage: '索引'
           }), //索引
           type: ResourceNodeType.MaterializedViewIndexRoot,
           key: `${materializedViewKey}-index`,
@@ -85,7 +94,7 @@ export const MaterializedViewTreeData = (dbSession: SessionStore, database: IDat
           icon: (
             <FolderOpenFilled
               style={{
-                color: 'var(--icon-color-5)',
+                color: 'var(--icon-color-5)'
               }}
             />
           ),
@@ -101,21 +110,21 @@ export const MaterializedViewTreeData = (dbSession: SessionStore, database: IDat
                 <Icon
                   component={IndexSvg}
                   style={{
-                    color: 'var(--icon-color-5)',
+                    color: 'var(--icon-color-5)'
                   }}
                 />
               ),
 
               sessionId: dbSession?.sessionId,
-              isLeaf: true,
+              isLeaf: true
             };
-          }),
+          })
         };
       }
       let partitionRoot: TreeDataNode = {
         title: formatMessage({
           id: 'odc.ResourceTree.Nodes.table.Partition',
-          defaultMessage: '分区',
+          defaultMessage: '分区'
         }), //分区
         type: ResourceNodeType.MaterializedViewPartitionRoot,
         key: `${materializedViewKey}-partition`,
@@ -124,10 +133,10 @@ export const MaterializedViewTreeData = (dbSession: SessionStore, database: IDat
         icon: (
           <FolderOpenFilled
             style={{
-              color: 'var(--icon-color-5)',
+              color: 'var(--icon-color-5)'
             }}
           />
-        ),
+        )
       };
       const subpartitionsDataHelper = (key, partitions, name) => {
         if (!partitions) return [];
@@ -143,12 +152,12 @@ export const MaterializedViewTreeData = (dbSession: SessionStore, database: IDat
                 <Icon
                   component={PartitionSvg}
                   style={{
-                    color: '#3FA3FF',
+                    color: '#3FA3FF'
                   }}
                 />
               ),
 
-              type: ResourceNodeType.MaterializedViewPartition,
+              type: ResourceNodeType.MaterializedViewPartition
             };
           });
       };
@@ -166,13 +175,17 @@ export const MaterializedViewTreeData = (dbSession: SessionStore, database: IDat
                 <Icon
                   component={PartitionSvg}
                   style={{
-                    color: 'var(--icon-color-5)',
+                    color: 'var(--icon-color-5)'
                   }}
                 />
               ),
 
               type: ResourceNodeType.MaterializedViewPartition,
-              children: subpartitionsDataHelper(key, item.subpartitions?.partitions, p.name),
+              children: subpartitionsDataHelper(
+                key,
+                item.subpartitions?.partitions,
+                p.name
+              )
             };
           });
           break;
@@ -190,13 +203,17 @@ export const MaterializedViewTreeData = (dbSession: SessionStore, database: IDat
                 <Icon
                   component={PartitionSvg}
                   style={{
-                    color: 'var(--icon-color-5)',
+                    color: 'var(--icon-color-5)'
                   }}
                 />
               ),
 
               type: ResourceNodeType.MaterializedViewPartition,
-              children: subpartitionsDataHelper(key, item.subpartitions?.partitions, p.name),
+              children: subpartitionsDataHelper(
+                key,
+                item.subpartitions?.partitions,
+                p.name
+              )
             };
           });
           break;
@@ -213,13 +230,17 @@ export const MaterializedViewTreeData = (dbSession: SessionStore, database: IDat
                 <Icon
                   component={PartitionSvg}
                   style={{
-                    color: 'var(--icon-color-5)',
+                    color: 'var(--icon-color-5)'
                   }}
                 />
               ),
 
               type: ResourceNodeType.MaterializedViewPartition,
-              children: subpartitionsDataHelper(key, item.subpartitions?.partitions, p.name),
+              children: subpartitionsDataHelper(
+                key,
+                item.subpartitions?.partitions,
+                p.name
+              )
             };
           });
           break;
@@ -236,13 +257,17 @@ export const MaterializedViewTreeData = (dbSession: SessionStore, database: IDat
                 <Icon
                   component={PartitionSvg}
                   style={{
-                    color: 'var(--icon-color-5)',
+                    color: 'var(--icon-color-5)'
                   }}
                 />
               ),
 
               type: ResourceNodeType.MaterializedViewPartition,
-              children: subpartitionsDataHelper(key, item.subpartitions?.partitions, p.name),
+              children: subpartitionsDataHelper(
+                key,
+                item.subpartitions?.partitions,
+                p.name
+              )
             };
           });
           break;
@@ -259,13 +284,17 @@ export const MaterializedViewTreeData = (dbSession: SessionStore, database: IDat
                 <Icon
                   component={PartitionSvg}
                   style={{
-                    color: 'var(--icon-color-5)',
+                    color: 'var(--icon-color-5)'
                   }}
                 />
               ),
 
               type: ResourceNodeType.MaterializedViewPartition,
-              children: subpartitionsDataHelper(key, item.subpartitions?.partitions, p.name),
+              children: subpartitionsDataHelper(
+                key,
+                item.subpartitions?.partitions,
+                p.name
+              )
             };
           });
           break;
@@ -282,13 +311,17 @@ export const MaterializedViewTreeData = (dbSession: SessionStore, database: IDat
                 <Icon
                   component={PartitionSvg}
                   style={{
-                    color: 'var(--icon-color-5)',
+                    color: 'var(--icon-color-5)'
                   }}
                 />
               ),
 
               type: ResourceNodeType.MaterializedViewPartition,
-              children: subpartitionsDataHelper(key, item.subpartitions?.partitions, p.name),
+              children: subpartitionsDataHelper(
+                key,
+                item.subpartitions?.partitions,
+                p.name
+              )
             };
           });
           break;
@@ -298,12 +331,14 @@ export const MaterializedViewTreeData = (dbSession: SessionStore, database: IDat
         }
       }
       let constraintRoot: TreeDataNode;
-      let constraint: TablePrimaryConstraint[] = [].concat(item.primaryConstraints).filter(Boolean);
+      let constraint: TablePrimaryConstraint[] = []
+        .concat(item.primaryConstraints)
+        .filter(Boolean);
       if (constraint.length) {
         constraintRoot = {
           title: formatMessage({
             id: 'odc.ResourceTree.Nodes.table.Constraints',
-            defaultMessage: '约束',
+            defaultMessage: '约束'
           }), //约束
           type: ResourceNodeType.MaterializedViewConstraintRoot,
           key: `${materializedViewKey}-constraint`,
@@ -312,7 +347,7 @@ export const MaterializedViewTreeData = (dbSession: SessionStore, database: IDat
           icon: (
             <FolderOpenFilled
               style={{
-                color: 'var(--icon-color-5)',
+                color: 'var(--icon-color-5)'
               }}
             />
           ),
@@ -328,14 +363,14 @@ export const MaterializedViewTreeData = (dbSession: SessionStore, database: IDat
                 <Icon
                   component={IndexSvg}
                   style={{
-                    color: 'var(--icon-color-5)',
+                    color: 'var(--icon-color-5)'
                   }}
                 />
               ),
 
-              key: `${materializedViewKey}-constraint-${c.name}`,
+              key: `${materializedViewKey}-constraint-${c.name}`
             };
-          }),
+          })
         };
       }
       return {
@@ -350,7 +385,7 @@ export const MaterializedViewTreeData = (dbSession: SessionStore, database: IDat
             TopTab.PROPS,
             PropsTab.DDL,
             session?.odcDatabase?.id,
-            session?.odcDatabase?.name,
+            session?.odcDatabase?.name
           );
         },
         icon: (
@@ -360,7 +395,7 @@ export const MaterializedViewTreeData = (dbSession: SessionStore, database: IDat
             style={{
               color: 'var(--icon-color-5)',
               position: 'relative',
-              top: 1,
+              top: 1
             }}
           />
         ),
@@ -368,8 +403,13 @@ export const MaterializedViewTreeData = (dbSession: SessionStore, database: IDat
         sessionId: dbSession?.sessionId,
         isLeaf: false,
         children: item.columns
-          ? [MaterializedViewColumnRoot, indexRoot, partitionRoot, constraintRoot].filter(Boolean)
-          : null,
+          ? [
+              MaterializedViewColumnRoot,
+              indexRoot,
+              partitionRoot,
+              constraintRoot
+            ].filter(Boolean)
+          : null
       };
     });
   }

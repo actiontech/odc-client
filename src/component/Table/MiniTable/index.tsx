@@ -22,7 +22,10 @@ import { FilterValue } from 'antd/lib/table/interface';
 import styles from './index.less';
 import classNames from 'classnames';
 import { ResizeTitle } from '@/component/CommonTable/component/ResizeTitle';
-import { EditableRow, EditableCell } from '@/component/CommonTable/component/EditTableRow';
+import {
+  EditableRow,
+  EditableCell
+} from '@/component/CommonTable/component/EditTableRow';
 import { DEFAULT_COLUMN_WIDTH } from '@/component/CommonTable/const';
 import type { ColumnGroupType, ColumnType } from 'antd/es/table';
 
@@ -33,7 +36,10 @@ type IColumnsType<RecordType = unknown> = ((
 
 interface IProps<T> extends TableProps<T> {
   isExpandedRowRender?: boolean;
-  loadData?: (page: TablePaginationConfig, filters: Record<string, FilterValue>) => void;
+  loadData?: (
+    page: TablePaginationConfig,
+    filters: Record<string, FilterValue>
+  ) => void;
   // 是否启用 列宽可拖拽
   enableResize?: boolean;
   enableEditTable?: boolean;
@@ -84,9 +90,9 @@ export default function MiniTable<T extends object>({
       loadData?.(
         {
           pageSize,
-          current: 1,
+          current: 1
         },
-        {},
+        {}
       );
     }
   }, [pageSize]);
@@ -95,7 +101,7 @@ export default function MiniTable<T extends object>({
   cloneProps.pagination = cloneProps.pagination && {
     ...cloneProps.pagination,
     pageSize: pageSize,
-    showSizeChanger: false,
+    showSizeChanger: false
   };
   cloneProps.onChange = function (page, filters, s, e) {
     loadData(page, filters);
@@ -108,7 +114,7 @@ export default function MiniTable<T extends object>({
       }
       setColumnWidthMap({
         ...columnWidthMap,
-        [oriColumn.key]: size?.width,
+        [oriColumn.key]: size?.width
       });
     };
   }
@@ -118,31 +124,31 @@ export default function MiniTable<T extends object>({
       <Table<T>
         size="small"
         className={classNames(styles.table, {
-          [styles.expandedRowRender]: isExpandedRowRender,
+          [styles.expandedRowRender]: isExpandedRowRender
         })}
         {...cloneProps}
         components={{
           ...(enableResize
             ? {
                 header: {
-                  cell: ResizeTitle,
-                },
+                  cell: ResizeTitle
+                }
               }
             : {}),
           ...(enableEditTable
             ? {
                 body: {
                   row: EditableRow,
-                  cell: EditableCell,
-                },
+                  cell: EditableCell
+                }
               }
-            : {}),
+            : {})
         }}
         scroll={
           isScroll
             ? {
                 y: scrollHeight,
-                x: cloneProps.scroll.x || 1400,
+                x: cloneProps.scroll.x || 1400
               }
             : null
         }
@@ -152,13 +158,17 @@ export default function MiniTable<T extends object>({
                 return {
                   ...oriColumn,
                   width:
-                    columnWidthMap?.[oriColumn?.key] || oriColumn.width || DEFAULT_COLUMN_WIDTH,
+                    columnWidthMap?.[oriColumn?.key] ||
+                    oriColumn.width ||
+                    DEFAULT_COLUMN_WIDTH,
                   onHeaderCell: (column) =>
                     ({
                       width:
-                        columnWidthMap?.[column?.key] || oriColumn.width || DEFAULT_COLUMN_WIDTH,
-                      onResize: handleResize(oriColumn),
-                    } as React.HTMLAttributes<HTMLElement>),
+                        columnWidthMap?.[column?.key] ||
+                        oriColumn.width ||
+                        DEFAULT_COLUMN_WIDTH,
+                      onResize: handleResize(oriColumn)
+                    } as React.HTMLAttributes<HTMLElement>)
                 };
               })
             : columns || []

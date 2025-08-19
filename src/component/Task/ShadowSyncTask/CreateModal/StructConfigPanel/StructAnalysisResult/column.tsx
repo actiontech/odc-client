@@ -23,7 +23,7 @@ import {
   SchemaSyncExecuteStatus,
   SchemaSyncExecuteStatusText,
   SchemaSyncExecutingRecord,
-  ShadowTableSyncTaskResult,
+  ShadowTableSyncTaskResult
 } from '../../interface';
 
 import { SchemaComparingResultText } from '@/constant/label';
@@ -32,10 +32,12 @@ import {
   CloseCircleFilled,
   EllipsisOutlined,
   LoadingOutlined,
-  StopFilled,
+  StopFilled
 } from '@ant-design/icons';
 
-const ExecuteStatus: React.FC<{ status: SchemaSyncExecuteStatus }> = function ({ status }) {
+const ExecuteStatus: React.FC<{ status: SchemaSyncExecuteStatus }> = function ({
+  status
+}) {
   switch (status) {
     case SchemaSyncExecuteStatus.WAITING: {
       return (
@@ -46,7 +48,7 @@ const ExecuteStatus: React.FC<{ status: SchemaSyncExecuteStatus }> = function ({
               background: 'var(--icon-orange-color)',
               borderRadius: '14px',
               padding: 1,
-              fontSize: 13,
+              fontSize: 13
             }}
           />
 
@@ -95,7 +97,7 @@ const ExecuteStatus: React.FC<{ status: SchemaSyncExecuteStatus }> = function ({
 export function useColumns(
   isSync: boolean,
   { skip, cancelSkip, viewResult },
-  resultData: ShadowTableSyncTaskResult,
+  resultData: ShadowTableSyncTaskResult
 ): TableColumnsType<IShadowSyncAnalysisResult['tables'][number]> {
   const isViewMode = !!resultData;
   const resultMap: Map<string, SchemaSyncExecutingRecord> = useMemo(() => {
@@ -111,12 +113,12 @@ export function useColumns(
       dataIndex: 'originTableName',
       title: formatMessage({
         id: 'odc.StructConfigPanel.StructAnalysisResult.column.SourceTable',
-        defaultMessage: '源表',
+        defaultMessage: '源表'
       }), //源表
       width: 115,
       render(a) {
         return <span style={{ wordBreak: 'break-all' }}>{a}</span>;
-      },
+      }
     },
 
     {
@@ -124,11 +126,11 @@ export function useColumns(
       dataIndex: 'destTableName',
       title: formatMessage({
         id: 'odc.StructConfigPanel.StructAnalysisResult.column.ShadowTable',
-        defaultMessage: '影子表',
+        defaultMessage: '影子表'
       }), //影子表
       render(a) {
         return <span style={{ wordBreak: 'break-all' }}>{a}</span>;
-      },
+      }
     },
 
     {
@@ -136,41 +138,45 @@ export function useColumns(
       dataIndex: 'comparingResult',
       title: formatMessage({
         id: 'odc.StructConfigPanel.StructAnalysisResult.column.AnalysisResults',
-        defaultMessage: '分析结果',
+        defaultMessage: '分析结果'
       }), //分析结果
       width: 115,
       filters: isSync
         ? [
             {
               text: SchemaComparingResultText()[SchemaComparingResult.CREATE],
-              value: SchemaComparingResult.CREATE,
+              value: SchemaComparingResult.CREATE
             },
 
             {
               text: SchemaComparingResultText()[SchemaComparingResult.UPDATE],
-              value: SchemaComparingResult.UPDATE,
-            },
+              value: SchemaComparingResult.UPDATE
+            }
           ]
         : [
             {
-              text: SchemaComparingResultText()[SchemaComparingResult.NO_ACTION],
-              value: SchemaComparingResult.NO_ACTION,
+              text: SchemaComparingResultText()[
+                SchemaComparingResult.NO_ACTION
+              ],
+              value: SchemaComparingResult.NO_ACTION
             },
 
             {
               text: SchemaComparingResultText()[SchemaComparingResult.SKIP],
-              value: SchemaComparingResult.SKIP,
+              value: SchemaComparingResult.SKIP
             },
 
             {
               text: SchemaComparingResultText()[SchemaComparingResult.WAITING],
-              value: SchemaComparingResult.WAITING,
+              value: SchemaComparingResult.WAITING
             },
 
             {
-              text: SchemaComparingResultText()[SchemaComparingResult.COMPARING],
-              value: SchemaComparingResult.COMPARING,
-            },
+              text: SchemaComparingResultText()[
+                SchemaComparingResult.COMPARING
+              ],
+              value: SchemaComparingResult.COMPARING
+            }
           ],
 
       onFilter(v, row) {
@@ -178,7 +184,7 @@ export function useColumns(
       },
       render(v) {
         return SchemaComparingResultText()[v] || '-';
-      },
+      }
     },
 
     isSync && resultData
@@ -187,34 +193,40 @@ export function useColumns(
           dataIndex: 'executeResult',
           title: formatMessage({
             id: 'odc.StructConfigPanel.StructAnalysisResult.column.ExecutionResult',
-            defaultMessage: '执行结果',
+            defaultMessage: '执行结果'
           }), //执行结果
           width: 115,
           filters: [
             {
-              text: SchemaSyncExecuteStatusText[SchemaSyncExecuteStatus.WAITING],
-              value: SchemaSyncExecuteStatus.WAITING,
+              text: SchemaSyncExecuteStatusText[
+                SchemaSyncExecuteStatus.WAITING
+              ],
+              value: SchemaSyncExecuteStatus.WAITING
             },
 
             {
-              text: SchemaSyncExecuteStatusText[SchemaSyncExecuteStatus.EXECUTING],
-              value: SchemaSyncExecuteStatus.EXECUTING,
+              text: SchemaSyncExecuteStatusText[
+                SchemaSyncExecuteStatus.EXECUTING
+              ],
+              value: SchemaSyncExecuteStatus.EXECUTING
             },
 
             {
-              text: SchemaSyncExecuteStatusText[SchemaSyncExecuteStatus.SUCCESS],
-              value: SchemaSyncExecuteStatus.SUCCESS,
+              text: SchemaSyncExecuteStatusText[
+                SchemaSyncExecuteStatus.SUCCESS
+              ],
+              value: SchemaSyncExecuteStatus.SUCCESS
             },
 
             {
               text: SchemaSyncExecuteStatusText[SchemaSyncExecuteStatus.FAILED],
-              value: SchemaSyncExecuteStatus.FAILED,
+              value: SchemaSyncExecuteStatus.FAILED
             },
 
             {
               text: SchemaSyncExecuteStatusText[SchemaSyncExecuteStatus.SKIP],
-              value: SchemaSyncExecuteStatus.SKIP,
-            },
+              value: SchemaSyncExecuteStatus.SKIP
+            }
           ],
 
           onFilter(v, row) {
@@ -222,11 +234,15 @@ export function useColumns(
           },
           render: (_, row) => {
             if (isSync) {
-              return <ExecuteStatus status={resultMap.get(row.originTableName)?.status} />;
+              return (
+                <ExecuteStatus
+                  status={resultMap.get(row.originTableName)?.status}
+                />
+              );
             } else {
               return '-';
             }
-          },
+          }
         }
       : null,
     {
@@ -234,7 +250,7 @@ export function useColumns(
       dataIndex: 'actions',
       title: formatMessage({
         id: 'odc.StructConfigPanel.StructAnalysisResult.column.Operation',
-        defaultMessage: '操作',
+        defaultMessage: '操作'
       }), //操作
       width: 110,
       render(_, row) {
@@ -247,7 +263,7 @@ export function useColumns(
             {
               formatMessage({
                 id: 'odc.StructConfigPanel.StructAnalysisResult.column.View',
-                defaultMessage: '查看',
+                defaultMessage: '查看'
               }) /*查看*/
             }
           </a>
@@ -263,7 +279,7 @@ export function useColumns(
               {
                 formatMessage({
                   id: 'odc.StructConfigPanel.StructAnalysisResult.column.Skip',
-                  defaultMessage: '跳过',
+                  defaultMessage: '跳过'
                 }) /*跳过*/
               }
             </a>
@@ -278,7 +294,7 @@ export function useColumns(
               {
                 formatMessage({
                   id: 'odc.StructConfigPanel.StructAnalysisResult.column.CancelSkip',
-                  defaultMessage: '取消跳过',
+                  defaultMessage: '取消跳过'
                 }) /*取消跳过*/
               }
             </a>
@@ -294,10 +310,12 @@ export function useColumns(
         return (
           <Space>
             {detailBtn}
-            {row.comparingResult === SchemaComparingResult.SKIP ? cancelskipBtn : null}
+            {row.comparingResult === SchemaComparingResult.SKIP
+              ? cancelskipBtn
+              : null}
           </Space>
         );
-      },
-    },
+      }
+    }
   ].filter(Boolean);
 }

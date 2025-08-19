@@ -32,11 +32,16 @@ const EditPropertyComponentMap: React.FC<EditPropertyComponentMapProps> = ({
   index,
   label,
   initData,
-  description = '',
+  description = ''
 }) => {
   const name = `activeKey${index}`;
   const option = `options${index}`;
-  const { componentType = '', candidates = [], defaultValue, type } = propertyMetadata;
+  const {
+    componentType = '',
+    candidates = [],
+    defaultValue,
+    type
+  } = propertyMetadata;
 
   switch (componentType) {
     case ComponentType.INPUT_STRING: {
@@ -46,7 +51,7 @@ const EditPropertyComponentMap: React.FC<EditPropertyComponentMapProps> = ({
             placeholder={
               formatMessage({
                 id: 'odc.src.page.Secure.Env.components.PleaseEnter',
-                defaultMessage: '请输入',
+                defaultMessage: '请输入'
               }) /* 请输入 */
             }
           />
@@ -64,28 +69,30 @@ const EditPropertyComponentMap: React.FC<EditPropertyComponentMapProps> = ({
               message: formatMessage(
                 {
                   id: 'odc.Env.components.EditPropertyComponent.EnterLabel',
-                  defaultMessage: '请输入{label}',
+                  defaultMessage: '请输入{label}'
                 },
-                { label },
-              ), //`请输入${label}`
+                { label }
+              ) //`请输入${label}`
             },
             {
               validator: (_, value) => {
-                const max = setting.getSpaceConfigByKey('odc.sqlexecute.default.maxQueryLimit');
+                const max = setting.getSpaceConfigByKey(
+                  'odc.sqlexecute.default.maxQueryLimit'
+                );
                 if (value !== undefined && value > max) {
                   return Promise.reject(
                     formatMessage(
                       {
                         id: 'src.page.Secure.Env.components.260700F2',
-                        defaultMessage: '不超过查询条数上限 {max}',
+                        defaultMessage: '不超过查询条数上限 {max}'
                       },
-                      { max },
-                    ),
+                      { max }
+                    )
                   );
                 }
                 return Promise.resolve();
-              },
-            },
+              }
+            }
           ]}
           tooltip={description}
         >
@@ -96,7 +103,7 @@ const EditPropertyComponentMap: React.FC<EditPropertyComponentMapProps> = ({
             placeholder={
               formatMessage({
                 id: 'odc.src.page.Secure.Env.components.PleaseEnter.1',
-                defaultMessage: '请输入',
+                defaultMessage: '请输入'
               }) /* 请输入 */
             }
           />
@@ -114,11 +121,11 @@ const EditPropertyComponentMap: React.FC<EditPropertyComponentMapProps> = ({
               message: formatMessage(
                 {
                   id: 'odc.Env.components.EditPropertyComponent.SelectLabel',
-                  defaultMessage: '请选择{label}',
+                  defaultMessage: '请选择{label}'
                 },
-                { label },
-              ), //`请选择${label}`
-            },
+                { label }
+              ) //`请选择${label}`
+            }
           ]}
           tooltip={description}
         >
@@ -142,7 +149,7 @@ const EditPropertyComponentMap: React.FC<EditPropertyComponentMapProps> = ({
             placeholder={
               formatMessage({
                 id: 'odc.src.page.Secure.Env.components.PleaseChoose',
-                defaultMessage: '请选择',
+                defaultMessage: '请选择'
               }) /* 请选择 */
             }
           />
@@ -160,7 +167,7 @@ const EditPropertyComponentMap: React.FC<EditPropertyComponentMapProps> = ({
             placeholder={
               formatMessage({
                 id: 'odc.src.page.Secure.Env.components.PleaseChoose.1',
-                defaultMessage: '请选择',
+                defaultMessage: '请选择'
               }) /* 请选择 */
             }
           />
@@ -178,7 +185,7 @@ const EditPropertyComponentMap: React.FC<EditPropertyComponentMapProps> = ({
             placeholder={
               formatMessage({
                 id: 'odc.src.page.Secure.Env.components.PleaseChoose.2',
-                defaultMessage: '请选择',
+                defaultMessage: '请选择'
               }) /* 请选择 */
             }
           />

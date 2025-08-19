@@ -38,7 +38,7 @@ export enum IDataTypeParamType {
   /**
    * 255 [byte|char]，可以写单位
    */
-  SIZE,
+  SIZE
 }
 
 export type IDataTypes = Record<

@@ -36,7 +36,9 @@ const SQLLintResult: React.FC<IProps> = function ({ data }) {
       className={styles.collapse}
       ghost
       defaultActiveKey={data?.map((item, index) => index)}
-      expandIcon={({ isActive }) => <CaretRightOutlined rotate={isActive ? 90 : 0} />}
+      expandIcon={({ isActive }) => (
+        <CaretRightOutlined rotate={isActive ? 90 : 0} />
+      )}
     >
       {data?.map?.((item, index) => {
         return (
@@ -44,7 +46,10 @@ const SQLLintResult: React.FC<IProps> = function ({ data }) {
             header={
               <Tooltip title={item.sql}>
                 <Typography.Paragraph
-                  style={{ marginBottom: 0, color: 'var(--text-color-inverse)' }}
+                  style={{
+                    marginBottom: 0,
+                    color: 'var(--text-color-inverse)'
+                  }}
                   ellipsis={{ rows: 2 }}
                 >
                   {item.sql}

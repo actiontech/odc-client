@@ -34,16 +34,16 @@ export function SQLCodePreviewer(props: IProps) {
                 const map = {
                   obmysql: module.SQLType.OBMySQL,
                   mysql: module.SQLType.MySQL,
-                  oboracle: module.SQLType.Oracle,
+                  oboracle: module.SQLType.Oracle
                 };
                 const formatted = module.plugins.format({
                   sql: editor.getValue(),
-                  type: map[props.language],
+                  type: map[props.language]
                 });
                 editor.setValue(formatted);
               });
-            },
-          }),
+            }
+          })
         );
       }}
     />

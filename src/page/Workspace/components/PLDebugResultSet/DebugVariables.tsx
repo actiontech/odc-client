@@ -32,20 +32,20 @@ const DebugVariables: React.FC<IProps> = (props) => {
       dataIndex: 'name',
       title: formatMessage({
         id: 'odc.components.PLDebugResultSet.VariableName',
-        defaultMessage: '变量名',
-      }),
+        defaultMessage: '变量名'
+      })
     },
 
     {
       dataIndex: 'value',
       title: formatMessage({
         id: 'odc.components.PLDebugResultSet.Value',
-        defaultMessage: '值',
+        defaultMessage: '值'
       }),
       render(v) {
         return <pre style={{ margin: 0 }}>{v}</pre>;
-      },
-    },
+      }
+    }
   ];
 
   const variables = debug?.contextVariables;

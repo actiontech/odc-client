@@ -13,5 +13,5 @@ export enum ListDataExportWorkflowsFilterByStatusEnum {
 
   'failed' = 'failed',
 
-  'finish' = 'finish',
+  'finish' = 'finish'
 }

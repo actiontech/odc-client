@@ -20,7 +20,7 @@ import CommonTable from '@/component/CommonTable';
 import {
   CommonTableMode,
   ITableInstance,
-  ITableLoadOptions,
+  ITableLoadOptions
 } from '@/component/CommonTable/interface';
 import SearchFilter from '@/component/SearchFilter';
 import { getExpireTimeLabel } from '@/component/Task/ApplyDatabasePermission';
@@ -34,7 +34,7 @@ import React, { useState } from 'react';
 import {
   tablePermissionStatusFilters,
   tablePermissionTypeFilters,
-  tablePermissionTypeMap,
+  tablePermissionTypeMap
 } from '../';
 import StatusLabel from '../Status';
 
@@ -49,7 +49,7 @@ const getColumns = (params: {
       dataIndex: 'tableName',
       title: formatMessage({
         id: 'src.page.Project.User.ManageModal.Table.TaskApplyList.3EEF9DAF',
-        defaultMessage: '表/视图',
+        defaultMessage: '表/视图'
       }),
       width: 140,
       ellipsis: true,
@@ -60,7 +60,7 @@ const getColumns = (params: {
             selectedKeys={filters?.tableName}
             placeholder={formatMessage({
               id: 'src.page.Project.User.ManageModal.Table.TaskApplyList.F38F822F',
-              defaultMessage: '请输入',
+              defaultMessage: '请输入'
             })}
           />
         );
@@ -68,19 +68,19 @@ const getColumns = (params: {
       filterIcon: (filtered) => (
         <SearchOutlined
           style={{
-            color: filtered ? 'var(--icon-color-focus)' : undefined,
+            color: filtered ? 'var(--icon-color-focus)' : undefined
           }}
         />
       ),
 
       filteredValue: filters?.tableName || null,
-      filters: [],
+      filters: []
     },
     {
       dataIndex: 'databaseName',
       title: formatMessage({
         id: 'src.page.Project.User.ManageModal.Table.TaskApplyList.47C16695',
-        defaultMessage: '所属数据库',
+        defaultMessage: '所属数据库'
       }),
       ellipsis: true,
       width: 208,
@@ -91,7 +91,7 @@ const getColumns = (params: {
             selectedKeys={filters?.databaseName}
             placeholder={formatMessage({
               id: 'src.page.Project.User.ManageModal.Table.TaskApplyList.88257A65',
-              defaultMessage: '请输入',
+              defaultMessage: '请输入'
             })}
           />
         );
@@ -99,19 +99,19 @@ const getColumns = (params: {
       filterIcon: (filtered) => (
         <SearchOutlined
           style={{
-            color: filtered ? 'var(--icon-color-focus)' : undefined,
+            color: filtered ? 'var(--icon-color-focus)' : undefined
           }}
         />
       ),
 
       filteredValue: filters?.databaseName || null,
-      filters: [],
+      filters: []
     },
     {
       dataIndex: 'dataSourceName',
       title: formatMessage({
         id: 'src.page.Project.User.ManageModal.Table.TaskApplyList.E80C6744',
-        defaultMessage: '所属数据源',
+        defaultMessage: '所属数据源'
       }),
       ellipsis: true,
       width: 188,
@@ -122,7 +122,7 @@ const getColumns = (params: {
             selectedKeys={filters?.dataSourceName}
             placeholder={formatMessage({
               id: 'src.page.Project.User.ManageModal.Table.TaskApplyList.C0ABE640',
-              defaultMessage: '请输入',
+              defaultMessage: '请输入'
             })}
           />
         );
@@ -130,7 +130,7 @@ const getColumns = (params: {
       filterIcon: (filtered) => (
         <SearchOutlined
           style={{
-            color: filtered ? 'var(--icon-color-focus)' : undefined,
+            color: filtered ? 'var(--icon-color-focus)' : undefined
           }}
         />
       ),
@@ -139,13 +139,13 @@ const getColumns = (params: {
       filters: [],
       render(value) {
         return value || '-';
-      },
+      }
     },
     {
       dataIndex: 'ticketId',
       title: formatMessage({
         id: 'src.page.Project.User.ManageModal.Table.TaskApplyList.C0E75C97',
-        defaultMessage: '工单编号',
+        defaultMessage: '工单编号'
       }),
       width: 128,
       filterDropdown: (props) => {
@@ -155,7 +155,7 @@ const getColumns = (params: {
             selectedKeys={filters?.ticketId}
             placeholder={formatMessage({
               id: 'src.page.Project.User.ManageModal.Table.TaskApplyList.3B1CD3B1',
-              defaultMessage: '请输入',
+              defaultMessage: '请输入'
             })}
           />
         );
@@ -163,7 +163,7 @@ const getColumns = (params: {
       filterIcon: (filtered) => (
         <SearchOutlined
           style={{
-            color: filtered ? 'var(--icon-color-focus)' : undefined,
+            color: filtered ? 'var(--icon-color-focus)' : undefined
           }}
         />
       ),
@@ -180,45 +180,45 @@ const getColumns = (params: {
             {ticketId}
           </Action.Link>
         );
-      },
+      }
     },
     {
       dataIndex: 'type',
       title: formatMessage({
         id: 'src.page.Project.User.ManageModal.Table.TaskApplyList.9C75241F',
-        defaultMessage: '权限类型',
+        defaultMessage: '权限类型'
       }),
       width: 120,
       filters: tablePermissionTypeFilters,
       filteredValue: filters?.type || null,
-      render: (type) => tablePermissionTypeMap[type].text,
+      render: (type) => tablePermissionTypeMap[type].text
     },
     {
       dataIndex: 'expireTime',
       title: formatMessage({
         id: 'src.page.Project.User.ManageModal.Table.TaskApplyList.EC52BFBC',
-        defaultMessage: '过期时间',
+        defaultMessage: '过期时间'
       }),
       width: 138,
       sorter: true,
-      render: getExpireTimeLabel,
+      render: getExpireTimeLabel
     },
     {
       dataIndex: 'status',
       title: formatMessage({
         id: 'src.page.Project.User.ManageModal.Table.TaskApplyList.D8B38717',
-        defaultMessage: '状态',
+        defaultMessage: '状态'
       }),
       width: 104,
       filters: tablePermissionStatusFilters,
       filteredValue: filters?.status || null,
-      render: (status) => <StatusLabel status={status} />,
+      render: (status) => <StatusLabel status={status} />
     },
     {
       dataIndex: 'action',
       title: formatMessage({
         id: 'src.page.Project.User.ManageModal.Table.TaskApplyList.BC1F3BBD',
-        defaultMessage: '操作',
+        defaultMessage: '操作'
       }),
       ellipsis: true,
       width: 65,
@@ -234,19 +234,19 @@ const getColumns = (params: {
               record?.status === TablePermissionStatus.EXPIRED
                 ? formatMessage({
                     id: 'src.page.Project.User.ManageModal.Table.TaskApplyList.8BA76A12',
-                    defaultMessage: '过期超三个月后此权限将被清除',
+                    defaultMessage: '过期超三个月后此权限将被清除'
                   })
                 : ''
             }
           >
             {formatMessage({
               id: 'src.page.Project.User.ManageModal.Table.TaskApplyList.9CDE663F',
-              defaultMessage: '回收',
+              defaultMessage: '回收'
             })}
           </Action.Link>
         );
-      },
-    },
+      }
+    }
   ];
 };
 
@@ -263,12 +263,24 @@ interface IProps {
 }
 
 const TaskApplyList: React.FC<IProps> = (props) => {
-  const { projectId, isOwner, isDBA, dataSource, params, tableRef, onReclaim, onLoad, onChange } =
-    props;
+  const {
+    projectId,
+    isOwner,
+    isDBA,
+    dataSource,
+    params,
+    tableRef,
+    onReclaim,
+    onLoad,
+    onChange
+  } = props;
   const [detailId, setDetailId] = useState(null);
   const [detailVisible, setDetailVisible] = useState(false);
 
-  const handleDetailVisible = (task: { id: number }, visible: boolean = false) => {
+  const handleDetailVisible = (
+    task: { id: number },
+    visible: boolean = false
+  ) => {
     const { id } = task ?? {};
     setDetailId(id);
     setDetailVisible(visible);
@@ -277,7 +289,7 @@ const TaskApplyList: React.FC<IProps> = (props) => {
   const columns = getColumns({
     paramOptions: params,
     onOpenDetail: handleDetailVisible,
-    onReclaim: onReclaim,
+    onReclaim: onReclaim
   });
 
   return (
@@ -288,7 +300,7 @@ const TaskApplyList: React.FC<IProps> = (props) => {
         mode={CommonTableMode.SMALL}
         ref={tableRef}
         filterContent={{
-          enabledSearch: false,
+          enabledSearch: false
         }}
         titleContent={null}
         rowSelecter={
@@ -298,17 +310,17 @@ const TaskApplyList: React.FC<IProps> = (props) => {
                   {
                     okText: formatMessage({
                       id: 'src.page.Project.User.ManageModal.Table.TaskApplyList.AEDC316B',
-                      defaultMessage: '批量回收',
+                      defaultMessage: '批量回收'
                     }),
-                    onOk: onReclaim,
-                  },
+                    onOk: onReclaim
+                  }
                 ],
 
                 getCheckboxProps: (record: ITablePermission) => {
                   return {
-                    disabled: record?.status === TablePermissionStatus.EXPIRED,
+                    disabled: record?.status === TablePermissionStatus.EXPIRED
                   };
-                },
+                }
               }
             : null
         }
@@ -316,18 +328,18 @@ const TaskApplyList: React.FC<IProps> = (props) => {
         onChange={onChange}
         tableProps={{
           columns: columns?.filter((item) =>
-            isOwner || isDBA ? true : item?.dataIndex !== 'action',
+            isOwner || isDBA ? true : item?.dataIndex !== 'action'
           ),
           dataSource: dataSource?.contents ?? [],
           rowKey: 'id',
           scroll: {
-            x: 950,
+            x: 950
           },
           pagination: {
             current: dataSource?.page?.number,
             pageSize: 10,
-            total: dataSource?.page?.totalElements,
-          },
+            total: dataSource?.page?.totalElements
+          }
         }}
       />
 

@@ -21,8 +21,8 @@ interface IProjectContext {
   project: IProject | null;
   projectId: number;
   reloadProject: () => void;
-  hasLoginDatabaseAuth: boolean
-  setHasLoginDatabaseAuth: Dispatch<SetStateAction<boolean>>
+  hasLoginDatabaseAuth: boolean;
+  setHasLoginDatabaseAuth: Dispatch<SetStateAction<boolean>>;
 }
 
 const ProjectContext = React.createContext<IProjectContext>({
@@ -30,7 +30,7 @@ const ProjectContext = React.createContext<IProjectContext>({
   projectId: null,
   reloadProject: () => {},
   hasLoginDatabaseAuth: false,
-  setHasLoginDatabaseAuth: ()=>{}
+  setHasLoginDatabaseAuth: () => {}
 });
 
 export default ProjectContext;

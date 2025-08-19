@@ -30,23 +30,24 @@ export const getIsSupportCreatedByMeRoles = () =>
   !odc?.createdByMeRolesSupport || odc?.createdByMeRolesSupport?.();
 export const ALL_SELECTED_ID = 'ALL';
 export const ALL_I_HAVE_CREATED_ID = 'ALL_I_HAVE_CREATED_ID';
-export const ALL_SELECTED_VALUE = () => (getIsSupportCreatedByMeRoles() ? '*' : null);
+export const ALL_SELECTED_VALUE = () =>
+  getIsSupportCreatedByMeRoles() ? '*' : null;
 export const ALL_I_HAVE_CREATED_VALUE = 'CREATOR';
 
 export const AllOption: IResourceOption = {
   name: formatMessage({
     id: 'src.component.Manage.ResourceSelector.87EC2FC6',
-    defaultMessage: '全部',
+    defaultMessage: '全部'
   }),
-  resourceId: ALL_SELECTED_ID,
+  resourceId: ALL_SELECTED_ID
 };
 
 export const AllIHaveCreatedOption: IResourceOption = {
   name: formatMessage({
     id: 'src.component.Manage.ResourceSelector.DCB7A4BF',
-    defaultMessage: '我创建的',
+    defaultMessage: '我创建的'
   }),
-  resourceId: ALL_I_HAVE_CREATED_ID,
+  resourceId: ALL_I_HAVE_CREATED_ID
 };
 
 export const isSelectedAll = (id: number | string) => {
@@ -59,7 +60,7 @@ export const isSelectedAllThatIHaveCreated = (id: number | string) => {
 
 export const staticSelectedMap = {
   [ALL_SELECTED_ID]: ALL_SELECTED_VALUE(),
-  [ALL_I_HAVE_CREATED_ID]: ALL_I_HAVE_CREATED_VALUE,
+  [ALL_I_HAVE_CREATED_ID]: ALL_I_HAVE_CREATED_VALUE
 };
 
 export interface IResourceOption {
@@ -111,8 +112,16 @@ const ResourceItem: React.FC<{
   onRemove: (name: number) => void;
   onTypeChange: (index: number, type: IManagerResourceType) => void;
   onFieldChange: (type: IManagerResourceType) => void;
-  onSelectAllFields: (type: IManagerResourceType, index: number, selected: boolean) => void;
-  onSelectAllICreatedFields: (type: IManagerResourceType, index: number, selected: boolean) => void;
+  onSelectAllFields: (
+    type: IManagerResourceType,
+    index: number,
+    selected: boolean
+  ) => void;
+  onSelectAllICreatedFields: (
+    type: IManagerResourceType,
+    index: number,
+    selected: boolean
+  ) => void;
 }> = ({
   name: fieldName,
   parentName,
@@ -131,7 +140,7 @@ const ResourceItem: React.FC<{
   onTypeChange,
   onFieldChange,
   onSelectAllFields,
-  onSelectAllICreatedFields,
+  onSelectAllICreatedFields
 }) => {
   const [type, setType] = useState(() => {
     return values?.[fieldName]?.resourceType ?? '';
@@ -139,25 +148,32 @@ const ResourceItem: React.FC<{
   const [isSelectAll, setIsSelectAll] = useState(() => {
     return isSelectedAll(values?.[fieldName]?.resourceId);
   });
-  const [isSelectedAllIHaveCreated, setIsSelectedAllIHaveCreated] = useState(() => {
-    return isSelectedAllThatIHaveCreated(values?.[fieldName]?.resourceId);
-  });
+  const [isSelectedAllIHaveCreated, setIsSelectedAllIHaveCreated] = useState(
+    () => {
+      return isSelectedAllThatIHaveCreated(values?.[fieldName]?.resourceId);
+    }
+  );
   const [open, setOpen] = useState(false);
   const enableSelectAll = !(
-    parentName === 'connectionAccessPermissions' && type === IManagerResourceType.resource
+    parentName === 'connectionAccessPermissions' &&
+    type === IManagerResourceType.resource
   );
 
   const fieldOptions = optionsMap?.[type] ?? [];
-  const disableSelectAll = allSelecteField?.type === type && allSelecteField?.index !== fieldName;
+  const disableSelectAll =
+    allSelecteField?.type === type && allSelecteField?.index !== fieldName;
   const disableSelectAllICreated =
-    allICreatedSelecteField?.type === type && allICreatedSelecteField?.index !== fieldName;
+    allICreatedSelecteField?.type === type &&
+    allICreatedSelecteField?.index !== fieldName;
   const allFieldOptions = getIsSupportCreatedByMeRoles()
     ? fieldOptions.concat([AllOption, AllIHaveCreatedOption])
     : fieldOptions.concat([AllOption]);
   const hasEnableKeys = actionOptions.some((item) => item?.enableKeys?.length);
   const enabledActionOptions = !hasEnableKeys
     ? actionOptions
-    : actionOptions?.filter((item) => item?.enableKeys?.includes(type as IManagerResourceType));
+    : actionOptions?.filter((item) =>
+        item?.enableKeys?.includes(type as IManagerResourceType)
+      );
   const handleChange = () => {
     onFieldChange(type as IManagerResourceType);
   };
@@ -184,7 +200,11 @@ const ResourceItem: React.FC<{
   const handleSelectAllIHaveCreatedFields = () => {
     setIsSelectedAllIHaveCreated(!isSelectedAllIHaveCreated);
     setIsSelectAll(false);
-    onSelectAllICreatedFields(type as IManagerResourceType, fieldName, !isSelectedAllIHaveCreated);
+    onSelectAllICreatedFields(
+      type as IManagerResourceType,
+      fieldName,
+      !isSelectedAllIHaveCreated
+    );
     setOpen(false);
   };
 
@@ -199,11 +219,15 @@ const ResourceItem: React.FC<{
       style={{
         display: 'flex',
         alignItems: 'baseline',
-        justifyContent: 'space-between',
+        justifyContent: 'space-between'
       }}
     >
       <Form.Item
-        style={showField ? { width: '100px', marginRight: 8 } : { flexGrow: 1, marginRight: 8 }}
+        style={
+          showField
+            ? { width: '100px', marginRight: 8 }
+            : { flexGrow: 1, marginRight: 8 }
+        }
         name={[fieldName, 'resourceType']}
         fieldKey={[fieldKey, 'resourceType']}
         rules={[
@@ -211,11 +235,11 @@ const ResourceItem: React.FC<{
             required: isRequired,
             message: formatMessage({
               id: 'odc.components.FormRoleModal.component.Select',
-              defaultMessage: '请选择',
-            }),
+              defaultMessage: '请选择'
+            })
 
             // 请选择
-          },
+          }
         ]}
       >
         <Select options={typeOptions} onChange={handleTypeChange} />
@@ -230,18 +254,20 @@ const ResourceItem: React.FC<{
               required: isRequired,
               message: formatMessage({
                 id: 'odc.components.FormRoleModal.component.Select',
-                defaultMessage: '请选择',
-              }),
+                defaultMessage: '请选择'
+              })
 
               // 请选择
-            },
+            }
           ]}
         >
           <Select
             showSearch={true}
             open={open}
             filterOption={(value, option) => {
-              return option?.title?.toLowerCase()?.indexOf(value?.toLowerCase()) >= 0;
+              return (
+                option?.title?.toLowerCase()?.indexOf(value?.toLowerCase()) >= 0
+              );
             }}
             onChange={handleChange}
             onDropdownVisibleChange={(visible) => {
@@ -253,7 +279,9 @@ const ResourceItem: React.FC<{
                     <>
                       {menu}
                       <>
-                        {fieldOptions?.length > 0 && <Divider style={{ margin: '8px 0' }} />}
+                        {fieldOptions?.length > 0 && (
+                          <Divider style={{ margin: '8px 0' }} />
+                        )}
                         <Button
                           type="link"
                           disabled={disableSelectAll}
@@ -263,16 +291,17 @@ const ResourceItem: React.FC<{
                             !isSelectAll
                               ? formatMessage({
                                   id: 'odc.components.ResourceSelector2.All',
-                                  defaultMessage: '全部',
+                                  defaultMessage: '全部'
                                 }) //全部
                               : formatMessage({
                                   id: 'odc.components.ResourceSelector2.CancelAll',
-                                  defaultMessage: '取消全部',
+                                  defaultMessage: '取消全部'
                                 }) //取消全部
                           }
                         </Button>
                         {getIsSupportCreatedByMeRoles() &&
-                        values?.[fieldName]?.resourceType !== IManagerResourceType.role ? (
+                        values?.[fieldName]?.resourceType !==
+                          IManagerResourceType.role ? (
                           <Button
                             type="link"
                             disabled={disableSelectAllICreated}
@@ -281,11 +310,11 @@ const ResourceItem: React.FC<{
                             {!isSelectedAllIHaveCreated
                               ? formatMessage({
                                   id: 'src.component.Manage.ResourceSelector.8CA96C98',
-                                  defaultMessage: '我创建的',
+                                  defaultMessage: '我创建的'
                                 })
                               : formatMessage({
                                   id: 'src.component.Manage.ResourceSelector.EEEF9C96',
-                                  defaultMessage: '取消我创建的',
+                                  defaultMessage: '取消我创建的'
                                 })}
                           </Button>
                         ) : null}
@@ -300,14 +329,17 @@ const ResourceItem: React.FC<{
               return (
                 <Option
                   className={
-                    isSelectedAll(resourceId) || isSelectedAllThatIHaveCreated(resourceId)
+                    isSelectedAll(resourceId) ||
+                    isSelectedAllThatIHaveCreated(resourceId)
                       ? styles.hide
                       : null
                   }
                   value={resourceId}
                   title={name}
                   key={`${resourceType}${resourceId}`}
-                  disabled={isSelectAll || selected || isSelectedAllIHaveCreated}
+                  disabled={
+                    isSelectAll || selected || isSelectedAllIHaveCreated
+                  }
                 >
                   {resourceType === IManagerResourceType.resource ? (
                     <Popover
@@ -327,9 +359,9 @@ const ResourceItem: React.FC<{
                               formatMessage(
                                 {
                                   id: 'odc.components.ResourceSelector2.NameName',
-                                  defaultMessage: '姓名：{name}',
+                                  defaultMessage: '姓名：{name}'
                                 },
-                                { name },
+                                { name }
                               )
                               /*姓名：{name}*/
                             }
@@ -338,7 +370,7 @@ const ResourceItem: React.FC<{
                             {
                               formatMessage({
                                 id: 'odc.components.ResourceSelector2.Account',
-                                defaultMessage: '账号：',
+                                defaultMessage: '账号：'
                               }) /*账号：*/
                             }
 
@@ -369,11 +401,11 @@ const ResourceItem: React.FC<{
               required: isRequired,
               message: formatMessage({
                 id: 'odc.components.FormRoleModal.component.Select',
-                defaultMessage: '请选择',
-              }),
+                defaultMessage: '请选择'
+              })
 
               // 请选择
-            },
+            }
           ]}
         >
           <Select options={enabledActionOptions} onChange={handleChange} />
@@ -425,7 +457,7 @@ export const ResourceSelector: React.FC<{
     showField = true,
     optionsMap,
     onFieldChange,
-    onOptionsChange,
+    onOptionsChange
   } = props;
   const resource = initialValue?.[name] ?? [];
   const [isRequired, setIsRequired] = useState(true);
@@ -445,23 +477,24 @@ export const ResourceSelector: React.FC<{
       resourceType: IManagerResourceType;
     }[],
 
-    type: IManagerResourceType,
+    type: IManagerResourceType
   ) => {
     const selectedResourceOptions = selectedPublicResource?.filter(
-      (item) => item?.resourceType === type,
+      (item) => item?.resourceType === type
     );
 
     const filteredOptions = optionsMap?.[type]?.map((item) => {
       const selected = selectedResourceOptions?.some(
         (selectedItem) =>
-          isSelectedAll(selectedItem?.resourceId) || selectedItem?.resourceId === item?.resourceId,
+          isSelectedAll(selectedItem?.resourceId) ||
+          selectedItem?.resourceId === item?.resourceId
       );
 
       return { ...item, resourceType: type, selected };
     });
     onOptionsChange?.({
       ...optionsMap,
-      [type]: filteredOptions,
+      [type]: filteredOptions
     });
   };
 
@@ -492,7 +525,9 @@ export const ResourceSelector: React.FC<{
         return false;
       }
       // 包含空值 && 不是所有筛选项为空
-      return _values?.some((value) => !value) && !_values?.every((value) => !value);
+      return (
+        _values?.some((value) => !value) && !_values?.every((value) => !value)
+      );
     });
     if ((required && !validValues.length) || invalidValues.length) {
       itemRequired = true;
@@ -506,7 +541,7 @@ export const ResourceSelector: React.FC<{
     const resetValue = {
       resourceType: value,
       resourceId: '',
-      actions: '',
+      actions: ''
     };
 
     if (!showField) {
@@ -516,7 +551,7 @@ export const ResourceSelector: React.FC<{
       delete resetValue.actions;
     }
     resourcePermissions[index] = {
-      ...resetValue,
+      ...resetValue
     };
 
     onFieldChange(name, [...resourcePermissions]);
@@ -526,21 +561,28 @@ export const ResourceSelector: React.FC<{
   const selectionTypeConfig = {
     all: {
       getResourceId: (selected: boolean) => (selected ? ALL_SELECTED_ID : ''),
-      setState: (selected: boolean, type: IManagerResourceType, index: number) =>
-        setAllSelecteField(selected ? { type, index } : null),
+      setState: (
+        selected: boolean,
+        type: IManagerResourceType,
+        index: number
+      ) => setAllSelecteField(selected ? { type, index } : null)
     },
     created: {
-      getResourceId: (selected: boolean) => (selected ? ALL_I_HAVE_CREATED_ID : ''),
-      setState: (selected: boolean, type: IManagerResourceType, index: number) =>
-        setAllICreatedSelecteField(selected ? { type, index } : null),
-    },
+      getResourceId: (selected: boolean) =>
+        selected ? ALL_I_HAVE_CREATED_ID : '',
+      setState: (
+        selected: boolean,
+        type: IManagerResourceType,
+        index: number
+      ) => setAllICreatedSelecteField(selected ? { type, index } : null)
+    }
   };
 
   const handleSelectFields = (
     type: IManagerResourceType,
     index: number,
     selected: boolean,
-    selectionType: 'all' | 'created',
+    selectionType: 'all' | 'created'
   ) => {
     const resourcePermissions = formRef.current.getFieldValue(name);
 
@@ -550,23 +592,23 @@ export const ResourceSelector: React.FC<{
 
     const resetValue = {
       ...resourcePermissions[index],
-      resourceId: resourceIdValue,
+      resourceId: resourceIdValue
     };
 
     resourcePermissions[index] = {
-      ...resetValue,
+      ...resetValue
     };
 
     const selectedResource = optionsMap?.[type]?.map((item) => ({
       ...item,
-      selected,
+      selected
     }));
 
     formRef.current.setFields([
       {
         name: [name, index, 'resourceId'],
-        errors: [],
-      },
+        errors: []
+      }
     ]);
 
     config.setState(selected, type, index);
@@ -574,7 +616,7 @@ export const ResourceSelector: React.FC<{
     onFieldChange(name, [...resourcePermissions]);
     onOptionsChange?.({
       ...optionsMap,
-      [type]: selectedResource,
+      [type]: selectedResource
     });
   };
 
@@ -583,8 +625,8 @@ export const ResourceSelector: React.FC<{
       name={name}
       rules={[
         {
-          validator: handleValidator,
-        },
+          validator: handleValidator
+        }
       ]}
     >
       {(fields, { add, remove }) => {
@@ -609,17 +651,26 @@ export const ResourceSelector: React.FC<{
                 onRemove={remove}
                 onTypeChange={handleTypeChange}
                 onFieldChange={handleFieldChange}
-                onSelectAllFields={(...args) => handleSelectFields(...args, 'all')}
-                onSelectAllICreatedFields={(...args) => handleSelectFields(...args, 'created')}
+                onSelectAllFields={(...args) =>
+                  handleSelectFields(...args, 'all')
+                }
+                onSelectAllICreatedFields={(...args) =>
+                  handleSelectFields(...args, 'created')
+                }
               />
             ))}
 
             <Form.Item style={{ marginBottom: 0, width: '640px' }}>
-              <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+              <Button
+                type="dashed"
+                onClick={() => add()}
+                block
+                icon={<PlusOutlined />}
+              >
                 {
                   formatMessage({
                     id: 'odc.components.ResourceSelector2.Add',
-                    defaultMessage: '添加',
+                    defaultMessage: '添加'
                   }) /*添加*/
                 }
               </Button>

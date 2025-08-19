@@ -42,10 +42,14 @@ export default function ProjectSelect({
   disabledTip,
   defaultProject,
   onChange,
-  setDisabledStatus,
+  setDisabledStatus
 }: IProps) {
-  const isProjectNotFound = !projects?.find((item) => item.id === currentDatabase?.project?.id);
-  const haveDefaultProject = projects?.find((item) => item.id === defaultProject?.projectId);
+  const isProjectNotFound = !projects?.find(
+    (item) => item.id === currentDatabase?.project?.id
+  );
+  const haveDefaultProject = projects?.find(
+    (item) => item.id === defaultProject?.projectId
+  );
   const bindProjectId = currentDatabase?.dataSource?.projectId;
   const _isNull = isNull(value);
   return (
@@ -72,12 +76,18 @@ export default function ProjectSelect({
             })
             .filter(Boolean)}
           {isProjectNotFound && currentDatabase?.project?.id ? (
-            <Select.Option value={currentDatabase?.project?.id} key={currentDatabase?.project?.id}>
+            <Select.Option
+              value={currentDatabase?.project?.id}
+              key={currentDatabase?.project?.id}
+            >
               {currentDatabase?.project?.name}
             </Select.Option>
           ) : null}
           {!haveDefaultProject && defaultProject ? (
-            <Select.Option value={defaultProject?.projectId} key={defaultProject?.projectId}>
+            <Select.Option
+              value={defaultProject?.projectId}
+              key={defaultProject?.projectId}
+            >
               {defaultProject?.projectName}
             </Select.Option>
           ) : null}
@@ -93,7 +103,7 @@ export default function ProjectSelect({
           {
             formatMessage({
               id: 'odc.Info.ChangeProjectModal.ProjectSelect.DoNotAssignProjects',
-              defaultMessage: '不分配项目',
+              defaultMessage: '不分配项目'
             }) /*不分配项目*/
           }
         </Checkbox>

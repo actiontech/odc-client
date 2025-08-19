@@ -1,7 +1,7 @@
 /* tslint:disable no-duplicate-string */
 
 export enum ListProjectsOrderByEnum {
-  'name' = 'name',
+  'name' = 'name'
 }
 
 export enum ListProjectsFilterByProjectPriorityEnum {
@@ -11,15 +11,15 @@ export enum ListProjectsFilterByProjectPriorityEnum {
 
   'low' = 'low',
 
-  'unknown' = 'unknown',
+  'unknown' = 'unknown'
 }
 
 export enum ExportProjectsOrderByEnum {
-  'name' = 'name',
+  'name' = 'name'
 }
 
 export enum ListProjectsV2OrderByEnum {
-  'name' = 'name',
+  'name' = 'name'
 }
 
 export enum ListProjectsV2FilterByProjectPriorityEnum {
@@ -29,5 +29,5 @@ export enum ListProjectsV2FilterByProjectPriorityEnum {
 
   'low' = 'low',
 
-  'unknown' = 'unknown',
+  'unknown' = 'unknown'
 }

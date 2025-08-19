@@ -37,7 +37,8 @@ export class AttachAddon implements ITerminalAddon {
     this._socket = socket;
     // always set binary type to arraybuffer, we do not handle blobs
     this._socket.binaryType = 'arraybuffer';
-    this._bidirectional = options && options.bidirectional === false ? false : true;
+    this._bidirectional =
+      options && options.bidirectional === false ? false : true;
   }
 
   public activate(terminal: Terminal): void {
@@ -57,16 +58,22 @@ export class AttachAddon implements ITerminalAddon {
         } else {
           terminal.write(new Uint8Array(data));
         }
-      }),
+      })
     );
 
     if (this._bidirectional) {
       this._disposables.push(terminal.onData((data) => this._sendData(data)));
-      this._disposables.push(terminal.onBinary((data) => this._sendBinary(data)));
+      this._disposables.push(
+        terminal.onBinary((data) => this._sendBinary(data))
+      );
     }
 
-    this._disposables.push(addSocketListener(this._socket, 'close', () => this.dispose()));
-    this._disposables.push(addSocketListener(this._socket, 'error', () => this.dispose()));
+    this._disposables.push(
+      addSocketListener(this._socket, 'close', () => this.dispose())
+    );
+    this._disposables.push(
+      addSocketListener(this._socket, 'error', () => this.dispose())
+    );
   }
 
   public dispose(): void {
@@ -84,9 +91,9 @@ export class AttachAddon implements ITerminalAddon {
         method: 'stdin',
         id: generateUniqKey(),
         params: {
-          data,
-        },
-      }),
+          data
+        }
+      })
     );
   }
 
@@ -105,7 +112,7 @@ export class AttachAddon implements ITerminalAddon {
 function addSocketListener<K extends keyof WebSocketEventMap>(
   socket: WebSocket,
   type: K,
-  handler: (this: WebSocket, ev: WebSocketEventMap[K]) => any,
+  handler: (this: WebSocket, ev: WebSocketEventMap[K]) => any
 ): IDisposable {
   socket.addEventListener(type, handler);
   return {
@@ -115,6 +122,6 @@ function addSocketListener<K extends keyof WebSocketEventMap>(
         return;
       }
       socket.removeEventListener(type, handler);
-    },
+    }
   };
 }

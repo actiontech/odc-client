@@ -31,28 +31,34 @@ interface INodeSelectorProps {
 }
 
 export const NodeSelector: React.FC<INodeSelectorProps> = (props) => {
-  const { name, width = '200px', selectedNodes = [], title, nodes = [] } = props;
+  const {
+    name,
+    width = '200px',
+    selectedNodes = [],
+    title,
+    nodes = []
+  } = props;
   const rource = selectedNodes?.filter((item) => item.name) ?? [];
   const options = uniqBy([...rource]?.concat([...nodes]), 'id')?.map((role) => {
     return {
       label: role.name,
       value: role.id,
-      disabled: selectedNodes?.some((item) => item.id === role.id),
+      disabled: selectedNodes?.some((item) => item.id === role.id)
     };
   });
   const message = formatMessage(
     {
       id: 'odc.component.NodeSelector.SelectTitle',
-      defaultMessage: '请选择{title}',
+      defaultMessage: '请选择{title}'
     },
-    { title },
+    { title }
   ); //`请选择${title}`
   const placeholder = formatMessage(
     {
       id: 'odc.component.NodeSelector.SelectTitle',
-      defaultMessage: '请选择{title}',
+      defaultMessage: '请选择{title}'
     },
-    { title },
+    { title }
   ); //`请选择${title}`
   return (
     <Form.Item
@@ -61,8 +67,8 @@ export const NodeSelector: React.FC<INodeSelectorProps> = (props) => {
       rules={[
         {
           required: true,
-          message,
-        },
+          message
+        }
       ]}
       noStyle
     >
@@ -72,7 +78,9 @@ export const NodeSelector: React.FC<INodeSelectorProps> = (props) => {
         options={options}
         showSearch={true}
         filterOption={(value, option) => {
-          return option?.label?.toLowerCase()?.indexOf(value?.toLowerCase()) >= 0;
+          return (
+            option?.label?.toLowerCase()?.indexOf(value?.toLowerCase()) >= 0
+          );
         }}
       />
     </Form.Item>

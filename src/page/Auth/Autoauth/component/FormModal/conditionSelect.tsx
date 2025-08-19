@@ -25,24 +25,24 @@ export const operationOptions = [
   {
     label: formatMessage({
       id: 'odc.components.FormAutoAuthModal.conditionSelect.Include',
-      defaultMessage: '包含',
+      defaultMessage: '包含'
     }), //包含
-    value: 'contains',
+    value: 'contains'
   },
   {
     label: formatMessage({
       id: 'odc.components.FormAutoAuthModal.conditionSelect.Match',
-      defaultMessage: '匹配',
+      defaultMessage: '匹配'
     }), //匹配
-    value: 'matches',
+    value: 'matches'
   },
   {
     label: formatMessage({
       id: 'odc.components.FormAutoAuthModal.conditionSelect.Equal',
-      defaultMessage: '等于',
+      defaultMessage: '等于'
     }), //等于
-    value: 'equals',
-  },
+    value: 'equals'
+  }
 ];
 
 interface IProps {
@@ -55,7 +55,7 @@ const ConditionSelect: React.FC<IProps> = (props) => {
   const { variables, variableExpression = {} } = props;
   const variablesOptions = variables?.map((item) => ({
     label: item,
-    value: item,
+    value: item
   }));
 
   // 有效性校验
@@ -74,7 +74,9 @@ const ConditionSelect: React.FC<IProps> = (props) => {
         return false;
       }
       // 包含空值 && 不是所有筛选项为空
-      return _values?.some((value) => !value) && !_values?.every((value) => !value);
+      return (
+        _values?.some((value) => !value) && !_values?.every((value) => !value)
+      );
     });
 
     if (!validValues.length || invalidValues.length) {
@@ -85,7 +87,10 @@ const ConditionSelect: React.FC<IProps> = (props) => {
   };
 
   const getPromoteOption = (variable) => {
-    return (variableExpression[variable] || []).map((e) => ({ lable: e, value: e }));
+    return (variableExpression[variable] || []).map((e) => ({
+      lable: e,
+      value: e
+    }));
   };
 
   return (
@@ -93,8 +98,8 @@ const ConditionSelect: React.FC<IProps> = (props) => {
       name="conditions"
       rules={[
         {
-          validator: handleValidator,
-        },
+          validator: handleValidator
+        }
       ]}
     >
       {(fields, { add, remove }) => {
@@ -111,9 +116,9 @@ const ConditionSelect: React.FC<IProps> = (props) => {
                       required: isRequired,
                       message: formatMessage({
                         id: 'odc.components.FormAutoAuthModal.conditionSelect.PleaseSelect',
-                        defaultMessage: '请选择',
-                      }), //请选择
-                    },
+                        defaultMessage: '请选择'
+                      }) //请选择
+                    }
                   ]}
                 >
                   <Select options={variablesOptions} />
@@ -127,9 +132,9 @@ const ConditionSelect: React.FC<IProps> = (props) => {
                       required: isRequired,
                       message: formatMessage({
                         id: 'odc.components.FormAutoAuthModal.conditionSelect.PleaseEnter',
-                        defaultMessage: '请输入',
-                      }), //请输入
-                    },
+                        defaultMessage: '请输入'
+                      }) //请输入
+                    }
                   ]}
                 >
                   {getPromoteOption('User').length > 0 ? (
@@ -138,7 +143,7 @@ const ConditionSelect: React.FC<IProps> = (props) => {
                     <Input
                       placeholder={formatMessage({
                         id: 'odc.components.FormAutoAuthModal.conditionSelect.EnterAnIndexKeySuch',
-                        defaultMessage: '请输入索引键，如 dept[0].deptname',
+                        defaultMessage: '请输入索引键，如 dept[0].deptname'
                       })} /*请输入索引键，如 dept[0].deptname*/
                     />
                   )}
@@ -152,9 +157,9 @@ const ConditionSelect: React.FC<IProps> = (props) => {
                       required: isRequired,
                       message: formatMessage({
                         id: 'odc.components.FormAutoAuthModal.conditionSelect.PleaseSelect',
-                        defaultMessage: '请选择',
-                      }), //请选择
-                    },
+                        defaultMessage: '请选择'
+                      }) //请选择
+                    }
                   ]}
                 >
                   <Select options={operationOptions} />
@@ -168,15 +173,15 @@ const ConditionSelect: React.FC<IProps> = (props) => {
                       required: isRequired,
                       message: formatMessage({
                         id: 'odc.components.FormAutoAuthModal.conditionSelect.PleaseEnter',
-                        defaultMessage: '请输入',
-                      }), //请输入
-                    },
+                        defaultMessage: '请输入'
+                      }) //请输入
+                    }
                   ]}
                 >
                   <Input
                     placeholder={formatMessage({
                       id: 'odc.components.FormAutoAuthModal.conditionSelect.EnterAValue',
-                      defaultMessage: '请输入值',
+                      defaultMessage: '请输入值'
                     })} /*请输入值*/
                   />
                 </Form.Item>
@@ -198,7 +203,7 @@ const ConditionSelect: React.FC<IProps> = (props) => {
                     object: undefined,
                     expression: undefined,
                     operation: undefined,
-                    value: undefined,
+                    value: undefined
                   })
                 }
                 block
@@ -207,13 +212,13 @@ const ConditionSelect: React.FC<IProps> = (props) => {
                 {
                   formatMessage({
                     id: 'odc.components.FormAutoAuthModal.conditionSelect.Add',
-                    defaultMessage: '添加',
+                    defaultMessage: '添加'
                   }) /*添加*/
                 }
                 <Typography.Text style={{ marginLeft: 8 }} type="secondary">
                   {formatMessage({
                     id: 'src.page.Auth.Autoauth.component.FormModal.CD9C93B9',
-                    defaultMessage: '多个匹配条件需同时满足',
+                    defaultMessage: '多个匹配条件需同时满足'
                   })}
                 </Typography.Text>
               </Button>

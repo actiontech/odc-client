@@ -18,7 +18,7 @@ import {
   IUpdateMemberParams,
   IUpdateMemberReturn,
   IDelMemberParams,
-  IDelMemberReturn,
+  IDelMemberReturn
 } from './index.type';
 
 class MemberService extends ServiceBase {
@@ -30,7 +30,7 @@ class MemberService extends ServiceBase {
     return this.get<IListMembersReturn>(
       `/v1/dms/projects/${project_uid}/members`,
       paramsData,
-      options,
+      options
     );
   }
 
@@ -42,13 +42,13 @@ class MemberService extends ServiceBase {
     return this.post<IAddMemberReturn>(
       `/v1/dms/projects/${project_uid}/members`,
       paramsData,
-      options,
+      options
     );
   }
 
   public ListMembersForInternal(
     params: IListMembersForInternalParams,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_uid = paramsData.project_uid;
@@ -57,11 +57,14 @@ class MemberService extends ServiceBase {
     return this.get<IListMembersForInternalReturn>(
       `/v1/dms/projects/${project_uid}/members/internal`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public ListMemberTips(params: IListMemberTipsParams, options?: AxiosRequestConfig) {
+  public ListMemberTips(
+    params: IListMemberTipsParams,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_uid = paramsData.project_uid;
     delete paramsData.project_uid;
@@ -69,11 +72,14 @@ class MemberService extends ServiceBase {
     return this.get<IListMemberTipsReturn>(
       `/v1/dms/projects/${project_uid}/members/tips`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public UpdateMember(params: IUpdateMemberParams, options?: AxiosRequestConfig) {
+  public UpdateMember(
+    params: IUpdateMemberParams,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_uid = paramsData.project_uid;
     delete paramsData.project_uid;
@@ -84,7 +90,7 @@ class MemberService extends ServiceBase {
     return this.put<IUpdateMemberReturn>(
       `/v1/dms/projects/${project_uid}/members/${member_uid}`,
       paramsData,
-      options,
+      options
     );
   }
 
@@ -99,7 +105,7 @@ class MemberService extends ServiceBase {
     return this.delete<IDelMemberReturn>(
       `/v1/dms/projects/${project_uid}/members/${member_uid}`,
       paramsData,
-      options,
+      options
     );
   }
 }

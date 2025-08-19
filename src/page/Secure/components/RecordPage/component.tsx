@@ -15,7 +15,11 @@
  */
 
 import UserPopover from '@/component/UserPopover';
-import { AuditEventActionMap, AuditEventMetaMap, IUserMap } from '@/constant/record';
+import {
+  AuditEventActionMap,
+  AuditEventMetaMap,
+  IUserMap
+} from '@/constant/record';
 import type { IAudit } from '@/d.ts';
 import { AuditEventResult } from '@/d.ts';
 import { formatMessage } from '@/util/intl';
@@ -37,7 +41,7 @@ export const Status: React.FC<{
             {
               formatMessage({
                 id: 'odc.components.RecordPage.component.Successful',
-                defaultMessage: '成功',
+                defaultMessage: '成功'
               }) /*成功*/
             }
           </span>
@@ -49,7 +53,7 @@ export const Status: React.FC<{
             {
               formatMessage({
                 id: 'odc.components.RecordPage.component.Failed',
-                defaultMessage: '失败',
+                defaultMessage: '失败'
               }) /*失败*/
             }
           </span>
@@ -93,7 +97,7 @@ export const RecordContent: React.FC<{
     clientIpAddress,
     detail,
     startTime,
-    result,
+    result
   } = data;
   const { name, accountName, roleNames = [] } = userMap?.[username] ?? {};
   return (
@@ -101,7 +105,7 @@ export const RecordContent: React.FC<{
       <Descriptions.Item
         label={formatMessage({
           id: 'odc.components.RecordPage.component.EventType',
-          defaultMessage: '事件类型',
+          defaultMessage: '事件类型'
         })} /*事件类型*/
       >
         {typeName || AuditEventMetaMap[type]}
@@ -109,7 +113,7 @@ export const RecordContent: React.FC<{
       <Descriptions.Item
         label={formatMessage({
           id: 'odc.components.RecordPage.component.EventAction',
-          defaultMessage: '事件操作',
+          defaultMessage: '事件操作'
         })} /*事件操作*/
       >
         {actionName || AuditEventActionMap[action]}
@@ -121,7 +125,7 @@ export const RecordContent: React.FC<{
               {
                 formatMessage({
                   id: 'odc.components.RecordPage.component.Connection',
-                  defaultMessage: '所属连接',
+                  defaultMessage: '所属连接'
                 }) /*所属连接*/
               }
             </div>
@@ -129,7 +133,7 @@ export const RecordContent: React.FC<{
               <Descriptions.Item
                 label={formatMessage({
                   id: 'odc.components.RecordPage.component.ConnectionName',
-                  defaultMessage: '连接名称',
+                  defaultMessage: '连接名称'
                 })} /*连接名称*/
               >
                 {connectionName || '-'}
@@ -137,7 +141,7 @@ export const RecordContent: React.FC<{
               <Descriptions.Item
                 label={formatMessage({
                   id: 'odc.components.RecordPage.component.ConnectionMode',
-                  defaultMessage: '连接模式',
+                  defaultMessage: '连接模式'
                 })} /*连接模式*/
               >
                 {connectionDialectType || '-'}
@@ -145,7 +149,7 @@ export const RecordContent: React.FC<{
               <Descriptions.Item
                 label={formatMessage({
                   id: 'odc.components.RecordPage.component.HostnamePort',
-                  defaultMessage: '主机名/端口',
+                  defaultMessage: '主机名/端口'
                 })} /*主机名/端口*/
               >
                 {`${connectionHost || '-'}/${connectionPort || '-'}`}
@@ -153,15 +157,17 @@ export const RecordContent: React.FC<{
               <Descriptions.Item
                 label={formatMessage({
                   id: 'odc.components.RecordPage.component.ClusterTenant',
-                  defaultMessage: '集群/租户',
+                  defaultMessage: '集群/租户'
                 })} /*集群/租户*/
               >
-                {`${connectionClusterName || '-'}/${connectionTenantName || '-'}`}
+                {`${connectionClusterName || '-'}/${
+                  connectionTenantName || '-'
+                }`}
               </Descriptions.Item>
               <Descriptions.Item
                 label={formatMessage({
                   id: 'odc.components.RecordPage.component.DatabaseUsername',
-                  defaultMessage: '数据库用户名',
+                  defaultMessage: '数据库用户名'
                 })} /*数据库用户名*/
               >
                 {connectionUsername || '-'}
@@ -174,7 +180,7 @@ export const RecordContent: React.FC<{
       <Descriptions.Item
         label={formatMessage({
           id: 'odc.components.RecordPage.component.IpSource',
-          defaultMessage: 'IP 来源',
+          defaultMessage: 'IP 来源'
         })} /*IP来源*/
       >
         {clientIpAddress || '-'}
@@ -185,7 +191,7 @@ export const RecordContent: React.FC<{
             {
               formatMessage({
                 id: 'odc.components.RecordPage.component.DetailedRules',
-                defaultMessage: '执行细则',
+                defaultMessage: '执行细则'
               }) /*执行细则*/
             }
           </div>
@@ -196,17 +202,21 @@ export const RecordContent: React.FC<{
         <Descriptions.Item
           label={formatMessage({
             id: 'odc.components.RecordPage.component.Executor',
-            defaultMessage: '执行人',
+            defaultMessage: '执行人'
           })} /*执行人*/
         >
-          <UserPopover name={name ?? '-'} accountName={accountName ?? '-'} roles={roleNames} />
+          <UserPopover
+            name={name ?? '-'}
+            accountName={accountName ?? '-'}
+            roles={roleNames}
+          />
         </Descriptions.Item>
       )}
 
       <Descriptions.Item
         label={formatMessage({
           id: 'odc.components.RecordPage.component.ExecutionTime',
-          defaultMessage: '执行时间',
+          defaultMessage: '执行时间'
         })} /*执行时间*/
       >
         {getFormatDateTime(startTime)}
@@ -214,7 +224,7 @@ export const RecordContent: React.FC<{
       <Descriptions.Item
         label={formatMessage({
           id: 'odc.components.RecordPage.component.ExecutionResult',
-          defaultMessage: '执行结果',
+          defaultMessage: '执行结果'
         })} /*执行结果*/
       >
         <Status result={result} />

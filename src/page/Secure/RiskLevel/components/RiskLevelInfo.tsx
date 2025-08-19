@@ -23,7 +23,16 @@ import { ODCRiskLevelLabel } from '@/component/RiskLevelLabel';
 import { actionTypes, IManagerResourceType, ITaskFlow } from '@/d.ts';
 import { formatMessage } from '@/util/intl';
 import { ExclamationCircleFilled } from '@ant-design/icons';
-import { Button, Divider, Drawer, Form, message, Modal, Select, Space } from 'antd';
+import {
+  Button,
+  Divider,
+  Drawer,
+  Form,
+  message,
+  Modal,
+  Select,
+  Space
+} from 'antd';
 import { useForm } from 'antd/lib/form/Form';
 import { inject, observer } from 'mobx-react';
 import { useEffect, useState } from 'react';
@@ -48,11 +57,11 @@ const RiskLevelInfo = ({ currentRiskLevel, memoryReload }) => {
   >([]);
   const canAcessCreate = canAcess({
     resourceIdentifier: IManagerResourceType.approval_flow,
-    action: actionTypes.create,
+    action: actionTypes.create
   }).accessible;
   const onpenEditModal = () => {
     formRef.setFieldsValue({
-      approvalFlowConfigId: currentRiskLevel?.approvalFlowConfigId,
+      approvalFlowConfigId: currentRiskLevel?.approvalFlowConfigId
     });
     setEditModalOpen(true);
   };
@@ -64,31 +73,31 @@ const RiskLevelInfo = ({ currentRiskLevel, memoryReload }) => {
     Modal.confirm({
       title: formatMessage({
         id: 'odc.Secure.Approval.AreYouSureYouWant',
-        defaultMessage: '是否确认删除审批流程？',
+        defaultMessage: '是否确认删除审批流程？'
       }),
       //确认要删除审批流程吗？
       icon: (
         <ExclamationCircleFilled
           style={{
-            color: 'var(--icon-orange-color)',
+            color: 'var(--icon-orange-color)'
           }}
         />
       ),
 
       cancelText: formatMessage({
         id: 'odc.Secure.Approval.Cancel',
-        defaultMessage: '取消',
+        defaultMessage: '取消'
       }),
       //取消
       okText: formatMessage({
         id: 'odc.Secure.Approval.Ok',
-        defaultMessage: '确定',
+        defaultMessage: '确定'
       }),
       //确定
       centered: true,
       onOk: () => {
         handleConfirmDelete(param as number);
-      },
+      }
     });
   };
   const handleConfirmDelete = async (id: number) => {
@@ -97,8 +106,8 @@ const RiskLevelInfo = ({ currentRiskLevel, memoryReload }) => {
       message.success(
         formatMessage({
           id: 'odc.Secure.Approval.DeletedSuccessfully',
-          defaultMessage: '删除成功',
-        }), //删除成功
+          defaultMessage: '删除成功'
+        }) //删除成功
       );
 
       reloadData();
@@ -110,8 +119,8 @@ const RiskLevelInfo = ({ currentRiskLevel, memoryReload }) => {
     setApprovalProcessOptions(
       rawData?.contents?.map((rd) => ({
         label: rd.name,
-        value: rd.id,
-      })),
+        value: rd.id
+      }))
     );
     setApprovalProcesses(rawData?.contents);
     setLoading(false);
@@ -126,8 +135,8 @@ const RiskLevelInfo = ({ currentRiskLevel, memoryReload }) => {
       message.success(
         formatMessage({
           id: 'odc.src.page.Secure.RiskLevel.components.UpdateCompleted.1',
-          defaultMessage: '更新成功',
-        }), //'更新成功'
+          defaultMessage: '更新成功'
+        }) //'更新成功'
       );
       await formRef.resetFields();
       setEditModalOpen(false);
@@ -136,14 +145,14 @@ const RiskLevelInfo = ({ currentRiskLevel, memoryReload }) => {
       message.error(
         formatMessage({
           id: 'odc.src.page.Secure.RiskLevel.components.UpdateFailure.1',
-          defaultMessage: '更新失败',
-        }), //'更新失败'
+          defaultMessage: '更新失败'
+        }) //'更新失败'
       );
     }
   };
   const columns = getColumns({
     openFormModal,
-    handleDelete,
+    handleDelete
   });
   useEffect(() => {
     if (editModalOpen) {
@@ -158,7 +167,7 @@ const RiskLevelInfo = ({ currentRiskLevel, memoryReload }) => {
             {
               formatMessage({
                 id: 'odc.src.page.Secure.RiskLevel.components.RiskLevel',
-                defaultMessage: '风险等级',
+                defaultMessage: '风险等级'
               }) /* 
             风险等级 */
             }
@@ -166,7 +175,11 @@ const RiskLevelInfo = ({ currentRiskLevel, memoryReload }) => {
             <span>:</span>
           </div>
           {/* <RiskLevelLabel level={currentRiskLevel?.level} color={currentRiskLevel?.style} /> */}
-          <ODCRiskLevelLabel iconMode levelMap level={currentRiskLevel?.level} />
+          <ODCRiskLevelLabel
+            iconMode
+            levelMap
+            level={currentRiskLevel?.level}
+          />
         </Space>
 
         <Space className={styles.tag}>
@@ -174,7 +187,7 @@ const RiskLevelInfo = ({ currentRiskLevel, memoryReload }) => {
             {
               formatMessage({
                 id: 'odc.src.page.Secure.RiskLevel.components.ApprovalProcess.1',
-                defaultMessage: '审批流程',
+                defaultMessage: '审批流程'
               }) /* 
             审批流程 */
             }
@@ -184,17 +197,25 @@ const RiskLevelInfo = ({ currentRiskLevel, memoryReload }) => {
           <div
             style={{
               display: 'flex',
-              gap: '8px',
+              gap: '8px'
             }}
           >
             {currentRiskLevel?.approvalFlowConfig?.name}
             <Action.Group>
-              <Acess {...createPermission(IManagerResourceType.risk_level, actionTypes.update)}>
-                <Action.Link disabled={currentRiskLevel?.builtIn} onClick={onpenEditModal}>
+              <Acess
+                {...createPermission(
+                  IManagerResourceType.risk_level,
+                  actionTypes.update
+                )}
+              >
+                <Action.Link
+                  disabled={currentRiskLevel?.builtIn}
+                  onClick={onpenEditModal}
+                >
                   {
                     formatMessage({
                       id: 'odc.src.page.Secure.RiskLevel.components.Edit',
-                      defaultMessage: '编辑',
+                      defaultMessage: '编辑'
                     }) /* 
                   编辑
                   */
@@ -210,12 +231,12 @@ const RiskLevelInfo = ({ currentRiskLevel, memoryReload }) => {
         title={
           formatMessage({
             id: 'odc.src.page.Secure.RiskLevel.components.EditApprovalProcess',
-            defaultMessage: '编辑审批流程',
+            defaultMessage: '编辑审批流程'
           }) //'编辑审批流程'
         }
         width={480}
         bodyStyle={{
-          padding: '40px',
+          padding: '40px'
         }}
         closable
         onCancel={() => setEditModalOpen(false)}
@@ -226,7 +247,7 @@ const RiskLevelInfo = ({ currentRiskLevel, memoryReload }) => {
             label={
               formatMessage({
                 id: 'odc.src.page.Secure.RiskLevel.components.ChooseTheApprovalProcess',
-                defaultMessage: '选择审批流程',
+                defaultMessage: '选择审批流程'
               }) //'选择审批流程'
             }
             name="approvalFlowConfigId"
@@ -235,9 +256,9 @@ const RiskLevelInfo = ({ currentRiskLevel, memoryReload }) => {
                 required: true,
                 message: formatMessage({
                   id: 'odc.src.page.Secure.RiskLevel.components.PleaseSelectTheApprovalProcess',
-                  defaultMessage: '请选择审批流程',
-                }), //'请选择审批流程'
-              },
+                  defaultMessage: '请选择审批流程'
+                }) //'请选择审批流程'
+              }
             ]}
           >
             <Select
@@ -245,11 +266,11 @@ const RiskLevelInfo = ({ currentRiskLevel, memoryReload }) => {
               placeholder={
                 formatMessage({
                   id: 'odc.src.page.Secure.RiskLevel.components.PleaseSelectTheApprovalProcess.1',
-                  defaultMessage: '请选择审批流程',
+                  defaultMessage: '请选择审批流程'
                 }) //'请选择审批流程'
               }
               style={{
-                width: '320px',
+                width: '320px'
               }}
               open={selectOpen}
               onDropdownVisibleChange={(visible) => setSelectOpen(visible)}
@@ -258,7 +279,7 @@ const RiskLevelInfo = ({ currentRiskLevel, memoryReload }) => {
                   {menu}
                   <Divider
                     style={{
-                      margin: '0px 0',
+                      margin: '0px 0'
                     }}
                   />
 
@@ -266,7 +287,7 @@ const RiskLevelInfo = ({ currentRiskLevel, memoryReload }) => {
                     type="link"
                     block
                     style={{
-                      textAlign: 'left',
+                      textAlign: 'left'
                     }}
                     onClick={() => {
                       setSelectOpen(false);
@@ -276,7 +297,7 @@ const RiskLevelInfo = ({ currentRiskLevel, memoryReload }) => {
                     {
                       formatMessage({
                         id: 'odc.src.page.Secure.RiskLevel.components.ManagementApprovalProcess',
-                        defaultMessage: '管理审批流程',
+                        defaultMessage: '管理审批流程'
                       }) /* 
                   管理审批流程
                   */
@@ -293,7 +314,7 @@ const RiskLevelInfo = ({ currentRiskLevel, memoryReload }) => {
         title={
           formatMessage({
             id: 'odc.src.page.Secure.RiskLevel.components.ManagementApprovalProcess.1',
-            defaultMessage: '管理审批流程',
+            defaultMessage: '管理审批流程'
           }) //'管理审批流程'
         }
         width={720}
@@ -303,17 +324,20 @@ const RiskLevelInfo = ({ currentRiskLevel, memoryReload }) => {
           style={{
             height: '100%',
             display: 'flex',
-            flexDirection: 'column',
+            flexDirection: 'column'
           }}
         >
           <div
             style={{
-              marginBottom: '16px',
+              marginBottom: '16px'
             }}
           >
             <Action.Group>
               <Acess
-                {...createPermission(IManagerResourceType.approval_flow, actionTypes.create)}
+                {...createPermission(
+                  IManagerResourceType.approval_flow,
+                  actionTypes.create
+                )}
                 fallback={
                   <Action.Button
                     disabled
@@ -325,7 +349,7 @@ const RiskLevelInfo = ({ currentRiskLevel, memoryReload }) => {
                     {
                       formatMessage({
                         id: 'odc.src.page.Secure.RiskLevel.components.NewApprovalProcess',
-                        defaultMessage: '新建审批流程',
+                        defaultMessage: '新建审批流程'
                       }) /* 
                   新建审批流程
                   */
@@ -342,7 +366,7 @@ const RiskLevelInfo = ({ currentRiskLevel, memoryReload }) => {
                   {
                     formatMessage({
                       id: 'odc.src.page.Secure.RiskLevel.components.NewApprovalProcess',
-                      defaultMessage: '新建审批流程',
+                      defaultMessage: '新建审批流程'
                     }) /* 
                   新建审批流程
                   */
@@ -365,7 +389,7 @@ const RiskLevelInfo = ({ currentRiskLevel, memoryReload }) => {
                 dataSource: approvalProcesses,
                 rowKey: 'id',
                 pagination: false,
-                loading: loading,
+                loading: loading
               }}
             />
           </div>

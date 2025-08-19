@@ -36,7 +36,11 @@ interface IProps {
   settingStore?: SettingStore;
 }
 
-export function showVersionModal(modalStore: ModalStore, id: number, settingStore: SettingStore) {
+export function showVersionModal(
+  modalStore: ModalStore,
+  id: number,
+  settingStore: SettingStore
+) {
   if (!isNil(id)) {
     const isNewUser = localLoginHistoy.isNewUser();
     if (isNewUser) {
@@ -92,7 +96,7 @@ const VersionModal: React.FC<IProps> = (props) => {
             {
               formatMessage({
                 id: 'odc.component.VersionModal.ProductFunctionIntroduction',
-                defaultMessage: '产品功能介绍',
+                defaultMessage: '产品功能介绍'
               }) /* 产品功能介绍 */
             }
           </div>
@@ -104,7 +108,7 @@ const VersionModal: React.FC<IProps> = (props) => {
             className={styles.menuContent}
             items={menuList.map((menu, index) => ({
               key: index.toString(),
-              label: menu.title,
+              label: menu.title
             }))}
           />
 
@@ -122,21 +126,34 @@ const VersionModal: React.FC<IProps> = (props) => {
               activeKey === menuList.length - 1
                 ? formatMessage({
                     id: 'odc.component.VersionModal.ISee',
-                    defaultMessage: '我知道了',
+                    defaultMessage: '我知道了'
                   }) // 我知道了
-                : formatMessage({ id: 'odc.component.VersionModal.Next', defaultMessage: '下一个' }) // 下一个
+                : formatMessage({
+                    id: 'odc.component.VersionModal.Next',
+                    defaultMessage: '下一个'
+                  }) // 下一个
             }
           </Button>
         </div>
         <div className={styles.content}>
           <div className={styles.contentImg}>
-            <Image width="100%" src={menuList[activeKey]?.img} preview={false} />
+            <Image
+              width="100%"
+              src={menuList[activeKey]?.img}
+              preview={false}
+            />
           </div>
-          <div className={styles.contentText}>{menuList[activeKey]?.content}</div>
+          <div className={styles.contentText}>
+            {menuList[activeKey]?.content}
+          </div>
         </div>
       </div>
     </Modal>
   );
 };
 
-export default inject('modalStore', 'userStore', 'settingStore')(observer(VersionModal));
+export default inject(
+  'modalStore',
+  'userStore',
+  'settingStore'
+)(observer(VersionModal));

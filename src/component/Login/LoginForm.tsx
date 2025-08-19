@@ -20,7 +20,7 @@ import {
   LockOutlined,
   SafetyCertificateOutlined,
   SyncOutlined,
-  UserOutlined,
+  UserOutlined
 } from '@ant-design/icons';
 import { Alert, Button, Divider, Form, Input, Space } from 'antd';
 import type { FormProps } from 'antd/lib/form';
@@ -81,16 +81,16 @@ const Login: React.FC<ILoginFormProps> = ({
             required: true,
             message: formatMessage({
               id: 'odc.component.Login.LoginForm.TheUsernameCannotBeEmpty',
-              defaultMessage: '用户名不能为空',
-            }), //用户名不能为空
-          },
+              defaultMessage: '用户名不能为空'
+            }) //用户名不能为空
+          }
         ]}
       >
         <Input
           prefix={<UserOutlined />}
           placeholder={formatMessage({
             id: 'odc.component.Login.LoginForm.EnterAUsername',
-            defaultMessage: '请输入用户名',
+            defaultMessage: '请输入用户名'
           })} /*请输入用户名*/
           onFocus={() => {
             setFocusInput('username');
@@ -99,7 +99,7 @@ const Login: React.FC<ILoginFormProps> = ({
             setFocusInput('');
           }}
           className={classNames({
-            [`${prefix}-focus-input`]: focusInput === 'username',
+            [`${prefix}-focus-input`]: focusInput === 'username'
           })}
         />
       </Form.Item>
@@ -110,9 +110,9 @@ const Login: React.FC<ILoginFormProps> = ({
             required: true,
             message: formatMessage({
               id: 'odc.component.Login.LoginForm.ThePasswordCannotBeEmpty',
-              defaultMessage: '密码不能为空',
-            }), //密码不能为空
-          },
+              defaultMessage: '密码不能为空'
+            }) //密码不能为空
+          }
         ]}
       >
         <Input.Password
@@ -121,7 +121,7 @@ const Login: React.FC<ILoginFormProps> = ({
           prefix={<LockOutlined />}
           placeholder={formatMessage({
             id: 'odc.component.Login.LoginForm.EnterAPassword',
-            defaultMessage: '请输入密码',
+            defaultMessage: '请输入密码'
           })} /*请输入密码*/
           onFocus={() => {
             setFocusInput('password');
@@ -141,16 +141,16 @@ const Login: React.FC<ILoginFormProps> = ({
                 required: true,
                 message: formatMessage({
                   id: 'odc.component.Login.LoginForm.TheVerificationCodeCannotBe',
-                  defaultMessage: '验证码不能为空',
-                }), //验证码不能为空
-              },
+                  defaultMessage: '验证码不能为空'
+                }) //验证码不能为空
+              }
             ]}
           >
             <Input
               prefix={<SafetyCertificateOutlined />}
               placeholder={formatMessage({
                 id: 'odc.component.Login.LoginForm.PleaseEnterAVerificationCode',
-                defaultMessage: '请输入验证码',
+                defaultMessage: '请输入验证码'
               })} /*请输入验证码*/
               onFocus={() => {
                 setFocusInput('authCode');
@@ -159,13 +159,16 @@ const Login: React.FC<ILoginFormProps> = ({
                 setFocusInput('');
               }}
               className={classNames({
-                [`${prefix}-focus-input`]: focusInput === 'authCode',
+                [`${prefix}-focus-input`]: focusInput === 'authCode'
               })}
             />
           </Form.Item>
           <div className={classNames(`${prefix}-code-btn`)}>
             <img src={authCodeImg} alt="" width="96" height="48" />
-            <div className={`${prefix}-code-mask`} onClick={onAuthCodeImgChange}>
+            <div
+              className={`${prefix}-code-mask`}
+              onClick={onAuthCodeImgChange}
+            >
               <SyncOutlined />
             </div>
           </div>
@@ -183,7 +186,7 @@ const Login: React.FC<ILoginFormProps> = ({
         {
           formatMessage({
             id: 'odc.component.Login.LoginForm.Login',
-            defaultMessage: '登录',
+            defaultMessage: '登录'
           }) /*登录*/
         }
       </Button>
@@ -193,7 +196,7 @@ const Login: React.FC<ILoginFormProps> = ({
             {
               formatMessage({
                 id: 'odc.component.Login.LoginForm.OtherLogonMethods',
-                defaultMessage: '其他登录方式',
+                defaultMessage: '其他登录方式'
               }) /*其他登录方式*/
             }
           </Divider>
@@ -209,13 +212,16 @@ const Login: React.FC<ILoginFormProps> = ({
                   }
                 : otherLoginProps.onFinish
             }
-            className={classNames(`${prefix}-submit-btn`, `${prefix}-submit-ldap-btn`)}
+            className={classNames(
+              `${prefix}-submit-btn`,
+              `${prefix}-submit-ldap-btn`
+            )}
           >
             {
               ssoLoginName ||
                 formatMessage({
                   id: 'odc.component.Login.LoginForm.ThirdPartyLogin',
-                  defaultMessage: '第三方登录',
+                  defaultMessage: '第三方登录'
                 }) /*第三方登录*/
             }
           </Button>
@@ -223,7 +229,12 @@ const Login: React.FC<ILoginFormProps> = ({
       )}
 
       {errorMessage && (
-        <Alert type="error" showIcon={true} className={`${prefix}-alert`} message={errorMessage} />
+        <Alert
+          type="error"
+          showIcon={true}
+          className={`${prefix}-alert`}
+          message={errorMessage}
+        />
       )}
     </Form>
   );

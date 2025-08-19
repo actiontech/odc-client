@@ -8,7 +8,7 @@ export const URL_ACTION = {
   newTask: 'newTask',
   newApply: 'newApply',
   newDataMock: 'newDataMock',
-  dataMock: TaskPageType.DATAMOCK,
+  dataMock: TaskPageType.DATAMOCK
 };
 
 const useUrlAction = () => {
@@ -16,7 +16,13 @@ const useUrlAction = () => {
   const navigate = useNavigate();
 
   const runAction = useCallback(
-    ({ actionType, callback }: { actionType: string; callback: () => void }) => {
+    ({
+      actionType,
+      callback
+    }: {
+      actionType: string;
+      callback: () => void;
+    }) => {
       const params = new URLSearchParams(location.search);
       const action = params.get('action');
 
@@ -28,7 +34,7 @@ const useUrlAction = () => {
       }
       return false;
     },
-    [location, navigate],
+    [location, navigate]
   );
 
   const runTask = useCallback(
@@ -44,7 +50,7 @@ const useUrlAction = () => {
 
       return false;
     },
-    [location, navigate],
+    [location, navigate]
   );
   return { runAction, runTask };
 };

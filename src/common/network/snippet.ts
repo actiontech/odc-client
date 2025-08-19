@@ -31,7 +31,7 @@ export async function queryCustomerSnippets(): Promise<ISnippet[]> {
 export async function createCustomerSnippet(snippet: ISnippet) {
   snippet.type = snippet.snippetType;
   const res = await request.post(`/api/v1/snippets`, {
-    data: snippet,
+    data: snippet
   });
   if (res.errCode) {
     return null;
@@ -43,7 +43,7 @@ export async function createCustomerSnippet(snippet: ISnippet) {
 export async function updateCustomerSnippet(snippet: ISnippet) {
   snippet.type = snippet.snippetType;
   const res = await request.put(`/api/v1/snippets/${snippet.id}`, {
-    data: snippet,
+    data: snippet
   });
   return res?.data;
 }
@@ -52,7 +52,7 @@ export async function updateCustomerSnippet(snippet: ISnippet) {
 export async function deleteCustomerSnippet(snippet: ISnippet) {
   snippet.type = snippet.snippetType;
   const res = await request.delete(`/api/v1/snippets/${snippet.id}`, {
-    data: snippet,
+    data: snippet
   });
   return res?.data;
 }
@@ -60,8 +60,8 @@ export async function deleteCustomerSnippet(snippet: ISnippet) {
 export async function getBuiltinSnippets(sid): Promise<ISnippet[]> {
   const res = await request.get('/api/v2/snippet/builtinSnippets', {
     params: {
-      sessionId: sid,
-    },
+      sessionId: sid
+    }
   });
   const snippets = res?.data?.contents || [];
   return snippets;

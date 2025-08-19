@@ -31,7 +31,9 @@ interface ExtraMessageProps {
     [key in string]: string;
   };
 }
-const ExtraMessage: React.FC<ExtraMessageProps> = (props: ExtraMessageProps) => {
+const ExtraMessage: React.FC<ExtraMessageProps> = (
+  props: ExtraMessageProps
+) => {
   const { extraMessageParams } = props;
   const extraMessageParamsKeys = Object.keys(extraMessageParams) || [];
   if (extraMessageParamsKeys.length === 0) {
@@ -44,7 +46,7 @@ const ExtraMessage: React.FC<ExtraMessageProps> = (props: ExtraMessageProps) => 
             {
               formatMessage({
                 id: 'odc.src.util.notification.ErrorMessage',
-                defaultMessage: '报错信息:',
+                defaultMessage: '报错信息:'
               }) /*报错信息:*/
             }
           </strong>
@@ -56,14 +58,19 @@ const ExtraMessage: React.FC<ExtraMessageProps> = (props: ExtraMessageProps) => 
                 <span style={{ color: 'var(--text-color-hint)' }}>{key}</span>:{' '}
                 <span>{extraMessageParams[key]}</span>
               </div>
-            ),
+            )
         )}
       </>
     );
   }
 };
 function Description(props: DescriptionProps) {
-  const { description, requestId, isComponent = false, extraMessageParams = {} } = props;
+  const {
+    description,
+    requestId,
+    isComponent = false,
+    extraMessageParams = {}
+  } = props;
   const [isOpen, setIsOpen] = useState(false);
 
   const openDetail = useCallback(() => {
@@ -72,14 +79,17 @@ function Description(props: DescriptionProps) {
     }
     Modal.info({
       zIndex: 9999,
-      title: formatMessage({ id: 'odc.src.util.notification.Details', defaultMessage: '详情' }), // 详情
+      title: formatMessage({
+        id: 'odc.src.util.notification.Details',
+        defaultMessage: '详情'
+      }), // 详情
       content: <div>{description}</div>,
       onCancel: () => {
         setIsOpen(false);
       },
       onOk: () => {
         setIsOpen(false);
-      },
+      }
     });
 
     setIsOpen(true);
@@ -91,7 +101,7 @@ function Description(props: DescriptionProps) {
         {
           formatMessage({
             id: 'odc.src.util.notification.NoErrorMessage',
-            defaultMessage: '无错误信息',
+            defaultMessage: '无错误信息'
           })
           /* 无错误信息 */
         }
@@ -111,7 +121,7 @@ function Description(props: DescriptionProps) {
           {
             formatMessage({
               id: 'odc.src.util.notification.RequestId',
-              defaultMessage: '请求 ID：',
+              defaultMessage: '请求 ID：'
             }) /*请求Id：*/
           }
           {requestId}
@@ -125,7 +135,7 @@ function Description(props: DescriptionProps) {
           {
             formatMessage({
               id: 'odc.src.util.notification.Details',
-              defaultMessage: '详情',
+              defaultMessage: '详情'
             }) /* 详情 */
           }
         </a>
@@ -163,13 +173,15 @@ export default {
       supportRepeat = true,
       holdErrorTip = false,
       requestId,
-      extraMessage = {},
+      extraMessage = {}
     } = errorParams || {};
     /**
      * 最小 4.5，最大 20 秒，其余情况 length * 0.1s
      */
     const key = generateUniqKey();
-    let duration = holdErrorTip ? 9999 : Math.max(Math.min(20, description.length * 0.1), 4.5);
+    let duration = holdErrorTip
+      ? 9999
+      : Math.max(Math.min(20, description.length * 0.1), 4.5);
     if (extraMessage.isComponent) {
       duration = 5;
     }
@@ -179,17 +191,21 @@ export default {
     notification.error({
       message: formatMessage({
         id: 'odc.src.util.notification.RequestFailed',
-        defaultMessage: '请求失败',
+        defaultMessage: '请求失败'
       }), // 请求失败
       description: (
-        <Description description={description} requestId={requestId} {...extraMessage} />
+        <Description
+          description={description}
+          requestId={requestId}
+          {...extraMessage}
+        />
       ),
 
       duration,
       key,
       onClose: () => {
         notificationCache.delete(description);
-      },
+      }
     });
 
     notificationCache.set(description, key);
@@ -198,26 +214,34 @@ export default {
     description: string = '',
     supportRepeat: boolean = true,
     durationOption: number = 4.5,
-    requestId = '',
+    requestId = ''
   ) {
     /**
      * 最小 4.5，最大 20 秒，其余情况 length * 0.1s
      */
     const key = generateUniqKey();
-    const duration = Math.max(Math.min(20, description.length * 0.1), durationOption);
+    const duration = Math.max(
+      Math.min(20, description.length * 0.1),
+      durationOption
+    );
     if (!supportRepeat && notificationCache.has(description)) {
       notification.destroy(notificationCache.get(description));
     }
     notification.warning({
-      message: formatMessage({ id: 'odc.src.util.notification.Cue', defaultMessage: '提示' }), // 提示
-      description: <Description description={description} requestId={requestId} />,
+      message: formatMessage({
+        id: 'odc.src.util.notification.Cue',
+        defaultMessage: '提示'
+      }), // 提示
+      description: (
+        <Description description={description} requestId={requestId} />
+      ),
       duration,
       key,
       onClose: () => {
         notificationCache.delete(description);
-      },
+      }
     });
 
     notificationCache.set(description, key);
-  },
+  }
 };

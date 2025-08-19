@@ -24,7 +24,7 @@ import {
   getClientWidth,
   getScrollBarSize,
   getScrollOffsets,
-  isFixedElem,
+  isFixedElem
 } from './utils';
 
 const INIT_RIGHT = 32;
@@ -84,17 +84,18 @@ class Draggable extends React.Component<DraggableProps, DraggableState> {
       dragged: false,
       width: 0,
       bottom: position.bottom ? position.bottom : INIT_BOTTOM,
-      right: position.right ? position.right : INIT_RIGHT,
+      right: position.right ? position.right : INIT_RIGHT
     };
   }
 
   overlapDetection = () => {
     const node = this.nodeRef.current;
-    const { left, top, right, bottom, width, height } = node.getBoundingClientRect();
+    const { left, top, right, bottom, width, height } =
+      node.getBoundingClientRect();
     const aroundElems = [
       document.elementFromPoint(left, top),
       document.elementFromPoint(right, bottom),
-      document.elementFromPoint(left + width / 2, top + height / 2),
+      document.elementFromPoint(left + width / 2, top + height / 2)
     ];
 
     for (const elem of aroundElems) {
@@ -116,7 +117,7 @@ class Draggable extends React.Component<DraggableProps, DraggableState> {
 
     const { width } = this.nodeRef.current.getBoundingClientRect();
     this.setState({
-      width,
+      width
     });
   }
 
@@ -141,7 +142,7 @@ class Draggable extends React.Component<DraggableProps, DraggableState> {
     if (preHide && !hide) {
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({
-        right: INIT_RIGHT,
+        right: INIT_RIGHT
       });
     }
   }
@@ -153,7 +154,8 @@ class Draggable extends React.Component<DraggableProps, DraggableState> {
     const node = this.nodeRef.current;
     const clientRect = node.getBoundingClientRect();
     const { width, height } = clientRect;
-    const { right: styleRight, bottom: styleBottom } = window.getComputedStyle(node);
+    const { right: styleRight, bottom: styleBottom } =
+      window.getComputedStyle(node);
     let right = Number(styleRight.replace('px', ''));
     let bottom = Number(styleBottom.replace('px', ''));
 
@@ -173,7 +175,7 @@ class Draggable extends React.Component<DraggableProps, DraggableState> {
 
     this.setState({
       bottom,
-      right,
+      right
     });
   };
 
@@ -200,7 +202,7 @@ class Draggable extends React.Component<DraggableProps, DraggableState> {
     }
 
     this.setState({
-      dragged: true,
+      dragged: true
     });
 
     // We've handled this event. Don't let anybody else see it.
@@ -261,16 +263,16 @@ class Draggable extends React.Component<DraggableProps, DraggableState> {
       {
         dragged: true,
         right: right - this.defaultScrollBarSize,
-        bottom,
+        bottom
       },
       () => {
         if (this.props.onDrag) {
           this.props.onDrag({
             right,
-            bottom,
+            bottom
           });
         }
-      },
+      }
     );
   };
 
@@ -283,20 +285,20 @@ class Draggable extends React.Component<DraggableProps, DraggableState> {
       if (interval < 200 && e.target.id !== 'ui-mini-hide') {
         this.props.onClick(e);
         this.setState({
-          dragged: false,
+          dragged: false
         });
         return;
       }
 
       this.setState(
         {
-          dragged: false,
+          dragged: false
         },
         () => {
           if (this.props.onDragEnd) {
             this.props.onDragEnd();
           }
-        },
+        }
       );
     }
   };
@@ -310,7 +312,7 @@ class Draggable extends React.Component<DraggableProps, DraggableState> {
       className,
       id,
       onMouseEnter,
-      onMouseLeave,
+      onMouseLeave
     } = this.props;
     const { dragged, width, bottom, right } = this.state;
 
@@ -321,7 +323,7 @@ class Draggable extends React.Component<DraggableProps, DraggableState> {
     const containerClassName = classNames(containerPrefix, className, {
       [`${containerPrefix}-dragged`]: dragged,
       [`${containerPrefix}-hide`]: hide,
-      [`${containerPrefix}-hide-not-dragged`]: hide && !dragged,
+      [`${containerPrefix}-hide-not-dragged`]: hide && !dragged
     });
 
     return (
@@ -331,7 +333,9 @@ class Draggable extends React.Component<DraggableProps, DraggableState> {
         onMouseDown={this.handleMouseDown}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
-        style={hide ? { ...containerStyle, right: -width / 1.5 } : containerStyle}
+        style={
+          hide ? { ...containerStyle, right: -width / 1.5 } : containerStyle
+        }
         className={containerClassName}
       >
         {children}

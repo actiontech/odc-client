@@ -33,20 +33,22 @@ const ExcecuteDetailModal: React.FC<IProps> = function (props) {
             ...i,
             endTime: getLocalFormatDateTime(i?.endTime),
             startTime: getLocalFormatDateTime(i?.startTime),
-            key: index,
+            key: index
           };
         });
         setList([...list]);
         setLoading(false);
         const isDone = list.every((i) => {
-          return [SubTaskStatus.DONE, SubTaskStatus.CANCELED, SubTaskStatus.FAILED].includes(
-            i?.status,
-          );
+          return [
+            SubTaskStatus.DONE,
+            SubTaskStatus.CANCELED,
+            SubTaskStatus.FAILED
+          ].includes(i?.status);
         });
         const isParentDone = [
           SubTaskStatus.DONE,
           SubTaskStatus.CANCELED,
-          SubTaskStatus.FAILED,
+          SubTaskStatus.FAILED
         ].includes(res?.status);
         if (isDone && isParentDone) {
           cancel();
@@ -54,8 +56,8 @@ const ExcecuteDetailModal: React.FC<IProps> = function (props) {
       }
     },
     {
-      pollingInterval: 3000,
-    },
+      pollingInterval: 3000
+    }
   );
 
   useEffect(() => {
@@ -79,49 +81,55 @@ const ExcecuteDetailModal: React.FC<IProps> = function (props) {
     {
       title: formatMessage({
         id: 'src.component.Task.component.CommonDetailModal.99A2CD95',
-        defaultMessage: '表名',
+        defaultMessage: '表名'
       }),
       dataIndex: 'tableName',
-      key: 'tableName',
+      key: 'tableName'
     },
     {
       title: formatMessage({
         id: 'src.component.Task.component.CommonDetailModal.6DD48CF2',
-        defaultMessage: '任务类型',
+        defaultMessage: '任务类型'
       }),
       dataIndex: 'type',
       key: 'type',
       render: (type) => {
         return SubTaskTypeMap[type]?.label;
-      },
+      }
     },
     {
       title: formatMessage({
         id: 'src.component.Task.component.CommonDetailModal.6E7EBEA3',
-        defaultMessage: '实际处理行数',
+        defaultMessage: '实际处理行数'
       }),
       dataIndex: 'processedRowCount',
-      key: 'processedRowCount',
+      key: 'processedRowCount'
     },
     {
       title: formatMessage({
         id: 'src.component.Task.component.CommonDetailModal.129F651F',
-        defaultMessage: '扫描行数',
+        defaultMessage: '扫描行数'
       }),
       dataIndex: 'readRowCount',
-      key: 'readRowCount',
+      key: 'readRowCount'
     },
     {
       title: formatMessage({
         id: 'src.component.Task.component.CommonDetailModal.CA18955A',
-        defaultMessage: '执行状态',
+        defaultMessage: '执行状态'
       }),
       dataIndex: 'status',
       key: 'status',
       render: (_, record) => {
-        return <StatusLabel status={record?.status} type={record?.type} isSubTask={true} />;
-      },
-    },
+        return (
+          <StatusLabel
+            status={record?.status}
+            type={record?.type}
+            isSubTask={true}
+          />
+        );
+      }
+    }
   ];
 
   const expandedRowRender = (record) => {
@@ -131,7 +139,7 @@ const ExcecuteDetailModal: React.FC<IProps> = function (props) {
           <Descriptions.Item
             label={formatMessage({
               id: 'src.component.Task.component.CommonDetailModal.E5B0F02A',
-              defaultMessage: '开始时间',
+              defaultMessage: '开始时间'
             })}
             span={2}
           >
@@ -140,7 +148,7 @@ const ExcecuteDetailModal: React.FC<IProps> = function (props) {
           <Descriptions.Item
             label={formatMessage({
               id: 'src.component.Task.component.CommonDetailModal.403574A6',
-              defaultMessage: '结束时间',
+              defaultMessage: '结束时间'
             })}
             span={2}
           >
@@ -149,33 +157,33 @@ const ExcecuteDetailModal: React.FC<IProps> = function (props) {
           <Descriptions.Item
             label={formatMessage({
               id: 'src.component.Task.component.CommonDetailModal.62A63BEC',
-              defaultMessage: '当前读性能',
+              defaultMessage: '当前读性能'
             })}
             span={2}
           >
             {record?.readRowsPerSecond}
             {formatMessage({
               id: 'src.component.Task.component.CommonDetailModal.BC466037',
-              defaultMessage: '行/每秒',
+              defaultMessage: '行/每秒'
             })}
           </Descriptions.Item>
           <Descriptions.Item
             label={formatMessage({
               id: 'src.component.Task.component.CommonDetailModal.F516F4E4',
-              defaultMessage: '当前写性能',
+              defaultMessage: '当前写性能'
             })}
             span={2}
           >
             {record?.processedRowsPerSecond}
             {formatMessage({
               id: 'src.component.Task.component.CommonDetailModal.892DAF55',
-              defaultMessage: '行/每秒',
+              defaultMessage: '行/每秒'
             })}
           </Descriptions.Item>
           <Descriptions.Item
             label={formatMessage({
               id: 'src.component.Task.component.CommonDetailModal.D9ACA50C',
-              defaultMessage: '处理条件',
+              defaultMessage: '处理条件'
             })}
             span={2}
           >
@@ -195,7 +203,7 @@ const ExcecuteDetailModal: React.FC<IProps> = function (props) {
       onClose={onClose}
       title={formatMessage({
         id: 'src.component.Task.component.CommonDetailModal.5AE38327',
-        defaultMessage: '执行记录详情',
+        defaultMessage: '执行记录详情'
       })}
       destroyOnClose
       footer={null}
@@ -212,13 +220,13 @@ const ExcecuteDetailModal: React.FC<IProps> = function (props) {
             expandedRowRender: (record) => expandedRowRender(record),
             expandedRowKeys: expandedRowKeys,
             defaultExpandedRowKeys: expandedRowKeys,
-            onExpandedRowsChange: onExpandedRowsChange,
+            onExpandedRowsChange: onExpandedRowsChange
           },
           dataSource: list,
           pagination: false,
           scroll: {
-            y: 650,
-          },
+            y: 650
+          }
         }}
       />
     </Drawer>

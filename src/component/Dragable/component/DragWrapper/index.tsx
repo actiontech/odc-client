@@ -48,11 +48,11 @@ const Component: React.FC<IProps> = ({
     },
     collect: (monitor) => ({
       opacity: monitor.isDragging() ? 0.4 : 1,
-      isDragging: monitor.isDragging(),
+      isDragging: monitor.isDragging()
     }),
     options: {
-      dropEffect: 'copy',
-    },
+      dropEffect: 'copy'
+    }
   });
 
   //隐藏默认预览
@@ -63,7 +63,13 @@ const Component: React.FC<IProps> = ({
   }, []);
 
   return (
-    <div key={key} ref={drag} className={className} style={{ ...style, opacity }} {...rest}>
+    <div
+      key={key}
+      ref={drag}
+      className={className}
+      style={{ ...style, opacity }}
+      {...rest}
+    >
       {children}
     </div>
   );

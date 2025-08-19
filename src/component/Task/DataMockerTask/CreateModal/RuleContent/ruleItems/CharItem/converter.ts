@@ -36,7 +36,7 @@ export const ruleTypeToGenerator = {
   [CharRuleType.ORDER_NUMBER]: MockGenerator.STEP_GENERATOR,
   [CharRuleType.NORMAL_NUMBER]: MockGenerator.FIX_GENERATOR,
   [CharRuleType.NULL]: MockGenerator.NULL_GENERATOR,
-  [CharRuleType.SKIP]: MockGenerator.SKIP_GENERATOR,
+  [CharRuleType.SKIP]: MockGenerator.SKIP_GENERATOR
 };
 const g2r = {};
 Object.entries(ruleTypeToGenerator).forEach(([key, value]) => {
@@ -57,7 +57,9 @@ function generatorToRuleType(column: IServerMockColumn): CharRuleType {
   }
 }
 
-export function convertFormDataToServerData(formData: IMockFormColumn): IServerMockColumn {
+export function convertFormDataToServerData(
+  formData: IMockFormColumn
+): IServerMockColumn {
   let lowValue, highValue;
   let generator = ruleTypeToGenerator[formData.rule];
   formData = cloneDeep(formData);
@@ -85,7 +87,8 @@ export function convertFormDataToServerData(formData: IMockFormColumn): IServerM
     }
     case CharRuleType.ORDER_DATE: {
       lowValue = (formData.typeConfig.lowValue as dayjs.Dayjs)?.valueOf?.();
-      genParams.step = getSignWithOrder(formData.typeConfig.order) * parseInt(genParams.step);
+      genParams.step =
+        getSignWithOrder(formData.typeConfig.order) * parseInt(genParams.step);
       genParams.timeUnit = 'DAYS';
       genParams.timezone = getTimeZone(formData.typeConfig.lowValue);
       break;
@@ -111,11 +114,13 @@ export function convertFormDataToServerData(formData: IMockFormColumn): IServerM
       highValue,
       genParams,
       generator,
-      width: formData.columnObj.width,
-    },
+      width: formData.columnObj.width
+    }
   };
 }
-export function convertServerDataToFormData(formData: IServerMockColumn): IMockFormColumn {
+export function convertServerDataToFormData(
+  formData: IServerMockColumn
+): IMockFormColumn {
   let rule = generatorToRuleType(formData);
   formData = cloneDeep(formData);
   let genParams = formData?.typeConfig?.genParams;
@@ -164,7 +169,7 @@ export function convertServerDataToFormData(formData: IServerMockColumn): IMockF
       lowValue,
       range,
       genParams,
-      order,
-    },
+      order
+    }
   };
 }

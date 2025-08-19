@@ -25,7 +25,7 @@ import { convertColumnType } from './utils';
 export function getColumnMaxValue(
   precision: number | string,
   scale: number,
-  limit?: string,
+  limit?: string
 ): string {
   if (typeof precision === 'string') {
     precision = parseInt(precision);
@@ -41,7 +41,9 @@ export function getColumnMaxValue(
      * 1 - 1/x^2
      */
     maxValue = maxValue.plus(
-      new BigNumber(1).minus(new BigNumber(1).dividedBy(new BigNumber(10).pow(scale))),
+      new BigNumber(1).minus(
+        new BigNumber(1).dividedBy(new BigNumber(10).pow(scale))
+      )
     );
   }
   if (!isNil(limit)) {
@@ -69,7 +71,7 @@ export function getColumnSizeMapFromColumns(columns: any[]): IColumnSizeMap {
           isNumber: true,
           maxValue: '127',
           minValue: '-128',
-          scale: 0,
+          scale: 0
         };
         break;
       }
@@ -78,7 +80,7 @@ export function getColumnSizeMapFromColumns(columns: any[]): IColumnSizeMap {
           isNumber: true,
           maxValue: '255',
           minValue: '0',
-          scale: 0,
+          scale: 0
         };
         break;
       }
@@ -87,7 +89,7 @@ export function getColumnSizeMapFromColumns(columns: any[]): IColumnSizeMap {
           isNumber: true,
           maxValue: '32767',
           minValue: '-32768',
-          scale: 0,
+          scale: 0
         };
         break;
       }
@@ -96,7 +98,7 @@ export function getColumnSizeMapFromColumns(columns: any[]): IColumnSizeMap {
           isNumber: true,
           maxValue: '65535',
           minValue: '0',
-          scale: 0,
+          scale: 0
         };
         break;
       }
@@ -105,7 +107,7 @@ export function getColumnSizeMapFromColumns(columns: any[]): IColumnSizeMap {
           isNumber: true,
           maxValue: '8388607',
           minValue: '-8388608',
-          scale: 0,
+          scale: 0
         };
         break;
       }
@@ -114,7 +116,7 @@ export function getColumnSizeMapFromColumns(columns: any[]): IColumnSizeMap {
           isNumber: true,
           maxValue: '16777215',
           minValue: '0',
-          scale: 0,
+          scale: 0
         };
         break;
       }
@@ -123,7 +125,7 @@ export function getColumnSizeMapFromColumns(columns: any[]): IColumnSizeMap {
           isNumber: true,
           maxValue: '2147483647',
           minValue: '-2147483648',
-          scale: 0,
+          scale: 0
         };
         break;
       }
@@ -132,7 +134,7 @@ export function getColumnSizeMapFromColumns(columns: any[]): IColumnSizeMap {
           isNumber: true,
           maxValue: '0',
           minValue: '4294967295',
-          scale: 0,
+          scale: 0
         };
         break;
       }
@@ -141,7 +143,7 @@ export function getColumnSizeMapFromColumns(columns: any[]): IColumnSizeMap {
           isNumber: true,
           maxValue: '9223372036854775807',
           minValue: '-9223372036854775808',
-          scale: 0,
+          scale: 0
         };
         break;
       }
@@ -150,7 +152,7 @@ export function getColumnSizeMapFromColumns(columns: any[]): IColumnSizeMap {
           isNumber: true,
           maxValue: '18446744073709551615',
           minValue: '0',
-          scale: 0,
+          scale: 0
         };
         break;
       }
@@ -159,7 +161,7 @@ export function getColumnSizeMapFromColumns(columns: any[]): IColumnSizeMap {
           isNumber: true,
           maxValue: new BigNumber(2).pow(precision).minus(1).toString(),
           minValue: '0',
-          scale: 0,
+          scale: 0
         };
         break;
       }
@@ -177,7 +179,7 @@ export function getColumnSizeMapFromColumns(columns: any[]): IColumnSizeMap {
             isNumber: true,
             maxValue: new BigNumber('10').pow(126).toString(),
             minValue: new BigNumber('10').pow(126).multipliedBy(-1).toString(),
-            scale: 0,
+            scale: 0
           };
           break;
         }
@@ -189,7 +191,7 @@ export function getColumnSizeMapFromColumns(columns: any[]): IColumnSizeMap {
             isNumber: true,
             maxValue: maxValue,
             minValue: new BigNumber(maxValue).multipliedBy(-1).toString(),
-            scale: parseInt(scale) || 0,
+            scale: parseInt(scale) || 0
           };
         } else {
           if (length == null) {
@@ -207,20 +209,29 @@ export function getColumnSizeMapFromColumns(columns: any[]): IColumnSizeMap {
 /**
  * 生成字段展示的内容
  */
-export function convertColumnShowDataType(column: IColumn, isOracle: boolean = true) {
+export function convertColumnShowDataType(
+  column: IColumn,
+  isOracle: boolean = true
+) {
   if (!column) {
     return '';
   }
   if (['NUMBER', 'DECIMAL', 'DEC', 'NUMERIC'].includes(column.nativeDataType)) {
-    const lengthText = [column.precision, column.scale].filter((a) => !isNil(a)).join(', ');
-    return lengthText ? `${column.nativeDataType}(${lengthText})` : column.nativeDataType;
+    const lengthText = [column.precision, column.scale]
+      .filter((a) => !isNil(a))
+      .join(', ');
+    return lengthText
+      ? `${column.nativeDataType}(${lengthText})`
+      : column.nativeDataType;
   }
   return `${column.dataType}(${column.length})`;
 }
 
 export function isObjectColumn(columnType: string) {
   columnType = convertColumnType(columnType);
-  return ['TINYBLOB', 'BLOB', 'MEDIUMBLOB', 'LONGBLOB', 'CLOB', 'RAW'].includes(columnType);
+  return ['TINYBLOB', 'BLOB', 'MEDIUMBLOB', 'LONGBLOB', 'CLOB', 'RAW'].includes(
+    columnType
+  );
 }
 
 export function isNlsColumn(columnType: string, dbMode: ConnectionMode) {
@@ -232,7 +243,7 @@ export function isNlsColumn(columnType: string, dbMode: ConnectionMode) {
     'TIMESTAMP_WITH_TIME_ZONE',
     'TIMESTAMP_WITH_LOCAL_TIME_ZONE',
     'TIMESTAMP',
-    'DATE',
+    'DATE'
   ].includes(columnType);
 }
 

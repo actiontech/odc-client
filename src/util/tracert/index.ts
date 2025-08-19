@@ -30,10 +30,10 @@ export function initTracert() {
     autoLogPv: false,
     eventType: null,
     mdata: {
-      version: pkg.version,
+      version: pkg.version
     },
     roleId: null,
-    debug: process?.env?.NODE_ENV === 'development',
+    debug: process?.env?.NODE_ENV === 'development'
   };
   const dom = document.createElement('script');
   dom.setAttribute('src', 'https://ur.alipay.com/tracert_a3112.js');
@@ -57,7 +57,7 @@ const pageSpm = {
   [PageType.RECYCLE_BIN]: 'c114253',
   [PageType.TUTORIAL]: 'c114252',
   [PageType.SQL]: 'c114261',
-  [PageType.SESSION_MANAGEMENT]: 'c114255',
+  [PageType.SESSION_MANAGEMENT]: 'c114255'
 };
 const tracert = {
   updateTracertParams(newParams: Record<string, any>) {
@@ -68,7 +68,7 @@ const tracert = {
   },
   setUser(id) {
     tracert.updateTracertParams({
-      roleId: id,
+      roleId: id
     });
   },
   expo(id, data?: Record<any, any>) {
@@ -88,6 +88,6 @@ const tracert = {
     if (spm) {
       tracert.expo(spm);
     }
-  },
+  }
 };
 export default tracert;

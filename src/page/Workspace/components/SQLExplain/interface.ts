@@ -19,7 +19,7 @@ import SessionStore from '@/store/sessionManager/session';
 
 export enum TAB_NAME {
   SUMMARY = 'SUMMARY',
-  TRACE = 'TRACE',
+  TRACE = 'TRACE'
 }
 export interface SQLExplainProps {
   explain: ISQLExplain | string;

@@ -45,7 +45,7 @@ const ExecPlan: React.FC<IProps> = function (props) {
       const explain = await getSQLExplain(
         selectedSQL,
         session?.sessionId,
-        session?.database?.dbName,
+        session?.database?.dbName
       );
       setloadingExplain(false);
 
@@ -53,7 +53,7 @@ const ExecPlan: React.FC<IProps> = function (props) {
         setSqlExplainToShow(explain);
       }
     },
-    [selectedSQL],
+    [selectedSQL]
   );
   useEffect(() => {
     if (visible) {
@@ -64,7 +64,7 @@ const ExecPlan: React.FC<IProps> = function (props) {
     <Drawer
       title={formatMessage({
         id: 'workspace.window.sql.explain.tab.summary.title',
-        defaultMessage: '计划详情',
+        defaultMessage: '计划详情'
       })}
       placement="right"
       closable
@@ -73,11 +73,16 @@ const ExecPlan: React.FC<IProps> = function (props) {
       width={960}
       rootClassName={styles.explainDrawer}
       bodyStyle={{
-        paddingBottom: 50,
+        paddingBottom: 50
       }}
     >
       <Spin spinning={loadingExplain}>
-        <SQLExplain session={session} sql={selectedSQL} explain={sqlExplainToShow} haveText />
+        <SQLExplain
+          session={session}
+          sql={selectedSQL}
+          explain={sqlExplainToShow}
+          haveText
+        />
       </Spin>
       <div
         style={{
@@ -89,14 +94,14 @@ const ExecPlan: React.FC<IProps> = function (props) {
           padding: '10px 16px',
           background: 'var(--odc-antd-drawer-bg-color)',
           textAlign: 'right',
-          zIndex: 1,
+          zIndex: 1
         }}
       >
         <Button onClick={onClose} type="primary">
           {
             formatMessage({
               id: 'odc.components.SQLPage.Closed',
-              defaultMessage: '关闭',
+              defaultMessage: '关闭'
             })
             /* 关闭 */
           }

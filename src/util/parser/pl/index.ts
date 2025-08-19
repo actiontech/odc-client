@@ -31,7 +31,7 @@ export async function getPLEntryName(sql: string) {
         OraclePLLexer.FUNCTION,
         OraclePLLexer.TRIGGER,
         OraclePLLexer.TYPE,
-        OraclePLLexer.PACKAGE,
+        OraclePLLexer.PACKAGE
       ].includes(tokenType)
     ) {
       break;
@@ -43,7 +43,10 @@ export async function getPLEntryName(sql: string) {
      */
     return null;
   }
-  if (tokens[i].type === OraclePLLexer.PACKAGE && tokens[i + 1].type === OraclePLLexer.BODY) {
+  if (
+    tokens[i].type === OraclePLLexer.PACKAGE &&
+    tokens[i + 1].type === OraclePLLexer.BODY
+  ) {
     i = i + 2;
   } else {
     i = i + 1;

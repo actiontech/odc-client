@@ -43,7 +43,7 @@ const WorkspaceSideTip: React.FC<any> = function () {
           {
             formatMessage({
               id: 'odc.component.WorkspaceSideTip.WelcomeToTheOceanbaseTutorial',
-              defaultMessage: '欢迎使用 OceanBase 教程中心',
+              defaultMessage: '欢迎使用 OceanBase 教程中心'
             }) /*欢迎使用 OceanBase 教程中心*/
           }
         </div>
@@ -51,7 +51,7 @@ const WorkspaceSideTip: React.FC<any> = function () {
           {
             formatMessage({
               id: 'odc.component.WorkspaceSideTip.GetStartedWithDistributedDatabases',
-              defaultMessage: '快速入门分布式数据库，掌握 OceanBase 核心能力',
+              defaultMessage: '快速入门分布式数据库，掌握 OceanBase 核心能力'
             }) /*快速入门分布式数据库，掌握 OceanBase 核心能力*/
           }
         </div>
@@ -72,7 +72,11 @@ const WorkspaceSideTip: React.FC<any> = function () {
               >
                 <List.Item.Meta
                   title={item.name}
-                  description={<Paragraph ellipsis={{ rows: 2 }}>{item.overview}</Paragraph>}
+                  description={
+                    <Paragraph ellipsis={{ rows: 2 }}>
+                      {item.overview}
+                    </Paragraph>
+                  }
                 />
               </List.Item>
             );

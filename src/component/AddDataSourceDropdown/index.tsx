@@ -31,37 +31,37 @@ export default function AddDataSourceDropdown(props: IProps) {
     obConnectTypes.forEach((t) => {
       result.push({
         label: ConnectTypeText(t),
-        key: t,
+        key: t
       });
     });
     result.push({
-      type: 'divider',
+      type: 'divider'
     });
     mysqlConnectTypes.forEach((t) => {
       result.push({
         label: ConnectTypeText(t),
-        key: t,
+        key: t
       });
     });
     dorisConnectTypes.forEach((t) => {
       result.push({
         label: ConnectTypeText(t),
-        key: t,
+        key: t
       });
     });
     result.push({
       label: formatMessage({
         id: 'odc.src.component.AddDataSourceDropdown.BatchImport',
-        defaultMessage: '批量导入',
+        defaultMessage: '批量导入'
       }), //'批量导入'
-      key: 'batchImport',
+      key: 'batchImport'
     });
     return result;
   }, [dorisConnectTypes, mysqlConnectTypes, obConnectTypes]);
   return (
     <Dropdown
       menu={{
-        items: result,
+        items: result
       }}
     ></Dropdown>
   );

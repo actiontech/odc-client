@@ -13,7 +13,7 @@ class CloudBeaverService extends ServiceBase {
     return this.get<IGetSQLQueryConfigurationReturn>(
       '/v1/dms/configurations/sql_query',
       undefined,
-      options,
+      options
     );
   }
 }

@@ -1,5 +1,5 @@
 import SessionDropdown, {
-  ISessionDropdownFiltersProps,
+  ISessionDropdownFiltersProps
 } from '@/page/Workspace/components/SessionContextWrap/SessionSelect/SessionDropdown';
 import { IDatabase } from '@/d.ts/database';
 import React, { useState } from 'react';
@@ -40,9 +40,9 @@ const MultipleDatabaseSelect: React.FC<IProps> = (props) => {
     selectWidth,
     placeholder = formatMessage({
       id: 'src.page.Workspace.components.SessionContextWrap.SessionSelect.66A17FFD',
-      defaultMessage: '请选择',
+      defaultMessage: '请选择'
     }),
-    disabled = false,
+    disabled = false
   } = props;
 
   const [options, setOptions] = useState<SelectItemProps[]>([]);
@@ -59,13 +59,16 @@ const MultipleDatabaseSelect: React.FC<IProps> = (props) => {
         onSelect,
         checkedKeys,
         setOptions,
-        setCheckedKeys,
+        setCheckedKeys
       }}
     >
       <Space
         direction="vertical"
         size={24}
-        style={{ width: isAdaptiveWidth ? '100%' : selectWidth, height: '100%' }}
+        style={{
+          width: isAdaptiveWidth ? '100%' : selectWidth,
+          height: '100%'
+        }}
       >
         <Form.Item
           label={label}
@@ -77,9 +80,9 @@ const MultipleDatabaseSelect: React.FC<IProps> = (props) => {
               required: true,
               message: formatMessage({
                 id: 'odc.component.DatabaseSelect.SelectADatabase',
-                defaultMessage: '请选择数据库',
-              }), //请选择数据库
-            },
+                defaultMessage: '请选择数据库'
+              }) //请选择数据库
+            }
           ]}
         >
           <Select

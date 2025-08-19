@@ -38,7 +38,10 @@ const ApplyPermissionButton: React.FC<IProps> = inject('modalStore')(
 
     const { runAction } = useUrlAction();
     useEffect(() => {
-      runAction({ actionType: URL_ACTION.newApply, callback: handleApplyPermission });
+      runAction({
+        actionType: URL_ACTION.newApply,
+        callback: handleApplyPermission
+      });
     }, []);
 
     return (
@@ -49,7 +52,7 @@ const ApplyPermissionButton: React.FC<IProps> = inject('modalStore')(
         <ApplyPermissionCreateModal />
       </>
     );
-  }),
+  })
 );
 
 export default ApplyPermissionButton;

@@ -18,7 +18,7 @@ import { getTableListByDatabaseName } from '@/common/network/table';
 import {
   getShadowSyncAnalysisResult,
   getTaskDetail,
-  startShadowSyncAnalysis,
+  startShadowSyncAnalysis
 } from '@/common/network/task';
 import ExportCard from '@/component/ExportCard';
 import HelpDoc from '@/component/helpDoc';
@@ -28,11 +28,29 @@ import { ModalStore } from '@/store/modal';
 import { formatMessage } from '@/util/intl';
 import Icon, { DeleteOutlined } from '@ant-design/icons';
 import { useUnmountedRef } from 'ahooks';
-import { Checkbox, Col, Form, Input, message, Radio, Row, Select, Space, Spin } from 'antd';
+import {
+  Checkbox,
+  Col,
+  Form,
+  Input,
+  message,
+  Radio,
+  Row,
+  Select,
+  Space,
+  Spin
+} from 'antd';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { clone, cloneDeep } from 'lodash';
 import { inject, observer } from 'mobx-react';
-import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
 import { List as VirtualList } from 'react-virtualized';
 import DatabaseSelect from '../../../component/DatabaseSelect';
 import { IContentProps, IShaodwSyncData } from '../interface';
@@ -46,8 +64,17 @@ interface IProps extends IContentProps {
 }
 
 const SelectPanel = forwardRef<any, IProps>(function (
-  { modalStore, databaseId, schemaName, connectionId, sessionId, projectId, data, setData },
-  ref,
+  {
+    modalStore,
+    databaseId,
+    schemaName,
+    connectionId,
+    sessionId,
+    projectId,
+    data,
+    setData
+  },
+  ref
 ) {
   const { shadowSyncData } = modalStore;
   const [tables, setTables] = useState([]);
@@ -72,7 +99,11 @@ const SelectPanel = forwardRef<any, IProps>(function (
     }
     return tables
       .filter((table) => {
-        return table.tableName?.toLowerCase().indexOf(sourceSearchValue?.toLowerCase()) > -1;
+        return (
+          table.tableName
+            ?.toLowerCase()
+            .indexOf(sourceSearchValue?.toLowerCase()) > -1
+        );
       })
       ?.map((t) => ({ label: t.tableName, value: t.tableName }));
   }, [tables, sourceSearchValue]);
@@ -83,12 +114,12 @@ const SelectPanel = forwardRef<any, IProps>(function (
       targetTables = Array.from(data.originTableNames);
     } else {
       targetTables = Array.from(data.originTableNames)?.filter(
-        (name) => name?.toLowerCase().indexOf(targetSearchValue) > -1,
+        (name) => name?.toLowerCase().indexOf(targetSearchValue) > -1
       );
     }
     return targetTables?.map((name) => ({
       label: data.prefix ? `${data.name}${name}` : `${name}${data.name}`,
-      value: name,
+      value: name
     }));
   }, [targetSearchValue, data.originTableNames, data.prefix, data.name]);
   const [sourceSelectCount, sourceCount] = useMemo(() => {
@@ -120,21 +151,23 @@ const SelectPanel = forwardRef<any, IProps>(function (
               message.warning(
                 formatMessage({
                   id: 'odc.CreateShadowSyncModal.SelectPanel.SelectASynchronizationObject',
-                  defaultMessage: '请选择同步对象',
-                }),
+                  defaultMessage: '请选择同步对象'
+                })
 
                 //请选择同步对象
               );
               return;
             }
             const destTableNames = originTableNames?.map((name) => {
-              return values.prefix ? `${values.name}${name}` : `${name}${values.name}`;
+              return values.prefix
+                ? `${values.name}${name}`
+                : `${name}${values.name}`;
             });
             const taskId = await startShadowSyncAnalysis(
               databaseId,
               connectionId,
               originTableNames,
-              destTableNames,
+              destTableNames
             );
 
             if (!taskId) {
@@ -158,7 +191,7 @@ const SelectPanel = forwardRef<any, IProps>(function (
                   setData({
                     ...dataRef.current,
                     originTableNames: new Set([]),
-                    shadowAnalysisData: result,
+                    shadowAnalysisData: result
                   });
 
                   resolve(true);
@@ -170,10 +203,10 @@ const SelectPanel = forwardRef<any, IProps>(function (
           } catch (errorInfo) {
             form.scrollToField(errorInfo?.errorFields?.[0]?.name);
           }
-        },
+        }
       };
     },
-    [data],
+    [data]
   );
 
   async function updateTables() {
@@ -186,7 +219,7 @@ const SelectPanel = forwardRef<any, IProps>(function (
       ...dataRef.current,
       originTableNames: selectDestTableNames.length
         ? clone(new Set(selectDestTableNames))
-        : new Set(),
+        : new Set()
     });
 
     return tables;
@@ -209,7 +242,7 @@ const SelectPanel = forwardRef<any, IProps>(function (
   function handleSelect(
     event: CheckboxChangeEvent,
     index: number = -1,
-    requestTable?: { value: string }[],
+    requestTable?: { value: string }[]
   ) {
     const checked = requestTable ? true : event.target.checked;
     if (index !== -1) {
@@ -220,12 +253,15 @@ const SelectPanel = forwardRef<any, IProps>(function (
         data.originTableNames.delete(sourceDisplayTables[index]?.value);
       }
       setIndeterminate(
-        !!data.originTableNames.size && data.originTableNames.size < sourceDisplayTables.length,
+        !!data.originTableNames.size &&
+          data.originTableNames.size < sourceDisplayTables.length
       );
       setCheckAll(data.originTableNames.size === sourceDisplayTables.length);
     } else {
       if (checked) {
-        data.originTableNames = new Set<string>(sourceDisplayTables.map((item) => item.value));
+        data.originTableNames = new Set<string>(
+          sourceDisplayTables.map((item) => item.value)
+        );
       } else {
         data.originTableNames.clear();
       }
@@ -234,7 +270,7 @@ const SelectPanel = forwardRef<any, IProps>(function (
     }
     setData({
       ...data,
-      originTableNames: clone(data.originTableNames),
+      originTableNames: clone(data.originTableNames)
     });
   }
 
@@ -246,7 +282,7 @@ const SelectPanel = forwardRef<any, IProps>(function (
       form.setFieldsValue({ databaseId });
       setData({
         ...data,
-        databaseId,
+        databaseId
       });
     }
 
@@ -255,21 +291,30 @@ const SelectPanel = forwardRef<any, IProps>(function (
     }
   }, [shadowSyncData?.databaseId]);
 
-  const { run: fetchTaskDetail, loading: fetchTaskDetailLoading } = useRequest(getTaskDetail, {
-    manual: true,
-  });
-  const { run: fetchShadowSyncAnalysisResult, loading: fetchShadowSyncAnalysisResultLoading } =
-    useRequest(getShadowSyncAnalysisResult, { manual: true });
+  const { run: fetchTaskDetail, loading: fetchTaskDetailLoading } = useRequest(
+    getTaskDetail,
+    {
+      manual: true
+    }
+  );
+  const {
+    run: fetchShadowSyncAnalysisResult,
+    loading: fetchShadowSyncAnalysisResultLoading
+  } = useRequest(getShadowSyncAnalysisResult, { manual: true });
 
   const getTaskDetailValue = async (taskId: number, databaseId: number) => {
-    const detailRes = (await fetchTaskDetail(taskId)) as TaskDetail<ShadowSyncTaskParams>;
+    const detailRes = (await fetchTaskDetail(
+      taskId
+    )) as TaskDetail<ShadowSyncTaskParams>;
     const res = await fetchShadowSyncAnalysisResult(
-      detailRes.parameters.comparingTaskId.toString(),
+      detailRes.parameters.comparingTaskId.toString()
     );
 
     const newDataObj = {
       ...dataRef.current,
-      originTableNames: clone(new Set<string>(res?.tables?.map((item) => item.originTableName))),
+      originTableNames: clone(
+        new Set<string>(res?.tables?.map((item) => item.originTableName))
+      )
     };
 
     if (res?.tables?.length > 0) {
@@ -282,14 +327,18 @@ const SelectPanel = forwardRef<any, IProps>(function (
         res.tables.find((table) => {
           const { originTableName, destTableName } = table;
           return !(
-            destTableName?.startsWith(originTableName) && destTableName?.endsWith(originTableName)
+            destTableName?.startsWith(originTableName) &&
+            destTableName?.endsWith(originTableName)
           );
         }) || res.tables[0];
 
       const { originTableName, destTableName } = targetTable;
 
       // 判断是前缀还是后缀
-      if (destTableName?.startsWith(originTableName) && !destTableName?.endsWith(originTableName)) {
+      if (
+        destTableName?.startsWith(originTableName) &&
+        !destTableName?.endsWith(originTableName)
+      ) {
         prefixTemp = false;
         nameTemp = destTableName.substring(originTableName.length);
       } else if (
@@ -297,7 +346,10 @@ const SelectPanel = forwardRef<any, IProps>(function (
         !destTableName?.startsWith(originTableName)
       ) {
         prefixTemp = true;
-        nameTemp = destTableName.substring(0, destTableName.length - originTableName.length);
+        nameTemp = destTableName.substring(
+          0,
+          destTableName.length - originTableName.length
+        );
       } else {
         prefixTemp = true;
         nameTemp = '_test_';
@@ -321,7 +373,9 @@ const SelectPanel = forwardRef<any, IProps>(function (
   };
 
   return (
-    <Spin spinning={fetchTaskDetailLoading || fetchShadowSyncAnalysisResultLoading}>
+    <Spin
+      spinning={fetchTaskDetailLoading || fetchShadowSyncAnalysisResultLoading}
+    >
       <Form
         form={form}
         layout="vertical"
@@ -330,12 +384,12 @@ const SelectPanel = forwardRef<any, IProps>(function (
           if (changedValues.hasOwnProperty('prefix')) {
             values.name = changedValues.prefix ? '_test_' : '_t';
             form.setFieldsValue({
-              name: values.name,
+              name: values.name
             });
           }
           setData({
             ...data,
-            ...values,
+            ...values
           });
         }}
       >
@@ -343,12 +397,12 @@ const SelectPanel = forwardRef<any, IProps>(function (
         <Form.Item
           extra={formatMessage({
             id: 'odc.CreateShadowSyncModal.SelectPanel.OnlyTheStructureOfThe',
-            defaultMessage: '仅同步源表的结构，不同步数据',
+            defaultMessage: '仅同步源表的结构，不同步数据'
           })}
           /*仅同步源表的结构，不同步数据*/ name="syncAll"
           label={formatMessage({
             id: 'odc.CreateShadowSyncModal.SelectPanel.SynchronizationRange',
-            defaultMessage: '同步范围',
+            defaultMessage: '同步范围'
           })}
 
           /*同步范围*/
@@ -357,7 +411,7 @@ const SelectPanel = forwardRef<any, IProps>(function (
             onChange={() => {
               setData({
                 ...data,
-                originTableNames: new Set(),
+                originTableNames: new Set()
               });
             }}
           >
@@ -365,7 +419,7 @@ const SelectPanel = forwardRef<any, IProps>(function (
               {
                 formatMessage({
                   id: 'odc.CreateShadowSyncModal.SelectPanel.PartialTable',
-                  defaultMessage: '部分表',
+                  defaultMessage: '部分表'
                 })
 
                 /*部分表*/
@@ -375,7 +429,7 @@ const SelectPanel = forwardRef<any, IProps>(function (
               {
                 formatMessage({
                   id: 'odc.CreateShadowSyncModal.SelectPanel.AllTables',
-                  defaultMessage: '全部表',
+                  defaultMessage: '全部表'
                 })
 
                 /*全部表*/
@@ -390,7 +444,7 @@ const SelectPanel = forwardRef<any, IProps>(function (
               {
                 formatMessage({
                   id: 'odc.CreateShadowSyncModal.SelectPanel.ShadowTableName',
-                  defaultMessage: '影子表名',
+                  defaultMessage: '影子表名'
                 })
 
                 /*影子表名*/
@@ -405,7 +459,7 @@ const SelectPanel = forwardRef<any, IProps>(function (
                   {
                     formatMessage({
                       id: 'odc.CreateShadowSyncModal.SelectPanel.AddSuffix',
-                      defaultMessage: '添加后缀',
+                      defaultMessage: '添加后缀'
                     })
 
                     /*添加后缀*/
@@ -415,7 +469,7 @@ const SelectPanel = forwardRef<any, IProps>(function (
                   {
                     formatMessage({
                       id: 'odc.CreateShadowSyncModal.SelectPanel.AddPrefix',
-                      defaultMessage: '添加前缀',
+                      defaultMessage: '添加前缀'
                     })
 
                     /*添加前缀*/
@@ -431,8 +485,8 @@ const SelectPanel = forwardRef<any, IProps>(function (
                   required: true,
                   message: formatMessage({
                     id: 'odc.CreateShadowSyncModal.SelectPanel.EnterAShadowTableName',
-                    defaultMessage: '请输入影子表名',
-                  }),
+                    defaultMessage: '请输入影子表名'
+                  })
 
                   //请输入影子表名
                 },
@@ -440,8 +494,8 @@ const SelectPanel = forwardRef<any, IProps>(function (
                   pattern: /^[\w]*$/,
                   message: formatMessage({
                     id: 'odc.CreateShadowSyncModal.SelectPanel.OnlyEnglishNumbersAndUnderscores',
-                    defaultMessage: '仅支持英文/数字/下划线',
-                  }),
+                    defaultMessage: '仅支持英文/数字/下划线'
+                  })
 
                   //仅支持英文/数字/下划线
                 },
@@ -449,11 +503,11 @@ const SelectPanel = forwardRef<any, IProps>(function (
                   max: 32,
                   message: formatMessage({
                     id: 'odc.CreateShadowSyncModal.SelectPanel.NoMoreThanCharacters',
-                    defaultMessage: '不超过 32 个字符',
-                  }),
+                    defaultMessage: '不超过 32 个字符'
+                  })
 
                   //不超过 32 个字符
-                },
+                }
               ]}
             >
               <Input style={{ width: 185 }} />
@@ -470,7 +524,7 @@ const SelectPanel = forwardRef<any, IProps>(function (
                 shouldUpdate
                 label={formatMessage({
                   id: 'odc.CreateShadowSyncModal.SelectPanel.SynchronizeObjects',
-                  defaultMessage: '同步对象',
+                  defaultMessage: '同步对象'
                 })}
 
                 /*同步对象*/
@@ -486,7 +540,7 @@ const SelectPanel = forwardRef<any, IProps>(function (
                       title={
                         formatMessage({
                           id: 'odc.CreateShadowSyncModal.SelectPanel.SelectSourceTable',
-                          defaultMessage: '选择源表',
+                          defaultMessage: '选择源表'
                         }) +
                         //`选择源表`
                         `(${sourceSelectCount}/${sourceCount})`
@@ -503,10 +557,12 @@ const SelectPanel = forwardRef<any, IProps>(function (
                             <Row key={key} style={{ height: 22, ..._style }}>
                               <Checkbox
                                 checked={data.originTableNames.has(
-                                  sourceDisplayTables[index]?.value,
+                                  sourceDisplayTables[index]?.value
                                 )}
                                 key={sourceDisplayTables[index]?.value}
-                                onChange={(e: CheckboxChangeEvent) => handleSelect(e, index)}
+                                onChange={(e: CheckboxChangeEvent) =>
+                                  handleSelect(e, index)
+                                }
                               >
                                 <span
                                   style={{ whiteSpace: 'nowrap' }}
@@ -527,7 +583,7 @@ const SelectPanel = forwardRef<any, IProps>(function (
                       title={
                         formatMessage({
                           id: 'odc.CreateShadowSyncModal.SelectPanel.ShadowTable',
-                          defaultMessage: '影子表',
+                          defaultMessage: '影子表'
                         }) +
                         //`影子表`
                         `(${targetDisplayTables?.length ?? 0})`
@@ -539,14 +595,14 @@ const SelectPanel = forwardRef<any, IProps>(function (
                             setIndeterminate(false);
                             setData({
                               ...data,
-                              originTableNames: new Set(),
+                              originTableNames: new Set()
                             });
                           }}
                         >
                           {
                             formatMessage({
                               id: 'odc.CreateShadowSyncModal.SelectPanel.Clear',
-                              defaultMessage: '清空',
+                              defaultMessage: '清空'
                             }) /*清空*/
                           }
                         </a>
@@ -576,15 +632,19 @@ const SelectPanel = forwardRef<any, IProps>(function (
                               className={styles.delete}
                               onClick={() => {
                                 let newNames = cloneDeep(data.originTableNames);
-                                if (newNames.size === targetDisplayTables.length) {
+                                if (
+                                  newNames.size === targetDisplayTables.length
+                                ) {
                                   // 源表 全选时，影子表 单选删除。
                                   setCheckAll(false);
                                 }
-                                newNames.delete(targetDisplayTables[index]?.value);
+                                newNames.delete(
+                                  targetDisplayTables[index]?.value
+                                );
                                 setIndeterminate(!!newNames.size); // newNames中元素个数大于零时，indeterminate为true; 当元素个数等于零时为false;
                                 setData({
                                   ...data,
-                                  originTableNames: newNames,
+                                  originTableNames: newNames
                                 });
                               }}
                             >

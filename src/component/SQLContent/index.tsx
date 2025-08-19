@@ -56,7 +56,7 @@ export class SQLContent extends React.PureComponent<{
       language,
       settingStore,
       showLineNumbers = true,
-      theme,
+      theme
     } = this.props;
     return (
       <div className={styles.sqlContent}>
@@ -76,7 +76,7 @@ export class SQLContent extends React.PureComponent<{
                     {
                       formatMessage({
                         id: 'odc.AsyncTask.components.Download',
-                        defaultMessage: '下载',
+                        defaultMessage: '下载'
                       }) /* 下载 */
                     }
                   </Button>

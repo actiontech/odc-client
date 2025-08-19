@@ -29,12 +29,16 @@ import {
   hourOptions,
   initCronString,
   modeOptions,
-  weekOptions,
+  weekOptions
 } from './const';
 import styles from './index.less';
 import CronInput from './input';
 import { CrontabDateType, CrontabMode, ICrontab } from './interface';
-import translator, { getCronExecuteCycleByObject, getCronPlan, getCronString } from './utils';
+import translator, {
+  getCronExecuteCycleByObject,
+  getCronPlan,
+  getCronString
+} from './utils';
 
 const { Panel } = Collapse;
 
@@ -45,7 +49,7 @@ const defaultCronTabValue = {
   dayOfWeek: [],
   hour: [0],
   cronString: initCronString,
-  error: null,
+  error: null
 };
 
 interface IProps {
@@ -57,8 +61,11 @@ interface IProps {
 const Crontab = (props, ref) => {
   const {
     initialValue = null,
-    title = formatMessage({ id: 'src.component.Crontab.D7390DC8', defaultMessage: '定时周期' }),
-    onValueChange,
+    title = formatMessage({
+      id: 'src.component.Crontab.D7390DC8',
+      defaultMessage: '定时周期'
+    }),
+    onValueChange
   } = props;
   const [value, setValue] = useState(() => {
     return merge({}, defaultCronTabValue, initialValue);
@@ -71,16 +78,17 @@ const Crontab = (props, ref) => {
     },
     resetFields: () => {
       setValue(defaultCronTabValue);
-    },
+    }
   }));
 
   const [executeCycle, setExecuteCycle] = useState(null);
-  const { mode, dateType, dayOfMonth, dayOfWeek, hour, cronString, error } = value;
+  const { mode, dateType, dayOfMonth, dayOfWeek, hour, cronString, error } =
+    value;
   const handleValueChange = (newValue) => {
     const values = {
       ...value,
       ...newValue,
-      error: newValue.error,
+      error: newValue.error
     };
 
     if (values.mode !== CrontabMode.custom) {
@@ -104,8 +112,8 @@ const Crontab = (props, ref) => {
         setValue({
           ...value,
           error: {
-            plan: cronErrorMessage,
-          },
+            plan: cronErrorMessage
+          }
         });
       }
       setPlan(plan);
@@ -127,15 +135,16 @@ const Crontab = (props, ref) => {
 
   const handleDateTypeChange = (value: string) => {
     handleValueChange({
-      dateType: value,
+      dateType: value
     });
   };
 
   const handleModeChange = (value: string) => {
     handleValueChange({
       mode: value,
-      dateType: value === CrontabMode.default ? CrontabDateType.daily : dateType,
-      cronString: initCronString,
+      dateType:
+        value === CrontabMode.default ? CrontabDateType.daily : dateType,
+      cronString: initCronString
     });
   };
 
@@ -159,7 +168,7 @@ const Crontab = (props, ref) => {
               {
                 formatMessage({
                   id: 'odc.component.Crontab.Hourly',
-                  defaultMessage: '每小时',
+                  defaultMessage: '每小时'
                 }) /*每小时*/
               }
             </Button>
@@ -172,7 +181,7 @@ const Crontab = (props, ref) => {
               {
                 formatMessage({
                   id: 'odc.component.Crontab.EveryNight',
-                  defaultMessage: '每天晚上',
+                  defaultMessage: '每天晚上'
                 }) /*每天晚上*/
               }
             </Button>
@@ -185,7 +194,7 @@ const Crontab = (props, ref) => {
               {
                 formatMessage({
                   id: 'odc.component.Crontab.EveryFriday',
-                  defaultMessage: '每周五',
+                  defaultMessage: '每周五'
                 }) /*每周五*/
               }
             </Button>
@@ -201,7 +210,7 @@ const Crontab = (props, ref) => {
       <div
         className={classnames(styles.content, {
           [styles['default-mode']]: mode !== CrontabMode.custom,
-          [styles.daily]: dateType === CrontabDateType.daily,
+          [styles.daily]: dateType === CrontabDateType.daily
         })}
       >
         {mode === CrontabMode.custom ? (
@@ -222,7 +231,11 @@ const Crontab = (props, ref) => {
           </>
         ) : (
           <>
-            <Select value={dateType} options={dateOptions} onChange={handleDateTypeChange} />
+            <Select
+              value={dateType}
+              options={dateOptions}
+              onChange={handleDateTypeChange}
+            />
 
             {dateType === CrontabDateType.weekly && (
               <Select
@@ -233,7 +246,7 @@ const Crontab = (props, ref) => {
                 onChange={(value) => {
                   handleValueChange({
                     dayOfWeek: value,
-                    dayOfMonth: [],
+                    dayOfMonth: []
                   });
                 }}
               />
@@ -248,7 +261,7 @@ const Crontab = (props, ref) => {
                 onChange={(value) => {
                   handleValueChange({
                     dayOfWeek: [],
-                    dayOfMonth: value,
+                    dayOfMonth: value
                   });
                 }}
               />
@@ -262,7 +275,7 @@ const Crontab = (props, ref) => {
               onChange={(value) => {
                 handleValueChange({
                   hour: value,
-                  dayOfMonth: [],
+                  dayOfMonth: []
                 });
               }}
             />
@@ -291,7 +304,7 @@ const Crontab = (props, ref) => {
                   {
                     formatMessage({
                       id: 'odc.component.Crontab.NextExecutionTime',
-                      defaultMessage: '下一次执行时间：',
+                      defaultMessage: '下一次执行时间：'
                     }) /*下一次执行时间：*/
                   }
                 </span>

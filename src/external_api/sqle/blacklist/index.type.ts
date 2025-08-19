@@ -6,7 +6,7 @@ import {
   IGetBlacklistResV1,
   ICreateBlacklistReqV1,
   IBaseRes,
-  IUpdateBlacklistReqV1,
+  IUpdateBlacklistReqV1
 } from '../common.type';
 
 export interface IGetBlacklistV1Params {

@@ -35,12 +35,12 @@ interface IProps {
 
 export default forwardRef(function ListItem(
   { data, onClick, action, onSelectChange, selectProjectList }: IProps,
-  ref: React.Ref<HTMLDivElement>,
+  ref: React.Ref<HTMLDivElement>
 ) {
   const onChange = (e) => {
     onSelectChange(e.target.checked, {
       id: data.id,
-      name: data.name,
+      name: data.name
     });
   };
 
@@ -49,7 +49,11 @@ export default forwardRef(function ListItem(
   }, [data?.currentUserResourceRoles]);
 
   return (
-    <div ref={ref} className={classNames(styles.item)} onClick={onClick.bind(this, data)}>
+    <div
+      ref={ref}
+      className={classNames(styles.item)}
+      onClick={onClick.bind(this, data)}
+    >
       {action && (
         <div
           className={classNames(styles.block)}
@@ -61,7 +65,7 @@ export default forwardRef(function ListItem(
               isDisabledCheckbox
                 ? formatMessage({
                     id: 'src.page.Project.Project.ListItem.84183D4F',
-                    defaultMessage: '暂无权限，请联系管理员',
+                    defaultMessage: '暂无权限，请联系管理员'
                   })
                 : undefined
             }
@@ -76,19 +80,31 @@ export default forwardRef(function ListItem(
       )}
 
       <div className={classNames(styles.block, styles.status)}>
-        <Icon component={ProjectSvg} style={{ color: 'var(--icon-blue-color)', fontSize: 16 }} />
+        <Icon
+          component={ProjectSvg}
+          style={{ color: 'var(--icon-blue-color)', fontSize: 16 }}
+        />
       </div>
       <div className={classNames(styles.block, styles.name)}>{data.name}</div>
-      <div className={classNames(styles.block, styles.desc)}>{data.description || '-'}</div>
+      <div className={classNames(styles.block, styles.desc)}>
+        {data.description || '-'}
+      </div>
       <div className={classNames(styles.block, styles.users)}>
-        <Icon style={{ color: 'var(--icon-color-disable)', marginRight: 5 }} component={UserSvg} />
+        <Icon
+          style={{ color: 'var(--icon-color-disable)', marginRight: 5 }}
+          component={UserSvg}
+        />
         {Array.from(
           new Set(
-            data.members?.filter((item) => item.role === ProjectRole.OWNER)?.map((a) => a.name),
-          ),
+            data.members
+              ?.filter((item) => item.role === ProjectRole.OWNER)
+              ?.map((a) => a.name)
+          )
         )?.join(', ') || '-'}
       </div>
-      {action && <div className={classNames(styles.block, styles.action)}>{action}</div>}
+      {action && (
+        <div className={classNames(styles.block, styles.action)}>{action}</div>
+      )}
     </div>
   );
 });

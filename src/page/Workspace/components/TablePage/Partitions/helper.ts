@@ -20,13 +20,13 @@ import {
   ITableListPartition,
   ITableModel,
   ITableRangeColumnsPartition,
-  ITableRangePartition,
+  ITableRangePartition
 } from '../../CreateTable/interface';
 
 export function getRowsByPartType(
   type: IPartitionType,
   data: ITableModel['partitions'],
-  connectionMode: ConnectionMode,
+  connectionMode: ConnectionMode
 ) {
   const formatMultiListValue = (value) => {
     return value
@@ -51,76 +51,80 @@ export function getRowsByPartType(
   switch (type) {
     case IPartitionType.HASH:
     case IPartitionType.KEY:
-      return (data as ITableListPartition | ITableRangePartition)?.partitions?.map(
-        (p, position) => {
-          position = position + 1;
-          return {
-            name: p.name,
-            position,
-            key: p.ordinalPosition ?? p.key,
-            parentName: p?.parentName,
-          };
-        },
-      );
+      return (
+        data as ITableListPartition | ITableRangePartition
+      )?.partitions?.map((p, position) => {
+        position = position + 1;
+        return {
+          name: p.name,
+          position,
+          key: p.ordinalPosition ?? p.key,
+          parentName: p?.parentName
+        };
+      });
     case IPartitionType.LIST:
-      return (data as ITableListPartition | ITableRangePartition)?.partitions?.map(
-        (p, position) => {
-          position = position + 1;
-          return {
-            name: p.name,
-            position,
-            partValues:
-              connectionMode === ConnectionMode.OB_ORACLE
-                ? formatMultiListValue(p.valueForColumnDisplay)
-                : p.valueForColumnDisplay,
-            isNew: p.isNew,
-            key: p.ordinalPosition ?? p.key,
-            parentName: p?.parentName,
-          };
-        },
-      );
+      return (
+        data as ITableListPartition | ITableRangePartition
+      )?.partitions?.map((p, position) => {
+        position = position + 1;
+        return {
+          name: p.name,
+          position,
+          partValues:
+            connectionMode === ConnectionMode.OB_ORACLE
+              ? formatMultiListValue(p.valueForColumnDisplay)
+              : p.valueForColumnDisplay,
+          isNew: p.isNew,
+          key: p.ordinalPosition ?? p.key,
+          parentName: p?.parentName
+        };
+      });
     case IPartitionType.RANGE: {
-      return (data as ITableListPartition | ITableRangePartition)?.partitions?.map(
-        (p, position) => {
-          position = position + 1;
-          return {
-            name: p.name,
-            position,
-            partValues:
-              connectionMode === ConnectionMode.OB_ORACLE
-                ? formatMultiRangeValue(p.valueForColumnDisplay)
-                : p.valueForColumnDisplay,
-            isNew: p.isNew,
-            key: p.ordinalPosition ?? p.key,
-            parentName: p?.parentName,
-          };
-        },
-      );
+      return (
+        data as ITableListPartition | ITableRangePartition
+      )?.partitions?.map((p, position) => {
+        position = position + 1;
+        return {
+          name: p.name,
+          position,
+          partValues:
+            connectionMode === ConnectionMode.OB_ORACLE
+              ? formatMultiRangeValue(p.valueForColumnDisplay)
+              : p.valueForColumnDisplay,
+          isNew: p.isNew,
+          key: p.ordinalPosition ?? p.key,
+          parentName: p?.parentName
+        };
+      });
     }
     case IPartitionType.LIST_COLUMNS:
-      return (data as ITableListColumnsPartition)?.partitions?.map((p, position) => {
-        position = position + 1;
-        return {
-          name: p.name,
-          position,
-          isNew: p.isNew,
-          partValues: formatMultiListValue(p.value),
-          key: p.ordinalPosition ?? p.key,
-          parentName: p?.parentName,
-        };
-      });
+      return (data as ITableListColumnsPartition)?.partitions?.map(
+        (p, position) => {
+          position = position + 1;
+          return {
+            name: p.name,
+            position,
+            isNew: p.isNew,
+            partValues: formatMultiListValue(p.value),
+            key: p.ordinalPosition ?? p.key,
+            parentName: p?.parentName
+          };
+        }
+      );
     case IPartitionType.RANGE_COLUMNS:
-      return (data as ITableRangeColumnsPartition)?.partitions?.map((p, position) => {
-        position = position + 1;
-        return {
-          name: p.name,
-          position,
-          isNew: p.isNew,
-          partValues: formatMultiRangeValue(p.value),
-          key: p.ordinalPosition ?? p.key,
-          parentName: p?.parentName,
-        };
-      });
+      return (data as ITableRangeColumnsPartition)?.partitions?.map(
+        (p, position) => {
+          position = position + 1;
+          return {
+            name: p.name,
+            position,
+            isNew: p.isNew,
+            partValues: formatMultiRangeValue(p.value),
+            key: p.ordinalPosition ?? p.key,
+            parentName: p?.parentName
+          };
+        }
+      );
     default: {
       return [];
     }

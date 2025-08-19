@@ -8,7 +8,10 @@ interface ProjectEmptyProps {
   renderActionButton: () => JSX.Element;
 }
 
-const ProjectEmpty: React.FC<ProjectEmptyProps> = ({ type, renderActionButton }) => {
+const ProjectEmpty: React.FC<ProjectEmptyProps> = ({
+  type,
+  renderActionButton
+}) => {
   const renderTitle = (type) => {
     switch (type) {
       case ProjectTabType.ALL:
@@ -16,7 +19,7 @@ const ProjectEmpty: React.FC<ProjectEmptyProps> = ({ type, renderActionButton })
           <div className={styles.title}>
             {formatMessage({
               id: 'src.component.Empty.ProjectEmpty.9FECA85F',
-              defaultMessage: '暂无项目',
+              defaultMessage: '暂无项目'
             })}
           </div>
         );
@@ -25,7 +28,7 @@ const ProjectEmpty: React.FC<ProjectEmptyProps> = ({ type, renderActionButton })
           <div className={styles.title}>
             {formatMessage({
               id: 'src.component.Empty.ProjectEmpty.328FFA9A',
-              defaultMessage: '暂无归档项目',
+              defaultMessage: '暂无归档项目'
             })}
           </div>
         );
@@ -42,13 +45,13 @@ const ProjectEmpty: React.FC<ProjectEmptyProps> = ({ type, renderActionButton })
             <div>
               {formatMessage({
                 id: 'src.component.Empty.ProjectEmpty.027DBCF9',
-                defaultMessage: '作为业务协同的最小协作单元，提供统一管控规则',
+                defaultMessage: '作为业务协同的最小协作单元，提供统一管控规则'
               })}
             </div>
             <div>
               {formatMessage({
                 id: 'src.component.Empty.ProjectEmpty.C753B59D',
-                defaultMessage: '保障团队的高效协同和数据源安全变更',
+                defaultMessage: '保障团队的高效协同和数据源安全变更'
               })}
             </div>
           </div>
@@ -60,7 +63,7 @@ const ProjectEmpty: React.FC<ProjectEmptyProps> = ({ type, renderActionButton })
             <div>
               {formatMessage({
                 id: 'src.component.Empty.ProjectEmpty.C35E7838',
-                defaultMessage: '项目归档后，将不再支持任何协同开发活动',
+                defaultMessage: '项目归档后，将不再支持任何协同开发活动'
               })}
             </div>
           </div>

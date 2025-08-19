@@ -28,7 +28,7 @@ const oracleTableConfig = {
   constraintForeignOnDeleteConfig: [
     TableForeignConstraintOnDeleteType.CASCADE,
     TableForeignConstraintOnDeleteType.NO_ACTION,
-    TableForeignConstraintOnDeleteType.SET_NULL,
+    TableForeignConstraintOnDeleteType.SET_NULL
   ],
   disableRangeColumnsPartition: true,
   disableListColumnsPartition: true,
@@ -40,24 +40,27 @@ const oracleTableConfig = {
     id: 'NUMBER',
     name: 'VARCHAR',
     date: 'DATE',
-    time: 'TIMESTAMP',
-  },
+    time: 'TIMESTAMP'
+  }
 };
 
 const functionConfig: IDataSourceModeConfig['schema']['func'] = {
-  params: ['paramName', 'paramMode', 'dataType', 'defaultValue'],
+  params: ['paramName', 'paramMode', 'dataType', 'defaultValue']
 };
 
-const items: Record<ConnectType.CLOUD_OB_ORACLE | ConnectType.OB_ORACLE, IDataSourceModeConfig> = {
+const items: Record<
+  ConnectType.CLOUD_OB_ORACLE | ConnectType.OB_ORACLE,
+  IDataSourceModeConfig
+> = {
   [ConnectType.OB_ORACLE]: {
     priority: 99,
     connection: {
       address: {
-        items: ['ip', 'port', 'cluster', 'tenant'],
+        items: ['ip', 'port', 'cluster', 'tenant']
       },
       account: true,
       sys: true,
-      ssl: true,
+      ssl: true
     },
     features: {
       task: Object.values(TaskType).filter(
@@ -65,8 +68,8 @@ const items: Record<ConnectType.CLOUD_OB_ORACLE | ConnectType.OB_ORACLE, IDataSo
           ![
             TaskType.SHADOW,
             TaskType.ONLINE_SCHEMA_CHANGE,
-            TaskType.LOGICAL_DATABASE_CHANGE,
-          ].includes(type),
+            TaskType.LOGICAL_DATABASE_CHANGE
+          ].includes(type)
       ),
       obclient: true,
       recycleBin: true,
@@ -82,35 +85,36 @@ const items: Record<ConnectType.CLOUD_OB_ORACLE | ConnectType.OB_ORACLE, IDataSo
       supportOBProxy: true,
       export: {
         fileLimit: true,
-        snapshot: true,
-      },
+        snapshot: true
+      }
     },
     schema: {
       table: oracleTableConfig,
       func: functionConfig,
       proc: functionConfig,
-      innerSchema: ['SYS'],
+      innerSchema: ['SYS']
     },
     sql: {
       language: 'oboracle',
       escapeChar: '"',
-      plParamMode: 'text',
-    },
+      plParamMode: 'text'
+    }
   },
   [ConnectType.CLOUD_OB_ORACLE]: {
     priority: 97,
     connection: {
       address: {
-        items: ['ip', 'port'],
+        items: ['ip', 'port']
       },
       account: true,
       sys: true,
       ssl: true,
-      unionUser: true,
+      unionUser: true
     },
     features: {
       task: Object.values(TaskType).filter(
-        (type) => ![TaskType.SHADOW, TaskType.LOGICAL_DATABASE_CHANGE].includes(type),
+        (type) =>
+          ![TaskType.SHADOW, TaskType.LOGICAL_DATABASE_CHANGE].includes(type)
       ),
       obclient: true,
       recycleBin: true,
@@ -126,21 +130,21 @@ const items: Record<ConnectType.CLOUD_OB_ORACLE | ConnectType.OB_ORACLE, IDataSo
       supportOBProxy: true,
       export: {
         fileLimit: true,
-        snapshot: true,
-      },
+        snapshot: true
+      }
     },
     schema: {
       table: oracleTableConfig,
       func: functionConfig,
       proc: functionConfig,
-      innerSchema: ['SYS'],
+      innerSchema: ['SYS']
     },
     sql: {
       language: 'oboracle',
       escapeChar: '"',
-      plParamMode: 'text',
-    },
-  },
+      plParamMode: 'text'
+    }
+  }
 };
 
 if (haveOCP()) {

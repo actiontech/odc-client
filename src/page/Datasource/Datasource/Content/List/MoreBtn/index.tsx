@@ -24,7 +24,7 @@ import {
   DeleteOutlined,
   EditOutlined,
   EllipsisOutlined,
-  QuestionCircleFilled,
+  QuestionCircleFilled
 } from '@ant-design/icons';
 import { Dropdown, message, Modal } from 'antd';
 import { ItemType } from 'antd/es/menu/interface';
@@ -40,7 +40,7 @@ enum Actions {
   EDIT = 'edit',
   COPY = 'copy',
   REMOVE = 'remove',
-  CLONE = 'clone',
+  CLONE = 'clone'
 }
 const MoreBtn: React.FC<IProps> = function ({ connection, modalStore }) {
   const context = useContext(ParamContext);
@@ -54,14 +54,14 @@ const MoreBtn: React.FC<IProps> = function ({ connection, modalStore }) {
         `${connection.name}_` +
         formatMessage({
           id: 'portal.connection.tooltip.copy',
-          defaultMessage: '复制',
+          defaultMessage: '复制'
         }),
-      copyFromSid: connection?.id,
+      copyFromSid: connection?.id
     };
     modalStore.changeAddConnectionModal(true, {
       data: newConnection,
       isEdit: false,
-      isCopy: true,
+      isCopy: true
     });
   }
   async function remove() {
@@ -69,24 +69,24 @@ const MoreBtn: React.FC<IProps> = function ({ connection, modalStore }) {
       title: formatMessage(
         {
           id: 'portal.connection.delete.modal.title',
-          defaultMessage: '是否确认删除 {name} ？',
+          defaultMessage: '是否确认删除 {name} ？'
         },
         {
-          name: connection.name,
-        },
+          name: connection.name
+        }
       ),
       content: formatMessage({
         id: 'odc.src.page.Datasource.AfterDeletingYouWill',
-        defaultMessage: '删除后将无法访问该数据源',
+        defaultMessage: '删除后将无法访问该数据源'
       }),
       //'删除后将无法访问该数据源'
       okText: formatMessage({
         id: 'app.button.ok',
-        defaultMessage: '确定',
+        defaultMessage: '确定'
       }),
       cancelText: formatMessage({
         id: 'app.button.cancel',
-        defaultMessage: '取消',
+        defaultMessage: '取消'
       }),
       centered: true,
       icon: <QuestionCircleFilled />,
@@ -97,11 +97,11 @@ const MoreBtn: React.FC<IProps> = function ({ connection, modalStore }) {
           message.success(
             formatMessage({
               id: 'portal.connection.delete.success',
-              defaultMessage: '删除成功',
-            }),
+              defaultMessage: '删除成功'
+            })
           );
         }
-      },
+      }
     });
   }
   const items: ItemType[] = [
@@ -109,48 +109,48 @@ const MoreBtn: React.FC<IProps> = function ({ connection, modalStore }) {
       ? {
           label: formatMessage({
             id: 'odc.List.MoreBtn.Edit',
-            defaultMessage: '编辑',
+            defaultMessage: '编辑'
           }),
           key: Actions.EDIT,
-          icon: <EditOutlined />,
+          icon: <EditOutlined />
         }
       : null,
     connection.permittedActions?.includes(actionTypes.update)
       ? {
           label: formatMessage({
             id: 'odc.src.page.Datasource.Datasource.Content.List.MoreBtn.Clone',
-            defaultMessage: '克隆',
+            defaultMessage: '克隆'
           }), //'克隆'
           key: Actions.CLONE,
-          icon: <CopyOutlined />,
+          icon: <CopyOutlined />
         }
       : null,
     connection.permittedActions?.includes(actionTypes.delete)
       ? {
           label: formatMessage({
             id: 'odc.src.page.Datasource.Datasource.Content.List.MoreBtn.Delete',
-            defaultMessage: '删除',
+            defaultMessage: '删除'
           }),
           //'删除'
           key: Actions.REMOVE,
-          icon: <DeleteOutlined />,
+          icon: <DeleteOutlined />
         }
       : null,
     {
-      type: 'divider',
+      type: 'divider'
     },
     {
       label:
         formatMessage({
           id: 'odc.List.MoreBtn.UpdatedOn',
-          defaultMessage: '更新于',
+          defaultMessage: '更新于'
         }) + getFormatDateTime(connection?.updateTime),
       key: 'updateTime',
       disabled: true,
       style: {
-        color: 'var(--text-color-hint)',
-      },
-    },
+        color: 'var(--text-color-hint)'
+      }
+    }
   ];
 
   return (
@@ -177,14 +177,14 @@ const MoreBtn: React.FC<IProps> = function ({ connection, modalStore }) {
               return;
             }
           }
-        },
+        }
       }}
     >
       <EllipsisOutlined
         style={{
           cursor: 'default',
           fontSize: 14,
-          color: 'var(--icon-color-normal)',
+          color: 'var(--icon-color-normal)'
         }}
       />
     </Dropdown>

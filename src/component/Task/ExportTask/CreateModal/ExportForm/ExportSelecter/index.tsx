@@ -49,7 +49,7 @@ const ExportSelecter: React.FC<IProps> = function ({
   onlyTable,
   value,
   dialectType,
-  onChange,
+  onChange
 }) {
   const [objsLoading, setObjsLoading] = useState(false);
   const [sourceSearchValue, setSourceSearchValue] = useState(null);
@@ -60,7 +60,7 @@ const ExportSelecter: React.FC<IProps> = function ({
   function wrapValueStruct(dbObjectType, objectName) {
     return {
       dbObjectType,
-      objectName,
+      objectName
     };
   }
 
@@ -71,7 +71,10 @@ const ExportSelecter: React.FC<IProps> = function ({
       if (!name) {
         return;
       }
-      if (type === DbObjectType.package && objs[DbObjectType?.package_body]?.includes(name)) {
+      if (
+        type === DbObjectType.package &&
+        objs[DbObjectType?.package_body]?.includes(name)
+      ) {
         /**
          * 需要增加程序包体进去
          */
@@ -108,7 +111,7 @@ const ExportSelecter: React.FC<IProps> = function ({
           DbObjectType.synonym,
           DbObjectType.public_synonym,
           DbObjectType.type,
-          DbObjectType.materialized_view,
+          DbObjectType.materialized_view
         ];
 
     if (!onlyTable && dialectType !== ConnectionMode.MYSQL) {
@@ -177,14 +180,15 @@ const ExportSelecter: React.FC<IProps> = function ({
           .map((name) => {
             if (
               targetSearchValue &&
-              name?.toLowerCase().indexOf(targetSearchValue?.toLowerCase()) === -1
+              name?.toLowerCase().indexOf(targetSearchValue?.toLowerCase()) ===
+                -1
             ) {
               return null;
             }
             return {
               title: name,
               icon,
-              key: getObjKey(name, objType),
+              key: getObjKey(name, objType)
             };
           })
           .filter(Boolean);
@@ -192,7 +196,7 @@ const ExportSelecter: React.FC<IProps> = function ({
           title: DbObjectTypeTextMap(objType) + `(${children?.length})`,
           key: objType,
           icon,
-          children,
+          children
         };
       })
       .filter(Boolean);
@@ -214,14 +218,15 @@ const ExportSelecter: React.FC<IProps> = function ({
           ?.map((name) => {
             if (
               sourceSearchValue &&
-              name?.toLowerCase().indexOf(sourceSearchValue?.toLowerCase()) === -1
+              name?.toLowerCase().indexOf(sourceSearchValue?.toLowerCase()) ===
+                -1
             ) {
               return null;
             }
             return {
               title: <span style={{ wordBreak: 'break-all' }}>{name}</span>,
               icon,
-              key: getObjKey(name, objType),
+              key: getObjKey(name, objType)
             };
           })
           .filter(Boolean);
@@ -229,7 +234,7 @@ const ExportSelecter: React.FC<IProps> = function ({
           title: DbObjectTypeTextMap(objType) + `(${children?.length})`,
           key: objType,
           icon,
-          children,
+          children
         };
       })
       .filter(Boolean);
@@ -237,11 +242,14 @@ const ExportSelecter: React.FC<IProps> = function ({
 
   const allTreeData = getAllTreeData();
   const selectedTreeData = getCheckedTreeData();
-  const allTreeDataCount = Object.entries(allTreeData).reduce((prev, current) => {
-    return prev + current?.[1]?.children.length;
-  }, 0);
+  const allTreeDataCount = Object.entries(allTreeData).reduce(
+    (prev, current) => {
+      return prev + current?.[1]?.children.length;
+    },
+    0
+  );
   const selectedTreeDataCount = checkedKeys.filter(
-    (key) => !getObjTypeList().includes(key),
+    (key) => !getObjTypeList().includes(key)
   )?.length;
   return (
     <div className={styles.selecter}>
@@ -252,7 +260,7 @@ const ExportSelecter: React.FC<IProps> = function ({
             title={
               formatMessage({
                 id: 'odc.ExportForm.ExportSelecter.SelectObject',
-                defaultMessage: '选择对象',
+                defaultMessage: '选择对象'
               }) + //选择对象
               `(${allTreeDataCount})`
             }
@@ -291,9 +299,9 @@ const ExportSelecter: React.FC<IProps> = function ({
             formatMessage(
               {
                 id: 'odc.ExportForm.ExportSelecter.SelectedtreedatacountItemsSelected',
-                defaultMessage: '已选 {selectedTreeDataCount} 项',
+                defaultMessage: '已选 {selectedTreeDataCount} 项'
               },
-              { selectedTreeDataCount },
+              { selectedTreeDataCount }
             ) //`已选 ${selectedTreeDataCount} 项`
           }
           onSearch={(v) => setTargetSearchValue(v)}
@@ -305,14 +313,14 @@ const ExportSelecter: React.FC<IProps> = function ({
               placement="left"
               title={formatMessage({
                 id: 'odc.ExportForm.ExportSelecter.AreYouSureYouWant',
-                defaultMessage: '是否确定清空已选对象？',
+                defaultMessage: '是否确定清空已选对象？'
               })} /*确定要清空已选对象吗？*/
             >
               <a>
                 {
                   formatMessage({
                     id: 'odc.ExportForm.ExportSelecter.Clear',
-                    defaultMessage: '清空',
+                    defaultMessage: '清空'
                   }) /*清空*/
                 }
               </a>
@@ -341,16 +349,22 @@ const ExportSelecter: React.FC<IProps> = function ({
                            * 说明这里删除的是根节点
                            */
                           const typeList = selectedTreeData.find(
-                            (d) => d.key === nodeKey,
+                            (d) => d.key === nodeKey
                           )?.children;
-                          const filterAllkeys = typeList?.map((item) => item.key);
+                          const filterAllkeys = typeList?.map(
+                            (item) => item.key
+                          );
                           setCheckedKeys(
-                            checkedKeys.filter((key) => !filterAllkeys?.includes(key)),
+                            checkedKeys.filter(
+                              (key) => !filterAllkeys?.includes(key)
+                            )
                           );
 
                           return;
                         }
-                        setCheckedKeys(checkedKeys.filter((key) => key !== nodeKey));
+                        setCheckedKeys(
+                          checkedKeys.filter((key) => key !== nodeKey)
+                        );
                       }}
                     >
                       <DeleteOutlined />

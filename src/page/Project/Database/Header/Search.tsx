@@ -12,30 +12,33 @@ export enum SearchType {
   DATABASE = 'DATABASE',
   DATASOURCE = 'DATASOURCE',
   CLUSTER = 'CLUSTER',
-  TENANT = 'TENANT',
+  TENANT = 'TENANT'
 }
 
 export const SearchTypeText = {
   [SearchType.DATABASE]: formatMessage({
     id: 'src.component.ODCSetting.config.9EC92943',
-    defaultMessage: '数据库',
+    defaultMessage: '数据库'
   }), //'数据库'
   [SearchType.DATASOURCE]: formatMessage({
     id: 'odc.component.RecordPopover.column.DataSource',
-    defaultMessage: '数据源',
+    defaultMessage: '数据源'
   }), //数据源
   [SearchType.CLUSTER]: formatMessage({
     id: 'odc.Connecion.ConnectionList.ParamContext.Cluster',
-    defaultMessage: '集群',
+    defaultMessage: '集群'
   }), //集群
   [SearchType.TENANT]: formatMessage({
     id: 'odc.Connecion.ConnectionList.ParamContext.Tenant',
-    defaultMessage: '租户',
-  }), //租户
+    defaultMessage: '租户'
+  }) //租户
 };
 const splitKey = '_$$$odc$$$_';
 
-const RemoveSplitInput = forwardRef(function RemoveSplitInput({ value, ...rest }: any, ref) {
+const RemoveSplitInput = forwardRef(function RemoveSplitInput(
+  { value, ...rest }: any,
+  ref
+) {
   let type;
   if (value) {
     const arr = value.split(splitKey);
@@ -48,7 +51,7 @@ const RemoveSplitInput = forwardRef(function RemoveSplitInput({ value, ...rest }
       value={value}
       placeholder={formatMessage({
         id: 'src.component.BatchSelectionPopover.9DC08FE8',
-        defaultMessage: '搜索关键字',
+        defaultMessage: '搜索关键字'
       })}
       prefix={<SearchOutlined />}
       suffix={
@@ -77,32 +80,45 @@ const Search: React.FC<IProps> = function () {
       return;
     }
     setOptions(
-      [SearchType.DATABASE, SearchType.DATASOURCE, SearchType.CLUSTER, SearchType.TENANT]?.map(
-        (v) => {
-          return {
-            value: value + splitKey + v,
-            label: (
+      [
+        SearchType.DATABASE,
+        SearchType.DATASOURCE,
+        SearchType.CLUSTER,
+        SearchType.TENANT
+      ]?.map((v) => {
+        return {
+          value: value + splitKey + v,
+          label: (
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between'
+              }}
+            >
               <div
-                style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
+                style={{
+                  flex: 1,
+                  overflow: 'hidden',
+                  whiteSpace: 'nowrap',
+                  textOverflow: 'ellipsis'
+                }}
               >
-                <div
-                  style={{
-                    flex: 1,
-                    overflow: 'hidden',
-                    whiteSpace: 'nowrap',
-                    textOverflow: 'ellipsis',
-                  }}
-                >
-                  {value}
-                </div>
-                <div style={{ flexShrink: 0, flexGrow: 0, color: 'var(--text-color-hint)' }}>
-                  {SearchTypeText[v]}
-                </div>
+                {value}
               </div>
-            ),
-          };
-        },
-      ),
+              <div
+                style={{
+                  flexShrink: 0,
+                  flexGrow: 0,
+                  color: 'var(--text-color-hint)'
+                }}
+              >
+                {SearchTypeText[v]}
+              </div>
+            </div>
+          )
+        };
+      })
     );
     return;
   }
@@ -137,7 +153,11 @@ const Search: React.FC<IProps> = function () {
         setIsEmpty(!v);
       }}
       value={value}
-      defaultValue={searchValue?.value ? searchValue.value + splitKey + searchValue.type : null}
+      defaultValue={
+        searchValue?.value
+          ? searchValue.value + splitKey + searchValue.type
+          : null
+      }
       defaultActiveFirstOption
       onSearch={getOptions}
       onSelect={(v, option) => {

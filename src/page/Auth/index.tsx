@@ -15,7 +15,11 @@
  */
 
 import { getConnectionList } from '@/common/network/connection';
-import { getResourceRoles, getRoleList, getUserList } from '@/common/network/manager';
+import {
+  getResourceRoles,
+  getRoleList,
+  getUserList
+} from '@/common/network/manager';
 import { listProjects } from '@/common/network/project';
 import { canAcess, createPermission } from '@/component/Acess';
 import PageContainer, { TitleType } from '@/component/PageContainer';
@@ -30,7 +34,10 @@ import { ResourceContext } from './context';
 import Role from './Role';
 import User from './User';
 
-export const getProjectRoleNameByIds = (roles: IResourceRole[], roleIds: number[]) => {
+export const getProjectRoleNameByIds = (
+  roles: IResourceRole[],
+  roleIds: number[]
+) => {
   const names = [];
   if (roles?.length && roleIds?.length) {
     roleIds?.forEach((id) => {
@@ -51,30 +58,36 @@ interface IProps {}
 
 const Pages = {
   [IPageType.Auth_User]: {
-    component: User,
+    component: User
   },
   [IPageType.Auth_Role]: {
-    component: Role,
+    component: Role
   },
   [IPageType.Auth_Autoauth]: {
-    component: Autoauth,
-  },
+    component: Autoauth
+  }
 };
 
 const tabs = [
   {
     tab: formatMessage({ id: 'odc.page.Auth.User', defaultMessage: '用户' }), //用户
-    key: IPageType.Auth_User,
+    key: IPageType.Auth_User
   },
   {
     tab: formatMessage({ id: 'odc.page.Auth.Role', defaultMessage: '角色' }), //角色
-    key: IPageType.Auth_Role,
+    key: IPageType.Auth_Role
   },
   {
-    tab: formatMessage({ id: 'odc.page.Auth.AutomaticAuthorization', defaultMessage: '自动授权' }), //自动授权
+    tab: formatMessage({
+      id: 'odc.page.Auth.AutomaticAuthorization',
+      defaultMessage: '自动授权'
+    }), //自动授权
     key: IPageType.Auth_Autoauth,
-    permission: createPermission(IManagerResourceType.auto_auth, actionTypes.read),
-  },
+    permission: createPermission(
+      IManagerResourceType.auto_auth,
+      actionTypes.read
+    )
+  }
 ];
 
 const Index: React.FC<IProps> = function () {
@@ -127,7 +140,10 @@ const Index: React.FC<IProps> = function () {
     <PageContainer
       titleProps={{
         type: TitleType.TEXT,
-        title: formatMessage({ id: 'odc.page.Auth.UserPermissions', defaultMessage: '用户权限' }), //用户权限
+        title: formatMessage({
+          id: 'odc.page.Auth.UserPermissions',
+          defaultMessage: '用户权限'
+        }) //用户权限
       }}
       tabList={displayTabs}
       tabActiveKey={page}
@@ -144,7 +160,7 @@ const Index: React.FC<IProps> = function () {
           loadUsers,
           loadConnections,
           loadProjectRoles,
-          loadProjects,
+          loadProjects
         }}
       >
         <Component id={id} />

@@ -28,14 +28,27 @@ export function openMainWebWindow(mainWindow: BrowserWindow) {
   if (process.platform !== 'darwin') {
     mainWindow.setMenu(null);
   }
-  if (process.env.ODC_DEBUG_MODE === 'open' || process.env.NODE_ENV === 'development') {
+  if (
+    process.env.ODC_DEBUG_MODE === 'open' ||
+    process.env.NODE_ENV === 'development'
+  ) {
     mainWindow!.webContents.openDevTools();
   }
 
-  mainWindow.webContents?.on('did-fail-load', (e, code, desc, url, isMainFrame, frameProcId) => {
-    log.error('webcontent load failed', code, desc, url, isMainFrame, frameProcId);
-    log.error(e);
-  });
+  mainWindow.webContents?.on(
+    'did-fail-load',
+    (e, code, desc, url, isMainFrame, frameProcId) => {
+      log.error(
+        'webcontent load failed',
+        code,
+        desc,
+        url,
+        isMainFrame,
+        frameProcId
+      );
+      log.error(e);
+    }
+  );
   mainWindow.webContents.on('certificate-error', (e) => {
     log.error('certificate-error', e);
   });
@@ -47,7 +60,9 @@ export function openMainWebWindow(mainWindow: BrowserWindow) {
     log.error('loadURL error', e);
     dialog.showErrorBox(
       `Open ODC Window Failed`,
-      `Please submit the log to the administrator（${app.getPath('userData')}/logs）`,
+      `Please submit the log to the administrator（${app.getPath(
+        'userData'
+      )}/logs）`
     );
     app.quit();
   });

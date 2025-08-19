@@ -22,7 +22,7 @@ import { TableCheckConstraint } from '../../interface';
 import { useDeferColumn, useEnableColumn } from '../baseColumn';
 
 export function useColumns(
-  mode: ConnectionMode,
+  mode: ConnectionMode
 ): Column<TableCheckConstraint, TableCheckConstraint>[] {
   const enableColumn = useEnableColumn(mode);
   const deferColumn = useDeferColumn(mode);
@@ -31,26 +31,26 @@ export function useColumns(
       key: 'name',
       name: formatMessage({
         id: 'odc.CreateTable.Columns.columns.Name',
-        defaultMessage: '名称',
+        defaultMessage: '名称'
       }), //名称
       resizable: true,
       editable: true,
-      editor: TextEditor,
+      editor: TextEditor
     },
 
     {
       key: 'check',
       name: formatMessage({
         id: 'odc.TableConstraint.Check.columns.CheckConditions',
-        defaultMessage: '检查条件',
+        defaultMessage: '检查条件'
       }), //检查条件
       resizable: true,
       filterable: false,
       editable: true,
-      editor: TextEditor,
+      editor: TextEditor
     },
 
     enableColumn,
-    deferColumn,
+    deferColumn
   ].filter(Boolean);
 }

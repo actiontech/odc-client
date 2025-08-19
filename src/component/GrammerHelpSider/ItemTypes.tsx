@@ -15,5 +15,5 @@
  */
 
 export const ItemTypes = {
-  BOX: 'box',
+  BOX: 'box'
 };

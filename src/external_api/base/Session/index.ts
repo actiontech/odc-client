@@ -12,26 +12,45 @@ import {
   IDelSessionReturn,
   IRefreshSessionReturn,
   IGetUserBySessionParams,
-  IGetUserBySessionReturn,
+  IGetUserBySessionReturn
 } from './index.type';
 
 class SessionService extends ServiceBase {
   public AddSession(params: IAddSessionParams, options?: AxiosRequestConfig) {
     const paramsData = this.cloneDeep(params);
-    return this.post<IAddSessionReturn>('/v1/dms/sessions', paramsData, options);
+    return this.post<IAddSessionReturn>(
+      '/v1/dms/sessions',
+      paramsData,
+      options
+    );
   }
 
   public DelSession(options?: AxiosRequestConfig) {
-    return this.delete<IDelSessionReturn>('/v1/dms/sessions', undefined, options);
+    return this.delete<IDelSessionReturn>(
+      '/v1/dms/sessions',
+      undefined,
+      options
+    );
   }
 
   public RefreshSession(options?: AxiosRequestConfig) {
-    return this.post<IRefreshSessionReturn>('/v1/dms/sessions/refresh', undefined, options);
+    return this.post<IRefreshSessionReturn>(
+      '/v1/dms/sessions/refresh',
+      undefined,
+      options
+    );
   }
 
-  public GetUserBySession(params: IGetUserBySessionParams, options?: AxiosRequestConfig) {
+  public GetUserBySession(
+    params: IGetUserBySessionParams,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
-    return this.get<IGetUserBySessionReturn>('/v1/dms/sessions/user', paramsData, options);
+    return this.get<IGetUserBySessionReturn>(
+      '/v1/dms/sessions/user',
+      paramsData,
+      options
+    );
   }
 }
 

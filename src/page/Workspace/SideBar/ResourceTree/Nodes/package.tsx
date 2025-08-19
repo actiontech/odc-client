@@ -32,19 +32,22 @@ import { ReactComponent as ParameterSvg } from '@/svgr/Parameter.svg';
 
 const THEME = 'var(--icon-color-3)';
 
-export function PackageTreeData(dbSession: SessionStore, database: IDatabase): TreeDataNode {
+export function PackageTreeData(
+  dbSession: SessionStore,
+  database: IDatabase
+): TreeDataNode {
   const dbName = database.name;
   const packages = dbSession?.database?.packages;
   const treeData: TreeDataNode = {
     title: formatMessage({
       id: 'odc.ResourceTree.Nodes.package.Package',
-      defaultMessage: '程序包',
+      defaultMessage: '程序包'
     }), //程序包
     key: `${database.id}-${dbName}-package`,
     type: ResourceNodeType.PackageRoot,
     data: database,
     sessionId: dbSession?.sessionId,
-    isLeaf: false,
+    isLeaf: false
   };
   if (packages) {
     treeData.children = packages.map((pkg) => {
@@ -59,7 +62,7 @@ export function PackageTreeData(dbSession: SessionStore, database: IDatabase): T
         headRoot = {
           title: formatMessage({
             id: 'odc.ResourceTree.Nodes.package.Baotou',
-            defaultMessage: '包头',
+            defaultMessage: '包头'
           }), //包头
           key: `${pkgKey}-head`,
           data: pkg,
@@ -67,26 +70,26 @@ export function PackageTreeData(dbSession: SessionStore, database: IDatabase): T
             <Icon
               component={PackageHeadSvg}
               style={{
-                color: THEME,
+                color: THEME
               }}
             />
           ),
 
           sessionId: dbSession?.sessionId,
-          type: ResourceNodeType.PackageHead,
+          type: ResourceNodeType.PackageHead
         };
         if (packageHead.variables?.length) {
           variablesRoot = {
             title: formatMessage({
               id: 'odc.ResourceTree.Nodes.package.Variable',
-              defaultMessage: '变量',
+              defaultMessage: '变量'
             }), //变量
             key: `${pkgKey}-head-variable`,
             type: ResourceNodeType.PackageHeadVariableRoot,
             icon: (
               <InfoOutlined
                 style={{
-                  color: THEME,
+                  color: THEME
                 }}
               />
             ),
@@ -96,9 +99,9 @@ export function PackageTreeData(dbSession: SessionStore, database: IDatabase): T
                 title: `${v.varName}:${v.varType}`,
                 key: `${pkgKey}-head-variable-${v.varName}-${v.varType}-${i}`,
                 type: ResourceNodeType.PackageHeadVariable,
-                isLeaf: true,
+                isLeaf: true
               };
-            }),
+            })
           };
         }
         if (packageHead.functions?.length || packageHead.procedures?.length) {
@@ -107,7 +110,7 @@ export function PackageTreeData(dbSession: SessionStore, database: IDatabase): T
           programRoot = {
             title: formatMessage({
               id: 'odc.ResourceTree.Nodes.package.Subprogram',
-              defaultMessage: '子程序',
+              defaultMessage: '子程序'
             }), //子程序
             key: `${pkgKey}-head-program`,
             type: ResourceNodeType.PackageHeadProgramRoot,
@@ -116,7 +119,7 @@ export function PackageTreeData(dbSession: SessionStore, database: IDatabase): T
               <Icon
                 component={ParameterSvg}
                 style={{
-                  color: THEME,
+                  color: THEME
                 }}
               />
             ),
@@ -130,7 +133,7 @@ export function PackageTreeData(dbSession: SessionStore, database: IDatabase): T
                   `${pkgKey}-${i}`,
                   ResourceNodeType.PackageHeadFunction,
                   pkg,
-                  i,
+                  i
                 );
               })
               .concat(
@@ -142,10 +145,10 @@ export function PackageTreeData(dbSession: SessionStore, database: IDatabase): T
                     `${pkgKey}-${i}`,
                     ResourceNodeType.PackageHeadProcedure,
                     pkg,
-                    i,
+                    i
                   );
-                }),
-              ),
+                })
+              )
           };
         }
         headRoot.children = [variablesRoot, programRoot].filter(Boolean);
@@ -156,7 +159,7 @@ export function PackageTreeData(dbSession: SessionStore, database: IDatabase): T
         bodyRoot = {
           title: formatMessage({
             id: 'odc.ResourceTree.Nodes.package.PackageBody',
-            defaultMessage: '包体',
+            defaultMessage: '包体'
           }), //包体
           key: `${pkgKey}-body`,
           type: ResourceNodeType.PackageBody,
@@ -166,23 +169,23 @@ export function PackageTreeData(dbSession: SessionStore, database: IDatabase): T
             <Icon
               component={PackageBodySvg}
               style={{
-                color: THEME,
+                color: THEME
               }}
             />
-          ),
+          )
         };
         if (packageBody.variables?.length) {
           variablesRoot = {
             title: formatMessage({
               id: 'odc.ResourceTree.Nodes.package.Variable',
-              defaultMessage: '变量',
+              defaultMessage: '变量'
             }), //变量
             key: `${pkgKey}-body-variable`,
             type: ResourceNodeType.PackageBodyVariableRoot,
             icon: (
               <InfoOutlined
                 style={{
-                  color: THEME,
+                  color: THEME
                 }}
               />
             ),
@@ -192,9 +195,9 @@ export function PackageTreeData(dbSession: SessionStore, database: IDatabase): T
                 title: `${v.varName}:${v.varType}`,
                 key: `${pkgKey}-body-variable-name${v.varName}-${v.varType}-${i}`,
                 type: ResourceNodeType.PackageBodyVariable,
-                isLeaf: true,
+                isLeaf: true
               };
-            }),
+            })
           };
         }
         if (packageBody.functions?.length || packageBody.procedures?.length) {
@@ -203,7 +206,7 @@ export function PackageTreeData(dbSession: SessionStore, database: IDatabase): T
           programRoot = {
             title: formatMessage({
               id: 'odc.ResourceTree.Nodes.package.Subprogram',
-              defaultMessage: '子程序',
+              defaultMessage: '子程序'
             }), //子程序
             key: `${pkgKey}-body-program`,
             type: ResourceNodeType.PackageBodyProgramRoot,
@@ -211,7 +214,7 @@ export function PackageTreeData(dbSession: SessionStore, database: IDatabase): T
               <Icon
                 component={ParameterSvg}
                 style={{
-                  color: THEME,
+                  color: THEME
                 }}
               />
             ),
@@ -225,7 +228,7 @@ export function PackageTreeData(dbSession: SessionStore, database: IDatabase): T
                   pkgKey + '-body-' + i,
                   ResourceNodeType.PackageBodyFunction,
                   pkg,
-                  i,
+                  i
                 );
               })
               .concat(
@@ -237,10 +240,10 @@ export function PackageTreeData(dbSession: SessionStore, database: IDatabase): T
                     pkgKey + '-body-' + i,
                     ResourceNodeType.PackageBodyProcedure,
                     pkg,
-                    i,
+                    i
                   );
-                }),
-              ),
+                })
+              )
           };
         }
         bodyRoot.children = [variablesRoot, programRoot].filter(Boolean);
@@ -258,17 +261,22 @@ export function PackageTreeData(dbSession: SessionStore, database: IDatabase): T
           <Icon
             component={PackageSvg}
             style={{
-              color: THEME,
+              color: THEME
             }}
           />
         ),
 
         doubleClick(session, node) {
-          openPackageViewPage(pkg.packageName, undefined, undefined, session?.database?.databaseId);
+          openPackageViewPage(
+            pkg.packageName,
+            undefined,
+            undefined,
+            session?.database?.databaseId
+          );
         },
         sessionId: dbSession?.sessionId,
         isLeaf: false,
-        children: haveData ? [headRoot, bodyRoot].filter(Boolean) : null,
+        children: haveData ? [headRoot, bodyRoot].filter(Boolean) : null
       };
     });
   }

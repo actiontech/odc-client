@@ -32,16 +32,16 @@ const StatusSwitch: React.FC<{
     disabled = false,
     title = formatMessage({
       id: 'odc.component.StatusSwitch.AreYouSureYouWant',
-      defaultMessage: '是否确定关闭？',
+      defaultMessage: '是否确定关闭？'
     }), //确定要关闭吗？
     overlayStyle,
     onConfirm,
-    onCancel,
+    onCancel
   } = props;
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [checked, setChecked] = useControllableValue(props, {
-    valuePropName: 'checked',
+    valuePropName: 'checked'
   });
 
   const handleChange = (value: boolean) => {
@@ -77,22 +77,27 @@ const StatusSwitch: React.FC<{
       open={visible}
       overlayStyle={{
         width: '180px',
-        ...overlayStyle,
+        ...overlayStyle
       }}
       title={title}
       okText={formatMessage({
         id: 'odc.component.StatusSwitch.Ok',
-        defaultMessage: '确定',
+        defaultMessage: '确定'
       })} /*确定*/
       cancelText={formatMessage({
         id: 'odc.component.StatusSwitch.Cancel',
-        defaultMessage: '取消',
+        defaultMessage: '取消'
       })} /*取消*/
       okButtonProps={{ loading }}
       onConfirm={handleConfirm}
       onCancel={handleCancel}
     >
-      <Switch size="small" disabled={disabled} checked={checked} onChange={handleChange} />
+      <Switch
+        size="small"
+        disabled={disabled}
+        checked={checked}
+        onChange={handleChange}
+      />
     </Popconfirm>
   );
 };

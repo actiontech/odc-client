@@ -45,14 +45,16 @@ const TraceTable: React.FC<{
   return (
     <div className={styles.traceTable}>
       {innerTreeData?.map((node, index) => {
-        const other = (node.startTimestamp - totalStartTimestamp) / totalElapseMicroSeconds;
-        const percent = (node.endTimestamp - node.startTimestamp) / totalElapseMicroSeconds;
+        const other =
+          (node.startTimestamp - totalStartTimestamp) / totalElapseMicroSeconds;
+        const percent =
+          (node.endTimestamp - node.startTimestamp) / totalElapseMicroSeconds;
         const dataSource = [];
         node?.tags?.forEach((obj) => {
           Object.keys(obj).forEach((key) => {
             dataSource.push({
               label: key,
-              value: obj?.[key] || '-',
+              value: obj?.[key] || '-'
             });
           });
         });
@@ -60,43 +62,45 @@ const TraceTable: React.FC<{
           <div
             className={styles.traceTableItem}
             style={{
-              backgroundColor: node?.isSearch ? 'var(--odc-color1-bgcolor)' : 'transparent',
+              backgroundColor: node?.isSearch
+                ? 'var(--odc-color1-bgcolor)'
+                : 'transparent'
             }}
             key={index}
           >
             <div
               className={styles.timeStepItem}
               style={{
-                left: `25%`,
+                left: `25%`
               }}
             ></div>
             <div
               className={styles.timeStepItem}
               style={{
-                left: `calc(50% - 1px)`,
+                left: `calc(50% - 1px)`
               }}
             ></div>
             <div
               className={styles.timeStepItem}
               style={{
-                left: `calc(75% - 2px)`,
+                left: `calc(75% - 2px)`
               }}
             ></div>
             <div
               className={styles.timeStepItem}
               style={{
-                left: `100%`,
+                left: `100%`
               }}
             ></div>
             <div
               className={styles.progressBar}
               style={{
-                color: 'var(--text-color-primary)',
+                color: 'var(--text-color-primary)'
               }}
             >
               <div
                 style={{
-                  width: `${other * 100}%`,
+                  width: `${other * 100}%`
                 }}
               ></div>
               <Popover
@@ -104,7 +108,7 @@ const TraceTable: React.FC<{
                 content={
                   <div
                     style={{
-                      width: '400px',
+                      width: '400px'
                     }}
                   >
                     <InfoRender
@@ -112,21 +116,21 @@ const TraceTable: React.FC<{
                         {
                           title: formatMessage({
                             id: 'odc.src.page.Workspace.components.Trace.Node.2',
-                            defaultMessage: '节点',
+                            defaultMessage: '节点'
                           }), //'节点'
                           render: () => (
                             <div className={styles.nodeTitle}>
                               <div
                                 style={{
                                   width: '14px',
-                                  height: '14px',
+                                  height: '14px'
                                 }}
                               >
                                 {getIconByNodeType(node?.node)}
                               </div>
                               {node?.node} {node?.host}
                             </div>
-                          ),
+                          )
                         },
                         {
                           title: 'Span ID',
@@ -137,43 +141,46 @@ const TraceTable: React.FC<{
                                 key="copy"
                                 text={node?.spanId}
                                 style={{
-                                  marginLeft: '8px',
+                                  marginLeft: '8px'
                                 }}
                                 onCopy={() => {
                                   message.success(
                                     formatMessage({
                                       id: 'odc.src.page.Workspace.components.Trace.Replication.2',
-                                      defaultMessage: '复制成功',
-                                    }), //'复制成功'
+                                      defaultMessage: '复制成功'
+                                    }) //'复制成功'
                                   );
                                 }}
                               >
                                 <CopyOutlined />
                               </CopyToClipboard>
                             </>
-                          ),
+                          )
                         },
                         {
                           title: formatMessage({
                             id: 'odc.src.page.Workspace.components.Trace.StartingTime.3',
-                            defaultMessage: '开始时间',
+                            defaultMessage: '开始时间'
                           }), //'开始时间'
-                          render: () => node?.originStartTimestamp,
+                          render: () => node?.originStartTimestamp
                         },
                         {
                           title: formatMessage({
                             id: 'odc.src.page.Workspace.components.Trace.EndTime.1',
-                            defaultMessage: '结束时间',
+                            defaultMessage: '结束时间'
                           }), //'结束时间'
-                          render: () => node?.originEndTimestamp,
+                          render: () => node?.originEndTimestamp
                         },
                         {
                           title: formatMessage({
                             id: 'odc.src.page.Workspace.components.Trace.TimeConsuming.2',
-                            defaultMessage: '耗时',
+                            defaultMessage: '耗时'
                           }), //'耗时'
-                          render: () => formatTimeTemplatMicroSeconds(node?.elapseMicroSeconds),
-                        },
+                          render: () =>
+                            formatTimeTemplatMicroSeconds(
+                              node?.elapseMicroSeconds
+                            )
+                        }
                       ]}
                     />
 
@@ -181,7 +188,7 @@ const TraceTable: React.FC<{
                       <>
                         <div
                           style={{
-                            margin: '8px 0px',
+                            margin: '8px 0px'
                           }}
                         >
                           Tags
@@ -189,7 +196,7 @@ const TraceTable: React.FC<{
                         <DisplayTable
                           bordered={true}
                           expandable={{
-                            defaultExpandAllRows: true,
+                            defaultExpandAllRows: true
                           }}
                           disablePagination={true}
                           showHeader={false}
@@ -197,7 +204,7 @@ const TraceTable: React.FC<{
                             {
                               title: 'label',
                               dataIndex: 'label',
-                              key: 'label',
+                              key: 'label'
                             },
                             {
                               title: 'value',
@@ -205,10 +212,12 @@ const TraceTable: React.FC<{
                               key: 'value',
                               render: (text) => (
                                 <Tooltip title={text}>
-                                  <div className={styles.valueElliscape}>{text}</div>
+                                  <div className={styles.valueElliscape}>
+                                    {text}
+                                  </div>
                                 </Tooltip>
-                              ),
-                            },
+                              )
+                            }
                           ]}
                           dataSource={dataSource}
                         />
@@ -225,7 +234,7 @@ const TraceTable: React.FC<{
                     lineHeight: '14px',
                     whiteSpace: 'nowrap',
                     position: 'relative',
-                    backgroundColor: `${getColorByType(node.node)}`,
+                    backgroundColor: `${getColorByType(node.node)}`
                   }}
                   className={styles.traceBar}
                 >
@@ -235,7 +244,7 @@ const TraceTable: React.FC<{
                     <div
                       style={{
                         position: 'absolute',
-                        right: '1px',
+                        right: '1px'
                       }}
                     >
                       {formatTimeTemplatMicroSeconds(node?.elapseMicroSeconds)}

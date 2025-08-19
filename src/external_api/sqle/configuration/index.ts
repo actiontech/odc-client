@@ -39,7 +39,7 @@ import {
   IUpdateWechatAuditConfigurationV1Return,
   ITestWechatAuditConfigV1Params,
   ITestWechatAuditConfigV1Return,
-  IGetDriversV2Return,
+  IGetDriversV2Return
 } from './index.type';
 
 class ConfigurationService extends ServiceBase {
@@ -47,28 +47,31 @@ class ConfigurationService extends ServiceBase {
     return this.get<IGetCodingConfigurationV1Return>(
       '/v1/configurations/coding',
       undefined,
-      options,
+      options
     );
   }
 
   public UpdateCodingConfigurationV1(
     params: IUpdateCodingConfigurationV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     return this.patch<IUpdateCodingConfigurationV1Return>(
       '/v1/configurations/coding',
       paramsData,
-      options,
+      options
     );
   }
 
-  public testCodingConfigV1(params: ITestCodingConfigV1Params, options?: AxiosRequestConfig) {
+  public testCodingConfigV1(
+    params: ITestCodingConfigV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     return this.post<ITestCodingConfigV1Return>(
       '/v1/configurations/coding/test',
       paramsData,
-      options,
+      options
     );
   }
 
@@ -76,19 +79,19 @@ class ConfigurationService extends ServiceBase {
     return this.get<IGetDingTalkConfigurationV1Return>(
       '/v1/configurations/ding_talk',
       undefined,
-      options,
+      options
     );
   }
 
   public updateDingTalkConfigurationV1(
     params: IUpdateDingTalkConfigurationV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     return this.patch<IUpdateDingTalkConfigurationV1Return>(
       '/v1/configurations/ding_talk',
       paramsData,
-      options,
+      options
     );
   }
 
@@ -96,66 +99,80 @@ class ConfigurationService extends ServiceBase {
     return this.post<ITestDingTalkConfigV1Return>(
       '/v1/configurations/ding_talk/test',
       undefined,
-      options,
+      options
     );
   }
 
   public getDriversV1(options?: AxiosRequestConfig) {
-    return this.get<IGetDriversV1Return>('/v1/configurations/drivers', undefined, options);
+    return this.get<IGetDriversV1Return>(
+      '/v1/configurations/drivers',
+      undefined,
+      options
+    );
   }
 
   public getFeishuAuditConfigurationV1(options?: AxiosRequestConfig) {
     return this.get<IGetFeishuAuditConfigurationV1Return>(
       '/v1/configurations/feishu_audit',
       undefined,
-      options,
+      options
     );
   }
 
   public updateFeishuAuditConfigurationV1(
     params: IUpdateFeishuAuditConfigurationV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     return this.patch<IUpdateFeishuAuditConfigurationV1Return>(
       '/v1/configurations/feishu_audit',
       paramsData,
-      options,
+      options
     );
   }
 
   public testFeishuAuditConfigV1(
     params: ITestFeishuAuditConfigV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     return this.post<ITestFeishuAuditConfigV1Return>(
       '/v1/configurations/feishu_audit/test',
       paramsData,
-      options,
+      options
     );
   }
 
-  public TestGitConnectionV1(params: ITestGitConnectionV1Params, options?: AxiosRequestConfig) {
+  public TestGitConnectionV1(
+    params: ITestGitConnectionV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     return this.post<ITestGitConnectionV1Return>(
       '/v1/configurations/git/test',
       paramsData,
-      options,
+      options
     );
   }
 
   public getSQLELicenseV1(options?: AxiosRequestConfig) {
-    return this.get<IGetSQLELicenseV1Return>('/v1/configurations/license', undefined, options);
+    return this.get<IGetSQLELicenseV1Return>(
+      '/v1/configurations/license',
+      undefined,
+      options
+    );
   }
 
-  public setSQLELicenseV1(params: ISetSQLELicenseV1Params, options?: AxiosRequestConfig) {
+  public setSQLELicenseV1(
+    params: ISetSQLELicenseV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const config = options || {};
     const headers = config.headers ? config.headers : {};
     config.headers = {
       ...headers,
 
-      'Content-Type': 'multipart/form-data',
+      'Content-Type': 'multipart/form-data'
     };
 
     const paramsData = new FormData();
@@ -164,16 +181,23 @@ class ConfigurationService extends ServiceBase {
       paramsData.append('license_file', params.license_file as any);
     }
 
-    return this.post<ISetSQLELicenseV1Return>('/v1/configurations/license', paramsData, config);
+    return this.post<ISetSQLELicenseV1Return>(
+      '/v1/configurations/license',
+      paramsData,
+      config
+    );
   }
 
-  public checkSQLELicenseV1(params: ICheckSQLELicenseV1Params, options?: AxiosRequestConfig) {
+  public checkSQLELicenseV1(
+    params: ICheckSQLELicenseV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const config = options || {};
     const headers = config.headers ? config.headers : {};
     config.headers = {
       ...headers,
 
-      'Content-Type': 'multipart/form-data',
+      'Content-Type': 'multipart/form-data'
     };
 
     const paramsData = new FormData();
@@ -185,7 +209,7 @@ class ConfigurationService extends ServiceBase {
     return this.post<ICheckSQLELicenseV1Return>(
       '/v1/configurations/license/check',
       paramsData,
-      config,
+      config
     );
   }
 
@@ -194,30 +218,38 @@ class ConfigurationService extends ServiceBase {
   }
 
   public getSSHPublicKey(options?: AxiosRequestConfig) {
-    return this.get<IGetSSHPublicKeyReturn>('/v1/configurations/ssh_key', undefined, options);
+    return this.get<IGetSSHPublicKeyReturn>(
+      '/v1/configurations/ssh_key',
+      undefined,
+      options
+    );
   }
 
   public genSSHPublicKey(options?: AxiosRequestConfig) {
-    return this.post<IGenSSHPublicKeyReturn>('/v1/configurations/ssh_key', undefined, options);
+    return this.post<IGenSSHPublicKeyReturn>(
+      '/v1/configurations/ssh_key',
+      undefined,
+      options
+    );
   }
 
   public getSystemVariablesV1(options?: AxiosRequestConfig) {
     return this.get<IGetSystemVariablesV1Return>(
       '/v1/configurations/system_variables',
       undefined,
-      options,
+      options
     );
   }
 
   public updateSystemVariablesV1(
     params: IUpdateSystemVariablesV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     return this.patch<IUpdateSystemVariablesV1Return>(
       '/v1/configurations/system_variables',
       paramsData,
-      options,
+      options
     );
   }
 
@@ -225,36 +257,40 @@ class ConfigurationService extends ServiceBase {
     return this.get<IGetWechatAuditConfigurationV1Return>(
       '/v1/configurations/wechat_audit',
       undefined,
-      options,
+      options
     );
   }
 
   public updateWechatAuditConfigurationV1(
     params: IUpdateWechatAuditConfigurationV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     return this.patch<IUpdateWechatAuditConfigurationV1Return>(
       '/v1/configurations/wechat_audit',
       paramsData,
-      options,
+      options
     );
   }
 
   public testWechatAuditConfigV1(
     params: ITestWechatAuditConfigV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     return this.post<ITestWechatAuditConfigV1Return>(
       '/v1/configurations/wechat_audit/test',
       paramsData,
-      options,
+      options
     );
   }
 
   public getDriversV2(options?: AxiosRequestConfig) {
-    return this.get<IGetDriversV2Return>('/v2/configurations/drivers', undefined, options);
+    return this.get<IGetDriversV2Return>(
+      '/v2/configurations/drivers',
+      undefined,
+      options
+    );
   }
 }
 

@@ -44,7 +44,7 @@ export const formatSafeData = (logValue: LogValue): SafeLine[] => {
   if (typeof dataList[0] === 'string') {
     return (dataList as string[]).map((str, index) => ({
       rowIndex: index + 1,
-      content: str,
+      content: str
     }));
   }
 
@@ -52,19 +52,19 @@ export const formatSafeData = (logValue: LogValue): SafeLine[] => {
   for (let i = 0; i < dataList.length - 1; i += 1) {
     data.push({
       rowIndex: dataList[i].rowIndex,
-      content: dataList[i].content ?? '',
+      content: dataList[i].content ?? ''
     });
     if (dataList[i]?.rowIndex + 1 !== dataList[i + 1]?.rowIndex) {
       data.push({
         rowIndex: Number.MAX_SAFE_INTEGER - i,
         content: '',
-        brokenMark: true,
+        brokenMark: true
       });
     }
   }
   data.push({
     rowIndex: dataList[dataList.length - 1].rowIndex,
-    content: dataList[dataList.length - 1].content ?? '',
+    content: dataList[dataList.length - 1].content ?? ''
   });
 
   return data;
@@ -83,7 +83,7 @@ export const dealData = (data: SafeLine[]) => {
 
   return {
     downloadStr,
-    copyStr,
+    copyStr
   };
 };
 
@@ -91,7 +91,9 @@ export const download = (data: SafeLine[]) => {
   const element = document.createElement('a');
   element.setAttribute(
     'href',
-    `data:text/plain;charset=utf-8, ${encodeURIComponent(dealData(data).downloadStr)}`,
+    `data:text/plain;charset=utf-8, ${encodeURIComponent(
+      dealData(data).downloadStr
+    )}`
   );
   element.setAttribute('download', 'text.log');
   element.click();

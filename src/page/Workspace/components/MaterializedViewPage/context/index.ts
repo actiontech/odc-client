@@ -11,14 +11,15 @@ interface IMaterializedViewPageContext {
     tableName: any,
     onSuccess,
     tip?: string,
-    callback?: () => void,
+    callback?: () => void
   ) => Promise<boolean>;
 }
 
-const MaterializedViewPageContext = React.createContext<IMaterializedViewPageContext>({
-  onRefresh: () => {},
-  materializedView: null,
-  pageKey: undefined,
-});
+const MaterializedViewPageContext =
+  React.createContext<IMaterializedViewPageContext>({
+    onRefresh: () => {},
+    materializedView: null,
+    pageKey: undefined
+  });
 
 export default MaterializedViewPageContext;

@@ -45,11 +45,14 @@ import {
   IGetWorkflowRejectedPercentGroupByCreatorV1Return,
   IGetWorkflowRejectedPercentGroupByInstanceV1Params,
   IGetWorkflowRejectedPercentGroupByInstanceV1Return,
-  IGetWorkflowStatusCountV1Return,
+  IGetWorkflowStatusCountV1Return
 } from './index.type';
 
 class StatisticService extends ServiceBase {
-  public statisticAuditPlanV1(params: IStatisticAuditPlanV1Params, options?: AxiosRequestConfig) {
+  public statisticAuditPlanV1(
+    params: IStatisticAuditPlanV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -57,13 +60,13 @@ class StatisticService extends ServiceBase {
     return this.get<IStatisticAuditPlanV1Return>(
       `/v1/projects/${project_name}/statistic/audit_plans`,
       paramsData,
-      options,
+      options
     );
   }
 
   public statisticsAuditedSQLV1(
     params: IStatisticsAuditedSQLV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -72,11 +75,14 @@ class StatisticService extends ServiceBase {
     return this.get<IStatisticsAuditedSQLV1Return>(
       `/v1/projects/${project_name}/statistic/audited_sqls`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public GetInstanceHealthV1(params: IGetInstanceHealthV1Params, options?: AxiosRequestConfig) {
+  public GetInstanceHealthV1(
+    params: IGetInstanceHealthV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -84,11 +90,14 @@ class StatisticService extends ServiceBase {
     return this.get<IGetInstanceHealthV1Return>(
       `/v1/projects/${project_name}/statistic/instance_health`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public GetProjectScoreV1(params: IGetProjectScoreV1Params, options?: AxiosRequestConfig) {
+  public GetProjectScoreV1(
+    params: IGetProjectScoreV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -96,11 +105,14 @@ class StatisticService extends ServiceBase {
     return this.get<IGetProjectScoreV1Return>(
       `/v1/projects/${project_name}/statistic/project_score`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public getRiskAuditPlanV1(params: IGetRiskAuditPlanV1Params, options?: AxiosRequestConfig) {
+  public getRiskAuditPlanV1(
+    params: IGetRiskAuditPlanV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -108,13 +120,13 @@ class StatisticService extends ServiceBase {
     return this.get<IGetRiskAuditPlanV1Return>(
       `/v1/projects/${project_name}/statistic/risk_audit_plans`,
       paramsData,
-      options,
+      options
     );
   }
 
   public statisticRiskWorkflowV1(
     params: IStatisticRiskWorkflowV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -123,11 +135,14 @@ class StatisticService extends ServiceBase {
     return this.get<IStatisticRiskWorkflowV1Return>(
       `/v1/projects/${project_name}/statistic/risk_workflow`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public getRoleUserCountV1(params: IGetRoleUserCountV1Params, options?: AxiosRequestConfig) {
+  public getRoleUserCountV1(
+    params: IGetRoleUserCountV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -135,13 +150,13 @@ class StatisticService extends ServiceBase {
     return this.get<IGetRoleUserCountV1Return>(
       `/v1/projects/${project_name}/statistic/role_user`,
       paramsData,
-      options,
+      options
     );
   }
 
   public statisticWorkflowStatusV1(
     params: IStatisticWorkflowStatusV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -150,13 +165,13 @@ class StatisticService extends ServiceBase {
     return this.get<IStatisticWorkflowStatusV1Return>(
       `/v1/projects/${project_name}/statistic/workflow_status`,
       paramsData,
-      options,
+      options
     );
   }
 
   public getProjectStatisticsV1(
     params: IGetProjectStatisticsV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -165,43 +180,43 @@ class StatisticService extends ServiceBase {
     return this.get<IGetProjectStatisticsV1Return>(
       `/v1/projects/${project_name}/statistics`,
       paramsData,
-      options,
+      options
     );
   }
 
   public getInstanceOverviewStatisticsV1(
     params: IGetInstanceOverviewStatisticsV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     return this.get<IGetInstanceOverviewStatisticsV1Return>(
       '/v1/statistic/instances/resource_overview_statistics',
       paramsData,
-      options,
+      options
     );
   }
 
   public getSqlAverageExecutionTimeV1(
     params: IGetSqlAverageExecutionTimeV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     return this.get<IGetSqlAverageExecutionTimeV1Return>(
       '/v1/statistic/instances/sql_average_execution_time',
       paramsData,
-      options,
+      options
     );
   }
 
   public getSqlExecutionFailPercentV1(
     params: IGetSqlExecutionFailPercentV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     return this.get<IGetSqlExecutionFailPercentV1Return>(
       '/v1/statistic/instances/sql_execution_fail_percent',
       paramsData,
-      options,
+      options
     );
   }
 
@@ -209,19 +224,23 @@ class StatisticService extends ServiceBase {
     return this.get<IGetInstancesTypePercentV1Return>(
       '/v1/statistic/instances/type_percent',
       undefined,
-      options,
+      options
     );
   }
 
   public getLicenseUsageV1(options?: AxiosRequestConfig) {
-    return this.get<IGetLicenseUsageV1Return>('/v1/statistic/license/usage', undefined, options);
+    return this.get<IGetLicenseUsageV1Return>(
+      '/v1/statistic/license/usage',
+      undefined,
+      options
+    );
   }
 
   public getWorkflowAuditPassPercentV1(options?: AxiosRequestConfig) {
     return this.get<IGetWorkflowAuditPassPercentV1Return>(
       '/v1/statistic/workflows/audit_pass_percent',
       undefined,
-      options,
+      options
     );
   }
 
@@ -229,7 +248,7 @@ class StatisticService extends ServiceBase {
     return this.get<IGetWorkflowCountV1Return>(
       '/v1/statistic/workflows/counts',
       undefined,
-      options,
+      options
     );
   }
 
@@ -237,35 +256,39 @@ class StatisticService extends ServiceBase {
     return this.get<IGetWorkflowDurationOfWaitingForAuditV1Return>(
       '/v1/statistic/workflows/duration_of_waiting_for_audit',
       undefined,
-      options,
+      options
     );
   }
 
-  public getWorkflowDurationOfWaitingForExecutionV1(options?: AxiosRequestConfig) {
+  public getWorkflowDurationOfWaitingForExecutionV1(
+    options?: AxiosRequestConfig
+  ) {
     return this.get<IGetWorkflowDurationOfWaitingForExecutionV1Return>(
       '/v1/statistic/workflows/duration_of_waiting_for_execution',
       undefined,
-      options,
+      options
     );
   }
 
   public getWorkflowCreatedCountEachDayV1(
     params: IGetWorkflowCreatedCountEachDayV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     return this.get<IGetWorkflowCreatedCountEachDayV1Return>(
       '/v1/statistic/workflows/each_day_counts',
       paramsData,
-      options,
+      options
     );
   }
 
-  public getWorkflowPercentCountedByInstanceTypeV1(options?: AxiosRequestConfig) {
+  public getWorkflowPercentCountedByInstanceTypeV1(
+    options?: AxiosRequestConfig
+  ) {
     return this.get<IGetWorkflowPercentCountedByInstanceTypeV1Return>(
       '/v1/statistic/workflows/instance_type_percent',
       undefined,
-      options,
+      options
     );
   }
 
@@ -273,31 +296,31 @@ class StatisticService extends ServiceBase {
     return this.get<IGetWorkflowPassPercentV1Return>(
       '/v1/statistic/workflows/pass_percent',
       undefined,
-      options,
+      options
     );
   }
 
   public getWorkflowRejectedPercentGroupByCreatorV1(
     params: IGetWorkflowRejectedPercentGroupByCreatorV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     return this.get<IGetWorkflowRejectedPercentGroupByCreatorV1Return>(
       '/v1/statistic/workflows/rejected_percent_group_by_creator',
       paramsData,
-      options,
+      options
     );
   }
 
   public getWorkflowRejectedPercentGroupByInstanceV1(
     params: IGetWorkflowRejectedPercentGroupByInstanceV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     return this.get<IGetWorkflowRejectedPercentGroupByInstanceV1Return>(
       '/v1/statistic/workflows/rejected_percent_group_by_instance',
       paramsData,
-      options,
+      options
     );
   }
 
@@ -305,7 +328,7 @@ class StatisticService extends ServiceBase {
     return this.get<IGetWorkflowStatusCountV1Return>(
       '/v1/statistic/workflows/status_count',
       undefined,
-      options,
+      options
     );
   }
 }

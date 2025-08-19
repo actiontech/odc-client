@@ -49,7 +49,7 @@ export default function ({ column, onChange }: IProps) {
           <Form.Item
             label={formatMessage({
               id: 'odc.Columns.ColumnExtraInfo.Character.CharacterSet',
-              defaultMessage: '字符集',
+              defaultMessage: '字符集'
             })} /*字符集*/
           >
             <Select
@@ -59,7 +59,7 @@ export default function ({ column, onChange }: IProps) {
                 onChange({
                   ...column,
                   character: v,
-                  collation: getDefaultCollation(v, collations),
+                  collation: getDefaultCollation(v, collations)
                 });
               }}
             >
@@ -75,7 +75,7 @@ export default function ({ column, onChange }: IProps) {
           <Form.Item
             label={formatMessage({
               id: 'odc.Columns.ColumnExtraInfo.Character.SortingRules',
-              defaultMessage: '排序规则',
+              defaultMessage: '排序规则'
             })} /*排序规则*/
           >
             <Select
@@ -84,7 +84,7 @@ export default function ({ column, onChange }: IProps) {
               onChange={(v) => {
                 onChange({
                   ...column,
-                  collation: v,
+                  collation: v
                 });
               }}
             >

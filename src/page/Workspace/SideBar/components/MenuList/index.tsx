@@ -37,7 +37,7 @@ const MenuList: React.FC<IProps> = function ({ data, titleRender, onClick }) {
       }
       return node.title;
     },
-    [titleRender],
+    [titleRender]
   );
   return (
     <div className={styles.menuList}>

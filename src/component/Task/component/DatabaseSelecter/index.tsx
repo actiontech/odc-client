@@ -22,7 +22,17 @@ import { EnvColorMap } from '@/constant';
 import { DBType } from '@/d.ts/database';
 import { isConnectTypeBeFileSystemGroup } from '@/util/connection';
 import { DeleteOutlined } from '@ant-design/icons';
-import { Badge, Checkbox, Empty, Popconfirm, Space, Spin, Tooltip, Tree, Typography } from 'antd';
+import {
+  Badge,
+  Checkbox,
+  Empty,
+  Popconfirm,
+  Space,
+  Spin,
+  Tooltip,
+  Tree,
+  Typography
+} from 'antd';
 import { DataNode, TreeProps } from 'antd/lib/tree';
 import classnames from 'classnames';
 import datasourceStatus from '@/store/datasourceStatus';
@@ -55,7 +65,7 @@ const DatabaseSelecter: React.FC<IProps> = function ({
   baseDatabase,
   showEnv,
   infoText,
-  setShowSelectLogicDBTip,
+  setShowSelectLogicDBTip
 }) {
   const [isLoading, setIsLoading] = useState(false);
   const [sourceSearchValue, setSourceSearchValue] = useState(null);
@@ -65,15 +75,29 @@ const DatabaseSelecter: React.FC<IProps> = function ({
   const loadExportObjects = async () => {
     setIsLoading(true);
     try {
-      const res = await listDatabases(projectId, null, null, null, null, null, null, true, null);
+      const res = await listDatabases(
+        projectId,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        true,
+        null
+      );
       if (res?.contents) {
-        setDatabaseList(databaseFilter ? databaseFilter(res?.contents) : res?.contents);
+        setDatabaseList(
+          databaseFilter ? databaseFilter(res?.contents) : res?.contents
+        );
         datasourceStatus.asyncUpdateStatus([
           ...new Set(
             res?.contents
-              ?.filter((item) => item.type !== 'LOGICAL' && !!item.dataSource?.id)
-              ?.map((item) => item?.dataSource?.id),
-          ),
+              ?.filter(
+                (item) => item.type !== 'LOGICAL' && !!item.dataSource?.id
+              )
+              ?.map((item) => item?.dataSource?.id)
+          )
         ]);
       }
     } catch (e) {
@@ -98,7 +122,9 @@ const DatabaseSelecter: React.FC<IProps> = function ({
   useEffect(() => {
     if (checkedKeys?.length) {
       setShowSelectLogicDBTip?.(
-        databaseList?.some((i) => checkedKeys?.includes(i?.id) && i?.type === DBType.LOGICAL),
+        databaseList?.some(
+          (i) => checkedKeys?.includes(i?.id) && i?.type === DBType.LOGICAL
+        )
       );
     }
   }, [checkedKeys, databaseList]);
@@ -110,7 +136,9 @@ const DatabaseSelecter: React.FC<IProps> = function ({
         ?.filter((item) => {
           return !targetSearchValue?.length
             ? true
-            : item?.name?.toLowerCase().indexOf(targetSearchValue?.toLowerCase()) !== -1;
+            : item?.name
+                ?.toLowerCase()
+                .indexOf(targetSearchValue?.toLowerCase()) !== -1;
         }) ?? [];
     return getTreeData(validDatabaseList);
   };
@@ -120,7 +148,9 @@ const DatabaseSelecter: React.FC<IProps> = function ({
       if (isConnectTypeBeFileSystemGroup(item.connectType)) return false;
       return !sourceSearchValue?.length
         ? true
-        : item?.name?.toLowerCase().indexOf(sourceSearchValue?.toLowerCase()) !== -1;
+        : item?.name
+            ?.toLowerCase()
+            .indexOf(sourceSearchValue?.toLowerCase()) !== -1;
     });
     return getTreeData(validDatabaseList);
   };
@@ -166,20 +196,24 @@ const DatabaseSelecter: React.FC<IProps> = function ({
                 ? formatMessage(
                     {
                       id: 'src.component.Task.component.DatabaseSelecter.EC5561FD',
-                      defaultMessage: '最多支持选择 {maxCount} 个数据库',
+                      defaultMessage: '最多支持选择 {maxCount} 个数据库'
                     },
-                    { maxCount },
+                    { maxCount }
                   )
                 : isBaseDb
                 ? formatMessage({
                     id: 'src.component.Task.component.DatabaseSelecter.36C7926E',
-                    defaultMessage: '默认选中基准库',
+                    defaultMessage: '默认选中基准库'
                   })
                 : ''
             }
           >
             <div
-              style={{ display: 'flex', width: 260, justifyContent: 'space-between' }}
+              style={{
+                display: 'flex',
+                width: 260,
+                justifyContent: 'space-between'
+              }}
               onClick={() => {
                 !isBaseDb && handleCheck(item?.id);
               }}
@@ -187,7 +221,11 @@ const DatabaseSelecter: React.FC<IProps> = function ({
               <div>
                 <Text
                   ellipsis
-                  style={{ wordBreak: 'keep-all', paddingRight: 4, maxWidth: 180 }}
+                  style={{
+                    wordBreak: 'keep-all',
+                    paddingRight: 4,
+                    maxWidth: 180
+                  }}
                   title={item?.name}
                 >
                   {item?.name}
@@ -208,7 +246,7 @@ const DatabaseSelecter: React.FC<IProps> = function ({
 
         disabled: disabledByCount || isBaseDb,
         key: item?.id,
-        icon: <DataBaseStatusIcon item={item} showStatusTooltip={false} />,
+        icon: <DataBaseStatusIcon item={item} showStatusTooltip={false} />
       };
     });
     return allTreeData;
@@ -251,19 +289,21 @@ const DatabaseSelecter: React.FC<IProps> = function ({
       }
       onChange(list || []);
     },
-    [checkedKeys, onChange, databaseList],
+    [checkedKeys, onChange, databaseList]
   );
 
   const allTreeDataKeys = getAllTreeDataKeys();
   const maxTreeDataKeys = getAllTreeDataKeys(maxCount);
-  const checkAll = allTreeDataKeys?.length && maxTreeDataKeys.length === checkedKeys.length;
+  const checkAll =
+    allTreeDataKeys?.length && maxTreeDataKeys.length === checkedKeys.length;
   const allTreeData = getAllTreeData();
   const selectedTreeData = getCheckedTreeData();
   const allTreeDataCount = allTreeDataKeys?.length;
   const selectedTreeDataCount = useMemo(() => {
     return checkedKeys?.length;
   }, [checkedKeys]);
-  const indeterminate = selectedTreeDataCount && selectedTreeDataCount < allTreeDataCount;
+  const indeterminate =
+    selectedTreeDataCount && selectedTreeDataCount < allTreeDataCount;
 
   return (
     <>
@@ -271,7 +311,7 @@ const DatabaseSelecter: React.FC<IProps> = function ({
         <div style={{ color: 'var(--text-color-hint)', paddingBottom: 4 }}>
           {formatMessage({
             id: 'src.component.Task.component.DatabaseSelecter.1AD108EB',
-            defaultMessage: '仅支持选择与基准库相同数据源类型和环境的数据库',
+            defaultMessage: '仅支持选择与基准库相同数据源类型和环境的数据库'
           })}
         </div>
       )}
@@ -293,7 +333,7 @@ const DatabaseSelecter: React.FC<IProps> = function ({
                     {
                       formatMessage({
                         id: 'src.component.Task.component.DatabaseSelecter.D17AE43F' /*选择数据库*/,
-                        defaultMessage: '选择数据库',
+                        defaultMessage: '选择数据库'
                       }) /* 选择数据库 */
                     }
                   </span>
@@ -319,7 +359,7 @@ const DatabaseSelecter: React.FC<IProps> = function ({
                       ? undefined
                       : formatMessage({
                           id: 'src.component.Task.component.DatabaseSelecter.581BBA20',
-                          defaultMessage: '暂无数据',
+                          defaultMessage: '暂无数据'
                         })
                   }
                 />
@@ -333,9 +373,9 @@ const DatabaseSelecter: React.FC<IProps> = function ({
               formatMessage(
                 {
                   id: 'src.component.Task.component.DatabaseSelecter.D06DB16B',
-                  defaultMessage: '已选 {selectedTreeDataCount} 项',
+                  defaultMessage: '已选 {selectedTreeDataCount} 项'
                 },
-                { selectedTreeDataCount },
+                { selectedTreeDataCount }
               ) /*`已选 ${selectedTreeDataCount} 项`*/
             }
             onSearch={(v) => setTargetSearchValue(v)}
@@ -348,7 +388,7 @@ const DatabaseSelecter: React.FC<IProps> = function ({
                 title={
                   formatMessage({
                     id: 'src.component.Task.component.DatabaseSelecter.2FB288CA',
-                    defaultMessage: '确定要清空已选对象吗？',
+                    defaultMessage: '确定要清空已选对象吗？'
                   }) /*"确定要清空已选对象吗？"*/
                 }
               >
@@ -356,7 +396,7 @@ const DatabaseSelecter: React.FC<IProps> = function ({
                   {
                     formatMessage({
                       id: 'src.component.Task.component.DatabaseSelecter.302B4FB5' /*清空*/,
-                      defaultMessage: '清空',
+                      defaultMessage: '清空'
                     }) /* 清空 */
                   }
                 </a>
@@ -398,7 +438,7 @@ const DatabaseSelecter: React.FC<IProps> = function ({
               <ApplyDatabaseAuthEmpty
                 description={formatMessage({
                   id: 'src.component.Task.component.DatabaseSelecter.A8E97972',
-                  defaultMessage: '暂无数据',
+                  defaultMessage: '暂无数据'
                 })}
               />
             )}

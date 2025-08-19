@@ -3,7 +3,7 @@
 import {
   ListOpPermissionsOrderByEnum,
   ListOpPermissionsFilterByTargetEnum,
-  ListOpPermissionsServiceEnum,
+  ListOpPermissionsServiceEnum
 } from './index.enum';
 
 import { IListOpPermissionReply } from '../common.type';

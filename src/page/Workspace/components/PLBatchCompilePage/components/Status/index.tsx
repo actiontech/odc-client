@@ -35,7 +35,10 @@ export const Status: React.FC<{
           ellipsis={{
             rows: 5,
             expandable: true,
-            symbol: formatMessage({ id: 'odc.components.Status.More', defaultMessage: '更多' }), //更多
+            symbol: formatMessage({
+              id: 'odc.components.Status.More',
+              defaultMessage: '更多'
+            }) //更多
           }}
         >
           {errorMessage}
@@ -44,14 +47,14 @@ export const Status: React.FC<{
     >
       <InfoCircleFilled
         style={{
-          color: '#FAAD14',
+          color: '#FAAD14'
         }}
       />
     </Tooltip>
   ) : (
     <InfoCircleFilled
       style={{
-        color: '#FAAD14',
+        color: '#FAAD14'
       }}
     />
   );

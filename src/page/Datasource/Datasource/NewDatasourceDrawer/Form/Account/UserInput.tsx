@@ -34,7 +34,15 @@ interface IProps {
 const Option = Select.Option;
 
 const UserInput: React.FC<IProps> = forwardRef(function (props, ref) {
-  const { placeholder, baseWidth, tenantId, clusterId, clusterStore, value, onChange } = props;
+  const {
+    placeholder,
+    baseWidth,
+    tenantId,
+    clusterId,
+    clusterStore,
+    value,
+    onChange
+  } = props;
   const [userLoading, setUserLoading] = useState(false);
 
   async function fetchUserList() {
@@ -57,20 +65,22 @@ const UserInput: React.FC<IProps> = forwardRef(function (props, ref) {
     <AutoComplete
       placeholder={placeholder}
       style={{
-        width: baseWidth,
+        width: baseWidth
       }}
       ref={ref as any}
       value={value}
       filterOption={(inputValue, option) => {
         return (
-          !inputValue || option?.value?.toLowerCase()?.indexOf(inputValue?.toLowerCase()) !== -1
+          !inputValue ||
+          option?.value?.toLowerCase()?.indexOf(inputValue?.toLowerCase()) !==
+            -1
         );
       }}
       onChange={onChange}
       options={users?.map((user) => {
         return {
           value: user.userName,
-          label: user.userName,
+          label: user.userName
         };
       })}
       showSearch
@@ -85,7 +95,7 @@ const UserInput: React.FC<IProps> = forwardRef(function (props, ref) {
       style={
         baseWidth
           ? {
-              width: baseWidth,
+              width: baseWidth
             }
           : null
       }

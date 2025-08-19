@@ -32,43 +32,45 @@ const tableConfig = {
     id: 'int',
     name: 'varchar',
     date: 'datetime',
-    time: 'timestamp',
-  },
+    time: 'timestamp'
+  }
 };
 
 const functionConfig: IDataSourceModeConfig['schema']['func'] = {
   params: ['paramName', 'dataType', 'dataLength'],
   defaultValue: {
-    dataLength: 45,
+    dataLength: 45
   },
   dataNature: true,
   sqlSecurity: true,
-  deterministic: true,
+  deterministic: true
 };
 
 const procedureConfig: IDataSourceModeConfig['schema']['proc'] = {
   params: ['paramName', 'paramMode', 'dataType', 'dataLength'],
   defaultValue: {
-    dataLength: 45,
+    dataLength: 45
   },
   dataNature: true,
   sqlSecurity: true,
-  deterministic: true,
+  deterministic: true
 };
 
 const items: Record<
-  ConnectType.OB_MYSQL | ConnectType.CLOUD_OB_MYSQL | ConnectType.ODP_SHARDING_OB_MYSQL,
+  | ConnectType.OB_MYSQL
+  | ConnectType.CLOUD_OB_MYSQL
+  | ConnectType.ODP_SHARDING_OB_MYSQL,
   IDataSourceModeConfig
 > = {
   [ConnectType.OB_MYSQL]: {
     priority: 98,
     connection: {
       address: {
-        items: ['ip', 'port', 'cluster', 'tenant'],
+        items: ['ip', 'port', 'cluster', 'tenant']
       },
       account: true,
       sys: true,
-      ssl: true,
+      ssl: true
     },
     features: {
       task: Object.values(TaskType),
@@ -84,34 +86,36 @@ const items: Record<
       plEdit: true,
       export: {
         fileLimit: true,
-        snapshot: true,
-      },
+        snapshot: true
+      }
     },
     schema: {
       table: tableConfig,
       func: functionConfig,
       proc: procedureConfig,
-      innerSchema: ['test', 'mysql', 'oceanbase', 'information_schema'],
+      innerSchema: ['test', 'mysql', 'oceanbase', 'information_schema']
     },
     sql: {
       language: 'obmysql',
       escapeChar: '`',
-      caseSensitivity: true,
-    },
+      caseSensitivity: true
+    }
   },
   [ConnectType.CLOUD_OB_MYSQL]: {
     priority: 96,
     connection: {
       address: {
-        items: ['ip', 'port'],
+        items: ['ip', 'port']
       },
       account: true,
       sys: true,
       ssl: true,
-      unionUser: true,
+      unionUser: true
     },
     features: {
-      task: Object.values(TaskType)?.filter((i) => ![TaskType.ONLINE_SCHEMA_CHANGE]?.includes?.(i)),
+      task: Object.values(TaskType)?.filter(
+        (i) => ![TaskType.ONLINE_SCHEMA_CHANGE]?.includes?.(i)
+      ),
       obclient: true,
       recycleBin: true,
       sessionManage: true,
@@ -123,32 +127,32 @@ const items: Record<
       plRun: true,
       export: {
         fileLimit: true,
-        snapshot: true,
-      },
+        snapshot: true
+      }
     },
     schema: {
       table: tableConfig,
       func: functionConfig,
       proc: procedureConfig,
-      innerSchema: ['test', 'mysql', 'oceanbase', 'information_schema'],
+      innerSchema: ['test', 'mysql', 'oceanbase', 'information_schema']
     },
     sql: {
       language: 'obmysql',
       escapeChar: '`',
-      caseSensitivity: true,
-    },
+      caseSensitivity: true
+    }
   },
   [ConnectType.ODP_SHARDING_OB_MYSQL]: {
     priority: 95,
     connection: {
       address: {
-        items: ['ip', 'port'],
+        items: ['ip', 'port']
       },
       account: true,
       sys: false,
       ssl: true,
       defaultSchema: true,
-      unionUser: true,
+      unionUser: true
     },
     features: {
       task: [TaskType.ASYNC, TaskType.SQL_PLAN, TaskType.MULTIPLE_ASYNC],
@@ -162,21 +166,21 @@ const items: Record<
       supportOBProxy: true,
       export: {
         fileLimit: true,
-        snapshot: true,
-      },
+        snapshot: true
+      }
     },
     schema: {
       table: tableConfig,
       func: functionConfig,
       proc: procedureConfig,
-      innerSchema: ['test', 'mysql', 'oceanbase', 'information_schema'],
+      innerSchema: ['test', 'mysql', 'oceanbase', 'information_schema']
     },
     sql: {
       language: 'obmysql',
       escapeChar: '`',
-      caseSensitivity: true,
-    },
-  },
+      caseSensitivity: true
+    }
+  }
 };
 if (haveOCP()) {
   delete items[ConnectType.ODP_SHARDING_OB_MYSQL];

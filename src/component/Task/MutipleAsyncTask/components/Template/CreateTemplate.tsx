@@ -1,5 +1,8 @@
 import { formatMessage } from '@/util/intl';
-import { createTemplate, existsTemplateName } from '@/common/network/databaseChange';
+import {
+  createTemplate,
+  existsTemplateName
+} from '@/common/network/databaseChange';
 import login from '@/store/login';
 import { FormInstance, Form, message, Modal, Input } from 'antd';
 import { useContext } from 'react';
@@ -14,22 +17,25 @@ const CreateTemplate: React.FC<{
   const { projectId } = useContext(MultipleAsyncContext);
   const [formRef] = Form.useForm();
   const handleSubmit = async () => {
-    const orders = await form.getFieldValue(['parameters', 'orderedDatabaseIds']);
+    const orders = await form.getFieldValue([
+      'parameters',
+      'orderedDatabaseIds'
+    ]);
     const { name } = await formRef.validateFields().catch();
     const response = await createTemplate(
       {
         projectId,
         orders,
-        name,
+        name
       },
-      login.organizationId?.toString(),
+      login.organizationId?.toString()
     );
     if (response) {
       message.success(
         formatMessage({
           id: 'src.component.Task.MutipleAsyncTask.components.Template.249655CE',
-          defaultMessage: '模版保存成功',
-        }),
+          defaultMessage: '模版保存成功'
+        })
       );
       setCreateTemplateModalOpen(false);
       formRef.resetFields();
@@ -37,8 +43,8 @@ const CreateTemplate: React.FC<{
       message.error(
         formatMessage({
           id: 'src.component.Task.MutipleAsyncTask.components.Template.F76B71CA',
-          defaultMessage: '模版保存失败',
-        }),
+          defaultMessage: '模版保存失败'
+        })
       );
     }
   };
@@ -48,7 +54,11 @@ const CreateTemplate: React.FC<{
     if (!name) {
       return;
     }
-    const isRepeat = await existsTemplateName(name, projectId, login.organizationId?.toString());
+    const isRepeat = await existsTemplateName(
+      name,
+      projectId,
+      login.organizationId?.toString()
+    );
     if (isRepeat) {
       throw new Error();
     }
@@ -58,18 +68,18 @@ const CreateTemplate: React.FC<{
       open={createTemplateModalOpen}
       title={formatMessage({
         id: 'src.component.Task.MutipleAsyncTask.components.Template.F9A7EDA3',
-        defaultMessage: '保存模版',
+        defaultMessage: '保存模版'
       })}
       width={480}
       destroyOnClose
       closable
       okText={formatMessage({
         id: 'src.component.Task.MutipleAsyncTask.components.Template.AB6525D4',
-        defaultMessage: '确定',
+        defaultMessage: '确定'
       })}
       cancelText={formatMessage({
         id: 'src.component.Task.MutipleAsyncTask.components.Template.278A9FE1',
-        defaultMessage: '取消',
+        defaultMessage: '取消'
       })}
       onCancel={() => {
         setCreateTemplateModalOpen(false);
@@ -80,7 +90,8 @@ const CreateTemplate: React.FC<{
         <div className={styles.tip}>
           {formatMessage({
             id: 'src.component.Task.MutipleAsyncTask.components.Template.72F3787F',
-            defaultMessage: '将当前数据库配置保存为模版，可用于当前项目内快速发起多库变更',
+            defaultMessage:
+              '将当前数据库配置保存为模版，可用于当前项目内快速发起多库变更'
           })}
         </div>
         <Form requiredMark="optional" layout="vertical" form={formRef}>
@@ -88,7 +99,7 @@ const CreateTemplate: React.FC<{
             required
             label={formatMessage({
               id: 'src.component.Task.MutipleAsyncTask.components.Template.D826855F',
-              defaultMessage: '模版名称',
+              defaultMessage: '模版名称'
             })}
             name="name"
             validateTrigger="onBlur"
@@ -97,23 +108,23 @@ const CreateTemplate: React.FC<{
                 required: true,
                 message: formatMessage({
                   id: 'src.component.Task.MutipleAsyncTask.components.Template.4B3E6B15',
-                  defaultMessage: '请输入模版名称',
-                }),
+                  defaultMessage: '请输入模版名称'
+                })
               },
               {
                 message: formatMessage({
                   id: 'src.component.Task.MutipleAsyncTask.components.Template.1797C71B',
-                  defaultMessage: '模版名称已存在',
+                  defaultMessage: '模版名称已存在'
                 }),
                 required: true,
-                validator: checkNameRepeat,
-              },
+                validator: checkNameRepeat
+              }
             ]}
           >
             <Input
               placeholder={formatMessage({
                 id: 'src.component.Task.MutipleAsyncTask.components.Template.69303AA2',
-                defaultMessage: '请输入',
+                defaultMessage: '请输入'
               })}
               style={{ width: '320px' }}
             />

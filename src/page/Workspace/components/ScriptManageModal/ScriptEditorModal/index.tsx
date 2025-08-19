@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-import { getScript, updateScript as updateRemoteScript } from '@/common/network';
+import {
+  getScript,
+  updateScript as updateRemoteScript
+} from '@/common/network';
 import CommonIDE from '@/component/CommonIDE';
 import { updatePageByScriptId } from '@/store/helper/page';
 import { formatMessage } from '@/util/intl';
@@ -33,7 +36,7 @@ const ScriptEditorModal: React.FC<IProps> = function ({
   scriptId,
   visible,
   onClose: propOnClose,
-  onOk,
+  onOk
 }) {
   const [script, setScript] = useState(null);
   const [scriptKey, setScriptKey] = useState(0);
@@ -50,15 +53,15 @@ const ScriptEditorModal: React.FC<IProps> = function ({
       Modal.confirm({
         content: formatMessage({
           id: 'odc.ScriptManageModal.ScriptEditorModal.TheCurrentOperationIsNot',
-          defaultMessage: '当前的操作未保存，是否确定关闭窗口？',
+          defaultMessage: '当前的操作未保存，是否确定关闭窗口？'
         }), //当前的操作未保存，确定要关闭窗口吗?
         title: formatMessage({
           id: 'odc.ScriptManageModal.ScriptEditorModal.CloseWindow',
-          defaultMessage: '关闭窗口',
+          defaultMessage: '关闭窗口'
         }), //关闭窗口
         onOk: () => {
           propOnClose();
-        },
+        }
       });
     } else {
       propOnClose();
@@ -70,21 +73,25 @@ const ScriptEditorModal: React.FC<IProps> = function ({
     if (!values) {
       return;
     }
-    const file = await updateRemoteScript(scriptId, script.scriptText, values.scriptName);
+    const file = await updateRemoteScript(
+      scriptId,
+      script.scriptText,
+      values.scriptName
+    );
 
     if (file) {
       updatePageByScriptId(
         file.id,
         {
           title: script.scriptName,
-          isSaved: true,
+          isSaved: true
         },
 
         {
           scriptText: script.scriptText,
           scriptName: script.scriptName,
-          scriptId: scriptId,
-        },
+          scriptId: scriptId
+        }
       );
 
       setChanged(false);
@@ -100,13 +107,13 @@ const ScriptEditorModal: React.FC<IProps> = function ({
       const file = await getScript(scriptId);
       setScript({
         scriptText: file.content,
-        scriptName: file.scriptMeta.objectName,
+        scriptName: file.scriptMeta.objectName
       });
 
       setScriptKey(scriptKey + 1);
       form.setFieldsValue({
         scriptText: file.content,
-        scriptName: file.scriptMeta.objectName,
+        scriptName: file.scriptMeta.objectName
       });
     } catch (e) {
       console.error(e);
@@ -130,10 +137,10 @@ const ScriptEditorModal: React.FC<IProps> = function ({
         formatMessage(
           {
             id: 'odc.ScriptManageModal.ScriptEditorModal.EditScriptScriptname',
-            defaultMessage: '编辑脚本({scriptName})',
+            defaultMessage: '编辑脚本({scriptName})'
           },
 
-          { scriptName },
+          { scriptName }
         )
         //`编辑脚本(${scriptName})`
       }
@@ -144,7 +151,7 @@ const ScriptEditorModal: React.FC<IProps> = function ({
             {
               formatMessage({
                 id: 'odc.ScriptManageModal.ScriptEditorModal.Cancel',
-                defaultMessage: '取消',
+                defaultMessage: '取消'
               })
 
               /*取消*/
@@ -154,7 +161,7 @@ const ScriptEditorModal: React.FC<IProps> = function ({
             {
               formatMessage({
                 id: 'odc.ScriptManageModal.ScriptEditorModal.Save',
-                defaultMessage: '保存',
+                defaultMessage: '保存'
               })
 
               /*保存*/
@@ -176,7 +183,7 @@ const ScriptEditorModal: React.FC<IProps> = function ({
             name="scriptName"
             label={formatMessage({
               id: 'odc.ScriptManageModal.ScriptEditorModal.ScriptName',
-              defaultMessage: '脚本名称',
+              defaultMessage: '脚本名称'
             })}
 
             /*脚本名称*/
@@ -186,7 +193,7 @@ const ScriptEditorModal: React.FC<IProps> = function ({
           <Form.Item
             label={formatMessage({
               id: 'odc.ScriptManageModal.ScriptEditorModal.ScriptContent',
-              defaultMessage: '脚本内容',
+              defaultMessage: '脚本内容'
             })}
             style={{ height: 500 }}
             className={styles.sqlContent}

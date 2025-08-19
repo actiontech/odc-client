@@ -17,7 +17,11 @@ import { formatMessage } from '@/util/intl';
 
 import { DatabasePermissionStatus } from '@/d.ts/project';
 import HelpDoc from '@/component/helpDoc';
-import { ExclamationCircleFilled, StopFilled, CheckCircleFilled } from '@ant-design/icons';
+import {
+  ExclamationCircleFilled,
+  StopFilled,
+  CheckCircleFilled
+} from '@ant-design/icons';
 import { Space } from 'antd';
 import React from 'react';
 
@@ -25,39 +29,39 @@ export const tablePermissionStatusMap = {
   [DatabasePermissionStatus.EXPIRED]: {
     text: formatMessage({
       id: 'src.page.Project.User.ManageModal.Table.Status.F4074114',
-      defaultMessage: '已过期',
+      defaultMessage: '已过期'
     }),
     value: DatabasePermissionStatus.EXPIRED,
     icon: (
       <StopFilled
         style={{
-          color: 'var(--icon-color-disable)',
+          color: 'var(--icon-color-disable)'
         }}
       />
-    ),
+    )
   },
   [DatabasePermissionStatus.EXPIRING]: {
     text: formatMessage({
       id: 'src.page.Project.User.ManageModal.Table.Status.3F56D2D7',
-      defaultMessage: '即将过期',
+      defaultMessage: '即将过期'
     }),
     value: DatabasePermissionStatus.EXPIRING,
     icon: (
       <ExclamationCircleFilled
         style={{
-          color: 'var(--icon-orange-color)',
+          color: 'var(--icon-orange-color)'
         }}
       />
-    ),
+    )
   },
   [DatabasePermissionStatus.NOT_EXPIRED]: {
     text: formatMessage({
       id: 'src.page.Project.User.ManageModal.Table.Status.FBAD95E6',
-      defaultMessage: '生效中',
+      defaultMessage: '生效中'
     }),
     value: DatabasePermissionStatus.NOT_EXPIRED,
-    icon: <CheckCircleFilled style={{ color: 'var(--icon-green-color)' }} />,
-  },
+    icon: <CheckCircleFilled style={{ color: 'var(--icon-green-color)' }} />
+  }
 };
 
 interface IProps {
@@ -76,7 +80,7 @@ const StatusLabel: React.FC<IProps> = (props) => {
     <Space
       style={{
         overflow: 'hidden',
-        maxWidth: '100%',
+        maxWidth: '100%'
       }}
       size={5}
     >
@@ -87,7 +91,7 @@ const StatusLabel: React.FC<IProps> = (props) => {
             style={{
               whiteSpace: 'nowrap',
               overflow: 'hidden',
-              maxWidth: '100%',
+              maxWidth: '100%'
             }}
           >
             {statusInfo.text}

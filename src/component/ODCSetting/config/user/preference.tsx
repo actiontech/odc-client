@@ -21,19 +21,22 @@ import { IODCSetting, ODCSettingGroup } from '../../config';
 import RadioItem from '../../Item/RadioItem';
 
 const preferenceGroup: ODCSettingGroup = {
-  label: formatMessage({ id: 'src.component.ODCSetting.config.774332B4', defaultMessage: '外观' }), //'外观'
-  key: 'preference',
+  label: formatMessage({
+    id: 'src.component.ODCSetting.config.774332B4',
+    defaultMessage: '外观'
+  }), //'外观'
+  key: 'preference'
 };
 const preferenceDefaultGroup: ODCSettingGroup = {
   label: '',
-  key: 'preferenceDefault',
+  key: 'preferenceDefault'
 };
 
 const perferenceSettings: IODCSetting[] = [
   {
     label: formatMessage({
       id: 'src.component.ODCSetting.config.8D0B9878',
-      defaultMessage: '主题',
+      defaultMessage: '主题'
     }), //'主题'
     key: 'odc.appearance.scheme',
     locationKey: 'appearancescheme',
@@ -53,7 +56,7 @@ const perferenceSettings: IODCSetting[] = [
                 />
               ),
 
-              value: EThemeConfigKey.ODC_WHITE,
+              value: EThemeConfigKey.ODC_WHITE
             },
             {
               label: (
@@ -63,19 +66,19 @@ const perferenceSettings: IODCSetting[] = [
                 />
               ),
 
-              value: EThemeConfigKey.ODC_DARK,
-            },
+              value: EThemeConfigKey.ODC_DARK
+            }
           ]}
           value={value}
           onChange={onChange}
         />
       );
-    },
+    }
   },
   {
     label: formatMessage({
       id: 'src.component.ODCSetting.config.7E2B58B7',
-      defaultMessage: '语言',
+      defaultMessage: '语言'
     }), //'语言'
     key: 'odc.appearance.language',
     locationKey: 'appearancelanguage',
@@ -91,17 +94,17 @@ const perferenceSettings: IODCSetting[] = [
             {
               label: formatMessage({
                 id: 'src.component.ODCSetting.config.549CFCC5',
-                defaultMessage: '当前系统语言',
+                defaultMessage: '当前系统语言'
               }), //'当前系统语言'
-              value: 'FollowSystem',
-            },
+              value: 'FollowSystem'
+            }
           ].concat(localeList)}
           value={value}
           onChange={onChange}
         />
       );
-    },
-  },
+    }
+  }
 ];
 
 export default perferenceSettings;

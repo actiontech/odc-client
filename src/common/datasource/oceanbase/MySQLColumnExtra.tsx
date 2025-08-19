@@ -27,7 +27,7 @@ const MySQLColumnExtra: columnExtraComponent = ({
   column,
   originColumns,
   onChange,
-  dialectType,
+  dialectType
 }) => {
   if (!column) {
     return null;
@@ -39,43 +39,75 @@ const MySQLColumnExtra: columnExtraComponent = ({
   } else if (dataType.isChar || dataType.isText) {
     return (
       <>
-        <DefaultValue originColumns={originColumns} column={column} onChange={onChange} />
+        <DefaultValue
+          originColumns={originColumns}
+          column={column}
+          onChange={onChange}
+        />
         <Character column={column} onChange={onChange} />
-        {isGeneratedColumn && <Generation column={column} onChange={onChange} />}
+        {isGeneratedColumn && (
+          <Generation column={column} onChange={onChange} />
+        )}
       </>
     );
   } else if (dataType.isNumber) {
     return (
       <>
-        <DefaultValue originColumns={originColumns} column={column} onChange={onChange} />
+        <DefaultValue
+          originColumns={originColumns}
+          column={column}
+          onChange={onChange}
+        />
         <Number column={column} onChange={onChange} />
-        {isGeneratedColumn && <Generation column={column} onChange={onChange} />}
+        {isGeneratedColumn && (
+          <Generation column={column} onChange={onChange} />
+        )}
       </>
     );
   } else if (dataType.canSync) {
     return (
       <>
-        <DefaultValue originColumns={originColumns} column={column} onChange={onChange} />
+        <DefaultValue
+          originColumns={originColumns}
+          column={column}
+          onChange={onChange}
+        />
         <DataSync column={column} onChange={onChange} />
-        {isGeneratedColumn && <Generation column={column} onChange={onChange} />}
+        {isGeneratedColumn && (
+          <Generation column={column} onChange={onChange} />
+        )}
       </>
     );
   } else if (dataType.isEnum) {
     return (
       <>
-        <DefaultValue originColumns={originColumns} column={column} onChange={onChange} />
+        <DefaultValue
+          originColumns={originColumns}
+          column={column}
+          onChange={onChange}
+        />
         <Enum column={column} onChange={onChange} />
       </>
     );
   } else if (column.generated) {
     return (
       <>
-        <DefaultValue originColumns={originColumns} column={column} onChange={onChange} />
+        <DefaultValue
+          originColumns={originColumns}
+          column={column}
+          onChange={onChange}
+        />
         <Generation column={column} onChange={onChange} />
       </>
     );
   } else {
-    return <DefaultValue originColumns={originColumns} column={column} onChange={onChange} />;
+    return (
+      <DefaultValue
+        originColumns={originColumns}
+        column={column}
+        onChange={onChange}
+      />
+    );
   }
 };
 export default MySQLColumnExtra;

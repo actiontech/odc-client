@@ -28,21 +28,27 @@ interface IProps {
 
 export const ValueList = {
   DEFAULT: Symbol('default').toString(),
-  NULL: Symbol('null').toString(),
+  NULL: Symbol('null').toString()
 };
 
-const ValueInput: React.FC<IProps> = function ({ value, connectionMode, onChange }) {
+const ValueInput: React.FC<IProps> = function ({
+  value,
+  connectionMode,
+  onChange
+}) {
   const isOracle = connectionMode === ConnectionMode.OB_ORACLE;
   value = value === null ? ValueList.NULL : value;
   const [inputValue, inputPlaceholder, menuValue] = useMemo(() => {
-    const menuObj = Object.entries(ValueList).find(([key, _value]) => _value === value);
+    const menuObj = Object.entries(ValueList).find(
+      ([key, _value]) => _value === value
+    );
     return menuObj ? [null, menuObj[0], value] : [value, null, null];
   }, [value]);
   return (
     <div
       style={{
         display: 'flex',
-        alignItems: 'center',
+        alignItems: 'center'
       }}
     >
       <Input
@@ -70,29 +76,29 @@ const ValueInput: React.FC<IProps> = function ({ value, connectionMode, onChange
               key: ValueList.DEFAULT,
               label: formatMessage({
                 id: 'odc.component.EditPLParamsModal.ValueInput.SetToNull',
-                defaultMessage: '设置为 NULL',
-              }),
+                defaultMessage: '设置为 NULL'
+              })
             },
             {
               key: ValueList.NULL,
               label: formatMessage({
                 id: 'odc.component.EditPLParamsModal.ValueInput.SetToNull',
-                defaultMessage: '设置为 NULL',
-              }),
+                defaultMessage: '设置为 NULL'
+              })
             },
             !isOracle && {
               key: 'empty',
               label: formatMessage({
                 id: 'odc.component.EditPLParamsModal.ValueInput.SetToAnEmptyString',
-                defaultMessage: '设置为空字符串',
-              }),
-            },
-          ].filter(Boolean),
+                defaultMessage: '设置为空字符串'
+              })
+            }
+          ].filter(Boolean)
         }}
       >
         <MenuOutlined
           style={{
-            padding: '2px 4px',
+            padding: '2px 4px'
           }}
         />
       </Dropdown>

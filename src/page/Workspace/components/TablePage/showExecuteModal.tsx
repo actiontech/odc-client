@@ -28,146 +28,148 @@ import notification from '@/util/notification';
 import { message } from 'antd';
 import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
 
-export default forwardRef<any, { session: SessionStore; callbackRef: React.MutableRefObject<any> }>(
-  function TableExecuteModal({ session, callbackRef }, ref) {
-    const [visible, setVisible] = useState(false);
-    const [sql, setSQL] = useState('');
-    const [tableName, setTableName] = useState('');
-    const [tip, setTip] = useState<string>(null);
-    const [status, setStatus] = useState<EStatus>(null);
-    const [lintResultSet, setLintResultSet] = useState<ISQLLintReuslt[]>([]);
-    const [hasExecuted, setHasExecuted] = useState<boolean>(false);
-    const promiseResolveRef = useRef<(v: any) => void>();
-    const onSuccessRef = useRef<() => Promise<void>>();
-    useImperativeHandle(
-      ref,
-      () => {
-        return {
-          showExecuteModal: async (
-            sql,
-            tableName,
-            onSuccess,
-            tip?: string,
-            callback?: () => void,
-          ) => {
-            const promise = new Promise(async (resolve) => {
-              setSQL(sql);
-              setTableName(tableName);
-              setTip(tip);
-              promiseResolveRef.current = resolve;
-              onSuccessRef.current = onSuccess;
-              setVisible(true);
+export default forwardRef<
+  any,
+  { session: SessionStore; callbackRef: React.MutableRefObject<any> }
+>(function TableExecuteModal({ session, callbackRef }, ref) {
+  const [visible, setVisible] = useState(false);
+  const [sql, setSQL] = useState('');
+  const [tableName, setTableName] = useState('');
+  const [tip, setTip] = useState<string>(null);
+  const [status, setStatus] = useState<EStatus>(null);
+  const [lintResultSet, setLintResultSet] = useState<ISQLLintReuslt[]>([]);
+  const [hasExecuted, setHasExecuted] = useState<boolean>(false);
+  const promiseResolveRef = useRef<(v: any) => void>();
+  const onSuccessRef = useRef<() => Promise<void>>();
+  useImperativeHandle(
+    ref,
+    () => {
+      return {
+        showExecuteModal: async (
+          sql,
+          tableName,
+          onSuccess,
+          tip?: string,
+          callback?: () => void
+        ) => {
+          const promise = new Promise(async (resolve) => {
+            setSQL(sql);
+            setTableName(tableName);
+            setTip(tip);
+            promiseResolveRef.current = resolve;
+            onSuccessRef.current = onSuccess;
+            setVisible(true);
+          });
+          return promise;
+        }
+      };
+    },
+    []
+  );
+  return (
+    <ExecuteSQLModal
+      sessionStore={session}
+      visible={visible}
+      readonly
+      sql={sql}
+      tip={tip}
+      status={status}
+      lintResultSet={lintResultSet}
+      onCancel={() => {
+        promiseResolveRef.current?.(false);
+        promiseResolveRef.current = null;
+        setVisible(false);
+        setHasExecuted(false);
+        setLintResultSet(null);
+        setStatus(null);
+      }}
+      callback={() => {
+        promiseResolveRef.current?.(false);
+        promiseResolveRef.current = null;
+        setVisible(false);
+        setHasExecuted(false);
+        setLintResultSet(null);
+        setStatus(null);
+        callbackRef?.current?.();
+      }}
+      onSave={async () => {
+        if (isLogicalDatabase(session?.odcDatabase)) {
+          setVisible(false);
+          if (
+            !session?.odcDatabase?.authorizedPermissionTypes?.includes(
+              DatabasePermissionType.CHANGE
+            )
+          ) {
+            message.warning(
+              formatMessage({
+                id: 'src.page.Project.Database.8AFF2CDE',
+                defaultMessage: '暂无变更权限，请先申请数据库权限'
+              })
+            );
+            return;
+          }
+          // 关闭弹窗, 将sql带到工单
+          modal.changeLogicialDatabaseModal(true, {
+            ddl: sql,
+            projectId: session?.odcDatabase?.project?.id,
+            databaseId: session?.odcDatabase?.id
+          });
+          return;
+        }
+        const results = await executeSQL(
+          sql,
+          session?.sessionId,
+          session?.database?.dbName,
+          false
+        );
+        if (!results) {
+          return;
+        }
+        if (results?.unauthorizedDBResources?.length) {
+          return { unauthorizedDBResources: results?.unauthorizedDBResources };
+        }
+        if (!hasExecuted) {
+          /**
+           * status为submit时，即SQL内容没有被拦截，继续执行后续代码，完成相关交互
+           * status为其他情况时，中断操作
+           */
+          if (results?.status !== EStatus.SUBMIT) {
+            setLintResultSet(results?.lintResultSet);
+            setStatus(results?.status);
+            setHasExecuted(true);
+            return;
+          }
+        } else {
+          setLintResultSet(null);
+          setStatus(null);
+          setHasExecuted(false);
+          if (results?.status === EStatus.APPROVAL) {
+            modal.changeCreateAsyncTaskModal(true, {
+              sql: sql,
+              databaseId: sessionManager.sessionMap.get(
+                this.getSession()?.sessionId
+              ).odcDatabase?.id,
+              rules: lintResultSet
             });
-            return promise;
-          },
-        };
-      },
-      [],
-    );
-    return (
-      <ExecuteSQLModal
-        sessionStore={session}
-        visible={visible}
-        readonly
-        sql={sql}
-        tip={tip}
-        status={status}
-        lintResultSet={lintResultSet}
-        onCancel={() => {
+          }
+        }
+        if (results?.invalid) {
           promiseResolveRef.current?.(false);
           promiseResolveRef.current = null;
           setVisible(false);
-          setHasExecuted(false);
-          setLintResultSet(null);
-          setStatus(null);
-        }}
-        callback={() => {
-          promiseResolveRef.current?.(false);
+          return;
+        }
+        const result = results?.executeResult?.find((result) => result.track);
+        if (!result?.track) {
+          promiseResolveRef?.current?.(true);
           promiseResolveRef.current = null;
+          await onSuccessRef.current?.();
           setVisible(false);
-          setHasExecuted(false);
-          setLintResultSet(null);
-          setStatus(null);
-          callbackRef?.current?.();
-        }}
-        onSave={async () => {
-          if (isLogicalDatabase(session?.odcDatabase)) {
-            setVisible(false);
-            if (
-              !session?.odcDatabase?.authorizedPermissionTypes?.includes(
-                DatabasePermissionType.CHANGE,
-              )
-            ) {
-              message.warning(
-                formatMessage({
-                  id: 'src.page.Project.Database.8AFF2CDE',
-                  defaultMessage: '暂无变更权限，请先申请数据库权限',
-                }),
-              );
-              return;
-            }
-            // 关闭弹窗, 将sql带到工单
-            modal.changeLogicialDatabaseModal(true, {
-              ddl: sql,
-              projectId: session?.odcDatabase?.project?.id,
-              databaseId: session?.odcDatabase?.id,
-            });
-            return;
-          }
-          const results = await executeSQL(
-            sql,
-            session?.sessionId,
-            session?.database?.dbName,
-            false,
-          );
-          if (!results) {
-            return;
-          }
-          if (results?.unauthorizedDBResources?.length) {
-            return { unauthorizedDBResources: results?.unauthorizedDBResources };
-          }
-          if (!hasExecuted) {
-            /**
-             * status为submit时，即SQL内容没有被拦截，继续执行后续代码，完成相关交互
-             * status为其他情况时，中断操作
-             */
-            if (results?.status !== EStatus.SUBMIT) {
-              setLintResultSet(results?.lintResultSet);
-              setStatus(results?.status);
-              setHasExecuted(true);
-              return;
-            }
-          } else {
-            setLintResultSet(null);
-            setStatus(null);
-            setHasExecuted(false);
-            if (results?.status === EStatus.APPROVAL) {
-              modal.changeCreateAsyncTaskModal(true, {
-                sql: sql,
-                databaseId: sessionManager.sessionMap.get(this.getSession()?.sessionId).odcDatabase
-                  ?.id,
-                rules: lintResultSet,
-              });
-            }
-          }
-          if (results?.invalid) {
-            promiseResolveRef.current?.(false);
-            promiseResolveRef.current = null;
-            setVisible(false);
-            return;
-          }
-          const result = results?.executeResult?.find((result) => result.track);
-          if (!result?.track) {
-            promiseResolveRef?.current?.(true);
-            promiseResolveRef.current = null;
-            await onSuccessRef.current?.();
-            setVisible(false);
-          } else {
-            notification.error(result);
-          }
-          return !result.track;
-        }}
-      />
-    );
-  },
-);
+        } else {
+          notification.error(result);
+        }
+        return !result.track;
+      }}
+    />
+  );
+});

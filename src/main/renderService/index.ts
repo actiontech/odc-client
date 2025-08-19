@@ -22,7 +22,12 @@ import fs from 'fs';
 import MainServer from '../server/main';
 import { default as clientLog } from '../utils/log';
 import feedbackImpl from './feedback';
-import { changePwd, checkProcessKey as _checkProcessKey, checkPwd, resetPwdAndDB } from './lock';
+import {
+  changePwd,
+  checkProcessKey as _checkProcessKey,
+  checkPwd,
+  resetPwdAndDB
+} from './lock';
 import { getSettingPath, getUserSettingPath } from '../utils';
 
 export function initRenderService() {
@@ -80,7 +85,7 @@ export function initRenderService() {
   });
   ipcMain.handle('selectFolder', () => {
     const path = dialog.showOpenDialogSync({
-      properties: ['openDirectory'],
+      properties: ['openDirectory']
     });
     if (!path) {
       return '';

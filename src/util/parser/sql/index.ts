@@ -16,7 +16,11 @@
 
 import { getSQLTokens } from './core';
 
-export async function isSqlEmpty(sql: string, isMysql: boolean, removeDelimiter?: boolean) {
+export async function isSqlEmpty(
+  sql: string,
+  isMysql: boolean,
+  removeDelimiter?: boolean
+) {
   let tokens = await getSQLTokens(sql, isMysql);
   if (removeDelimiter) {
     tokens = tokens.filter((token) => {

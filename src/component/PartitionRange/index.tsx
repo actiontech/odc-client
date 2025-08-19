@@ -46,7 +46,7 @@ const PartitionRange: React.FC<IProps> = ({
   partitionValuePlaceholder,
   partitionValueLabel,
   value,
-  onChange,
+  onChange
 }) => {
   const handleAdd = useCallback(
     (e) => {
@@ -54,13 +54,13 @@ const PartitionRange: React.FC<IProps> = ({
         const newItem = {
           dragIdx: dragIdxGenerator++,
           name: '',
-          value: partitionType === 'LIST_COLUMNS' ? [{}] : '',
+          value: partitionType === 'LIST_COLUMNS' ? [{}] : ''
         };
         const updatedList = [...value, newItem];
         onChange(updatedList);
       }
     },
-    [value, onChange, partitionType],
+    [value, onChange, partitionType]
   );
 
   const handleDelete = useCallback(
@@ -71,7 +71,7 @@ const PartitionRange: React.FC<IProps> = ({
         onChange(newList);
       }
     },
-    [value, onChange],
+    [value, onChange]
   );
 
   const handleEdit = useCallback(
@@ -80,19 +80,19 @@ const PartitionRange: React.FC<IProps> = ({
         const newList = [...value];
         newList.splice(idx, 1, {
           ...newList[idx],
-          ...rule,
+          ...rule
         });
         onChange(newList);
       }
     },
-    [value, onChange],
+    [value, onChange]
   );
 
   const handlePartitionNameChange = useCallback(
     (index, val) => {
       handleEdit(index, { name: val });
     },
-    [handleEdit],
+    [handleEdit]
   );
 
   const dataSource = value ? [...value] : [];
@@ -104,7 +104,7 @@ const PartitionRange: React.FC<IProps> = ({
     {
       title: formatMessage({
         id: 'odc.component.PartitionRange.PartitionName',
-        defaultMessage: '分区名称',
+        defaultMessage: '分区名称'
       }),
       dataIndex: 'name',
       key: 'name',
@@ -123,13 +123,13 @@ const PartitionRange: React.FC<IProps> = ({
               }}
               placeholder={formatMessage({
                 id: 'odc.component.PartitionRange.Enter',
-                defaultMessage: '请输入',
+                defaultMessage: '请输入'
               })}
               autoFocus={true}
             />
           </Form.Item>
         );
-      },
+      }
     },
     {
       title: partitionValueLabel + labelPlus,
@@ -150,7 +150,7 @@ const PartitionRange: React.FC<IProps> = ({
             {dataSource.length > 1 ? (
               <DeleteOutlined
                 style={{
-                  lineHeight: '32px',
+                  lineHeight: '32px'
                 }}
                 className="btn-partition-delete"
                 onClick={() => {
@@ -160,8 +160,8 @@ const PartitionRange: React.FC<IProps> = ({
             ) : null}
           </div>
         );
-      },
-    },
+      }
+    }
   ];
 
   return (
@@ -174,10 +174,15 @@ const PartitionRange: React.FC<IProps> = ({
         bordered
         pagination={false}
       />
-      <Button className={styles.btnAdd} icon={<PlusOutlined />} size="small" onClick={handleAdd}>
+      <Button
+        className={styles.btnAdd}
+        icon={<PlusOutlined />}
+        size="small"
+        onClick={handleAdd}
+      >
         {formatMessage({
           id: 'workspace.window.createTable.partition.button.add',
-          defaultMessage: '添加分区',
+          defaultMessage: '添加分区'
         })}
       </Button>
     </>

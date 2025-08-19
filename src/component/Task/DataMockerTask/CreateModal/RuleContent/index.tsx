@@ -22,7 +22,7 @@ import {
   IColumnSizeMap,
   IColumnSizeValue,
   IServerMockColumn,
-  MockGenerator,
+  MockGenerator
 } from '@/d.ts';
 import { convertColumnType } from '@/util/utils';
 import { CheckOutlined, CloseOutlined, EditOutlined } from '@ant-design/icons';
@@ -33,48 +33,54 @@ import { columnTypeToRuleMap, IMockFormColumn, RuleItem } from '../type';
 
 import { isNil } from 'lodash';
 import styles from './index.less';
-import CharItem, { CharRuleType, isShowEmpty as isShowCharItemEmpty } from './ruleItems/CharItem';
+import CharItem, {
+  CharRuleType,
+  isShowEmpty as isShowCharItemEmpty
+} from './ruleItems/CharItem';
 import {
   convertFormDataToServerData as charConvertFormDataToServerData,
   convertServerDataToFormData as charConvertServerDataToFormData,
-  ruleTypeToGenerator as charRuleTypeToGenerator,
+  ruleTypeToGenerator as charRuleTypeToGenerator
 } from './ruleItems/CharItem/converter';
 import getCharDefaltValue from './ruleItems/CharItem/defaultValue';
-import DateItem, { DateRuleType, isShowEmpty as isShowDateItemEmpty } from './ruleItems/DateItem';
+import DateItem, {
+  DateRuleType,
+  isShowEmpty as isShowDateItemEmpty
+} from './ruleItems/DateItem';
 import {
   convertFormDataToServerData as dateConvertFormDataToServerData,
   convertServerDataToFormData as dateConvertServerDataToFormData,
-  ruleTypeToGenerator as dateRuleTypeToGenerator,
+  ruleTypeToGenerator as dateRuleTypeToGenerator
 } from './ruleItems/DateItem/converter';
 import getDateDefaltValue from './ruleItems/DateItem/defaultValue';
 import IntervalItem, {
   IntervalRuleType,
-  isShowEmpty as isShowIntervalItemEmpty,
+  isShowEmpty as isShowIntervalItemEmpty
 } from './ruleItems/IntervalItem';
 import {
   convertFormDataToServerData as intervalConvertFormDataToServerData,
   convertServerDataToFormData as intervalConvertServerDataToFormData,
-  ruleTypeToGenerator as intervalRuleTypeToGenerator,
+  ruleTypeToGenerator as intervalRuleTypeToGenerator
 } from './ruleItems/IntervalItem/converter';
 import getIntervalDefaltValue from './ruleItems/IntervalItem/defaultValue';
 import NumberItem, {
   isShowEmpty as isShowNumberItemEmpty,
-  NumberRuleType,
+  NumberRuleType
 } from './ruleItems/NumberItem';
 import {
   convertFormDataToServerData as numberConvertFormDataToServerData,
   convertServerDataToFormData as numberConvertServerDataToFormData,
-  ruleTypeToGenerator as numberRuleTypeToGenerator,
+  ruleTypeToGenerator as numberRuleTypeToGenerator
 } from './ruleItems/NumberItem/converter';
 import getNumberDefaltValue from './ruleItems/NumberItem/defaultValue';
 import OtherItem, {
   isShowEmpty as isShowOtherItemEmpty,
-  OtherRuleType,
+  OtherRuleType
 } from './ruleItems/OtherItem';
 import {
   convertFormDataToServerData as otherConvertFormDataToServerData,
   convertServerDataToFormData as otherConvertServerDataToFormData,
-  ruleTypeToGenerator as otherRuleTypeToGenerator,
+  ruleTypeToGenerator as otherRuleTypeToGenerator
 } from './ruleItems/OtherItem/converter';
 import getOtherDefaultValue from './ruleItems/OtherItem/defaultValue';
 
@@ -87,7 +93,10 @@ interface IRuleContentProps {
   onChange?: (value: any) => void;
   columnSizeMap: IColumnSizeMap;
   readonly?: boolean;
-  typeConfigValue?: { genParams?: { caseOption: string }; range: string[] | number[] };
+  typeConfigValue?: {
+    genParams?: { caseOption: string };
+    range: string[] | number[];
+  };
 }
 
 /**
@@ -97,7 +106,11 @@ function getNumberType(dbMode: ConnectionMode, columnType: string) {
   if (dbMode === ConnectionMode.OB_ORACLE || dbMode === ConnectionMode.ORACLE) {
     return 'float';
   }
-  if (['DECIMAL', 'FLOAT', 'DOUBLE', 'NUMERIC'].includes(convertColumnType(columnType))) {
+  if (
+    ['DECIMAL', 'FLOAT', 'DOUBLE', 'NUMERIC'].includes(
+      convertColumnType(columnType)
+    )
+  ) {
     return 'float';
   }
   return 'int';
@@ -107,8 +120,16 @@ const RuleContent: React.FC<IRuleContentProps> = (props) => {
   const [isEditing, _setIsEditing] = useState(false);
   const itemRef = useRef<FormInstance>();
   let emptyShowFunc;
-  let { dbMode, columnType, ruleType, readonly, value, columnSizeMap, columnName, onChange } =
-    props;
+  let {
+    dbMode,
+    columnType,
+    ruleType,
+    readonly,
+    value,
+    columnSizeMap,
+    columnName,
+    onChange
+  } = props;
 
   const maxLength = columnSizeMap?.[columnName];
   columnType = convertColumnType(columnType);
@@ -119,11 +140,11 @@ const RuleContent: React.FC<IRuleContentProps> = (props) => {
       if (value || newValue) {
         onChange({
           ...(newValue || value),
-          _isEditing: isEditing,
+          _isEditing: isEditing
         });
       }
     },
-    [value],
+    [value]
   );
   /**
    * ruleType 改变的时候，重置状态
@@ -233,7 +254,10 @@ const RuleContent: React.FC<IRuleContentProps> = (props) => {
                 }
               }}
             />
-            <CloseOutlined style={{ color: '#FF4D4F' }} onClick={() => setIsEditing(false)} />
+            <CloseOutlined
+              style={{ color: '#FF4D4F' }}
+              onClick={() => setIsEditing(false)}
+            />
           </Space>
         ) : (
           <EditOutlined
@@ -255,7 +279,7 @@ export function getDefaultValue(
   dbMode: ConnectionMode,
   columnType: string,
   ruleType: string,
-  columnSize?: IColumnSizeValue,
+  columnSize?: IColumnSizeValue
 ) {
   columnType = convertColumnType(columnType);
   const ruleItem = columnTypeToRuleMap[dbMode][columnType];
@@ -265,7 +289,10 @@ export function getDefaultValue(
     }
     case RuleItem.INTERVAL_DAY_TO_SECOND:
     case RuleItem.INTERVAL_YEAR_TO_MONTH: {
-      return getIntervalDefaltValue(ruleType as any, ruleItem === RuleItem.INTERVAL_DAY_TO_SECOND);
+      return getIntervalDefaltValue(
+        ruleType as any,
+        ruleItem === RuleItem.INTERVAL_DAY_TO_SECOND
+      );
     }
     case RuleItem.DATE: {
       return getDateDefaltValue(ruleType as any);
@@ -310,9 +337,11 @@ export function getDefaultRule(columnType: string, dbMode: ConnectionMode) {
 function getRuleTypeByGenerator<T extends string>(
   generatorMap: Record<T, MockGenerator>,
   generator: MockGenerator,
-  defaultValue: T,
+  defaultValue: T
 ): T {
-  const ruleType = Object.entries(generatorMap).find(([_, gen]) => gen === generator)?.[0] as T;
+  const ruleType = Object.entries(generatorMap).find(
+    ([_, gen]) => gen === generator
+  )?.[0] as T;
   return ruleType || defaultValue;
 }
 
@@ -322,7 +351,7 @@ function getRuleTypeByGenerator<T extends string>(
 export function getDefaultRuleByGenerator(
   generator: MockGenerator,
   columnType: string,
-  dbMode: ConnectionMode,
+  dbMode: ConnectionMode
 ) {
   columnType = convertColumnType(columnType);
   const ruleItem = columnTypeToRuleMap[dbMode][columnType];
@@ -333,14 +362,14 @@ export function getDefaultRuleByGenerator(
       return getRuleTypeByGenerator<CharRuleType>(
         charRuleTypeToGenerator,
         generator,
-        defaultRule as CharRuleType,
+        defaultRule as CharRuleType
       );
     }
     case RuleItem.DATE: {
       return getRuleTypeByGenerator<DateRuleType>(
         dateRuleTypeToGenerator,
         generator,
-        defaultRule as DateRuleType,
+        defaultRule as DateRuleType
       );
     }
     case RuleItem.INTERVAL_YEAR_TO_MONTH:
@@ -348,14 +377,14 @@ export function getDefaultRuleByGenerator(
       return getRuleTypeByGenerator<IntervalRuleType>(
         intervalRuleTypeToGenerator,
         generator,
-        defaultRule as IntervalRuleType,
+        defaultRule as IntervalRuleType
       );
     }
     case RuleItem.NUMBER: {
       return getRuleTypeByGenerator<NumberRuleType>(
         numberRuleTypeToGenerator,
         generator,
-        defaultRule as NumberRuleType,
+        defaultRule as NumberRuleType
       );
     }
     default: {
@@ -369,10 +398,11 @@ export function getDefaultRuleByGenerator(
  */
 export function convertFormToServerColumns(
   columns: IMockFormColumn[],
-  dbMode: ConnectionMode,
+  dbMode: ConnectionMode
 ): IServerMockColumn[] {
   return columns?.map((column) => {
-    const ruleItem: RuleItem = columnTypeToRuleMap[dbMode]?.[convertColumnType(column.columnType)];
+    const ruleItem: RuleItem =
+      columnTypeToRuleMap[dbMode]?.[convertColumnType(column.columnType)];
     switch (ruleItem) {
       case RuleItem.CHAR: {
         return charConvertFormDataToServerData(column);
@@ -395,14 +425,15 @@ export function convertFormToServerColumns(
 }
 export function convertServerColumnsToFormColumns(
   serverData: IServerMockColumn[],
-  dbMode: ConnectionMode,
+  dbMode: ConnectionMode
 ): IMockFormColumn[] {
   if (!serverData) {
     return null;
   }
   return serverData?.map((column) => {
     const columnType = column?.typeConfig?.columnType;
-    const ruleItem: RuleItem = columnTypeToRuleMap[dbMode]?.[convertColumnType(columnType)];
+    const ruleItem: RuleItem =
+      columnTypeToRuleMap[dbMode]?.[convertColumnType(columnType)];
     switch (ruleItem) {
       case RuleItem.CHAR: {
         return charConvertServerDataToFormData(column);

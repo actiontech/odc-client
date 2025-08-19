@@ -26,7 +26,7 @@ export enum TitleType {
   TEXT = 'text',
   TAB = 'tab',
   SELECT = 'select',
-  TAB_SELECT = 'tab_select',
+  TAB_SELECT = 'tab_select'
 }
 
 interface IPageContainerProps {
@@ -69,7 +69,7 @@ const PageContainer: React.FC<IPageContainerProps> = (props) => {
     icon,
     iconColor,
     onTabChange,
-    containerWrapStyle = {},
+    containerWrapStyle = {}
   } = props;
   const {
     title,
@@ -82,14 +82,14 @@ const PageContainer: React.FC<IPageContainerProps> = (props) => {
     SelectTab,
     onSelectTabChange,
     SelectTabOptions,
-    loading,
+    loading
   } = titleProps;
 
   return (
     <div className={styles['page-container']}>
       <div
         className={classnames(styles['page-container-header'], {
-          [styles['bottom-border']]: showDivider,
+          [styles['bottom-border']]: showDivider
         })}
       >
         {type === TitleType.TAB && (
@@ -101,7 +101,7 @@ const PageContainer: React.FC<IPageContainerProps> = (props) => {
             items={options?.map(({ label, value }) => {
               return {
                 key: value?.toString(),
-                label: label,
+                label: label
               };
             })}
           />
@@ -142,7 +142,7 @@ const PageContainer: React.FC<IPageContainerProps> = (props) => {
           items={tabList?.map(({ tab, key }) => {
             return {
               key,
-              label: tab,
+              label: tab
             };
           })}
         />

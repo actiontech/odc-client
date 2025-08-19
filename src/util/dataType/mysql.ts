@@ -22,170 +22,170 @@ import { IDataTypeParamType, IDataTypes } from './interface';
 export const dataTypes: IDataTypes = {
   integer: {
     params: [IDataTypeParamType.DISPLAY_WIDTH],
-    isNumber: true,
+    isNumber: true
   },
   int: {
     params: [IDataTypeParamType.DISPLAY_WIDTH],
-    isNumber: true,
+    isNumber: true
   },
   numeric: {
     params: [IDataTypeParamType.DISPLAY_WIDTH, IDataTypeParamType.SCALE],
     isNumber: true,
-    defaultValues: [10, 2],
+    defaultValues: [10, 2]
   },
   decimal: {
     params: [IDataTypeParamType.DISPLAY_WIDTH, IDataTypeParamType.SCALE],
     isNumber: true,
-    defaultValues: [10, 2],
+    defaultValues: [10, 2]
   },
   bit: {
     params: [IDataTypeParamType.BIT_LENGTH],
     isBit: true,
-    defaultValues: [1],
+    defaultValues: [1]
   },
   tinyint: {
     params: [IDataTypeParamType.DISPLAY_WIDTH],
-    isNumber: true,
+    isNumber: true
   },
   smallint: {
     params: [IDataTypeParamType.DISPLAY_WIDTH],
-    isNumber: true,
+    isNumber: true
   },
   mediumint: {
     params: [IDataTypeParamType.DISPLAY_WIDTH],
-    isNumber: true,
+    isNumber: true
   },
   bigint: {
     params: [IDataTypeParamType.DISPLAY_WIDTH],
-    isNumber: true,
+    isNumber: true
   },
   float: {
     params: [IDataTypeParamType.DISPLAY_WIDTH, IDataTypeParamType.SCALE],
     isNumber: true,
-    defaultValues: [10, 0],
+    defaultValues: [10, 0]
   },
   double: {
     params: [IDataTypeParamType.DISPLAY_WIDTH, IDataTypeParamType.SCALE],
     isNumber: true,
-    defaultValues: [10, 0],
+    defaultValues: [10, 0]
   },
   varchar: {
     params: [IDataTypeParamType.DISPLAY_WIDTH],
     isChar: true,
-    defaultValues: [120],
+    defaultValues: [120]
   },
   char: {
     params: [IDataTypeParamType.DISPLAY_WIDTH],
     isChar: true,
-    defaultValues: [120],
+    defaultValues: [120]
   },
   tinytext: {
     params: [],
-    isText: true,
+    isText: true
   },
   mediumtext: {
     params: [],
-    isText: true,
+    isText: true
   },
   text: {
     params: [IDataTypeParamType.DISPLAY_WIDTH],
-    isText: true,
+    isText: true
   },
   longtext: {
     params: [],
-    isText: true,
+    isText: true
   },
   tinyblob: {
     params: [],
-    isBlob: true,
+    isBlob: true
   },
   blob: {
     params: [IDataTypeParamType.BYTE_LENGTH],
-    isBlob: true,
+    isBlob: true
   },
   mediumblob: {
     params: [],
-    isBlob: true,
+    isBlob: true
   },
   longblob: {
     params: [],
-    isBlob: true,
+    isBlob: true
   },
   binary: {
     params: [IDataTypeParamType.BYTE_LENGTH],
     isBinary: true,
-    defaultValues: [120],
+    defaultValues: [120]
   },
   varbinary: {
     params: [IDataTypeParamType.BYTE_LENGTH],
     isBinary: true,
-    defaultValues: [120],
+    defaultValues: [120]
   },
   timestamp: {
     params: [IDataTypeParamType.FSP],
     defaultValues: [0],
     isDate: true,
-    canSync: true,
+    canSync: true
   },
   date: {
     params: [],
-    isDate: true,
+    isDate: true
   },
   time: {
     params: [IDataTypeParamType.FSP],
     defaultValues: [0],
     isDate: true,
-    canSync: true,
+    canSync: true
   },
   datetime: {
     params: [IDataTypeParamType.FSP],
     defaultValues: [0],
     isDate: true,
-    canSync: true,
+    canSync: true
   },
   year: {
     params: [IDataTypeParamType.DISPLAY_WIDTH],
-    isDate: true,
+    isDate: true
   },
   json: {
-    params: [],
+    params: []
   },
   geometry: {
-    params: [],
+    params: []
   },
   point: {
-    params: [],
+    params: []
   },
   linestring: {
-    params: [],
+    params: []
   },
   polygon: {
-    params: [],
+    params: []
   },
   multipoint: {
-    params: [],
+    params: []
   },
   multilinestring: {
-    params: [],
+    params: []
   },
   multipolygon: {
-    params: [],
+    params: []
   },
   geometrycollection: {
-    params: [],
+    params: []
   },
   enum: {
     params: [],
-    isEnum: true,
+    isEnum: true
   },
   set: {
     params: [],
-    isEnum: true,
+    isEnum: true
   },
   bool: {
-    params: [],
+    params: []
   },
   boolean: {
-    params: [],
-  },
+    params: []
+  }
 };

@@ -29,7 +29,15 @@ import { SettingStore } from '@/store/setting';
 import { SQLStore } from '@/store/sql';
 import { haveLockPwd, initClientService, isLock } from '@/util/client';
 import { isClient } from '@/util/env';
-import { Helmet, history, Outlet, useAppData, useLocation, useRouteData } from '@umijs/max';
+import {
+  getLocale,
+  Helmet,
+  history,
+  Outlet,
+  useAppData,
+  useLocation,
+  useRouteData
+} from '@umijs/max';
 import classNames from 'classnames';
 import { inject, observer } from 'mobx-react';
 import React, { useContext, useEffect, useState } from 'react';
@@ -39,34 +47,36 @@ import { PageLoadingContext } from './PageLoadingWrapper';
 import StoreProvider from './StoreProvider';
 import { ConfigProvider } from 'antd';
 import { theme } from './antdTheme';
-import { ConfigProvider as DmsKitConfigProvider } from '@actiontech/dms-kit';
-
+import {
+  ConfigProvider as DmsKitConfigProvider,
+  SupportLanguage
+} from '@actiontech/dms-kit';
 // // TODO：支持英文版
 // setLocale('zh-CN');
 
 const query = {
   'screen-xs': {
-    maxWidth: 575,
+    maxWidth: 575
   },
   'screen-sm': {
     minWidth: 576,
-    maxWidth: 767,
+    maxWidth: 767
   },
   'screen-md': {
     minWidth: 768,
-    maxWidth: 991,
+    maxWidth: 991
   },
   'screen-lg': {
     minWidth: 992,
-    maxWidth: 1199,
+    maxWidth: 1199
   },
   'screen-xl': {
     minWidth: 1200,
-    maxWidth: 1599,
+    maxWidth: 1599
   },
   'screen-xxl': {
-    minWidth: 1600,
-  },
+    minWidth: 1600
+  }
 };
 interface IBasicLayoutProps {
   settingStore: SettingStore;
@@ -81,7 +91,9 @@ interface IBasicLayoutProps {
   children?: any;
 }
 let timer = null;
-const AppContainer: React.FC<IBasicLayoutProps> = (props: IBasicLayoutProps) => {
+const AppContainer: React.FC<IBasicLayoutProps> = (
+  props: IBasicLayoutProps
+) => {
   const [isServerReady, setIsServerReady] = useState<boolean>(false);
   const [waitNumber, setWaitNumber] = useState<number>(-1);
   const { route } = useRouteData();
@@ -120,7 +132,7 @@ const AppContainer: React.FC<IBasicLayoutProps> = (props: IBasicLayoutProps) => 
   };
   const getContext = () => {
     return {
-      location,
+      location
     };
   };
   const getPageTitle = (pathname: any) => {
@@ -162,19 +174,19 @@ const AppContainer: React.FC<IBasicLayoutProps> = (props: IBasicLayoutProps) => 
         tip: isServerReady
           ? formatMessage({
               id: 'odc.src.layout.ObtainConfigurationInformation',
-              defaultMessage: '正在获取配置信息',
+              defaultMessage: '正在获取配置信息'
             }) //'正在获取配置信息'
           : formatMessage({
               id: 'odc.src.layout.InspectionServiceStatus',
-              defaultMessage: '正在检查服务状态',
+              defaultMessage: '正在检查服务状态'
             }), //'正在检查服务状态'
         showError: settingStore.settingLoadStatus === 'failed',
         queue:
           waitNumber > -1
             ? {
-                waitNumber,
+                waitNumber
               }
-            : null,
+            : null
       });
     }
   }, [isReady, isServerReady, waitNumber, settingStore.settingLoadStatus]);
@@ -194,7 +206,7 @@ const AppContainer: React.FC<IBasicLayoutProps> = (props: IBasicLayoutProps) => 
             {isReady ? (
               <div
                 style={{
-                  height: '100%',
+                  height: '100%'
                 }}
                 className={classNames(params)}
               >
@@ -213,21 +225,27 @@ const App = inject(
   'settingStore',
   'authStore',
   'userStore',
-  'clusterStore',
+  'clusterStore'
 )(observer(AppContainer));
-export default (props: any) => (
-  // <Media query="(max-width: 599px)">
-  <ErrorBoundary>
-    <DmsKitConfigProvider>
-      <ConfigProvider theme={theme}>
-        <StoreProvider>
-          <AuthStoreContext.Provider value={authStore}>
-            <App {...props} />
-          </AuthStoreContext.Provider>
-        </StoreProvider>
-      </ConfigProvider>
-    </DmsKitConfigProvider>
-  </ErrorBoundary>
-);
+export default (props: any) => {
+  const locale = getLocale();
+  return (
+    <ErrorBoundary>
+      <DmsKitConfigProvider
+        language={
+          locale === 'zh-CN' ? SupportLanguage.zhCN : SupportLanguage.enUS
+        }
+      >
+        <ConfigProvider theme={theme}>
+          <StoreProvider>
+            <AuthStoreContext.Provider value={authStore}>
+              <App {...props} />
+            </AuthStoreContext.Provider>
+          </StoreProvider>
+        </ConfigProvider>
+      </DmsKitConfigProvider>
+    </ErrorBoundary>
+  );
+};
 
 // </Media>;

@@ -21,15 +21,16 @@ export default function AntdEditorWrap(props) {
     <Popover
       arrow={false}
       classNames={{
-        root: 'rdg-antd-editor',
+        root: 'rdg-antd-editor'
       }}
       placement={'bottomLeft'}
       open={true}
       content={props.children}
       getPopupContainer={(triggerNode) => {
         return (
-          triggerNode.closest('.rdg')?.parentElement.querySelector('.rdg-editor-archor') ||
           triggerNode
+            .closest('.rdg')
+            ?.parentElement.querySelector('.rdg-editor-archor') || triggerNode
         );
       }}
     >

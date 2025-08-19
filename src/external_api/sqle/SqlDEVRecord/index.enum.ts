@@ -1,7 +1,7 @@
 /* tslint:disable no-duplicate-string */
 
 export enum GetSqlDEVRecordListFilterSourceEnum {
-  'ide_plugin' = 'ide_plugin',
+  'ide_plugin' = 'ide_plugin'
 }
 
 export enum GetSqlDEVRecordListSortFieldEnum {
@@ -9,11 +9,11 @@ export enum GetSqlDEVRecordListSortFieldEnum {
 
   'last_receive_timestamp' = 'last_receive_timestamp',
 
-  'fp_count' = 'fp_count',
+  'fp_count' = 'fp_count'
 }
 
 export enum GetSqlDEVRecordListSortOrderEnum {
   'asc' = 'asc',
 
-  'desc' = 'desc',
+  'desc' = 'desc'
 }

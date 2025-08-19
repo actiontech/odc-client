@@ -14,8 +14,16 @@
  * limitations under the License.
  */
 
-import { getConnectionDetail, testConnection } from '@/common/network/connection';
-import { AccountType, ConnectType, IConnection, IConnectionTestErrorType } from '@/d.ts';
+import {
+  getConnectionDetail,
+  testConnection
+} from '@/common/network/connection';
+import {
+  AccountType,
+  ConnectType,
+  IConnection,
+  IConnectionTestErrorType
+} from '@/d.ts';
 import { formatMessage } from '@/util/intl';
 import { KeyOutlined } from '@ant-design/icons';
 import { Form, Input, Modal } from 'antd';
@@ -42,7 +50,7 @@ const PasswordModal = function ({ formRef, cid, newConnection }) {
        */
       testResult = await testConnection(
         { ...newConnection, password: values.password },
-        AccountType.MAIN,
+        AccountType.MAIN
       );
     } else {
       const connection = await getConnectionDetail(cid);
@@ -59,11 +67,11 @@ const PasswordModal = function ({ formRef, cid, newConnection }) {
           host: connection.host,
           port: connection.port,
           sslConfig: {
-            enabled: false,
-          },
+            enabled: false
+          }
         },
 
-        AccountType.MAIN,
+        AccountType.MAIN
       );
     }
 
@@ -72,8 +80,8 @@ const PasswordModal = function ({ formRef, cid, newConnection }) {
       form.setFields([
         {
           name: 'password',
-          errors: [data?.errorMessage || 'NetError'],
-        },
+          errors: [data?.errorMessage || 'NetError']
+        }
       ]);
 
       return null;
@@ -92,14 +100,14 @@ const PasswordModal = function ({ formRef, cid, newConnection }) {
           width: 0,
           padding: 0,
           background: 'transparent',
-          border: 0,
+          border: 0
         }}
       />
 
       <Form.Item
         label={formatMessage({
           id: 'odc.component.ConnectPassowrd.Password',
-          defaultMessage: '密码',
+          defaultMessage: '密码'
         })}
         /*密码*/ name="password"
       >
@@ -111,7 +119,7 @@ const PasswordModal = function ({ formRef, cid, newConnection }) {
 
 export default function ShowConnectPassword(
   cid?: string,
-  newConnection?: Partial<IConnection>,
+  newConnection?: Partial<IConnection>
 ): Promise<{ password: string } | string> {
   return new Promise((resolve, reject) => {
     const formRef = { valid: null };
@@ -120,14 +128,20 @@ export default function ShowConnectPassword(
       zIndex: 1004,
       title: formatMessage({
         id: 'odc.component.ConnectPassowrd.EnterTheConnectionPassword',
-        defaultMessage: '请输入连接密码',
+        defaultMessage: '请输入连接密码'
       }),
       // 请输入连接密码
       icon: <KeyOutlined />,
       /**
        * 这里需要添加一个视觉上不可见的input，来欺骗 chorme 等浏览器填充密码的时候，把账号填充在这个input上，从而不影响其他正常的input组件
        */
-      content: <PasswordModal cid={cid} formRef={formRef} newConnection={newConnection} />,
+      content: (
+        <PasswordModal
+          cid={cid}
+          formRef={formRef}
+          newConnection={newConnection}
+        />
+      ),
       onOk: () => {
         return new Promise(async (resolve, reject) => {
           let v;
@@ -140,7 +154,7 @@ export default function ShowConnectPassword(
             reject();
           } else {
             callback({
-              password: v.password,
+              password: v.password
             });
             resolve(true);
           }
@@ -148,7 +162,7 @@ export default function ShowConnectPassword(
       },
       onCancel: () => {
         callback(null);
-      },
+      }
     });
   });
 }

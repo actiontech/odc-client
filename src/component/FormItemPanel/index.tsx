@@ -43,17 +43,17 @@ const FormItemPanel: React.FC<IProps> = function (props) {
     expandText,
     keepExpand,
     noPaddingBottom = false,
-    customExtra = null,
+    customExtra = null
   } = props;
   const [expand, setExpand] = useControllableValue<boolean>(props, {
     defaultValue: false,
     valuePropName: 'expand',
-    trigger: 'onExpandChange',
+    trigger: 'onExpandChange'
   });
 
   const iconStyle = {
     marginLeft: '4px',
-    fontSize: 14,
+    fontSize: 14
   };
 
   return (
@@ -72,10 +72,14 @@ const FormItemPanel: React.FC<IProps> = function (props) {
                 expandText ||
                   formatMessage({
                     id: 'odc.component.FormItemPanel.Superior',
-                    defaultMessage: '高级',
+                    defaultMessage: '高级'
                   }) // 高级
               }
-              {expand ? <UpOutlined style={iconStyle} /> : <DownOutlined style={iconStyle} />}
+              {expand ? (
+                <UpOutlined style={iconStyle} />
+              ) : (
+                <DownOutlined style={iconStyle} />
+              )}
             </a>
           ) : (
             customExtra
@@ -85,11 +89,13 @@ const FormItemPanel: React.FC<IProps> = function (props) {
       <div
         className={styles.content}
         style={{
-          paddingBottom: noPaddingBottom ? '0px' : '16px',
+          paddingBottom: noPaddingBottom ? '0px' : '16px'
         }}
       >
         <div>{overview}</div>
-        <div style={{ display: expand || keepExpand ? 'unset' : 'none' }}>{children}</div>
+        <div style={{ display: expand || keepExpand ? 'unset' : 'none' }}>
+          {children}
+        </div>
       </div>
     </div>
   );

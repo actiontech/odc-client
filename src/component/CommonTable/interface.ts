@@ -21,7 +21,7 @@ import type { FixedType } from 'rc-table/es/interface';
 
 export enum CommonTableMode {
   BIG = 'BIG',
-  SMALL = 'SMALL',
+  SMALL = 'SMALL'
 }
 export interface ITableInstance {
   reload: (args?: ITableLoadOptions) => void;
@@ -71,7 +71,7 @@ export enum IOperationOptionType {
   button = 'button',
   icon = 'icon',
   dropdown = 'dropdown',
-  custom = 'custom',
+  custom = 'custom'
 }
 export interface IOperationOption {
   tooltip?: string;

@@ -3,7 +3,7 @@ import {
   EmitterKey,
   getErrorMessage,
   getResponseCode,
-  ResponseCode,
+  ResponseCode
 } from '@actiontech/dms-kit';
 import axios, { AxiosRequestConfig } from 'axios';
 import type { IRefreshSessionReturn } from '../base/Session/index.type';
@@ -38,7 +38,7 @@ class AuthManager {
 
     const targetUrl = 'cloud-beaver' + currentSearch;
     window.location.href = `/login?${DMS_REDIRECT_KEY_PARAMS_NAME}=${encodeURIComponent(
-      targetUrl,
+      targetUrl
     )}`;
   };
 
@@ -54,11 +54,15 @@ class AuthManager {
       .then(async (res) => {
         const responseCode = await getResponseCode(res);
         if (res.status === 401) {
-          this.failedRequestsQueue.forEach((request) => request.reject('Token refresh failed'));
+          this.failedRequestsQueue.forEach((request) =>
+            request.reject('Token refresh failed')
+          );
           this.failedRequestsQueue.length = 0;
           this.redirectToLogin();
         } else if (responseCode === ResponseCode.SUCCESS) {
-          const newToken = res.data.data?.token ? `Bearer ${res.data.data.token}` : '';
+          const newToken = res.data.data?.token
+            ? `Bearer ${res.data.data.token}`
+            : '';
           if (newToken) {
             // store.dispatch(updateToken({ token: newToken }));
 
@@ -76,7 +80,9 @@ class AuthManager {
             this.failedRequestsQueue.length = 0;
           }
         } else {
-          this.failedRequestsQueue.forEach((request) => request.reject('Token refresh failed'));
+          this.failedRequestsQueue.forEach((request) =>
+            request.reject('Token refresh failed')
+          );
           this.failedRequestsQueue.length = 0;
           this.redirectToLogin();
 
@@ -87,23 +93,25 @@ class AuthManager {
             {
               message: formatMessage({
                 id: 'odc.src.util.notification.RequestFailed',
-                defaultMessage: '请求失败',
+                defaultMessage: '请求失败'
               }),
-              description: errorMessage,
-            },
+              description: errorMessage
+            }
           );
         }
         return res;
       })
       .catch((error) => {
-        this.failedRequestsQueue.forEach((request) => request.reject('Token refresh failed'));
+        this.failedRequestsQueue.forEach((request) =>
+          request.reject('Token refresh failed')
+        );
         this.failedRequestsQueue.length = 0;
 
         const errorMessage =
           error.message ||
           formatMessage({
             id: 'odc.src.util.notification.RequestFailed',
-            defaultMessage: '请求失败',
+            defaultMessage: '请求失败'
           });
         eventEmitter.emit<[NotificationInstanceKeyType, ArgsProps]>(
           EmitterKey.OPEN_GLOBAL_NOTIFICATION,
@@ -111,10 +119,10 @@ class AuthManager {
           {
             message: formatMessage({
               id: 'odc.src.util.notification.RequestFailed',
-              defaultMessage: '请求失败',
+              defaultMessage: '请求失败'
             }),
-            description: errorMessage,
-          },
+            description: errorMessage
+          }
         );
 
         this.redirectToLogin();
@@ -123,7 +131,7 @@ class AuthManager {
       // mock finally
       .then(
         () => {},
-        () => {},
+        () => {}
       )
       .then(() => {
         this.isRefreshing = false;
@@ -138,7 +146,7 @@ class AuthManager {
       this.failedRequestsQueue.push({
         config,
         resolve,
-        reject,
+        reject
       });
     });
 

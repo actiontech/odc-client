@@ -31,7 +31,7 @@ const getConnectionColumns = () => {
       dataIndex: 'databaseName',
       title: formatMessage({
         id: 'src.component.Task.ApplyTablePermission.DetailContent.9E007486',
-        defaultMessage: '数据库',
+        defaultMessage: '数据库'
       }),
       ellipsis: true,
       width: 240,
@@ -45,25 +45,25 @@ const getConnectionColumns = () => {
             <span>{databaseName}</span>
           </Space>
         );
-      },
+      }
     },
     {
       dataIndex: 'tableName',
       title: formatMessage({
         id: 'src.component.Task.ApplyTablePermission.DetailContent.9E20200F',
-        defaultMessage: '表/视图',
+        defaultMessage: '表/视图'
       }),
       ellipsis: true,
-      width: 240,
+      width: 240
     },
     {
       dataIndex: 'dataSourceName',
       title: formatMessage({
         id: 'src.component.Task.ApplyTablePermission.DetailContent.04825B86',
-        defaultMessage: '所属数据源',
+        defaultMessage: '所属数据源'
       }),
-      ellipsis: true,
-    },
+      ellipsis: true
+    }
   ];
 };
 
@@ -86,7 +86,7 @@ const TaskContent: React.FC<IProps> = (props) => {
         databaseName,
         dataSourceName,
         dataSourceType: database?.dataSource?.type,
-        tableId,
+        tableId
       });
     }
     return tableList;
@@ -98,7 +98,7 @@ const TaskContent: React.FC<IProps> = (props) => {
         <Descriptions.Item
           label={formatMessage({
             id: 'src.component.Task.ApplyTablePermission.DetailContent.8CEA0610',
-            defaultMessage: '任务编号',
+            defaultMessage: '任务编号'
           })}
         >
           {task?.id}
@@ -106,28 +106,31 @@ const TaskContent: React.FC<IProps> = (props) => {
         <Descriptions.Item
           label={formatMessage({
             id: 'src.component.Task.ApplyTablePermission.DetailContent.4B4A4E81',
-            defaultMessage: '任务类型',
+            defaultMessage: '任务类型'
           })}
         >
           {formatMessage({
             id: 'src.component.Task.ApplyTablePermission.DetailContent.A8093E8B',
-            defaultMessage: '申请表/视图权限',
+            defaultMessage: '申请表/视图权限'
           })}
         </Descriptions.Item>
         {hasFlow && (
           <Descriptions.Item
             label={formatMessage({
               id: 'odc.DataArchiveTask.DetailContent.RiskLevel',
-              defaultMessage: '风险等级',
+              defaultMessage: '风险等级'
             })} /*风险等级*/
           >
-            <RiskLevelLabel level={task?.riskLevel?.level} color={task?.riskLevel?.style} />
+            <RiskLevelLabel
+              level={task?.riskLevel?.level}
+              color={task?.riskLevel?.style}
+            />
           </Descriptions.Item>
         )}
       </Descriptions>
       <Divider
         style={{
-          marginTop: 4,
+          marginTop: 4
         }}
       />
 
@@ -135,7 +138,7 @@ const TaskContent: React.FC<IProps> = (props) => {
         <Descriptions.Item
           label={formatMessage({
             id: 'src.component.Task.ApplyTablePermission.DetailContent.32776504',
-            defaultMessage: '项目',
+            defaultMessage: '项目'
           })}
         >
           {parameters?.project?.name}
@@ -144,7 +147,7 @@ const TaskContent: React.FC<IProps> = (props) => {
       <SimpleTextItem
         label={formatMessage({
           id: 'src.component.Task.ApplyTablePermission.DetailContent.C384EA27',
-          defaultMessage: '表/视图',
+          defaultMessage: '表/视图'
         })}
         content={
           <DisplayTable
@@ -162,7 +165,7 @@ const TaskContent: React.FC<IProps> = (props) => {
 
       <Divider
         style={{
-          marginTop: 4,
+          marginTop: 4
         }}
       />
 
@@ -170,15 +173,17 @@ const TaskContent: React.FC<IProps> = (props) => {
         <Descriptions.Item
           label={formatMessage({
             id: 'src.component.Task.ApplyTablePermission.DetailContent.64239A78',
-            defaultMessage: '权限类型',
+            defaultMessage: '权限类型'
           })}
         >
-          {parameters?.types?.map((key) => permissionOptionsMap[key].text)?.join(', ')}
+          {parameters?.types
+            ?.map((key) => permissionOptionsMap[key].text)
+            ?.join(', ')}
         </Descriptions.Item>
         <Descriptions.Item
           label={formatMessage({
             id: 'src.component.Task.ApplyTablePermission.DetailContent.FB4B30E0',
-            defaultMessage: '权限有效期',
+            defaultMessage: '权限有效期'
           })}
         >
           {getExpireTimeLabel(parameters?.expireTime)}
@@ -186,7 +191,7 @@ const TaskContent: React.FC<IProps> = (props) => {
         <Descriptions.Item
           label={formatMessage({
             id: 'src.component.Task.ApplyTablePermission.DetailContent.55EE2A17',
-            defaultMessage: '申请原因',
+            defaultMessage: '申请原因'
           })}
         >
           {parameters?.applyReason}
@@ -194,7 +199,7 @@ const TaskContent: React.FC<IProps> = (props) => {
       </Descriptions>
       <Divider
         style={{
-          marginTop: 4,
+          marginTop: 4
         }}
       />
 
@@ -202,7 +207,7 @@ const TaskContent: React.FC<IProps> = (props) => {
         <Descriptions.Item
           label={formatMessage({
             id: 'src.component.Task.ApplyTablePermission.DetailContent.2740E99B',
-            defaultMessage: '创建人',
+            defaultMessage: '创建人'
           })}
         >
           {task?.creator?.name || '-'}
@@ -210,7 +215,7 @@ const TaskContent: React.FC<IProps> = (props) => {
         <Descriptions.Item
           label={formatMessage({
             id: 'src.component.Task.ApplyTablePermission.DetailContent.7EEDDF7A',
-            defaultMessage: '创建时间',
+            defaultMessage: '创建时间'
           })}
         >
           {getFormatDateTime(task?.createTime)}

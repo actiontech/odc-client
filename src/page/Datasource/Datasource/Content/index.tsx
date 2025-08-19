@@ -43,17 +43,20 @@ const Content = function (props: IProps, ref) {
     ref,
     () => {
       return {
-        reload,
+        reload
       };
     },
-    [],
+    []
   );
   return (
     <PageContainer
       titleProps={{
-        title: formatMessage({ id: 'odc.Datasource.Content.DataSource', defaultMessage: '数据源' }), //数据源
+        title: formatMessage({
+          id: 'odc.Datasource.Content.DataSource',
+          defaultMessage: '数据源'
+        }), //数据源
         type: TitleType.TEXT,
-        showDivider: true,
+        showDivider: true
       }}
     >
       <div className={styles.content}>
@@ -69,4 +72,7 @@ const Content = function (props: IProps, ref) {
   );
 };
 
-export default inject('modalStore', 'settingStore')(observer(forwardRef<any, IProps>(Content)));
+export default inject(
+  'modalStore',
+  'settingStore'
+)(observer(forwardRef<any, IProps>(Content)));

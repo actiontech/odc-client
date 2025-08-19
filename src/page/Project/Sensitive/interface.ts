@@ -19,7 +19,7 @@ import { ESensitiveColumnType } from '@/d.ts/sensitiveColumn';
 import { formatMessage } from '@/util/intl';
 export enum AddSensitiveColumnType {
   Manual,
-  Scan,
+  Scan
 }
 export interface SelectItemProps {
   label: string;
@@ -50,7 +50,7 @@ export interface ScanTableData {
 export enum DetectRuleType {
   PATH = 'PATH',
   REGEX = 'REGEX',
-  GROOVY = 'GROOVY',
+  GROOVY = 'GROOVY'
 }
 
 export interface CheckboxInputValue {
@@ -68,7 +68,16 @@ export interface CheckboxInputProps {
 }
 
 export const DetectRuleTypeMap = {
-  PATH: formatMessage({ id: 'odc.Project.Sensitive.interface.Path', defaultMessage: '路径' }), //路径
-  REGEX: formatMessage({ id: 'odc.Project.Sensitive.interface.Regular', defaultMessage: '正则' }), //正则
-  GROOVY: formatMessage({ id: 'odc.Project.Sensitive.interface.Script', defaultMessage: '脚本' }), //脚本
+  PATH: formatMessage({
+    id: 'odc.Project.Sensitive.interface.Path',
+    defaultMessage: '路径'
+  }), //路径
+  REGEX: formatMessage({
+    id: 'odc.Project.Sensitive.interface.Regular',
+    defaultMessage: '正则'
+  }), //正则
+  GROOVY: formatMessage({
+    id: 'odc.Project.Sensitive.interface.Script',
+    defaultMessage: '脚本'
+  }) //脚本
 };

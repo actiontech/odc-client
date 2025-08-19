@@ -31,7 +31,7 @@ import {
   TableIndex,
   TableIndexMehod,
   TableIndexScope,
-  TableIndexType,
+  TableIndexType
 } from '../interface';
 import { WrapReverseCheckboxFormatetr } from '../RdgFomatter/CheckboxFormatter';
 import WrapValueFormatter from '../RdgFomatter/ValueFormatter';
@@ -43,13 +43,13 @@ function NameFormatter({ row }) {
           title={
             formatMessage({
               id: 'odc.src.page.Workspace.components.CreateTable.TableIndex.IndexIsNotAvailable',
-              defaultMessage: '索引不可用',
+              defaultMessage: '索引不可用'
             }) /* 索引不可用 */
           }
         >
           <ExclamationCircleFilled
             style={{
-              color: 'var(--icon-orange-color)',
+              color: 'var(--icon-orange-color)'
             }}
           />
         </Tooltip>
@@ -61,35 +61,38 @@ function NameFormatter({ row }) {
 }
 export function useColumns(
   columns: TableColumn[],
-  session: SessionStore,
+  session: SessionStore
 ): Column<TableIndex, TableIndex>[] {
   const connection = session?.connection;
   const config = useTableConfig(connection?.dialectType);
   const methodOptions = {
     [TableIndexMehod.NONE]: formatMessage({
       id: 'odc.CreateTable.TableIndex.columns.Empty',
-      defaultMessage: '空',
+      defaultMessage: '空'
     }),
     //空
     [TableIndexMehod.HASH]: 'HASH',
     [TableIndexMehod.BTREE]: 'BTREE',
-    [TableIndexMehod.FULLTEXT]: 'FULLTEXT',
+    [TableIndexMehod.FULLTEXT]: 'FULLTEXT'
   };
   const visibleCheckbox = useMemo(() => {
     return WrapReverseCheckboxFormatetr('visible');
   }, []);
   const scopeSelect = useMemo(() => {
-    return WrapSelectEditor([TableIndexScope.GLOBAL, TableIndexScope.LOCAL], false);
+    return WrapSelectEditor(
+      [TableIndexScope.GLOBAL, TableIndexScope.LOCAL],
+      false
+    );
   }, []);
   const methodSelect = useMemo(() => {
     return WrapSelectEditor(
       Object.entries(methodOptions).map(([key, text]) => {
         return {
           text,
-          value: key,
+          value: key
         };
       }),
-      false,
+      false
     );
   }, []);
   const methodFormatter = useMemo(() => {
@@ -100,13 +103,21 @@ export function useColumns(
   const typeSelect = useMemo(() => {
     return WrapSelectEditor(
       config.enableIndexesFullTextType
-        ? [TableIndexType.FULLTEXT, TableIndexType.UNIQUE, TableIndexType.NORMAL]
+        ? [
+            TableIndexType.FULLTEXT,
+            TableIndexType.UNIQUE,
+            TableIndexType.NORMAL
+          ]
         : [TableIndexType.UNIQUE, TableIndexType.NORMAL],
-      false,
+      false
     );
   }, []);
   const validColumns = useMemo(() => {
-    return uniq(columns?.filter((column) => !!column.name?.trim()).map((column) => column.name));
+    return uniq(
+      columns
+        ?.filter((column) => !!column.name?.trim())
+        .map((column) => column.name)
+    );
   }, [columns]);
   const ColumnsMultipleSelect = useMemo(() => {
     return WrapSelectEditor(validColumns);
@@ -115,12 +126,12 @@ export function useColumns(
     return WrapSelectEditor([
       {
         text: columnGroupsText[ColumnStoreType.COLUMN],
-        value: ColumnStoreType.COLUMN,
+        value: ColumnStoreType.COLUMN
       },
       {
         text: columnGroupsText[ColumnStoreType.ROW],
-        value: ColumnStoreType.ROW,
-      },
+        value: ColumnStoreType.ROW
+      }
     ]);
   }, [columns]);
   return [
@@ -128,31 +139,31 @@ export function useColumns(
       key: 'name',
       name: formatMessage({
         id: 'odc.CreateTable.Columns.columns.Name',
-        defaultMessage: '名称',
+        defaultMessage: '名称'
       }),
       //名称
       resizable: true,
       editable: true,
       formatter: NameFormatter,
-      editor: TextEditor,
+      editor: TextEditor
     },
     config?.enableIndexScope && {
       key: 'scope',
       name: formatMessage({
         id: 'odc.CreateTable.TableIndex.columns.Scope',
-        defaultMessage: '范围',
+        defaultMessage: '范围'
       }),
       //范围
       resizable: true,
       editable: true,
       editor: scopeSelect,
-      width: 120,
+      width: 120
     },
     {
       key: 'method',
       name: formatMessage({
         id: 'odc.CreateTable.TableIndex.columns.Method',
-        defaultMessage: '方法',
+        defaultMessage: '方法'
       }),
       //方法
       resizable: true,
@@ -160,26 +171,26 @@ export function useColumns(
       filterable: false,
       editor: methodSelect,
       formatter: methodFormatter,
-      width: 100,
+      width: 100
     },
     {
       key: 'type',
       name: formatMessage({
         id: 'odc.CreateTable.TableIndex.columns.Type',
-        defaultMessage: '类型',
+        defaultMessage: '类型'
       }),
       //类型
       resizable: true,
       editable: true,
       filterable: false,
       editor: typeSelect,
-      width: 120,
+      width: 120
     },
     {
       key: 'columns',
       name: formatMessage({
         id: 'odc.CreateTable.TableIndex.columns.Column',
-        defaultMessage: '列',
+        defaultMessage: '列'
       }),
       //列
       resizable: true,
@@ -188,13 +199,13 @@ export function useColumns(
       editor: ColumnsMultipleSelect,
       formatter: ({ row }) => {
         return <span>{row.columns?.join?.(',')}</span>;
-      },
+      }
     },
     config?.enableIndexVisible && {
       key: 'visible',
       name: formatMessage({
         id: 'odc.CreateTable.TableIndex.columns.Invisible',
-        defaultMessage: '不可见',
+        defaultMessage: '不可见'
       }),
       //不可见
       resizable: true,
@@ -202,13 +213,13 @@ export function useColumns(
       editor: TextEditor,
       editable: false,
       formatter: visibleCheckbox,
-      width: 100,
+      width: 100
     },
     session?.supportFeature?.enableColumnStore && {
       key: 'columnGroups',
       name: formatMessage({
         id: 'src.page.Workspace.components.CreateTable.TableIndex.D801DCFF',
-        defaultMessage: '存储模式',
+        defaultMessage: '存储模式'
       }),
       //列组
       resizable: true,
@@ -223,7 +234,7 @@ export function useColumns(
               : '-'}
           </span>
         );
-      },
-    },
+      }
+    }
   ].filter(Boolean);
 }

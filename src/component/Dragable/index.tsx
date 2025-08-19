@@ -25,7 +25,7 @@ import {
   DragSourceMonitor,
   DropTarget,
   DropTargetConnector,
-  DropTargetMonitor,
+  DropTargetMonitor
 } from 'react-dnd';
 
 interface IInstance {
@@ -54,7 +54,7 @@ function DragableParam<T extends IDragable>(WrappedComponent: any) {
       isDragging,
       connectDropTarget,
       connectDragSource,
-      connectDragPreview,
+      connectDragPreview
     } = props;
 
     const elementRef = useRef(null);
@@ -64,7 +64,7 @@ function DragableParam<T extends IDragable>(WrappedComponent: any) {
 
     const opacity = isDragging ? 0 : 1;
     useImperativeHandle<{}, IInstance>(ref, () => ({
-      getNode: () => elementRef.current,
+      getNode: () => elementRef.current
     }));
 
     return (
@@ -80,7 +80,10 @@ function DragableParam<T extends IDragable>(WrappedComponent: any) {
   });
 }
 
-export default function Dragable<T extends IDragable>(WrappedComponent: any, type: string) {
+export default function Dragable<T extends IDragable>(
+  WrappedComponent: any,
+  type: string
+) {
   return DropTarget<Text>(
     type,
     {
@@ -107,13 +110,15 @@ export default function Dragable<T extends IDragable>(WrappedComponent: any, typ
         const hoverBoundingRect = node.getBoundingClientRect();
 
         // Get vertical middle
-        const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+        const hoverMiddleY =
+          (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
 
         // Determine mouse position
         const clientOffset = monitor.getClientOffset();
 
         // Get pixels to the top
-        const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top;
+        const hoverClientY =
+          (clientOffset as XYCoord).y - hoverBoundingRect.top;
 
         // Only perform the move when the mouse has crossed half of the items height
         // When dragging downwards, only move when the cursor is below 50%
@@ -137,27 +142,27 @@ export default function Dragable<T extends IDragable>(WrappedComponent: any, typ
         // but it's good here for the sake of performance
         // to avoid expensive index searches.
         monitor.getItem().index = hoverIndex;
-      },
+      }
     },
     (connect: DropTargetConnector, monitor: DropTargetMonitor) => ({
       connectDropTarget: connect.dropTarget(),
       isOver: monitor.isOver(),
-      dragIndex: monitor.getItem()?.index,
-    }),
+      dragIndex: monitor.getItem()?.index
+    })
   )(
     DragSource(
       type,
       {
         beginDrag: (props: T) => ({
           id: props.id,
-          index: props.index,
-        }),
+          index: props.index
+        })
       },
       (connect: DragSourceConnector, monitor: DragSourceMonitor) => ({
         connectDragSource: connect.dragSource(),
         connectDragPreview: connect.dragPreview(),
-        isDragging: monitor.isDragging(),
-      }),
-    )(DragableParam(WrappedComponent)),
+        isDragging: monitor.isDragging()
+      })
+    )(DragableParam(WrappedComponent))
   );
 }

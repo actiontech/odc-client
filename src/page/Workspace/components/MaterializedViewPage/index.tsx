@@ -16,7 +16,14 @@ import DDLResultSet from '../DDLResultSet';
 import SessionContext from '../SessionContextWrap/context';
 import WrapSessionPage from '../SessionContextWrap/SessionPageWrap';
 import styles from './index.less';
-import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
 import MvViewPageBaseInfoForm from './MvViewPageBaseInfoForm/index';
 import MvViewColumns from './Columns';
 import MvViewIndexes from './Indexes';
@@ -43,7 +50,7 @@ interface IProps {
 
 export enum TopTab {
   PROPS = 'PROPS',
-  DATA = 'DATA',
+  DATA = 'DATA'
 }
 
 export enum PropsTab {
@@ -52,7 +59,7 @@ export enum PropsTab {
   INDEX = 'INDEX',
   CONSTRAINT = 'CONSTRAINT',
   PARTITION = 'PARTITION',
-  DDL = 'DDL',
+  DDL = 'DDL'
 }
 
 interface IMaterializedViewPageState {}
@@ -60,7 +67,7 @@ const MaterializedViewPage = inject(
   'sqlStore',
   'pageStore',
   'sessionManagerStore',
-  'modalStore',
+  'modalStore'
 )(
   observer((props: IProps) => {
     const { pageStore, modalStore, pageKey, params, session } = props;
@@ -75,7 +82,7 @@ const MaterializedViewPage = inject(
         tableName: any,
         onSuccess,
         tip,
-        callback: () => void,
+        callback: () => void
       ) => Promise<boolean>;
     }>();
     const callbackRef = useRef<() => void>();
@@ -86,11 +93,12 @@ const MaterializedViewPage = inject(
         pageKey,
         {},
         {
-          topTab,
-        },
+          topTab
+        }
       );
     };
-    const [materializedView, setMaterializedView] = useState<Partial<IMaterializedView>>(null);
+    const [materializedView, setMaterializedView] =
+      useState<Partial<IMaterializedView>>(null);
     const showPartition = Boolean(materializedView?.partitions?.partType);
 
     const handlePropsTabChanged = async (propsTab: PropsTab) => {
@@ -98,8 +106,8 @@ const MaterializedViewPage = inject(
         pageKey,
         {},
         {
-          propsTab,
-        },
+          propsTab
+        }
       );
     };
 
@@ -107,14 +115,14 @@ const MaterializedViewPage = inject(
       const newMaterializedView = await getMaterializedView({
         sessionId: session.sessionId,
         dbName: params.dbName,
-        materializedViewName: params.materializedViewName,
+        materializedViewName: params.materializedViewName
       });
       setMaterializedView(newMaterializedView);
     };
 
     const reloadMaterializedViewData = async (
       materializedViewName: string,
-      limit: number = 1000,
+      limit: number = 1000
     ) => {
       setDataLoading(true);
       try {
@@ -123,14 +131,14 @@ const MaterializedViewPage = inject(
           materializedViewName,
           limit,
           false,
-          session?.sessionId,
+          session?.sessionId
         );
         if (viewData?.track) {
           notification.error(viewData);
         } else {
           const resultSet = generateResultSetColumns(
             [viewData],
-            session?.connection?.dialectType,
+            session?.connection?.dialectType
           )?.[0];
           if (resultSet) {
             setResultSet(resultSet);
@@ -152,7 +160,7 @@ const MaterializedViewPage = inject(
       modalStore.changeCreateResultSetExportTaskModal(true, {
         sql,
         databaseId: session?.database.databaseId,
-        tableName: params?.materializedViewName,
+        tableName: params?.materializedViewName
       });
     };
 
@@ -181,17 +189,21 @@ const MaterializedViewPage = inject(
       <>
         <div style={{ height: '100%', overflow: 'auto' }}>
           <div className={styles.header}>
-            <Radio.Group onChange={handleTopTabChanged} value={topTab} className={styles.topbar}>
+            <Radio.Group
+              onChange={handleTopTabChanged}
+              value={topTab}
+              className={styles.topbar}
+            >
               <Radio.Button value={TopTab.PROPS}>
                 {formatMessage({
                   id: 'workspace.window.table.toptab.props',
-                  defaultMessage: '属性',
+                  defaultMessage: '属性'
                 })}
               </Radio.Button>
               <Radio.Button value={TopTab.DATA}>
                 {formatMessage({
                   id: 'workspace.window.table.toptab.data',
-                  defaultMessage: '数据',
+                  defaultMessage: '数据'
                 })}
               </Radio.Button>
             </Radio.Group>
@@ -206,7 +218,7 @@ const MaterializedViewPage = inject(
                 // 后续回调函数
                 callbackRef.current = args?.[4];
                 return executeRef.current?.showExecuteModal(...args);
-              },
+              }
             }}
           >
             <Tabs
@@ -228,54 +240,54 @@ const MaterializedViewPage = inject(
                         {
                           label: formatMessage({
                             id: 'workspace.window.table.propstab.info',
-                            defaultMessage: '基本信息',
+                            defaultMessage: '基本信息'
                           }),
                           key: PropsTab.INFO,
-                          children: <MvViewPageBaseInfoForm pageKey={pageKey} />,
+                          children: <MvViewPageBaseInfoForm pageKey={pageKey} />
                         },
                         {
                           label: formatMessage({
                             id: 'workspace.window.table.propstab.column',
-                            defaultMessage: '列',
+                            defaultMessage: '列'
                           }),
                           key: PropsTab.COLUMN,
-                          children: <MvViewColumns />,
+                          children: <MvViewColumns />
                         },
                         {
                           key: PropsTab.INDEX,
                           label: formatMessage({
                             id: 'workspace.window.table.propstab.index',
-                            defaultMessage: '索引',
+                            defaultMessage: '索引'
                           }),
-                          children: <MvViewIndexes />,
+                          children: <MvViewIndexes />
                         },
                         {
                           key: PropsTab.CONSTRAINT,
                           label: formatMessage({
                             id: 'workspace.window.table.propstab.constraint',
-                            defaultMessage: '约束',
+                            defaultMessage: '约束'
                           }),
-                          children: <MvViewConstraints />,
+                          children: <MvViewConstraints />
                         },
                         showPartition && {
                           key: PropsTab.PARTITION,
                           label: formatMessage({
                             id: 'workspace.window.table.propstab.partition',
-                            defaultMessage: '分区',
+                            defaultMessage: '分区'
                           }),
-                          children: <MvViewPartitions />,
+                          children: <MvViewPartitions />
                         },
                         {
                           key: PropsTab.DDL,
                           label: formatMessage({
                             id: 'workspace.window.table.propstab.ddl',
-                            defaultMessage: 'DDL',
+                            defaultMessage: 'DDL'
                           }),
-                          children: <MvViewDDL />,
-                        },
+                          children: <MvViewDDL />
+                        }
                       ].filter(Boolean)}
                     />
-                  ),
+                  )
                 },
                 {
                   key: TopTab.DATA,
@@ -298,14 +310,17 @@ const MaterializedViewPage = inject(
                           table={
                             {
                               tableName: materializedView?.info?.name,
-                              ...materializedView,
+                              ...materializedView
                             } as any
                           }
                           resultHeight={`calc(100vh - ${
                             GLOBAL_HEADER_HEIGHT + TABBAR_HEIGHT + 46 + 1
                           }px)`}
                           onRefresh={(limit) =>
-                            reloadMaterializedViewData(materializedView?.info?.name, limit)
+                            reloadMaterializedViewData(
+                              materializedView?.info?.name,
+                              limit
+                            )
                           }
                           onExport={(limitToExport) => {
                             showExportResuleSetModal();
@@ -313,18 +328,22 @@ const MaterializedViewPage = inject(
                         />
                       )}
                     </Spin>
-                  ),
-                },
+                  )
+                }
               ]}
             />
           </MaterializedViewPageContext.Provider>
-          <ShowExecuteModal session={session} ref={executeRef} callbackRef={callbackRef} />
+          <ShowExecuteModal
+            session={session}
+            ref={executeRef}
+            callbackRef={callbackRef}
+          />
         </div>
       </>
     ) : (
       <WorkSpacePageLoading />
     );
-  }),
+  })
 );
 
 export default WrapSessionPage(
@@ -339,5 +358,5 @@ export default WrapSessionPage(
   },
   true,
   true,
-  true,
+  true
 );

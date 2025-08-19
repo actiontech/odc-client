@@ -32,7 +32,7 @@ export default {
       data?: Record<string, any>;
       params?: Record<string, any>;
       [key: string]: Record<string, any>;
-    },
+    }
   ) {
     return getRequest().get(url, options);
   },
@@ -42,7 +42,7 @@ export default {
       data?: Record<string, any>;
       params?: Record<string, any>;
       [key: string]: Record<string, any>;
-    },
+    }
   ) {
     return getRequest().post(url, options?.data, options);
   },
@@ -52,7 +52,7 @@ export default {
       data?: Record<string, any>;
       params?: Record<string, any>;
       [key: string]: Record<string, any>;
-    },
+    }
   ) {
     return getRequest().put(url, options?.data, options);
   },
@@ -62,7 +62,7 @@ export default {
       data?: Record<string, any>;
       params?: Record<string, any>;
       [key: string]: Record<string, any>;
-    },
+    }
   ) {
     return getRequest().patch(url, options?.data, options);
   },
@@ -72,8 +72,8 @@ export default {
       data?: Record<string, any>;
       params?: Record<string, any>;
       [key: string]: Record<string, any>;
-    },
+    }
   ) {
     return getRequest().delete(url, options);
-  },
+  }
 };

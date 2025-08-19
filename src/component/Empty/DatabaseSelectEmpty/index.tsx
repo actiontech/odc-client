@@ -21,7 +21,7 @@ export default ({ showIcon, height = 280 }: IProps) => {
             <div className={styles.title}>
               {formatMessage({
                 id: 'src.component.Empty.DatabaseSelectEmpty.9C21267F',
-                defaultMessage: '暂无数据库',
+                defaultMessage: '暂无数据库'
               })}
             </div>
             {login.isPrivateSpace() ? (
@@ -32,17 +32,20 @@ export default ({ showIcon, height = 280 }: IProps) => {
                   ? formatMessage({
                       id: 'src.component.Empty.DatabaseSelectEmpty.953DB46B',
                       defaultMessage:
-                        '仅展示全部项目内的数据库，请先确认已加入项目、且项目内存在数据库。',
+                        '仅展示全部项目内的数据库，请先确认已加入项目、且项目内存在数据库。'
                     })
                   : formatMessage({
                       id: 'src.component.Empty.DatabaseSelectEmpty.7272411D',
                       defaultMessage:
-                        '仅支持选择项目内的数据库，请先确认已加入项目、且项目内存在数据库。',
+                        '仅支持选择项目内的数据库，请先确认已加入项目、且项目内存在数据库。'
                     })}
-                <span className={styles.action} onClick={() => window.open('#/project')}>
+                <span
+                  className={styles.action}
+                  onClick={() => window.open('#/project')}
+                >
                   {formatMessage({
                     id: 'src.component.Empty.DatabaseSelectEmpty.8F714B05',
-                    defaultMessage: '管理项目',
+                    defaultMessage: '管理项目'
                   })}
                   {showIcon && <ExportOutlined style={{ marginLeft: 4 }} />}
                 </span>

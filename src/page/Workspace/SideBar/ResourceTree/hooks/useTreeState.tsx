@@ -16,12 +16,19 @@ export default function useTreeState(id: string) {
     cache[id] = state = {
       expandedKeys: [],
       loadedKeys: [],
-      sessionIds: {},
+      sessionIds: {}
     };
   }
-  const [expandedKeys, setExpandedKeys] = useState<(string | number)[]>(state.expandedKeys);
-  const [loadedKeys, setLoadedKeys] = useState<(string | number)[]>(state.loadedKeys);
-  const onExpand: TreeProps['onExpand'] = function (expandedKeys, { expanded, node }) {
+  const [expandedKeys, setExpandedKeys] = useState<(string | number)[]>(
+    state.expandedKeys
+  );
+  const [loadedKeys, setLoadedKeys] = useState<(string | number)[]>(
+    state.loadedKeys
+  );
+  const onExpand: TreeProps['onExpand'] = function (
+    expandedKeys,
+    { expanded, node }
+  ) {
     // @ts-ignore
     if (isGroupNode(node.type)) {
       setExpandedKeys(expandedKeys);
@@ -34,14 +41,16 @@ export default function useTreeState(id: string) {
        */
       return;
     }
-    cache[id] = Object.assign({}, cache[id], { expandedKeys: [...expandedKeys] });
+    cache[id] = Object.assign({}, cache[id], {
+      expandedKeys: [...expandedKeys]
+    });
     setExpandedKeys(expandedKeys);
   };
   const onLoad: TreeProps['onLoad'] = function (loadedKeys, { event, node }) {
     const newExpandedKeys = Array.from(new Set([...expandedKeys, node.key]));
     cache[id] = Object.assign({}, cache[id], {
       loadedKeys: [...loadedKeys],
-      expandedKeys: newExpandedKeys,
+      expandedKeys: newExpandedKeys
     });
     setLoadedKeys(loadedKeys);
     setExpandedKeys(newExpandedKeys);
@@ -56,8 +65,8 @@ export default function useTreeState(id: string) {
               isString(item) &&
               item !== DatabaseStore.refreshKey &&
               item.includes(DatabaseStore.refreshKey)
-            ),
-        ),
+            )
+        )
       );
       setLoadedKeys(
         loadedKeys.filter(
@@ -66,8 +75,8 @@ export default function useTreeState(id: string) {
               isString(item) &&
               item !== DatabaseStore.refreshKey &&
               item.includes(DatabaseStore.refreshKey)
-            ),
-        ),
+            )
+        )
       );
     }
   }, [DatabaseStore.refreshKey]);
@@ -81,6 +90,6 @@ export default function useTreeState(id: string) {
     setSessionId: (dbId: number, sessionId: string) => {
       cache[id].sessionIds[dbId] = sessionId;
     },
-    setExpandedKeys,
+    setExpandedKeys
   };
 }

@@ -83,7 +83,7 @@ import {
   IUpdateWorkflowScheduleV2Params,
   IUpdateWorkflowScheduleV2Return,
   IBatchCompleteWorkflowsV3Params,
-  IBatchCompleteWorkflowsV3Return,
+  IBatchCompleteWorkflowsV3Return
 } from './index.type';
 
 class WorkflowService extends ServiceBase {
@@ -91,28 +91,38 @@ class WorkflowService extends ServiceBase {
     return this.get<IGetScheduledTaskDefaultOptionV1Return>(
       '/v1/configurations/workflows/schedule/default_option',
       undefined,
-      options,
+      options
     );
   }
 
-  public getGlobalWorkflowsV1(params: IGetGlobalWorkflowsV1Params, options?: AxiosRequestConfig) {
+  public getGlobalWorkflowsV1(
+    params: IGetGlobalWorkflowsV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
-    return this.get<IGetGlobalWorkflowsV1Return>('/v1/dashboard/workflows', paramsData, options);
+    return this.get<IGetGlobalWorkflowsV1Return>(
+      '/v1/dashboard/workflows',
+      paramsData,
+      options
+    );
   }
 
   public GetGlobalWorkflowStatistics(
     params: IGetGlobalWorkflowStatisticsParams,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     return this.get<IGetGlobalWorkflowStatisticsReturn>(
       '/v1/dashboard/workflows/statistics',
       paramsData,
-      options,
+      options
     );
   }
 
-  public getWorkflowTemplateV1(params: IGetWorkflowTemplateV1Params, options?: AxiosRequestConfig) {
+  public getWorkflowTemplateV1(
+    params: IGetWorkflowTemplateV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -120,13 +130,13 @@ class WorkflowService extends ServiceBase {
     return this.get<IGetWorkflowTemplateV1Return>(
       `/v1/projects/${project_name}/workflow_template`,
       paramsData,
-      options,
+      options
     );
   }
 
   public updateWorkflowTemplateV1(
     params: IUpdateWorkflowTemplateV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -135,11 +145,14 @@ class WorkflowService extends ServiceBase {
     return this.patch<IUpdateWorkflowTemplateV1Return>(
       `/v1/projects/${project_name}/workflow_template`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public getWorkflowsV1(params: IGetWorkflowsV1Params, options?: AxiosRequestConfig) {
+  public getWorkflowsV1(
+    params: IGetWorkflowsV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -147,11 +160,14 @@ class WorkflowService extends ServiceBase {
     return this.get<IGetWorkflowsV1Return>(
       `/v1/projects/${project_name}/workflows`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public createWorkflowV1(params: ICreateWorkflowV1Params, options?: AxiosRequestConfig) {
+  public createWorkflowV1(
+    params: ICreateWorkflowV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -159,13 +175,13 @@ class WorkflowService extends ServiceBase {
     return this.post<ICreateWorkflowV1Return>(
       `/v1/projects/${project_name}/workflows`,
       paramsData,
-      options,
+      options
     );
   }
 
   public batchCancelWorkflowsV1(
     params: IBatchCancelWorkflowsV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -174,13 +190,13 @@ class WorkflowService extends ServiceBase {
     return this.post<IBatchCancelWorkflowsV1Return>(
       `/v1/projects/${project_name}/workflows/cancel`,
       paramsData,
-      options,
+      options
     );
   }
 
   public batchCompleteWorkflowsV1(
     params: IBatchCompleteWorkflowsV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -189,19 +205,29 @@ class WorkflowService extends ServiceBase {
     return this.post<IBatchCompleteWorkflowsV1Return>(
       `/v1/projects/${project_name}/workflows/complete`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public exportWorkflowV1(params: IExportWorkflowV1Params, options?: AxiosRequestConfig) {
+  public exportWorkflowV1(
+    params: IExportWorkflowV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
 
-    return this.get<any>(`/v1/projects/${project_name}/workflows/exports`, paramsData, options);
+    return this.get<any>(
+      `/v1/projects/${project_name}/workflows/exports`,
+      paramsData,
+      options
+    );
   }
 
-  public GetBackupSqlListV1(params: IGetBackupSqlListV1Params, options?: AxiosRequestConfig) {
+  public GetBackupSqlListV1(
+    params: IGetBackupSqlListV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -212,13 +238,13 @@ class WorkflowService extends ServiceBase {
     return this.get<IGetBackupSqlListV1Return>(
       `/v1/projects/${project_name}/workflows/${workflow_id}/backup_sqls`,
       paramsData,
-      options,
+      options
     );
   }
 
   public CreateRollbackWorkflow(
     params: ICreateRollbackWorkflowParams,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -230,13 +256,13 @@ class WorkflowService extends ServiceBase {
     return this.post<ICreateRollbackWorkflowReturn>(
       `/v1/projects/${project_name}/workflows/${workflow_id}/create_rollback_workflow`,
       paramsData,
-      options,
+      options
     );
   }
 
   public terminateMultipleTaskByWorkflowV1(
     params: ITerminateMultipleTaskByWorkflowV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -248,11 +274,14 @@ class WorkflowService extends ServiceBase {
     return this.post<ITerminateMultipleTaskByWorkflowV1Return>(
       `/v1/projects/${project_name}/workflows/${workflow_id}/tasks/terminate`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public getWorkflowAttachment(params: IGetWorkflowAttachmentParams, options?: AxiosRequestConfig) {
+  public getWorkflowAttachment(
+    params: IGetWorkflowAttachmentParams,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -266,13 +295,13 @@ class WorkflowService extends ServiceBase {
     return this.get<any>(
       `/v1/projects/${project_name}/workflows/${workflow_id}/tasks/${task_id}/attachment`,
       paramsData,
-      options,
+      options
     );
   }
 
   public terminateSingleTaskByWorkflowV1(
     params: ITerminateSingleTaskByWorkflowV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -287,11 +316,14 @@ class WorkflowService extends ServiceBase {
     return this.post<ITerminateSingleTaskByWorkflowV1Return>(
       `/v1/projects/${project_name}/workflows/${workflow_id}/tasks/${task_id}/terminate`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public getWorkflowV1(params: IGetWorkflowV1Params, options?: AxiosRequestConfig) {
+  public getWorkflowV1(
+    params: IGetWorkflowV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -302,11 +334,14 @@ class WorkflowService extends ServiceBase {
     return this.get<IGetWorkflowV1Return>(
       `/v1/projects/${project_name}/workflows/${workflow_name}/`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public updateWorkflowV1(params: IUpdateWorkflowV1Params, options?: AxiosRequestConfig) {
+  public updateWorkflowV1(
+    params: IUpdateWorkflowV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -317,11 +352,14 @@ class WorkflowService extends ServiceBase {
     return this.patch<IUpdateWorkflowV1Return>(
       `/v1/projects/${project_name}/workflows/${workflow_name}/`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public cancelWorkflowV1(params: ICancelWorkflowV1Params, options?: AxiosRequestConfig) {
+  public cancelWorkflowV1(
+    params: ICancelWorkflowV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -332,11 +370,14 @@ class WorkflowService extends ServiceBase {
     return this.post<ICancelWorkflowV1Return>(
       `/v1/projects/${project_name}/workflows/${workflow_name}/cancel`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public approveWorkflowV1(params: IApproveWorkflowV1Params, options?: AxiosRequestConfig) {
+  public approveWorkflowV1(
+    params: IApproveWorkflowV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -350,11 +391,14 @@ class WorkflowService extends ServiceBase {
     return this.post<IApproveWorkflowV1Return>(
       `/v1/projects/${project_name}/workflows/${workflow_name}/steps/${workflow_step_id}/approve`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public rejectWorkflowV1(params: IRejectWorkflowV1Params, options?: AxiosRequestConfig) {
+  public rejectWorkflowV1(
+    params: IRejectWorkflowV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -368,13 +412,13 @@ class WorkflowService extends ServiceBase {
     return this.post<IRejectWorkflowV1Return>(
       `/v1/projects/${project_name}/workflows/${workflow_name}/steps/${workflow_step_id}/reject`,
       paramsData,
-      options,
+      options
     );
   }
 
   public getSummaryOfInstanceTasksV1(
     params: IGetSummaryOfInstanceTasksV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -386,13 +430,13 @@ class WorkflowService extends ServiceBase {
     return this.get<IGetSummaryOfInstanceTasksV1Return>(
       `/v1/projects/${project_name}/workflows/${workflow_name}/tasks`,
       paramsData,
-      options,
+      options
     );
   }
 
   public executeTasksOnWorkflowV1(
     params: IExecuteTasksOnWorkflowV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -404,13 +448,13 @@ class WorkflowService extends ServiceBase {
     return this.post<IExecuteTasksOnWorkflowV1Return>(
       `/v1/projects/${project_name}/workflows/${workflow_name}/tasks/execute`,
       paramsData,
-      options,
+      options
     );
   }
 
   public executeOneTaskOnWorkflowV1(
     params: IExecuteOneTaskOnWorkflowV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -425,13 +469,13 @@ class WorkflowService extends ServiceBase {
     return this.post<IExecuteOneTaskOnWorkflowV1Return>(
       `/v1/projects/${project_name}/workflows/${workflow_name}/tasks/${task_id}/execute`,
       paramsData,
-      options,
+      options
     );
   }
 
   public updateWorkflowScheduleV1(
     params: IUpdateWorkflowScheduleV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -446,13 +490,13 @@ class WorkflowService extends ServiceBase {
     return this.put<IUpdateWorkflowScheduleV1Return>(
       `/v1/projects/${project_name}/workflows/${workflow_name}/tasks/${task_id}/schedule`,
       paramsData,
-      options,
+      options
     );
   }
 
   public UpdateTaskBackupStrategyV1(
     params: IUpdateTaskBackupStrategyV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const task_id = paramsData.task_id;
@@ -461,13 +505,13 @@ class WorkflowService extends ServiceBase {
     return this.patch<IUpdateTaskBackupStrategyV1Return>(
       `/v1/tasks/audits/${task_id}/backup_strategy`,
       paramsData,
-      options,
+      options
     );
   }
 
   public UpdateSqlBackupStrategyV1(
     params: IUpdateSqlBackupStrategyV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const task_id = paramsData.task_id;
@@ -479,23 +523,26 @@ class WorkflowService extends ServiceBase {
     return this.patch<IUpdateSqlBackupStrategyV1Return>(
       `/v1/tasks/audits/${task_id}/sqls/${sql_id}/backup_strategy`,
       paramsData,
-      options,
+      options
     );
   }
 
   public GetWorkflowStatisticOfInstances(
     params: IGetWorkflowStatisticOfInstancesParams,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     return this.get<IGetWorkflowStatisticOfInstancesReturn>(
       '/v1/workflows/statistic_of_instances',
       paramsData,
-      options,
+      options
     );
   }
 
-  public createWorkflowV2(params: ICreateWorkflowV2Params, options?: AxiosRequestConfig) {
+  public createWorkflowV2(
+    params: ICreateWorkflowV2Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -503,13 +550,13 @@ class WorkflowService extends ServiceBase {
     return this.post<ICreateWorkflowV2Return>(
       `/v2/projects/${project_name}/workflows`,
       paramsData,
-      options,
+      options
     );
   }
 
   public batchCancelWorkflowsV2(
     params: IBatchCancelWorkflowsV2Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -518,13 +565,13 @@ class WorkflowService extends ServiceBase {
     return this.post<IBatchCancelWorkflowsV2Return>(
       `/v2/projects/${project_name}/workflows/cancel`,
       paramsData,
-      options,
+      options
     );
   }
 
   public batchCompleteWorkflowsV2(
     params: IBatchCompleteWorkflowsV2Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -533,11 +580,14 @@ class WorkflowService extends ServiceBase {
     return this.post<IBatchCompleteWorkflowsV2Return>(
       `/v2/projects/${project_name}/workflows/complete`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public getWorkflowV2(params: IGetWorkflowV2Params, options?: AxiosRequestConfig) {
+  public getWorkflowV2(
+    params: IGetWorkflowV2Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -548,11 +598,14 @@ class WorkflowService extends ServiceBase {
     return this.get<IGetWorkflowV2Return>(
       `/v2/projects/${project_name}/workflows/${workflow_id}/`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public updateWorkflowV2(params: IUpdateWorkflowV2Params, options?: AxiosRequestConfig) {
+  public updateWorkflowV2(
+    params: IUpdateWorkflowV2Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -563,11 +616,14 @@ class WorkflowService extends ServiceBase {
     return this.patch<IUpdateWorkflowV2Return>(
       `/v2/projects/${project_name}/workflows/${workflow_id}/`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public cancelWorkflowV2(params: ICancelWorkflowV2Params, options?: AxiosRequestConfig) {
+  public cancelWorkflowV2(
+    params: ICancelWorkflowV2Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -578,11 +634,14 @@ class WorkflowService extends ServiceBase {
     return this.post<ICancelWorkflowV2Return>(
       `/v2/projects/${project_name}/workflows/${workflow_id}/cancel`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public approveWorkflowV2(params: IApproveWorkflowV2Params, options?: AxiosRequestConfig) {
+  public approveWorkflowV2(
+    params: IApproveWorkflowV2Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -596,11 +655,14 @@ class WorkflowService extends ServiceBase {
     return this.post<IApproveWorkflowV2Return>(
       `/v2/projects/${project_name}/workflows/${workflow_id}/steps/${workflow_step_id}/approve`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public rejectWorkflowV2(params: IRejectWorkflowV2Params, options?: AxiosRequestConfig) {
+  public rejectWorkflowV2(
+    params: IRejectWorkflowV2Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -614,13 +676,13 @@ class WorkflowService extends ServiceBase {
     return this.post<IRejectWorkflowV2Return>(
       `/v2/projects/${project_name}/workflows/${workflow_id}/steps/${workflow_step_id}/reject`,
       paramsData,
-      options,
+      options
     );
   }
 
   public getSummaryOfInstanceTasksV2(
     params: IGetSummaryOfInstanceTasksV2Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -632,13 +694,13 @@ class WorkflowService extends ServiceBase {
     return this.get<IGetSummaryOfInstanceTasksV2Return>(
       `/v2/projects/${project_name}/workflows/${workflow_id}/tasks`,
       paramsData,
-      options,
+      options
     );
   }
 
   public executeTasksOnWorkflowV2(
     params: IExecuteTasksOnWorkflowV2Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -650,13 +712,13 @@ class WorkflowService extends ServiceBase {
     return this.post<IExecuteTasksOnWorkflowV2Return>(
       `/v2/projects/${project_name}/workflows/${workflow_id}/tasks/execute`,
       paramsData,
-      options,
+      options
     );
   }
 
   public executeOneTaskOnWorkflowV2(
     params: IExecuteOneTaskOnWorkflowV2Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -671,13 +733,13 @@ class WorkflowService extends ServiceBase {
     return this.post<IExecuteOneTaskOnWorkflowV2Return>(
       `/v2/projects/${project_name}/workflows/${workflow_id}/tasks/${task_id}/execute`,
       paramsData,
-      options,
+      options
     );
   }
 
   public updateWorkflowScheduleV2(
     params: IUpdateWorkflowScheduleV2Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -692,13 +754,13 @@ class WorkflowService extends ServiceBase {
     return this.put<IUpdateWorkflowScheduleV2Return>(
       `/v2/projects/${project_name}/workflows/${workflow_id}/tasks/${task_id}/schedule`,
       paramsData,
-      options,
+      options
     );
   }
 
   public batchCompleteWorkflowsV3(
     params: IBatchCompleteWorkflowsV3Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -707,7 +769,7 @@ class WorkflowService extends ServiceBase {
     return this.post<IBatchCompleteWorkflowsV3Return>(
       `/v3/projects/${project_name}/workflows/complete`,
       paramsData,
-      options,
+      options
     );
   }
 }

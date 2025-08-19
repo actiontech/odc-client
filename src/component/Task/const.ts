@@ -18,86 +18,101 @@ import {
   SubTaskType,
   SyncTableStructureEnum,
   TaskErrorStrategy,
-  TaskPartitionStrategy,
+  TaskPartitionStrategy
 } from '@/d.ts';
 import { formatMessage } from '@/util/intl';
 
 export const ErrorStrategyMap = {
   [TaskErrorStrategy.ABORT]: formatMessage({
     id: 'src.component.Task.F0079010',
-    defaultMessage: '停止任务',
+    defaultMessage: '停止任务'
   }), //'停止任务'
   [TaskErrorStrategy.CONTINUE]: formatMessage({
     id: 'src.component.Task.2DA054B9',
-    defaultMessage: '忽略错误继续任务',
-  }), //'忽略错误继续任务'
+    defaultMessage: '忽略错误继续任务'
+  }) //'忽略错误继续任务'
 };
 
 export const TaskPartitionStrategyMap = {
   [TaskPartitionStrategy.CREATE]: formatMessage({
     id: 'src.component.Task.CD347F96',
-    defaultMessage: '创建策略',
+    defaultMessage: '创建策略'
   }), //'创建策略'
   [TaskPartitionStrategy.DROP]: formatMessage({
     id: 'src.component.Task.9262EB40',
-    defaultMessage: '删除策略',
-  }), //'删除策略'
+    defaultMessage: '删除策略'
+  }) //'删除策略'
 };
 
 export const SyncTableStructureConfig = {
   [SyncTableStructureEnum.COLUMN]: {
-    label: formatMessage({ id: 'src.d.ts.6CBA506D', defaultMessage: '表结构' }),
+    label: formatMessage({ id: 'src.d.ts.6CBA506D', defaultMessage: '表结构' })
   },
   [SyncTableStructureEnum.CONSTRAINT]: {
-    label: formatMessage({ id: 'src.d.ts.90979FA9', defaultMessage: '唯一性约束' }),
+    label: formatMessage({
+      id: 'src.d.ts.90979FA9',
+      defaultMessage: '唯一性约束'
+    })
   },
   [SyncTableStructureEnum.INDEX]: {
-    label: formatMessage({ id: 'src.d.ts.071AA07B', defaultMessage: '索引' }),
+    label: formatMessage({ id: 'src.d.ts.071AA07B', defaultMessage: '索引' })
   },
   [SyncTableStructureEnum.PARTITION]: {
-    label: formatMessage({ id: 'src.d.ts.40DBAF05', defaultMessage: '分区' }),
-  },
+    label: formatMessage({ id: 'src.d.ts.40DBAF05', defaultMessage: '分区' })
+  }
 };
 export const SyncTableStructureOptions = [
   {
     value: SyncTableStructureEnum.COLUMN,
     label: SyncTableStructureConfig[SyncTableStructureEnum.COLUMN].label,
-    disabled: true,
+    disabled: true
   },
   {
     value: SyncTableStructureEnum.CONSTRAINT,
     label: SyncTableStructureConfig[SyncTableStructureEnum.CONSTRAINT].label,
-    disabled: true,
+    disabled: true
   },
   {
     value: SyncTableStructureEnum.PARTITION,
-    label: SyncTableStructureConfig[SyncTableStructureEnum.PARTITION].label,
+    label: SyncTableStructureConfig[SyncTableStructureEnum.PARTITION].label
   },
   {
     value: SyncTableStructureEnum.INDEX,
-    label: SyncTableStructureConfig[SyncTableStructureEnum.INDEX].label,
-  },
+    label: SyncTableStructureConfig[SyncTableStructureEnum.INDEX].label
+  }
 ];
 
 export const SubTaskTypeMap = {
   [SubTaskType.MIGRATE]: {
-    label: formatMessage({ id: 'src.d.ts.CA81991C', defaultMessage: '归档' }),
+    label: formatMessage({ id: 'src.d.ts.CA81991C', defaultMessage: '归档' })
   },
   [SubTaskType.CHECK]: {
-    label: formatMessage({ id: 'src.d.ts.8977156C', defaultMessage: '数据检查' }),
+    label: formatMessage({
+      id: 'src.d.ts.8977156C',
+      defaultMessage: '数据检查'
+    })
   },
   [SubTaskType.DELETE]: {
-    label: formatMessage({ id: 'src.d.ts.237F5711', defaultMessage: '数据清理' }),
+    label: formatMessage({
+      id: 'src.d.ts.237F5711',
+      defaultMessage: '数据清理'
+    })
   },
   [SubTaskType.QUICK_DELETE]: {
-    label: formatMessage({ id: 'src.d.ts.CD43F08A', defaultMessage: '数据清理' }),
+    label: formatMessage({
+      id: 'src.d.ts.CD43F08A',
+      defaultMessage: '数据清理'
+    })
   },
   [SubTaskType.DEIRECT_DELETE]: {
-    label: formatMessage({ id: 'src.d.ts.910D42B5', defaultMessage: '数据清理' }),
+    label: formatMessage({
+      id: 'src.d.ts.910D42B5',
+      defaultMessage: '数据清理'
+    })
   },
   [SubTaskType.ROLLBACK]: {
-    label: formatMessage({ id: 'src.d.ts.DF449BBC', defaultMessage: '回滚' }),
-  },
+    label: formatMessage({ id: 'src.d.ts.DF449BBC', defaultMessage: '回滚' })
+  }
 };
 
 export const OscMinRowLimit = 1;

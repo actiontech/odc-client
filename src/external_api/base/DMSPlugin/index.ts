@@ -6,12 +6,22 @@
 import ServiceBase from '../Service.base';
 import { AxiosRequestConfig } from 'axios';
 
-import { IRegisterDMSPluginParams, IRegisterDMSPluginReturn } from './index.type';
+import {
+  IRegisterDMSPluginParams,
+  IRegisterDMSPluginReturn
+} from './index.type';
 
 class DMSPluginService extends ServiceBase {
-  public RegisterDMSPlugin(params: IRegisterDMSPluginParams, options?: AxiosRequestConfig) {
+  public RegisterDMSPlugin(
+    params: IRegisterDMSPluginParams,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
-    return this.post<IRegisterDMSPluginReturn>('/v1/dms/plugins', paramsData, options);
+    return this.post<IRegisterDMSPluginReturn>(
+      '/v1/dms/plugins',
+      paramsData,
+      options
+    );
   }
 }
 

@@ -26,7 +26,7 @@ import { cloneDeep, omit } from 'lodash';
 const typeToGlobalPermission = {
   owner: 'global_project_owner',
   dba: 'global_project_dba',
-  securityAdministrator: 'global_project_security_administrator',
+  securityAdministrator: 'global_project_security_administrator'
 };
 
 interface IProps {}
@@ -57,7 +57,7 @@ export default React.forwardRef<{
           label: `${user.name}(${user.accountName})`,
           value: user.id,
           roles: user?.roles?.map((item) => item.name),
-          disabled: false,
+          disabled: false
         };
       });
     }
@@ -83,7 +83,7 @@ export default React.forwardRef<{
       form?.setFieldsValue({
         owner: [...new Set(owner)],
         dba: [...new Set(dba)],
-        securityAdministrator: securityAdministrator,
+        securityAdministrator: securityAdministrator
       });
     }
   }, [userOptions]);
@@ -112,10 +112,10 @@ export default React.forwardRef<{
     ref,
     () => {
       return {
-        form,
+        form
       };
     },
-    [form],
+    [form]
   );
 
   return (
@@ -123,34 +123,34 @@ export default React.forwardRef<{
       <Form.Item
         rules={[
           {
-            required: true,
+            required: true
           },
           {
-            max: 32,
-          },
+            max: 32
+          }
         ]}
         required
         name={'name'}
         label={formatMessage({
           id: 'odc.Project.CreateProject.ProjectName',
-          defaultMessage: '项目名称',
+          defaultMessage: '项目名称'
         })} /*项目名称*/
       >
         <Input
           placeholder={formatMessage({
             id: 'odc.Project.CreateProject.PleaseEnterLessThanCharacters',
-            defaultMessage: '请输入，32 个字符以内',
+            defaultMessage: '请输入，32 个字符以内'
           })}
           /*请输入，32 个字符以内*/ style={{
-            width: 400,
+            width: 400
           }}
         />
       </Form.Item>
       <Form.Item
         rules={[
           {
-            required: true,
-          },
+            required: true
+          }
         ]}
         required
         name={'owner'}
@@ -159,7 +159,7 @@ export default React.forwardRef<{
             {
               formatMessage({
                 id: 'odc.Project.CreateProject.Administrator',
-                defaultMessage: '管理员',
+                defaultMessage: '管理员'
               }) /*管理员*/
             }
           </HelpDoc>
@@ -170,20 +170,20 @@ export default React.forwardRef<{
           optionFilterProp="label"
           mode="multiple"
           style={{
-            width: 240,
+            width: 240
           }}
           options={userOptionsByType('owner')}
           placeholder={formatMessage({
             id: 'odc.Project.CreateProject.PleaseSelect',
-            defaultMessage: '请选择',
+            defaultMessage: '请选择'
           })} /*请选择*/
         />
       </Form.Item>
       <Form.Item
         rules={[
           {
-            required: true,
-          },
+            required: true
+          }
         ]}
         required
         name={'dba'}
@@ -197,13 +197,13 @@ export default React.forwardRef<{
           loading={loading}
           mode="multiple"
           style={{
-            width: 240,
+            width: 240
           }}
           optionFilterProp="label"
           options={userOptionsByType('dba')}
           placeholder={formatMessage({
             id: 'odc.Project.CreateProject.PleaseSelect',
-            defaultMessage: '请选择',
+            defaultMessage: '请选择'
           })} /*请选择*/
         />
       </Form.Item>
@@ -214,7 +214,7 @@ export default React.forwardRef<{
             {
               formatMessage({
                 id: 'src.page.Project.Project.CreateProject.AD525382' /*开发者*/,
-                defaultMessage: '开发者',
+                defaultMessage: '开发者'
               }) /* 开发者 */
             }
           </HelpDoc>
@@ -225,12 +225,12 @@ export default React.forwardRef<{
           mode="multiple"
           optionFilterProp="label"
           style={{
-            width: 240,
+            width: 240
           }}
           options={userOptionsByType('developer')}
           placeholder={formatMessage({
             id: 'odc.Project.CreateProject.PleaseSelect',
-            defaultMessage: '请选择',
+            defaultMessage: '请选择'
           })} /*请选择*/
         />
       </Form.Item>
@@ -241,7 +241,7 @@ export default React.forwardRef<{
             {
               formatMessage({
                 id: 'odc.src.page.Project.Project.CreateProject.SecurityAdministrator',
-                defaultMessage: '安全管理员',
+                defaultMessage: '安全管理员'
               }) /* 
           安全管理员
           */
@@ -254,12 +254,12 @@ export default React.forwardRef<{
           mode="multiple"
           optionFilterProp="label"
           style={{
-            width: 240,
+            width: 240
           }}
           options={userOptionsByType('securityAdministrator')}
           placeholder={formatMessage({
             id: 'odc.Project.CreateProject.PleaseSelect',
-            defaultMessage: '请选择',
+            defaultMessage: '请选择'
           })} /*请选择*/
         />
       </Form.Item>
@@ -270,7 +270,7 @@ export default React.forwardRef<{
             {
               formatMessage({
                 id: 'odc.src.page.Project.Project.CreateProject.Participant',
-                defaultMessage: '参与者',
+                defaultMessage: '参与者'
               }) /* 
           参与者
           */
@@ -283,38 +283,38 @@ export default React.forwardRef<{
           mode="multiple"
           optionFilterProp="label"
           style={{
-            width: 240,
+            width: 240
           }}
           options={userOptionsByType('participant')}
           placeholder={formatMessage({
             id: 'odc.Project.CreateProject.PleaseSelect',
-            defaultMessage: '请选择',
+            defaultMessage: '请选择'
           })} /*请选择*/
         />
       </Form.Item>
       <Form.Item
         rules={[
           {
-            max: 256,
-          },
+            max: 256
+          }
         ]}
         name={'description'}
         label={formatMessage({
           id: 'odc.Project.CreateProject.Description',
-          defaultMessage: '描述',
+          defaultMessage: '描述'
         })} /*描述*/
       >
         <Input.TextArea
           placeholder={formatMessage({
             id: 'odc.Project.CreateProject.PleaseEnter',
-            defaultMessage: '请输入',
+            defaultMessage: '请输入'
           })}
           /*请输入*/ style={{
-            width: 400,
+            width: 400
           }}
           autoSize={{
             minRows: 4,
-            maxRows: 4,
+            maxRows: 4
           }}
         />
       </Form.Item>

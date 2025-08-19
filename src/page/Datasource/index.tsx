@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
-import { getDataSourceModeConfig, getDataSourceStyleByConnectType } from '@/common/datasource';
+import {
+  getDataSourceModeConfig,
+  getDataSourceStyleByConnectType
+} from '@/common/datasource';
 import {
   deleteConnection,
   getConnectionDetail,
-  getConnectionList,
+  getConnectionList
 } from '@/common/network/connection';
 import PageContainer, { TitleType } from '@/component/PageContainer';
 import { actionTypes } from '@/d.ts';
@@ -39,7 +42,7 @@ import Session from './Session';
 const ExtraContent = ({
   cid,
   name,
-  permissions,
+  permissions
 }: {
   cid: number;
   name: string;
@@ -54,7 +57,7 @@ const ExtraContent = ({
             {
               label: formatMessage({
                 id: 'odc.page.Datasource.Delete',
-                defaultMessage: '删除',
+                defaultMessage: '删除'
               }),
               //删除
               key: 'delete',
@@ -63,14 +66,14 @@ const ExtraContent = ({
                   title: formatMessage(
                     {
                       id: 'odc.page.Datasource.ConfirmToDeleteName',
-                      defaultMessage: '是否确认删除 {name}',
+                      defaultMessage: '是否确认删除 {name}'
                     },
-                    { name },
+                    { name }
                   ),
                   //`是否确认删除 ${name}`
                   content: formatMessage({
                     id: 'odc.src.page.Datasource.AfterDeletingYouWill',
-                    defaultMessage: '删除后将无法访问该数据源',
+                    defaultMessage: '删除后将无法访问该数据源'
                   }), //'删除后将无法访问该数据源'
                   async onOk() {
                     const isSuccess = await deleteConnection(cid?.toString());
@@ -78,18 +81,18 @@ const ExtraContent = ({
                       message.success(
                         formatMessage({
                           id: 'odc.page.Datasource.DeletedSuccessfully',
-                          defaultMessage: '删除成功',
-                        }), //删除成功
+                          defaultMessage: '删除成功'
+                        }) //删除成功
                       );
 
                       nav('/datasource');
                     }
-                  },
+                  }
                 });
               },
-              disabled: !permissions?.includes(actionTypes.delete),
-            },
-          ],
+              disabled: !permissions?.includes(actionTypes.delete)
+            }
+          ]
         }}
         buttonsRender={() => [null, <Button icon={<EllipsisOutlined />} />]}
       />
@@ -99,31 +102,31 @@ const ExtraContent = ({
 interface IProps {}
 const Pages = {
   [IPageType.Datasource_info]: {
-    component: Info,
+    component: Info
   },
   [IPageType.Datasource_recycle]: {
-    component: Recycle,
+    component: Recycle
   },
   [IPageType.Datasource_session]: {
-    component: Session,
+    component: Session
   },
   [IPageType.Datasource_obclient]: {
-    component: OBClientPage,
-  },
+    component: OBClientPage
+  }
 };
 const tabs = [
   {
     tab: formatMessage({
       id: 'odc.page.Datasource.Database',
-      defaultMessage: '数据库',
+      defaultMessage: '数据库'
     }),
     //数据库
-    key: IPageType.Datasource_info,
+    key: IPageType.Datasource_info
   },
   {
     tab: formatMessage({
       id: 'odc.page.Datasource.Session',
-      defaultMessage: '会话',
+      defaultMessage: '会话'
     }),
     //会话
     key: IPageType.Datasource_session,
@@ -132,12 +135,12 @@ const tabs = [
         !datasource?.permittedActions?.includes(actionTypes.update) ||
         !getDataSourceModeConfig(datasource?.type)?.features?.sessionManage
       );
-    },
+    }
   },
   {
     tab: formatMessage({
       id: 'odc.page.Datasource.RecycleBin',
-      defaultMessage: '回收站',
+      defaultMessage: '回收站'
     }),
     //回收站
     key: IPageType.Datasource_recycle,
@@ -146,12 +149,12 @@ const tabs = [
         !getDataSourceModeConfig(datasource?.type)?.features?.recycleBin ||
         !datasource?.permittedActions?.includes(actionTypes.update)
       );
-    },
+    }
   },
   {
     tab: formatMessage({
       id: 'odc.page.Datasource.CommandLineWindow',
-      defaultMessage: '命令行窗口',
+      defaultMessage: '命令行窗口'
     }),
     //命令行窗口
     key: IPageType.Datasource_obclient,
@@ -161,8 +164,8 @@ const tabs = [
         !getDataSourceModeConfig(datasource?.type)?.features?.obclient ||
         !datasource?.permittedActions?.includes(actionTypes.update)
       );
-    },
-  },
+    }
+  }
 ];
 
 const Index: React.FC<IProps> = function () {
@@ -199,15 +202,15 @@ const Index: React.FC<IProps> = function () {
     defaultParams: [
       {
         page: 1,
-        size: 10,
-      },
-    ],
+        size: 10
+      }
+    ]
   });
   const options = [
     {
       label: connection?.name,
-      value: cid,
-    },
+      value: cid
+    }
   ].concat(
     data?.contents
       ?.map((c) => {
@@ -216,10 +219,10 @@ const Index: React.FC<IProps> = function () {
         }
         return {
           label: c.name,
-          value: c.id,
+          value: c.id
         };
       })
-      ?.filter(Boolean) || [],
+      ?.filter(Boolean) || []
   );
   const filterTabs = tabs?.filter((tab) => !tab.isHide?.(connection));
   const DBIcon = getDataSourceStyleByConnectType(connection?.type)?.icon;
@@ -229,7 +232,7 @@ const Index: React.FC<IProps> = function () {
         type: TitleType.SELECT,
         defaultValue: cid,
         options: options,
-        onChange: handleSelectChange,
+        onChange: handleSelectChange
       }}
       icon={DBIcon?.component}
       iconColor={DBIcon?.color}
@@ -248,7 +251,7 @@ const Index: React.FC<IProps> = function () {
           {
             formatMessage({
               id: 'odc.page.Datasource.ViewAllDataSources',
-              defaultMessage: '查看所有数据源',
+              defaultMessage: '查看所有数据源'
             }) /*查看所有数据源*/
           }
         </Link>
@@ -271,7 +274,7 @@ const Index: React.FC<IProps> = function () {
                   bottom: 0,
                   overflow: 'auto',
                   padding: '12px 24px',
-                  zIndex: key === page ? 'unset' : -999,
+                  zIndex: key === page ? 'unset' : -999
                 }}
               >
                 <Page.component datasource={connection} key={id} id={id} />

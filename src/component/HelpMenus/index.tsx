@@ -36,64 +36,64 @@ export default class HelpMenus extends React.Component<
 > {
   state = {
     showModalFeedback: false,
-    showModalAbout: false,
+    showModalAbout: false
   };
 
   iconSize = {
     large: 18,
-    normal: 12,
+    normal: 12
   };
 
   HELP_MENUS = [
     !isClient() && {
       title: formatMessage({
         id: 'odc.component.HelpMenus.ProductFunctionIntroduction',
-        defaultMessage: '产品功能介绍',
+        defaultMessage: '产品功能介绍'
       }), // 产品功能介绍
       key: 'versionInfo',
       action() {
         modal.changeVersionModalVisible(true);
-      },
+      }
     },
 
     {
       title: formatMessage({
         id: 'odc.component.GlobalHeader.BrowseHelpDocuments',
-        defaultMessage: '浏览帮助文档',
+        defaultMessage: '浏览帮助文档'
       }),
 
       key: 'pdf',
       action() {
         window.open(odc.appConfig.docs.url || getLocalDocs());
-      },
+      }
     },
 
     {
       title: formatMessage({
         id: 'odc.component.GlobalHeader.AboutDeveloperCenter',
-        defaultMessage: '关于开发者中心',
+        defaultMessage: '关于开发者中心'
       }),
 
       key: 'about',
       action(ctx: HelpMenus) {
         ctx.setState({
-          showModalAbout: true,
+          showModalAbout: true
         });
-      },
+      }
     },
 
     {
       title: formatMessage({
         id: 'odc.component.GlobalHeader.Feedback',
-        defaultMessage: '意见反馈',
+        defaultMessage: '意见反馈'
       }),
       key: 'feedback',
       action(ctx: HelpMenus) {
         ctx.setState({
-          showModalFeedback: true,
+          showModalFeedback: true
         });
-      },
-    },
+      }
+    }
   ].filter(Boolean);
 
   public getHelpMenus = () => {
@@ -102,9 +102,9 @@ export default class HelpMenus extends React.Component<
         return {
           key: item.key,
           label: item.title,
-          onClick: this.handleClickHelpMenu,
+          onClick: this.handleClickHelpMenu
         };
-      }),
+      })
     };
   };
 
@@ -118,13 +118,16 @@ export default class HelpMenus extends React.Component<
     const { size, placement } = this.props;
     return (
       <>
-        <DropdownMenu menu={this.getHelpMenus()} placement={placement || 'bottom'}>
+        <DropdownMenu
+          menu={this.getHelpMenus()}
+          placement={placement || 'bottom'}
+        >
           <div className={classnames(styles.helpNav)}>
             <span>
               {
                 formatMessage({
                   id: 'odc.component.HelpMenus.Help',
-                  defaultMessage: '帮助',
+                  defaultMessage: '帮助'
                 }) /* 帮助 */
               }
             </span>
@@ -135,7 +138,7 @@ export default class HelpMenus extends React.Component<
           showModal={showModalAbout}
           onCancel={() => {
             this.setState({
-              showModalAbout: false,
+              showModalAbout: false
             });
           }}
         />
@@ -144,7 +147,7 @@ export default class HelpMenus extends React.Component<
           showModal={showModalFeedback}
           onCancel={() => {
             this.setState({
-              showModalFeedback: false,
+              showModalFeedback: false
             });
           }}
         />

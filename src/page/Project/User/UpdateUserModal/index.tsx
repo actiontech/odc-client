@@ -40,7 +40,7 @@ export default function UpdateUserModal({
   roles,
   projectId,
   userId,
-  globalRoles,
+  globalRoles
 }: IProps) {
   const [form] = Form.useForm<{
     roles: ProjectRole[];
@@ -49,7 +49,7 @@ export default function UpdateUserModal({
   useEffect(() => {
     if (visible) {
       form.setFieldsValue({
-        roles: roles,
+        roles: roles
       });
     }
   }, [visible]);
@@ -68,15 +68,15 @@ export default function UpdateUserModal({
         ?.filter((item) => !globalRoles.includes(item))
         ?.map((role) => ({
           id: userId,
-          role: role,
-        })),
+          role: role
+        }))
     });
     if (isSuccess) {
       message.success(
         formatMessage({
           id: 'odc.User.UpdateUserModal.OperationSucceeded',
-          defaultMessage: '操作成功',
-        }), //操作成功
+          defaultMessage: '操作成功'
+        }) //操作成功
       );
       close();
       onSuccess();
@@ -87,7 +87,7 @@ export default function UpdateUserModal({
     <Modal
       title={formatMessage({
         id: 'odc.User.UpdateUserModal.EditMember',
-        defaultMessage: '编辑成员',
+        defaultMessage: '编辑成员'
       })}
       /*编辑成员*/ onCancel={() => close()}
       className={styles.modal}
@@ -101,7 +101,7 @@ export default function UpdateUserModal({
           name={'roles'}
           label={formatMessage({
             id: 'odc.User.UpdateUserModal.ProjectRole',
-            defaultMessage: '项目角色',
+            defaultMessage: '项目角色'
           })} /*项目角色*/
         >
           <Checkbox.Group
@@ -112,13 +112,13 @@ export default function UpdateUserModal({
                     {
                       formatMessage({
                         id: 'odc.User.UpdateUserModal.Administrator',
-                        defaultMessage: '管理员',
+                        defaultMessage: '管理员'
                       }) /*管理员*/
                     }
                   </HelpDoc>
                 ),
                 disabled: globalRoles.includes(ProjectRole.OWNER),
-                value: ProjectRole.OWNER,
+                value: ProjectRole.OWNER
               },
               {
                 label: (
@@ -127,7 +127,7 @@ export default function UpdateUserModal({
                   </HelpDoc>
                 ),
                 disabled: globalRoles.includes(ProjectRole.DBA),
-                value: ProjectRole.DBA,
+                value: ProjectRole.DBA
               },
               {
                 label: (
@@ -135,13 +135,13 @@ export default function UpdateUserModal({
                     {
                       formatMessage({
                         id: 'src.page.Project.User.UpdateUserModal.09F81F9F' /*开发者*/,
-                        defaultMessage: '开发者',
+                        defaultMessage: '开发者'
                       }) /* 开发者 */
                     }
                   </HelpDoc>
                 ),
 
-                value: ProjectRole.DEVELOPER,
+                value: ProjectRole.DEVELOPER
               },
               {
                 label: (
@@ -149,8 +149,10 @@ export default function UpdateUserModal({
                     {projectRoleTextMap[ProjectRole.SECURITY_ADMINISTRATOR]}
                   </HelpDoc>
                 ),
-                disabled: globalRoles.includes(ProjectRole.SECURITY_ADMINISTRATOR),
-                value: ProjectRole.SECURITY_ADMINISTRATOR,
+                disabled: globalRoles.includes(
+                  ProjectRole.SECURITY_ADMINISTRATOR
+                ),
+                value: ProjectRole.SECURITY_ADMINISTRATOR
               },
               {
                 label: (
@@ -159,8 +161,8 @@ export default function UpdateUserModal({
                   </HelpDoc>
                 ),
 
-                value: ProjectRole.PARTICIPANT,
-              },
+                value: ProjectRole.PARTICIPANT
+              }
             ]}
           />
         </Form.Item>

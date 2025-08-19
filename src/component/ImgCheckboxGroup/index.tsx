@@ -43,14 +43,19 @@ const ImgCheckboxGroup: React.FC<{
             }}
             span={8}
           >
-            <div className={`${isChecked ? styles.activeKey : ''} ${styles.item}`}>
+            <div
+              className={`${isChecked ? styles.activeKey : ''} ${styles.item}`}
+            >
               <div className={styles.img}>{img}</div>
               <div className={styles.right}>
                 <div className={styles.title}>{title}</div>
                 <div className={styles.content}>{content}</div>
               </div>
               {isChecked && (
-                <CheckCircleFilled className={styles.checkicon} style={{ color: '#1890FF' }} />
+                <CheckCircleFilled
+                  className={styles.checkicon}
+                  style={{ color: '#1890FF' }}
+                />
               )}
             </div>
           </Col>

@@ -47,7 +47,7 @@ class TaskManagerModel {
 
     const notificationId = this.config.notificationHandler?.startNotification?.(
       params?.taskId,
-      params?.ids,
+      params?.ids
     );
 
     this.tasks.set(key, {
@@ -55,7 +55,7 @@ class TaskManagerModel {
       result: null,
       startTime: Date.now(),
       notificationId: notificationId || `${params?.taskId}`,
-      pollingTimer: undefined,
+      pollingTimer: undefined
     });
 
     await this.pollTask(key, params);
@@ -83,7 +83,8 @@ class TaskManagerModel {
     try {
       const result = await this.config.api.fetchStatus(params.taskId);
       if (this.config.isTaskCompleted(result)) {
-        const notificationToDestroy = task.notificationId || `${params?.taskId}`;
+        const notificationToDestroy =
+          task.notificationId || `${params?.taskId}`;
 
         runInAction(() => {
           task.isFinished = true;
@@ -102,7 +103,7 @@ class TaskManagerModel {
       } else {
         const timer = setTimeout(
           () => this.pollTask(key, params),
-          this.config.pollingInterval || 2000,
+          this.config.pollingInterval || 2000
         );
         runInAction(() => {
           task.pollingTimer = timer;
@@ -128,7 +129,7 @@ class TaskManagerModel {
         task.isFinished = true;
         task.result = {
           status: 'ERROR',
-          errorMessage: error.message,
+          errorMessage: error.message
         };
         task.pollingTimer = undefined;
         task.notificationId = undefined;

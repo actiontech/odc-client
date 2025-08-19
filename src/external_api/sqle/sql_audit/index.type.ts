@@ -6,7 +6,7 @@ import {
   IDirectAuditReqV1,
   IDirectAuditFileReqV2,
   IDirectAuditResV2,
-  IDirectAuditReqV2,
+  IDirectAuditReqV2
 } from '../common.type';
 
 export interface IDirectAuditFilesV1Params extends IDirectAuditFileReqV1 {}

@@ -52,14 +52,14 @@ const TABBAR_HEIGHT = 28;
 // 顶层 Tab key 枚举
 export enum TopTab {
   PROPS = 'PROPS',
-  DATA = 'DATA',
+  DATA = 'DATA'
 }
 
 // 属性 Tab key 枚举
 export enum PropsTab {
   INFO = 'INFO',
   COLUMN = 'COLUMN',
-  DDL = 'DDL',
+  DDL = 'DDL'
 }
 
 interface IProps {
@@ -100,7 +100,10 @@ interface IViewPageState {
 
 @inject('sqlStore', 'pageStore', 'sessionManagerStore', 'modalStore')
 @observer
-class ViewPage extends Component<IProps & { session: SessionStore }, IViewPageState> {
+class ViewPage extends Component<
+  IProps & { session: SessionStore },
+  IViewPageState
+> {
   public editor: IEditor;
 
   public readonly state: IViewPageState = {
@@ -109,7 +112,7 @@ class ViewPage extends Component<IProps & { session: SessionStore }, IViewPageSt
     view: {
       viewName: '',
       columns: [],
-      ddl: '',
+      ddl: ''
     },
 
     dataLoading: false,
@@ -119,7 +122,7 @@ class ViewPage extends Component<IProps & { session: SessionStore }, IViewPageSt
     executeViewLoading: false,
     updateViewDML: '',
     updatedView: {
-      viewName: this.props.params && this.props.params.viewName,
+      viewName: this.props.params && this.props.params.viewName
     },
 
     showDataExecuteSQLModal: false,
@@ -130,21 +133,21 @@ class ViewPage extends Component<IProps & { session: SessionStore }, IViewPageSt
     resultSetIndexToExport: -1,
     limitToExport: 0,
 
-    formated: false,
+    formated: false
   };
 
   private timer: number | undefined;
 
   public async componentDidMount() {
     const {
-      params: { viewName },
+      params: { viewName }
     } = this.props;
 
     this.setState({
       view: {
         ...this.state.view,
-        viewName,
-      },
+        viewName
+      }
     });
 
     await this.reloadView(viewName);
@@ -163,7 +166,7 @@ class ViewPage extends Component<IProps & { session: SessionStore }, IViewPageSt
       nextProps.params.topTab !== this.state.topTab
     ) {
       this.setState({
-        topTab: nextProps.params.topTab,
+        topTab: nextProps.params.topTab
       });
     }
     if (
@@ -173,7 +176,7 @@ class ViewPage extends Component<IProps & { session: SessionStore }, IViewPageSt
       nextProps.params.propsTab !== this.state.propsTab
     ) {
       this.setState({
-        propsTab: nextProps.params.propsTab,
+        propsTab: nextProps.params.propsTab
       });
     }
   }
@@ -199,8 +202,8 @@ class ViewPage extends Component<IProps & { session: SessionStore }, IViewPageSt
       {},
       {
         viewName: view.viewName,
-        topTab,
-      },
+        topTab
+      }
     );
   };
 
@@ -216,8 +219,8 @@ class ViewPage extends Component<IProps & { session: SessionStore }, IViewPageSt
       {
         viewName: view.viewName,
         topTab: TopTab.PROPS,
-        propsTab,
-      },
+        propsTab
+      }
     );
   };
 
@@ -226,7 +229,7 @@ class ViewPage extends Component<IProps & { session: SessionStore }, IViewPageSt
       sqlStore,
       params: { viewName, databaseId },
       pageKey,
-      pageStore,
+      pageStore
     } = this.props;
     const { updatedView } = this.state;
     const updatedViewName = updatedView && updatedView.viewName;
@@ -238,7 +241,7 @@ class ViewPage extends Component<IProps & { session: SessionStore }, IViewPageSt
         this.setState({
           showViewExecuteSQLModal: false,
           updateViewDML: '',
-          updatedView: {},
+          updatedView: {}
         });
 
         // TODO: 可能修改表名，需要更新 URL，Page title，左侧资源树
@@ -248,14 +251,17 @@ class ViewPage extends Component<IProps & { session: SessionStore }, IViewPageSt
             pageKey,
             { title: updatedViewName, updateKey: viewPage.pageKey },
             {
-              viewName: updatedViewName,
-            },
+              viewName: updatedViewName
+            }
           );
         }
         await this.reloadView(updatedViewName);
 
         message.success(
-          formatMessage({ id: 'portal.connection.form.save.success', defaultMessage: '保存成功' }),
+          formatMessage({
+            id: 'portal.connection.form.save.success',
+            defaultMessage: '保存成功'
+          })
         );
       }
     } catch (e) {
@@ -267,13 +273,16 @@ class ViewPage extends Component<IProps & { session: SessionStore }, IViewPageSt
     const view = await getView(
       viewName,
       this.props.session?.sessionId,
-      this.props.session?.odcDatabase?.name,
+      this.props.session?.odcDatabase?.name
     );
     if (view) {
       this.setState({ view });
     } else {
       message.error(
-        formatMessage({ id: 'workspace.window.view.load.error', defaultMessage: '加载视图失败' }),
+        formatMessage({
+          id: 'workspace.window.view.load.error',
+          defaultMessage: '加载视图失败'
+        })
       );
     }
   };
@@ -282,7 +291,7 @@ class ViewPage extends Component<IProps & { session: SessionStore }, IViewPageSt
     const { columns } = await getView(
       viewName,
       this.props.session?.sessionId,
-      this.props.session?.odcDatabase?.name,
+      this.props.session?.odcDatabase?.name
     );
     this.setState({
       view: {
@@ -300,10 +309,10 @@ class ViewPage extends Component<IProps & { session: SessionStore }, IViewPageSt
               ...c,
               initialValue: c,
               modified: false,
-              key: generateUniqKey(),
+              key: generateUniqKey()
             };
-          }),
-      },
+          })
+      }
     });
   };
 
@@ -313,7 +322,7 @@ class ViewPage extends Component<IProps & { session: SessionStore }, IViewPageSt
   public reloadViewData = async (
     viewName: string,
     keepInitialSQL: boolean = false,
-    limit: number = 1000,
+    limit: number = 1000
   ) => {
     this.setState({ dataLoading: true });
     try {
@@ -322,19 +331,19 @@ class ViewPage extends Component<IProps & { session: SessionStore }, IViewPageSt
         viewName,
         limit,
         false,
-        this.props.session?.sessionId,
+        this.props.session?.sessionId
       );
       if (viewData?.track) {
         notification.error(viewData);
       } else {
         const resultSet = generateResultSetColumns(
           [viewData],
-          this.props.session?.connection?.dialectType,
+          this.props.session?.connection?.dialectType
         )?.[0];
 
         if (resultSet) {
           this.setState({
-            resultSet,
+            resultSet
           });
         }
       }
@@ -353,7 +362,7 @@ class ViewPage extends Component<IProps & { session: SessionStore }, IViewPageSt
       this.editor.setValue(view?.ddl || '');
     }
     this.setState({
-      formated: !formated,
+      formated: !formated
     });
   };
 
@@ -364,7 +373,7 @@ class ViewPage extends Component<IProps & { session: SessionStore }, IViewPageSt
     modalStore.changeCreateResultSetExportTaskModal(true, {
       sql,
       databaseId: session?.database.databaseId,
-      tableName: params?.viewName,
+      tableName: params?.viewName
     });
   };
 
@@ -373,9 +382,10 @@ class ViewPage extends Component<IProps & { session: SessionStore }, IViewPageSt
       pageKey,
       params: { viewName },
       session,
-      sessionManagerStore,
+      sessionManagerStore
     } = this.props;
-    const { topTab, propsTab, view, dataLoading, resultSet, formated } = this.state;
+    const { topTab, propsTab, view, dataLoading, resultSet, formated } =
+      this.state;
 
     return (
       view && (
@@ -389,13 +399,13 @@ class ViewPage extends Component<IProps & { session: SessionStore }, IViewPageSt
               <Radio.Button value={TopTab.PROPS}>
                 {formatMessage({
                   id: 'workspace.window.table.toptab.props',
-                  defaultMessage: '属性',
+                  defaultMessage: '属性'
                 })}
               </Radio.Button>
               <Radio.Button value={TopTab.DATA}>
                 {formatMessage({
                   id: 'workspace.window.table.toptab.data',
-                  defaultMessage: '数据',
+                  defaultMessage: '数据'
                 })}
               </Radio.Button>
             </Radio.Group>
@@ -414,20 +424,22 @@ class ViewPage extends Component<IProps & { session: SessionStore }, IViewPageSt
                       activeKey={propsTab}
                       tabPosition="left"
                       className={styles.propsTab}
-                      onChange={this.handlePropsTabChanged as (key: string) => void}
+                      onChange={
+                        this.handlePropsTabChanged as (key: string) => void
+                      }
                       items={[
                         {
                           key: PropsTab.INFO,
                           label: formatMessage({
                             id: 'workspace.window.table.propstab.info',
-                            defaultMessage: '基本信息',
+                            defaultMessage: '基本信息'
                           }),
-                          children: <ShowViewBaseInfoForm model={view} />,
+                          children: <ShowViewBaseInfoForm model={view} />
                         },
                         {
                           label: formatMessage({
                             id: 'workspace.window.table.propstab.column',
-                            defaultMessage: '列',
+                            defaultMessage: '列'
                           }),
                           key: PropsTab.COLUMN,
                           children: (
@@ -441,7 +453,7 @@ class ViewPage extends Component<IProps & { session: SessionStore }, IViewPageSt
                               pageKey={pageKey}
                               onReload={() => this.reloadViewColumns(viewName)}
                             />
-                          ),
+                          )
                         },
                         {
                           key: PropsTab.DDL,
@@ -453,7 +465,7 @@ class ViewPage extends Component<IProps & { session: SessionStore }, IViewPageSt
                                   text={
                                     formatMessage({
                                       id: 'odc.components.ViewPage.Download',
-                                      defaultMessage: '下载',
+                                      defaultMessage: '下载'
                                     }) //下载
                                   }
                                   icon={<CloudDownloadOutlined />}
@@ -462,7 +474,7 @@ class ViewPage extends Component<IProps & { session: SessionStore }, IViewPageSt
                                       view?.viewName,
                                       'VIEW',
                                       view?.ddl,
-                                      this.props.session?.odcDatabase?.name,
+                                      this.props.session?.odcDatabase?.name
                                     );
                                   }}
                                 />
@@ -472,24 +484,28 @@ class ViewPage extends Component<IProps & { session: SessionStore }, IViewPageSt
                                     formated
                                       ? formatMessage({
                                           id: 'odc.components.ViewPage.Unformat',
-                                          defaultMessage: '取消格式化',
+                                          defaultMessage: '取消格式化'
                                         })
                                       : // 取消格式化
                                         formatMessage({
                                           id: 'odc.components.ViewPage.Formatting',
-                                          defaultMessage: '格式化',
+                                          defaultMessage: '格式化'
                                         })
                                     // 格式化
                                   }
                                   icon={<AlignLeftOutlined />}
                                   onClick={this.handleFormat}
-                                  status={formated ? IConStatus.ACTIVE : IConStatus.INIT}
+                                  status={
+                                    formated
+                                      ? IConStatus.ACTIVE
+                                      : IConStatus.INIT
+                                  }
                                 />
                               </Toolbar>
                               <div
                                 style={{
                                   height: `calc(100% - 38px)`,
-                                  position: 'relative',
+                                  position: 'relative'
                                 }}
                               >
                                 <SQLCodePreviewer
@@ -497,8 +513,9 @@ class ViewPage extends Component<IProps & { session: SessionStore }, IViewPageSt
                                   key={view.ddl}
                                   defaultValue={`${view.ddl};`}
                                   language={
-                                    getDataSourceModeConfig(session?.connection?.type)?.sql
-                                      ?.language
+                                    getDataSourceModeConfig(
+                                      session?.connection?.type
+                                    )?.sql?.language
                                   }
                                   onEditorCreated={(editor: IEditor) => {
                                     this.editor = editor;
@@ -506,11 +523,11 @@ class ViewPage extends Component<IProps & { session: SessionStore }, IViewPageSt
                                 />
                               </div>
                             </>
-                          ),
-                        },
+                          )
+                        }
                       ]}
                     />
-                  ),
+                  )
                 },
                 {
                   key: TopTab.DATA,
@@ -531,23 +548,25 @@ class ViewPage extends Component<IProps & { session: SessionStore }, IViewPageSt
                           sqlId={resultSet.sqlId}
                           table={{
                             tableName: view?.viewName,
-                            ...view,
+                            ...view
                           }}
                           resultHeight={`calc(100vh - ${
                             GLOBAL_HEADER_HEIGHT + TABBAR_HEIGHT + 46 + 1
                           }px)`}
-                          onRefresh={(limit) => this.reloadViewData(viewName, false, limit)}
+                          onRefresh={(limit) =>
+                            this.reloadViewData(viewName, false, limit)
+                          }
                           onExport={(limitToExport) => {
                             this.setState({
-                              limitToExport,
+                              limitToExport
                             });
                             this.showExportResuleSetModal();
                           }}
                         />
                       )}
                     </Spin>
-                  ),
-                },
+                  )
+                }
               ]}
             />
           </Content>
@@ -569,5 +588,5 @@ export default WrapSessionPage(
   },
   true,
   true,
-  true,
+  true
 );

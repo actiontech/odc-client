@@ -87,7 +87,7 @@ export function useDBSession(databaseId: number): {
     session,
     database: session?.odcDatabase,
     loading,
-    reset,
+    reset
   };
 }
 
@@ -157,6 +157,6 @@ export function useDatasourceSession(datasourceId: number): {
     session,
     datasource: session?.connection,
     loading,
-    reset,
+    reset
   };
 }

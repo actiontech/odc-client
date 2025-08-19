@@ -28,7 +28,7 @@ export const ruleTypeToGenerator = {
   [NumberRuleType.ORDER]: MockGenerator.STEP_GENERATOR,
   [NumberRuleType.RANDOM]: MockGenerator.UNIFORM_GENERATOR,
   [NumberRuleType.NULL]: MockGenerator.NULL_GENERATOR,
-  [NumberRuleType.SKIP]: MockGenerator.SKIP_GENERATOR,
+  [NumberRuleType.SKIP]: MockGenerator.SKIP_GENERATOR
 };
 const g2r = {};
 Object.entries(ruleTypeToGenerator).forEach(([key, value]) => {
@@ -40,7 +40,9 @@ function generatorToRuleType(column: IServerMockColumn): NumberRuleType {
   return g2r[generator];
 }
 
-export function convertFormDataToServerData(formData: IMockFormColumn): IServerMockColumn {
+export function convertFormDataToServerData(
+  formData: IMockFormColumn
+): IServerMockColumn {
   let lowValue, highValue;
   let generator = ruleTypeToGenerator[formData.rule];
   formData = cloneDeep(formData);
@@ -68,13 +70,17 @@ export function convertFormDataToServerData(formData: IMockFormColumn): IServerM
       highValue,
       genParams,
       generator,
-      precision: isNil(formData.columnObj.precision) ? 38 : formData.columnObj.precision,
-      scale: isNil(formData.columnObj.scale) ? 0 : formData.columnObj.scale,
-    },
+      precision: isNil(formData.columnObj.precision)
+        ? 38
+        : formData.columnObj.precision,
+      scale: isNil(formData.columnObj.scale) ? 0 : formData.columnObj.scale
+    }
   };
 }
 
-export function convertServerDataToFormData(formData: IServerMockColumn): IMockFormColumn {
+export function convertServerDataToFormData(
+  formData: IServerMockColumn
+): IMockFormColumn {
   let rule = generatorToRuleType(formData);
   formData = cloneDeep(formData);
   let genParams = formData?.typeConfig?.genParams;
@@ -105,7 +111,7 @@ export function convertServerDataToFormData(formData: IServerMockColumn): IMockF
       lowValue,
       range,
       genParams,
-      order,
-    },
+      order
+    }
   };
 }

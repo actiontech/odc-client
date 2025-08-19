@@ -31,7 +31,9 @@ interface IProps {
 }
 const LogModal: React.FC<IProps> = function (props) {
   const { visible, scheduleId, recordId, onClose, status } = props;
-  const [logType, setLogType] = useState<CommonTaskLogType>(CommonTaskLogType.ALL);
+  const [logType, setLogType] = useState<CommonTaskLogType>(
+    CommonTaskLogType.ALL
+  );
   const [loading, setLoading] = useState(false);
   const [log, setLog] = useState<ILog>(null);
   const [downloadUrl, setDownloadUrl] = useState<string>(undefined);
@@ -41,30 +43,36 @@ const LogModal: React.FC<IProps> = function (props) {
         const res = await getCycleTaskLog(scheduleId, recordId, logType);
         setLog({
           ...log,
-          [logType]: res,
+          [logType]: res
         });
         setLoading(false);
         if (
           status &&
-          [SubTaskStatus.CANCELED, SubTaskStatus.FAILED, SubTaskStatus.DONE].includes(status)
+          [
+            SubTaskStatus.CANCELED,
+            SubTaskStatus.FAILED,
+            SubTaskStatus.DONE
+          ].includes(status)
         ) {
           cancel();
         }
       }
     },
     {
-      pollingInterval: 3000,
-    },
+      pollingInterval: 3000
+    }
   );
 
-  const { run: getLogDownLoadUrl } = useRequest(async (scheduleId, recordId) => {
-    if (scheduleId && recordId) {
-      const res = await getDownloadUrl(scheduleId, recordId);
-      if (!!res) {
-        setDownloadUrl(res);
+  const { run: getLogDownLoadUrl } = useRequest(
+    async (scheduleId, recordId) => {
+      if (scheduleId && recordId) {
+        const res = await getDownloadUrl(scheduleId, recordId);
+        if (!!res) {
+          setDownloadUrl(res);
+        }
       }
     }
-  });
+  );
 
   const handleLogTypeChange = (type: CommonTaskLogType) => {
     setLogType(type);
@@ -95,7 +103,7 @@ const LogModal: React.FC<IProps> = function (props) {
       title={
         formatMessage({
           id: 'odc.src.component.Task.component.CommonDetailModal.Log',
-          defaultMessage: '日志',
+          defaultMessage: '日志'
         }) /* 日志 */
       }
       destroyOnClose
@@ -105,7 +113,9 @@ const LogModal: React.FC<IProps> = function (props) {
         log={log}
         logType={logType}
         isLoading={loading}
-        downloadUrl={logType === CommonTaskLogType.ALL ? downloadUrl : undefined}
+        downloadUrl={
+          logType === CommonTaskLogType.ALL ? downloadUrl : undefined
+        }
         onLogTypeChange={handleLogTypeChange}
       />
     </Drawer>

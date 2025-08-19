@@ -23,7 +23,7 @@ import { TopTab } from '@/page/Workspace/components/PackagePage';
 import {
   openFunctionOrProcedureFromPackage,
   openPackageBodyPage,
-  openPackageViewPage,
+  openPackageViewPage
 } from '@/store/helper/page';
 import { triggerActionAfterPLPageCreated } from '@/util/events';
 import { formatMessage } from '@/util/intl';
@@ -34,7 +34,9 @@ import { ResourceNodeType } from '../../type';
 import { hasChangePermission } from '../index';
 import { IMenuItemConfig } from '../type';
 
-export const packageBodyMenusConfig: Partial<Record<ResourceNodeType, IMenuItemConfig[]>> = {
+export const packageBodyMenusConfig: Partial<
+  Record<ResourceNodeType, IMenuItemConfig[]>
+> = {
   [ResourceNodeType.PackageBody]: [
     {
       key: 'OVERVIEW',
@@ -42,73 +44,99 @@ export const packageBodyMenusConfig: Partial<Record<ResourceNodeType, IMenuItemC
       text: [
         formatMessage({
           id: 'odc.ResourceTree.config.treeNodesActions.See',
-          defaultMessage: '查看',
-        }),
+          defaultMessage: '查看'
+        })
       ],
 
       run(session, node) {
         const pkgInfo: IPackage = node.data;
-        openPackageViewPage(pkgInfo?.packageName, TopTab.BODY, true, session?.odcDatabase?.id);
-      },
+        openPackageViewPage(
+          pkgInfo?.packageName,
+          TopTab.BODY,
+          true,
+          session?.odcDatabase?.id
+        );
+      }
     },
 
     {
       key: 'EDIT',
       ellipsis: true,
       text: [
-        formatMessage({ id: 'odc.ResourceTree.actions.Editing', defaultMessage: '编辑' }), //编辑
+        formatMessage({
+          id: 'odc.ResourceTree.actions.Editing',
+          defaultMessage: '编辑'
+        }) //编辑
       ],
       actionType: actionTypes.update,
       hasDivider: true,
       async run(session, node) {
         const pkgInfo: IPackage = node.data;
-        const pkg: IPackage = await session?.database?.loadPackage(pkgInfo.packageName);
+        const pkg: IPackage = await session?.database?.loadPackage(
+          pkgInfo.packageName
+        );
         const bodysql = pkg?.packageBody?.basicInfo?.ddl || '';
-        await openPackageBodyPage(pkg?.packageName, bodysql, session?.odcDatabase?.id);
-      },
+        await openPackageBodyPage(
+          pkg?.packageName,
+          bodysql,
+          session?.odcDatabase?.id
+        );
+      }
     },
     {
       key: 'COMPILE',
       ellipsis: true,
       text: [
-        formatMessage({ id: 'odc.ResourceTree.actions.Compile', defaultMessage: '编译' }), //编译
+        formatMessage({
+          id: 'odc.ResourceTree.actions.Compile',
+          defaultMessage: '编译'
+        }) //编译
       ],
       isHide(session, node) {
-        return !getDataSourceModeConfig(session?.connection?.type)?.features?.compile;
+        return !getDataSourceModeConfig(session?.connection?.type)?.features
+          ?.compile;
       },
       async run(session, node) {
         const pkgInfo: IPackage = node.data;
         const { pkgPage, isNew } = await openPackageBodyPage(
           pkgInfo?.packageName,
           pkgInfo?.packageBody?.basicInfo?.ddl,
-          session?.odcDatabase?.id,
+          session?.odcDatabase?.id
         );
         triggerActionAfterPLPageCreated(pkgPage, 'compile', isNew);
-      },
+      }
     },
     {
       key: 'DOWNLOAD',
       ellipsis: true,
       text: [
-        formatMessage({ id: 'odc.ResourceTree.actions.Download', defaultMessage: '下载' }), //下载
+        formatMessage({
+          id: 'odc.ResourceTree.actions.Download',
+          defaultMessage: '下载'
+        }) //下载
       ],
       hasDivider: true,
       async run(session, node) {
         const pkgInfo: IPackage = node.data;
-        const obj: IPackage = await session?.database?.loadPackage(pkgInfo?.packageName);
+        const obj: IPackage = await session?.database?.loadPackage(
+          pkgInfo?.packageName
+        );
         const ddl = obj?.packageBody?.basicInfo?.ddl;
         const name = pkgInfo?.packageName + '.body';
         if (ddl) {
           downloadPLDDL(name, PLType.PKG_BODY, ddl, session?.database?.dbName);
         }
-      },
+      }
     },
 
     {
       key: 'DELETE',
       ellipsis: true,
       text: [
-        formatMessage({ id: 'odc.ResourceTree.actions.Delete', defaultMessage: '删除' }), //删除
+        formatMessage({
+          id: 'odc.ResourceTree.actions.Delete',
+          defaultMessage: '删除'
+        }) //删除
       ],
       actionType: actionTypes.delete,
       disabled: (session) => {
@@ -121,35 +149,41 @@ export const packageBodyMenusConfig: Partial<Record<ResourceNodeType, IMenuItemC
           title: formatMessage(
             {
               id: 'workspace.window.PackageBody.modal.delete',
-              defaultMessage: '是否确定删除程序包 {name} 的包体？',
+              defaultMessage: '是否确定删除程序包 {name} 的包体？'
             },
 
             {
-              name: packageName,
-            },
+              name: packageName
+            }
           ),
 
           okText: formatMessage({
             id: 'app.button.ok',
-            defaultMessage: '确定',
+            defaultMessage: '确定'
           }),
 
           cancelText: formatMessage({
             id: 'app.button.cancel',
-            defaultMessage: '取消',
+            defaultMessage: '取消'
           }),
 
           centered: true,
           icon: <QuestionCircleFilled />,
           onOk: async () => {
-            if (!(await dropObject(packageName, DbObjectType.package_body, session?.sessionId))) {
+            if (
+              !(await dropObject(
+                packageName,
+                DbObjectType.package_body,
+                session?.sessionId
+              ))
+            ) {
               return;
             }
             message.success(
               formatMessage({
                 id: 'workspace.window.PackageBody.modal.delete.success',
-                defaultMessage: '删除程序包体成功',
-              }),
+                defaultMessage: '删除程序包体成功'
+              })
             );
             await session.database?.getPackageList();
             if (
@@ -159,23 +193,26 @@ export const packageBodyMenusConfig: Partial<Record<ResourceNodeType, IMenuItemC
             ) {
               await session.database?.loadPackage(packageName);
             }
-          },
+          }
         });
-      },
+      }
     },
     {
       key: 'REFRESH',
       ellipsis: true,
       text: [
-        formatMessage({ id: 'odc.ResourceTree.actions.Refresh', defaultMessage: '刷新' }), //刷新
+        formatMessage({
+          id: 'odc.ResourceTree.actions.Refresh',
+          defaultMessage: '刷新'
+        }) //刷新
       ],
       actionType: actionTypes.create,
       async run(session, node) {
         const pkgInfo: IPackage = node.data;
         const packageName = pkgInfo?.packageName;
         await session.database.loadPackage(packageName);
-      },
-    },
+      }
+    }
   ],
 
   [ResourceNodeType.PackageBodyFunction]: [
@@ -185,28 +222,42 @@ export const packageBodyMenusConfig: Partial<Record<ResourceNodeType, IMenuItemC
       text: [
         formatMessage({
           id: 'odc.ResourceTree.config.treeNodesActions.See',
-          defaultMessage: '查看',
-        }),
+          defaultMessage: '查看'
+        })
       ],
 
       run(session, node) {
-        openPackageViewPage(node.pkg?.packageName, TopTab.BODY, true, session?.odcDatabase?.id);
-      },
+        openPackageViewPage(
+          node.pkg?.packageName,
+          TopTab.BODY,
+          true,
+          session?.odcDatabase?.id
+        );
+      }
     },
     {
       key: 'EDIT',
       ellipsis: true,
       text: [
-        formatMessage({ id: 'odc.ResourceTree.actions.Editing', defaultMessage: '编辑' }), //编辑
+        formatMessage({
+          id: 'odc.ResourceTree.actions.Editing',
+          defaultMessage: '编辑'
+        }) //编辑
       ],
       actionType: actionTypes.update,
       hasDivider: true,
       async run(session, node) {
         const pkgInfo = node.pkg;
-        const pkg: IPackage = await session?.database?.loadPackage(pkgInfo.packageName);
+        const pkg: IPackage = await session?.database?.loadPackage(
+          pkgInfo.packageName
+        );
         const bodysql = pkg?.packageBody?.basicInfo?.ddl || '';
-        await openPackageBodyPage(pkg?.packageName, bodysql, session?.odcDatabase?.id);
-      },
+        await openPackageBodyPage(
+          pkg?.packageName,
+          bodysql,
+          session?.odcDatabase?.id
+        );
+      }
     },
 
     {
@@ -215,8 +266,8 @@ export const packageBodyMenusConfig: Partial<Record<ResourceNodeType, IMenuItemC
       text: [
         formatMessage({
           id: 'odc.ResourceTree.config.treeNodesActions.Debugging',
-          defaultMessage: '调试',
-        }),
+          defaultMessage: '调试'
+        })
       ],
 
       isHide(session, node) {
@@ -227,11 +278,13 @@ export const packageBodyMenusConfig: Partial<Record<ResourceNodeType, IMenuItemC
         const funcdata: IFunction & { key: string } = node.data;
         const packageName = pkgInfo?.packageName;
         const targetPackage = session.database?.packages.find(
-          (pkg) => pkg.packageName === packageName,
+          (pkg) => pkg.packageName === packageName
         );
         const { functions = [] } = targetPackage.packageBody;
 
-        const plSchema = functions.find((func) => funcdata.key.indexOf(func.key) !== -1);
+        const plSchema = functions.find(
+          (func) => funcdata.key.indexOf(func.key) !== -1
+        );
 
         plSchema.ddl = targetPackage.packageBody.basicInfo.ddl; // 补充字段 packageName
 
@@ -242,11 +295,11 @@ export const packageBodyMenusConfig: Partial<Record<ResourceNodeType, IMenuItemC
           PLType.FUNCTION,
           plSchema,
           session?.odcDatabase?.id,
-          session?.database?.dbName,
+          session?.database?.dbName
         );
 
         triggerActionAfterPLPageCreated(plPage, 'debug', isNew);
-      },
+      }
     },
     {
       key: 'RUN',
@@ -254,12 +307,13 @@ export const packageBodyMenusConfig: Partial<Record<ResourceNodeType, IMenuItemC
       text: [
         formatMessage({
           id: 'odc.ResourceTree.config.treeNodesActions.Run',
-          defaultMessage: '运行',
-        }),
+          defaultMessage: '运行'
+        })
       ],
 
       isHide(session, node) {
-        return !getDataSourceModeConfig(session?.connection?.type)?.features?.plRun;
+        return !getDataSourceModeConfig(session?.connection?.type)?.features
+          ?.plRun;
       },
       actionType: actionTypes.update,
       async run(session, node) {
@@ -267,11 +321,13 @@ export const packageBodyMenusConfig: Partial<Record<ResourceNodeType, IMenuItemC
         const funcdata: IFunction & { key: string } = node.data;
         const packageName = pkgInfo.packageName;
         const targetPackage = session?.database?.packages.find(
-          (pkg) => pkg.packageName === packageName,
+          (pkg) => pkg.packageName === packageName
         );
         const { functions = [], procedures = [] } = targetPackage.packageBody;
 
-        const plSchema = functions.find((func) => funcdata.key.indexOf(func.key) !== -1);
+        const plSchema = functions.find(
+          (func) => funcdata.key.indexOf(func.key) !== -1
+        );
         plSchema.ddl = targetPackage.packageBody.basicInfo.ddl; // 补充字段 packageName
 
         plSchema.packageName = packageName;
@@ -281,12 +337,12 @@ export const packageBodyMenusConfig: Partial<Record<ResourceNodeType, IMenuItemC
           PLType.FUNCTION,
           plSchema,
           session?.odcDatabase?.id,
-          session?.database?.dbName,
+          session?.database?.dbName
         );
 
         triggerActionAfterPLPageCreated(plPage, 'run', isNew);
-      },
-    },
+      }
+    }
   ],
 
   [ResourceNodeType.PackageBodyProcedure]: [
@@ -296,28 +352,42 @@ export const packageBodyMenusConfig: Partial<Record<ResourceNodeType, IMenuItemC
       text: [
         formatMessage({
           id: 'odc.ResourceTree.config.treeNodesActions.See',
-          defaultMessage: '查看',
-        }),
+          defaultMessage: '查看'
+        })
       ],
 
       run(session, node) {
-        openPackageViewPage(node.pkg?.packageName, TopTab.BODY, true, session?.odcDatabase?.id);
-      },
+        openPackageViewPage(
+          node.pkg?.packageName,
+          TopTab.BODY,
+          true,
+          session?.odcDatabase?.id
+        );
+      }
     },
     {
       key: 'EDIT',
       ellipsis: true,
       text: [
-        formatMessage({ id: 'odc.ResourceTree.actions.Editing', defaultMessage: '编辑' }), //编辑
+        formatMessage({
+          id: 'odc.ResourceTree.actions.Editing',
+          defaultMessage: '编辑'
+        }) //编辑
       ],
       actionType: actionTypes.update,
       hasDivider: true,
       async run(session, node) {
         const pkgInfo = node.pkg;
-        const pkg: IPackage = await session?.database?.loadPackage(pkgInfo.packageName);
+        const pkg: IPackage = await session?.database?.loadPackage(
+          pkgInfo.packageName
+        );
         const bodysql = pkg?.packageBody?.basicInfo?.ddl || '';
-        await openPackageBodyPage(pkg?.packageName, bodysql, session?.odcDatabase?.id);
-      },
+        await openPackageBodyPage(
+          pkg?.packageName,
+          bodysql,
+          session?.odcDatabase?.id
+        );
+      }
     },
 
     {
@@ -326,8 +396,8 @@ export const packageBodyMenusConfig: Partial<Record<ResourceNodeType, IMenuItemC
       text: [
         formatMessage({
           id: 'odc.ResourceTree.config.treeNodesActions.Debugging',
-          defaultMessage: '调试',
-        }),
+          defaultMessage: '调试'
+        })
       ],
 
       isHide(session, node) {
@@ -338,11 +408,13 @@ export const packageBodyMenusConfig: Partial<Record<ResourceNodeType, IMenuItemC
         const procdata: IProcedure & { key: string } = node.data;
         const packageName = pkgInfo?.packageName;
         const targetPackage = session.database?.packages.find(
-          (pkg) => pkg.packageName === packageName,
+          (pkg) => pkg.packageName === packageName
         );
         const { procedures = [] } = targetPackage.packageBody;
 
-        const plSchema = procedures.find((p) => procdata.key.indexOf(p.key) !== -1);
+        const plSchema = procedures.find(
+          (p) => procdata.key.indexOf(p.key) !== -1
+        );
 
         plSchema.ddl = targetPackage.packageBody.basicInfo.ddl; // 补充字段 packageName
 
@@ -353,10 +425,10 @@ export const packageBodyMenusConfig: Partial<Record<ResourceNodeType, IMenuItemC
           PLType.PROCEDURE,
           plSchema,
           session?.odcDatabase?.id,
-          session?.database?.dbName,
+          session?.database?.dbName
         );
         triggerActionAfterPLPageCreated(plPage, 'debug', isNew);
-      },
+      }
     },
     {
       key: 'RUN',
@@ -364,8 +436,8 @@ export const packageBodyMenusConfig: Partial<Record<ResourceNodeType, IMenuItemC
       text: [
         formatMessage({
           id: 'odc.ResourceTree.config.treeNodesActions.Run',
-          defaultMessage: '运行',
-        }),
+          defaultMessage: '运行'
+        })
       ],
 
       actionType: actionTypes.update,
@@ -374,11 +446,13 @@ export const packageBodyMenusConfig: Partial<Record<ResourceNodeType, IMenuItemC
         const procdata: IProcedure & { key: string } = node.data;
         const packageName = pkgInfo.packageName;
         const targetPackage = session?.database?.packages.find(
-          (pkg) => pkg.packageName === packageName,
+          (pkg) => pkg.packageName === packageName
         );
         const { procedures = [] } = targetPackage.packageBody;
 
-        const plSchema = procedures.find((p) => procdata.key.indexOf(p.key) !== -1);
+        const plSchema = procedures.find(
+          (p) => procdata.key.indexOf(p.key) !== -1
+        );
         plSchema.ddl = targetPackage.packageBody.basicInfo.ddl; // 补充字段 packageName
 
         plSchema.packageName = packageName;
@@ -388,10 +462,10 @@ export const packageBodyMenusConfig: Partial<Record<ResourceNodeType, IMenuItemC
           PLType.PROCEDURE,
           plSchema,
           session?.odcDatabase?.id,
-          session?.database?.dbName,
+          session?.database?.dbName
         );
         triggerActionAfterPLPageCreated(plPage, 'run', isNew);
-      },
-    },
-  ],
+      }
+    }
+  ]
 };

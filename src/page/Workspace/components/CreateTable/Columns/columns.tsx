@@ -36,11 +36,15 @@ interface IColumnParams {
   session?: SessionStore;
 }
 
-export function useColumns({ session }: IColumnParams, originColumns: TableColumn[]): Column[] {
+export function useColumns(
+  { session }: IColumnParams,
+  originColumns: TableColumn[]
+): Column[] {
   const { dataTypes } = session;
   const { dialectType, type } = session.connection || {};
   const pageContext = useContext(TablePageContext);
-  const haveAutoIncrement = getDataSourceModeConfig(type)?.schema?.table?.enableAutoIncrement;
+  const haveAutoIncrement =
+    getDataSourceModeConfig(type)?.schema?.table?.enableAutoIncrement;
   const sqlConfig = getDataSourceModeConfig(type)?.sql;
 
   const DataTypeSelect = useMemo(() => {
@@ -50,21 +54,25 @@ export function useColumns({ session }: IColumnParams, originColumns: TableColum
         <SelectEditor
           multiple={false}
           options={
-            dataTypes?.map((d: IDataType) => d.databaseType.replace(/\(\)/, '')).filter(Boolean) ||
-            []
+            dataTypes
+              ?.map((d: IDataType) => d.databaseType.replace(/\(\)/, ''))
+              .filter(Boolean) || []
           }
           {...props}
           onRowChange={(row: TableColumn) => {
             const type = row.type;
             // const dataType = dataTypesIns.getDataType('OB_MYSQL', type);
-            const dataType = dataTypesIns.getDataType(session.connection.dialectType, type);
+            const dataType = dataTypesIns.getDataType(
+              session.connection.dialectType,
+              type
+            );
             onRowChange(
               {
                 ...row,
                 width: dataType?.defaultValues?.[0],
-                scale: dataType?.defaultValues?.[1],
+                scale: dataType?.defaultValues?.[1]
               },
-              true,
+              true
             );
           }}
         />
@@ -96,7 +104,7 @@ export function useColumns({ session }: IColumnParams, originColumns: TableColum
                   ...newRow,
                   type: type.name,
                   width: type.type?.defaultValues?.[0],
-                  scale: type.type?.defaultValues?.[1],
+                  scale: type.type?.defaultValues?.[1]
                 };
 
                 onRowChange(newRow, true);
@@ -119,7 +127,7 @@ export function useColumns({ session }: IColumnParams, originColumns: TableColum
        * 不能从空转为非空
        */
       const originColumn = originColumns.find(
-        (column) => column?.ordinalPosition === row.ordinalPosition,
+        (column) => column?.ordinalPosition === row.ordinalPosition
       );
       if (originColumn && !originColumn?.notNull) {
         return true;
@@ -133,13 +141,16 @@ export function useColumns({ session }: IColumnParams, originColumns: TableColum
         return false;
       }
       const originData = originColumns.find(
-        (column) => column?.ordinalPosition === row.ordinalPosition,
+        (column) => column?.ordinalPosition === row.ordinalPosition
       );
 
       /**
        * 非自增列无法变成自增列，有缺省值的时候，不能设置自增
        */
-      if (originData?.autoIncrement === false || originData?.defaultValueOrExpr) {
+      if (
+        originData?.autoIncrement === false ||
+        originData?.defaultValueOrExpr
+      ) {
         return true;
       }
       return false;
@@ -154,7 +165,7 @@ export function useColumns({ session }: IColumnParams, originColumns: TableColum
        * 虚拟列不允许编辑
        */
       const originColumn = originColumns.find(
-        (column) => column?.ordinalPosition === row.ordinalPosition,
+        (column) => column?.ordinalPosition === row.ordinalPosition
       );
       if (originColumn) {
         return true;
@@ -165,13 +176,13 @@ export function useColumns({ session }: IColumnParams, originColumns: TableColum
   const WidthDisableFormatter = useMemo(() => {
     return WrapDisableFormatter(
       (row) => dataTypesIns.getParamsCount(dialectType, row.type) < 1,
-      'width',
+      'width'
     );
   }, []);
   const ScaleDisableFormatter = useMemo(() => {
     return WrapDisableFormatter(
       (row) => dataTypesIns.getParamsCount(dialectType, row.type) < 2,
-      'scale',
+      'scale'
     );
   }, []);
 
@@ -179,100 +190,108 @@ export function useColumns({ session }: IColumnParams, originColumns: TableColum
     return [
       {
         key: 'name',
-        name: formatMessage({ id: 'odc.CreateTable.Columns.columns.Name', defaultMessage: '名称' }), //名称
+        name: formatMessage({
+          id: 'odc.CreateTable.Columns.columns.Name',
+          defaultMessage: '名称'
+        }), //名称
         resizable: true,
         editable: true,
-        editor: ColumnNameEditor,
+        editor: ColumnNameEditor
       },
 
       {
         key: 'type',
-        name: formatMessage({ id: 'odc.CreateTable.Columns.columns.Type', defaultMessage: '类型' }), //类型
+        name: formatMessage({
+          id: 'odc.CreateTable.Columns.columns.Type',
+          defaultMessage: '类型'
+        }), //类型
         resizable: true,
         editable: (row) => !pageContext?.editMode || isNil(row.ordinalPosition),
         editor: DataTypeSelect,
-        width: 100,
+        width: 100
       },
 
       {
         key: 'width',
         name: formatMessage({
           id: 'odc.CreateTable.Columns.columns.Length',
-          defaultMessage: '长度',
+          defaultMessage: '长度'
         }), //长度
         resizable: true,
         filterable: false,
         editor: TextEditor,
-        editable: (row) => dataTypesIns.getParamsCount(dialectType, row.type) > 0,
+        editable: (row) =>
+          dataTypesIns.getParamsCount(dialectType, row.type) > 0,
         formatter: WidthDisableFormatter,
-        width: 80,
+        width: 80
       },
 
       {
         key: 'scale',
         name: formatMessage({
           id: 'odc.CreateTable.Columns.columns.DecimalPoint',
-          defaultMessage: '小数点',
+          defaultMessage: '小数点'
         }), //小数点
         resizable: true,
         filterable: false,
         editor: InputNumberEditor,
-        editable: (row) => dataTypesIns.getParamsCount(dialectType, row.type) > 1,
+        editable: (row) =>
+          dataTypesIns.getParamsCount(dialectType, row.type) > 1,
         formatter: ScaleDisableFormatter,
-        width: 80,
+        width: 80
       },
 
       {
         key: 'notNull',
         name: formatMessage({
           id: 'workspace.window.createTable.column.allowNull',
-          defaultMessage: '非空',
+          defaultMessage: '非空'
         }),
 
         resizable: true,
         filterable: false,
         editor: TextEditor,
         editable: false,
-        formatter: NotNullCheckbox,
+        formatter: NotNullCheckbox
       },
 
       haveAutoIncrement && {
         key: 'autoIncrement',
         name: formatMessage({
           id: 'workspace.window.createTable.column.increment',
-          defaultMessage: '自增',
+          defaultMessage: '自增'
         }),
 
         resizable: true,
         filterable: false,
         editor: TextEditor,
         editable: false,
-        formatter: AutoIncrementCheckbox,
+        formatter: AutoIncrementCheckbox
       },
 
       {
         key: 'generated',
         name: formatMessage({
           id: 'odc.CreateTable.Columns.columns.VirtualColumn',
-          defaultMessage: '虚拟列',
+          defaultMessage: '虚拟列'
         }), //虚拟列
         resizable: true,
         filterable: false,
         editor: TextEditor,
         editable: false,
-        formatter: GeneratedCheckbox,
+        formatter: GeneratedCheckbox
       },
 
       {
         key: 'comment',
         name: formatMessage({
           id: 'odc.CreateTable.Columns.columns.Comment',
-          defaultMessage: '注释',
+          defaultMessage: '注释'
         }), //注释
         filterable: false,
         resizable: true,
-        editor: TextEditor,
-      },
+        editor: TextEditor
+      }
     ].filter(Boolean) as Column[];
   }, [haveAutoIncrement, originColumns]);
 }

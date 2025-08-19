@@ -35,7 +35,7 @@ const MultiLineOverflowText: React.FC<IProps> = ({
   content,
   className,
   isShowMore = false,
-  maxHeight = 20,
+  maxHeight = 20
 }) => {
   const wrapperRef = useRef(null);
   const contentRef = useRef(null);
@@ -44,12 +44,14 @@ const MultiLineOverflowText: React.FC<IProps> = ({
 
   const style = !openStatus
     ? {
-        maxHeight: `${maxHeight}px`,
+        maxHeight: `${maxHeight}px`
       }
     : null;
 
   useEffect(() => {
-    setOverflow(contentRef?.current?.offsetHeight > wrapperRef?.current?.offsetHeight);
+    setOverflow(
+      contentRef?.current?.offsetHeight > wrapperRef?.current?.offsetHeight
+    );
   }, []);
 
   return (
@@ -57,7 +59,7 @@ const MultiLineOverflowText: React.FC<IProps> = ({
       ref={wrapperRef}
       className={classNames(styles.overflowText, className, {
         [styles.overflow]: overflow && !openStatus,
-        [styles.showMore]: isShowMore,
+        [styles.showMore]: isShowMore
       })}
       style={style}
     >
@@ -85,11 +87,11 @@ const MultiLineOverflowText: React.FC<IProps> = ({
             openStatus
               ? formatMessage({
                   id: 'odc.component.MultiLineOverflowText.Fold',
-                  defaultMessage: '收起',
+                  defaultMessage: '收起'
                 }) //收起
               : formatMessage({
                   id: 'odc.component.MultiLineOverflowText.More',
-                  defaultMessage: '更多',
+                  defaultMessage: '更多'
                 }) //更多
           }
         </Button>

@@ -9,9 +9,16 @@ import { AxiosRequestConfig } from 'axios';
 import { IGetUserTipListV1Params, IGetUserTipListV1Return } from './index.type';
 
 class UserService extends ServiceBase {
-  public getUserTipListV1(params: IGetUserTipListV1Params, options?: AxiosRequestConfig) {
+  public getUserTipListV1(
+    params: IGetUserTipListV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
-    return this.get<IGetUserTipListV1Return>('/v1/user_tips', paramsData, options);
+    return this.get<IGetUserTipListV1Return>(
+      '/v1/user_tips',
+      paramsData,
+      options
+    );
   }
 }
 

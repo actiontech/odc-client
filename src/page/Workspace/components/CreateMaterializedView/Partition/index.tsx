@@ -11,7 +11,7 @@ const Partition = () => {
   const optionColumns = useMemo(() => {
     return columns?.map((item: any) => ({
       ...item,
-      name: item.aliasName,
+      name: item.aliasName
     }));
   }, [JSON.stringify(columns)]);
 
@@ -32,7 +32,7 @@ const Partition = () => {
             <div
               style={{
                 display: 'flex',
-                alignItems: 'center',
+                alignItems: 'center'
               }}
             >
               <span>{item.columnName}</span>
@@ -43,7 +43,7 @@ const Partition = () => {
                     marginLeft: '6px',
                     whiteSpace: 'nowrap',
                     overflow: 'hidden',
-                    textOverflow: 'ellipsis',
+                    textOverflow: 'ellipsis'
                   }}
                 >
                   {item.aliasName}

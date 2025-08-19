@@ -42,11 +42,14 @@ import {
   IGetAuditTaskSQLsV2Params,
   IGetAuditTaskSQLsV2Return,
   IGetTaskAnalysisDataV2Params,
-  IGetTaskAnalysisDataV2Return,
+  IGetTaskAnalysisDataV2Return
 } from './index.type';
 
 class TaskService extends ServiceBase {
-  public createAuditTasksV1(params: ICreateAuditTasksV1Params, options?: AxiosRequestConfig) {
+  public createAuditTasksV1(
+    params: ICreateAuditTasksV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -54,17 +57,20 @@ class TaskService extends ServiceBase {
     return this.post<ICreateAuditTasksV1Return>(
       `/v1/projects/${project_name}/task_groups`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public createAndAuditTaskV1(params: ICreateAndAuditTaskV1Params, options?: AxiosRequestConfig) {
+  public createAndAuditTaskV1(
+    params: ICreateAndAuditTaskV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const config = options || {};
     const headers = config.headers ? config.headers : {};
     config.headers = {
       ...headers,
 
-      'Content-Type': 'multipart/form-data',
+      'Content-Type': 'multipart/form-data'
     };
 
     const paramsData = new FormData();
@@ -98,7 +104,10 @@ class TaskService extends ServiceBase {
     }
 
     if (params.input_mybatis_xml_file != undefined) {
-      paramsData.append('input_mybatis_xml_file', params.input_mybatis_xml_file as any);
+      paramsData.append(
+        'input_mybatis_xml_file',
+        params.input_mybatis_xml_file as any
+      );
     }
 
     if (params.input_zip_file != undefined) {
@@ -118,11 +127,14 @@ class TaskService extends ServiceBase {
     return this.post<ICreateAndAuditTaskV1Return>(
       `/v1/projects/${project_name}/tasks/audits`,
       paramsData,
-      config,
+      config
     );
   }
 
-  public downloadBackupFileV1(params: IDownloadBackupFileV1Params, options?: AxiosRequestConfig) {
+  public downloadBackupFileV1(
+    params: IDownloadBackupFileV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -136,11 +148,14 @@ class TaskService extends ServiceBase {
     return this.get<any>(
       `/v1/projects/${project_name}/workflows/${workflow_id}/tasks/${task_id}/backup_files/download`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public updateSqlFileOrderV1(params: IUpdateSqlFileOrderV1Params, options?: AxiosRequestConfig) {
+  public updateSqlFileOrderV1(
+    params: IUpdateSqlFileOrderV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
     delete paramsData.project_name;
@@ -154,17 +169,20 @@ class TaskService extends ServiceBase {
     return this.post<IUpdateSqlFileOrderV1Return>(
       `/v1/projects/${project_name}/workflows/${workflow_id}/tasks/${task_id}/order_file`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public auditTaskGroupIdV1(params: IAuditTaskGroupIdV1Params, options?: AxiosRequestConfig) {
+  public auditTaskGroupIdV1(
+    params: IAuditTaskGroupIdV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const config = options || {};
     const headers = config.headers ? config.headers : {};
     config.headers = {
       ...headers,
 
-      'Content-Type': 'multipart/form-data',
+      'Content-Type': 'multipart/form-data'
     };
 
     const paramsData = new FormData();
@@ -194,25 +212,42 @@ class TaskService extends ServiceBase {
     }
 
     if (params.input_mybatis_xml_file != undefined) {
-      paramsData.append('input_mybatis_xml_file', params.input_mybatis_xml_file as any);
+      paramsData.append(
+        'input_mybatis_xml_file',
+        params.input_mybatis_xml_file as any
+      );
     }
 
     if (params.input_zip_file != undefined) {
       paramsData.append('input_zip_file', params.input_zip_file as any);
     }
 
-    return this.post<IAuditTaskGroupIdV1Return>('/v1/task_groups/audit', paramsData, config);
+    return this.post<IAuditTaskGroupIdV1Return>(
+      '/v1/task_groups/audit',
+      paramsData,
+      config
+    );
   }
 
-  public getAuditTaskV1(params: IGetAuditTaskV1Params, options?: AxiosRequestConfig) {
+  public getAuditTaskV1(
+    params: IGetAuditTaskV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const task_id = paramsData.task_id;
     delete paramsData.task_id;
 
-    return this.get<IGetAuditTaskV1Return>(`/v1/tasks/audits/${task_id}/`, paramsData, options);
+    return this.get<IGetAuditTaskV1Return>(
+      `/v1/tasks/audits/${task_id}/`,
+      paramsData,
+      options
+    );
   }
 
-  public DownloadAuditFile(params: IDownloadAuditFileParams, options?: AxiosRequestConfig) {
+  public DownloadAuditFile(
+    params: IDownloadAuditFileParams,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const task_id = paramsData.task_id;
     delete paramsData.task_id;
@@ -220,13 +255,13 @@ class TaskService extends ServiceBase {
     return this.get<IDownloadAuditFileReturn>(
       `/v1/tasks/audits/${task_id}/origin_file`,
       paramsData,
-      options,
+      options
     );
   }
 
   public getAuditTaskSQLContentV1(
     params: IGetAuditTaskSQLContentV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const task_id = paramsData.task_id;
@@ -235,33 +270,44 @@ class TaskService extends ServiceBase {
     return this.get<IGetAuditTaskSQLContentV1Return>(
       `/v1/tasks/audits/${task_id}/sql_content`,
       paramsData,
-      options,
+      options
     );
   }
 
   public downloadAuditTaskSQLFileV1(
     params: IDownloadAuditTaskSQLFileV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const task_id = paramsData.task_id;
     delete paramsData.task_id;
 
-    return this.get<any>(`/v1/tasks/audits/${task_id}/sql_file`, paramsData, options);
+    return this.get<any>(
+      `/v1/tasks/audits/${task_id}/sql_file`,
+      paramsData,
+      options
+    );
   }
 
   public downloadAuditTaskSQLReportV1(
     params: IDownloadAuditTaskSQLReportV1Params,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const task_id = paramsData.task_id;
     delete paramsData.task_id;
 
-    return this.get<any>(`/v1/tasks/audits/${task_id}/sql_report`, paramsData, options);
+    return this.get<any>(
+      `/v1/tasks/audits/${task_id}/sql_report`,
+      paramsData,
+      options
+    );
   }
 
-  public getAuditTaskSQLsV1(params: IGetAuditTaskSQLsV1Params, options?: AxiosRequestConfig) {
+  public getAuditTaskSQLsV1(
+    params: IGetAuditTaskSQLsV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const task_id = paramsData.task_id;
     delete paramsData.task_id;
@@ -269,11 +315,14 @@ class TaskService extends ServiceBase {
     return this.get<IGetAuditTaskSQLsV1Return>(
       `/v1/tasks/audits/${task_id}/sqls`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public updateAuditTaskSQLsV1(params: IUpdateAuditTaskSQLsV1Params, options?: AxiosRequestConfig) {
+  public updateAuditTaskSQLsV1(
+    params: IUpdateAuditTaskSQLsV1Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const task_id = paramsData.task_id;
     delete paramsData.task_id;
@@ -284,11 +333,14 @@ class TaskService extends ServiceBase {
     return this.patch<IUpdateAuditTaskSQLsV1Return>(
       `/v1/tasks/audits/${task_id}/sqls/${number}`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public getTaskAnalysisData(params: IGetTaskAnalysisDataParams, options?: AxiosRequestConfig) {
+  public getTaskAnalysisData(
+    params: IGetTaskAnalysisDataParams,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const task_id = paramsData.task_id;
     delete paramsData.task_id;
@@ -299,7 +351,7 @@ class TaskService extends ServiceBase {
     return this.get<IGetTaskAnalysisDataReturn>(
       `/v1/tasks/audits/${task_id}/sqls/${number}/analysis`,
       paramsData,
-      options,
+      options
     );
   }
 
@@ -314,13 +366,13 @@ class TaskService extends ServiceBase {
     return this.post<IRewriteSQLReturn>(
       `/v1/tasks/audits/${task_id}/sqls/${number}/rewrite`,
       paramsData,
-      options,
+      options
     );
   }
 
   public GetAsyncRewriteTaskStatus(
     params: IGetAsyncRewriteTaskStatusParams,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const task_id = paramsData.task_id;
@@ -332,7 +384,7 @@ class TaskService extends ServiceBase {
     return this.get<IGetAsyncRewriteTaskStatusReturn>(
       `/v1/tasks/audits/${task_id}/sqls/${number}/rewrite/status`,
       paramsData,
-      options,
+      options
     );
   }
 
@@ -340,11 +392,14 @@ class TaskService extends ServiceBase {
     return this.get<IGetSqlFileOrderMethodV1Return>(
       '/v1/tasks/file_order_methods',
       undefined,
-      options,
+      options
     );
   }
 
-  public getAuditFileList(params: IGetAuditFileListParams, options?: AxiosRequestConfig) {
+  public getAuditFileList(
+    params: IGetAuditFileListParams,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const task_id = paramsData.task_id;
     delete paramsData.task_id;
@@ -352,13 +407,13 @@ class TaskService extends ServiceBase {
     return this.get<IGetAuditFileListReturn>(
       `/v2/tasks/audits/${task_id}/files`,
       paramsData,
-      options,
+      options
     );
   }
 
   public getAuditFileExecStatistic(
     params: IGetAuditFileExecStatisticParams,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const task_id = paramsData.task_id;
@@ -370,11 +425,14 @@ class TaskService extends ServiceBase {
     return this.get<IGetAuditFileExecStatisticReturn>(
       `/v2/tasks/audits/${task_id}/files/${file_id}/`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public getAuditTaskSQLsV2(params: IGetAuditTaskSQLsV2Params, options?: AxiosRequestConfig) {
+  public getAuditTaskSQLsV2(
+    params: IGetAuditTaskSQLsV2Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const task_id = paramsData.task_id;
     delete paramsData.task_id;
@@ -382,11 +440,14 @@ class TaskService extends ServiceBase {
     return this.get<IGetAuditTaskSQLsV2Return>(
       `/v2/tasks/audits/${task_id}/sqls`,
       paramsData,
-      options,
+      options
     );
   }
 
-  public getTaskAnalysisDataV2(params: IGetTaskAnalysisDataV2Params, options?: AxiosRequestConfig) {
+  public getTaskAnalysisDataV2(
+    params: IGetTaskAnalysisDataV2Params,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const task_id = paramsData.task_id;
     delete paramsData.task_id;
@@ -397,7 +458,7 @@ class TaskService extends ServiceBase {
     return this.get<IGetTaskAnalysisDataV2Return>(
       `/v2/tasks/audits/${task_id}/sqls/${number}/analysis`,
       paramsData,
-      options,
+      options
     );
   }
 }

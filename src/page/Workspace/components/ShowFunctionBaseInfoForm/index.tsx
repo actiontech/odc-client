@@ -34,45 +34,45 @@ class ShowFunctionBaseInfoForm extends Component<IProps> {
           {
             label: formatMessage({
               id: 'odc.components.ShowFunctionBaseInfoForm.FunctionName',
-              defaultMessage: '函数名称',
+              defaultMessage: '函数名称'
             }), // 函数名称
-            content: model.funName,
+            content: model.funName
           },
 
           {
             label: formatMessage({
               id: 'odc.components.ShowFunctionBaseInfoForm.ResponseType',
-              defaultMessage: '返回类型',
+              defaultMessage: '返回类型'
             }), // 返回类型
-            content: model.returnType,
+            content: model.returnType
           },
 
           {
             label: formatMessage({
               id: 'odc.components.ShowFunctionBaseInfoForm.Founder',
-              defaultMessage: '创建人',
+              defaultMessage: '创建人'
             }), // 创建人
-            content: model.definer,
+            content: model.definer
           },
 
           model.createTime > 0
             ? {
                 label: formatMessage({
                   id: 'odc.components.ShowFunctionBaseInfoForm.Created',
-                  defaultMessage: '创建时间',
+                  defaultMessage: '创建时间'
                 }), // 创建时间
-                content: getLocalFormatDateTime(model.createTime),
+                content: getLocalFormatDateTime(model.createTime)
               }
             : null,
           model.modifyTime > 0
             ? {
                 label: formatMessage({
                   id: 'odc.components.ShowFunctionBaseInfoForm.LastModifiedTime',
-                  defaultMessage: '最近修改时间',
+                  defaultMessage: '最近修改时间'
                 }), // 最近修改时间
-                content: getLocalFormatDateTime(model.modifyTime),
+                content: getLocalFormatDateTime(model.modifyTime)
               }
-            : null,
+            : null
         ].filter(Boolean)}
       />
     );

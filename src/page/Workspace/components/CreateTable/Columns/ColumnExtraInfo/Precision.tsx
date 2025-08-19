@@ -33,7 +33,7 @@ const Precision: React.FC<IProps> = function ({
   secondPrecision,
   dayPrecision,
   yearPrecision,
-  onChange,
+  onChange
 }) {
   return (
     <Form layout="vertical">
@@ -41,7 +41,7 @@ const Precision: React.FC<IProps> = function ({
         <Form.Item
           label={formatMessage({
             id: 'odc.Columns.ColumnExtraInfo.Precision.SecondPrecision',
-            defaultMessage: '秒精度',
+            defaultMessage: '秒精度'
           })} /*秒精度*/
         >
           <InputBigNumber
@@ -50,7 +50,7 @@ const Precision: React.FC<IProps> = function ({
             onChange={(v) => {
               onChange({
                 ...column,
-                secondPrecision: v,
+                secondPrecision: v
               });
             }}
           />
@@ -61,7 +61,7 @@ const Precision: React.FC<IProps> = function ({
         <Form.Item
           label={formatMessage({
             id: 'odc.Columns.ColumnExtraInfo.Precision.DayPrecision',
-            defaultMessage: '天精度',
+            defaultMessage: '天精度'
           })} /*天精度*/
         >
           <InputBigNumber
@@ -70,7 +70,7 @@ const Precision: React.FC<IProps> = function ({
             onChange={(v) => {
               onChange({
                 ...column,
-                dayPrecision: v,
+                dayPrecision: v
               });
             }}
           />
@@ -81,7 +81,7 @@ const Precision: React.FC<IProps> = function ({
         <Form.Item
           label={formatMessage({
             id: 'odc.Columns.ColumnExtraInfo.Precision.AnnualAccuracy',
-            defaultMessage: '年精度',
+            defaultMessage: '年精度'
           })} /*年精度*/
         >
           <InputBigNumber
@@ -90,7 +90,7 @@ const Precision: React.FC<IProps> = function ({
             onChange={(v) => {
               onChange({
                 ...column,
-                yearPrecision: v,
+                yearPrecision: v
               });
             }}
           />

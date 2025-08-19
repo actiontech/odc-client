@@ -14,8 +14,14 @@
  * limitations under the License.
  */
 
-import { getTablePermissions, reclaimTablePermission } from '@/common/network/project';
-import { ITableInstance, ITableLoadOptions } from '@/component/CommonTable/interface';
+import {
+  getTablePermissions,
+  reclaimTablePermission
+} from '@/common/network/project';
+import {
+  ITableInstance,
+  ITableLoadOptions
+} from '@/component/CommonTable/interface';
 import HelpDoc from '@/component/helpDoc';
 import type { IResponseData } from '@/d.ts';
 import { ITablePermission, PermissionSourceType } from '@/d.ts/project';
@@ -35,28 +41,30 @@ export const tablePermissionTypeMap = {
   [TablePermissionType.QUERY]: {
     text: formatMessage({
       id: 'src.page.Project.User.ManageModal.Table.A3D05C57',
-      defaultMessage: '查询',
+      defaultMessage: '查询'
     }),
-    value: TablePermissionType.QUERY,
+    value: TablePermissionType.QUERY
   },
   [TablePermissionType.EXPORT]: {
     text: formatMessage({
       id: 'src.page.Project.User.ManageModal.Table.D53578CD',
-      defaultMessage: '导出',
+      defaultMessage: '导出'
     }),
-    value: TablePermissionType.EXPORT,
+    value: TablePermissionType.EXPORT
   },
   [TablePermissionType.CHANGE]: {
     text: formatMessage({
       id: 'src.page.Project.User.ManageModal.Table.070B09D0',
-      defaultMessage: '变更',
+      defaultMessage: '变更'
     }),
-    value: TablePermissionType.CHANGE,
-  },
+    value: TablePermissionType.CHANGE
+  }
 };
 
 export const tablePermissionTypeFilters = Object.values(tablePermissionTypeMap);
-export const tablePermissionStatusFilters = Object.values(tablePermissionStatusMap);
+export const tablePermissionStatusFilters = Object.values(
+  tablePermissionStatusMap
+);
 
 interface IProps {
   projectId: number;
@@ -67,9 +75,10 @@ interface IProps {
 
 const ManageModal: React.FC<IProps> = (props) => {
   const { isOwner, projectId, userId, isDBA } = props;
-  const [dataSource, setDataSource] = useState<IResponseData<ITablePermission>>(null);
+  const [dataSource, setDataSource] =
+    useState<IResponseData<ITablePermission>>(null);
   const [authorizationType, setAuthorizationType] = useState(
-    PermissionSourceType.TICKET_APPLICATION,
+    PermissionSourceType.TICKET_APPLICATION
   );
   const [params, setParams] = useState<ITableLoadOptions>(null);
   const tableRef = useRef<ITableInstance>();
@@ -82,7 +91,14 @@ const ManageModal: React.FC<IProps> = (props) => {
   const loadData = useCallback(
     async (args?: ITableLoadOptions) => {
       const { filters, sorter, pagination, pageSize } = args ?? {};
-      const { tableName, dataSourceName, ticketId, type, status, databaseName } = filters ?? {};
+      const {
+        tableName,
+        dataSourceName,
+        ticketId,
+        type,
+        status,
+        databaseName
+      } = filters ?? {};
       const { column, order } = sorter ?? {};
       const { current = 1 } = pagination ?? {};
       const params = {
@@ -97,7 +113,7 @@ const ManageModal: React.FC<IProps> = (props) => {
         status,
         sort: column?.dataIndex,
         page: current,
-        size: pageSize,
+        size: pageSize
       };
       // sorter
       params.sort = column
@@ -106,7 +122,7 @@ const ManageModal: React.FC<IProps> = (props) => {
       const res = await getTablePermissions(params);
       setDataSource(res);
     },
-    [authorizationType, projectId, userId],
+    [authorizationType, projectId, userId]
   );
 
   const handleChange = (args: ITableLoadOptions) => {
@@ -115,7 +131,10 @@ const ManageModal: React.FC<IProps> = (props) => {
   };
 
   const handleReload = () => {
-    const param = { ...params, pagination: { ...params?.pagination, current: 1 } };
+    const param = {
+      ...params,
+      pagination: { ...params?.pagination, current: 1 }
+    };
     setParams(param);
     loadData(param);
   };
@@ -125,11 +144,11 @@ const ManageModal: React.FC<IProps> = (props) => {
     const title = isBatch
       ? formatMessage({
           id: 'src.page.Project.User.ManageModal.A23DCE27',
-          defaultMessage: '确认要批量回收权限吗？',
+          defaultMessage: '确认要批量回收权限吗？'
         })
       : formatMessage({
           id: 'src.page.Project.User.ManageModal.8B929D18',
-          defaultMessage: '确认要回收权限吗？',
+          defaultMessage: '确认要回收权限吗？'
         });
     Modal.confirm({
       title,
@@ -137,18 +156,18 @@ const ManageModal: React.FC<IProps> = (props) => {
         <Text type="secondary">
           {formatMessage({
             id: 'src.page.Project.User.ManageModal.Table.7E23C899',
-            defaultMessage: '回收后不可撤回',
+            defaultMessage: '回收后不可撤回'
           })}
         </Text>
       ),
 
       cancelText: formatMessage({
         id: 'src.page.Project.User.ManageModal.Table.C5AD844C',
-        defaultMessage: '取消',
+        defaultMessage: '取消'
       }),
       okText: formatMessage({
         id: 'src.page.Project.User.ManageModal.Table.E297BA02',
-        defaultMessage: '确定',
+        defaultMessage: '确定'
       }),
       centered: true,
       onOk: async () => {
@@ -157,13 +176,13 @@ const ManageModal: React.FC<IProps> = (props) => {
           message.success(
             formatMessage({
               id: 'src.page.Project.User.ManageModal.Table.2E8F3BF1',
-              defaultMessage: '操作成功',
-            }),
+              defaultMessage: '操作成功'
+            })
           );
           tableRef.current?.resetSelectedRows();
           handleReload();
         }
-      },
+      }
     });
   };
 
@@ -189,20 +208,24 @@ const ManageModal: React.FC<IProps> = (props) => {
             <Radio.Button value={PermissionSourceType.TICKET_APPLICATION}>
               {formatMessage({
                 id: 'src.page.Project.User.ManageModal.Table.CED524BB',
-                defaultMessage: '工单授权',
+                defaultMessage: '工单授权'
               })}
             </Radio.Button>
             <Radio.Button value={PermissionSourceType.USER_AUTHORIZATION}>
               {formatMessage({
                 id: 'src.page.Project.User.ManageModal.Table.92D4CD12',
-                defaultMessage: '用户授权',
+                defaultMessage: '用户授权'
               })}
             </Radio.Button>
           </Radio.Group>
           <HelpDoc isTip leftText doc="userManageTip" />
         </div>
         {(isOwner || isDBA) && (
-          <CreateAuth projectId={projectId} userId={userId} onSwitchUserTab={handleSwitchUserTab} />
+          <CreateAuth
+            projectId={projectId}
+            userId={userId}
+            onSwitchUserTab={handleSwitchUserTab}
+          />
         )}
       </div>
       <div className={styles.content}>

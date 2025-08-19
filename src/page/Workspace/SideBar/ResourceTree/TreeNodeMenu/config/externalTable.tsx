@@ -19,14 +19,19 @@ import { dropObject } from '@/common/network/database';
 import { getTableInfo, syncExternalTableFiles } from '@/common/network/table';
 import { actionTypes } from '@/component/Acess';
 import { copyObj } from '@/component/TemplateInsertModal';
-import { DbObjectType, DragInsertType, ResourceTreeNodeMenuKeys, TaskType } from '@/d.ts';
+import {
+  DbObjectType,
+  DragInsertType,
+  ResourceTreeNodeMenuKeys,
+  TaskType
+} from '@/d.ts';
 import { ITableModel } from '@/page/Workspace/components/CreateTable/interface';
 import { PropsTab, TopTab } from '@/page/Workspace/components/TablePage';
 import {
   openExternalTableTableViewPage,
   openCreateTablePage,
   openNewSQLPage,
-  openTableViewPage,
+  openTableViewPage
 } from '@/store/helper/page';
 import modalStore from '@/store/modal';
 import pageStore from '@/store/page';
@@ -34,7 +39,11 @@ import setting from '@/store/setting';
 import { formatMessage } from '@/util/intl';
 import { downloadPLDDL } from '@/util/sqlExport';
 import tracert from '@/util/tracert';
-import { PlusOutlined, QuestionCircleFilled, ReloadOutlined } from '@ant-design/icons';
+import {
+  PlusOutlined,
+  QuestionCircleFilled,
+  ReloadOutlined
+} from '@ant-design/icons';
 import { message, Modal } from 'antd';
 import { ResourceNodeType } from '../../type';
 import { hasTableChangePermission, hasTableExportPermission } from '../index';
@@ -45,13 +54,15 @@ import { DatabasePermissionType } from '@/d.ts/database';
 import request from '@/util/request';
 import DatabaseStore from '@/store/sessionManager/database';
 
-export const externalTableMenusConfig: Partial<Record<ResourceNodeType, IMenuItemConfig[]>> = {
+export const externalTableMenusConfig: Partial<
+  Record<ResourceNodeType, IMenuItemConfig[]>
+> = {
   [ResourceNodeType.ExternalTableRoot]: [
     {
       key: 'REFRESH',
       text: formatMessage({
         id: 'src.page.Workspace.SideBar.ResourceTree.TreeNodeMenu.config.31A318F4',
-        defaultMessage: '刷新',
+        defaultMessage: '刷新'
       }),
       icon: ReloadOutlined,
       actionType: actionTypes.read,
@@ -64,11 +75,11 @@ export const externalTableMenusConfig: Partial<Record<ResourceNodeType, IMenuIte
         message.success(
           formatMessage({
             id: 'src.page.Workspace.SideBar.ResourceTree.TreeNodeMenu.config.69DBC559',
-            defaultMessage: '刷新成功',
-          }),
+            defaultMessage: '刷新成功'
+          })
         );
-      },
-    },
+      }
+    }
   ],
 
   [ResourceNodeType.ExternalTable]: [
@@ -77,7 +88,7 @@ export const externalTableMenusConfig: Partial<Record<ResourceNodeType, IMenuIte
       ellipsis: true,
       text: formatMessage({
         id: 'src.page.Workspace.SideBar.ResourceTree.TreeNodeMenu.config.B3A660A1',
-        defaultMessage: '查看外表结构',
+        defaultMessage: '查看外表结构'
       }),
 
       run(session, node) {
@@ -86,15 +97,15 @@ export const externalTableMenusConfig: Partial<Record<ResourceNodeType, IMenuIte
           TopTab.PROPS,
           PropsTab.DDL,
           session?.odcDatabase?.id,
-          node?.data?.info?.tableId,
+          node?.data?.info?.tableId
         );
-      },
+      }
     },
     {
       key: ResourceTreeNodeMenuKeys.BROWSER_DATA,
       text: formatMessage({
         id: 'src.page.Workspace.SideBar.ResourceTree.TreeNodeMenu.config.BC718186',
-        defaultMessage: '查看外表数据',
+        defaultMessage: '查看外表数据'
       }),
       ellipsis: true,
       isHide: (session) => {
@@ -121,15 +132,15 @@ export const externalTableMenusConfig: Partial<Record<ResourceNodeType, IMenuIte
           TopTab.DATA,
           propsTab,
           session?.odcDatabase?.id,
-          node?.data?.info?.tableId,
+          node?.data?.info?.tableId
         );
-      },
+      }
     },
     {
       key: ResourceTreeNodeMenuKeys.EXTERNAL_TABLE_SYNCHRONIZATION_TABLE,
       text: formatMessage({
         id: 'src.page.Workspace.SideBar.ResourceTree.TreeNodeMenu.config.E0BAFAF1',
-        defaultMessage: '同步外表文件',
+        defaultMessage: '同步外表文件'
       }),
       ellipsis: true,
       hasDivider: true,
@@ -141,30 +152,30 @@ export const externalTableMenusConfig: Partial<Record<ResourceNodeType, IMenuIte
         const res = await syncExternalTableFiles(
           session.sessionId,
           session.database.dbName,
-          tableName,
+          tableName
         );
         if (res) {
           message.success(
             formatMessage({
               id: 'src.page.Workspace.SideBar.ResourceTree.TreeNodeMenu.config.9C33E64B',
-              defaultMessage: '同步成功',
-            }),
+              defaultMessage: '同步成功'
+            })
           );
         } else {
           message.error(
             formatMessage({
               id: 'src.page.Workspace.SideBar.ResourceTree.TreeNodeMenu.config.A2E0AD8B',
-              defaultMessage: '同步失败，请稍后再试',
-            }),
+              defaultMessage: '同步失败，请稍后再试'
+            })
           );
         }
-      },
+      }
     },
     {
       key: ResourceTreeNodeMenuKeys.DOWNLOAD,
       text: formatMessage({
         id: 'odc.TreeNodeMenu.config.table.Download',
-        defaultMessage: '下载',
+        defaultMessage: '下载'
       }),
       //下载
       ellipsis: true,
@@ -177,12 +188,17 @@ export const externalTableMenusConfig: Partial<Record<ResourceNodeType, IMenuIte
           tableName,
           session.database.dbName,
           session.sessionId,
-          true,
+          true
         );
         if (table) {
-          downloadPLDDL(tableName, 'TABLE', table.info?.DDL, session.database.dbName);
+          downloadPLDDL(
+            tableName,
+            'TABLE',
+            table.info?.DDL,
+            session.database.dbName
+          );
         }
-      },
+      }
     },
 
     {
@@ -191,8 +207,8 @@ export const externalTableMenusConfig: Partial<Record<ResourceNodeType, IMenuIte
       text: [
         formatMessage({
           id: 'odc.src.page.Workspace.SideBar.ResourceTree.TreeNodeMenu.config.OpenTheSQLWindow',
-          defaultMessage: '打开 SQL 窗口',
-        }), //'打开 SQL 窗口'
+          defaultMessage: '打开 SQL 窗口'
+        }) //'打开 SQL 窗口'
       ],
       isHide: (session) => {
         return isLogicalDatabase(session?.odcDatabase);
@@ -200,7 +216,7 @@ export const externalTableMenusConfig: Partial<Record<ResourceNodeType, IMenuIte
       run(session, node) {
         tracert.click('a3112.b41896.c330992.d367627');
         openNewSQLPage(session?.database?.databaseId);
-      },
+      }
     },
     {
       key: ResourceTreeNodeMenuKeys.COPY,
@@ -208,8 +224,8 @@ export const externalTableMenusConfig: Partial<Record<ResourceNodeType, IMenuIte
       text: [
         formatMessage({
           id: 'odc.TreeNodeMenu.config.table.Copy',
-          defaultMessage: '复制',
-        }), //复制
+          defaultMessage: '复制'
+        }) //复制
       ],
       children: [
         {
@@ -217,8 +233,8 @@ export const externalTableMenusConfig: Partial<Record<ResourceNodeType, IMenuIte
           text: [
             formatMessage({
               id: 'odc.TreeNodeMenu.config.table.ObjectName',
-              defaultMessage: '对象名',
-            }), //对象名
+              defaultMessage: '对象名'
+            }) //对象名
           ],
 
           run(session, node) {
@@ -228,17 +244,17 @@ export const externalTableMenusConfig: Partial<Record<ResourceNodeType, IMenuIte
               DbObjectType.table,
               DragInsertType.NAME,
               session.sessionId,
-              true,
+              true
             );
-          },
+          }
         },
         {
           key: ResourceTreeNodeMenuKeys.COPY_SELECT,
           text: [
             formatMessage({
               id: 'odc.TreeNodeMenu.config.table.SelectStatement',
-              defaultMessage: 'Select 语句',
-            }),
+              defaultMessage: 'Select 语句'
+            })
 
             //SELECT 语句
           ],
@@ -252,21 +268,21 @@ export const externalTableMenusConfig: Partial<Record<ResourceNodeType, IMenuIte
               DbObjectType.table,
               DragInsertType.SELECT,
               session.sessionId,
-              true,
+              true
             );
-          },
-        },
+          }
+        }
       ],
 
-      hasDivider: true,
+      hasDivider: true
     },
     {
       key: ResourceTreeNodeMenuKeys.DELETE_TABLE,
       text: [
         formatMessage({
           id: 'odc.TreeNodeMenu.config.table.Delete',
-          defaultMessage: '删除',
-        }),
+          defaultMessage: '删除'
+        })
       ],
 
       actionType: actionTypes.delete,
@@ -281,56 +297,62 @@ export const externalTableMenusConfig: Partial<Record<ResourceNodeType, IMenuIte
           title: formatMessage(
             {
               id: 'workspace.window.createTable.modal.delete',
-              defaultMessage: '是否确定删除 {name} ？',
+              defaultMessage: '是否确定删除 {name} ？'
             },
             {
-              name: tableName,
-            },
+              name: tableName
+            }
           ),
           okText: formatMessage({
             id: 'app.button.ok',
-            defaultMessage: '确定',
+            defaultMessage: '确定'
           }),
           cancelText: formatMessage({
             id: 'app.button.cancel',
-            defaultMessage: '取消',
+            defaultMessage: '取消'
           }),
           icon: <QuestionCircleFilled />,
           centered: true,
           onOk: async () => {
-            const success = await dropObject(tableName, DbObjectType.table, session.sessionId);
+            const success = await dropObject(
+              tableName,
+              DbObjectType.table,
+              session.sessionId
+            );
             if (success) {
               await session.database.getTableList(true);
               message.success(
                 formatMessage({
                   id: 'workspace.window.createTable.modal.delete.success',
-                  defaultMessage: '删除外表成功',
-                }),
+                  defaultMessage: '删除外表成功'
+                })
               );
-              const openedPage = pageStore!.pages.find((p) => p.params.tableName === tableName);
+              const openedPage = pageStore!.pages.find(
+                (p) => p.params.tableName === tableName
+              );
               if (openedPage) {
                 pageStore!.close(openedPage.key);
               }
             }
-          },
+          }
         });
-      },
+      }
     },
     {
       key: ResourceTreeNodeMenuKeys.REFRESH_TABLE,
       text: [
         formatMessage({
           id: 'odc.TreeNodeMenu.config.table.Refresh',
-          defaultMessage: '刷新',
-        }),
+          defaultMessage: '刷新'
+        })
       ],
 
       ellipsis: true,
       async run(session, node) {
         const table = node.data as ITableModel;
         await session.database.loadTable(table.info, true);
-      },
-    },
+      }
+    }
   ],
 
   [ResourceNodeType.ExternalTableColumnRoot]: [
@@ -339,8 +361,8 @@ export const externalTableMenusConfig: Partial<Record<ResourceNodeType, IMenuIte
       text: [
         formatMessage({
           id: 'odc.TreeNodeMenu.config.table.ViewColumns',
-          defaultMessage: '查看列',
-        }),
+          defaultMessage: '查看列'
+        })
       ],
 
       ellipsis: true,
@@ -352,24 +374,24 @@ export const externalTableMenusConfig: Partial<Record<ResourceNodeType, IMenuIte
           TopTab.PROPS,
           PropsTab.COLUMN,
           session?.odcDatabase?.id,
-          node?.data?.info?.tableId,
+          node?.data?.info?.tableId
         );
-      },
+      }
     },
     {
       key: ResourceTreeNodeMenuKeys.REFRESH_COLUMNS,
       text: [
         formatMessage({
           id: 'odc.TreeNodeMenu.config.table.Refresh',
-          defaultMessage: '刷新',
-        }),
+          defaultMessage: '刷新'
+        })
       ],
 
       ellipsis: true,
       async run(session, node) {
         const table = node.data as ITableModel;
         await session.database.loadTable(table.info, true);
-      },
-    },
-  ],
+      }
+    }
+  ]
 };

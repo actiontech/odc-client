@@ -17,7 +17,7 @@ const DrawerFooter: React.FC<{
         {
           formatMessage({
             id: 'odc.components.CreateAsyncTaskModal.Cancel',
-            defaultMessage: '取消',
+            defaultMessage: '取消'
           })
 
           /* 取消 */
@@ -27,7 +27,7 @@ const DrawerFooter: React.FC<{
         {
           formatMessage({
             id: 'odc.components.CreateAsyncTaskModal.New',
-            defaultMessage: '新建',
+            defaultMessage: '新建'
           })
 
           /* 新建 */

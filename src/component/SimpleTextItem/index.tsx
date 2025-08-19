@@ -27,17 +27,23 @@ const SimpleTextItem: React.FC<{
         display: 'flex',
         fontSize: 12,
         lineHeight: '20px',
-        marginBottom: 8,
+        marginBottom: 8
       }}
     >
-      <div style={{ flexGrow: 0, flexShrink: 0, color: 'var(--text-color-primary)' }}>
+      <div
+        style={{
+          flexGrow: 0,
+          flexShrink: 0,
+          color: 'var(--text-color-primary)'
+        }}
+      >
         {label + '：'}
       </div>
       <div
         style={{
           flexGrow: 1,
           wordBreak: 'break-all',
-          color: 'var(--text-color-primary)',
+          color: 'var(--text-color-primary)'
         }}
       >
         {content}

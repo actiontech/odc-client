@@ -24,7 +24,7 @@ const SqlWorkspace: React.FC<IProps> = () => {
       {
         formatMessage({
           id: 'odc.page.SqlWorkspace.SqlWorkbench',
-          defaultMessage: 'SQL 工作台',
+          defaultMessage: 'SQL 工作台'
         }) /*SQL 工作台*/
       }
     </h2>

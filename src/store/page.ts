@@ -60,7 +60,9 @@ export class PageStore {
     });
     this._saveDisposers = [];
     this._saveDisposers.push(await autoSave(this, 'pages', 'pages', []));
-    this._saveDisposers.push(await autoSave(this, 'activePageKey', 'activePageKey', null));
+    this._saveDisposers.push(
+      await autoSave(this, 'activePageKey', 'activePageKey', null)
+    );
   }
   /** 切换打开的page，更新一下URL */
   @action
@@ -86,8 +88,8 @@ export class PageStore {
               (pageType == PageType.PL ? 'PL' : 'SQL') +
                 formatMessage({
                   id: 'odc.src.store.page.TheNumberOfWindowsCannot',
-                  defaultMessage: '窗口不能超过 32 个',
-                }),
+                  defaultMessage: '窗口不能超过 32 个'
+                })
             );
             return;
           }
@@ -105,7 +107,7 @@ export class PageStore {
         title: pageTitle,
         type: pageType,
         isSaved: true,
-        params: pageParams,
+        params: pageParams
       };
 
       if (insertHead) {
@@ -122,7 +124,11 @@ export class PageStore {
 
   /** New!!!更新page */
   @action
-  public async updatePage(targetPageKey: string, options: IPageOptions = {}, pageData: any = {}) {
+  public async updatePage(
+    targetPageKey: string,
+    options: IPageOptions = {},
+    pageData: any = {}
+  ) {
     const { title, isSaved, startSaving, updateKey } = options;
     await this.updatePages(async (pages) => {
       const newPages = [];
@@ -137,7 +143,7 @@ export class PageStore {
           // 更新参数
           p.params = {
             ...p.params,
-            ...pageData,
+            ...pageData
           };
 
           // 更新页面状态
@@ -166,7 +172,7 @@ export class PageStore {
     const targetPage = this.pages.find((page: IPage) => page.title === title);
     if (targetPage) {
       this.updatePage(targetPage.key, undefined, {
-        isDisabled,
+        isDisabled
       });
     }
   }
@@ -213,7 +219,7 @@ export class PageStore {
         (p) =>
           p.params.isDocked ||
           [PageType.SQL, PageType.OB_CLIENT, PageType.TASKS].includes(p.type) ||
-          (p.type == PageType.PL && !p.params?.plName),
+          (p.type == PageType.PL && !p.params?.plName)
       );
     });
     await this.updateActiveKey((pages, activeKey) => {
@@ -227,7 +233,7 @@ export class PageStore {
       return {
         ...oldPage,
         startSaving: false,
-        isSaved: true,
+        isSaved: true
       };
     });
   }
@@ -237,7 +243,7 @@ export class PageStore {
     this.updatePageByKey(targetPageKey, (oldPage) => {
       return {
         ...oldPage,
-        startSaving: true,
+        startSaving: true
       };
     });
   }
@@ -247,7 +253,7 @@ export class PageStore {
     this.updatePageByKey(targetPageKey, (oldPage) => {
       return {
         ...oldPage,
-        startSaving: false,
+        startSaving: false
       };
     });
   }
@@ -257,13 +263,16 @@ export class PageStore {
     this.updatePageByKey(targetPageKey, (oldPage) => {
       return {
         ...oldPage,
-        isSaved: false,
+        isSaved: false
       };
     });
   }
 
   /** 更新单个page */
-  private async updatePageByKey(pageKey: string, getNewPage: (oldPage: IPage) => IPage) {
+  private async updatePageByKey(
+    pageKey: string,
+    getNewPage: (oldPage: IPage) => IPage
+  ) {
     this.pages = this.pages.map((p, i) => {
       if (p.key === pageKey) {
         return getNewPage(p);
@@ -273,12 +282,16 @@ export class PageStore {
   }
 
   /** 更新多个page */
-  public async updatePages(getNewPages: (oldPages: IPage[]) => Promise<IPage[]>) {
+  public async updatePages(
+    getNewPages: (oldPages: IPage[]) => Promise<IPage[]>
+  ) {
     this.pages = await getNewPages(this.pages);
   }
 
   /** 更新activeKey */
-  private async updateActiveKey(fn: (pages: IPage[], oldActiveKey: any) => any) {
+  private async updateActiveKey(
+    fn: (pages: IPage[], oldActiveKey: any) => any
+  ) {
     this.activePageKey = fn(this.pages, this.activePageKey);
     const pageType = this.getPageByKey(this.activePageKey)?.type;
     pageType && tracert.expoPage(pageType);

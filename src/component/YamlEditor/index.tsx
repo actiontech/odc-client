@@ -17,7 +17,13 @@
 import { SettingStore } from '@/store/setting';
 import { inject, observer } from 'mobx-react';
 import * as monaco from 'monaco-editor';
-import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef } from 'react';
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useRef
+} from 'react';
 import styles from './index.less';
 
 interface IEditorRef {
@@ -40,7 +46,10 @@ interface IProps {
   readOnly?: boolean;
 }
 
-const YamlEditor = function ({ defaultValue, theme, readOnly, settingStore, onValueChange }, ref) {
+const YamlEditor = function (
+  { defaultValue, theme, readOnly, settingStore, onValueChange },
+  ref
+) {
   const settingTheme = 'obwhite';
 
   const domRef = useRef<HTMLDivElement>(null);
@@ -58,7 +67,7 @@ const YamlEditor = function ({ defaultValue, theme, readOnly, settingStore, onVa
     return {
       setValue: (value) => {
         editorRef.current.setValue(value);
-      },
+      }
     };
   });
 
@@ -66,7 +75,7 @@ const YamlEditor = function ({ defaultValue, theme, readOnly, settingStore, onVa
     if (editorRef.current) {
       editorRef.current.updateOptions({
         readOnly,
-        theme: themeValue,
+        theme: themeValue
       });
     }
   }, [readOnly, themeValue]);
@@ -77,7 +86,7 @@ const YamlEditor = function ({ defaultValue, theme, readOnly, settingStore, onVa
       language: 'yaml',
       theme: themeValue,
       minimap: { enabled: false },
-      readOnly: readOnly,
+      readOnly: readOnly
     });
     editorRef.current.onDidChangeModelContent((e) => {
       const value = editorRef.current.getValue();
@@ -106,4 +115,6 @@ const YamlEditor = function ({ defaultValue, theme, readOnly, settingStore, onVa
   );
 };
 
-export default inject('settingStore')(observer(forwardRef<IEditorRef, IProps>(YamlEditor)));
+export default inject('settingStore')(
+  observer(forwardRef<IEditorRef, IProps>(YamlEditor))
+);

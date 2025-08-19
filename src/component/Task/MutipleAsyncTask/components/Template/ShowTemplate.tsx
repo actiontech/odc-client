@@ -26,9 +26,9 @@ const ShowTemplate: React.FC<{
             {formatMessage(
               {
                 id: 'src.component.Task.MutipleAsyncTask.components.Template.81F6A9AB',
-                defaultMessage: '执行节点{ BinaryExpression0 }',
+                defaultMessage: '执行节点{ BinaryExpression0 }'
               },
-              { BinaryExpression0: index + 1 },
+              { BinaryExpression0: index + 1 }
             )}
           </div>
           <div
@@ -38,11 +38,13 @@ const ShowTemplate: React.FC<{
               gap: '8px',
               backgroundColor: 'var(--background-tertraiy-color)',
               padding: '12px 16px',
-              marginTop: '8px',
+              marginTop: '8px'
             }}
           >
             {dbs?.map((db, _index) => {
-              const icon = getDataSourceStyleByConnectType(databaseIdsMap?.[db]?.dataSource?.type);
+              const icon = getDataSourceStyleByConnectType(
+                databaseIdsMap?.[db]?.dataSource?.type
+              );
               return (
                 <Space key={_index} size={0}>
                   <RiskLevelLabel
@@ -56,7 +58,7 @@ const ShowTemplate: React.FC<{
                       style={{
                         color: icon?.icon?.color,
                         fontSize: 16,
-                        marginRight: 4,
+                        marginRight: 4
                       }}
                     />
 

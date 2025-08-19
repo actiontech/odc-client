@@ -31,7 +31,7 @@ interface IProps {
 
 const KeymapInput: React.FC<IProps> = (props) => {
   const [value, setValue] = useControllableValue(props, {
-    defaultValue: '',
+    defaultValue: ''
   });
   const selectRef = React.useRef<BaseSelectRef>(null);
 
@@ -54,9 +54,12 @@ const KeymapInput: React.FC<IProps> = (props) => {
     ctrlKey && mod.push(KeyCode.Ctrl);
     shiftKey && mod.push(KeyCode.Shift);
     altKey && mod.push(KeyCode.Alt);
-    let isSpecialKey = [KeyCode.Ctrl, KeyCode.Shift, KeyCode.Alt, KeyCode.Meta].includes(
-      monacoKeyCode,
-    );
+    let isSpecialKey = [
+      KeyCode.Ctrl,
+      KeyCode.Shift,
+      KeyCode.Alt,
+      KeyCode.Meta
+    ].includes(monacoKeyCode);
 
     console.log(mod, keyCode, monacoKeyCode);
     const value = isSpecialKey ? [...mod] : [...mod, monacoKeyCode];

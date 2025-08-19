@@ -9,20 +9,23 @@ const TaskProgressHeader: React.FC<{
 }> = ({ subTasks, pendingExectionDatabases, isLogicalDb }) => {
   if (isLogicalDb) {
     const executeCount =
-      subTasks?.find((i) => i?.status === SchemaChangeRecordStatus.RUNNING)?.length || 0;
+      subTasks?.find((i) => i?.status === SchemaChangeRecordStatus.RUNNING)
+        ?.length || 0;
     const successCount =
-      subTasks?.find((i) => i?.status === SchemaChangeRecordStatus.SUCCESS)?.length || 0;
+      subTasks?.find((i) => i?.status === SchemaChangeRecordStatus.SUCCESS)
+        ?.length || 0;
     const failedCount =
-      subTasks?.find((i) => i?.status === SchemaChangeRecordStatus.FAILED)?.length || 0;
+      subTasks?.find((i) => i?.status === SchemaChangeRecordStatus.FAILED)
+        ?.length || 0;
     return (
       <div>
         {formatMessage(
           {
             id: 'src.component.Task.component.CommonDetailModal.TaskProgress.4F56B34E',
             defaultMessage:
-              '以下 {executeCount} 个数据库执行中， {successCount} 个数据库执行成功， {failedCount} 个数据库执行失败',
+              '以下 {executeCount} 个数据库执行中， {successCount} 个数据库执行成功， {failedCount} 个数据库执行失败'
           },
-          { executeCount, successCount, failedCount },
+          { executeCount, successCount, failedCount }
         )}
       </div>
     );
@@ -32,12 +35,13 @@ const TaskProgressHeader: React.FC<{
       {formatMessage(
         {
           id: 'src.component.Task.component.CommonDetailModal.E75BF608',
-          defaultMessage: '共 ${subTasks?.length} 个数据库， ${pendingExectionDatabases} 个待执行',
+          defaultMessage:
+            '共 ${subTasks?.length} 个数据库， ${pendingExectionDatabases} 个待执行'
         },
         {
           subTasksLength: subTasks?.length,
-          pendingExectionDatabases: pendingExectionDatabases,
-        },
+          pendingExectionDatabases: pendingExectionDatabases
+        }
       )}
     </div>
   );

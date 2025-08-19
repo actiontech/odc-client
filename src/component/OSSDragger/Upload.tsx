@@ -30,7 +30,11 @@ const OSSUpload: React.FC<IProps> = function (props) {
     delete props.action;
     // @ts-ignore
     props.customRequest = async ({ file, onSuccess, onError, onProgress }) => {
-      const fileName = await uploadFileToOSS(file, props.uploadFileOpenAPIName, null);
+      const fileName = await uploadFileToOSS(
+        file,
+        props.uploadFileOpenAPIName,
+        null
+      );
       if (!fileName) {
         onError(new Error('Upload Failed'), 'Upload Failed');
         return;
@@ -38,9 +42,9 @@ const OSSUpload: React.FC<IProps> = function (props) {
       setTimeout(() => {
         onSuccess(
           {
-            data: fileName,
+            data: fileName
           },
-          file as any,
+          file as any
         );
       }, 0);
     };

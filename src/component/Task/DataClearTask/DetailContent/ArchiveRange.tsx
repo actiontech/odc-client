@@ -25,16 +25,16 @@ const columns = (needCheckBeforeDelete: boolean) => [
     dataIndex: 'tableName',
     title: formatMessage({
       id: 'odc.DataClearTask.DetailContent.ArchiveRange.TableName',
-      defaultMessage: '表名',
+      defaultMessage: '表名'
     }), //表名
     ellipsis: true,
-    width: 140,
+    width: 140
   },
   {
     dataIndex: 'conditionExpression',
     title: formatMessage({
       id: 'odc.DataClearTask.DetailContent.ArchiveRange.FilterConditions',
-      defaultMessage: '过滤条件',
+      defaultMessage: '过滤条件'
     }), //过滤条件
     ellipsis: true,
     render: (value, record) => {
@@ -46,7 +46,7 @@ const columns = (needCheckBeforeDelete: boolean) => [
                 maxWidth: 160,
                 overflow: 'hidden',
                 whiteSpace: 'nowrap',
-                textOverflow: 'ellipsis',
+                textOverflow: 'ellipsis'
               }}
             >
               {value ?? '-'}
@@ -65,7 +65,7 @@ const columns = (needCheckBeforeDelete: boolean) => [
               <Typography.Link>
                 {formatMessage({
                   id: 'src.component.Task.DataClearTask.DetailContent.079D6222',
-                  defaultMessage: '关联表',
+                  defaultMessage: '关联表'
                 })}
               </Typography.Link>
             </Popover>
@@ -74,13 +74,13 @@ const columns = (needCheckBeforeDelete: boolean) => [
           )}
         </Flex>
       );
-    },
+    }
   },
   {
     dataIndex: 'targetTableName',
     title: formatMessage({
       id: 'src.component.Task.DataClearTask.DetailContent.A104F847',
-      defaultMessage: '目标表名',
+      defaultMessage: '目标表名'
     }),
     ellipsis: true,
     width: 140,
@@ -89,20 +89,20 @@ const columns = (needCheckBeforeDelete: boolean) => [
         return '-';
       }
       return <Tooltip title={value}>{value || '-'}</Tooltip>;
-    },
+    }
   },
   {
     dataIndex: 'partitions',
     title: formatMessage({
       id: 'src.component.Task.DataClearTask.DetailContent.2470B293',
-      defaultMessage: '指定分区',
+      defaultMessage: '指定分区'
     }),
     ellipsis: true,
     width: 190,
     render: (value) => {
       return value?.join(',') || '-';
-    },
-  },
+    }
+  }
 ];
 
 const ArchiveRange: React.FC<{

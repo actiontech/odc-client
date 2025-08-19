@@ -39,7 +39,7 @@ export const getPageColumns = (params: {
     {
       title: formatMessage({
         id: 'odc.component.RecordPopover.components.EventType',
-        defaultMessage: '事件类型',
+        defaultMessage: '事件类型'
       }),
 
       //事件类型
@@ -47,13 +47,13 @@ export const getPageColumns = (params: {
       ellipsis: true,
       key: 'typeName',
       dataIndex: 'typeName',
-      filters: eventfilter,
+      filters: eventfilter
     },
 
     {
       title: formatMessage({
         id: 'odc.component.RecordPopover.components.EventAction',
-        defaultMessage: '事件操作',
+        defaultMessage: '事件操作'
       }),
 
       //事件操作
@@ -64,16 +64,18 @@ export const getPageColumns = (params: {
         return <TreeFilter {...props} treeData={eventOptions} />;
       },
       filterIcon: (filtered) => (
-        <FilterFilled style={{ color: filtered ? 'var(--icon-color-focus)' : undefined }} />
+        <FilterFilled
+          style={{ color: filtered ? 'var(--icon-color-focus)' : undefined }}
+        />
       ),
 
-      dataIndex: 'actionName',
+      dataIndex: 'actionName'
     },
 
     {
       title: formatMessage({
         id: 'odc.component.RecordPopover.column.DataSource',
-        defaultMessage: '数据源',
+        defaultMessage: '数据源'
       }), //数据源
       ellipsis: true,
       key: 'connectionName',
@@ -84,24 +86,26 @@ export const getPageColumns = (params: {
             placeholder={
               formatMessage({
                 id: 'odc.component.RecordPopover.column.EnterADataSource',
-                defaultMessage: '请输入所属数据源',
+                defaultMessage: '请输入所属数据源'
               }) //请输入所属数据源
             }
           />
         );
       },
       filterIcon: (filtered) => (
-        <SearchOutlined style={{ color: filtered ? 'var(--icon-color-focus)' : undefined }} />
+        <SearchOutlined
+          style={{ color: filtered ? 'var(--icon-color-focus)' : undefined }}
+        />
       ),
 
       dataIndex: 'connectionName',
-      render: (connectionName) => connectionName || '-',
+      render: (connectionName) => connectionName || '-'
     },
 
     {
       title: formatMessage({
         id: 'odc.component.RecordPopover.components.IpSource',
-        defaultMessage: 'IP 来源',
+        defaultMessage: 'IP 来源'
       }),
 
       //IP来源
@@ -114,7 +118,7 @@ export const getPageColumns = (params: {
             {...props}
             placeholder={formatMessage({
               id: 'odc.component.RecordPopover.components.EnterAnIpSource',
-              defaultMessage: '请输入 IP 来源',
+              defaultMessage: '请输入 IP 来源'
             })}
 
             /*请输入IP来源*/
@@ -122,17 +126,19 @@ export const getPageColumns = (params: {
         );
       },
       filterIcon: (filtered) => (
-        <SearchOutlined style={{ color: filtered ? 'var(--icon-color-focus)' : undefined }} />
+        <SearchOutlined
+          style={{ color: filtered ? 'var(--icon-color-focus)' : undefined }}
+        />
       ),
 
       dataIndex: 'clientIpAddress',
-      render: (clientIpAddress) => clientIpAddress || '-',
+      render: (clientIpAddress) => clientIpAddress || '-'
     },
 
     {
       title: formatMessage({
         id: 'odc.component.RecordPopover.components.ExecutionTime',
-        defaultMessage: '执行时间',
+        defaultMessage: '执行时间'
       }),
 
       //执行时间
@@ -141,13 +147,13 @@ export const getPageColumns = (params: {
       key: 'startTime',
       dataIndex: 'startTime',
       sorter: true,
-      render: (startTime) => getLocalFormatDateTime(startTime),
+      render: (startTime) => getLocalFormatDateTime(startTime)
     },
 
     {
       title: formatMessage({
         id: 'odc.component.RecordPopover.components.ExecutionResult',
-        defaultMessage: '执行结果',
+        defaultMessage: '执行结果'
       }),
 
       //执行结果
@@ -159,31 +165,31 @@ export const getPageColumns = (params: {
         {
           text: formatMessage({
             id: 'odc.component.RecordPopover.components.Successful',
-            defaultMessage: '成功',
+            defaultMessage: '成功'
           }),
 
           //成功
-          value: AuditEventResult.SUCCESS,
+          value: AuditEventResult.SUCCESS
         },
 
         {
           text: formatMessage({
             id: 'odc.component.RecordPopover.components.Failed',
-            defaultMessage: '失败',
+            defaultMessage: '失败'
           }),
 
           //失败
-          value: AuditEventResult.FAILED,
-        },
+          value: AuditEventResult.FAILED
+        }
       ],
 
-      render: (result) => <Status result={result} />,
+      render: (result) => <Status result={result} />
     },
 
     {
       title: formatMessage({
         id: 'odc.component.RecordPopover.components.Actions',
-        defaultMessage: '操作',
+        defaultMessage: '操作'
       }),
 
       //操作
@@ -198,15 +204,17 @@ export const getPageColumns = (params: {
           {
             formatMessage({
               id: 'odc.component.RecordPopover.components.View',
-              defaultMessage: '查看',
+              defaultMessage: '查看'
             })
 
             /*查看*/
           }
         </Action.Link>
-      ),
-    },
+      )
+    }
   ];
 
-  return !isClient() ? columns : columns.filter((item) => item.dataIndex !== 'connectionName');
+  return !isClient()
+    ? columns
+    : columns.filter((item) => item.dataIndex !== 'connectionName');
 };

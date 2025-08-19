@@ -20,7 +20,9 @@ const renderDatabaseNode = (parmas: {
   !dbDisabled && canCheckedDbKeys && canCheckedDbKeys.push(database.id);
 
   return {
-    title: <DatabasesTitle taskType={taskType} db={database} disabled={dbDisabled} />,
+    title: (
+      <DatabasesTitle taskType={taskType} db={database} disabled={dbDisabled} />
+    ),
     key: database.id,
     selectable: true,
     isLeaf: true,
@@ -31,7 +33,7 @@ const renderDatabaseNode = (parmas: {
     ),
     data: database,
     disabled: dbDisabled,
-    type: NodeType.Database,
+    type: NodeType.Database
   };
 };
 export default renderDatabaseNode;

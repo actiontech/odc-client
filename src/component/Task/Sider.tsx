@@ -37,7 +37,13 @@ interface IProps {
   inProject?: boolean;
 }
 
-const Sider: React.FC<IProps> = function ({ taskStore, pageStore, className, isPage, inProject }) {
+const Sider: React.FC<IProps> = function ({
+  taskStore,
+  pageStore,
+  className,
+  isPage,
+  inProject
+}) {
   const firstEnabledTask = getFirstEnabledTask();
   const pageKey = isPage ? pageStore?.activePageKey : taskStore?.taskPageType;
   const { Text } = Typography;
@@ -83,9 +89,9 @@ const Sider: React.FC<IProps> = function ({ taskStore, pageStore, className, isP
                 <div
                   className={classNames(
                     {
-                      [styles.selected]: pageKey === item.value,
+                      [styles.selected]: pageKey === item.value
                     },
-                    styles.groupItem,
+                    styles.groupItem
                   )}
                   key={item.value}
                   onClick={() => handleClick(item.value)}
@@ -107,7 +113,7 @@ const Sider: React.FC<IProps> = function ({ taskStore, pageStore, className, isP
       callback: (task) => {
         openTasksPage(task as TaskPageType);
         taskStore.changeTaskPageType(task as TaskPageType);
-      },
+      }
     });
 
     if (!res) taskStore.changeTaskPageType(firstEnabledTask?.value);
@@ -117,7 +123,11 @@ const Sider: React.FC<IProps> = function ({ taskStore, pageStore, className, isP
     };
   }, []);
 
-  return <div className={`${styles.taskSider} ${className}`}>{renderTaskTypeList()}</div>;
+  return (
+    <div className={`${styles.taskSider} ${className}`}>
+      {renderTaskTypeList()}
+    </div>
+  );
 };
 
 export default inject('taskStore', 'pageStore')(observer(Sider));

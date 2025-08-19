@@ -56,26 +56,26 @@ const ActivityBar: React.FC<IProps> = (props) => {
       title: ActivityBarItemTypeText[ActivityBarItemType.Database],
       key: ActivityBarItemType.Database,
       icon: DBSvg,
-      isVisible: true,
+      isVisible: true
     },
     {
       title: ActivityBarItemTypeText[ActivityBarItemType.Script],
       key: ActivityBarItemType.Script,
       icon: CodeSvg,
-      isVisible: true,
+      isVisible: true
     },
     {
       title: ActivityBarItemTypeText[ActivityBarItemType.Task],
       key: ActivityBarItemType.Task,
       icon: TaskSvg,
-      isVisible: true,
+      isVisible: true
     },
     {
       title: ActivityBarItemTypeText[ActivityBarItemType.Manager],
       key: ActivityBarItemType.Manager,
       icon: ManagerSvg,
-      isVisible: true,
-    },
+      isVisible: true
+    }
   ];
 
   return (
@@ -119,7 +119,10 @@ const ActivityBar: React.FC<IProps> = (props) => {
               disableTip={true}
               icon={BulbOutlined}
               collapsed={true}
-              label={formatMessage({ id: 'odc.Index.Sider.Help', defaultMessage: '帮助' })} /*帮助*/
+              label={formatMessage({
+                id: 'odc.Index.Sider.Help',
+                defaultMessage: '帮助'
+              })} /*帮助*/
             />
           </HelpItem>
           <MineItem>
@@ -127,7 +130,10 @@ const ActivityBar: React.FC<IProps> = (props) => {
               disableTip={true}
               icon={UserOutlined}
               collapsed={true}
-              label={formatMessage({ id: 'odc.Index.Sider.Mine', defaultMessage: '我的' })} /*我的*/
+              label={formatMessage({
+                id: 'odc.Index.Sider.Mine',
+                defaultMessage: '我的'
+              })} /*我的*/
             />
           </MineItem>
         </Space>

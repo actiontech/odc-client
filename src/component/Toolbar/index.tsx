@@ -25,7 +25,7 @@ import {
   message,
   Popconfirm,
   Popover,
-  Tooltip,
+  Tooltip
 } from 'antd';
 import { PopconfirmProps } from 'antd/lib/popconfirm';
 import classNames from 'classnames'; // @ts-ignore
@@ -87,7 +87,7 @@ function TButton({
   const clzName = classNames(
     styles.button,
     isRunning ? styles.isRunning : disabled ? styles.disabled : null,
-    isActive ? styles.isActive : null,
+    isActive ? styles.isActive : null
   );
   if (typeof confirmConfig === 'function') {
     confirmConfig = confirmConfig();
@@ -101,8 +101,8 @@ function TButton({
           message.success(
             formatMessage({
               id: 'odc.component.Toolbar.DoNotClickAgainWhile',
-              defaultMessage: '执行中请勿重复点击',
-            }), //执行中请勿重复点击
+              defaultMessage: '执行中请勿重复点击'
+            }) //执行中请勿重复点击
           );
         } else if (disabled || confirmConfig) {
           return;
@@ -118,7 +118,12 @@ function TButton({
   switch (type) {
     case 'BUTTON':
       content = (
-        <Button {...rest} icon={icon} disabled={disabled} onClick={!disabled ? onClick : null}>
+        <Button
+          {...rest}
+          icon={icon}
+          disabled={disabled}
+          onClick={!disabled ? onClick : null}
+        >
           {text}
         </Button>
       );
@@ -146,7 +151,8 @@ function TButton({
           className={clzName}
           onClick={!disabled && !confirmConfig && !isRunning ? onClick : null}
         >
-          {icon} {isShowText && <span className={styles.buttonText}>{text}</span>}
+          {icon}{' '}
+          {isShowText && <span className={styles.buttonText}>{text}</span>}
         </span>
       );
 
@@ -210,7 +216,11 @@ function ButtonMenu(props: {
 }) {
   const { icon, menu, text, status = IConStatus.INIT } = props;
   return (
-    <Dropdown menu={menu} trigger={['click']} disabled={status === IConStatus.DISABLE}>
+    <Dropdown
+      menu={menu}
+      trigger={['click']}
+      disabled={status === IConStatus.DISABLE}
+    >
       <TButton text={text} icon={icon} isMenuIcon={true} />
     </Dropdown>
   );
@@ -227,7 +237,10 @@ function ButtonPopover(props: { icon: string | ComponentType; content: any }) {
 
 export default function Toolbar({ style = {}, children, compact = false }) {
   return (
-    <div className={classNames([styles.toolbar, compact ? styles.compact : null])} style={style}>
+    <div
+      className={classNames([styles.toolbar, compact ? styles.compact : null])}
+      style={style}
+    >
       {children}
     </div>
   );

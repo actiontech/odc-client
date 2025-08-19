@@ -19,9 +19,12 @@ import {
   getSessionStatus,
   newSessionByDataBase,
   newSessionByDataSource,
-  setTransactionInfo,
+  setTransactionInfo
 } from '@/common/network/connection';
-import { generateDatabaseSid, generateSessionSid } from '@/common/network/pathUtil';
+import {
+  generateDatabaseSid,
+  generateSessionSid
+} from '@/common/network/pathUtil';
 import { queryIdentities } from '@/common/network/table';
 import { IDataType, IRecycleObject, ISessionStatus } from '@/d.ts';
 import { IDatabase } from '@/d.ts/database';
@@ -122,7 +125,7 @@ class SessionStore {
     fullLinkTraceEnabled: true,
     continueExecutionOnError: true,
     defaultTableStoreFormat: DBDefaultStoreType.ROW,
-    killCurrentQuerySupported: false,
+    killCurrentQuerySupported: false
   };
 
   /**
@@ -151,7 +154,10 @@ class SessionStore {
     this.createTime = Date.now();
   }
 
-  public updateConnectionAndDatabase(connection: IDatasource, database: IDatabase) {
+  public updateConnectionAndDatabase(
+    connection: IDatasource,
+    database: IDatabase
+  ) {
     this.connection = connection || this.connection;
     this.odcDatabase = database || this.odcDatabase;
   }
@@ -159,7 +165,7 @@ class SessionStore {
   static async createInstance(
     datasource: IDatasource,
     database: IDatabase,
-    recordDbAccessHistory?: boolean,
+    recordDbAccessHistory?: boolean
   ) {
     const session = new SessionStore(datasource, database);
     if (await session.init(recordDbAccessHistory)) {
@@ -201,7 +207,11 @@ class SessionStore {
         /**
          * 数据库模式
          */
-        const data = await newSessionByDataBase(this.odcDatabase?.id, true, recordDbAccessHistory);
+        const data = await newSessionByDataBase(
+          this.odcDatabase?.id,
+          true,
+          recordDbAccessHistory
+        );
         if (!data) {
           return false;
         }
@@ -264,7 +274,7 @@ class SessionStore {
       this.sessionId,
       dbName,
       this.odcDatabase?.id,
-      this.odcDatabase?.type,
+      this.odcDatabase?.type
     );
     if (!this.database) {
       return false;
@@ -300,7 +310,8 @@ class SessionStore {
       support_shadowtable: 'enableShadowSync',
       support_partition_plan: (allConfig) => {
         this.supportFeature.enablePartitionPlan =
-          settingStore.enablePartitionPlan && allConfig['support_partition_plan'];
+          settingStore.enablePartitionPlan &&
+          allConfig['support_partition_plan'];
       },
       support_column_group: 'enableColumnStore',
       support_async: (allConfig) => {
@@ -324,7 +335,8 @@ class SessionStore {
           settingStore.enableOBClient && allConfig['support_obclient'];
       },
       support_kill_session: (allConfig) => {
-        this.supportFeature.enableKillSession = allConfig['support_kill_session'];
+        this.supportFeature.enableKillSession =
+          allConfig['support_kill_session'];
       },
       support_kill_query: (allConfig) => {
         this.supportFeature.enableKillQuery = allConfig['support_kill_query'];
@@ -335,7 +347,7 @@ class SessionStore {
         this.supportFeature.enablePLDebug = allConfig['support_pl_debug'];
       },
       support_external_table: 'enableExternalTable',
-      support_materialized_view: 'enableMaterializedView',
+      support_materialized_view: 'enableMaterializedView'
     };
     const allConfig = {};
     data?.forEach((item) => {
@@ -352,7 +364,7 @@ class SessionStore {
       const obVersion = this?.params?.obVersion;
       this.supportFeature.enableProfile =
         [ConnectionMode.OB_MYSQL, ConnectionMode.OB_ORACLE].includes(
-          this.connection?.dialectType,
+          this.connection?.dialectType
         ) &&
         isString(obVersion) &&
         OBCompare(obVersion, ODC_PROFILE_SUPPORT_VERSION, '>=');
@@ -370,8 +382,8 @@ class SessionStore {
     this.lastTableAndViewLoadTime = now;
     const res = await request.get(`/api/v1/view/listAll/${sid}`, {
       params: {
-        name,
-      },
+        name
+      }
     });
     if (!res || !res.data) {
       this.lastTableAndViewLoadTime = 0;
@@ -383,13 +395,19 @@ class SessionStore {
     return runInAction(() => {
       srcTables.forEach((item) => {
         tables[item.databaseName] = item.tables;
-        const dbObj = this.allTableAndView[item.databaseName] || { tables: [], views: [] };
+        const dbObj = this.allTableAndView[item.databaseName] || {
+          tables: [],
+          views: []
+        };
         dbObj.tables = item.tables;
         this.allTableAndView[item.databaseName] = { ...dbObj };
       });
       srcViews.forEach((item) => {
         views[item.databaseName] = item.views;
-        const dbObj = this.allTableAndView[item.databaseName] || { tables: [], views: [] };
+        const dbObj = this.allTableAndView[item.databaseName] || {
+          tables: [],
+          views: []
+        };
         dbObj.views = item.views;
         this.allTableAndView[item.databaseName] = { ...dbObj };
       });
@@ -398,14 +416,17 @@ class SessionStore {
   }
 
   @action
-  public async queryTablesAndMaterializedViews(name: string = '', force: boolean = false) {
+  public async queryTablesAndMaterializedViews(
+    name: string = '',
+    force: boolean = false
+  ) {
     const res = await request.get(
       `/api/v2/connect/sessions/${this.sessionId}/listMaterializedViewBases`,
       {
         params: {
-          name,
-        },
-      },
+          name
+        }
+      }
     );
     const tables = {};
     const mvs = {};
@@ -415,7 +436,7 @@ class SessionStore {
         tables[item.databaseName] = item.tables;
         const dbObj = this.allTableAndMaterializedViews[item.databaseName] || {
           tables: [],
-          mvs: [],
+          mvs: []
         };
         dbObj.tables = item.tables;
         this.allTableAndMaterializedViews[item.databaseName] = { ...dbObj };
@@ -424,7 +445,7 @@ class SessionStore {
         mvs[item.databaseName] = item.mvs;
         const dbObj = this.allTableAndMaterializedViews[item.databaseName] || {
           tables: [],
-          mvs: [],
+          mvs: []
         };
         dbObj.mvs = item.mvs;
         this.allTableAndMaterializedViews[item.databaseName] = { ...dbObj };
@@ -434,7 +455,10 @@ class SessionStore {
   }
 
   @action
-  public async initSessionStatus(init: boolean = false, isLogicDbSessionInit: boolean = false) {
+  public async initSessionStatus(
+    init: boolean = false,
+    isLogicDbSessionInit: boolean = false
+  ) {
     try {
       const data = await getSessionStatus(this.sessionId);
       this.params.autoCommit = data?.settings?.autocommit;
@@ -442,15 +466,22 @@ class SessionStore {
       this.params.delimiter = data?.settings?.delimiter || DEFAULT_DELIMITER;
       this.params.queryLimit = data?.settings?.queryLimit;
       this.params.obVersion = data?.settings?.obVersion;
-      this.params.defaultTableStoreFormat = data?.session?.defaultTableStoreFormat;
-      this.params.killCurrentQuerySupported = data?.session?.killCurrentQuerySupported;
+      this.params.defaultTableStoreFormat =
+        data?.session?.defaultTableStoreFormat;
+      this.params.killCurrentQuerySupported =
+        data?.session?.killCurrentQuerySupported;
       if (init) {
         this.params.tableColumnInfoVisible =
-          setting.configurations['odc.sqlexecute.default.fetchColumnInfo'] === 'true';
+          setting.configurations['odc.sqlexecute.default.fetchColumnInfo'] ===
+          'true';
         this.params.fullLinkTraceEnabled =
-          setting.configurations['odc.sqlexecute.default.fullLinkTraceEnabled'] === 'true';
+          setting.configurations[
+            'odc.sqlexecute.default.fullLinkTraceEnabled'
+          ] === 'true';
         this.params.continueExecutionOnError =
-          setting.configurations['odc.sqlexecute.default.continueExecutionOnError'] === 'true';
+          setting.configurations[
+            'odc.sqlexecute.default.continueExecutionOnError'
+          ] === 'true';
       }
       if (data?.session) {
         this.transState = data?.session;
@@ -466,7 +497,7 @@ class SessionStore {
           sqlId: null,
           activeQueries: null,
           defaultTableStoreFormat: null,
-          killCurrentQuerySupported: false,
+          killCurrentQuerySupported: false
         };
       }
     } catch (e) {
@@ -478,16 +509,20 @@ class SessionStore {
   @action
   public async getRecycleObjectList() {
     // ListRecycleObjects
-    const res = await request.get(`/api/v2/recyclebin/list/${generateSessionSid(this.sessionId)}`);
+    const res = await request.get(
+      `/api/v2/recyclebin/list/${generateSessionSid(this.sessionId)}`
+    );
     const recycleObjects = res?.data || [];
-    this.recycleObjects = recycleObjects.map((r: IRecycleObject, i: number) => ({
-      ...r,
-      id: `${(r.schema && r.schema + '.') || ''}${r.originName}`,
-      // 展示 id，可能重复
-      uniqueId: `${(r.schema && r.schema + '.') || ''}${r.originName}.${i}`,
-      // 生成唯一 id
-      initialNewName: r.newName, // 保存原始重命名
-    }));
+    this.recycleObjects = recycleObjects.map(
+      (r: IRecycleObject, i: number) => ({
+        ...r,
+        id: `${(r.schema && r.schema + '.') || ''}${r.originName}`,
+        // 展示 id，可能重复
+        uniqueId: `${(r.schema && r.schema + '.') || ''}${r.originName}.${i}`,
+        // 生成唯一 id
+        initialNewName: r.newName // 保存原始重命名
+      })
+    );
   }
 
   @action
@@ -499,7 +534,7 @@ class SessionStore {
   public resetNewNames() {
     this.recycleObjects = this.recycleObjects.map((r) => ({
       ...r,
-      newName: r.initialNewName,
+      newName: r.initialNewName
     }));
   }
 
@@ -508,20 +543,27 @@ class SessionStore {
     this.isAlive = false;
     console.log(generateSessionSid(this.sessionId));
     await request.delete(`/api/v2/datasource/sessions`, {
-      data: { sessionIds: [generateSessionSid(this.sessionId)], delay: force ? null : 60 },
+      data: {
+        sessionIds: [generateSessionSid(this.sessionId)],
+        delay: force ? null : 60
+      }
     });
   }
 
   static async batchDestory(sessions: SessionStore[], force: boolean = false) {
-    const sessionIds = sessions?.map((session) => generateSessionSid(session.sessionId));
+    const sessionIds = sessions?.map((session) =>
+      generateSessionSid(session.sessionId)
+    );
     if (!sessionIds?.length) {
       return;
     }
     await request.delete(`/api/v2/datasource/sessions`, {
       data: {
-        sessionIds: sessions?.map((session) => generateSessionSid(session.sessionId)),
-        delay: force ? null : 60,
-      },
+        sessionIds: sessions?.map((session) =>
+          generateSessionSid(session.sessionId)
+        ),
+        delay: force ? null : 60
+      }
     });
     sessions.forEach((session) => {
       session.isAlive = false;
@@ -531,18 +573,23 @@ class SessionStore {
   @action
   public async queryIdentities(identityNameLike?: string) {
     const now = Date.now();
-    if (now - this.lastIdentitiesLoadTime.get(identityNameLike || 'default') < 15000) {
+    if (
+      now - this.lastIdentitiesLoadTime.get(identityNameLike || 'default') <
+      15000
+    ) {
       return;
     }
     this.lastIdentitiesLoadTime.set(identityNameLike || 'default', now);
     let supportType = ['TABLE', 'VIEW'];
-    this.supportFeature.enableExternalTable && supportType.push('EXTERNAL_TABLE');
-    this.supportFeature.enableMaterializedView && supportType.push('MATERIALIZED_VIEW');
+    this.supportFeature.enableExternalTable &&
+      supportType.push('EXTERNAL_TABLE');
+    this.supportFeature.enableMaterializedView &&
+      supportType.push('MATERIALIZED_VIEW');
     const data = await queryIdentities(
       supportType,
       this.sessionId,
       this.database?.dbName,
-      identityNameLike,
+      identityNameLike
     );
     if (!data) {
       this.lastTableAndViewLoadTime = 0;
@@ -554,7 +601,7 @@ class SessionStore {
           tables: [],
           views: [],
           external_table: [],
-          materialized_view: [],
+          materialized_view: []
         };
         identities.forEach((identity) => {
           const { type, name } = identity;
@@ -588,7 +635,11 @@ class SessionStore {
   @action
   public changeDelimiter = async (v: string) => {
     this.params.delimiterLoading = true;
-    const isSuccess = await changeDelimiter(v, this.sessionId, this.database?.dbName);
+    const isSuccess = await changeDelimiter(
+      v,
+      this.sessionId,
+      this.database?.dbName
+    );
     runInAction(() => {
       if (isSuccess) {
         this.params.delimiter = v;
@@ -602,9 +653,9 @@ class SessionStore {
   public setQueryLimit = async (num: number) => {
     const isSuccess = await setTransactionInfo(
       {
-        queryLimit: num,
+        queryLimit: num
       },
-      this.sessionId,
+      this.sessionId
     );
     if (isSuccess) {
       this.params.queryLimit = num;

@@ -4,7 +4,7 @@ const colorToken = {
   action: '#006aff',
   warning: '#ffa21a',
   error: '#f93939',
-  success: '#0ac185',
+  success: '#0ac185'
 };
 
 export const theme: ThemeConfig = {
@@ -26,66 +26,66 @@ export const theme: ThemeConfig = {
     colorLink: colorToken.action,
     colorWarning: colorToken.warning,
     colorError: colorToken.error,
-    colorSuccess: colorToken.success,
+    colorSuccess: colorToken.success
   },
   components: {
     Tree: {
       titleHeight: 24,
       colorBgContainer: 'transparent',
-      paddingXS: 4,
+      paddingXS: 4
     },
     Transfer: {
       colorIcon: 'var(--icon-color-normal)',
-      colorBorder: 'var(--odc-border-color)',
+      colorBorder: 'var(--odc-border-color)'
     },
     Radio: {
-      colorPrimaryBorder: 'var(--odc-border-color)',
+      colorPrimaryBorder: 'var(--odc-border-color)'
     },
     Drawer: {
       colorBorder: 'var(--odc-border-color)',
-      colorSplit: 'var(--odc-border-color)',
+      colorSplit: 'var(--odc-border-color)'
     },
     Divider: {
-      colorSplit: 'var(--divider-color)',
+      colorSplit: 'var(--divider-color)'
     },
     Input: {
       colorBorder: 'var(--odc-border-color)',
-      colorIcon: 'var(--icon-color-normal)',
+      colorIcon: 'var(--icon-color-normal)'
     },
     Collapse: {
-      colorBorder: 'var(--odc-border-color)',
+      colorBorder: 'var(--odc-border-color)'
     },
     InputNumber: {
-      colorBorder: 'var(--odc-border-color)',
+      colorBorder: 'var(--odc-border-color)'
     },
     Tabs: {
-      colorBorder: 'var(--odc-border-color)',
+      colorBorder: 'var(--odc-border-color)'
     },
     Select: {
       colorBorder: 'var(--odc-border-color)',
-      colorIcon: 'var(--icon-color-normal)',
+      colorIcon: 'var(--icon-color-normal)'
     },
     Checkbox: {
-      colorBorder: 'var(--odc-border-color)',
+      colorBorder: 'var(--odc-border-color)'
     },
     Menu: {
       itemBorderRadius: 0,
       horizontalItemBorderRadius: 0,
-      subMenuItemBorderRadius: 0,
+      subMenuItemBorderRadius: 0
     },
     Dropdown: {
-      controlItemBgActive: 'var(--hover-color)',
+      controlItemBgActive: 'var(--hover-color)'
     },
     Button: {
-      defaultBorderColor: 'var(--odc-border-color)',
+      defaultBorderColor: 'var(--odc-border-color)'
     },
     Table: {
       colorTextHeading: 'var(--text-color-primary)',
       borderColor: 'var(--table-border-color)',
-      headerBg: 'var(--table-header-background-color)',
+      headerBg: 'var(--table-header-background-color)'
     },
     Modal: {
-      contentBg: 'var(--background-primary-color)',
-    },
-  },
+      contentBg: 'var(--background-primary-color)'
+    }
+  }
 };

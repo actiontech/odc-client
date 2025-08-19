@@ -29,7 +29,7 @@ export default function SelectTransfer(props: IProps) {
   const [checkedKeys, setCheckedKeys] = useControllableValue(props, {
     defaultValue: [],
     valuePropName: 'checkedKeys',
-    trigger: 'onCheck',
+    trigger: 'onCheck'
   });
 
   const [sourceSearch, setSourceSearch] = useState(null);
@@ -59,7 +59,10 @@ export default function SelectTransfer(props: IProps) {
       return props.treeData;
     }
     return props.treeData.filter((data) => {
-      return data.title?.toString()?.toLowerCase()?.includes(sourceSearch?.toLowerCase?.());
+      return data.title
+        ?.toString()
+        ?.toLowerCase()
+        ?.includes(sourceSearch?.toLowerCase?.());
     });
   }, [sourceSearch, props.treeData]);
 
@@ -68,7 +71,10 @@ export default function SelectTransfer(props: IProps) {
       return checkedData;
     }
     return checkedData.filter((data) => {
-      return data.title?.toString()?.toLowerCase()?.includes(targetSearch?.toLowerCase?.());
+      return data.title
+        ?.toString()
+        ?.toLowerCase()
+        ?.includes(targetSearch?.toLowerCase?.());
     });
   }, [targetSearch, checkedData]);
   const count = checkedKeys?.length || 0;
@@ -89,14 +95,20 @@ export default function SelectTransfer(props: IProps) {
   }, [count, isSelectAll]);
 
   return (
-    <div style={{ height: 370, display: 'flex', border: '1px solid var(--odc-border-color)' }}>
+    <div
+      style={{
+        height: 370,
+        display: 'flex',
+        border: '1px solid var(--odc-border-color)'
+      }}
+    >
       <div
         style={{
           width: '50%',
           flexShrink: 0,
           flexGrow: 0,
           height: '100%',
-          borderRight: '1px solid var(--odc-border-color)',
+          borderRight: '1px solid var(--odc-border-color)'
         }}
       >
         <Card
@@ -105,7 +117,7 @@ export default function SelectTransfer(props: IProps) {
           indeterminate={indeterminate}
           title={formatMessage({
             id: 'odc.component.SelectTransfer.SelectUser',
-            defaultMessage: '选择用户',
+            defaultMessage: '选择用户'
           })} /*选择用户*/
           onSearch={(v) => {
             setSourceSearch(v);
@@ -136,9 +148,9 @@ export default function SelectTransfer(props: IProps) {
             formatMessage(
               {
                 id: 'odc.component.SelectTransfer.CountItemSelected',
-                defaultMessage: '已选 {count} 项',
+                defaultMessage: '已选 {count} 项'
               },
-              { count },
+              { count }
             ) //`已选 ${count} 项`
           }
           onSearch={(v) => {
@@ -149,7 +161,7 @@ export default function SelectTransfer(props: IProps) {
               {
                 formatMessage({
                   id: 'odc.component.SelectTransfer.Clear',
-                  defaultMessage: '清空',
+                  defaultMessage: '清空'
                 }) /*清空*/
               }
             </a>
@@ -163,7 +175,13 @@ export default function SelectTransfer(props: IProps) {
             treeData={targetDisplayTreeData}
             titleRender={(node) => {
               return (
-                <div style={{ display: 'flex', maxWidth: '100%', justifyContent: 'space-between' }}>
+                <div
+                  style={{
+                    display: 'flex',
+                    maxWidth: '100%',
+                    justifyContent: 'space-between'
+                  }}
+                >
                   <span
                     style={{
                       flexGrow: 1,
@@ -172,7 +190,7 @@ export default function SelectTransfer(props: IProps) {
                       whiteSpace: 'nowrap',
                       textOverflow: 'ellipsis',
                       wordBreak: 'break-all',
-                      color: 'var(--text-color-primary)',
+                      color: 'var(--text-color-primary)'
                     }}
                     title={node.title}
                   >
@@ -181,7 +199,9 @@ export default function SelectTransfer(props: IProps) {
                   <span style={{ flexGrow: 0, flexShrink: 0 }}>
                     <Delete
                       onClick={() => {
-                        setCheckedKeys(checkedKeys.filter((key) => key !== node.key));
+                        setCheckedKeys(
+                          checkedKeys.filter((key) => key !== node.key)
+                        );
                       }}
                     />
                   </span>

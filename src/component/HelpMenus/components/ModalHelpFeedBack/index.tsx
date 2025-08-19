@@ -51,21 +51,29 @@ export default class ModalHelp extends PureComponent<{
         <h3>
           {formatMessage({
             id: 'odc.components.ModalHelpFeedBack.Feedback',
-            defaultMessage: '意见反馈',
+            defaultMessage: '意见反馈'
           })}
         </h3>
-        {feekBackUrl ? <Image width={240} height={240} src={feekBackUrl} /> : null}
+        {feekBackUrl ? (
+          <Image width={240} height={240} src={feekBackUrl} />
+        ) : null}
         <div className="email">
           <h4>
-            <Icon style={{ fontSize: 14, marginRight: 8 }} component={ODCColorSvg} />
+            <Icon
+              style={{ fontSize: 14, marginRight: 8 }}
+              component={ODCColorSvg}
+            />
             {formatMessage({
               id: 'odc.components.ModalHelpFeedBack.SupportedEmailAddresses',
-              defaultMessage: '支持邮箱',
+              defaultMessage: '支持邮箱'
             })}
           </h4>
           <p>{serverSystemInfo?.supportEmail || pkg.bugs.email}</p>
           <h4>
-            <Icon style={{ fontSize: 14, marginRight: 8 }} component={GithubSvg} />
+            <Icon
+              style={{ fontSize: 14, marginRight: 8 }}
+              component={GithubSvg}
+            />
             {'Github issues'}
           </h4>
           <a
@@ -75,7 +83,9 @@ export default class ModalHelp extends PureComponent<{
           >
             https://github.com/oceanbase/odc/issues
           </a>
-          {serverSystemInfo?.supportUrl ? <p>Help: {serverSystemInfo?.supportUrl}</p> : null}
+          {serverSystemInfo?.supportUrl ? (
+            <p>Help: {serverSystemInfo?.supportUrl}</p>
+          ) : null}
         </div>
         {isClient() ? (
           <a

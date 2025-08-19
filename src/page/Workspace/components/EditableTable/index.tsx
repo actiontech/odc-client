@@ -70,7 +70,7 @@ export default inject('settingStore')(
   observer(
     React.forwardRef(function EditableTable<R extends RowType, SR>(
       props: IProps<R, SR>,
-      ref: React.Ref<RefHandle>,
+      ref: React.Ref<RefHandle>
     ) {
       const {
         initialColumns,
@@ -93,7 +93,7 @@ export default inject('settingStore')(
         contextMenuRender,
         pasteFormatter,
         getContextMenuConfig,
-        onSelectChange,
+        onSelectChange
       } = props;
       const innerGridRef = useRef<DataGridRef>(null);
 
@@ -112,12 +112,15 @@ export default inject('settingStore')(
             enableFlushDelete,
             theme: theme || (settingStore.theme.sheetTheme as any),
             searchKey,
-            rowHeight: 24,
+            rowHeight: 24
           }}
           style={{
-            height: minHeight,
+            height: minHeight
           }}
-          className={classNames(styles.fillGrid, !bordered ? styles.removeBordered : '')}
+          className={classNames(
+            styles.fillGrid,
+            !bordered ? styles.removeBordered : ''
+          )}
           ref={(ref) => {
             innerGridRef.current = ref;
             //@ts-ignore
@@ -130,6 +133,6 @@ export default inject('settingStore')(
           pasteFormatter={pasteFormatter}
         />
       );
-    }),
-  ),
+    })
+  )
 );

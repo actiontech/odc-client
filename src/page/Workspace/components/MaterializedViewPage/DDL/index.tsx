@@ -5,7 +5,11 @@ import { IEditor } from '@/component/MonacoEditor';
 import { getDataSourceModeConfig } from '@/common/datasource';
 import Toolbar from '@/component/Toolbar';
 import { IConStatus } from '@/component/Toolbar/statefulIcon';
-import { AlignLeftOutlined, CloudDownloadOutlined, SyncOutlined } from '@ant-design/icons';
+import {
+  AlignLeftOutlined,
+  CloudDownloadOutlined,
+  SyncOutlined
+} from '@ant-design/icons';
 import { formatMessage } from '@/util/intl';
 import { downloadPLDDL } from '@/util/sqlExport';
 
@@ -13,7 +17,9 @@ const ToolbarButton = Toolbar.Button;
 
 interface IProps {}
 const MvViewDDL: React.FC<IProps> = () => {
-  const { materializedView, session, onRefresh } = useContext(MaterializedViewPageContext);
+  const { materializedView, session, onRefresh } = useContext(
+    MaterializedViewPageContext
+  );
   const editorRef = useRef<IEditor>();
   const [formated, setFormated] = useState(true);
   const handleFormat = () => {
@@ -33,11 +39,11 @@ const MvViewDDL: React.FC<IProps> = () => {
             formated
               ? formatMessage({
                   id: 'odc.components.TablePage.Unformat',
-                  defaultMessage: '取消格式化',
+                  defaultMessage: '取消格式化'
                 }) // 取消格式化
               : formatMessage({
                   id: 'odc.components.TablePage.Formatting',
-                  defaultMessage: '格式化',
+                  defaultMessage: '格式化'
                 }) // 格式化
           }
           icon={<AlignLeftOutlined />}
@@ -48,7 +54,7 @@ const MvViewDDL: React.FC<IProps> = () => {
           text={
             formatMessage({
               id: 'odc.components.ViewPage.Download',
-              defaultMessage: '下载',
+              defaultMessage: '下载'
             }) //下载
           }
           icon={<CloudDownloadOutlined />}
@@ -57,7 +63,7 @@ const MvViewDDL: React.FC<IProps> = () => {
               materializedView?.info?.name,
               'MATERIALIZED_VIEW',
               materializedView?.info?.ddl,
-              session.database.dbName,
+              session.database.dbName
             );
           }}
         />
@@ -65,7 +71,7 @@ const MvViewDDL: React.FC<IProps> = () => {
           icon={<SyncOutlined />}
           text={formatMessage({
             id: 'odc.components.ShowTableBaseInfoForm.Refresh',
-            defaultMessage: '刷新',
+            defaultMessage: '刷新'
           })}
           /* 刷新 */ onClick={onRefresh}
         />
@@ -74,13 +80,15 @@ const MvViewDDL: React.FC<IProps> = () => {
         style={{
           flex: 1,
           overflow: 'hidden',
-          position: 'relative',
+          position: 'relative'
         }}
       >
         <SQLCodePreviewer
           readOnly
           defaultValue={materializedView?.info?.ddl}
-          language={getDataSourceModeConfig(session?.connection?.type)?.sql?.language}
+          language={
+            getDataSourceModeConfig(session?.connection?.type)?.sql?.language
+          }
           onEditorCreated={(editor: IEditor) => {
             editorRef.current = editor;
             editorRef.current?.doFormat();

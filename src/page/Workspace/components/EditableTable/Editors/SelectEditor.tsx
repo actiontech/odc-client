@@ -38,7 +38,7 @@ export function SelectEditor<T>({
   options,
   multiple,
   loading,
-  customRenderOptions,
+  customRenderOptions
 }: IProps<T>) {
   const [open, setOpen] = useState(false);
   const { key } = column;
@@ -56,7 +56,7 @@ export function SelectEditor<T>({
       // }
       onRowChange({ ...row, [key]: realValue }, !multiple);
     },
-    [onRowChange],
+    [onRowChange]
   );
   return (
     <AntdEditorWrap>
@@ -113,7 +113,7 @@ export function SelectEditor<T>({
 export function WrapSelectEditor(
   options,
   multiple: boolean = true,
-  customRenderOptions = undefined,
+  customRenderOptions = undefined
 ) {
   return (p) => {
     return (

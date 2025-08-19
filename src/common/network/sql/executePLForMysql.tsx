@@ -5,7 +5,7 @@ import {
   executeSQLPreHandle,
   IExecutePLForMysqlParams,
   IExecuteTaskResult,
-  ISQLExecuteTask,
+  ISQLExecuteTask
 } from './preHandle';
 
 /**
@@ -19,32 +19,33 @@ export default async function executePLForMysql(
   params: IExecutePLForMysqlParams,
   sessionId?: string,
   dbName?: string,
-  onUpdate: (info: IExecutingInfo) => void = () => {},
+  onUpdate: (info: IExecutingInfo) => void = () => {}
 ): Promise<IExecuteTaskResult> {
   const sid = generateDatabaseSid(dbName, sessionId);
   const res = await request.post(`/api/v2/pl/editPL/${sid}`, {
-    data: params,
+    data: params
   });
   const taskInfo: ISQLExecuteTask = res?.data;
   const { data } = res;
-  const needModal = res?.successful && data?.errorMessage === null && data?.approvalRequired;
+  const needModal =
+    res?.successful && data?.errorMessage === null && data?.approvalRequired;
   const {
     pass,
     data: preHandleData,
     lintResultSet,
-    status,
+    status
   } = executeSQLPreHandle(
     taskInfo,
     { ...params, wrappedSql: data?.wrappedSql },
     needModal,
     sessionId,
-    true,
+    true
   );
   if (!pass) {
     return {
       errorMessage: res?.data?.errorMessage,
       approvalRequired: res?.data?.approvalRequired,
-      ...preHandleData,
+      ...preHandleData
     };
   }
   return {
@@ -56,6 +57,6 @@ export default async function executePLForMysql(
     violatedRules: [],
     lintResultSet,
     hasLintResults: lintResultSet?.length > 0,
-    status,
+    status
   };
 }

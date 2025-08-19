@@ -43,10 +43,26 @@ import { getSessionStorageKey } from './helper';
 import { observer, inject } from 'mobx-react';
 import { UserStore } from '@/store/login';
 
-const ExtraContent = ({ projectId, hasLoginDatabaseAuth, setHasLoginDatabaseAuth }) => {
+const ExtraContent = ({
+  projectId,
+  hasLoginDatabaseAuth,
+  setHasLoginDatabaseAuth
+}) => {
   const getLoginDatabaseAuth = async () => {
-    const res = await listDatabases(projectId, null, null, null, null, null, null, null, true);
-    const canLoginDatabase = res.contents?.some((item) => !!item.authorizedPermissionTypes.length);
+    const res = await listDatabases(
+      projectId,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      true
+    );
+    const canLoginDatabase = res.contents?.some(
+      (item) => !!item.authorizedPermissionTypes.length
+    );
     setHasLoginDatabaseAuth(canLoginDatabase);
   };
 
@@ -61,7 +77,10 @@ const ExtraContent = ({ projectId, hasLoginDatabaseAuth, setHasLoginDatabaseAuth
       <TooltipAction
         title={
           !hasLoginDatabaseAuth
-            ? formatMessage({ id: 'src.page.Project.653AB743', defaultMessage: '暂无权限' })
+            ? formatMessage({
+                id: 'src.page.Project.653AB743',
+                defaultMessage: '暂无权限'
+              })
             : ''
         }
       >
@@ -72,9 +91,15 @@ const ExtraContent = ({ projectId, hasLoginDatabaseAuth, setHasLoginDatabaseAuth
           }}
           disabled={!hasLoginDatabaseAuth}
         >
-          {formatMessage({ id: 'src.page.Project.8635398D', defaultMessage: 'SQL 控制台' })}
+          {formatMessage({
+            id: 'src.page.Project.8635398D',
+            defaultMessage: 'SQL 控制台'
+          })}
 
-          <Icon component={NewOpenSvg} style={{ color: 'var(--text-color-hint)' }} />
+          <Icon
+            component={NewOpenSvg}
+            style={{ color: 'var(--text-color-hint)' }}
+          />
         </Button>
       </TooltipAction>
     </Space>
@@ -85,68 +110,71 @@ interface IProps {
 }
 const Pages = {
   [IPageType.Project_Database]: {
-    component: Database,
+    component: Database
   },
   [IPageType.Project_Setting]: {
-    component: Setting,
+    component: Setting
   },
   [IPageType.Project_Task]: {
-    component: Task,
+    component: Task
   },
   [IPageType.Project_User]: {
-    component: User,
+    component: User
   },
   [IPageType.Project_Sensitive]: {
-    component: Sensitive,
+    component: Sensitive
   },
   [IPageType.Project_Notification]: {
-    component: Notification,
-  },
+    component: Notification
+  }
 };
 const tabs = [
   {
     tab: formatMessage({
       id: 'odc.page.Project.Database',
-      defaultMessage: '数据库',
+      defaultMessage: '数据库'
     }),
     //数据库
-    key: IPageType.Project_Database,
+    key: IPageType.Project_Database
   },
   {
     tab: formatMessage({
       id: 'odc.page.Project.Ticket',
-      defaultMessage: '工单',
+      defaultMessage: '工单'
     }),
     //工单
-    key: IPageType.Project_Task,
+    key: IPageType.Project_Task
   },
   {
     tab: formatMessage({
       id: 'odc.page.Project.Member',
-      defaultMessage: '成员',
+      defaultMessage: '成员'
     }),
     //成员
-    key: IPageType.Project_User,
+    key: IPageType.Project_User
   },
   {
     tab: formatMessage({
       id: 'odc.src.page.Project.Sensitive',
-      defaultMessage: '敏感列',
+      defaultMessage: '敏感列'
     }), //'敏感列'
-    key: IPageType.Project_Sensitive,
+    key: IPageType.Project_Sensitive
   },
   {
-    tab: formatMessage({ id: 'src.page.Project.B4D9BC23', defaultMessage: '消息' }), //'消息'
-    key: IPageType.Project_Notification,
+    tab: formatMessage({
+      id: 'src.page.Project.B4D9BC23',
+      defaultMessage: '消息'
+    }), //'消息'
+    key: IPageType.Project_Notification
   },
   {
     tab: formatMessage({
       id: 'odc.page.Project.Settings',
-      defaultMessage: '设置',
+      defaultMessage: '设置'
     }),
     //设置
-    key: IPageType.Project_Setting,
-  },
+    key: IPageType.Project_Setting
+  }
 ];
 
 const Index: React.FC<IProps> = function (props) {
@@ -172,7 +200,9 @@ const Index: React.FC<IProps> = function (props) {
   };
   const sessionStorageKey = getSessionStorageKey(userStore);
   const [project, setProject] = useState<IProject>(null);
-  const [titleSelectType, setTitleSelectType] = useState<ProjectTabType>(ProjectTabType.ALL);
+  const [titleSelectType, setTitleSelectType] = useState<ProjectTabType>(
+    ProjectTabType.ALL
+  );
   const isTitleASelectArchived = titleSelectType === ProjectTabType.ARCHIVED;
   const [hasLoginDatabaseAuth, setHasLoginDatabaseAuth] = useState(false);
 
@@ -180,7 +210,9 @@ const Index: React.FC<IProps> = function (props) {
     const data = await getProject(projectId);
     if (data) {
       setProject(data);
-      setTitleSelectType(data?.archived ? ProjectTabType.ARCHIVED : ProjectTabType.ALL);
+      setTitleSelectType(
+        data?.archived ? ProjectTabType.ARCHIVED : ProjectTabType.ALL
+      );
       fetchProjectList(undefined, 1, 100, data?.archived, false);
     }
   }
@@ -197,7 +229,11 @@ const Index: React.FC<IProps> = function (props) {
       // 当前项目中只有Developer身份的用户通过url访问Sensitive页面时，跳转到Project，避免用户通过url直接进入Sensitvie页面导致发起错误请求。
       if (
         !project?.currentUserResourceRoles?.some((role) =>
-          [ProjectRole.DBA, ProjectRole.OWNER, ProjectRole.SECURITY_ADMINISTRATOR].includes(role),
+          [
+            ProjectRole.DBA,
+            ProjectRole.OWNER,
+            ProjectRole.SECURITY_ADMINISTRATOR
+          ].includes(role)
         )
       ) {
         navigate('/project');
@@ -208,14 +244,20 @@ const Index: React.FC<IProps> = function (props) {
   const {
     run: fetchProjectList,
     data,
-    loading,
+    loading
   } = useRequest(listProjects, {
-    manual: true,
+    manual: true
   });
 
   const handleChangeSelectTab = async (value: ProjectTabType) => {
     setTitleSelectType(value);
-    await fetchProjectList(undefined, 1, 100, value === ProjectTabType.ARCHIVED, false);
+    await fetchProjectList(
+      undefined,
+      1,
+      100,
+      value === ProjectTabType.ARCHIVED,
+      false
+    );
   };
 
   const options = useMemo(() => {
@@ -225,8 +267,8 @@ const Index: React.FC<IProps> = function (props) {
       options = [
         {
           label: project?.name,
-          value: projectId,
-        },
+          value: projectId
+        }
       ];
     }
     return options.concat(
@@ -237,28 +279,28 @@ const Index: React.FC<IProps> = function (props) {
           }
           return {
             label: p.name,
-            value: p.id,
+            value: p.id
           };
         })
-        ?.filter(Boolean) || [],
+        ?.filter(Boolean) || []
     );
   }, [data?.contents, titleSelectType, project]);
 
   const SelectBottom = useMemo(() => {
     const linkContnet = {
       text: '',
-      to: '',
+      to: ''
     };
     if (titleSelectType === ProjectTabType.ALL) {
       linkContnet.text = formatMessage({
         id: 'odc.page.Project.ViewAllProjects',
-        defaultMessage: '查看所有项目',
+        defaultMessage: '查看所有项目'
       });
       linkContnet.to = '/project';
     } else {
       linkContnet.text = formatMessage({
         id: 'src.page.Project.6AEA99CC',
-        defaultMessage: '查看所有归档项目',
+        defaultMessage: '查看所有归档项目'
       });
       linkContnet.to = '/project?archived=true';
     }
@@ -281,13 +323,13 @@ const Index: React.FC<IProps> = function (props) {
         IPageType.Project_Database,
         IPageType.Project_Task,
         IPageType.Project_Sensitive,
-        IPageType.Project_User,
+        IPageType.Project_User
       ],
 
       [ProjectRole.DEVELOPER]: [
         IPageType.Project_Database,
         IPageType.Project_Task,
-        IPageType.Project_User,
+        IPageType.Project_User
       ],
 
       [ProjectRole.OWNER]: [
@@ -296,21 +338,21 @@ const Index: React.FC<IProps> = function (props) {
         IPageType.Project_Sensitive,
         IPageType.Project_Setting,
         IPageType.Project_User,
-        IPageType.Project_Notification,
+        IPageType.Project_Notification
       ],
 
       [ProjectRole.SECURITY_ADMINISTRATOR]: [
         IPageType.Project_Database,
         IPageType.Project_Task,
         IPageType.Project_Sensitive,
-        IPageType.Project_User,
+        IPageType.Project_User
       ],
 
       [ProjectRole.PARTICIPANT]: [
         IPageType.Project_Database,
         IPageType.Project_Task,
-        IPageType.Project_User,
-      ],
+        IPageType.Project_User
+      ]
     };
     const currentRoles = project?.currentUserResourceRoles || [];
     const roleTabs: IPageType[] = currentRoles?.reduce((prev, current) => {
@@ -331,7 +373,7 @@ const Index: React.FC<IProps> = function (props) {
         SelectTab: titleSelectType,
         onSelectTabChange: handleChangeSelectTab,
         SelectTabOptions: titleOptions,
-        loading: loading,
+        loading: loading
       }}
       // 当前项目中拥有DBA或OWNER身份的用户拥有完整的Tabs，否则隐藏“敏感数据”入口。
       tabList={displayTabs}
@@ -346,7 +388,7 @@ const Index: React.FC<IProps> = function (props) {
       containerWrapStyle={
         [IPageType.Project_Notification].includes(page)
           ? {
-              padding: '0px 12px',
+              padding: '0px 12px'
             }
           : {}
       }
@@ -359,7 +401,7 @@ const Index: React.FC<IProps> = function (props) {
           projectId,
           reloadProject,
           hasLoginDatabaseAuth,
-          setHasLoginDatabaseAuth,
+          setHasLoginDatabaseAuth
         }}
       >
         <Component key={id} id={id} />

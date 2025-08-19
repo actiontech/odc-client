@@ -32,45 +32,50 @@ interface ICreateApprovalProps {
 const databaseRoleTextMap = {
   OWNER: formatMessage({
     id: 'src.page.Secure.RiskLevel.components.74C5AF56',
-    defaultMessage: '管理员',
-  }),
+    defaultMessage: '管理员'
+  })
 };
 const CreateApproval: React.FC<ICreateApprovalProps> = ({
   editId,
   formModalVisible,
   setFormModalVisible,
-  reloadData,
+  reloadData
 }) => {
   const [roles, setRoles] = useState([]);
   const [integrations, setIntegrations] = useState([]);
 
   const loadRoles = async () => {
     const res = await getResourceRoles({
-      resourceType: [IManagerResourceType.project, IManagerResourceType.database],
+      resourceType: [
+        IManagerResourceType.project,
+        IManagerResourceType.database
+      ]
     });
     const roles = res?.contents.map(({ roleName, id, resourceType }) => {
       const textMap =
-        resourceType === IManagerResourceType.database ? databaseRoleTextMap : projectRoleTextMap;
+        resourceType === IManagerResourceType.database
+          ? databaseRoleTextMap
+          : projectRoleTextMap;
       const prefix =
         resourceType == IManagerResourceType.database
           ? formatMessage({
               id: 'src.page.Secure.RiskLevel.components.8AA090C0',
-              defaultMessage: '库-',
+              defaultMessage: '库-'
             })
           : formatMessage({
               id: 'src.page.Secure.RiskLevel.components.9742C706',
-              defaultMessage: '项目-',
+              defaultMessage: '项目-'
             });
       return {
         name: prefix + textMap?.[roleName],
-        id,
+        id
       };
     });
     setRoles(roles);
   };
   const loadIntegrations = async () => {
     const integrations = await getIntegrationList({
-      type: IntegrationType.APPROVAL,
+      type: IntegrationType.APPROVAL
     });
     setIntegrations(integrations?.contents);
   };

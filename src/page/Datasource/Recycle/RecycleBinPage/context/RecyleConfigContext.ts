@@ -26,11 +26,12 @@ const defaultContext: IRecyleConfigContext = {
   setting: {
     objectExpireTime: '',
     recyclebinEnabled: false,
-    truncateFlashbackEnabled: false,
+    truncateFlashbackEnabled: false
   },
-  changeSetting: null,
+  changeSetting: null
 };
 
-const RecyleConfigContext = React.createContext<IRecyleConfigContext>(defaultContext);
+const RecyleConfigContext =
+  React.createContext<IRecyleConfigContext>(defaultContext);
 
 export default RecyleConfigContext;

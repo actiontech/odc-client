@@ -35,16 +35,20 @@ const RecentlyDatabase: React.FC<IProps> = ({ modalStore }) => {
   const {
     data: databaseList,
     run: runGetDatabasesHistories,
-    loading,
-  } = useRequest((params: IDatabaseHistoriesParam) => getDatabasesHistories(params), {
-    manual: true,
-  });
-  const { columnNames, columnKeys, columnDataIndex, columnWidth } = ConsoleTextConfig.recently;
+    loading
+  } = useRequest(
+    (params: IDatabaseHistoriesParam) => getDatabasesHistories(params),
+    {
+      manual: true
+    }
+  );
+  const { columnNames, columnKeys, columnDataIndex, columnWidth } =
+    ConsoleTextConfig.recently;
 
   useMount(() => {
     runGetDatabasesHistories({
       currentOrganizationId: login.organizationId,
-      limit: 10,
+      limit: 10
     });
   });
 
@@ -68,21 +72,24 @@ const RecentlyDatabase: React.FC<IProps> = ({ modalStore }) => {
             {formatMessage(
               {
                 id: 'src.page.Console.components.RecentlyDatabase.CA6BD899',
-                defaultMessage: '未加入项目【{LogicalExpression0}】请先',
+                defaultMessage: '未加入项目【{LogicalExpression0}】请先'
               },
-              { LogicalExpression0: record?.project?.name || '-' },
+              { LogicalExpression0: record?.project?.name || '-' }
             )}
             <a
               target="_blank"
               rel="noopener noreferrer"
               style={{ color: '#40a9ff', marginLeft: 4 }}
               onClick={() => {
-                handleApply(TaskType.APPLY_PROJECT_PERMISSION, record?.project?.id);
+                handleApply(
+                  TaskType.APPLY_PROJECT_PERMISSION,
+                  record?.project?.id
+                );
               }}
             >
               {formatMessage({
                 id: 'src.page.Console.components.RecentlyDatabase.825A345D',
-                defaultMessage: '申请项目权限',
+                defaultMessage: '申请项目权限'
               })}
             </a>
           </div>
@@ -93,7 +100,7 @@ const RecentlyDatabase: React.FC<IProps> = ({ modalStore }) => {
           <div>
             {formatMessage({
               id: 'src.page.Console.components.RecentlyDatabase.67205237',
-              defaultMessage: '暂无该数据库权限，请先',
+              defaultMessage: '暂无该数据库权限，请先'
             })}
 
             <a
@@ -101,12 +108,15 @@ const RecentlyDatabase: React.FC<IProps> = ({ modalStore }) => {
               rel="noopener noreferrer"
               style={{ color: '#40a9ff' }}
               onClick={() => {
-                handleApply(TaskType.APPLY_DATABASE_PERMISSION, record?.project?.id);
+                handleApply(
+                  TaskType.APPLY_DATABASE_PERMISSION,
+                  record?.project?.id
+                );
               }}
             >
               {formatMessage({
                 id: 'src.page.Console.components.RecentlyDatabase.CEF9CB7E',
-                defaultMessage: '申请库权限',
+                defaultMessage: '申请库权限'
               })}
             </a>
           </div>
@@ -126,17 +136,27 @@ const RecentlyDatabase: React.FC<IProps> = ({ modalStore }) => {
       ellipsis: true,
       width: columnWidth[index],
       render: (value, record) => {
-        const hasProjectAuth = record?.project?.currentUserResourceRoles?.length > 0;
+        const hasProjectAuth =
+          record?.project?.currentUserResourceRoles?.length > 0;
         const hasDBAuth = !!record?.authorizedPermissionTypes?.length;
-        const actionStyle = hasProjectAuth ? styles.action : styles.disabledAction;
+        const actionStyle = hasProjectAuth
+          ? styles.action
+          : styles.disabledAction;
         const normalStyle = hasProjectAuth ? '' : styles.disabledAction;
         switch (key) {
           case EDatabaseTableColumnKey.Operation:
-            const operation = getRecentlyDatabaseOperation({ record, project: record?.project });
+            const operation = getRecentlyDatabaseOperation({
+              record,
+              project: record?.project
+            });
             return (
               <div
                 className={actionStyle}
-                style={hasDBAuth ? {} : { filter: 'grayscale(1)', pointerEvents: 'none' }}
+                style={
+                  hasDBAuth
+                    ? {}
+                    : { filter: 'grayscale(1)', pointerEvents: 'none' }
+                }
               >
                 <Action.Group size={3}>
                   {operation.map((item, index) => {
@@ -147,7 +167,9 @@ const RecentlyDatabase: React.FC<IProps> = ({ modalStore }) => {
             );
 
           case EDatabaseTableColumnKey.Recently:
-            const databaseStyle = getDataSourceStyleByConnectType(record?.dataSource?.type);
+            const databaseStyle = getDataSourceStyleByConnectType(
+              record?.dataSource?.type
+            );
             const existed = record?.existed;
             return (
               <div
@@ -158,10 +180,17 @@ const RecentlyDatabase: React.FC<IProps> = ({ modalStore }) => {
                   gap={4}
                   label={
                     <Tooltip
-                      overlayInnerStyle={{ whiteSpace: 'nowrap', width: 'fit-content' }}
+                      overlayInnerStyle={{
+                        whiteSpace: 'nowrap',
+                        width: 'fit-content'
+                      }}
                       title={renderTooltipContent({
-                        type: hasProjectAuth ? (hasDBAuth ? '' : 'database') : 'project',
-                        record,
+                        type: hasProjectAuth
+                          ? hasDBAuth
+                            ? ''
+                            : 'database'
+                          : 'project',
+                        record
                       })}
                     >
                       <span
@@ -175,7 +204,7 @@ const RecentlyDatabase: React.FC<IProps> = ({ modalStore }) => {
                             record?.id,
                             null,
                             '',
-                            isLogicalDatabase(record),
+                            isLogicalDatabase(record)
                           );
                         }}
                       >
@@ -186,7 +215,7 @@ const RecentlyDatabase: React.FC<IProps> = ({ modalStore }) => {
                             isTip={false}
                             title={formatMessage({
                               id: 'odc.Datasource.Info.TheCurrentDatabaseDoesNot',
-                              defaultMessage: '当前数据库不存在',
+                              defaultMessage: '当前数据库不存在'
                             })} /*当前数据库不存在*/
                           />
                         )}
@@ -204,7 +233,7 @@ const RecentlyDatabase: React.FC<IProps> = ({ modalStore }) => {
                         style={{
                           color: databaseStyle?.icon?.color,
                           fontSize: 16,
-                          marginRight: 4,
+                          marginRight: 4
                         }}
                       />
                     )
@@ -214,14 +243,19 @@ const RecentlyDatabase: React.FC<IProps> = ({ modalStore }) => {
             );
 
           case EDatabaseTableColumnKey.DataSource:
-            const style = getDataSourceStyleByConnectType(record.dataSource?.type);
+            const style = getDataSourceStyleByConnectType(
+              record.dataSource?.type
+            );
             if (!value) {
               return (
                 <Tooltip
-                  overlayInnerStyle={{ whiteSpace: 'nowrap', width: 'fit-content' }}
+                  overlayInnerStyle={{
+                    whiteSpace: 'nowrap',
+                    width: 'fit-content'
+                  }}
                   title={renderTooltipContent({
                     type: hasProjectAuth ? '' : 'project',
-                    record,
+                    record
                   })}
                 >
                   <span>-</span>
@@ -235,10 +269,17 @@ const RecentlyDatabase: React.FC<IProps> = ({ modalStore }) => {
                   gap={6}
                   label={
                     <Tooltip
-                      overlayInnerStyle={{ whiteSpace: 'nowrap', width: 'fit-content' }}
+                      overlayInnerStyle={{
+                        whiteSpace: 'nowrap',
+                        width: 'fit-content'
+                      }}
                       title={renderTooltipContent({
-                        type: hasProjectAuth ? (hasDBAuth ? '' : 'database') : 'project',
-                        record,
+                        type: hasProjectAuth
+                          ? hasDBAuth
+                            ? ''
+                            : 'database'
+                          : 'project',
+                        record
                       })}
                     >
                       <span>{value}</span>
@@ -250,7 +291,7 @@ const RecentlyDatabase: React.FC<IProps> = ({ modalStore }) => {
                       style={{
                         color: style?.icon?.color,
                         fontSize: 16,
-                        marginRight: 4,
+                        marginRight: 4
                       }}
                     />
                   }
@@ -283,7 +324,7 @@ const RecentlyDatabase: React.FC<IProps> = ({ modalStore }) => {
           default:
             return <>-</>;
         }
-      },
+      }
     };
     return config;
   });
@@ -299,7 +340,10 @@ const RecentlyDatabase: React.FC<IProps> = ({ modalStore }) => {
           pagination={false}
         />
       ) : (
-        <RecentlyDatabaseEmpty height={391} color="var(--text-color-secondary)" />
+        <RecentlyDatabaseEmpty
+          height={391}
+          color="var(--text-color-secondary)"
+        />
       )}
       <ExportTaskCreateModal />
       <ImportTaskCreateModal />

@@ -15,7 +15,11 @@
  */
 
 import { formatMessage } from '@/util/intl';
-import { CheckCircleFilled, CloseCircleFilled, ExclamationCircleFilled } from '@ant-design/icons';
+import {
+  CheckCircleFilled,
+  CloseCircleFilled,
+  ExclamationCircleFilled
+} from '@ant-design/icons';
 import { Col, Empty, Row, Tabs } from 'antd';
 import React, { useEffect, useState } from 'react';
 // @ts-ignore
@@ -50,9 +54,14 @@ interface IProps {
       plName: string;
       plType: PLType;
       packageName: string;
-    }[],
+    }[]
   ) => Promise<boolean>;
-  gotoBreakPoint: (lineNum: number, plName: string, plType: PLType, packageName: string) => void;
+  gotoBreakPoint: (
+    lineNum: number,
+    plName: string,
+    plType: PLType,
+    packageName: string
+  ) => void;
 }
 
 const PLDebugResultSet: React.FC<IProps> = (props) => {
@@ -81,7 +90,7 @@ const PLDebugResultSet: React.FC<IProps> = (props) => {
       {
         name: formatMessage({
           id: 'odc.components.PLDebugResultSet.CompilationResult',
-          defaultMessage: '编译结果',
+          defaultMessage: '编译结果'
         }),
 
         key: 'COMPLIE_RESULT',
@@ -94,24 +103,24 @@ const PLDebugResultSet: React.FC<IProps> = (props) => {
               icon: <CheckCircleFilled style={{ color: '#52C41A' }} />,
               text: formatMessage({
                 id: 'odc.components.PLDebugResultSet.CompiledSuccessfully',
-                defaultMessage: '编译成功',
-              }),
+                defaultMessage: '编译成功'
+              })
             },
 
             WARNING: {
               icon: <ExclamationCircleFilled style={{ color: '#faad14' }} />,
               text: formatMessage({
                 id: 'odc.components.PLDebugResultSet.CompiledSuccessfullyWithAnAlert',
-                defaultMessage: '编译成功，存在告警信息',
-              }), // 编译成功，存在告警信息
+                defaultMessage: '编译成功，存在告警信息'
+              }) // 编译成功，存在告警信息
             },
             FAIL: {
               icon: <CloseCircleFilled style={{ color: '#FF1A2E' }} />,
               text: formatMessage({
                 id: 'odc.components.PLDebugResultSet.CompilationFailed',
-                defaultMessage: '编译失败',
-              }),
-            },
+                defaultMessage: '编译失败'
+              })
+            }
           };
 
           const info = resInfo[status];
@@ -125,7 +134,7 @@ const PLDebugResultSet: React.FC<IProps> = (props) => {
                   {
                     formatMessage({
                       id: 'odc.components.PLDebugResultSet.AlertDetails',
-                      defaultMessage: '告警详情：',
+                      defaultMessage: '告警详情：'
                     }) /* 告警详情： */
                   }
                 </div>
@@ -134,8 +143,8 @@ const PLDebugResultSet: React.FC<IProps> = (props) => {
               <div>{data.COMPILE.track}</div>
             </div>
           );
-        },
-      },
+        }
+      }
     ];
 
     return renderTabArea(tabs);
@@ -150,7 +159,7 @@ const PLDebugResultSet: React.FC<IProps> = (props) => {
       {
         name: formatMessage({
           id: 'odc.components.PLDebugResultSet.Result',
-          defaultMessage: '运行结果',
+          defaultMessage: '运行结果'
         }),
         key: 'EXEC_RESULT',
         renderTabContent() {
@@ -162,20 +171,24 @@ const PLDebugResultSet: React.FC<IProps> = (props) => {
               icon: <CheckCircleFilled style={{ color: '#52C41A' }} />,
               text: formatMessage({
                 id: 'odc.components.PLDebugResultSet.RunSuccessfully',
-                defaultMessage: '运行成功',
-              }),
+                defaultMessage: '运行成功'
+              })
             },
 
             FAIL: {
               icon: <CloseCircleFilled style={{ color: '#FF1A2E' }} />,
               text: formatMessage({
                 id: 'odc.components.PLDebugResultSet.FailedToRun',
-                defaultMessage: '运行失败',
-              }),
-            },
+                defaultMessage: '运行失败'
+              })
+            }
           };
 
-          const { errorMessage = '', status, unauthorizedDBResources } = data.EXEC || {};
+          const {
+            errorMessage = '',
+            status,
+            unauthorizedDBResources
+          } = data.EXEC || {};
           const formatStatus = status !== 'FAIL' ? 'SUCCESS' : 'FAIL';
           const statusInfo = statusMap[formatStatus];
           const paramsColumns = [
@@ -183,29 +196,34 @@ const PLDebugResultSet: React.FC<IProps> = (props) => {
               dataIndex: 'paramName',
               title: formatMessage({
                 id: 'odc.components.PLDebugResultSet.Parameter',
-                defaultMessage: '参数',
-              }),
+                defaultMessage: '参数'
+              })
             },
 
             {
               dataIndex: 'paramMode',
               title: formatMessage({
                 id: 'odc.components.PLDebugResultSet.Type',
-                defaultMessage: '类型',
-              }),
+                defaultMessage: '类型'
+              })
             },
 
             {
               dataIndex: 'value',
               title: formatMessage({
                 id: 'odc.components.PLDebugResultSet.Value',
-                defaultMessage: '值',
+                defaultMessage: '值'
               }),
               render(v, record) {
-                const isOracle = session?.connection.dialectType === ConnectionMode.OB_ORACLE;
+                const isOracle =
+                  session?.connection.dialectType === ConnectionMode.OB_ORACLE;
                 let text;
                 if (v === null || (isOracle && v === '')) {
-                  text = <span style={{ color: 'var(--text-color-hint)' }}>(null)</span>;
+                  text = (
+                    <span style={{ color: 'var(--text-color-hint)' }}>
+                      (null)
+                    </span>
+                  );
                 } else {
                   text = v;
                 }
@@ -220,8 +238,8 @@ const PLDebugResultSet: React.FC<IProps> = (props) => {
                       )}
                   </div>
                 );
-              },
-            },
+              }
+            }
           ];
 
           const paramsValues = [];
@@ -238,7 +256,7 @@ const PLDebugResultSet: React.FC<IProps> = (props) => {
           data?.EXEC?.outParams?.forEach((param) => {
             paramsValues.push({
               ...param,
-              paramMode: 'OUT',
+              paramMode: 'OUT'
             });
           });
 
@@ -247,25 +265,25 @@ const PLDebugResultSet: React.FC<IProps> = (props) => {
               dataIndex: 'returnType',
               title: formatMessage({
                 id: 'odc.components.PLDebugResultSet.ResponseType',
-                defaultMessage: '返回类型',
-              }),
+                defaultMessage: '返回类型'
+              })
             },
 
             {
               dataIndex: 'returnValue',
               title: formatMessage({
                 id: 'odc.components.PLDebugResultSet.ReturnValue',
-                defaultMessage: '返回值',
-              }),
-            },
+                defaultMessage: '返回值'
+              })
+            }
           ];
 
           const returnValues = data?.EXEC?.returnValue
             ? [
                 {
                   returnType: data.EXEC.returnValue.dataType,
-                  returnValue: data.EXEC.returnValue.value,
-                },
+                  returnValue: data.EXEC.returnValue.value
+                }
               ]
             : [];
 
@@ -299,17 +317,20 @@ const PLDebugResultSet: React.FC<IProps> = (props) => {
                 </Row>
               )}
               {unauthorizedDBResources?.length && (
-                <DBPermissionTableContent dataSource={unauthorizedDBResources} showAction />
+                <DBPermissionTableContent
+                  dataSource={unauthorizedDBResources}
+                  showAction
+                />
               )}
             </div>
           );
-        },
+        }
       },
 
       {
         name: formatMessage({
           id: 'odc.components.PLDebugResultSet.DbmsOutput',
-          defaultMessage: 'DBMS 输出',
+          defaultMessage: 'DBMS 输出'
         }),
 
         key: 'EXEC_DBMS',
@@ -318,8 +339,8 @@ const PLDebugResultSet: React.FC<IProps> = (props) => {
             return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />;
           }
           return <div className={styles['dbms-output']}>{data.DBMS.line}</div>;
-        },
-      },
+        }
+      }
     ];
 
     return renderTabArea(tabs);
@@ -333,7 +354,7 @@ const PLDebugResultSet: React.FC<IProps> = (props) => {
       {
         name: formatMessage({
           id: 'odc.components.PLDebugResultSet.Parameter',
-          defaultMessage: '参数',
+          defaultMessage: '参数'
         }),
 
         key: 'PARAMS',
@@ -343,33 +364,33 @@ const PLDebugResultSet: React.FC<IProps> = (props) => {
               dataIndex: 'paramName',
               title: formatMessage({
                 id: 'odc.components.PLDebugResultSet.Parameter.1',
-                defaultMessage: '参数名',
-              }),
+                defaultMessage: '参数名'
+              })
             },
 
             {
               dataIndex: 'paramMode',
               title: formatMessage({
                 id: 'odc.components.PLDebugResultSet.Mode',
-                defaultMessage: '模式',
-              }),
+                defaultMessage: '模式'
+              })
             },
 
             {
               dataIndex: 'dataType',
               title: formatMessage({
                 id: 'odc.components.PLDebugResultSet.DataType',
-                defaultMessage: '数据类型',
-              }),
+                defaultMessage: '数据类型'
+              })
             },
 
             {
               dataIndex: 'defaultValue',
               title: formatMessage({
                 id: 'odc.components.PLDebugResultSet.Value',
-                defaultMessage: '值',
-              }),
-            },
+                defaultMessage: '值'
+              })
+            }
           ];
 
           const resultParams = props.debug?.result;
@@ -377,24 +398,34 @@ const PLDebugResultSet: React.FC<IProps> = (props) => {
           let dataSource = cloneDeep(
             isArray(resultParams)
               ? resultParams
-              : initParams?.filter((item) => item?.paramMode?.includes('OUT')),
+              : initParams?.filter((item) => item?.paramMode?.includes('OUT'))
           );
-          if (props.debug?.isDebugEnd() && props.debug?.plType === PLType.FUNCTION) {
+          if (
+            props.debug?.isDebugEnd() &&
+            props.debug?.plType === PLType.FUNCTION
+          ) {
             dataSource = []
               .concat(dataSource)
               .concat({
                 paramName: 'return',
                 paramMode: 'returnMode',
-                dataType: (props.debug?.result as IDebugFunctionResult)?.returnType,
-                defaultValue: (props.debug?.result as IDebugFunctionResult)?.returnValue,
-                seqNum: 9999,
+                dataType: (props.debug?.result as IDebugFunctionResult)
+                  ?.returnType,
+                defaultValue: (props.debug?.result as IDebugFunctionResult)
+                  ?.returnValue,
+                seqNum: 9999
               })
               .filter(Boolean);
             (resultParams as IDebugFunctionResult)?.params?.forEach((param) => {
               const { paramName, paramMode, defaultValue } = param;
-              if (paramMode === ParamMode.OUT || paramMode === ParamMode.INOUT) {
+              if (
+                paramMode === ParamMode.OUT ||
+                paramMode === ParamMode.INOUT
+              ) {
                 const target = (dataSource as IPLParam[]).find(
-                  (item) => item?.paramName === paramName && item?.paramMode === paramMode,
+                  (item) =>
+                    item?.paramName === paramName &&
+                    item?.paramMode === paramMode
                 );
                 if (target) target.defaultValue = defaultValue;
               }
@@ -412,25 +443,25 @@ const PLDebugResultSet: React.FC<IProps> = (props) => {
               disablePagination={true}
             />
           );
-        },
+        }
       },
 
       {
         name: formatMessage({
           id: 'odc.components.PLDebugResultSet.StacksAndVariables',
-          defaultMessage: '堆栈与变量',
+          defaultMessage: '堆栈与变量'
         }),
 
         key: 'TRACK_AND_VARIABLE',
         renderTabContent: () => {
           return <DebugVariables debug={props.debug} />;
-        },
+        }
       },
 
       {
         name: formatMessage({
           id: 'odc.components.PLDebugResultSet.DbmsOutput',
-          defaultMessage: 'DBMS 输出',
+          defaultMessage: 'DBMS 输出'
         }),
 
         key: 'DBMS',
@@ -440,15 +471,15 @@ const PLDebugResultSet: React.FC<IProps> = (props) => {
             return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />;
           }
           return <div className={styles['dbms-output']}>{dbms}</div>;
-        },
-      },
+        }
+      }
     ];
 
     const rightTabs = [
       {
         name: formatMessage({
           id: 'odc.components.PLDebugResultSet.Breakpoint',
-          defaultMessage: '断点',
+          defaultMessage: '断点'
         }),
 
         key: 'BREAK_POINT',
@@ -460,25 +491,30 @@ const PLDebugResultSet: React.FC<IProps> = (props) => {
               debug={props.debug}
             />
           );
-        },
+        }
       },
 
       {
         name: formatMessage({
           id: 'odc.components.PLDebugResultSet.DebuggingLogs',
-          defaultMessage: '调试日志',
+          defaultMessage: '调试日志'
         }),
 
         key: 'DEBUG_LOG',
         renderTabContent: () => {
           return <DebugLog debug={props.debug} />;
-        },
-      },
+        }
+      }
     ];
 
     return (
       <div className={styles.plDebugResults}>
-        <SplitPane split="vertical" defaultSize="60%" minSize={136} maxSize={-200}>
+        <SplitPane
+          split="vertical"
+          defaultSize="60%"
+          minSize={136}
+          maxSize={-200}
+        >
           {renderTabArea(leftTabs, 'LEFT')}
           {renderTabArea(rightTabs, 'RIGHT')}
         </SplitPane>
@@ -501,13 +537,14 @@ const PLDebugResultSet: React.FC<IProps> = (props) => {
         return {
           key,
           label: name,
-          children: renderTabContent(),
+          children: renderTabContent()
         };
-      }),
+      })
     };
 
     if (isLeft) {
-      tabCfg.activeKey = activeTabKey || (type == 'DEBUG' ? tabs[1].key : tabs[0].key);
+      tabCfg.activeKey =
+        activeTabKey || (type == 'DEBUG' ? tabs[1].key : tabs[0].key);
       tabCfg.onChange = handleChangeTab;
     } else {
       tabCfg.activeKey = activeRightTabKey || tabs[0].key;

@@ -18,7 +18,7 @@ import {
   EllipsisOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  PlayCircleOutlined,
+  PlayCircleOutlined
 } from '@ant-design/icons';
 import { ComponentClass, FunctionComponent } from 'react';
 import commonIcon from './commonIcon';
@@ -66,7 +66,7 @@ export enum IConStatus {
   INIT,
   RUNNING,
   DISABLE,
-  ACTIVE,
+  ACTIVE
 }
 
 export interface IStatefulIconProps {
@@ -77,11 +77,13 @@ export interface IStatefulIconProps {
 export const commonIconLoadingStyle = {
   outline: '5px solid #E6F7FF',
   background: '#E6F7FF',
-  color: '#3fa3ff',
+  color: '#3fa3ff'
 };
 
 const iconMap: {
-  [key: string]: ComponentClass<IStatefulIconProps> | FunctionComponent<IStatefulIconProps>;
+  [key: string]:
+    | ComponentClass<IStatefulIconProps>
+    | FunctionComponent<IStatefulIconProps>;
 } = {
   SQL_RUN: commonIcon({ component: StartSvg }),
   SQL_RUN_SECTION: commonIcon({ component: ExecuteSectionSvg }),
@@ -108,7 +110,7 @@ const iconMap: {
   SNIPPET: commonIcon({ component: SnippetSvg }),
   EXPAIN: commonIcon({ component: ExpainSvg }),
   FORMAT: commonIcon({ component: FormatSvg }),
-  LINT: commonIcon({ component: LintSvg }),
+  LINT: commonIcon({ component: LintSvg })
 };
 
 export default iconMap;

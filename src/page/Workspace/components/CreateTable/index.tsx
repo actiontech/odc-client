@@ -27,7 +27,7 @@ import {
   TablePartition,
   TablePrimaryConstraint,
   TableTabType,
-  TableUniqueConstraint,
+  TableUniqueConstraint
 } from './interface';
 import TableContext from './TableContext';
 
@@ -67,7 +67,7 @@ const defaultInfo: TableInfo = {
   character: 'utf8mb4',
   collation: 'utf8mb4_general_ci',
   comment: null,
-  columnGroups: [],
+  columnGroups: []
 };
 
 const defaultPartitions: TablePartition = null;
@@ -77,23 +77,35 @@ const CreateTable: React.FC<IProps> = function ({
   params,
   sessionManagerStore,
   modalStore,
-  isExternalTable,
+  isExternalTable
 }) {
   const [info, setInfo] = useState<TableInfo>(defaultInfo);
   const [columns, setColumns] = useState<TableColumn[]>([defaultColumn]);
-  const [partitions, setPartitions] = useState<Partial<TablePartition>>(defaultPartitions);
+  const [partitions, setPartitions] =
+    useState<Partial<TablePartition>>(defaultPartitions);
   const [indexes, setIndexes] = useState<ITableIndex[]>([]);
   const [status, setStatus] = useState<EStatus>(null);
   const [lintResultSet, setLintResultSet] = useState<ISQLLintReuslt[]>([]);
-  const [primaryConstraints, setPrimaryConstraints] = useState<TablePrimaryConstraint[]>([]);
-  const [uniqueConstraints, setUniqueConstraints] = useState<TableUniqueConstraint[]>([]);
-  const [foreignConstraints, setForeignConstraints] = useState<TableForeignConstraint[]>([]);
-  const [checkConstraints, setCheckConstraints] = useState<TableCheckConstraint[]>([]);
+  const [primaryConstraints, setPrimaryConstraints] = useState<
+    TablePrimaryConstraint[]
+  >([]);
+  const [uniqueConstraints, setUniqueConstraints] = useState<
+    TableUniqueConstraint[]
+  >([]);
+  const [foreignConstraints, setForeignConstraints] = useState<
+    TableForeignConstraint[]
+  >([]);
+  const [checkConstraints, setCheckConstraints] = useState<
+    TableCheckConstraint[]
+  >([]);
   const [DDL, setDDL] = useState('');
   const [hasExecuted, setHasExecuted] = useState<boolean>(false);
-  const { loading, run: runGenerateCreateTableDDL } = useRequest(generateCreateTableDDL, {
-    manual: true,
-  });
+  const { loading, run: runGenerateCreateTableDDL } = useRequest(
+    generateCreateTableDDL,
+    {
+      manual: true
+    }
+  );
   const [isLogicalTableValid, setIsLogicalTableValid] = useState<boolean>(true);
 
   const { session } = useContext(SessionContext);
@@ -108,10 +120,10 @@ const CreateTable: React.FC<IProps> = function ({
         primaryConstraints,
         uniqueConstraints,
         foreignConstraints,
-        checkConstraints,
+        checkConstraints
       },
       session?.sessionId,
-      session?.odcDatabase?.name,
+      session?.odcDatabase?.name
     );
     if (sql) {
       setDDL(sql);
@@ -141,7 +153,7 @@ const CreateTable: React.FC<IProps> = function ({
             {
               formatMessage({
                 id: 'odc.components.CreateTable.BasicInformationAsRequiredOptional',
-                defaultMessage: '基本信息，列为必填项，其他选填',
+                defaultMessage: '基本信息，列为必填项，其他选填'
               })
               /*基本信息，列为必填项，其他选填*/
             }
@@ -156,15 +168,20 @@ const CreateTable: React.FC<IProps> = function ({
                 ? null
                 : formatMessage({
                     id: 'odc.components.CreateTable.PleaseFillInTheBasic',
-                    defaultMessage: '请填写基本信息和列',
+                    defaultMessage: '请填写基本信息和列'
                   }) //请填写基本信息和列
             }
           >
-            <Button type="primary" disabled={!isComplete} loading={loading} onClick={handleSubmit}>
+            <Button
+              type="primary"
+              disabled={!isComplete}
+              loading={loading}
+              onClick={handleSubmit}
+            >
               {
                 formatMessage({
                   id: 'odc.components.CreateTable.SubmitAndConfirmSql',
-                  defaultMessage: '提交并确认 SQL',
+                  defaultMessage: '提交并确认 SQL'
                 })
                 /*提交并确认 SQL*/
               }
@@ -193,7 +210,7 @@ const CreateTable: React.FC<IProps> = function ({
           setCheckConstraints,
           session,
           isLogicalTableValid,
-          setIsLogicalTableValid,
+          setIsLogicalTableValid
         }}
       >
         <Tabs
@@ -204,42 +221,42 @@ const CreateTable: React.FC<IProps> = function ({
               key: TableTabType.INFO,
               label: formatMessage({
                 id: 'odc.components.CreateTable.BasicInformation',
-                defaultMessage: '基本信息',
+                defaultMessage: '基本信息'
               }),
-              children: <BaseInfo dbType={dbType} />,
+              children: <BaseInfo dbType={dbType} />
             },
             {
               key: TableTabType.COLUMN,
               label: formatMessage({
                 id: 'odc.components.CreateTable.Column',
-                defaultMessage: '列',
+                defaultMessage: '列'
               }),
-              children: <Columns isExternalTable={isExternalTable} />,
+              children: <Columns isExternalTable={isExternalTable} />
             },
             {
               key: TableTabType.INDEX,
               label: formatMessage({
                 id: 'odc.components.CreateTable.Index',
-                defaultMessage: '索引',
+                defaultMessage: '索引'
               }),
-              children: <TableIndex />,
+              children: <TableIndex />
             },
             {
               key: TableTabType.CONSTRAINT,
               label: formatMessage({
                 id: 'odc.components.CreateTable.Constraints',
-                defaultMessage: '约束',
+                defaultMessage: '约束'
               }),
-              children: <TableConstraint />,
+              children: <TableConstraint />
             },
             {
               key: TableTabType.PARTITION,
               label: formatMessage({
                 id: 'odc.components.CreateTable.Partition',
-                defaultMessage: '分区',
+                defaultMessage: '分区'
               }),
-              children: <Partition />,
-            },
+              children: <Partition />
+            }
           ]}
         />
 
@@ -270,7 +287,7 @@ const CreateTable: React.FC<IProps> = function ({
               modalStore.changeLogicialDatabaseModal(true, {
                 ddl: DDL,
                 projectId: session?.odcDatabase?.project?.id,
-                databaseId: session?.odcDatabase?.id,
+                databaseId: session?.odcDatabase?.id
               });
               setDDL('');
               return;
@@ -279,15 +296,19 @@ const CreateTable: React.FC<IProps> = function ({
               DDL,
               session?.sessionId,
               session?.odcDatabase?.name,
-              false,
+              false
             );
             if (results?.unauthorizedDBResources?.length) {
-              return { unauthorizedDBResources: results?.unauthorizedDBResources };
+              return {
+                unauthorizedDBResources: results?.unauthorizedDBResources
+              };
             }
             if (!hasExecuted) {
               if (results?.status !== EStatus.SUBMIT) {
                 setLintResultSet(results?.lintResultSet);
-                modal.updateCreateAsyncTaskModal({ activePageKey: page.activePageKey });
+                modal.updateCreateAsyncTaskModal({
+                  activePageKey: page.activePageKey
+                });
                 setStatus(results?.status);
                 setHasExecuted(true);
                 return;
@@ -296,8 +317,9 @@ const CreateTable: React.FC<IProps> = function ({
               if (results?.status === EStatus.APPROVAL) {
                 modal.changeCreateAsyncTaskModal(true, {
                   sql: DDL,
-                  databaseId: sessionManager.sessionMap.get(session?.sessionId).odcDatabase?.id,
-                  rules: lintResultSet,
+                  databaseId: sessionManager.sessionMap.get(session?.sessionId)
+                    .odcDatabase?.id,
+                  rules: lintResultSet
                 });
               }
               setStatus(null);
@@ -322,8 +344,9 @@ const CreateTable: React.FC<IProps> = function ({
               if (results?.status === EStatus.APPROVAL) {
                 modal.changeCreateAsyncTaskModal(true, {
                   sql: DDL,
-                  databaseId: sessionManager.sessionMap.get(session?.sessionId).odcDatabase?.id,
-                  rules: lintResultSet,
+                  databaseId: sessionManager.sessionMap.get(session?.sessionId)
+                    .odcDatabase?.id,
+                  rules: lintResultSet
                 });
               }
               setStatus(null);
@@ -334,7 +357,9 @@ const CreateTable: React.FC<IProps> = function ({
               setDDL('');
               return;
             }
-            const result = results?.executeResult?.find((result) => result.track);
+            const result = results?.executeResult?.find(
+              (result) => result.track
+            );
             if (!result?.track) {
               // 关闭创建表页面
               page.close(pageKey);
@@ -343,8 +368,8 @@ const CreateTable: React.FC<IProps> = function ({
               message.success(
                 formatMessage({
                   id: 'portal.connection.form.save.success',
-                  defaultMessage: '保存成功',
-                }),
+                  defaultMessage: '保存成功'
+                })
               );
             } else {
               notification.error(result);
@@ -357,5 +382,5 @@ const CreateTable: React.FC<IProps> = function ({
 };
 export default inject(
   'sessionManagerStore',
-  'modalStore',
+  'modalStore'
 )(observer(WrapSessionPage(CreateTable, false, true)));

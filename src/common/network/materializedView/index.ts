@@ -2,8 +2,15 @@ import request from '@/util/request';
 import { encodeObjName } from '@/util/utils';
 import { Base64 } from 'js-base64';
 import sessionManager from '@/store/sessionManager';
-import { convertMaterializedViewToTable, convertCreateMaterializedViewData } from './helper';
-import { IMaterializedView, MaterializedViewRecord, RefreshMethod } from '@/d.ts';
+import {
+  convertMaterializedViewToTable,
+  convertCreateMaterializedViewData
+} from './helper';
+import {
+  IMaterializedView,
+  MaterializedViewRecord,
+  RefreshMethod
+} from '@/d.ts';
 import notification from '@/util/notification';
 import { formatMessage } from '@/util/intl';
 
@@ -15,11 +22,14 @@ export async function getMaterializedView(params: {
   const { materializedViewName, sessionId, dbName } = params;
   const res = await request.get(
     `/api/v2/connect/sessions/${sessionId}/databases/${dbName}/materializedViews/${encodeObjName(
-      Base64.encode(materializedViewName),
-    )}`,
+      Base64.encode(materializedViewName)
+    )}`
   );
   const session = sessionManager.sessionMap.get(sessionId);
-  return convertMaterializedViewToTable(res?.data, session?.connection?.dialectType);
+  return convertMaterializedViewToTable(
+    res?.data,
+    session?.connection?.dialectType
+  );
 }
 
 export async function generateCreateMaterializedViewSql(params: {
@@ -33,8 +43,11 @@ export async function generateCreateMaterializedViewSql(params: {
   const res = await request.post(
     `/api/v2/connect/sessions/${sessionId}/databases/${dbName}/materializedViews/${materializedViewName}/generateCreateDDL`,
     {
-      data: convertCreateMaterializedViewData(data, session?.connection?.dialectType),
-    },
+      data: convertCreateMaterializedViewData(
+        data,
+        session?.connection?.dialectType
+      )
+    }
   );
   return res?.data;
 }
@@ -46,7 +59,13 @@ export async function syncMaterializedView(params: {
   method: RefreshMethod;
   parallelismDegree: number;
 }): Promise<boolean> {
-  const { materializedViewName: mvName, dbName, method, sessionId, parallelismDegree } = params;
+  const {
+    materializedViewName: mvName,
+    dbName,
+    method,
+    sessionId,
+    parallelismDegree
+  } = params;
   const res = await request.post(
     `/api/v2/connect/sessions/${sessionId}/databases/${dbName}/materializedViews/${mvName}/refresh`,
     {
@@ -54,9 +73,9 @@ export async function syncMaterializedView(params: {
         databaseName: dbName,
         mvName,
         method,
-        parallelismDegree,
-      },
-    },
+        parallelismDegree
+      }
+    }
   );
   return res?.data;
 }
@@ -71,8 +90,8 @@ export async function getRefreshRecords(params: {
   const res = await request.get(
     `/api/v2/connect/sessions/${sessionId}/databases/${dbName}/materializedViews/${materializedViewName}/refreshRecords`,
     {
-      params: { queryLimit },
-    },
+      params: { queryLimit }
+    }
   );
   return res?.data?.contents;
 }
@@ -87,21 +106,27 @@ export async function generateUpdateMaterializedViewDDL(params: {
   const session = sessionManager.sessionMap.get(sessionId);
   const res = await request.post(
     `/api/v2/connect/sessions/${sessionId}/databases/${encodeObjName(
-      dbName,
+      dbName
     )}/materializedViews/generateUpdateMViewDDL`,
     {
       data: {
-        previous: convertCreateMaterializedViewData(oldData, session?.connection?.dialectType),
-        current: convertCreateMaterializedViewData(newData, session?.connection?.dialectType),
-      },
-    },
+        previous: convertCreateMaterializedViewData(
+          oldData,
+          session?.connection?.dialectType
+        ),
+        current: convertCreateMaterializedViewData(
+          newData,
+          session?.connection?.dialectType
+        )
+      }
+    }
   );
   if (!res?.data?.sql) {
     notification.error({
       track: formatMessage({
         id: 'odc.network.table.CurrentlyNoSqlCanBe',
-        defaultMessage: '当前无 SQL 可提交',
-      }), //当前无 SQL 可提交
+        defaultMessage: '当前无 SQL 可提交'
+      }) //当前无 SQL 可提交
     });
   }
   return res?.data || { sql: '', tip: '' };

@@ -29,7 +29,7 @@ const DetectWay = ({
   formRef,
   hasValidated,
   setScript,
-  originType = SensitiveRuleType.PATH,
+  originType = SensitiveRuleType.PATH
 }) => {
   const [type, setType] = useState<SensitiveRuleType>(originType);
   const handleScriptChange = (v: string) => {
@@ -48,13 +48,13 @@ const DetectWay = ({
     <>
       <div
         style={{
-          marginBottom: '4px',
+          marginBottom: '4px'
         }}
       >
         {
           formatMessage({
             id: 'odc.SensitiveRule.components.DetectWay.IdentificationMethod',
-            defaultMessage: '识别方式',
+            defaultMessage: '识别方式'
           }) /*识别方式*/
         }
       </div>
@@ -65,7 +65,7 @@ const DetectWay = ({
               {
                 formatMessage({
                   id: 'odc.SensitiveRule.components.DetectWay.Path',
-                  defaultMessage: '路径',
+                  defaultMessage: '路径'
                 }) /*路径*/
               }
             </Radio.Button>
@@ -73,7 +73,7 @@ const DetectWay = ({
               {
                 formatMessage({
                   id: 'odc.SensitiveRule.components.DetectWay.Regular',
-                  defaultMessage: '正则',
+                  defaultMessage: '正则'
                 }) /*正则*/
               }
             </Radio.Button>
@@ -81,7 +81,7 @@ const DetectWay = ({
               {
                 formatMessage({
                   id: 'odc.SensitiveRule.components.DetectWay.Script',
-                  defaultMessage: '脚本',
+                  defaultMessage: '脚本'
                 }) /*脚本*/
               }
             </Radio.Button>
@@ -94,14 +94,14 @@ const DetectWay = ({
                 formatMessage({
                   id: 'odc.SensitiveRule.components.DetectWay.UseAsTheWildcardAnd',
                   defaultMessage:
-                    '使用「*」作为通配符，使用「,」作为分割符，例如：db*.table.*a,*.*.name',
+                    '使用「*」作为通配符，使用「,」作为分割符，例如：db*.table.*a,*.*.name'
                 }) /*使用「*」作为通配符，使用「,」作为分割符，例如：db*.table.*a,*.*.name*/
               }
             </div>
             <Form.Item
               label={formatMessage({
                 id: 'odc.SensitiveRule.components.DetectWay.MatchingRules',
-                defaultMessage: '匹配的规则',
+                defaultMessage: '匹配的规则'
               })}
               /*匹配的规则*/ name="pathIncludes"
               required
@@ -110,15 +110,15 @@ const DetectWay = ({
                   required: true,
                   message: formatMessage({
                     id: 'odc.SensitiveRule.components.DetectWay.EnterAMatchingRule',
-                    defaultMessage: '请输入匹配的规则',
-                  }), //请输入匹配的规则
-                },
+                    defaultMessage: '请输入匹配的规则'
+                  }) //请输入匹配的规则
+                }
               ]}
             >
               <Input.TextArea
                 placeholder={formatMessage({
                   id: 'odc.SensitiveRule.components.DetectWay.PleaseEnter',
-                  defaultMessage: '请输入',
+                  defaultMessage: '请输入'
                 })}
                 /*请输入*/ rows={4}
               ></Input.TextArea>
@@ -126,7 +126,7 @@ const DetectWay = ({
             <Form.Item
               label={formatMessage({
                 id: 'odc.SensitiveRule.components.DetectWay.ExcludedRules',
-                defaultMessage: '排除的规则',
+                defaultMessage: '排除的规则'
               })}
               /*排除的规则*/ name="pathExcludes"
               required
@@ -134,7 +134,7 @@ const DetectWay = ({
               <Input.TextArea
                 placeholder={formatMessage({
                   id: 'odc.SensitiveRule.components.DetectWay.PleaseEnter',
-                  defaultMessage: '请输入',
+                  defaultMessage: '请输入'
                 })}
                 /*请输入*/ rows={4}
               ></Input.TextArea>
@@ -148,7 +148,7 @@ const DetectWay = ({
               {
                 formatMessage({
                   id: 'odc.SensitiveRule.components.DetectWay.SelectTheRecognitionObjectBefore',
-                  defaultMessage: '请先勾选识别对象，再填写对应的表达式',
+                  defaultMessage: '请先勾选识别对象，再填写对应的表达式'
                 }) /*请先勾选识别对象，再填写对应的表达式*/
               }
             </div>
@@ -161,8 +161,8 @@ const DetectWay = ({
                   rules={[
                     {
                       required: true,
-                      message: 'required',
-                    },
+                      message: 'required'
+                    }
                   ]}
                   noStyle
                 >
@@ -224,19 +224,22 @@ const DetectWay = ({
               <Space
                 size={4}
                 style={{
-                  marginBottom: '5px',
+                  marginBottom: '5px'
                 }}
               >
                 <div>
                   {
                     formatMessage({
                       id: 'odc.SensitiveRule.components.DetectWay.GroovyScript',
-                      defaultMessage: 'Groovy脚本',
+                      defaultMessage: 'Groovy脚本'
                     }) /*Groovy脚本*/
                   }
                 </div>
                 <a
-                  href={odc.appConfig?.docs?.url || getLocalDocs('1.data-desensitization.html')}
+                  href={
+                    odc.appConfig?.docs?.url ||
+                    getLocalDocs('1.data-desensitization.html')
+                  }
                   target={'_blank'}
                   onClick={(e) => {
                     e.stopPropagation();
@@ -246,7 +249,7 @@ const DetectWay = ({
                   {
                     formatMessage({
                       id: 'odc.src.page.Project.Sensitive.components.SensitiveRule.components.LookAtTheDocumentation',
-                      defaultMessage: '查看文档',
+                      defaultMessage: '查看文档'
                     }) /* 
                 查看文档
                 */
@@ -256,7 +259,7 @@ const DetectWay = ({
               <div
                 style={{
                   height: '250px',
-                  paddingBottom: '12px',
+                  paddingBottom: '12px'
                 }}
               >
                 <CommonIDE
@@ -265,7 +268,7 @@ const DetectWay = ({
                   language={'groovy'}
                   initialSQL={script}
                   editorProps={{
-                    theme: EThemeConfigKey.ODC_WHITE,
+                    theme: EThemeConfigKey.ODC_WHITE
                   }}
                   onSQLChange={(script) => {
                     handleScriptChange(script);
@@ -273,11 +276,13 @@ const DetectWay = ({
                 />
               </div>
             </div>
-            <div className={hasValidated ? styles.errorTip : styles.errorTipHidden}>
+            <div
+              className={hasValidated ? styles.errorTip : styles.errorTipHidden}
+            >
               {
                 formatMessage({
                   id: 'odc.SensitiveRule.components.DetectWay.PleaseEnterGroovyScript',
-                  defaultMessage: '请输入Groovy脚本',
+                  defaultMessage: '请输入Groovy脚本'
                 }) /*请输入Groovy脚本*/
               }
             </div>

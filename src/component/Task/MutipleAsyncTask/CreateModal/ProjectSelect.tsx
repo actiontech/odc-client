@@ -14,8 +14,8 @@ const ProjectSelect: React.FC<{
       {
         name: ['parameters', 'orderedDatabaseIds'],
         value: [[undefined]],
-        errors: [],
-      },
+        errors: []
+      }
     ]);
   };
   return (
@@ -23,7 +23,7 @@ const ProjectSelect: React.FC<{
       label={
         formatMessage({
           id: 'odc.src.component.Task.ApplyPermission.CreateModal.Project',
-          defaultMessage: '项目',
+          defaultMessage: '项目'
         }) /* 项目 */
       }
       name="projectId"
@@ -32,9 +32,9 @@ const ProjectSelect: React.FC<{
           required: true,
           message: formatMessage({
             id: 'odc.src.component.Task.ApplyPermission.CreateModal.PleaseSelectTheProject',
-            defaultMessage: '请选择项目',
-          }), //'请选择项目'
-        },
+            defaultMessage: '请选择项目'
+          }) //'请选择项目'
+        }
       ]}
     >
       <Select

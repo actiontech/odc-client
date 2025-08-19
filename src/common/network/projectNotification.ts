@@ -22,7 +22,7 @@ import {
   IMessage,
   TBatchUpdatePolicy,
   EMessageStatus,
-  EChannelType,
+  EChannelType
 } from '@/d.ts/projectNotification';
 import request from '@/util/request';
 
@@ -40,13 +40,13 @@ export async function getChannelsList(
     sort?: string;
     page?: number;
     size?: number;
-  }>,
+  }>
 ): Promise<IResponseData<Omit<IChannel<EChannelType>, 'channelConfig'>>> {
   const res = await request.get(
     `/api/v2/collaboration/projects/${projectId}/notification/channels`,
     {
-      params,
-    },
+      params
+    }
   );
   return res?.data;
 }
@@ -58,10 +58,10 @@ export async function getChannelsList(
  */
 export async function detailChannel(
   projectId: number,
-  channelId: number,
+  channelId: number
 ): Promise<IChannel<EChannelType>> {
   const res = await request.get(
-    `/api/v2/collaboration/projects/${projectId}/notification/channels/${channelId}`,
+    `/api/v2/collaboration/projects/${projectId}/notification/channels/${channelId}`
   );
   return res?.data;
 }
@@ -74,13 +74,13 @@ export async function detailChannel(
  */
 export async function testChannel(
   projectId: number,
-  data: Pick<IChannel<EChannelType>, 'type' | 'channelConfig'>,
+  data: Pick<IChannel<EChannelType>, 'type' | 'channelConfig'>
 ): Promise<ITestChannelResult> {
   const res = await request.post(
     `/api/v2/collaboration/projects/${projectId}/notification/channels/test`,
     {
-      data,
-    },
+      data
+    }
   );
   return res?.data;
 }
@@ -93,13 +93,13 @@ export async function testChannel(
  */
 export async function createChannel(
   projectId: number,
-  data: IChannel<EChannelType>,
+  data: IChannel<EChannelType>
 ): Promise<IChannel<EChannelType>> {
   const res = await request.post(
     `/api/v2/collaboration/projects/${projectId}/notification/channels`,
     {
-      data,
-    },
+      data
+    }
   );
   return res?.data;
 }
@@ -114,13 +114,13 @@ export async function createChannel(
 export async function editChannel(
   projectId: number,
   channelId: number,
-  data: IChannel<EChannelType>,
+  data: IChannel<EChannelType>
 ): Promise<IChannel<EChannelType>> {
   const res = await request.put(
     `/api/v2/collaboration/projects/${projectId}/notification/channels/${channelId}`,
     {
-      data,
-    },
+      data
+    }
   );
   return res?.data;
 }
@@ -133,10 +133,10 @@ export async function editChannel(
  */
 export async function deleteChannel(
   projectId: number,
-  channelId: number,
+  channelId: number
 ): Promise<IChannel<EChannelType>> {
   const res = await request.delete(
-    `/api/v2/collaboration/projects/${projectId}/notification/channels/${channelId}`,
+    `/api/v2/collaboration/projects/${projectId}/notification/channels/${channelId}`
   );
   return res?.data;
 }
@@ -148,12 +148,12 @@ export async function deleteChannel(
  */
 export async function existsChannel(
   projectId: number,
-  channelName: string,
+  channelName: string
 ): Promise<{
   result: boolean;
 }> {
   const res = await request.get(
-    `/api/v2/collaboration/projects/${projectId}/notification/channels/exists?name=${channelName}`,
+    `/api/v2/collaboration/projects/${projectId}/notification/channels/exists?name=${channelName}`
   );
   return res?.data;
 }
@@ -175,13 +175,13 @@ export async function getPoliciesList(
     column: string[];
     maskingAlgorithm: number[];
     enabled: boolean[];
-  }>,
+  }>
 ): Promise<IResponseData<IPolicy>> {
   const res = await request.get(
     `/api/v2/collaboration/projects/${projectId}/notification/policies`,
     {
-      params,
-    },
+      params
+    }
   );
   return res?.data;
 }
@@ -191,9 +191,12 @@ export async function getPoliciesList(
  * @param policyId
  * @returns
  */
-export async function detailPolicy(projectId: number, policyId: number): Promise<IPolicy> {
+export async function detailPolicy(
+  projectId: number,
+  policyId: number
+): Promise<IPolicy> {
   const res = await request.get(
-    `/api/v2/collaboration/projects/${projectId}/notification/policies/${policyId}`,
+    `/api/v2/collaboration/projects/${projectId}/notification/policies/${policyId}`
   );
   return res?.data;
 }
@@ -205,13 +208,13 @@ export async function detailPolicy(projectId: number, policyId: number): Promise
  */
 export async function batchUpdatePolicy(
   projectId: number,
-  policies: TBatchUpdatePolicy[],
+  policies: TBatchUpdatePolicy[]
 ): Promise<IResponseData<IPolicy>> {
   const res = await request.put(
     `/api/v2/collaboration/projects/${projectId}/notification/policies`,
     {
-      data: policies,
-    },
+      data: policies
+    }
   );
   return res?.data;
 }
@@ -231,19 +234,22 @@ export async function getMessagesList(
     sort?: string;
     page?: number;
     size?: number;
-  }>,
+  }>
 ): Promise<IResponseData<IMessage>> {
   const res = await request.get(
     `/api/v2/collaboration/projects/${projectId}/notification/messages`,
     {
-      params,
-    },
+      params
+    }
   );
   return res?.data;
 }
-export async function detailMessage(projectId: number, messageId: number): Promise<IMessage> {
+export async function detailMessage(
+  projectId: number,
+  messageId: number
+): Promise<IMessage> {
   const res = await request.get(
-    `/api/v2/collaboration/projects/${projectId}/notification/messages/${messageId}`,
+    `/api/v2/collaboration/projects/${projectId}/notification/messages/${messageId}`
   );
   return res?.data;
 }

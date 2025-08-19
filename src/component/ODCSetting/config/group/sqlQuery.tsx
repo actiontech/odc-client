@@ -23,16 +23,16 @@ import { validForQueryLimit, validForQueryQueryNumber } from '../../validators';
 const databaseGroup: ODCSettingGroup = {
   label: formatMessage({
     id: 'src.component.ODCSetting.config.group.8EBEF215',
-    defaultMessage: 'SQL 查询',
+    defaultMessage: 'SQL 查询'
   }),
-  key: 'groupSqlQuery',
+  key: 'groupSqlQuery'
 };
 
 const sqlQuerySetting: IODCSetting[] = [
   {
     label: formatMessage({
       id: 'src.component.ODCSetting.config.group.5F1DCFE2',
-      defaultMessage: '查询条数上限',
+      defaultMessage: '查询条数上限'
     }),
     key: 'odc.sqlexecute.default.maxQueryLimit',
     locationKey: 'maxQueryLimit',
@@ -42,8 +42,8 @@ const sqlQuerySetting: IODCSetting[] = [
       {
         validator(rule, value, callback) {
           return validForQueryLimit(value);
-        },
-      },
+        }
+      }
     ],
 
     render: (value, onChange) => {
@@ -51,18 +51,21 @@ const sqlQuerySetting: IODCSetting[] = [
         <InputIntergerItem
           value={value}
           onChange={async (value) => {
-            sessionStorage.setItem(`maxQueryLimit-${getCurrentOrganizationId()}`, value || '');
+            sessionStorage.setItem(
+              `maxQueryLimit-${getCurrentOrganizationId()}`,
+              value || ''
+            );
             onChange(value);
           }}
           min={'1'}
         />
       );
-    },
+    }
   },
   {
     label: formatMessage({
       id: 'src.component.ODCSetting.config.group.7B82C09C',
-      defaultMessage: '查询条数默认值',
+      defaultMessage: '查询条数默认值'
     }),
     key: 'odc.sqlexecute.default.queryLimit',
     locationKey: 'queryLimit',
@@ -73,14 +76,14 @@ const sqlQuerySetting: IODCSetting[] = [
       {
         validator(rule, value, callback) {
           return validForQueryQueryNumber(value);
-        },
-      },
+        }
+      }
     ],
 
     render: (value, onChange) => {
       return <InputIntergerItem value={value} onChange={onChange} min={'1'} />;
-    },
-  },
+    }
+  }
 ];
 
 export default sqlQuerySetting;

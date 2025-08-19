@@ -26,7 +26,7 @@ export interface IMetaStore {
 let ins: {
   metaStore: IMetaStore;
 } = {
-  metaStore: null,
+  metaStore: null
 };
 
 export async function initMetaStore() {

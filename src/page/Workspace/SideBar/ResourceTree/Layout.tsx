@@ -27,14 +27,18 @@ interface IProps {
   bottomLoading?: boolean;
 }
 
-const ResourceLayout: React.FC<IProps> = function ({ top, bottom, bottomLoading }) {
+const ResourceLayout: React.FC<IProps> = function ({
+  top,
+  bottom,
+  bottomLoading
+}) {
   const maxHeight = document.body.clientHeight * 0.7;
   const [sideWidth, setSideWidth] = useState(150);
   const emitResizeEvent = useCallback(
     debounce(() => {
       window.dispatchEvent(new Event('resize'));
     }, 500),
-    [],
+    []
   );
   const handleChangeSiderWidth = (width: number) => {
     setSideWidth(width);
@@ -52,10 +56,10 @@ const ResourceLayout: React.FC<IProps> = function ({ top, bottom, bottomLoading 
           defaultSize={sideWidth}
           pane2Style={{
             minHeight: '1px',
-            overflow: 'hidden',
+            overflow: 'hidden'
           }}
           resizerStyle={{
-            background: 'transparent',
+            background: 'transparent'
           }}
           onChange={handleChangeSiderWidth}
         >

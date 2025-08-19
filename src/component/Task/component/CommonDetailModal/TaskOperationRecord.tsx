@@ -18,7 +18,13 @@ import { getTaskDetail } from '@/common/network/task';
 import Action from '@/component/Action';
 import DisplayTable from '@/component/DisplayTable';
 import { status } from '@/component/Task/component/Status';
-import { TaskOperationType, TaskRecord, TaskRecordParameters, Operation, TaskType } from '@/d.ts';
+import {
+  TaskOperationType,
+  TaskRecord,
+  TaskRecordParameters,
+  Operation,
+  TaskType
+} from '@/d.ts';
 import { formatMessage } from '@/util/intl';
 import { getFormatDateTime } from '@/util/utils';
 import { FilterOutlined } from '@ant-design/icons';
@@ -31,35 +37,38 @@ import styles from './index.less';
 const statusFilters = Object.keys(status).map((key) => {
   return {
     text: status?.[key].text,
-    value: key,
+    value: key
   };
 });
 
 export const operationTypeMap = {
   [TaskOperationType.CREATE]: formatMessage({
     id: 'odc.component.CommonTaskDetailModal.TaskOperationRecord.CreateATask',
-    defaultMessage: '创建任务',
+    defaultMessage: '创建任务'
   }), //创建任务
   [TaskOperationType.UPDATE]: formatMessage({
     id: 'odc.component.CommonTaskDetailModal.TaskOperationRecord.EditTask',
-    defaultMessage: '编辑任务',
+    defaultMessage: '编辑任务'
   }), //编辑任务
   [TaskOperationType.PAUSE]: formatMessage({
     id: 'odc.component.CommonTaskDetailModal.TaskOperationRecord.DisableATask',
-    defaultMessage: '停用任务',
+    defaultMessage: '停用任务'
   }), //停用任务
   [TaskOperationType.TERMINATE]: formatMessage({
     id: 'odc.component.CommonTaskDetailModal.TaskOperationRecord.TerminateATask',
-    defaultMessage: '终止任务',
+    defaultMessage: '终止任务'
   }), //终止任务
   [TaskOperationType.RESUME]: formatMessage({
     id: 'odc.component.CommonTaskDetailModal.TaskOperationRecord.EnableTasks',
-    defaultMessage: '启用任务',
-  }), //启用任务
+    defaultMessage: '启用任务'
+  }) //启用任务
 };
 
 const getConnectionColumns = (params: {
-  onOpenDetail: (task: TaskRecord<TaskRecordParameters> | Operation, visible: boolean) => void;
+  onOpenDetail: (
+    task: TaskRecord<TaskRecordParameters> | Operation,
+    visible: boolean
+  ) => void;
   onOpenChangeDetail: (task: Operation, visible: boolean) => void;
   taskType: TaskType;
 }) => {
@@ -68,31 +77,31 @@ const getConnectionColumns = (params: {
       dataIndex: 'id',
       title: formatMessage({
         id: 'odc.component.CommonTaskDetailModal.TaskOperationRecord.EventOperations',
-        defaultMessage: '事件操作',
+        defaultMessage: '事件操作'
       }), //事件操作
       ellipsis: true,
       width: 140,
       render: (id, record) => {
         return <span>{operationTypeMap?.[record.type]}</span>;
-      },
+      }
     },
 
     {
       dataIndex: 'createTime',
       title: formatMessage({
         id: 'odc.component.CommonTaskDetailModal.TaskOperationRecord.OperationTime',
-        defaultMessage: '操作时间',
+        defaultMessage: '操作时间'
       }), //操作时间
       ellipsis: true,
       width: 180,
-      render: (createTime) => getFormatDateTime(createTime),
+      render: (createTime) => getFormatDateTime(createTime)
     },
 
     {
       dataIndex: 'status',
       title: formatMessage({
         id: 'odc.component.CommonTaskDetailModal.TaskOperationRecord.ApprovalStatus',
-        defaultMessage: '审批状态',
+        defaultMessage: '审批状态'
       }), //审批状态
       ellipsis: true,
       width: 140,
@@ -103,14 +112,14 @@ const getConnectionColumns = (params: {
       },
       render: (status, record) => {
         return <StatusItem status={status} />;
-      },
+      }
     },
 
     {
       dataIndex: 'action',
       title: formatMessage({
         id: 'odc.component.CommonTaskDetailModal.TaskOperationRecord.Operation',
-        defaultMessage: '操作',
+        defaultMessage: '操作'
       }), //操作
       ellipsis: true,
       width: 92,
@@ -126,7 +135,7 @@ const getConnectionColumns = (params: {
               >
                 {formatMessage({
                   id: 'src.component.Task.component.CommonDetailModal.3D4F5474',
-                  defaultMessage: '审批记录',
+                  defaultMessage: '审批记录'
                 })}
               </Action.Link>
             ) : undefined}
@@ -137,13 +146,13 @@ const getConnectionColumns = (params: {
             >
               {formatMessage({
                 id: 'src.component.Task.component.CommonDetailModal.5C706BA6',
-                defaultMessage: '变更详情',
+                defaultMessage: '变更详情'
               })}
             </Action.Link>
           </>
         );
-      },
-    },
+      }
+    }
   ];
 };
 
@@ -164,13 +173,16 @@ const TaskOperationRecord: React.FC<IProps> = (props) => {
 
   const handleDetailVisible = (
     task: Operation | TaskRecord<TaskRecordParameters>,
-    visible: boolean = false,
+    visible: boolean = false
   ) => {
     setDetailId((task as Operation)?.flowInstanceId);
     setDetailVisible(visible);
   };
 
-  const handleChangeDetailVisible = (task: Operation, visible: boolean = false) => {
+  const handleChangeDetailVisible = (
+    task: Operation,
+    visible: boolean = false
+  ) => {
     setTask(task);
     setChangeDetailVisible(visible);
   };
@@ -194,7 +206,7 @@ const TaskOperationRecord: React.FC<IProps> = (props) => {
         columns={getConnectionColumns({
           onOpenDetail: handleDetailVisible,
           onOpenChangeDetail: handleChangeDetailVisible,
-          taskType: taskType,
+          taskType: taskType
         })}
         dataSource={opRecord}
         disablePagination

@@ -23,4 +23,9 @@ const Record = () => {
 
 // export default Record;
 
-export default inject('userStore', 'settingStore', 'taskStore', 'modalStore')(observer(Record));
+export default inject(
+  'userStore',
+  'settingStore',
+  'taskStore',
+  'modalStore'
+)(observer(Record));

@@ -5,7 +5,7 @@ import type {
   ICycleTaskRecord,
   ISqlPlayJobParameters,
   IDataArchiveJobParameters,
-  IResponseData,
+  IResponseData
 } from '@/d.ts';
 import { TaskPageType, TaskStatus } from '@/d.ts';
 import type { TaskStore } from '@/store/task';
@@ -13,7 +13,7 @@ import type { ITableInstance } from '@/component/CommonTable/interface';
 import {
   isSupportTaksExport,
   isSupportTaksImport,
-  isSupportTaksTerminate,
+  isSupportTaksTerminate
 } from '../AsyncTaskOperationButton/helper';
 
 export const statusThatCanBeExport = Object.keys(TaskStatus);
@@ -25,14 +25,14 @@ export const statusThatCanBeTerminate = [
   TaskStatus.PAUSE,
   TaskStatus.EXECUTING,
   TaskStatus.WAIT_FOR_EXECUTION,
-  TaskStatus.CREATED,
+  TaskStatus.CREATED
 ];
 
 export const taskTypeThatCanBeExport = [
   TaskPageType.SQL_PLAN,
   TaskPageType.DATA_ARCHIVE,
   TaskPageType.DATA_DELETE,
-  TaskPageType.PARTITION_PLAN,
+  TaskPageType.PARTITION_PLAN
 ];
 
 interface UseTaskSelectionProps {
@@ -49,9 +49,10 @@ export const useTaskSelection = ({
   taskStore,
   taskTabType,
   taskList,
-  tableRef,
+  tableRef
 }: UseTaskSelectionProps) => {
-  const [selectedRow, setSelectedRow] = useState<TaskRecord<TaskRecordParameters>[]>();
+  const [selectedRow, setSelectedRow] =
+    useState<TaskRecord<TaskRecordParameters>[]>();
 
   useEffect(() => {
     setSelectedRow([]);
@@ -60,20 +61,27 @@ export const useTaskSelection = ({
 
   // 当任务列表数据变化时，清理无效的selectedRowKeys
   useEffect(() => {
-    if (taskList?.contents?.length > 0 && taskStore.selectedRowKeys.length > 0) {
+    if (
+      taskList?.contents?.length > 0 &&
+      taskStore.selectedRowKeys.length > 0
+    ) {
       const rules = taskTypeThatCanBeExport.includes(taskTabType)
         ? [...statusThatCanBeExport, ...statusThatCanBeTerminate]
         : [...statusThatCanBeTerminate];
 
       const validSelectedRowKeys = taskStore.selectedRowKeys.filter((keyId) => {
-        const taskInCurrentList = taskList.contents.find((task) => task.id === keyId);
+        const taskInCurrentList = taskList.contents.find(
+          (task) => task.id === keyId
+        );
         return taskInCurrentList && rules.includes(taskInCurrentList.status);
       });
 
       // 更新store
       if (validSelectedRowKeys.length !== taskStore.selectedRowKeys.length) {
         taskStore.setSelectedRowKeys(validSelectedRowKeys);
-        setSelectedRow(selectedRow?.filter((row) => validSelectedRowKeys.includes(row.id)));
+        setSelectedRow(
+          selectedRow?.filter((row) => validSelectedRowKeys.includes(row.id))
+        );
         tableRef.current?.setSelectedRowKeys(validSelectedRowKeys);
       }
     }
@@ -82,7 +90,7 @@ export const useTaskSelection = ({
   useEffect(() => {
     if (taskList?.contents?.length > 0) {
       const selectedRows = taskList.contents.filter((row) =>
-        taskStore.selectedRowKeys.includes(row.id),
+        taskStore.selectedRowKeys.includes(row.id)
       ) as TaskRecord<TaskRecordParameters>[];
       setSelectedRow(selectedRows);
     } else {
@@ -106,7 +114,7 @@ export const useTaskSelection = ({
       options: [],
       onChange: (
         selectedRowKeys: React.Key[],
-        selectedRows: TaskRecord<TaskRecordParameters>[],
+        selectedRows: TaskRecord<TaskRecordParameters>[]
       ) => {
         taskStore.setSelectedRowKeys(selectedRowKeys);
         setSelectedRow(selectedRows);
@@ -114,13 +122,13 @@ export const useTaskSelection = ({
       getCheckboxProps: (
         record:
           | TaskRecord<TaskRecordParameters>
-          | ICycleTaskRecord<ISqlPlayJobParameters | IDataArchiveJobParameters>,
+          | ICycleTaskRecord<ISqlPlayJobParameters | IDataArchiveJobParameters>
       ) => {
         return {
           disabled: !rules?.includes(record.status),
-          name: record.id?.toString(),
+          name: record.id?.toString()
         };
-      },
+      }
     };
   }, [taskStore.selectedRowKeys, taskTabType]);
 
@@ -136,6 +144,6 @@ export const useTaskSelection = ({
       isSupportTaksExport || isSupportTaksImport || isSupportTaksTerminate
         ? rowSelection
         : undefined,
-    clearSelection,
+    clearSelection
   };
 };

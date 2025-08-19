@@ -68,7 +68,7 @@ export const partitionNameMap = {
   [IPartitionType.RANGE_COLUMNS]: 'Range Columns',
   [IPartitionType.LIST]: 'List',
   [IPartitionType.LIST_COLUMNS]: 'List Columns',
-  [IPartitionType.NONE]: 'None',
+  [IPartitionType.NONE]: 'None'
 };
 
 class CreateTablePartitionRuleForm extends Component<
@@ -78,7 +78,7 @@ class CreateTablePartitionRuleForm extends Component<
   }
 > {
   public readonly state = {
-    partitionType: this.props.partitionType,
+    partitionType: this.props.partitionType
   };
 
   private form = React.createRef<FormInstance>();
@@ -88,8 +88,9 @@ class CreateTablePartitionRuleForm extends Component<
       return '';
     }
     const { session } = this.props;
-    const config = getDataSourceModeConfigByConnectionMode(session.connection?.dialectType)?.schema
-      ?.table;
+    const config = getDataSourceModeConfigByConnectionMode(
+      session.connection?.dialectType
+    )?.schema?.table;
     return !config.paritionNameCaseSensitivity ? name.toLowerCase() : name;
   }
 
@@ -107,13 +108,13 @@ class CreateTablePartitionRuleForm extends Component<
       // 分区名不能重复
       if (itemName && partitionNames[itemName]) {
         const sameNamePartitions = partition.partitions.filter(
-          (i) => this.getRealParitionName(i.name) === itemName,
+          (i) => this.getRealParitionName(i.name) === itemName
         );
 
         sameNamePartitions.forEach((item) => {
           item.error.name = formatMessage({
             id: 'odc.components.CreateTablePartitionRuleForm.ThePartitionNameMustBeUnique',
-            defaultMessage: '分区名称不能重复',
+            defaultMessage: '分区名称不能重复'
           });
         });
       }
@@ -122,7 +123,7 @@ class CreateTablePartitionRuleForm extends Component<
 
     // 更新错误信息
     this.form.current.setFieldsValue({
-      partitions: partition.partitions || [],
+      partitions: partition.partitions || []
     });
     onSave(values);
   }, 500);
@@ -135,7 +136,7 @@ class CreateTablePartitionRuleForm extends Component<
         item.value = partitionType === IPartitionType.LIST_COLUMNS ? [{}] : '';
         item.error = {};
         return item;
-      }),
+      })
     });
 
     this.setState({ partitionType });
@@ -148,7 +149,7 @@ class CreateTablePartitionRuleForm extends Component<
       <Form.Item
         label={formatMessage({
           id: 'odc.TableConstraint.Primary.columns.Column',
-          defaultMessage: '列',
+          defaultMessage: '列'
         })}
         name={'columnName'}
         rules={[
@@ -156,9 +157,9 @@ class CreateTablePartitionRuleForm extends Component<
             required: true,
             message: formatMessage({
               id: 'workspace.window.createTable.column.name.validation',
-              defaultMessage: '请填写字段名称',
-            }),
-          },
+              defaultMessage: '请填写字段名称'
+            })
+          }
         ]}
       >
         <Select disabled={addMode} allowClear style={{ width: 240 }}>
@@ -180,7 +181,7 @@ class CreateTablePartitionRuleForm extends Component<
       <Form.Item
         label={formatMessage({
           id: 'workspace.window.createTable.partition.expression',
-          defaultMessage: '表达式',
+          defaultMessage: '表达式'
         })}
         name={'expression'}
       >
@@ -192,7 +193,7 @@ class CreateTablePartitionRuleForm extends Component<
       <Form.Item
         label={formatMessage({
           id: 'odc.TableConstraint.Primary.columns.Column',
-          defaultMessage: '列',
+          defaultMessage: '列'
         })}
         name={'columns'}
       >
@@ -215,7 +216,7 @@ class CreateTablePartitionRuleForm extends Component<
               label={
                 formatMessage({
                   id: 'odc.Partition.CreateTablePartitionRuleForm.PartitionSettings',
-                  defaultMessage: '分区设置',
+                  defaultMessage: '分区设置'
                 }) //分区设置
               }
               name={'partitions'}
@@ -224,7 +225,9 @@ class CreateTablePartitionRuleForm extends Component<
               <PartitionRange
                 partitionType={partitionType}
                 selectColums={getFieldValue('columns')}
-                partitionValuePlaceholder={partitionValuePlaceholder[partitionType] || ''}
+                partitionValuePlaceholder={
+                  partitionValuePlaceholder[partitionType] || ''
+                }
                 partitionValueLabel={getPartitionValueLabel(partitionType)}
               />
             </Form.Item>
@@ -237,7 +240,7 @@ class CreateTablePartitionRuleForm extends Component<
       <Form.Item
         label={formatMessage({
           id: 'workspace.window.createTable.partition.partNumber',
-          defaultMessage: '分区数量',
+          defaultMessage: '分区数量'
         })}
         name="partNumber"
       >
@@ -276,16 +279,17 @@ class CreateTablePartitionRuleForm extends Component<
       selectColumnName,
       partNumber,
       expression,
-      session,
+      session
     } = this.props;
     const formItemLayout = {
       labelCol: { span: 4 },
-      wrapperCol: { span: 18 },
+      wrapperCol: { span: 18 }
     };
 
     const { partitionType } = this.state;
     const config =
-      getDataSourceModeConfigByConnectionMode(session.connection?.dialectType)?.schema?.table || {};
+      getDataSourceModeConfigByConnectionMode(session.connection?.dialectType)
+        ?.schema?.table || {};
 
     const initialPartitions = [{ name: '', value: '' }];
 
@@ -302,23 +306,24 @@ class CreateTablePartitionRuleForm extends Component<
           }}
           initialValues={{
             partType: partitionType || IPartitionType.NONE,
-            columnName: selectColumnName ?? (columns?.length ? columns[0].name : ''),
+            columnName:
+              selectColumnName ?? (columns?.length ? columns[0].name : ''),
             columns: selectColumns ?? [],
             partitions: initialPartitions,
             partNumber: partNumber ?? 1,
-            expression: expression,
+            expression: expression
           }}
         >
           <div
             style={{
               overflow: 'auto',
-              marginBottom: '24px',
+              marginBottom: '24px'
             }}
           >
             <Form.Item
               label={formatMessage({
                 id: 'workspace.window.createTable.partition.type',
-                defaultMessage: '分区方法',
+                defaultMessage: '分区方法'
               })}
               name={'partType'}
               rules={[
@@ -326,9 +331,9 @@ class CreateTablePartitionRuleForm extends Component<
                   required: true,
                   message: formatMessage({
                     id: 'workspace.window.createTable.partition.type.validation',
-                    defaultMessage: '请选择分区方法',
-                  }),
-                },
+                    defaultMessage: '请选择分区方法'
+                  })
+                }
               ]}
             >
               <Select
@@ -340,7 +345,9 @@ class CreateTablePartitionRuleForm extends Component<
                   return e?.closest('.J_createTable') || document.body;
                 }}
               >
-                <Option value={IPartitionType.NONE}>{partitionNameMap[IPartitionType.NONE]}</Option>
+                <Option value={IPartitionType.NONE}>
+                  {partitionNameMap[IPartitionType.NONE]}
+                </Option>
                 <Option value={IPartitionType.RANGE}>
                   {partitionNameMap[IPartitionType.RANGE]}
                 </Option>
@@ -350,16 +357,22 @@ class CreateTablePartitionRuleForm extends Component<
                   </Option>
                 )}
 
-                <Option value={IPartitionType.LIST}>{partitionNameMap[IPartitionType.LIST]}</Option>
+                <Option value={IPartitionType.LIST}>
+                  {partitionNameMap[IPartitionType.LIST]}
+                </Option>
                 {!config.disableListColumnsPartition && (
                   <Option value={IPartitionType.LIST_COLUMNS}>
                     {partitionNameMap[IPartitionType.LIST_COLUMNS]}
                   </Option>
                 )}
 
-                <Option value={IPartitionType.HASH}>{partitionNameMap[IPartitionType.HASH]}</Option>
+                <Option value={IPartitionType.HASH}>
+                  {partitionNameMap[IPartitionType.HASH]}
+                </Option>
                 {!config.disableKeyPartition && (
-                  <Option value={IPartitionType.KEY}>{partitionNameMap[IPartitionType.KEY]}</Option>
+                  <Option value={IPartitionType.KEY}>
+                    {partitionNameMap[IPartitionType.KEY]}
+                  </Option>
                 )}
               </Select>
             </Form.Item>

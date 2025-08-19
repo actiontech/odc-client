@@ -19,7 +19,7 @@ import {
   generateConnectionStr,
   getConnectionDetail,
   getConnectionExists,
-  updateConnection,
+  updateConnection
 } from '@/common/network/connection';
 import { ConnectType, IConnection } from '@/d.ts';
 import { haveOCP } from '@/util/env';
@@ -51,12 +51,12 @@ export default function NewDatasourceDrawer({
   id,
   disableTheme,
   close,
-  onSuccess,
+  onSuccess
 }: IProps) {
   const formRef = useRef<IFormRef>();
 
   const { data, loading, run } = useRequest(getConnectionDetail, {
-    manual: true,
+    manual: true
   });
 
   function getOriginDatasource(data: IConnection, isCopy: boolean) {
@@ -68,7 +68,7 @@ export default function NewDatasourceDrawer({
           name: null,
           password: '',
           sysTenantPassword: '',
-          projectId: null,
+          projectId: null
         }
       : { ...data, password: null, sysTenantPassword: null };
   }
@@ -99,14 +99,14 @@ export default function NewDatasourceDrawer({
     if (isEdit) {
       const isSuccess = await updateConnection({
         ...data,
-        ...values,
+        ...values
       });
       if (isSuccess) {
         message.success(
           formatMessage({
             id: 'odc.Datasource.NewDatasourceDrawer.ModifiedSuccessfully',
-            defaultMessage: '修改成功',
-          }), //修改成功
+            defaultMessage: '修改成功'
+          }) //修改成功
         );
         onSuccess();
         close();
@@ -116,17 +116,19 @@ export default function NewDatasourceDrawer({
     Modal.confirm({
       title: formatMessage({
         id: 'odc.Datasource.NewDatasourceDrawer.EnterADataSourceName',
-        defaultMessage: '请输入数据源名称',
+        defaultMessage: '请输入数据源名称'
       }), //请输入数据源名称
       content: <Input id="newCloudConnectionName" />,
       onOk: async (_close) => {
-        const name = (document.querySelector('#newCloudConnectionName') as HTMLInputElement)?.value;
+        const name = (
+          document.querySelector('#newCloudConnectionName') as HTMLInputElement
+        )?.value;
         if (!name) {
           message.warning(
             formatMessage({
               id: 'odc.component.AddConnectionForm.NameItems.EnterAConnectionName',
-              defaultMessage: '请输入连接名称',
-            }),
+              defaultMessage: '请输入连接名称'
+            })
           );
 
           //请输入连接名称
@@ -136,8 +138,8 @@ export default function NewDatasourceDrawer({
           message.warning(
             formatMessage({
               id: 'odc.Datasource.NewDatasourceDrawer.TheMaximumLengthOfThe',
-              defaultMessage: '名称最大长度为 128',
-            }), //名称最大长度为 128
+              defaultMessage: '名称最大长度为 128'
+            }) //名称最大长度为 128
           );
           throw new Error('');
         }
@@ -145,21 +147,21 @@ export default function NewDatasourceDrawer({
           message.warning(
             formatMessage({
               id: 'odc.AddConnectionDrawer.AddConnectionForm.TheConnectionNameCannotContain',
-              defaultMessage: '连接名称不能含有空格',
-            }),
+              defaultMessage: '连接名称不能含有空格'
+            })
           );
 
           throw new Error('');
         }
         const isRepeat = await getConnectionExists({
-          name,
+          name
         });
         if (isRepeat) {
           message.warning(
             formatMessage({
               id: 'odc.Datasource.NewDatasourceDrawer.TheNameAlreadyExists',
-              defaultMessage: '名称已存在',
-            }), //名称已存在
+              defaultMessage: '名称已存在'
+            }) //名称已存在
           );
           throw new Error();
         }
@@ -169,8 +171,8 @@ export default function NewDatasourceDrawer({
             message.success(
               formatMessage({
                 id: 'portal.connection.form.save.success',
-                defaultMessage: '保存成功',
-              }),
+                defaultMessage: '保存成功'
+              })
             );
             resolve(true);
             onSuccess();
@@ -179,7 +181,7 @@ export default function NewDatasourceDrawer({
             reject();
           }
         });
-      },
+      }
     });
   }
 
@@ -187,7 +189,7 @@ export default function NewDatasourceDrawer({
     const data: any = await formRef.current?.form?.validateFields();
     if (data) {
       const res = await generateConnectionStr({
-        ...data,
+        ...data
       });
 
       if (res) {
@@ -195,8 +197,8 @@ export default function NewDatasourceDrawer({
         message.success(
           formatMessage({
             id: 'odc.components.AddConnectionDrawer.TheConnectionInformationIsCopied',
-            defaultMessage: '连接信息复制成功',
-          }),
+            defaultMessage: '连接信息复制成功'
+          })
         );
       }
     }
@@ -209,11 +211,11 @@ export default function NewDatasourceDrawer({
         isEdit
           ? formatMessage({
               id: 'odc.Datasource.NewDatasourceDrawer.EditDataSource',
-              defaultMessage: '编辑数据源',
+              defaultMessage: '编辑数据源'
             }) //编辑数据源
           : formatMessage({
               id: 'odc.Datasource.NewDatasourceDrawer.CreateADataSource',
-              defaultMessage: '新建数据源',
+              defaultMessage: '新建数据源'
             }) //新建数据源
       }
       open={visible}
@@ -228,7 +230,7 @@ export default function NewDatasourceDrawer({
               {
                 formatMessage({
                   id: 'odc.Datasource.NewDatasourceDrawer.CopyConnectionString',
-                  defaultMessage: '复制连接串',
+                  defaultMessage: '复制连接串'
                 }) /*复制连接串*/
               }
             </Button>
@@ -237,7 +239,7 @@ export default function NewDatasourceDrawer({
             {
               formatMessage({
                 id: 'odc.Datasource.NewDatasourceDrawer.Cancel',
-                defaultMessage: '取消',
+                defaultMessage: '取消'
               }) /*取消*/
             }
           </Button>
@@ -245,7 +247,7 @@ export default function NewDatasourceDrawer({
             {
               formatMessage({
                 id: 'odc.Datasource.NewDatasourceDrawer.Ok',
-                defaultMessage: '确定',
+                defaultMessage: '确定'
               }) /*确定*/
             }
           </Button>

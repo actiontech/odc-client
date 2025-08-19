@@ -18,10 +18,17 @@ import { IResponseData } from '@/d.ts';
 import { IRule, RuleType } from '@/d.ts/rule';
 import request from '@/util/request';
 
-export async function updateRule(rulesetId: number, ruleId: number, rule: IRule): Promise<boolean> {
-  const ret = await request.put(`/api/v2/regulation/rulesets/${rulesetId}/rules/${ruleId}`, {
-    data: rule,
-  });
+export async function updateRule(
+  rulesetId: number,
+  ruleId: number,
+  rule: IRule
+): Promise<boolean> {
+  const ret = await request.put(
+    `/api/v2/regulation/rulesets/${rulesetId}/rules/${ruleId}`,
+    {
+      data: rule
+    }
+  );
   return ret?.successful;
 }
 
@@ -29,24 +36,35 @@ export async function listRules(
   rulesetId: number,
   params: {
     types: RuleType;
-  },
+  }
 ): Promise<IResponseData<IRule>> {
-  const ret = await request.get(`/api/v2/regulation/rulesets/${rulesetId}/rules`, {
-    params,
-  });
+  const ret = await request.get(
+    `/api/v2/regulation/rulesets/${rulesetId}/rules`,
+    {
+      params
+    }
+  );
   return ret?.data;
 }
 
-export async function getRule(rulesetId: number, ruleId: number): Promise<IRule> {
-  const ret = await request.get(`/api/v2/regulation/rulesets/${rulesetId}/rules/${ruleId}`);
+export async function getRule(
+  rulesetId: number,
+  ruleId: number
+): Promise<IRule> {
+  const ret = await request.get(
+    `/api/v2/regulation/rulesets/${rulesetId}/rules/${ruleId}`
+  );
   return ret?.data;
 }
 
 export async function statsRules(rulesetId: number, type: RuleType) {
-  const rawData = await request.get(`/api/v2/regulation/rulesets/${rulesetId}/rules/stats`, {
-    params: {
-      type,
-    },
-  });
+  const rawData = await request.get(
+    `/api/v2/regulation/rulesets/${rulesetId}/rules/stats`,
+    {
+      params: {
+        type
+      }
+    }
+  );
   return rawData?.data;
 }

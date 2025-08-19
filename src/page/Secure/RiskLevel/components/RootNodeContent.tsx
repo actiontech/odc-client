@@ -26,10 +26,12 @@ const RootNodeContent = ({
   environmentMap,
   taskTypeIdMap,
   sqlCheckResultIdMap,
-  showActionButton,
+  showActionButton
 }) => {
   const [isHover, setIsHover] = useState<boolean>(false);
-  const getValueMapByExpression = (expression: Expression): { [key in string]: string } => {
+  const getValueMapByExpression = (
+    expression: Expression
+  ): { [key in string]: string } => {
     let valueMap;
     switch (expression) {
       case Expression.ENVIRONMENT_NAME: {
@@ -84,7 +86,9 @@ const RootNodeContent = ({
   };
   const renderRootNodeTree = (node) => {
     if (node?.type === EConditionType.CONDITION) {
-      return <div className={styles.treeScopeContainer}>{renderNode(node)}</div>;
+      return (
+        <div className={styles.treeScopeContainer}>{renderNode(node)}</div>
+      );
     } else {
       return (
         <div className={styles.treeScopeContainer}>
@@ -108,7 +112,9 @@ const RootNodeContent = ({
     }
   };
   return (
-    <div className={empty ? styles.rootNodeContentEmpty : styles.rootNodeContent}>
+    <div
+      className={empty ? styles.rootNodeContentEmpty : styles.rootNodeContent}
+    >
       {empty ? (
         <ScanRuleEmpty showActionButton={showActionButton} />
       ) : (

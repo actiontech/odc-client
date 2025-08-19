@@ -39,8 +39,8 @@ export const AuthNode: React.FC<IAuthNodeProps> = (props) => {
         name="nodes"
         rules={[
           {
-            validator: handleValid,
-          },
+            validator: handleValid
+          }
         ]}
       >
         {(fields, { add, remove }, { errors }) => (
@@ -60,7 +60,7 @@ export const AuthNode: React.FC<IAuthNodeProps> = (props) => {
                             {
                               formatMessage({
                                 id: 'odc.component.AuthNode.ApprovalNode',
-                                defaultMessage: '审批节点',
+                                defaultMessage: '审批节点'
                               }) /*审批节点*/
                             }
 
@@ -77,12 +77,12 @@ export const AuthNode: React.FC<IAuthNodeProps> = (props) => {
                                 if (!e.target.checked) {
                                   setFieldValue(fieldkey, {
                                     autoApproval: false,
-                                    externalApproval: false,
+                                    externalApproval: false
                                   });
                                 } else {
                                   setFieldValue(fieldkey, {
                                     autoApproval: false,
-                                    externalApproval: true,
+                                    externalApproval: true
                                   });
                                 }
                               }}
@@ -90,7 +90,7 @@ export const AuthNode: React.FC<IAuthNodeProps> = (props) => {
                               {
                                 formatMessage({
                                   id: 'odc.component.AuthNode.ExternalApproval',
-                                  defaultMessage: '外部审批',
+                                  defaultMessage: '外部审批'
                                 }) /*外部审批*/
                               }
                             </Checkbox>
@@ -102,27 +102,35 @@ export const AuthNode: React.FC<IAuthNodeProps> = (props) => {
                   <Space>
                     <Form.Item noStyle shouldUpdate>
                       {({ getFieldValue }) => {
-                        const fieldkey = ['nodes', field.name, 'externalApproval'];
+                        const fieldkey = [
+                          'nodes',
+                          field.name,
+                          'externalApproval'
+                        ];
                         const isExternalApproval = getFieldValue(fieldkey);
                         const approvalNodes = getFieldValue('nodes');
                         const nodes = isExternalApproval ? integrations : roles;
-                        const name = isExternalApproval ? 'externalApprovalId' : 'resourceRoleId';
+                        const name = isExternalApproval
+                          ? 'externalApprovalId'
+                          : 'resourceRoleId';
                         const selectedNodes = nodes
                           ?.filter((item) =>
-                            approvalNodes?.find((node) => node?.[name] === item?.id),
+                            approvalNodes?.find(
+                              (node) => node?.[name] === item?.id
+                            )
                           )
                           ?.map((item) => ({
                             id: item.id,
-                            name: item.name,
+                            name: item.name
                           }));
                         const title = isExternalApproval
                           ? formatMessage({
                               id: 'odc.component.AuthNode.ExternalIntegration',
-                              defaultMessage: '外部集成',
+                              defaultMessage: '外部集成'
                             }) //外部集成
                           : formatMessage({
                               id: 'odc.component.AuthNode.Role',
-                              defaultMessage: '角色',
+                              defaultMessage: '角色'
                             }); //角色
                         return (
                           <NodeSelector
@@ -136,7 +144,11 @@ export const AuthNode: React.FC<IAuthNodeProps> = (props) => {
                     </Form.Item>
                     <Form.Item noStyle shouldUpdate>
                       {({ getFieldValue }) => {
-                        const fieldkey = ['nodes', field.name, 'externalApproval'];
+                        const fieldkey = [
+                          'nodes',
+                          field.name,
+                          'externalApproval'
+                        ];
                         const isExternalApproval = getFieldValue(fieldkey);
                         return (
                           <Form.Item
@@ -148,7 +160,7 @@ export const AuthNode: React.FC<IAuthNodeProps> = (props) => {
                               {
                                 formatMessage({
                                   id: 'odc.component.AuthNode.AutomaticApproval',
-                                  defaultMessage: '自动审批',
+                                  defaultMessage: '自动审批'
                                 }) /*自动审批*/
                               }
                             </Checkbox>
@@ -173,14 +185,14 @@ export const AuthNode: React.FC<IAuthNodeProps> = (props) => {
                   onClick={() =>
                     add({
                       autoApproval: false,
-                      externalApproval: false,
+                      externalApproval: false
                     })
                   }
                 >
                   {
                     formatMessage({
                       id: 'odc.component.AuthNode.AddAnApprovalNode',
-                      defaultMessage: '添加审批节点',
+                      defaultMessage: '添加审批节点'
                     }) /*添加审批节点*/
                   }
                 </Button>

@@ -18,7 +18,7 @@ export enum SpaceType {
   // 协同
   SYNERGY = 'TEAM',
   // 个人
-  PRIVATE = 'INDIVIDUAL',
+  PRIVATE = 'INDIVIDUAL'
 }
 
 export enum IPageType {
@@ -55,5 +55,5 @@ export enum IPageType {
   ExternalIntegration = 'externalIntegration',
   ExternalIntegration_Approval = 'approval',
   ExternalIntegration_Sql = 'sql',
-  ExternalIntegration_SSO = 'sso',
+  ExternalIntegration_SSO = 'sso'
 }

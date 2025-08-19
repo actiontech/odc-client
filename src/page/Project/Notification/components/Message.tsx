@@ -17,10 +17,13 @@
 import {
   detailMessage,
   getChannelsList,
-  getMessagesList,
+  getMessagesList
 } from '@/common/network/projectNotification';
 import CommonTable from '@/component/CommonTable';
-import { ITableInstance, ITableLoadOptions } from '@/component/CommonTable/interface';
+import {
+  ITableInstance,
+  ITableLoadOptions
+} from '@/component/CommonTable/interface';
 import { IResponseData } from '@/d.ts';
 import { IMessage } from '@/d.ts/projectNotification';
 import { useLoop } from '@/util/hooks/useLoop';
@@ -39,7 +42,9 @@ const Message: React.FC<{
   const [formDrawerOpen, setFormDrawerOpen] = useState<boolean>(false);
   const [messagesList, setMessagesList] = useState<IResponseData<IMessage>>();
   const [selectedMessageId, setSelectedMessageId] = useState<number>(null);
-  const [channelFilter, setChannelFilter] = useState<{ text: string; value: number }[]>([]);
+  const [channelFilter, setChannelFilter] = useState<
+    { text: string; value: number }[]
+  >([]);
 
   const { loop: loadMessages, destory } = useLoop((count) => {
     return async (args: ITableLoadOptions) => {
@@ -53,9 +58,11 @@ const Message: React.FC<{
         status,
         sort: column?.dataIndex,
         page: current,
-        size: pageSize,
+        size: pageSize
       };
-      data.sort = column ? `${column.dataIndex},${order === 'ascend' ? 'asc' : 'desc'}` : undefined;
+      data.sort = column
+        ? `${column.dataIndex},${order === 'ascend' ? 'asc' : 'desc'}`
+        : undefined;
       const messages = await getMessagesList(projectId, data);
       if (messages) {
         setMessagesList(messages as IResponseData<IMessage>);
@@ -74,7 +81,7 @@ const Message: React.FC<{
     const channels = await getChannelsList(projectId);
     const newOptions = channels?.contents?.map((channel) => ({
       text: channel?.name,
-      value: channel?.id,
+      value: channel?.id
     }));
     setChannelFilter(newOptions);
   }
@@ -86,7 +93,7 @@ const Message: React.FC<{
   }, []);
   const columns = getMessageColumns({
     channelFilter,
-    handleOpenMessageDetailDrawer,
+    handleOpenMessageDetailDrawer
   });
   return (
     <div className={styles.common}>
@@ -110,8 +117,8 @@ const Message: React.FC<{
           dataSource: messagesList?.contents,
           pagination: {
             current: messagesList?.page?.number,
-            total: messagesList?.page?.totalElements,
-          },
+            total: messagesList?.page?.totalElements
+          }
         }}
       />
     </div>
@@ -122,7 +129,12 @@ const DetailDrawer: React.FC<{
   messageId: number;
   formDrawerOpen: boolean;
   handleCloseMessageDetailDrawer: () => void;
-}> = ({ projectId, messageId, formDrawerOpen, handleCloseMessageDetailDrawer }) => {
+}> = ({
+  projectId,
+  messageId,
+  formDrawerOpen,
+  handleCloseMessageDetailDrawer
+}) => {
   const [message, setMessage] = useState<IMessage>();
   async function loadMessageDetail(messageId: number) {
     const result = await detailMessage(projectId, messageId);
@@ -142,7 +154,7 @@ const DetailDrawer: React.FC<{
       title={
         formatMessage({
           id: 'src.page.Project.Notification.components.7E3088E2',
-          defaultMessage: '推送记录详情',
+          defaultMessage: '推送记录详情'
         }) /*"推送记录详情"*/
       }
       width={520}
@@ -155,7 +167,7 @@ const DetailDrawer: React.FC<{
           label={
             formatMessage({
               id: 'src.page.Project.Notification.components.68CAD20E',
-              defaultMessage: '事件',
+              defaultMessage: '事件'
             }) /*"事件"*/
           }
         >
@@ -165,7 +177,7 @@ const DetailDrawer: React.FC<{
           label={
             formatMessage({
               id: 'src.page.Project.Notification.components.48F9F94C',
-              defaultMessage: '推送通道',
+              defaultMessage: '推送通道'
             }) /*"消息通道"*/
           }
         >
@@ -175,27 +187,31 @@ const DetailDrawer: React.FC<{
           label={
             formatMessage({
               id: 'src.page.Project.Notification.components.DA2AAC4F',
-              defaultMessage: '生效时间',
+              defaultMessage: '生效时间'
             }) /*"生效时间"*/
           }
         >
-          {message?.createTime ? getLocalFormatDateTime(message?.createTime) : '-'}
+          {message?.createTime
+            ? getLocalFormatDateTime(message?.createTime)
+            : '-'}
         </Descriptions.Item>
         <Descriptions.Item
           label={
             formatMessage({
               id: 'src.page.Project.Notification.components.9A3FA11B',
-              defaultMessage: '最后推送时间',
+              defaultMessage: '最后推送时间'
             }) /*"最后推送时间"*/
           }
         >
-          {message?.lastSentTime ? getLocalFormatDateTime(message?.lastSentTime) : '-'}
+          {message?.lastSentTime
+            ? getLocalFormatDateTime(message?.lastSentTime)
+            : '-'}
         </Descriptions.Item>
         <Descriptions.Item
           label={
             formatMessage({
               id: 'src.page.Project.Notification.components.A6D3B9A2',
-              defaultMessage: '推送状态',
+              defaultMessage: '推送状态'
             }) /*"推送状态"*/
           }
         >
@@ -205,7 +221,7 @@ const DetailDrawer: React.FC<{
           label={
             formatMessage({
               id: 'src.page.Project.Notification.components.56685F5A',
-              defaultMessage: '消息内容',
+              defaultMessage: '消息内容'
             }) /*"消息内容"*/
           }
         >
@@ -216,7 +232,7 @@ const DetailDrawer: React.FC<{
         style={{
           borderRadius: '2px',
           backgroundColor: '#F7F9FB',
-          padding: '8px 12px',
+          padding: '8px 12px'
         }}
       >
         {message?.content || '-'}

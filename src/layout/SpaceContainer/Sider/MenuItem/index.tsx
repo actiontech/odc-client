@@ -15,9 +15,8 @@
  */
 
 import Icon from '@ant-design/icons';
-import { Badge, Tooltip } from 'antd';
+import { Badge } from 'antd';
 import classNames from 'classnames';
-
 import styles from './index.less';
 import { BasicToolTip } from '@actiontech/dms-kit';
 
@@ -48,7 +47,7 @@ export default function ({
           {...rest}
           onClick={onClick}
           className={classNames(styles.collapsedIcon, {
-            [styles.selected]: selected,
+            [styles.selected]: selected
           })}
           component={icon}
         />
@@ -60,7 +59,7 @@ export default function ({
           <Icon
             onClick={onClick}
             className={classNames(styles.collapsedIcon, {
-              [styles.selected]: selected,
+              [styles.selected]: selected
             })}
             component={icon}
           />

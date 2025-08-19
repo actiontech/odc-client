@@ -41,7 +41,7 @@ const TutorialPage: React.FC<IProps> = function (props) {
     onSuccess: (data, params) => {
       setMdHtml(renderMd(data?.content));
       page.updatePage(props.pageKey, { title: data?.name });
-    },
+    }
   });
   const ref = useRef<SQLPage>();
 
@@ -69,10 +69,13 @@ const TutorialPage: React.FC<IProps> = function (props) {
           <div
             onClick={(e) => {
               const target = e.target;
-              if (target instanceof HTMLButtonElement && target.getAttribute('data-insert')) {
+              if (
+                target instanceof HTMLButtonElement &&
+                target.getAttribute('data-insert')
+              ) {
                 editorUtils.replaceText(
                   ref.current.editor,
-                  Base64.decode(target.getAttribute('data-insert')),
+                  Base64.decode(target.getAttribute('data-insert'))
                 );
               } else if (
                 target instanceof HTMLAnchorElement &&
@@ -81,12 +84,15 @@ const TutorialPage: React.FC<IProps> = function (props) {
                 e.preventDefault();
                 e.stopPropagation();
                 const anthor = target.getAttribute('data-anchor').slice(1);
-                const targetAnthor = Array.from(document.querySelectorAll('h2')).find(
-                  (el) => el.textContent === anthor,
-                );
+                const targetAnthor = Array.from(
+                  document.querySelectorAll('h2')
+                ).find((el) => el.textContent === anthor);
                 if (targetAnthor) {
                   e.currentTarget.scrollTo({
-                    top: Math.max(targetAnthor.offsetTop - targetAnthor.offsetHeight - 15, 0),
+                    top: Math.max(
+                      targetAnthor.offsetTop - targetAnthor.offsetHeight - 15,
+                      0
+                    )
                   });
                 }
               }

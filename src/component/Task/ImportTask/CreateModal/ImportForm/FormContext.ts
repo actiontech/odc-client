@@ -21,7 +21,7 @@ export interface IFormContext {
 }
 
 const FormContext = React.createContext<IFormContext>({
-  updateFormData: (v) => {},
+  updateFormData: (v) => {}
 });
 
 export default FormContext;

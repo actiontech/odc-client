@@ -2,13 +2,13 @@
 // @ts-nocheck
 import {
   GetSqlPerformanceInsightsMetricNameEnum,
-  GetSqlPerformanceInsightsRelatedSQLFilterSourceEnum,
+  GetSqlPerformanceInsightsRelatedSQLFilterSourceEnum
 } from './index.enum';
 
 import {
   IGetSqlPerformanceInsightsResp,
   IGetSqlPerformanceInsightsRelatedSQLResp,
-  IGetSqlPerformanceInsightsRelatedTransactionResp,
+  IGetSqlPerformanceInsightsRelatedTransactionResp
 } from '../common.type';
 
 export interface IGetSqlPerformanceInsightsParams {
@@ -23,7 +23,8 @@ export interface IGetSqlPerformanceInsightsParams {
   instance_id: string;
 }
 
-export interface IGetSqlPerformanceInsightsReturn extends IGetSqlPerformanceInsightsResp {}
+export interface IGetSqlPerformanceInsightsReturn
+  extends IGetSqlPerformanceInsightsResp {}
 
 export interface IGetSqlPerformanceInsightsRelatedSQLParams {
   project_name: string;

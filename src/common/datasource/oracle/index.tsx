@@ -28,7 +28,7 @@ const oracleTableConfig = {
   constraintForeignOnDeleteConfig: [
     TableForeignConstraintOnDeleteType.CASCADE,
     TableForeignConstraintOnDeleteType.NO_ACTION,
-    TableForeignConstraintOnDeleteType.SET_NULL,
+    TableForeignConstraintOnDeleteType.SET_NULL
   ],
   disableRangeColumnsPartition: true,
   disableListColumnsPartition: true,
@@ -40,12 +40,12 @@ const oracleTableConfig = {
     id: 'NUMBER',
     name: 'VARCHAR',
     date: 'DATE',
-    time: 'TIMESTAMP',
-  },
+    time: 'TIMESTAMP'
+  }
 };
 
 const functionConfig: IDataSourceModeConfig['schema']['func'] = {
-  params: ['paramName', 'paramMode', 'dataType', 'defaultValue'],
+  params: ['paramName', 'paramMode', 'dataType', 'defaultValue']
 };
 
 const items: Record<ConnectType.ORACLE, IDataSourceModeConfig> = {
@@ -53,7 +53,7 @@ const items: Record<ConnectType.ORACLE, IDataSourceModeConfig> = {
     priority: 2,
     connection: {
       address: {
-        items: ['ip', 'port', 'sid'],
+        items: ['ip', 'port', 'sid']
       },
       account: true,
       role: true,
@@ -61,7 +61,7 @@ const items: Record<ConnectType.ORACLE, IDataSourceModeConfig> = {
       ssl: false,
       jdbcDoc:
         'https://docs.oracle.com/en/database/oracle/oracle-database/21/jajdb/oracle/jdbc/OracleConnection.html',
-      disableURLParse: true,
+      disableURLParse: true
     },
     features: {
       task: [
@@ -72,7 +72,7 @@ const items: Record<ConnectType.ORACLE, IDataSourceModeConfig> = {
         TaskType.ASYNC,
         TaskType.DATA_DELETE,
         TaskType.DATA_ARCHIVE,
-        TaskType.MULTIPLE_ASYNC,
+        TaskType.MULTIPLE_ASYNC
       ],
       obclient: false,
       recycleBin: false,
@@ -88,21 +88,21 @@ const items: Record<ConnectType.ORACLE, IDataSourceModeConfig> = {
       supportOBProxy: false,
       export: {
         fileLimit: false,
-        snapshot: false,
-      },
+        snapshot: false
+      }
     },
     schema: {
       table: oracleTableConfig,
       func: functionConfig,
       proc: functionConfig,
-      innerSchema: ['SYS'],
+      innerSchema: ['SYS']
     },
     sql: {
       language: 'oboracle',
       escapeChar: '"',
-      plParamMode: 'text',
-    },
-  },
+      plParamMode: 'text'
+    }
+  }
 };
 if (haveOCP()) {
   delete items[ConnectType.ORACLE];

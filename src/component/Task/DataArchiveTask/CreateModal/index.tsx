@@ -15,9 +15,17 @@
  */
 
 import { getTableListByDatabaseName } from '@/common/network/table';
-import { createTask, getCycleTaskDetail, previewSqlStatements } from '@/common/network/task';
+import {
+  createTask,
+  getCycleTaskDetail,
+  previewSqlStatements
+} from '@/common/network/task';
 import Crontab from '@/component/Crontab';
-import { CrontabDateType, CrontabMode, ICrontab } from '@/component/Crontab/interface';
+import {
+  CrontabDateType,
+  CrontabMode,
+  ICrontab
+} from '@/component/Crontab/interface';
 import FormItemPanel from '@/component/FormItemPanel';
 import DescriptionInput from '@/component/Task/component/DescriptionInput';
 import { IDatabase } from '@/d.ts/database';
@@ -35,14 +43,19 @@ import {
   TaskPageScope,
   TaskPageType,
   TaskType,
-  CycleTaskDetail,
+  CycleTaskDetail
 } from '@/d.ts';
 import { openTasksPage } from '@/store/helper/page';
 import type { ModalStore } from '@/store/modal';
 import { useDBSession } from '@/store/sessionManager/hooks';
 import { isClient } from '@/util/env';
 import { formatMessage } from '@/util/intl';
-import { hourToMilliSeconds, kbToMb, mbToKb, milliSecondsToHour } from '@/util/utils';
+import {
+  hourToMilliSeconds,
+  kbToMb,
+  mbToKb,
+  milliSecondsToHour
+} from '@/util/utils';
 import { FieldTimeOutlined } from '@ant-design/icons';
 import {
   Button,
@@ -54,7 +67,7 @@ import {
   Radio,
   Space,
   Tooltip,
-  Spin,
+  Spin
 } from 'antd';
 import { inject, observer } from 'mobx-react';
 import dayjs from 'dayjs';
@@ -75,23 +88,23 @@ import MaxAllowedDirtyRowCount from '../../component/MaxAllowedDirtyRowCount';
 
 export enum IArchiveRange {
   PORTION = 'portion',
-  ALL = 'all',
+  ALL = 'all'
 }
 export const InsertActionOptions = [
   {
     label: formatMessage({
       id: 'odc.src.component.Task.DataArchiveTask.CreateModal.IgnoreWhenRepeated',
-      defaultMessage: '重复时忽略',
+      defaultMessage: '重复时忽略'
     }), //'重复时忽略'
-    value: MigrationInsertAction.INSERT_IGNORE,
+    value: MigrationInsertAction.INSERT_IGNORE
   },
   {
     label: formatMessage({
       id: 'odc.src.component.Task.DataArchiveTask.CreateModal.UpdateWhenRepeated',
-      defaultMessage: '重复时更新',
+      defaultMessage: '重复时更新'
     }), //'重复时更新'
-    value: MigrationInsertAction.INSERT_DUPLICATE_UPDATE,
-  },
+    value: MigrationInsertAction.INSERT_DUPLICATE_UPDATE
+  }
 ];
 
 export const variable = {
@@ -101,9 +114,9 @@ export const variable = {
     {
       operator: '',
       step: '',
-      unit: '',
-    },
-  ],
+      unit: ''
+    }
+  ]
 };
 const defaultValue = {
   triggerStrategy: TaskExecStrategy.START_NOW,
@@ -112,7 +125,7 @@ const defaultValue = {
   migrationInsertAction: MigrationInsertAction.INSERT_DUPLICATE_UPDATE,
   shardingStrategy: ShardingStrategy.FIXED_LENGTH,
   rowLimit: 100,
-  dataSizeLimit: 1,
+  dataSizeLimit: 1
 };
 interface IProps {
   modalStore?: ModalStore;
@@ -127,7 +140,7 @@ const getVariables = (
       step: number;
       unit: string;
     }[];
-  }[],
+  }[]
 ) => {
   return value?.map(({ name, format, pattern }) => {
     let _pattern = null;
@@ -140,7 +153,7 @@ const getVariables = (
     } catch (error) {}
     return {
       name,
-      pattern: `${format}|${_pattern}`,
+      pattern: `${format}|${_pattern}`
     };
   });
 };
@@ -149,7 +162,7 @@ export const getVariableValue = (
   value: {
     name: string;
     pattern: string;
-  }[],
+  }[]
 ) => {
   var reg = /([+-])?(\d+)?(.+)?/;
   return value?.map(({ name, pattern }) => {
@@ -157,23 +170,25 @@ export const getVariableValue = (
     let patternValue = {
       operator: '',
       step: '',
-      unit: '',
+      unit: ''
     };
     if (_pattern) {
       const res = _pattern?.match(reg);
       const operator = res[1] ?? '';
       const step = res[2] ?? '';
-      const unit = timeUnitOptions.map((item) => item.value).includes(res[3]) ? res[3] : '';
+      const unit = timeUnitOptions.map((item) => item.value).includes(res[3])
+        ? res[3]
+        : '';
       patternValue = {
         operator,
         step,
-        unit,
+        unit
       };
     }
     return {
       name,
       format,
-      pattern: [patternValue],
+      pattern: [patternValue]
     };
   });
 };
@@ -189,12 +204,19 @@ const CreateModal: React.FC<IProps> = (props) => {
   const [targetDatabase, setTargetDatabase] = useState<IDatabase>();
   const [form] = Form.useForm();
   const databaseId = Form.useWatch('databaseId', form);
-  const { session: sourceDBSession, database: sourceDB } = useDBSession(databaseId);
+  const { session: sourceDBSession, database: sourceDB } =
+    useDBSession(databaseId);
 
-  const { run: fetchCycleTaskDetail, loading } = useRequest(getCycleTaskDetail, { manual: true });
+  const { run: fetchCycleTaskDetail, loading } = useRequest(
+    getCycleTaskDetail,
+    { manual: true }
+  );
 
   const loadTables = async () => {
-    const tables = await getTableListByDatabaseName(sourceDBSession?.sessionId, sourceDB?.name);
+    const tables = await getTableListByDatabaseName(
+      sourceDBSession?.sessionId,
+      sourceDB?.name
+    );
     setTables(tables);
   };
   const crontabRef = useRef<{
@@ -206,11 +228,13 @@ const CreateModal: React.FC<IProps> = (props) => {
   const isEdit = !!dataArchiveEditId && dataArchiveTaskData?.type === 'EDIT';
   const [isdeleteAfterMigration, setIsdeleteAfterMigration] = useState(false);
   const loadEditData = async (editId: number) => {
-    const data = (await fetchCycleTaskDetail(editId)) as CycleTaskDetail<IDataArchiveJobParameters>;
+    const data = (await fetchCycleTaskDetail(
+      editId
+    )) as CycleTaskDetail<IDataArchiveJobParameters>;
     const {
       jobParameters,
       description,
-      triggerConfig: { triggerStrategy, cronExpression, hours, days, startAt },
+      triggerConfig: { triggerStrategy, cronExpression, hours, days, startAt }
     } = data;
 
     const {
@@ -227,7 +251,7 @@ const CreateModal: React.FC<IProps> = (props) => {
       syncTableStructure,
       dirtyRowAction,
       maxAllowedDirtyRowCount,
-      fullDatabase,
+      fullDatabase
     } = jobParameters;
     setEnablePartition(!!tables?.find((i) => i?.partitions?.length));
     setIsdeleteAfterMigration(deleteAfterMigration);
@@ -252,18 +276,25 @@ const CreateModal: React.FC<IProps> = (props) => {
       timeoutMillis: milliSecondsToHour(timeoutMillis),
       syncTableStructure,
       dirtyRowAction,
-      maxAllowedDirtyRowCount,
+      maxAllowedDirtyRowCount
     };
 
-    if (![TaskExecStrategy.START_NOW, TaskExecStrategy.START_AT].includes(triggerStrategy)) {
+    if (
+      ![TaskExecStrategy.START_NOW, TaskExecStrategy.START_AT].includes(
+        triggerStrategy
+      )
+    ) {
       formData.triggerStrategy = TaskExecStrategy.TIMER;
       const crontab = {
-        mode: triggerStrategy === TaskExecStrategy.CRON ? CrontabMode.custom : CrontabMode.default,
+        mode:
+          triggerStrategy === TaskExecStrategy.CRON
+            ? CrontabMode.custom
+            : CrontabMode.default,
         dateType: triggerStrategy as any,
         cronString: cronExpression,
         hour: hours,
         dayOfMonth: days,
-        dayOfWeek: days,
+        dayOfWeek: days
       };
       setCrontab(crontab);
     }
@@ -278,13 +309,13 @@ const CreateModal: React.FC<IProps> = (props) => {
       Modal.confirm({
         title: formatMessage({
           id: 'odc.DataArchiveTask.CreateModal.AreYouSureYouWant',
-          defaultMessage: '是否确认取消此数据归档？',
+          defaultMessage: '是否确认取消此数据归档？'
         }),
         //确认取消此 数据归档吗？
         centered: true,
         onOk: () => {
           props.modalStore.changeDataArchiveModal(false);
-        },
+        }
       });
     } else {
       props.modalStore.changeDataArchiveModal(false);
@@ -298,14 +329,17 @@ const CreateModal: React.FC<IProps> = (props) => {
     setConfirmLoading(false);
     if (res) {
       handleCancel(false);
-      openTasksPage(TaskPageType.DATA_ARCHIVE, TaskPageScope.CREATED_BY_CURRENT_USER);
+      openTasksPage(
+        TaskPageType.DATA_ARCHIVE,
+        TaskPageScope.CREATED_BY_CURRENT_USER
+      );
     }
   };
   const handleEditAndConfirm = async (data: Partial<CreateTaskRecord>) => {
     Modal.confirm({
       title: formatMessage({
         id: 'odc.DataArchiveTask.CreateModal.AreYouSureYouWant.1',
-        defaultMessage: '是否确认修改此数据归档？',
+        defaultMessage: '是否确认修改此数据归档？'
       }),
       //确认要修改此 数据归档吗？
       content: (
@@ -314,7 +348,7 @@ const CreateModal: React.FC<IProps> = (props) => {
             {
               formatMessage({
                 id: 'odc.DataArchiveTask.CreateModal.EditDataArchive',
-                defaultMessage: '编辑数据归档',
+                defaultMessage: '编辑数据归档'
               }) /*编辑数据归档*/
             }
           </div>
@@ -322,7 +356,7 @@ const CreateModal: React.FC<IProps> = (props) => {
             {
               formatMessage({
                 id: 'odc.DataArchiveTask.CreateModal.TheTaskNeedsToBe',
-                defaultMessage: '任务需要重新审批，审批通过后此任务将重新执行',
+                defaultMessage: '任务需要重新审批，审批通过后此任务将重新执行'
               }) /*任务需要重新审批，审批通过后此任务将重新执行*/
             }
           </div>
@@ -331,12 +365,12 @@ const CreateModal: React.FC<IProps> = (props) => {
 
       cancelText: formatMessage({
         id: 'odc.DataArchiveTask.CreateModal.Cancel',
-        defaultMessage: '取消',
+        defaultMessage: '取消'
       }),
       //取消
       okText: formatMessage({
         id: 'odc.DataArchiveTask.CreateModal.Ok',
-        defaultMessage: '确定',
+        defaultMessage: '确定'
       }),
       //确定
       centered: true,
@@ -345,7 +379,7 @@ const CreateModal: React.FC<IProps> = (props) => {
       },
       onCancel: () => {
         setConfirmLoading(false);
-      },
+      }
     });
   };
   const handleCloseSQLPreviewModal = () => {
@@ -374,7 +408,7 @@ const CreateModal: React.FC<IProps> = (props) => {
           timeoutMillis,
           syncTableStructure,
           dirtyRowAction,
-          maxAllowedDirtyRowCount,
+          maxAllowedDirtyRowCount
         } = values;
         _tables?.map((i) => {
           i.partitions = Array.isArray(i.partitions)
@@ -386,7 +420,9 @@ const CreateModal: React.FC<IProps> = (props) => {
         });
         const parameters = {
           type: TaskType.MIGRATION,
-          operationType: isEdit ? TaskOperationType.UPDATE : TaskOperationType.CREATE,
+          operationType: isEdit
+            ? TaskOperationType.UPDATE
+            : TaskOperationType.CREATE,
           taskId: dataArchiveEditId,
           scheduleTaskParameters: {
             sourceDatabaseId: databaseId,
@@ -398,7 +434,7 @@ const CreateModal: React.FC<IProps> = (props) => {
                     return {
                       tableName: item?.tableName,
                       conditionExpression: '',
-                      targetTableName: '',
+                      targetTableName: ''
                     };
                   })
                 : _tables,
@@ -412,33 +448,36 @@ const CreateModal: React.FC<IProps> = (props) => {
             timeoutMillis: hourToMilliSeconds(timeoutMillis),
             rateLimit: {
               rowLimit,
-              dataSizeLimit: mbToKb(dataSizeLimit),
+              dataSizeLimit: mbToKb(dataSizeLimit)
             },
-            fullDatabase: archiveRange === IArchiveRange.ALL,
+            fullDatabase: archiveRange === IArchiveRange.ALL
           },
           triggerConfig: {
-            triggerStrategy,
-          } as ICycleTaskTriggerConfig,
+            triggerStrategy
+          } as ICycleTaskTriggerConfig
         };
         if (triggerStrategy === TaskExecStrategy.TIMER) {
-          const { mode, dateType, cronString, hour, dayOfMonth, dayOfWeek } = crontab;
+          const { mode, dateType, cronString, hour, dayOfMonth, dayOfWeek } =
+            crontab;
           parameters.triggerConfig = {
-            triggerStrategy: (mode === 'custom' ? 'CRON' : dateType) as TaskExecStrategy,
+            triggerStrategy: (mode === 'custom'
+              ? 'CRON'
+              : dateType) as TaskExecStrategy,
             days: dateType === CrontabDateType.weekly ? dayOfWeek : dayOfMonth,
             hours: hour,
-            cronExpression: cronString,
+            cronExpression: cronString
           };
         } else if (triggerStrategy === TaskExecStrategy.START_AT) {
           parameters.triggerConfig = {
             triggerStrategy: TaskExecStrategy.START_AT,
-            startAt: startAt?.valueOf(),
+            startAt: startAt?.valueOf()
           };
         }
         const data = {
           databaseId,
           taskType: TaskType.ALTER_SCHEDULE,
           parameters,
-          description,
+          description
         };
         setConfirmLoading(true);
         if (!isEdit) {
@@ -476,10 +515,10 @@ const CreateModal: React.FC<IProps> = (props) => {
                   return {
                     tableName: item?.tableName,
                     conditionExpression: '',
-                    targetTableName: '',
+                    targetTableName: ''
                   };
                 })
-              : _tables,
+              : _tables
         };
         const sqls = await previewSqlStatements(parameters);
         if (sqls) {
@@ -533,7 +572,7 @@ const CreateModal: React.FC<IProps> = (props) => {
     const databaseId = dataArchiveTaskData?.databaseId;
     if (databaseId) {
       form.setFieldsValue({
-        databaseId,
+        databaseId
       });
     }
   }, [dataArchiveTaskData?.databaseId]);
@@ -559,11 +598,11 @@ const CreateModal: React.FC<IProps> = (props) => {
         isEdit
           ? formatMessage({
               id: 'src.component.Task.DataArchiveTask.CreateModal.77394106',
-              defaultMessage: '编辑数据归档',
+              defaultMessage: '编辑数据归档'
             })
           : formatMessage({
               id: 'src.component.Task.DataArchiveTask.CreateModal.81AF31F1',
-              defaultMessage: '新建数据归档',
+              defaultMessage: '新建数据归档'
             }) //'新建数据归档'
       }
       footer={
@@ -576,20 +615,24 @@ const CreateModal: React.FC<IProps> = (props) => {
             {
               formatMessage({
                 id: 'odc.DataArchiveTask.CreateModal.Cancel',
-                defaultMessage: '取消',
+                defaultMessage: '取消'
               }) /*取消*/
             }
           </Button>
-          <Button type="primary" loading={confirmLoading || loading} onClick={handleSQLPreview}>
+          <Button
+            type="primary"
+            loading={confirmLoading || loading}
+            onClick={handleSQLPreview}
+          >
             {
               isEdit
                 ? formatMessage({
                     id: 'odc.DataArchiveTask.CreateModal.Save',
-                    defaultMessage: '保存',
+                    defaultMessage: '保存'
                   }) //保存
                 : formatMessage({
                     id: 'odc.DataArchiveTask.CreateModal.Create',
-                    defaultMessage: '新建',
+                    defaultMessage: '新建'
                   }) //新建
             }
           </Button>
@@ -616,12 +659,12 @@ const CreateModal: React.FC<IProps> = (props) => {
                 disabled={isEdit}
                 label={formatMessage({
                   id: 'odc.DataArchiveTask.CreateModal.SourceDatabase',
-                  defaultMessage: '源端数据库',
+                  defaultMessage: '源端数据库'
                 })}
                 /*源端数据库*/ projectId={projectId}
                 onChange={handleDBChange}
                 filters={{
-                  hideFileSystem: true,
+                  hideFileSystem: true
                 }}
               />
 
@@ -629,7 +672,7 @@ const CreateModal: React.FC<IProps> = (props) => {
                 type={TaskType.DATA_ARCHIVE}
                 label={formatMessage({
                   id: 'odc.DataArchiveTask.CreateModal.TargetDatabase',
-                  defaultMessage: '目标数据库',
+                  defaultMessage: '目标数据库'
                 })}
                 onChange={(_, database) => {
                   setTargetDatabase(database);
@@ -656,13 +699,13 @@ const CreateModal: React.FC<IProps> = (props) => {
                       <span style={{ marginRight: '6px' }}>
                         {formatMessage({
                           id: 'src.component.Task.DataArchiveTask.CreateModal.3D6F0B7D',
-                          defaultMessage: '任务完成后删除归档过程中产生的临时表',
+                          defaultMessage: '任务完成后删除归档过程中产生的临时表'
                         })}
                       </span>
                       <span className={styles.desc}>
                         {formatMessage({
                           id: 'src.component.Task.DataArchiveTask.CreateModal.85B377FF',
-                          defaultMessage: '勾选后已归档的任务不支持回滚',
+                          defaultMessage: '勾选后已归档的任务不支持回滚'
                         })}
                       </span>
                       <HelpDoc doc="TemporaryTableNameRules" />
@@ -673,7 +716,7 @@ const CreateModal: React.FC<IProps> = (props) => {
             <Form.Item
               label={formatMessage({
                 id: 'odc.DataArchiveTask.CreateModal.ExecutionMethod',
-                defaultMessage: '执行方式',
+                defaultMessage: '执行方式'
               })}
               /*执行方式*/ name="triggerStrategy"
               required
@@ -683,7 +726,7 @@ const CreateModal: React.FC<IProps> = (props) => {
                   {
                     formatMessage({
                       id: 'odc.DataArchiveTask.CreateModal.ExecuteNow',
-                      defaultMessage: '立即执行',
+                      defaultMessage: '立即执行'
                     }) /*立即执行*/
                   }
                 </Radio.Button>
@@ -692,7 +735,7 @@ const CreateModal: React.FC<IProps> = (props) => {
                     {
                       formatMessage({
                         id: 'odc.DataArchiveTask.CreateModal.ScheduledExecution',
-                        defaultMessage: '定时执行',
+                        defaultMessage: '定时执行'
                       }) /*定时执行*/
                     }
                   </Radio.Button>
@@ -701,7 +744,7 @@ const CreateModal: React.FC<IProps> = (props) => {
                   {
                     formatMessage({
                       id: 'odc.DataArchiveTask.CreateModal.PeriodicExecution',
-                      defaultMessage: '周期执行',
+                      defaultMessage: '周期执行'
                     }) /*周期执行*/
                   }
                 </Radio.Button>
@@ -716,7 +759,7 @@ const CreateModal: React.FC<IProps> = (props) => {
                       name="startAt"
                       label={formatMessage({
                         id: 'odc.DataArchiveTask.CreateModal.ExecutionTime',
-                        defaultMessage: '执行时间',
+                        defaultMessage: '执行时间'
                       })}
                       /*执行时间*/ required
                     >
@@ -747,7 +790,7 @@ const CreateModal: React.FC<IProps> = (props) => {
               label={
                 formatMessage({
                   id: 'odc.src.component.Task.DataArchiveTask.CreateModal.TaskSetting',
-                  defaultMessage: '任务设置',
+                  defaultMessage: '任务设置'
                 }) /* 任务设置 */
               }
               keepExpand
@@ -759,15 +802,18 @@ const CreateModal: React.FC<IProps> = (props) => {
                 extra={
                   <span>
                     {
-                      isConnectTypeBeFileSystemGroup(targetDatabase?.connectType)
+                      isConnectTypeBeFileSystemGroup(
+                        targetDatabase?.connectType
+                      )
                         ? formatMessage({
                             id: 'src.component.Task.DataArchiveTask.CreateModal.5A19F0AB',
-                            defaultMessage: '若您进行清理，默认立即清理且不做备份',
+                            defaultMessage:
+                              '若您进行清理，默认立即清理且不做备份'
                           })
                         : formatMessage({
                             id: 'odc.DataArchiveTask.CreateModal.IfYouCleanUpThe',
                             defaultMessage:
-                              '若您进行清理，默认立即清理且不做备份；清理任务完成后支持回滚',
+                              '若您进行清理，默认立即清理且不做备份；清理任务完成后支持回滚'
                           }) /*若您进行清理，默认立即清理且不做备份；清理任务完成后支持回滚*/
                     }
                   </span>
@@ -782,7 +828,7 @@ const CreateModal: React.FC<IProps> = (props) => {
                     {
                       formatMessage({
                         id: 'odc.DataArchiveTask.CreateModal.CleanUpArchivedDataFrom',
-                        defaultMessage: '清理源端已归档数据',
+                        defaultMessage: '清理源端已归档数据'
                       }) /*清理源端已归档数据*/
                     }
                   </Space>
@@ -791,12 +837,15 @@ const CreateModal: React.FC<IProps> = (props) => {
               <DirtyRowAction dependentField="deleteAfterMigration" />
               <MaxAllowedDirtyRowCount />
               <TaskdurationItem form={form} />
-              <SynchronizationItem form={form} targetDatabase={targetDatabase} />
+              <SynchronizationItem
+                form={form}
+                targetDatabase={targetDatabase}
+              />
               <Form.Item
                 label={
                   formatMessage({
                     id: 'odc.src.component.Task.DataArchiveTask.CreateModal.InsertionStrategy',
-                    defaultMessage: '插入策略',
+                    defaultMessage: '插入策略'
                   }) /* 插入策略 */
                 }
                 name="migrationInsertAction"
@@ -805,9 +854,9 @@ const CreateModal: React.FC<IProps> = (props) => {
                     required: true,
                     message: formatMessage({
                       id: 'odc.src.component.Task.DataArchiveTask.CreateModal.PleaseSelectInsertionStrategy',
-                      defaultMessage: '请选择插入策略',
-                    }), //'请选择插入策略'
-                  },
+                      defaultMessage: '请选择插入策略'
+                    }) //'请选择插入策略'
+                  }
                 ]}
               >
                 <Radio.Group options={InsertActionOptions} />

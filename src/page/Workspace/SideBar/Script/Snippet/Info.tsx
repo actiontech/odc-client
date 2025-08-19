@@ -40,12 +40,15 @@ const SnippetInfoToolTip: React.FC<{
               {
                 formatMessage({
                   id: 'odc.component.SnippetCard.Syntax',
-                  defaultMessage: '代码',
+                  defaultMessage: '代码'
                 }) /*代码片段*/
               }
             </dt>
             <dd>
-              <pre className={styles['snippet-value']} style={{ maxHeight: 300 }}>
+              <pre
+                className={styles['snippet-value']}
+                style={{ maxHeight: 300 }}
+              >
                 {getSnippetText(snippet.body)}
               </pre>
             </dd>
@@ -53,11 +56,13 @@ const SnippetInfoToolTip: React.FC<{
               {
                 formatMessage({
                   id: 'odc.component.SnippetCard.Description',
-                  defaultMessage: '描述',
+                  defaultMessage: '描述'
                 }) /*描述*/
               }
             </dt>
-            <dd style={{ wordBreak: 'break-all' }}>{snippet.description || 'no descrption'}</dd>
+            <dd style={{ wordBreak: 'break-all' }}>
+              {snippet.description || 'no descrption'}
+            </dd>
           </dl>
           <footer>{snippet.snippetType}</footer>
         </div>

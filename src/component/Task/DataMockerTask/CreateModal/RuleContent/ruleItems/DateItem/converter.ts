@@ -28,7 +28,7 @@ export const ruleTypeToGenerator = {
   [DateRuleType.ORDER]: MockGenerator.STEP_DATE_GENERATOR,
   [DateRuleType.RANDOM]: MockGenerator.RANDOM_DATE_GENERATOR,
   [DateRuleType.NULL]: MockGenerator.NULL_GENERATOR,
-  [DateRuleType.SKIP]: MockGenerator.SKIP_GENERATOR,
+  [DateRuleType.SKIP]: MockGenerator.SKIP_GENERATOR
 };
 
 const g2r = {};
@@ -41,7 +41,9 @@ function generatorToRuleType(column: IServerMockColumn): DateRuleType {
   return g2r[generator];
 }
 
-export function convertFormDataToServerData(formData: IMockFormColumn): IServerMockColumn {
+export function convertFormDataToServerData(
+  formData: IMockFormColumn
+): IServerMockColumn {
   let lowValue, highValue;
   let generator = ruleTypeToGenerator[formData.rule];
   formData = cloneDeep(formData);
@@ -59,7 +61,8 @@ export function convertFormDataToServerData(formData: IMockFormColumn): IServerM
     }
     case DateRuleType.ORDER: {
       lowValue = (formData.typeConfig.lowValue as dayjs.Dayjs)?.valueOf?.();
-      genParams.step = getSignWithOrder(formData.typeConfig.order) * parseInt(genParams.step);
+      genParams.step =
+        getSignWithOrder(formData.typeConfig.order) * parseInt(genParams.step);
       genParams.timeUnit = 'DAYS';
       genParams.timezone = getTimeZone(formData.typeConfig.lowValue);
       break;
@@ -78,12 +81,14 @@ export function convertFormDataToServerData(formData: IMockFormColumn): IServerM
       highValue,
       genParams,
       generator,
-      scale: formData.columnObj.scale,
-    },
+      scale: formData.columnObj.scale
+    }
   };
 }
 
-export function convertServerDataToFormData(formData: IServerMockColumn): IMockFormColumn {
+export function convertServerDataToFormData(
+  formData: IServerMockColumn
+): IMockFormColumn {
   let rule = generatorToRuleType(formData);
   formData = cloneDeep(formData);
   let genParams = formData?.typeConfig?.genParams;
@@ -119,7 +124,7 @@ export function convertServerDataToFormData(formData: IServerMockColumn): IMockF
       lowValue,
       range,
       genParams,
-      order,
-    },
+      order
+    }
   };
 }

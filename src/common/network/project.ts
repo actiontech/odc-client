@@ -21,7 +21,7 @@ import {
   IProject,
   ITablePermission,
   PermissionSourceType,
-  ProjectRole,
+  ProjectRole
 } from '@/d.ts/project';
 import request from '@/util/request';
 
@@ -30,7 +30,7 @@ export async function listProjects(
   page: number,
   size: number,
   archived: boolean = false,
-  builtin: boolean = false,
+  builtin: boolean = false
 ): Promise<IResponseData<IProject>> {
   const res = await request.get(`/api/v2/collaboration/projects`, {
     params: {
@@ -38,8 +38,8 @@ export async function listProjects(
       page,
       size,
       archived,
-      builtin,
-    },
+      builtin
+    }
   });
 
   return res?.data;
@@ -54,15 +54,18 @@ export async function getProject(id: number): Promise<IProject> {
 export async function getProjectWithErrorCatch(id: number): Promise<IProject> {
   const res = await request.get(`/api/v2/collaboration/projects/${id}`, {
     params: {
-      ignoreError: true,
-    },
+      ignoreError: true
+    }
   });
   return res?.data;
 }
 
-export async function updateProject(id: number, project: IProject): Promise<IProject> {
+export async function updateProject(
+  id: number,
+  project: IProject
+): Promise<IProject> {
   const res = await request.put(`/api/v2/collaboration/projects/${id}`, {
-    data: project,
+    data: project
   });
 
   return res?.data;
@@ -77,7 +80,7 @@ export async function createProject(params: {
   }[];
 }): Promise<IProject> {
   const res = await request.post(`/api/v2/collaboration/projects`, {
-    data: params,
+    data: params
   });
 
   return res?.data;
@@ -91,9 +94,9 @@ export async function setProjectAchived(params: {
     `/api/v2/collaboration/projects/${params?.projectId}/setArchived`,
     {
       data: {
-        archived: params?.archived,
-      },
-    },
+        archived: params?.archived
+      }
+    }
   );
 
   return !!res?.data;
@@ -104,7 +107,7 @@ export async function deleteProjectMember(params: {
   userId: number;
 }): Promise<boolean> {
   const res = await request.delete(
-    `/api/v2/collaboration/projects/${params?.projectId}/members/${params?.userId}`,
+    `/api/v2/collaboration/projects/${params?.projectId}/members/${params?.userId}`
   );
 
   return !!res?.data;
@@ -121,8 +124,8 @@ export async function updateProjectMember(params: {
   const res = await request.put(
     `/api/v2/collaboration/projects/${params?.projectId}/members/${params?.userId}`,
     {
-      data: params?.members,
-    },
+      data: params?.members
+    }
   );
 
   return !!res?.data;
@@ -135,20 +138,25 @@ export async function addProjectMember(params: {
     role: ProjectRole;
   }[];
 }): Promise<boolean> {
-  const res = await request.post(`/api/v2/collaboration/projects/${params?.projectId}/members`, {
-    data: params?.members,
-  });
+  const res = await request.post(
+    `/api/v2/collaboration/projects/${params?.projectId}/members`,
+    {
+      data: params?.members
+    }
+  );
 
   return !!res?.data;
 }
 
-export async function getUserSummaryList(): Promise<IResponseData<IUserSummary>> {
+export async function getUserSummaryList(): Promise<
+  IResponseData<IUserSummary>
+> {
   const res = await request.get(`/api/v2/iam/users`, {
     params: {
       basic: true,
       size: 9999,
-      page: 1,
-    },
+      page: 1
+    }
   });
 
   return res?.data;
@@ -179,9 +187,12 @@ export async function getDatabasePermissions(params: {
   size?: number;
 }): Promise<IResponseData<IDatabasePermission>> {
   const { projectId } = params;
-  const res = await request.get(`api/v2/collaboration/projects/${projectId}/databasePermissions/`, {
-    params,
-  });
+  const res = await request.get(
+    `api/v2/collaboration/projects/${projectId}/databasePermissions/`,
+    {
+      params
+    }
+  );
   return res?.data;
 }
 
@@ -210,33 +221,39 @@ export async function getTablePermissions(params: {
   size?: number;
 }): Promise<IResponseData<ITablePermission>> {
   const { projectId } = params;
-  const res = await request.get(`api/v2/collaboration/projects/${projectId}/tablePermissions`, {
-    params,
-  });
+  const res = await request.get(
+    `api/v2/collaboration/projects/${projectId}/tablePermissions`,
+    {
+      params
+    }
+  );
   return res?.data;
 }
 
 // 回收库权限
 export async function reclaimDatabasePermission(
   projectId: number,
-  ids: number[],
+  ids: number[]
 ): Promise<boolean> {
   const res = await request.delete(
     `api/v2/collaboration/projects/${projectId}/databasePermissions/batchRevoke`,
     {
-      data: ids,
-    },
+      data: ids
+    }
   );
   return !!res?.data;
 }
 
 // 回收表权限
-export async function reclaimTablePermission(projectId: number, ids: number[]): Promise<boolean> {
+export async function reclaimTablePermission(
+  projectId: number,
+  ids: number[]
+): Promise<boolean> {
   const res = await request.post(
     `api/v2/collaboration/projects/${projectId}/tablePermissions/batchRevoke`,
     {
-      data: ids,
-    },
+      data: ids
+    }
   );
   return !!res?.data;
 }
@@ -251,8 +268,8 @@ export async function addDatabasePermissions(params: {
   const res = await request.post(
     `/api/v2/collaboration/projects/${params?.projectId}/databasePermissions/batchCreate`,
     {
-      data: params,
-    },
+      data: params
+    }
   );
   return !!res?.data;
 }
@@ -267,15 +284,17 @@ export async function addTablePermissions(params: {
   const res = await request.post(
     `/api/v2/collaboration/projects/${params?.projectId}/tablePermissions/batchCreate`,
     {
-      data: params,
-    },
+      data: params
+    }
   );
   return !!res?.data;
 }
 
-export async function batchDeleteProject(projectId: number[]): Promise<boolean> {
+export async function batchDeleteProject(
+  projectId: number[]
+): Promise<boolean> {
   const res = await request.post('/api/v2/collaboration/projects/batchDelete', {
-    data: projectId,
+    data: projectId
   });
   return !!res?.data;
 }

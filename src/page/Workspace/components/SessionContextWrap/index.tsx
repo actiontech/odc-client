@@ -35,7 +35,7 @@ export default function SessionContextWrap({
   datasourceMode,
   children,
   useMaster,
-  warnIfNotFound = true,
+  warnIfNotFound = true
 }: IProps) {
   const [session, _setSession] = useState<SessionStore>(null);
   const [databaseId, setDatabaseId] = useState(defaultDatabaseId);
@@ -54,7 +54,7 @@ export default function SessionContextWrap({
       datasourceId,
       databaseId,
       useMaster,
-      true,
+      true
     );
     if (newSession === 'NotFound') {
       setDatabaseId(null);
@@ -88,12 +88,12 @@ export default function SessionContextWrap({
         selectSession: selectSession,
         databaseId,
         datasourceMode,
-        datasourceId,
+        datasourceId
       }}
     >
       {typeof children === 'function'
         ? children({
-            session,
+            session
           })
         : children}
     </SessionContext.Provider>

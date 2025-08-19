@@ -26,52 +26,62 @@ import {
   openCreatePackageBodyPage,
   openPackageBodyPage,
   openPackageHeadPage,
-  openPackageViewPage,
+  openPackageViewPage
 } from '@/store/helper/page';
 import modal from '@/store/modal';
 import pageStore from '@/store/page';
 import { ReactComponent as BatchCompileSvg } from '@/svgr/batch-compile-all.svg';
 import { formatMessage } from '@/util/intl';
 import { downloadPLDDL } from '@/util/sqlExport';
-import { PlusOutlined, QuestionCircleFilled, ReloadOutlined } from '@ant-design/icons';
+import {
+  PlusOutlined,
+  QuestionCircleFilled,
+  ReloadOutlined
+} from '@ant-design/icons';
 import { message, Modal } from 'antd';
 import { ResourceNodeType } from '../../type';
 import { hasChangePermission, hasExportPermission } from '../index';
 import { IMenuItemConfig } from '../type';
 import { isSupportExport } from './helper';
 
-export const packageMenusConfig: Partial<Record<ResourceNodeType, IMenuItemConfig[]>> = {
+export const packageMenusConfig: Partial<
+  Record<ResourceNodeType, IMenuItemConfig[]>
+> = {
   [ResourceNodeType.PackageRoot]: [
     {
       key: 'BATCH_COMPILE',
       text: [
         formatMessage({
           id: 'odc.TreeNodeMenu.config.package.BatchCompilation',
-          defaultMessage: '批量编译',
-        }), //批量编译
+          defaultMessage: '批量编译'
+        }) //批量编译
       ],
       actionType: actionTypes.create,
       icon: BatchCompileSvg,
       isHide(session, node) {
-        return !getDataSourceModeConfig(session?.connection?.type)?.features?.compile;
+        return !getDataSourceModeConfig(session?.connection?.type)?.features
+          ?.compile;
       },
       run(session, node) {
         openBatchCompilePLPage(
           PageType.BATCH_COMPILE_PACKAGE,
           DbObjectType.package,
-          formatMessage({ id: 'odc.components.ResourceTree.Bag', defaultMessage: '包' }),
+          formatMessage({
+            id: 'odc.components.ResourceTree.Bag',
+            defaultMessage: '包'
+          }),
           session?.odcDatabase?.id,
-          session?.database?.dbName,
+          session?.database?.dbName
         );
-      },
+      }
     },
     {
       key: 'CREATE',
       text: [
         formatMessage({
           id: 'odc.ResourceTree.config.treeNodesActions.CreateAPackage',
-          defaultMessage: '新建程序包',
-        }),
+          defaultMessage: '新建程序包'
+        })
       ],
 
       actionType: actionTypes.create,
@@ -80,21 +90,24 @@ export const packageMenusConfig: Partial<Record<ResourceNodeType, IMenuItemConfi
         modal.changeCreatePackageModalVisible(
           true,
           session?.odcDatabase?.id,
-          session?.database?.dbName,
+          session?.database?.dbName
         );
-      },
+      }
     },
     {
       key: 'REFRESH',
       text: [
-        formatMessage({ id: 'odc.ResourceTree.actions.Refresh', defaultMessage: '刷新' }), //刷新
+        formatMessage({
+          id: 'odc.ResourceTree.actions.Refresh',
+          defaultMessage: '刷新'
+        }) //刷新
       ],
       icon: ReloadOutlined,
       actionType: actionTypes.read,
       async run(session, node) {
         await session.database.getPackageList();
-      },
-    },
+      }
+    }
   ],
 
   [ResourceNodeType.Package]: [
@@ -103,8 +116,8 @@ export const packageMenusConfig: Partial<Record<ResourceNodeType, IMenuItemConfi
       text: [
         formatMessage({
           id: 'odc.ResourceTree.config.treeNodesActions.CreateAPackage.1',
-          defaultMessage: '新建包体',
-        }),
+          defaultMessage: '新建包体'
+        })
       ],
 
       actionType: actionTypes.create,
@@ -114,18 +127,22 @@ export const packageMenusConfig: Partial<Record<ResourceNodeType, IMenuItemConfi
         const sql = await getPackageBodyCreateSQL(
           pkg.packageName,
           session?.sessionId,
-          session?.database?.dbName,
+          session?.database?.dbName
         );
-        openCreatePackageBodyPage(sql, session?.odcDatabase?.id, session?.database?.dbName);
-      },
+        openCreatePackageBodyPage(
+          sql,
+          session?.odcDatabase?.id,
+          session?.database?.dbName
+        );
+      }
     },
     {
       key: 'EDIT_HEAD_BODY',
       text: [
         formatMessage({
           id: 'odc.ResourceTree.config.treeNodesActions.EditThePackageHeader',
-          defaultMessage: '编辑包头包体',
-        }),
+          defaultMessage: '编辑包头包体'
+        })
       ],
 
       actionType: actionTypes.update,
@@ -133,20 +150,33 @@ export const packageMenusConfig: Partial<Record<ResourceNodeType, IMenuItemConfi
       hasDivider: true,
       async run(session, node) {
         const pkgInfo: IPackage = node.data;
-        const pkg: IPackage = await session?.database?.loadPackage(pkgInfo.packageName);
+        const pkg: IPackage = await session?.database?.loadPackage(
+          pkgInfo.packageName
+        );
         const sql = pkg?.packageHead?.basicInfo?.ddl || '';
         const bodysql = pkg?.packageBody?.basicInfo?.ddl || '';
-        await openPackageHeadPage(pkg?.packageName, sql, session?.odcDatabase?.id);
+        await openPackageHeadPage(
+          pkg?.packageName,
+          sql,
+          session?.odcDatabase?.id
+        );
         if (bodysql) {
-          await openPackageBodyPage(pkg?.packageName, bodysql, session?.odcDatabase?.id);
+          await openPackageBodyPage(
+            pkg?.packageName,
+            bodysql,
+            session?.odcDatabase?.id
+          );
         }
-      },
+      }
     },
 
     {
       key: 'EXPORT',
       text: [
-        formatMessage({ id: 'odc.ResourceTree.actions.Export', defaultMessage: '导出' }), //导出
+        formatMessage({
+          id: 'odc.ResourceTree.actions.Export',
+          defaultMessage: '导出'
+        }) //导出
       ],
       ellipsis: true,
       hasDivider: true,
@@ -161,17 +191,17 @@ export const packageMenusConfig: Partial<Record<ResourceNodeType, IMenuItemConfi
         const pkgBodyList = await getExportObjects(
           session?.database?.databaseId,
           DbObjectType.package_body,
-          session?.connection?.id,
+          session?.connection?.id
         );
         modal.changeExportModal(true, {
           type: DbObjectType.package,
           name: pkgInfo?.packageName,
           exportPkgBody: !!pkgBodyList[DbObjectType.package_body]?.find(
-            (item) => item === pkgInfo.packageName,
+            (item) => item === pkgInfo.packageName
           ),
-          databaseId: session?.database.databaseId,
+          databaseId: session?.database.databaseId
         });
-      },
+      }
     },
 
     {
@@ -179,8 +209,8 @@ export const packageMenusConfig: Partial<Record<ResourceNodeType, IMenuItemConfi
       text: [
         formatMessage({
           id: 'odc.ResourceTree.config.treeNodesActions.Delete',
-          defaultMessage: '删除',
-        }),
+          defaultMessage: '删除'
+        })
       ],
 
       ellipsis: true,
@@ -194,64 +224,73 @@ export const packageMenusConfig: Partial<Record<ResourceNodeType, IMenuItemConfi
           title: formatMessage(
             {
               id: 'workspace.window.createPackage.modal.delete',
-              defaultMessage: '是否确定删除程序包 {name} ？',
+              defaultMessage: '是否确定删除程序包 {name} ？'
             },
 
             {
-              name: pkg?.packageName,
-            },
+              name: pkg?.packageName
+            }
           ),
 
           okText: formatMessage({
             id: 'app.button.ok',
-            defaultMessage: '确定',
+            defaultMessage: '确定'
           }),
 
           cancelText: formatMessage({
             id: 'app.button.cancel',
-            defaultMessage: '取消',
+            defaultMessage: '取消'
           }),
 
           centered: true,
           icon: <QuestionCircleFilled />,
           onOk: async () => {
-            if (!(await dropObject(pkg.packageName, DbObjectType.package, session?.sessionId))) {
+            if (
+              !(await dropObject(
+                pkg.packageName,
+                DbObjectType.package,
+                session?.sessionId
+              ))
+            ) {
               return;
             }
             await session?.database?.getPackageList();
             message.success(
               formatMessage({
                 id: 'workspace.window.createPackage.modal.delete.success',
-                defaultMessage: '删除程序包成功',
-              }),
+                defaultMessage: '删除程序包成功'
+              })
             );
 
             const openedPages = pageStore.pages.filter(
               (p) =>
                 p.params.packageName === pkg.packageName &&
-                session?.database?.databaseId === p.params.databaseId,
+                session?.database?.databaseId === p.params.databaseId
             );
             if (openedPages.length) {
               for (let p of openedPages) {
                 await pageStore.close(p.key);
               }
             }
-          },
+          }
         });
-      },
+      }
     },
     {
       key: 'REFRESH',
       text: [
-        formatMessage({ id: 'odc.ResourceTree.actions.Refresh', defaultMessage: '刷新' }), //刷新
+        formatMessage({
+          id: 'odc.ResourceTree.actions.Refresh',
+          defaultMessage: '刷新'
+        }) //刷新
       ],
       ellipsis: true,
       actionType: actionTypes.create,
       async run(session, node) {
         const pkg: IPackage = node.data;
         await session.database.loadPackage(pkg.packageName);
-      },
-    },
+      }
+    }
   ],
 
   [ResourceNodeType.PackageHead]: [
@@ -260,23 +299,28 @@ export const packageMenusConfig: Partial<Record<ResourceNodeType, IMenuItemConfi
       text: [
         formatMessage({
           id: 'odc.ResourceTree.config.treeNodesActions.See',
-          defaultMessage: '查看',
-        }),
+          defaultMessage: '查看'
+        })
       ],
 
       ellipsis: true,
       async run(session, node) {
         const pkgInfo: IPackage = node.data;
-        openPackageViewPage(pkgInfo?.packageName, TopTab.HEAD, true, session?.odcDatabase?.id);
-      },
+        openPackageViewPage(
+          pkgInfo?.packageName,
+          TopTab.HEAD,
+          true,
+          session?.odcDatabase?.id
+        );
+      }
     },
     {
       key: 'EDIT',
       text: [
         formatMessage({
           id: 'odc.ResourceTree.config.treeNodesActions.Editing',
-          defaultMessage: '编辑',
-        }),
+          defaultMessage: '编辑'
+        })
       ],
 
       ellipsis: true,
@@ -284,16 +328,25 @@ export const packageMenusConfig: Partial<Record<ResourceNodeType, IMenuItemConfi
       hasDivider: true,
       async run(session, node) {
         const pkgInfo: IPackage = node.data;
-        const pkg: IPackage = await session?.database?.loadPackage(pkgInfo.packageName);
+        const pkg: IPackage = await session?.database?.loadPackage(
+          pkgInfo.packageName
+        );
         const sql = pkg?.packageHead?.basicInfo?.ddl || '';
-        await openPackageHeadPage(pkg?.packageName, sql, session?.odcDatabase?.id);
-      },
+        await openPackageHeadPage(
+          pkg?.packageName,
+          sql,
+          session?.odcDatabase?.id
+        );
+      }
     },
 
     {
       key: 'DOWNLOAD',
       text: [
-        formatMessage({ id: 'odc.ResourceTree.actions.Download', defaultMessage: '下载' }), //下载
+        formatMessage({
+          id: 'odc.ResourceTree.actions.Download',
+          defaultMessage: '下载'
+        }) //下载
       ],
       ellipsis: true,
       hasDivider: true,
@@ -305,7 +358,7 @@ export const packageMenusConfig: Partial<Record<ResourceNodeType, IMenuItemConfi
         if (ddl) {
           downloadPLDDL(name, PLType.PKG_HEAD, ddl, session?.database?.dbName);
         }
-      },
+      }
     },
 
     {
@@ -313,8 +366,8 @@ export const packageMenusConfig: Partial<Record<ResourceNodeType, IMenuItemConfi
       text: [
         formatMessage({
           id: 'odc.ResourceTree.config.treeNodesActions.Delete',
-          defaultMessage: '删除',
-        }),
+          defaultMessage: '删除'
+        })
       ],
 
       ellipsis: true,
@@ -326,19 +379,22 @@ export const packageMenusConfig: Partial<Record<ResourceNodeType, IMenuItemConfi
         packageMenusConfig[ResourceNodeType.Package]
           .find((item) => item.key === 'DELETE')
           ?.run?.(session, node);
-      },
+      }
     },
     {
       key: 'REFRESH',
       text: [
-        formatMessage({ id: 'odc.ResourceTree.actions.Refresh', defaultMessage: '刷新' }), //刷新
+        formatMessage({
+          id: 'odc.ResourceTree.actions.Refresh',
+          defaultMessage: '刷新'
+        }) //刷新
       ],
       ellipsis: true,
       actionType: actionTypes.create,
       async run(session, node) {
         const pkg: IPackage = node.data;
         await session.database.loadPackage(pkg.packageName);
-      },
-    },
-  ],
+      }
+    }
+  ]
 };

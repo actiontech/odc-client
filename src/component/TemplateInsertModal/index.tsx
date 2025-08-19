@@ -49,7 +49,16 @@ interface IProps {
 }
 
 const TemplateInsertModal: React.FC<IProps> = function (props) {
-  const { visible, name, type, settingStore, onClose, onOk, modalStore, session } = props;
+  const {
+    visible,
+    name,
+    type,
+    settingStore,
+    onClose,
+    onOk,
+    modalStore,
+    session
+  } = props;
   const [value, setValue] = useState(DragInsertType.NAME);
   const [closePrompt, setClosePrompt] = useState(false);
 
@@ -72,7 +81,7 @@ const TemplateInsertModal: React.FC<IProps> = function (props) {
           {
             formatMessage({
               id: 'odc.component.TemplateInsertModal.TheGenerationIsSuccessfulAnd',
-              defaultMessage: '生成成功，且下次拖放将不再提示，可前往',
+              defaultMessage: '生成成功，且下次拖放将不再提示，可前往'
             }) /*生成成功，且下次拖放将不再提示，可前往*/
           }
 
@@ -86,24 +95,28 @@ const TemplateInsertModal: React.FC<IProps> = function (props) {
             {
               formatMessage({
                 id: 'odc.component.TemplateInsertModal.PersonalSettings',
-                defaultMessage: '个人设置',
+                defaultMessage: '个人设置'
               }) /*个人设置*/
             }
           </Button>
           {
             formatMessage({
               id: 'odc.component.TemplateInsertModal.ModifyTheGeneratedStatementType',
-              defaultMessage: '修改生成语句类型',
+              defaultMessage: '修改生成语句类型'
             }) /*修改生成语句类型*/
           }
-        </>,
+        </>
       );
     }
   };
 
   useEffect(() => {
     if (visible) {
-      setValue(settingStore.configurations['odc.sqlexecute.default.objectDraggingOption']);
+      setValue(
+        settingStore.configurations[
+          'odc.sqlexecute.default.objectDraggingOption'
+        ]
+      );
     }
   }, [visible, settingStore.configurations]);
 
@@ -112,7 +125,7 @@ const TemplateInsertModal: React.FC<IProps> = function (props) {
       title={
         formatMessage({
           id: 'odc.component.TemplateInsertModal.FastGeneration',
-          defaultMessage: '快速生成',
+          defaultMessage: '快速生成'
         }) + //快速生成
         `(${name})`
       }
@@ -125,7 +138,7 @@ const TemplateInsertModal: React.FC<IProps> = function (props) {
             {
               formatMessage({
                 id: 'odc.component.TemplateInsertModal.NoMorePromptInThe',
-                defaultMessage: '以后不再提示',
+                defaultMessage: '以后不再提示'
               }) /*以后不再提示*/
             }
           </Checkbox>
@@ -134,7 +147,7 @@ const TemplateInsertModal: React.FC<IProps> = function (props) {
               {
                 formatMessage({
                   id: 'odc.component.TemplateInsertModal.Cancel',
-                  defaultMessage: '取消',
+                  defaultMessage: '取消'
                 }) /*取消*/
               }
             </Button>
@@ -142,7 +155,7 @@ const TemplateInsertModal: React.FC<IProps> = function (props) {
               {
                 formatMessage({
                   id: 'odc.component.TemplateInsertModal.Ok',
-                  defaultMessage: '确定',
+                  defaultMessage: '确定'
                 }) /*确定*/
               }
             </Button>
@@ -154,7 +167,7 @@ const TemplateInsertModal: React.FC<IProps> = function (props) {
         {
           formatMessage({
             id: 'odc.component.TemplateInsertModal.WhenYouDragAndDrop',
-            defaultMessage: '选择对象进行拖放时，可在 SQL 窗口快速生成：',
+            defaultMessage: '选择对象进行拖放时，可在 SQL 窗口快速生成：'
           }) /*选择对象进行拖放时，可在 SQL 窗口快速生成：*/
         }
 
@@ -165,7 +178,9 @@ const TemplateInsertModal: React.FC<IProps> = function (props) {
           }}
         >
           <Space direction="vertical">
-            <Radio value={DragInsertType.NAME}>{DragInsertTypeText()[DragInsertType.NAME]}</Radio>
+            <Radio value={DragInsertType.NAME}>
+              {DragInsertTypeText()[DragInsertType.NAME]}
+            </Radio>
             <Radio value={DragInsertType.SELECT}>
               {DragInsertTypeText()[DragInsertType.SELECT]}
             </Radio>
@@ -185,13 +200,16 @@ const TemplateInsertModal: React.FC<IProps> = function (props) {
   );
 };
 
-export default inject('settingStore', 'modalStore')(observer(TemplateInsertModal));
+export default inject(
+  'settingStore',
+  'modalStore'
+)(observer(TemplateInsertModal));
 
 async function getColumns(
   type: DbObjectType,
   name: string,
   sessionId: string,
-  isExternalTable?: boolean,
+  isExternalTable?: boolean
 ) {
   const dbSession = sessionManager.sessionMap.get(sessionId);
   const dbName = dbSession?.database?.dbName;
@@ -200,7 +218,10 @@ async function getColumns(
       return (
         (await getTableInfo(name, dbName, sessionId, isExternalTable))?.columns
           ?.map((column) => {
-            return getQuoteTableName(column.name, dbSession?.connection?.dialectType);
+            return getQuoteTableName(
+              column.name,
+              dbSession?.connection?.dialectType
+            );
           })
           .join(', ') || ''
       );
@@ -209,7 +230,10 @@ async function getColumns(
       return (
         (await getView(name, sessionId, dbName))?.columns
           ?.map((column) => {
-            return getQuoteTableName(column.columnName, dbSession?.connection?.dialectType);
+            return getQuoteTableName(
+              column.columnName,
+              dbSession?.connection?.dialectType
+            );
           })
           .join(', ') || ''
       );
@@ -220,11 +244,14 @@ async function getColumns(
           await getMaterializedView({
             materializedViewName: name,
             sessionId,
-            dbName,
+            dbName
           })
         )?.columns
           ?.map((column) => {
-            return getQuoteTableName(column.name, dbSession?.connection?.dialectType);
+            return getQuoteTableName(
+              column.name,
+              dbSession?.connection?.dialectType
+            );
           })
           .join(', ') || ''
       );
@@ -240,7 +267,7 @@ export async function getCopyText(
   copyType: DragInsertType,
   isEscape: boolean = false,
   sessionId: string,
-  isExternalTable?: boolean,
+  isExternalTable?: boolean
 ) {
   const dbSession = sessionManager.sessionMap.get(sessionId);
   if (!dbSession) {
@@ -262,7 +289,7 @@ export async function getCopyText(
           (await getColumns(objType, name, sessionId, isExternalTable)) +
           ' FROM ' +
           getQuoteTableName(name, dbSession?.connection?.dialectType) +
-          ';',
+          ';'
       );
     }
     case DragInsertType.INSERT: {
@@ -299,14 +326,21 @@ export async function copyObj(
   objType: DbObjectType,
   copyType: DragInsertType,
   sessionId: string,
-  isExternalTable?: boolean,
+  isExternalTable?: boolean
 ) {
-  const text = await getCopyText(name, objType, copyType, false, sessionId, isExternalTable);
+  const text = await getCopyText(
+    name,
+    objType,
+    copyType,
+    false,
+    sessionId,
+    isExternalTable
+  );
   copy(text);
   message.success(
     formatMessage({
       id: 'odc.component.TemplateInsertModal.CopiedSuccessfully',
-      defaultMessage: '复制成功',
-    }), //复制成功
+      defaultMessage: '复制成功'
+    }) //复制成功
   );
 }

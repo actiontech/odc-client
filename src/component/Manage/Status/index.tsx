@@ -29,19 +29,25 @@ export const COMMON_STATUS: Record<
 > = {
   [IManagerUserStatus.ACTIVATE]: {
     icon: <CheckCircleFilled style={{ color: '#52c41a' }} />,
-    text: formatMessage({ id: 'odc.components.CommonStatus.Enable', defaultMessage: '启用' }), // 启用
+    text: formatMessage({
+      id: 'odc.components.CommonStatus.Enable',
+      defaultMessage: '启用'
+    }) // 启用
   },
   [IManagerUserStatus.DEACTIVATE]: {
     icon: <StopFilled style={{ color: 'var(--text-color-hint)' }} />,
-    text: formatMessage({ id: 'odc.components.CommonStatus.Disable', defaultMessage: '停用' }), // 停用
+    text: formatMessage({
+      id: 'odc.components.CommonStatus.Disable',
+      defaultMessage: '停用'
+    }) // 停用
   },
   [IManagerUserStatus.INACTIVATE]: {
     icon: <CheckCircleFilled style={{ color: '#52c41a' }} />,
     text: formatMessage({
       id: 'odc.components.CommonStatus.NotActivated',
-      defaultMessage: '未激活',
-    }), // 未激活
-  },
+      defaultMessage: '未激活'
+    }) // 未激活
+  }
 };
 
 const Status: React.FC<{
@@ -49,7 +55,9 @@ const Status: React.FC<{
   showIcon?: boolean;
   isActive?: boolean;
 }> = ({ enabled, showIcon = true, isActive = true }) => {
-  let status = enabled ? IManagerUserStatus.ACTIVATE : IManagerUserStatus.DEACTIVATE;
+  let status = enabled
+    ? IManagerUserStatus.ACTIVATE
+    : IManagerUserStatus.DEACTIVATE;
   if (!isActive) {
     status = IManagerUserStatus.INACTIVATE;
   }

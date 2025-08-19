@@ -21,7 +21,7 @@ export default {
   PROCEDURE: 'PROCEDURE',
   TRIGGER: 'TRIGGER',
   SYNONYM: 'SYNONYM',
-  TYPE: 'TYPE',
+  TYPE: 'TYPE'
 };
 
 export enum PLType {
@@ -33,5 +33,5 @@ export enum PLType {
   TRIGGER = 'TRIGGER',
   SYNONYM = 'SYNONYM',
   TYPE = 'TYPE',
-  ANONYMOUSBLOCK = 'ANONYMOUS_BLOCK',
+  ANONYMOUSBLOCK = 'ANONYMOUS_BLOCK'
 }

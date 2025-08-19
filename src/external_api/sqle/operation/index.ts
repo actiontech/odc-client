@@ -10,7 +10,11 @@ import { IGetOperationsV1Return } from './index.type';
 
 class OperationService extends ServiceBase {
   public GetOperationsV1(options?: AxiosRequestConfig) {
-    return this.get<IGetOperationsV1Return>('/v1/operations', undefined, options);
+    return this.get<IGetOperationsV1Return>(
+      '/v1/operations',
+      undefined,
+      options
+    );
   }
 }
 

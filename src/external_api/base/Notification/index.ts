@@ -9,9 +9,16 @@ import { AxiosRequestConfig } from 'axios';
 import { INotificationParams, INotificationReturn } from './index.type';
 
 class NotificationService extends ServiceBase {
-  public Notification(params: INotificationParams, options?: AxiosRequestConfig) {
+  public Notification(
+    params: INotificationParams,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
-    return this.post<INotificationReturn>('/v1/dms/notifications', paramsData, options);
+    return this.post<INotificationReturn>(
+      '/v1/dms/notifications',
+      paramsData,
+      options
+    );
   }
 }
 

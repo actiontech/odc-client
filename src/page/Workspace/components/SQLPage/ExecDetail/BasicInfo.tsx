@@ -21,27 +21,27 @@ import { Card, Descriptions, Tooltip as AntdTooltip } from 'antd';
 import classNames from 'classnames';
 import styles from './index.less';
 const BasicInfo: React.FC<{ sqlExecuteDetailToShow: ISQLExecuteDetail }> = ({
-  sqlExecuteDetailToShow,
+  sqlExecuteDetailToShow
 }) => {
   return (
     <Card
       bodyStyle={{
         height: 210,
-        padding: 16,
+        padding: 16
       }}
       className={classNames([styles.card, styles.baseCard])}
     >
       <Descriptions
         title={formatMessage({
           id: 'workspace.window.sql.explain.tab.detail.card.base.title',
-          defaultMessage: '基本信息',
+          defaultMessage: '基本信息'
         })}
         column={1}
       >
         <Descriptions.Item
           label={formatMessage({
             id: 'workspace.window.sql.explain.tab.detail.card.base.sqlID',
-            defaultMessage: 'SQL ID',
+            defaultMessage: 'SQL ID'
           })}
         >
           {sqlExecuteDetailToShow?.sqlId}
@@ -49,7 +49,7 @@ const BasicInfo: React.FC<{ sqlExecuteDetailToShow: ISQLExecuteDetail }> = ({
         <Descriptions.Item
           label={formatMessage({
             id: 'workspace.window.sql.explain.tab.detail.card.base.sql',
-            defaultMessage: 'SQL',
+            defaultMessage: 'SQL'
           })}
         >
           <AntdTooltip title={sqlExecuteDetailToShow?.sql ?? ''}>
@@ -58,7 +58,7 @@ const BasicInfo: React.FC<{ sqlExecuteDetailToShow: ISQLExecuteDetail }> = ({
                 textOverflow: 'ellipsis',
                 overflow: 'hidden',
                 whiteSpace: 'nowrap',
-                maxWidth: 300,
+                maxWidth: 300
               }}
             >
               {sqlExecuteDetailToShow?.sql}
@@ -68,7 +68,7 @@ const BasicInfo: React.FC<{ sqlExecuteDetailToShow: ISQLExecuteDetail }> = ({
         <Descriptions.Item
           label={formatMessage({
             id: 'workspace.window.sql.explain.tab.detail.card.base.traceID',
-            defaultMessage: 'Trace ID',
+            defaultMessage: 'Trace ID'
           })}
         >
           {sqlExecuteDetailToShow?.traceId}
@@ -76,7 +76,7 @@ const BasicInfo: React.FC<{ sqlExecuteDetailToShow: ISQLExecuteDetail }> = ({
         <Descriptions.Item
           label={formatMessage({
             id: 'workspace.window.sql.explain.tab.detail.card.base.reqTime',
-            defaultMessage: '请求到达时间',
+            defaultMessage: '请求到达时间'
           })}
         >
           {getLocalFormatDateTime(sqlExecuteDetailToShow?.reqTime)}
@@ -84,7 +84,7 @@ const BasicInfo: React.FC<{ sqlExecuteDetailToShow: ISQLExecuteDetail }> = ({
         <Descriptions.Item
           label={formatMessage({
             id: 'workspace.window.sql.explain.tab.detail.card.base.planType',
-            defaultMessage: '计划类型',
+            defaultMessage: '计划类型'
           })}
         >
           {sqlExecuteDetailToShow?.planType}
@@ -92,17 +92,17 @@ const BasicInfo: React.FC<{ sqlExecuteDetailToShow: ISQLExecuteDetail }> = ({
         <Descriptions.Item
           label={formatMessage({
             id: 'workspace.window.sql.explain.tab.detail.card.base.hitPlanCache',
-            defaultMessage: '是否命中缓存',
+            defaultMessage: '是否命中缓存'
           })}
         >
           {sqlExecuteDetailToShow?.hitPlanCache
             ? formatMessage({
                 id: 'odc.components.SQLPage.Is',
-                defaultMessage: '是',
+                defaultMessage: '是'
               })
             : formatMessage({
                 id: 'odc.components.SQLPage.No',
-                defaultMessage: '否',
+                defaultMessage: '否'
               })}
         </Descriptions.Item>
       </Descriptions>

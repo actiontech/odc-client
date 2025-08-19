@@ -7,7 +7,7 @@ import {
   IAddRoleReq,
   IAddRoleReply,
   IUpdateRoleReq,
-  IGenericResp,
+  IGenericResp
 } from '../common.type';
 
 export interface IListRolesParams {

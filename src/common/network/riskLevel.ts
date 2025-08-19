@@ -17,9 +17,12 @@
 import { IRiskLevel } from '@/d.ts/riskLevel';
 import request from '@/util/request';
 
-export async function updateRiskLevel(id: number, riskLevel: IRiskLevel): Promise<boolean> {
+export async function updateRiskLevel(
+  id: number,
+  riskLevel: IRiskLevel
+): Promise<boolean> {
   const ret = await request.put(`/api/v2/regulation/risklevels/${id}`, {
-    data: riskLevel,
+    data: riskLevel
   });
   return ret?.successful;
 }

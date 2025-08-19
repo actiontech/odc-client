@@ -29,7 +29,7 @@ export enum RuleItem {
   CHAR = 'CHAR',
   DATE = 'DATE',
   INTERVAL_YEAR_TO_MONTH = 'INTERVAL_YEAR_TO_MONTH',
-  INTERVAL_DAY_TO_SECOND = 'INTERVAL_DAY_TO_SECOND',
+  INTERVAL_DAY_TO_SECOND = 'INTERVAL_DAY_TO_SECOND'
 }
 
 /**
@@ -47,7 +47,7 @@ const _columnTypeToRuleMap = {
     DATE: RuleItem.DATE,
     TIMESTAMP: RuleItem.DATE,
     TIMESTAMP_WITH_TIME_ZONE: RuleItem.DATE,
-    TIMESTAMP_WITH_LOCAL_TIME_ZONE: RuleItem.DATE,
+    TIMESTAMP_WITH_LOCAL_TIME_ZONE: RuleItem.DATE
     // INTERVAL_YEAR_TO_MONTH: RuleItem.INTERVAL_YEAR_TO_MONTH,
     // INTERVAL_DAY_TO_SECOND: RuleItem.INTERVAL_DAY_TO_SECOND,
   },
@@ -87,16 +87,22 @@ const _columnTypeToRuleMap = {
     LONGBLOB: RuleItem.CHAR,
     BIT: RuleItem.NUMBER,
     BINARY: RuleItem.CHAR,
-    VARBINARY: RuleItem.CHAR,
-  },
+    VARBINARY: RuleItem.CHAR
+  }
 };
-_columnTypeToRuleMap[ConnectionMode.MYSQL] = _columnTypeToRuleMap[ConnectionMode.OB_MYSQL];
+_columnTypeToRuleMap[ConnectionMode.MYSQL] =
+  _columnTypeToRuleMap[ConnectionMode.OB_MYSQL];
 export const columnTypeToRuleMap = _columnTypeToRuleMap;
 export interface IMockFormColumn {
   columnName: string;
   columnType: string;
   columnObj?: any;
-  rule: CharRuleType | DateRuleType | IntervalRuleType | NumberRuleType | OtherRuleType;
+  rule:
+    | CharRuleType
+    | DateRuleType
+    | IntervalRuleType
+    | NumberRuleType
+    | OtherRuleType;
   typeConfig: {
     _isEditing?: boolean;
     [key: string]: any;
@@ -122,26 +128,31 @@ export interface IMockFormData {
 export enum MockStrategy {
   IGNORE = 'IGNORE',
   OVERWRITE = 'OVERWRITE',
-  TERMINATE = 'TERMINATE',
+  TERMINATE = 'TERMINATE'
 }
 
 export const MockStrategyTextMap = {
   [MockStrategy.IGNORE]: formatMessage({
     id: 'odc.component.DataMockerDrawer.type.Ignore',
-    defaultMessage: '忽略',
+    defaultMessage: '忽略'
   }), // 忽略
   [MockStrategy.OVERWRITE]: formatMessage({
     id: 'odc.component.DataMockerDrawer.type.Cover',
-    defaultMessage: '覆盖',
+    defaultMessage: '覆盖'
   }), // 覆盖
   [MockStrategy.TERMINATE]: formatMessage({
     id: 'odc.component.DataMockerDrawer.type.Termination',
-    defaultMessage: '终止',
-  }), // 终止
+    defaultMessage: '终止'
+  }) // 终止
 };
 
 export interface RuleConfigList {
-  rule?: CharRuleType | DateRuleType | IntervalRuleType | NumberRuleType | OtherRuleType;
+  rule?:
+    | CharRuleType
+    | DateRuleType
+    | IntervalRuleType
+    | NumberRuleType
+    | OtherRuleType;
   range: string[] | number[];
   columnName: string;
   typeConfig: {

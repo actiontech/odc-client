@@ -28,15 +28,15 @@ export async function startScanning(
     databaseIds: number[];
     allSensitiveRules: boolean;
     sensitiveRuleIds: number[];
-  },
+  }
 ): Promise<string> {
   const ret = await request.post(
     `/api/v2/collaboration/projects/${projectId}/sensitiveColumns/startScanning`,
     {
       data: {
-        ...params,
-      },
-    },
+        ...params
+      }
+    }
   );
   return ret?.data?.taskId;
 }
@@ -44,13 +44,13 @@ export async function startScanning(
 export async function setEnabled(
   projectId: number,
   id: number,
-  enabled: boolean,
+  enabled: boolean
 ): Promise<boolean> {
   const ret = await request.post(
     `/api/v2/collaboration/projects/${projectId}/sensitiveColumns/${id}/setEnabled`,
     {
-      data: { enabled },
-    },
+      data: { enabled }
+    }
   );
   return ret?.successful;
 }
@@ -65,17 +65,20 @@ export async function listSensitiveColumns(
     column: string[];
     maskingAlgorithm: number[];
     enabled: boolean[];
-  }>,
+  }>
 ): Promise<IResponseData<ISensitiveColumn>> {
-  const ret = await request.get(`/api/v2/collaboration/projects/${projectId}/sensitiveColumns/`, {
-    params,
-  });
+  const ret = await request.get(
+    `/api/v2/collaboration/projects/${projectId}/sensitiveColumns/`,
+    {
+      params
+    }
+  );
   return ret?.data;
 }
 
 export async function listColumns(
   projectId: number,
-  database: number[],
+  database: number[]
 ): Promise<{
   contents: DatabaseColumn[];
 }> {
@@ -83,9 +86,9 @@ export async function listColumns(
     `/api/v2/collaboration/projects/${projectId}/sensitiveColumns/listColumns`,
     {
       params: {
-        database,
-      },
-    },
+        database
+      }
+    }
   );
   return result?.data || {};
 }
@@ -94,7 +97,7 @@ export enum ScannResultType {
   CREATED = 'CREATED',
   RUNNING = 'RUNNING',
   SUCCESS = 'SUCCESS',
-  FAILED = 'FAILED',
+  FAILED = 'FAILED'
 }
 export interface IScannResult {
   taskId: string;
@@ -108,11 +111,14 @@ export interface IScannResult {
   errorMsg: string;
 }
 
-export async function getScanningResults(projectId: number, taskId: string): Promise<IScannResult> {
+export async function getScanningResults(
+  projectId: number,
+  taskId: string
+): Promise<IScannResult> {
   const ret = await request.get(
     `/api/v2/collaboration/projects/${projectId}/sensitiveColumns/getScanningResults?taskId=${encodeURIComponent(
-      taskId,
-    )}`,
+      taskId
+    )}`
   );
   return ret?.data;
 }
@@ -122,50 +128,50 @@ export async function batchUpdateSensitiveColumn(
   params?: Partial<{
     sensitiveColumnIds: number[];
     maskingAlgorithmId: number;
-  }>,
+  }>
 ): Promise<boolean> {
   const ret = await request.put(
     `/api/v2/collaboration/projects/${projectId}/sensitiveColumns/batchUpdate`,
     {
       data: {
-        ...params,
-      },
-    },
+        ...params
+      }
+    }
   );
   return ret?.successful;
 }
 
 export async function batchDeleteSensitiveColumns(
   projectId: number,
-  params?: number[],
+  params?: number[]
 ): Promise<boolean> {
   const ret = await request.delete(
     `/api/v2/collaboration/projects/${projectId}/sensitiveColumns/batchDelete`,
-    { data: params },
+    { data: params }
   );
   return ret?.successful;
 }
 
 export async function batchCreateSensitiveColumns(
   projectId: number,
-  params: ISensitiveColumn[],
+  params: ISensitiveColumn[]
 ): Promise<boolean> {
   const ret = await request.post(
     `/api/v2/collaboration/projects/${projectId}/sensitiveColumns/batchCreate`,
-    { data: params },
+    { data: params }
   );
   return ret?.successful;
 }
 
 export async function statsSensitiveColumns(projectId: number) {
   const res = await request.get(
-    `/api/v2/collaboration/projects/${projectId}/sensitiveColumns/stats`,
+    `/api/v2/collaboration/projects/${projectId}/sensitiveColumns/stats`
   );
   return (
     res?.data || {
       datasource: { distinct: [] },
       database: { distinct: [] },
-      maskingAlgorithmId: { distinct: [] },
+      maskingAlgorithmId: { distinct: [] }
     }
   );
 }

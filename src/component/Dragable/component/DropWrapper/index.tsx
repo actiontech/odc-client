@@ -25,7 +25,13 @@ interface IProps {
   onHover?: (item, monitor: DropTargetMonitor) => void;
 }
 
-const Component: React.FC<IProps> = ({ children, className, style, onDrop, onHover }) => {
+const Component: React.FC<IProps> = ({
+  children,
+  className,
+  style,
+  onDrop,
+  onHover
+}) => {
   const [{ canDrop, isOver }, drop] = useDrop({
     accept: 'box',
     hover(item, monitor) {
@@ -36,8 +42,8 @@ const Component: React.FC<IProps> = ({ children, className, style, onDrop, onHov
     },
     collect: (monitor) => ({
       isOver: monitor.isOver(),
-      canDrop: monitor.canDrop(),
-    }),
+      canDrop: monitor.canDrop()
+    })
   });
 
   return (

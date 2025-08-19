@@ -52,10 +52,11 @@ const Login: React.FC<{
     }
   }, []);
   const tryAutoLogin = () => {
-    const query: { [key: string]: any } = new URLSearchParams(location.search) || {};
+    const query: { [key: string]: any } =
+      new URLSearchParams(location.search) || {};
     if (query.has('accountVerifyToken')) {
       handleLogin({
-        token: query.get('accountVerifyToken'),
+        token: query.get('accountVerifyToken')
       });
     }
   };
@@ -82,7 +83,12 @@ const Login: React.FC<{
     try {
       const { success, message: msg, errCode } = await userStore.login(params);
       if (success) {
-        message.success(formatMessage({ id: 'login.login.success', defaultMessage: '登录成功' }));
+        message.success(
+          formatMessage({
+            id: 'login.login.success',
+            defaultMessage: '登录成功'
+          })
+        );
         await userStore.getOrganizations();
         const isSuccess = await userStore.switchCurrentOrganization();
         if (!isSuccess) {
@@ -95,7 +101,8 @@ const Login: React.FC<{
         }
 
         // 跳转主页
-        const query: { [key: string]: any } = new URLSearchParams(location.search) || {};
+        const query: { [key: string]: any } =
+          new URLSearchParams(location.search) || {};
         if (query.has('redirectTo')) {
           history.push(decodeURIComponent(query.get('redirectTo')));
         } else {
@@ -107,7 +114,7 @@ const Login: React.FC<{
         setLoginLoading(false);
         setInitialLoginValues({
           username,
-          password,
+          password
         });
       } else {
         // 后端登录错误格式很特殊
@@ -118,7 +125,10 @@ const Login: React.FC<{
     } catch (e) {
       console.trace(e);
       setErrMsg(
-        formatMessage({ id: 'odc.page.Login.NetworkException', defaultMessage: '网络异常' }),
+        formatMessage({
+          id: 'odc.page.Login.NetworkException',
+          defaultMessage: '网络异常'
+        })
       );
       setLoginLoading(false);
       reloadAuthCode();
@@ -128,16 +138,16 @@ const Login: React.FC<{
   const handleActivate = async (confirmPassword: string) => {
     let status = {
       errMsg: '',
-      loginLoading: true,
+      loginLoading: true
     };
 
     if (!confirmPassword?.match(SPACE_REGEX)) {
       status = {
         errMsg: formatMessage({
           id: 'odc.page.Login.ThePasswordCannotContainSpaces',
-          defaultMessage: '密码不能包含空格',
+          defaultMessage: '密码不能包含空格'
         }), //密码不能包含空格
-        loginLoading: false,
+        loginLoading: false
       };
     }
     setErrMsg('');
@@ -150,12 +160,15 @@ const Login: React.FC<{
       const res = await userStore.activate({
         username: initialLoginValues?.username,
         currentPassword: initialLoginValues?.password,
-        newPassword: confirmPassword,
+        newPassword: confirmPassword
       });
 
       if (res) {
         message.success(
-          formatMessage({ id: 'odc.page.Login.Activated', defaultMessage: '激活成功' }), // 激活成功
+          formatMessage({
+            id: 'odc.page.Login.Activated',
+            defaultMessage: '激活成功'
+          }) // 激活成功
         );
         setShowActivate(false);
         setLoginLoading(false);
@@ -165,14 +178,20 @@ const Login: React.FC<{
         });
       } else {
         setErrMsg(
-          formatMessage({ id: 'odc.page.Login.ActivationFailed', defaultMessage: '激活失败' }),
+          formatMessage({
+            id: 'odc.page.Login.ActivationFailed',
+            defaultMessage: '激活失败'
+          })
         ); // 激活失败
         setLoginLoading(false);
       }
     } catch (e) {
       console.trace(e);
       setErrMsg(
-        formatMessage({ id: 'odc.page.Login.NetworkException', defaultMessage: '网络异常' }),
+        formatMessage({
+          id: 'odc.page.Login.NetworkException',
+          defaultMessage: '网络异常'
+        })
       ); // 网络异常
       setLoginLoading(false);
     }
@@ -188,13 +207,13 @@ const Login: React.FC<{
       ssoLoginType={settingStore?.serverSystemInfo?.ssoLoginType}
       ssoLoginName={settingStore?.serverSystemInfo?.ssoLoginName}
       otherLoginProps={{
-        onFinish: loginStore.gotoLoginPageSSO,
+        onFinish: loginStore.gotoLoginPageSSO
       }}
       authCodeImg={authCode}
       onAuthCodeImgChange={loadAuthCode}
       bgImage={`${window.publicPath}img/loginbg.png`}
       alertProps={{
-        message: errMsg,
+        message: errMsg
       }}
       loginProps={{
         onFinish: async (values) => {
@@ -202,13 +221,13 @@ const Login: React.FC<{
         },
         initialValues: initialLoginValues,
         loading: loginLoading,
-        onValuesChange: () => setErrMsg(null),
+        onValuesChange: () => setErrMsg(null)
       }}
       activateFormProps={{
         onValuesChange: () => setErrMsg(null),
         onFinish: async (values) => {
           await handleActivate(values.confirmPassword);
-        },
+        }
       }}
       showLocale
       showActivate={showActivate}

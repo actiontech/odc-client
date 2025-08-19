@@ -1,6 +1,10 @@
 import { BasicButton, BasicInput } from '@actiontech/dms-kit';
 import { DmsKitDemoStyleWrapper } from './style';
-import { FaLessThanEqualOutlined, CloseCircleFilled, CloseOutlined } from '@actiontech/icons';
+import {
+  FaLessThanEqualOutlined,
+  CloseCircleFilled,
+  CloseOutlined
+} from '@actiontech/icons';
 
 const DmsKitDemo: React.FC = () => {
   return (

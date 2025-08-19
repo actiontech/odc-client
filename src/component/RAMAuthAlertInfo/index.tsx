@@ -30,7 +30,7 @@ export default function RAMAuthAlertInfo() {
             formatMessage({
               id: 'odc.component.RAMAuthAlertInfo.TheCurrentOperationMayConflict',
               defaultMessage:
-                '当前操作可能会和 RAM 鉴权中指定的权限范围冲突，请注意风险（用户实际权限取权限合集）。',
+                '当前操作可能会和 RAM 鉴权中指定的权限范围冲突，请注意风险（用户实际权限取权限合集）。'
             }) //当前操作可能会和 RAM 鉴权中指定的权限范围冲突，请注意风险（用户实际权限取权限合集）。
           }
           showIcon

@@ -25,7 +25,7 @@ import Icon, {
   CloseCircleFilled,
   InfoCircleOutlined,
   LoadingOutlined,
-  StopFilled,
+  StopFilled
 } from '@ant-design/icons';
 import { Alert, message, Space, Table, Tooltip, Typography } from 'antd';
 import BigNumber from 'bignumber.js';
@@ -45,7 +45,7 @@ interface IProps {
     traceId: string,
     sql?: string,
     sessionId?: string,
-    traceEmptyReason?: string,
+    traceEmptyReason?: string
   ) => void;
 }
 
@@ -61,13 +61,19 @@ export function getResultText(rs: ISqlExecuteResult) {
 export const getSqlExecuteResultStatusIcon = (status) => {
   switch (status) {
     case ISqlExecuteResultStatus.SUCCESS: {
-      return <CheckCircleFilled style={{ color: 'var(--function-green6-color)' }} />;
+      return (
+        <CheckCircleFilled style={{ color: 'var(--function-green6-color)' }} />
+      );
     }
     case ISqlExecuteResultStatus.FAILED: {
-      return <CloseCircleFilled style={{ color: 'var(--function-red6-color)' }} />;
+      return (
+        <CloseCircleFilled style={{ color: 'var(--function-red6-color)' }} />
+      );
     }
     case ISqlExecuteResultStatus.CANCELED: {
-      return <StopFilled style={{ color: 'var(--profile-icon-unready-color)' }} />;
+      return (
+        <StopFilled style={{ color: 'var(--profile-icon-unready-color)' }} />
+      );
     }
     case ISqlExecuteResultStatus.CREATED: {
       return (
@@ -84,7 +90,12 @@ export const getSqlExecuteResultStatusIcon = (status) => {
 };
 
 const ExecuteHistory: React.FC<IProps> = function (props) {
-  const { onShowExecuteDetail, resultHeight, sqlStore, onOpenExecutingDetailModal } = props;
+  const {
+    onShowExecuteDetail,
+    resultHeight,
+    sqlStore,
+    onOpenExecutingDetailModal
+  } = props;
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const tableRef = useRef<HTMLDivElement>();
   const [width, setWidth] = useState(0);
@@ -121,35 +132,38 @@ const ExecuteHistory: React.FC<IProps> = function (props) {
         dataIndex: 'status',
         title: formatMessage({
           id: 'workspace.window.sql.record.column.status',
-          defaultMessage: '状态',
+          defaultMessage: '状态'
         }),
 
         width: 50,
-        render: (value: ISqlExecuteResultStatus) => getSqlExecuteResultStatusIcon(value),
+        render: (value: ISqlExecuteResultStatus) =>
+          getSqlExecuteResultStatusIcon(value)
       },
 
       {
         dataIndex: 'executeTimestamp',
         title: formatMessage({
           id: 'workspace.window.sql.record.column.executeTimestamp',
-          defaultMessage: '时间',
+          defaultMessage: '时间'
         }),
 
         width: isSmallMode ? 80 : 100,
         render: (_, record: ISqlExecuteResult) => {
           return record.timer
             ? dayjs(
-                record.timer?.stages?.find((item) => item.stageName === 'Execute')?.startTimeMillis,
+                record.timer?.stages?.find(
+                  (item) => item.stageName === 'Execute'
+                )?.startTimeMillis
               ).format('HH:mm:ss')
             : '-';
-        },
+        }
       },
 
       {
         dataIndex: 'executeSql',
         title: formatMessage({
           id: 'workspace.window.sql.record.column.executeSql',
-          defaultMessage: 'SQL 语句',
+          defaultMessage: 'SQL 语句'
         }),
 
         width: isSmallMode ? 150 : 300,
@@ -161,7 +175,7 @@ const ExecuteHistory: React.FC<IProps> = function (props) {
               <div
                 style={{
                   maxHeight: 300,
-                  overflowY: 'auto',
+                  overflowY: 'auto'
                 }}
               >
                 {value || '-'}
@@ -170,14 +184,14 @@ const ExecuteHistory: React.FC<IProps> = function (props) {
           >
             {value || '-'}
           </Tooltip>
-        ),
+        )
       },
 
       {
         dataIndex: 'track',
         title: formatMessage({
           id: 'workspace.window.sql.record.column.track',
-          defaultMessage: '结果',
+          defaultMessage: '结果'
         }),
         ellipsis: true,
         render: (value: string, row: any) =>
@@ -190,7 +204,7 @@ const ExecuteHistory: React.FC<IProps> = function (props) {
                 <div
                   style={{
                     maxHeight: 300,
-                    overflowY: 'auto',
+                    overflowY: 'auto'
                   }}
                 >
                   {value || '-'}
@@ -199,7 +213,7 @@ const ExecuteHistory: React.FC<IProps> = function (props) {
             >
               {value || '-'}
             </Tooltip>
-          ),
+          )
       },
 
       {
@@ -215,7 +229,7 @@ const ExecuteHistory: React.FC<IProps> = function (props) {
                   value,
                   row?.originSql,
                   row?.sessionId,
-                  row?.traceEmptyReason,
+                  row?.traceEmptyReason
                 )
               }
             >
@@ -224,7 +238,7 @@ const ExecuteHistory: React.FC<IProps> = function (props) {
           ) : (
             value
           );
-        },
+        }
       },
 
       {
@@ -234,7 +248,7 @@ const ExecuteHistory: React.FC<IProps> = function (props) {
             DB{' '}
             {formatMessage({
               id: 'workspace.window.sql.record.column.elapsedTime',
-              defaultMessage: '耗时',
+              defaultMessage: '耗时'
             })}
           </span>
         ),
@@ -242,16 +256,20 @@ const ExecuteHistory: React.FC<IProps> = function (props) {
         width: isSmallMode ? 80 : 100,
         render: (value: string, row: ISqlExecuteResult) => {
           const { timer } = row;
-          const executeStage = timer?.stages?.find((stage) => stage.stageName === 'Execute');
+          const executeStage = timer?.stages?.find(
+            (stage) => stage.stageName === 'Execute'
+          );
           const executeSQLStage = executeStage?.subStages?.find(
-            (stage) => stage.stageName === 'DB Server Execute SQL',
+            (stage) => stage.stageName === 'DB Server Execute SQL'
           );
           const DBCostTime = formatTimeTemplate(
-            BigNumber(executeSQLStage?.totalDurationMicroseconds).div(1000000).toNumber(),
+            BigNumber(executeSQLStage?.totalDurationMicroseconds)
+              .div(1000000)
+              .toNumber()
           );
           const showDBTimeline = ![
             ISqlExecuteResultStatus.CANCELED,
-            ISqlExecuteResultStatus.CREATED,
+            ISqlExecuteResultStatus.CREATED
           ].includes(row?.status);
 
           return (
@@ -263,24 +281,27 @@ const ExecuteHistory: React.FC<IProps> = function (props) {
                   color="var(--background-primary-color)"
                   overlayInnerStyle={{
                     maxHeight: 500,
-                    overflow: 'auto',
+                    overflow: 'auto'
                   }}
                   placement="leftTop"
                   showArrow={false}
                   title={<DBTimeline row={row} />}
                 >
-                  <InfoCircleOutlined style={{ color: 'var(--text-color-hint)' }} />
+                  <InfoCircleOutlined
+                    style={{ color: 'var(--text-color-hint)' }}
+                  />
                 </Tooltip>
               ) : null}
             </Space>
           );
-        },
-      },
+        }
+      }
     ].filter(Boolean);
   }, [onShowExecuteDetail, isSmallMode]);
   const showTimeAlert = false;
   const showDeleteAlert = selectedRowKeys.length > 0;
-  const tableHeight = resultHeight - TAB_HEADER_HEIGHT - 24 - (showTimeAlert ? 36 : 0) - 56;
+  const tableHeight =
+    resultHeight - TAB_HEADER_HEIGHT - 24 - (showTimeAlert ? 36 : 0) - 56;
   return (
     <>
       {showTimeAlert && (
@@ -290,10 +311,10 @@ const ExecuteHistory: React.FC<IProps> = function (props) {
               {
                 id: 'odc.components.SQLResultSet.ExecuteHistory.TheOdcUsageEnvironmentClock',
                 defaultMessage:
-                  'ODC 使用环境时钟和 ODC 部署环境时钟设置不一致，差异大于 {lagRecordLag} ms，会导致网络耗时统计不精准，请检查两个环境时间和 UTC 时间的差异',
+                  'ODC 使用环境时钟和 ODC 部署环境时钟设置不一致，差异大于 {lagRecordLag} ms，会导致网络耗时统计不精准，请检查两个环境时间和 UTC 时间的差异'
               },
 
-              { lagRecordLag: 100 },
+              { lagRecordLag: 100 }
             )
 
             // `ODC 使用环境时钟和 ODC 部署环境时钟设置不一致，差异大于 ${lagRecord.lag} ms，会导致网络耗时统计不精准，请检查两个环境时间和 UTC 时间的差异`
@@ -308,10 +329,10 @@ const ExecuteHistory: React.FC<IProps> = function (props) {
             formatMessage(
               {
                 id: 'odc.components.SQLResultSet.ExecuteHistory.SelectedrowkeyslengthRecordsSelected',
-                defaultMessage: '已选择 {selectedRowKeysLength} 个记录',
+                defaultMessage: '已选择 {selectedRowKeysLength} 个记录'
               },
 
-              { selectedRowKeysLength: selectedRowKeys.length },
+              { selectedRowKeysLength: selectedRowKeys.length }
             )
 
             // `已选择 ${selectedRowKeys.length} 个记录`
@@ -321,7 +342,7 @@ const ExecuteHistory: React.FC<IProps> = function (props) {
               {
                 formatMessage({
                   id: 'odc.components.SQLResultSet.ExecuteHistory.Delete',
-                  defaultMessage: '删除',
+                  defaultMessage: '删除'
                 })
                 /* 删除 */
               }
@@ -334,8 +355,8 @@ const ExecuteHistory: React.FC<IProps> = function (props) {
             message.success(
               formatMessage({
                 id: 'odc.components.SQLResultSet.ExecuteHistory.Deleted',
-                defaultMessage: '删除成功',
-              }),
+                defaultMessage: '删除成功'
+              })
               // 删除成功
             );
           }}
@@ -352,33 +373,39 @@ const ExecuteHistory: React.FC<IProps> = function (props) {
             selectedRowKeys,
             selections: [
               {
-                text: formatMessage({ id: 'app.button.selectAll', defaultMessage: '全选' }),
+                text: formatMessage({
+                  id: 'app.button.selectAll',
+                  defaultMessage: '全选'
+                }),
                 key: 'selectAll',
                 onSelect: () => {
                   setSelectedRowKeys(records?.map((r) => r.id));
-                },
+                }
               },
 
               {
-                text: formatMessage({ id: 'app.button.deselectAll', defaultMessage: '取消全选' }),
+                text: formatMessage({
+                  id: 'app.button.deselectAll',
+                  defaultMessage: '取消全选'
+                }),
                 key: 'deselectAll',
                 onSelect: () => {
                   setSelectedRowKeys([]);
-                },
-              },
+                }
+              }
             ],
 
             onChange: (selectedRowKeys, selectedRows) => {
               setSelectedRowKeys(selectedRowKeys);
-            },
+            }
           }}
           scroll={{
-            y: tableHeight - (showDeleteAlert ? 50 : 0),
+            y: tableHeight - (showDeleteAlert ? 50 : 0)
           }}
           pagination={{
             pageSize: Math.max(Math.ceil(tableHeight / 25), 2),
             size: 'small',
-            showSizeChanger: false,
+            showSizeChanger: false
           }}
         />
       </div>
@@ -386,4 +413,8 @@ const ExecuteHistory: React.FC<IProps> = function (props) {
   );
 };
 
-export default inject('sqlStore', 'userStore', 'pageStore')(observer(ExecuteHistory));
+export default inject(
+  'sqlStore',
+  'userStore',
+  'pageStore'
+)(observer(ExecuteHistory));

@@ -30,7 +30,7 @@ import {
   TaskExecStrategy,
   TaskPageScope,
   TaskPageType,
-  TaskType,
+  TaskType
 } from '@/d.ts';
 import LintResultTable from '@/page/Workspace/components/SQLResultSet/LintResultTable';
 import { openTasksPage } from '@/store/helper/page';
@@ -55,7 +55,7 @@ import {
   Modal,
   Radio,
   Space,
-  Tooltip,
+  Tooltip
 } from 'antd';
 import type { UploadFile } from 'antd/lib/upload/interface';
 import Cookies from 'js-cookie';
@@ -76,7 +76,7 @@ interface IProps {
 }
 enum ErrorStrategy {
   CONTINUE = 'CONTINUE',
-  ABORT = 'ABORT',
+  ABORT = 'ABORT'
 }
 const getFilesByIds = (ids: string[], names: string[]) => {
   return ids?.map((id, i) => {
@@ -88,11 +88,11 @@ const getFilesByIds = (ids: string[], names: string[]) => {
         data: {
           contents: [
             {
-              objectId: id,
-            },
-          ],
-        },
-      },
+              objectId: id
+            }
+          ]
+        }
+      }
     };
   });
 };
@@ -102,7 +102,9 @@ const CreateModal: React.FC<IProps> = (props) => {
   const [form] = Form.useForm();
   const editorRef = useRef<CommonIDE>();
   const [sqlContentType, setSqlContentType] = useState(SQLContentType.TEXT);
-  const [rollbackContentType, setRollbackContentType] = useState(SQLContentType.TEXT);
+  const [rollbackContentType, setRollbackContentType] = useState(
+    SQLContentType.TEXT
+  );
   const [hasEdit, setHasEdit] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const databaseId = Form.useWatch('databaseId', form);
@@ -127,7 +129,9 @@ const CreateModal: React.FC<IProps> = (props) => {
   const initSqlContent = isRollback
     ? asyncTaskData?.task?.parameters?.rollbackSqlContent || asyncTaskData?.sql
     : asyncTaskData?.task?.parameters?.sqlContent || asyncTaskData?.sql;
-  const initRollbackContent = isRollback ? '' : asyncTaskData?.task?.parameters?.rollbackSqlContent;
+  const initRollbackContent = isRollback
+    ? ''
+    : asyncTaskData?.task?.parameters?.rollbackSqlContent;
 
   const loadEditData = async () => {
     const { task, type, objectId } = asyncTaskData;
@@ -137,7 +141,7 @@ const CreateModal: React.FC<IProps> = (props) => {
       database: { id: databaseId },
       description,
       executionStrategy,
-      executionTime,
+      executionTime
     } = task;
     const {
       delimiter,
@@ -151,16 +155,20 @@ const CreateModal: React.FC<IProps> = (props) => {
       rollbackSqlObjectNames,
       rollbackSqlContent,
       generateRollbackPlan,
-      retryTimes = 0,
+      retryTimes = 0
     } = parameters ?? {};
     let sqlContentType = null;
     let rollbackContentType = null;
     if (isRollback) {
-      sqlContentType = rollbackSqlObjectIds ? SQLContentType.FILE : SQLContentType.TEXT;
+      sqlContentType = rollbackSqlObjectIds
+        ? SQLContentType.FILE
+        : SQLContentType.TEXT;
       rollbackContentType = SQLContentType.TEXT;
     } else {
       sqlContentType = sqlObjectIds ? SQLContentType.FILE : SQLContentType.TEXT;
-      rollbackContentType = rollbackSqlObjectIds ? SQLContentType.FILE : SQLContentType.TEXT;
+      rollbackContentType = rollbackSqlObjectIds
+        ? SQLContentType.FILE
+        : SQLContentType.TEXT;
     }
     const formData = {
       projectId,
@@ -168,7 +176,9 @@ const CreateModal: React.FC<IProps> = (props) => {
       description,
       executionStrategy,
       executionTime:
-        executionTime && executionTime > new Date().getTime() ? dayjs(executionTime) : null,
+        executionTime && executionTime > new Date().getTime()
+          ? dayjs(executionTime)
+          : null,
       sqlContentType,
       rollbackContentType,
       generateRollbackPlan,
@@ -180,7 +190,7 @@ const CreateModal: React.FC<IProps> = (props) => {
       errorStrategy,
       sqlFiles: undefined,
       rollbackSqlFiles: undefined,
-      retryTimes,
+      retryTimes
     };
     if (isRollback) {
       formData.sqlContent = rollbackSqlContent;
@@ -191,7 +201,10 @@ const CreateModal: React.FC<IProps> = (props) => {
         formData.sqlFiles = files;
       } else {
         if (sqlContentType === SQLContentType.FILE) {
-          const files = getFilesByIds(rollbackSqlObjectIds, rollbackSqlObjectNames);
+          const files = getFilesByIds(
+            rollbackSqlObjectIds,
+            rollbackSqlObjectNames
+          );
           formData.sqlFiles = files;
         }
       }
@@ -201,7 +214,10 @@ const CreateModal: React.FC<IProps> = (props) => {
         formData.sqlFiles = files;
       }
       if (rollbackContentType === SQLContentType.FILE) {
-        const files = getFilesByIds(rollbackSqlObjectIds, rollbackSqlObjectNames);
+        const files = getFilesByIds(
+          rollbackSqlObjectIds,
+          rollbackSqlObjectNames
+        );
         formData.rollbackSqlFiles = files;
       }
     }
@@ -224,7 +240,7 @@ const CreateModal: React.FC<IProps> = (props) => {
     return {
       ids,
       names,
-      size: ids.length,
+      size: ids.length
     };
   };
   const checkFileSizeAmount = (files: UploadFile[]): boolean => {
@@ -238,8 +254,8 @@ const CreateModal: React.FC<IProps> = (props) => {
       message.warning(
         formatMessage({
           id: 'odc.components.CreateAsyncTaskModal.TheMaximumSizeOfThe',
-          defaultMessage: '文件最多不超过 256 MB',
-        }),
+          defaultMessage: '文件最多不超过 256 MB'
+        })
         //文件最多不超过 256MB
       );
 
@@ -247,16 +263,22 @@ const CreateModal: React.FC<IProps> = (props) => {
     }
     return true;
   };
-  const handleChange = (type: 'sqlContentType' | 'rollbackContentType', value: SQLContentType) => {
+  const handleChange = (
+    type: 'sqlContentType' | 'rollbackContentType',
+    value: SQLContentType
+  ) => {
     if (type === 'sqlContentType') {
       setSqlContentType(value);
     } else {
       setRollbackContentType(value);
     }
   };
-  const handleSqlChange = (type: 'sqlContent' | 'rollbackSqlContent', sql: string) => {
+  const handleSqlChange = (
+    type: 'sqlContent' | 'rollbackSqlContent',
+    sql: string
+  ) => {
     form?.setFieldsValue({
-      [type]: sql,
+      [type]: sql
     });
     setHasEdit(true);
   };
@@ -271,8 +293,8 @@ const CreateModal: React.FC<IProps> = (props) => {
           type,
           formatMessage({
             id: 'odc.components.CreateAsyncTaskModal.TheMaximumSizeOfThe',
-            defaultMessage: '文件最多不超过 256 MB',
-          }),
+            defaultMessage: '文件最多不超过 256 MB'
+          })
           //文件最多不超过 256MB
         );
       }, 0);
@@ -280,17 +302,20 @@ const CreateModal: React.FC<IProps> = (props) => {
     return isLt20M;
   };
 
-  const handleFileChange = (files: UploadFile[], type: 'sqlFiles' | 'rollbackSqlFiles') => {
+  const handleFileChange = (
+    files: UploadFile[],
+    type: 'sqlFiles' | 'rollbackSqlFiles'
+  ) => {
     form?.setFieldsValue({
-      [type]: files,
+      [type]: files
     });
     if (files.some((item) => item?.error?.isLimit)) {
       setFormStatus(
         type,
         formatMessage({
           id: 'odc.components.CreateAsyncTaskModal.TheMaximumSizeOfThe',
-          defaultMessage: '文件最多不超过 256 MB',
-        }),
+          defaultMessage: '文件最多不超过 256 MB'
+        })
         //文件最多不超过 256MB
       );
     } else {
@@ -301,8 +326,8 @@ const CreateModal: React.FC<IProps> = (props) => {
     form.setFields([
       {
         name: [fieldName],
-        errors: errorMessage ? [errorMessage] : [],
-      },
+        errors: errorMessage ? [errorMessage] : []
+      }
     ]);
   };
   const hadleReset = () => {
@@ -321,7 +346,7 @@ const CreateModal: React.FC<IProps> = (props) => {
       Modal.confirm({
         title: formatMessage({
           id: 'odc.components.CreateAsyncTaskModal.AreYouSureYouWant.1',
-          defaultMessage: '是否确认取消数据库变更？',
+          defaultMessage: '是否确认取消数据库变更？'
         }),
         //确认取消数据库变更吗？
         centered: true,
@@ -331,12 +356,12 @@ const CreateModal: React.FC<IProps> = (props) => {
         },
         okText: formatMessage({
           id: 'odc.src.component.Task.AsyncTask.CreateModal.Confirm',
-          defaultMessage: '确认',
+          defaultMessage: '确认'
         }), //'确认'
         cancelText: formatMessage({
           id: 'odc.src.component.Task.AsyncTask.CreateModal.Cancel',
-          defaultMessage: '取消',
-        }), //'取消'
+          defaultMessage: '取消'
+        }) //'取消'
       });
     } else {
       modalStore.changeCreateAsyncTaskModal(false);
@@ -364,12 +389,14 @@ const CreateModal: React.FC<IProps> = (props) => {
           description,
           queryLimit,
           delimiter,
-          retryTimes,
+          retryTimes
         } = values;
         const sqlFileIdAndNames = getFileIdAndNames(sqlFiles);
         const rollbackSqlFileIdAndNames = getFileIdAndNames(rollbackSqlFiles);
         const parameters = {
-          timeoutMillis: timeoutMillis ? timeoutMillis * 60 * 60 * 1000 : undefined,
+          timeoutMillis: timeoutMillis
+            ? timeoutMillis * 60 * 60 * 1000
+            : undefined,
           errorStrategy,
           sqlContent,
           generateRollbackPlan,
@@ -383,9 +410,12 @@ const CreateModal: React.FC<IProps> = (props) => {
           rollbackSqlObjectNames: rollbackSqlFileIdAndNames?.names,
           queryLimit,
           delimiter,
-          retryTimes,
+          retryTimes
         };
-        if (!checkFileSizeAmount(sqlFiles) || !checkFileSizeAmount(rollbackSqlFiles)) {
+        if (
+          !checkFileSizeAmount(sqlFiles) ||
+          !checkFileSizeAmount(rollbackSqlFiles)
+        ) {
           return;
         }
         if (sqlContentType === SQLContentType.FILE) {
@@ -395,20 +425,23 @@ const CreateModal: React.FC<IProps> = (props) => {
               'sqlFiles',
               formatMessage({
                 id: 'odc.components.CreateAsyncTaskModal.TheMaximumSizeOfThe',
-                defaultMessage: '文件最多不超过 256 MB',
-              }),
+                defaultMessage: '文件最多不超过 256 MB'
+              })
               //文件最多不超过 256MB
             );
 
             return;
           }
-          if (!sqlFileIdAndNames?.size || sqlFileIdAndNames?.size !== sqlFiles?.length) {
+          if (
+            !sqlFileIdAndNames?.size ||
+            sqlFileIdAndNames?.size !== sqlFiles?.length
+          ) {
             setFormStatus(
               'sqlFiles',
               formatMessage({
                 id: 'odc.components.CreateAsyncTaskModal.UploadAnSqlFile',
-                defaultMessage: '请上传 SQL 文件',
-              }),
+                defaultMessage: '请上传 SQL 文件'
+              })
 
               //请上传 SQL 文件
             );
@@ -430,12 +463,13 @@ const CreateModal: React.FC<IProps> = (props) => {
         const data = {
           projectId,
           databaseId,
-          parentFlowInstanceId: asyncTaskData?.parentFlowInstanceId || undefined,
+          parentFlowInstanceId:
+            asyncTaskData?.parentFlowInstanceId || undefined,
           taskType: TaskType.ASYNC,
           executionStrategy,
           executionTime,
           parameters,
-          description,
+          description
         };
         if (executionStrategy === TaskExecStrategy.TIMER) {
           data.executionTime = executionTime?.valueOf();
@@ -447,7 +481,10 @@ const CreateModal: React.FC<IProps> = (props) => {
         handleCancel(false);
         setConfirmLoading(false);
         if (res) {
-          openTasksPage(TaskPageType.ASYNC, TaskPageScope.CREATED_BY_CURRENT_USER);
+          openTasksPage(
+            TaskPageType.ASYNC,
+            TaskPageScope.CREATED_BY_CURRENT_USER
+          );
         }
       })
       .catch((errorInfo) => {
@@ -463,7 +500,11 @@ const CreateModal: React.FC<IProps> = (props) => {
       setAffectedRows(undefined);
       setPreLoading(true);
       setHasPreCheck(false);
-      const result = await runSQLLint(session?.sessionId, delimiter, sqlContent);
+      const result = await runSQLLint(
+        session?.sessionId,
+        delimiter,
+        sqlContent
+      );
       setExecuteOrPreCheckSql(sqlContent);
       setSqlChanged(false);
       setHasPreCheck(true);
@@ -480,10 +521,15 @@ const CreateModal: React.FC<IProps> = (props) => {
 
   const loadInitialDataFromSpaceConfig = () => {
     const initialFormData = {
-      queryLimit: Number(setting.getSpaceConfigByKey('odc.sqlexecute.default.queryLimit')),
+      queryLimit: Number(
+        setting.getSpaceConfigByKey('odc.sqlexecute.default.queryLimit')
+      ),
       generateRollbackPlan:
-        setting.getSpaceConfigByKey('odc.task.default.rollbackPlanEnabled') === 'true',
-      executionStrategy: setting.getSpaceConfigByKey('odc.task.databaseChange.executionStrategy'),
+        setting.getSpaceConfigByKey('odc.task.default.rollbackPlanEnabled') ===
+        'true',
+      executionStrategy: setting.getSpaceConfigByKey(
+        'odc.task.databaseChange.executionStrategy'
+      )
     };
     form.setFieldsValue(initialFormData);
   };
@@ -515,7 +561,7 @@ const CreateModal: React.FC<IProps> = (props) => {
   }, [initSqlContent]);
   useEffect(() => {
     form.setFieldsValue({
-      databaseId: asyncTaskData?.databaseId,
+      databaseId: asyncTaskData?.databaseId
     });
   }, [asyncTaskData?.databaseId]);
   return (
@@ -525,7 +571,7 @@ const CreateModal: React.FC<IProps> = (props) => {
       width={905}
       title={formatMessage({
         id: 'src.component.Task.AsyncTask.CreateModal.6EEFAEA6',
-        defaultMessage: '新建数据库变更',
+        defaultMessage: '新建数据库变更'
       })}
       footer={
         <Space>
@@ -537,17 +583,21 @@ const CreateModal: React.FC<IProps> = (props) => {
             {
               formatMessage({
                 id: 'odc.components.CreateAsyncTaskModal.Cancel',
-                defaultMessage: '取消',
+                defaultMessage: '取消'
               })
 
               /* 取消 */
             }
           </Button>
-          <Button type="primary" loading={confirmLoading} onClick={handleSubmit}>
+          <Button
+            type="primary"
+            loading={confirmLoading}
+            onClick={handleSubmit}
+          >
             {
               formatMessage({
                 id: 'odc.components.CreateAsyncTaskModal.New',
-                defaultMessage: '新建',
+                defaultMessage: '新建'
               })
 
               /* 新建 */
@@ -564,7 +614,7 @@ const CreateModal: React.FC<IProps> = (props) => {
         name="basic"
         initialValues={{
           databaseId: asyncTaskData?.databaseId,
-          retryTimes: 0,
+          retryTimes: 0
         }}
         layout="vertical"
         requiredMark="optional"
@@ -575,7 +625,7 @@ const CreateModal: React.FC<IProps> = (props) => {
         <Form.Item
           label={formatMessage({
             id: 'odc.components.CreateAsyncTaskModal.SqlContent',
-            defaultMessage: 'SQL 内容',
+            defaultMessage: 'SQL 内容'
           })}
           /* SQL 内容 */ name="sqlContentType"
           initialValue={SQLContentType.TEXT}
@@ -584,11 +634,11 @@ const CreateModal: React.FC<IProps> = (props) => {
               required: true,
               message: formatMessage({
                 id: 'odc.components.CreateAsyncTaskModal.SelectSqlContent',
-                defaultMessage: '请选择 SQL 内容',
-              }),
+                defaultMessage: '请选择 SQL 内容'
+              })
 
               // 请选择 SQL 内容
-            },
+            }
           ]}
         >
           <Radio.Group
@@ -600,7 +650,7 @@ const CreateModal: React.FC<IProps> = (props) => {
               {
                 formatMessage({
                   id: 'odc.components.CreateAsyncTaskModal.SqlEntry',
-                  defaultMessage: 'SQL 录入',
+                  defaultMessage: 'SQL 录入'
                 })
 
                 /* SQL录入 */
@@ -610,7 +660,7 @@ const CreateModal: React.FC<IProps> = (props) => {
               {
                 formatMessage({
                   id: 'odc.components.CreateAsyncTaskModal.UploadAttachments',
-                  defaultMessage: '上传附件',
+                  defaultMessage: '上传附件'
                 })
 
                 /* 上传附件 */
@@ -628,14 +678,14 @@ const CreateModal: React.FC<IProps> = (props) => {
               required: sqlContentType === SQLContentType.TEXT,
               message: formatMessage({
                 id: 'odc.components.CreateAsyncTaskModal.EnterTheSqlContent',
-                defaultMessage: '请填写 SQL 内容',
-              }),
+                defaultMessage: '请填写 SQL 内容'
+              })
 
               // 请填写 SQL 内容
-            },
+            }
           ]}
           style={{
-            height: '280px',
+            height: '280px'
           }}
         >
           <CommonIDE
@@ -667,14 +717,14 @@ const CreateModal: React.FC<IProps> = (props) => {
             multiple={true}
             tip={formatMessage({
               id: 'odc.component.OSSDragger2.YouCanDragAndDrop',
-              defaultMessage: '支持拖拽文件上传，任务将按文件排列的先后顺序执行',
+              defaultMessage: '支持拖拽文件上传，任务将按文件排列的先后顺序执行'
             })}
             maxCount={500}
             action={getAsyncTaskUploadUrl()}
             headers={{
               'X-XSRF-TOKEN': Cookies.get('XSRF-TOKEN') || '',
               'Accept-Language': getLocale(),
-              currentOrganizationId: login.organizationId?.toString(),
+              currentOrganizationId: login.organizationId?.toString()
             }}
             onFileChange={(files) => {
               handleFileChange(files, 'sqlFiles');
@@ -684,7 +734,7 @@ const CreateModal: React.FC<IProps> = (props) => {
               {
                 formatMessage({
                   id: 'odc.components.CreateAsyncTaskModal.ClickOrDragMultipleFiles',
-                  defaultMessage: '点击或将多个文件拖拽到这里上传',
+                  defaultMessage: '点击或将多个文件拖拽到这里上传'
                 })
                 /*点击或将多个文件拖拽到这里上传*/
               }
@@ -693,7 +743,7 @@ const CreateModal: React.FC<IProps> = (props) => {
               {
                 formatMessage({
                   id: 'odc.components.CreateAsyncTaskModal.TheMaximumSizeOfThe.2',
-                  defaultMessage: '文件最多不超过 256 MB ，支持扩展名 .sql',
+                  defaultMessage: '文件最多不超过 256 MB ，支持扩展名 .sql'
                 })
                 /*文件最多不超过 256MB ，支持扩展名 .sql*/
               }
@@ -705,14 +755,14 @@ const CreateModal: React.FC<IProps> = (props) => {
             sqlContentType === SQLContentType.FILE
               ? formatMessage({
                   id: 'odc.src.component.Task.AsyncTask.CreateModal.PleaseUseSQLToEnter',
-                  defaultMessage: '请使用 SQL 录入，上传附件暂不支持 SQL 检查',
+                  defaultMessage: '请使用 SQL 录入，上传附件暂不支持 SQL 检查'
                 }) //'请使用 SQL 录入，上传附件暂不支持 SQL 检查'
               : ''
           }
         >
           <Button
             style={{
-              marginBottom: '12px',
+              marginBottom: '12px'
             }}
             onClick={preCheck}
             disabled={
@@ -727,11 +777,11 @@ const CreateModal: React.FC<IProps> = (props) => {
               preCheckLoading
                 ? formatMessage({
                     id: 'odc.src.component.Task.AsyncTask.CreateModal.InInspection',
-                    defaultMessage: '检查中',
+                    defaultMessage: '检查中'
                   }) //'检查中'
                 : formatMessage({
                     id: 'odc.src.component.Task.AsyncTask.CreateModal.SQLCheck',
-                    defaultMessage: 'SQL 检查',
+                    defaultMessage: 'SQL 检查'
                   }) //'SQL 检查'
             }
           </Button>
@@ -744,17 +794,18 @@ const CreateModal: React.FC<IProps> = (props) => {
                 formatMessage(
                   {
                     id: 'odc.src.component.Task.AsyncTask.CreateModal.ThePreExaminationIs',
-                    defaultMessage: '预检查完成，{lintResultSetLength} 处语句违反 SQL 开发规范。',
+                    defaultMessage:
+                      '预检查完成，{lintResultSetLength} 处语句违反 SQL 开发规范。'
                   },
                   {
-                    lintResultSetLength: lintResultSet?.length || 0,
-                  },
+                    lintResultSetLength: lintResultSet?.length || 0
+                  }
                 ) //`预检查完成，${lintResultSet.length} 处语句违反 SQL 开发规范。`
               }
               type={lintResultSet?.length === 0 ? 'success' : 'warning'}
               showIcon
               style={{
-                marginBottom: '8px',
+                marginBottom: '8px'
               }}
             />
 
@@ -763,14 +814,14 @@ const CreateModal: React.FC<IProps> = (props) => {
               message={formatMessage(
                 {
                   id: 'src.component.Task.AsyncTask.CreateModal.4F14EA28',
-                  defaultMessage: 'DML语句预估影响行数：{LogicalExpression0}',
+                  defaultMessage: 'DML语句预估影响行数：{LogicalExpression0}'
                 },
-                { LogicalExpression0: affectedRows || '-' },
+                { LogicalExpression0: affectedRows || '-' }
               )}
               type={lintResultSet?.length === 0 ? 'success' : 'warning'}
               showIcon
               style={{
-                marginBottom: '8px',
+                marginBottom: '8px'
               }}
             />
           </>
@@ -791,7 +842,7 @@ const CreateModal: React.FC<IProps> = (props) => {
         <Form.Item
           label={formatMessage({
             id: 'odc.components.CreateAsyncTaskModal.RollbackScheme',
-            defaultMessage: '回滚方案',
+            defaultMessage: '回滚方案'
           })}
           /*回滚方案*/
         >
@@ -801,19 +852,23 @@ const CreateModal: React.FC<IProps> = (props) => {
             extra={formatMessage({
               id: 'odc.AsyncTask.CreateModal.TheRollbackSchemeCanBe',
               defaultMessage:
-                '可针对 Update、Delete 语句自动生成回滚方案，并以附件形式提供下载，该方案仅供参考',
+                '可针对 Update、Delete 语句自动生成回滚方案，并以附件形式提供下载，该方案仅供参考'
             })} /*可针对 Update、Delete 语句自动生成回滚方案，并以附件形式提供下载，该方案仅供参考*/
           >
             <Checkbox>
               {
                 formatMessage({
                   id: 'odc.AsyncTask.CreateModal.GenerateABackupRollbackScheme',
-                  defaultMessage: '生成备份回滚方案',
+                  defaultMessage: '生成备份回滚方案'
                 }) /*生成备份回滚方案*/
               }
             </Checkbox>
           </Form.Item>
-          <Form.Item name="rollbackContentType" initialValue={SQLContentType.TEXT} noStyle>
+          <Form.Item
+            name="rollbackContentType"
+            initialValue={SQLContentType.TEXT}
+            noStyle
+          >
             <Radio.Group
               onChange={(e) => {
                 handleChange('rollbackContentType', e.target.value);
@@ -823,7 +878,7 @@ const CreateModal: React.FC<IProps> = (props) => {
                 {
                   formatMessage({
                     id: 'odc.components.CreateAsyncTaskModal.SqlEntry',
-                    defaultMessage: 'SQL 录入',
+                    defaultMessage: 'SQL 录入'
                   })
 
                   /* SQL录入 */
@@ -833,7 +888,7 @@ const CreateModal: React.FC<IProps> = (props) => {
                 {
                   formatMessage({
                     id: 'odc.components.CreateAsyncTaskModal.UploadAttachments',
-                    defaultMessage: '上传附件',
+                    defaultMessage: '上传附件'
                   })
 
                   /* 上传附件 */
@@ -848,14 +903,14 @@ const CreateModal: React.FC<IProps> = (props) => {
             rollbackContentType !== SQLContentType.TEXT && styles.hide
           }`}
           style={{
-            height: '280px',
+            height: '280px'
           }}
         >
           <CommonIDE
             initialSQL={initRollbackContent}
             language={getDataSourceModeConfig(connection?.type)?.sql?.language}
             editorProps={{
-              theme,
+              theme
             }}
             onSQLChange={(sql) => {
               handleSqlChange('rollbackSqlContent', sql);
@@ -879,7 +934,7 @@ const CreateModal: React.FC<IProps> = (props) => {
             headers={{
               'X-XSRF-TOKEN': Cookies.get('XSRF-TOKEN') || '',
               'Accept-Language': getLocale(),
-              currentOrganizationId: login.organizationId?.toString(),
+              currentOrganizationId: login.organizationId?.toString()
             }}
             onFileChange={(files) => {
               handleFileChange(files, 'rollbackSqlFiles');
@@ -889,7 +944,7 @@ const CreateModal: React.FC<IProps> = (props) => {
               {
                 formatMessage({
                   id: 'odc.components.CreateAsyncTaskModal.ClickOrDragMultipleFiles',
-                  defaultMessage: '点击或将多个文件拖拽到这里上传',
+                  defaultMessage: '点击或将多个文件拖拽到这里上传'
                 })
                 /*点击或将多个文件拖拽到这里上传*/
               }
@@ -898,7 +953,7 @@ const CreateModal: React.FC<IProps> = (props) => {
               {
                 formatMessage({
                   id: 'odc.components.CreateAsyncTaskModal.TheMaximumSizeOfThe.2',
-                  defaultMessage: '文件最多不超过 256 MB ，支持扩展名 .sql',
+                  defaultMessage: '文件最多不超过 256 MB ，支持扩展名 .sql'
                 })
                 /*文件最多不超过 256MB ，支持扩展名 .sql*/
               }
@@ -909,7 +964,7 @@ const CreateModal: React.FC<IProps> = (props) => {
           name="delimiter"
           label={formatMessage({
             id: 'odc.components.CreateAsyncTaskModal.Separator',
-            defaultMessage: '分隔符',
+            defaultMessage: '分隔符'
           })}
           /* 分隔符 */ initialValue=";"
           required
@@ -918,20 +973,20 @@ const CreateModal: React.FC<IProps> = (props) => {
               required: true,
               message: formatMessage({
                 id: 'odc.components.CreateAsyncTaskModal.EnterADelimiter',
-                defaultMessage: '请输入分隔符',
-              }),
+                defaultMessage: '请输入分隔符'
+              })
 
               //请输入分隔符
-            },
+            }
           ]}
         >
           <AutoComplete
             style={{
-              width: 90,
+              width: 90
             }}
             options={[';', '/', '//', '$', '$$'].map((value) => {
               return {
-                value,
+                value
               };
             })}
           />
@@ -940,7 +995,7 @@ const CreateModal: React.FC<IProps> = (props) => {
           name="queryLimit"
           label={formatMessage({
             id: 'odc.components.CreateAsyncTaskModal.QueryResultLimits',
-            defaultMessage: '查询结果限制',
+            defaultMessage: '查询结果限制'
           })}
           required
           rules={[
@@ -948,28 +1003,30 @@ const CreateModal: React.FC<IProps> = (props) => {
               required: true,
               message: formatMessage({
                 id: 'odc.components.CreateAsyncTaskModal.EnterAQueryResultLimit',
-                defaultMessage: '请输入查询结果限制',
-              }),
+                defaultMessage: '请输入查询结果限制'
+              })
 
               //请输入查询结果限制
             },
             {
               validator: (_, value) => {
-                const max = setting.getSpaceConfigByKey('odc.sqlexecute.default.maxQueryLimit');
+                const max = setting.getSpaceConfigByKey(
+                  'odc.sqlexecute.default.maxQueryLimit'
+                );
                 if (value !== undefined && value > max) {
                   return Promise.reject(
                     formatMessage(
                       {
                         id: 'src.component.Task.AsyncTask.CreateModal.06DB3655',
-                        defaultMessage: '不超过查询条数上限 {max}',
+                        defaultMessage: '不超过查询条数上限 {max}'
                       },
-                      { max },
-                    ),
+                      { max }
+                    )
                   );
                 }
                 return Promise.resolve();
-              },
-            },
+              }
+            }
           ]}
         >
           <InputNumber min={1} />
@@ -977,7 +1034,7 @@ const CreateModal: React.FC<IProps> = (props) => {
         <FormItemPanel
           label={formatMessage({
             id: 'odc.components.CreateAsyncTaskModal.TaskSettings',
-            defaultMessage: '任务设置',
+            defaultMessage: '任务设置'
           })}
           /*任务设置*/ keepExpand
         >
@@ -985,7 +1042,7 @@ const CreateModal: React.FC<IProps> = (props) => {
             label={
               formatMessage({
                 id: 'src.component.Task.AsyncTask.CreateModal.4C35F704',
-                defaultMessage: 'SQL 重试次数',
+                defaultMessage: 'SQL 重试次数'
               }) /*"SQL 重试次数"*/
             }
             name="retryTimes"
@@ -994,9 +1051,9 @@ const CreateModal: React.FC<IProps> = (props) => {
                 required: true,
                 message: formatMessage({
                   id: 'src.component.Task.AsyncTask.CreateModal.DF31D4E7',
-                  defaultMessage: '请输入',
-                }), //'请输入'
-              },
+                  defaultMessage: '请输入'
+                }) //'请输入'
+              }
             ]}
           >
             <InputNumber min={0} precision={0} />
@@ -1004,7 +1061,7 @@ const CreateModal: React.FC<IProps> = (props) => {
           <Form.Item
             label={formatMessage({
               id: 'odc.components.CreateAsyncTaskModal.TaskErrorHandling',
-              defaultMessage: '任务错误处理',
+              defaultMessage: '任务错误处理'
             })}
             /* 任务错误处理 */ name="errorStrategy"
             initialValue={ErrorStrategy.ABORT}
@@ -1013,11 +1070,11 @@ const CreateModal: React.FC<IProps> = (props) => {
                 required: true,
                 message: formatMessage({
                   id: 'odc.components.CreateAsyncTaskModal.SelectTaskErrorHandling',
-                  defaultMessage: '请选择任务错误处理',
-                }),
+                  defaultMessage: '请选择任务错误处理'
+                })
 
                 // 请选择任务错误处理
-              },
+              }
             ]}
           >
             <Radio.Group>
@@ -1025,7 +1082,7 @@ const CreateModal: React.FC<IProps> = (props) => {
                 {
                   formatMessage({
                     id: 'odc.components.CreateAsyncTaskModal.StopATask',
-                    defaultMessage: '停止任务',
+                    defaultMessage: '停止任务'
                   })
 
                   /* 停止任务 */
@@ -1035,7 +1092,7 @@ const CreateModal: React.FC<IProps> = (props) => {
                 {
                   formatMessage({
                     id: 'odc.components.CreateAsyncTaskModal.IgnoreErrorsContinueTasks',
-                    defaultMessage: '忽略错误继续任务',
+                    defaultMessage: '忽略错误继续任务'
                   })
 
                   /* 忽略错误继续任务 */
@@ -1048,14 +1105,14 @@ const CreateModal: React.FC<IProps> = (props) => {
         <Form.Item
           label={formatMessage({
             id: 'odc.components.CreateAsyncTaskModal.ExecutionTimeout',
-            defaultMessage: '执行超时时间',
+            defaultMessage: '执行超时时间'
           })}
           /* 执行超时时间 */ required
         >
           <Form.Item
             label={formatMessage({
               id: 'odc.components.CreateAsyncTaskModal.Hours',
-              defaultMessage: '小时',
+              defaultMessage: '小时'
             })}
             /* 小时 */ name="timeoutMillis"
             rules={[
@@ -1063,8 +1120,8 @@ const CreateModal: React.FC<IProps> = (props) => {
                 required: true,
                 message: formatMessage({
                   id: 'odc.components.CreateAsyncTaskModal.EnterATimeoutPeriod',
-                  defaultMessage: '请输入超时时间',
-                }),
+                  defaultMessage: '请输入超时时间'
+                })
 
                 // 请输入超时时间
               },
@@ -1073,11 +1130,11 @@ const CreateModal: React.FC<IProps> = (props) => {
                 max: 480,
                 message: formatMessage({
                   id: 'odc.components.CreateAsyncTaskModal.MaximumLengthOfHours',
-                  defaultMessage: '最大不超过 480 小时',
-                }),
+                  defaultMessage: '最大不超过 480 小时'
+                })
 
                 // 最大不超过480小时
-              },
+              }
             ]}
             initialValue={48}
             noStyle
@@ -1088,7 +1145,7 @@ const CreateModal: React.FC<IProps> = (props) => {
             {
               formatMessage({
                 id: 'odc.components.CreateAsyncTaskModal.Hours',
-                defaultMessage: '小时',
+                defaultMessage: '小时'
               })
 
               /* 小时 */
@@ -1100,4 +1157,8 @@ const CreateModal: React.FC<IProps> = (props) => {
     </Drawer>
   );
 };
-export default inject('sqlStore', 'taskStore', 'modalStore')(observer(CreateModal));
+export default inject(
+  'sqlStore',
+  'taskStore',
+  'modalStore'
+)(observer(CreateModal));

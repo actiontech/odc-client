@@ -3,5 +3,5 @@
 export enum getSQLAuditRecordsV1FilterSqlAuditStatusEnum {
   'auditing' = 'auditing',
 
-  'successfully' = 'successfully',
+  'successfully' = 'successfully'
 }

@@ -18,7 +18,7 @@ import { getTaskDetail, getTaskList } from '@/common/network/task';
 import MultiLineOverflowText from '@/component/MultiLineOverflowText';
 import {
   nodeStatus as nodeStatusMap,
-  status as statusMap,
+  status as statusMap
 } from '@/component/Task/component/Status';
 import UserPopover from '@/component/UserPopover';
 import {
@@ -31,7 +31,7 @@ import {
   TaskNodeStatus,
   TaskRecordParameters,
   TaskStatus,
-  TaskType,
+  TaskType
 } from '@/d.ts';
 import { formatMessage } from '@/util/intl';
 import { getLocalFormatDateTime } from '@/util/utils';
@@ -79,7 +79,8 @@ const TaskFlow: React.FC<IProps> = (props) => {
     visible: boolean;
     hasDescription: boolean;
   } = null;
-  const [flowDetail, setFlowDetail] = useState<TaskDetail<TaskRecordParameters>>();
+  const [flowDetail, setFlowDetail] =
+    useState<TaskDetail<TaskRecordParameters>>();
 
   useEffect(() => {
     if (isLogicDbChangeTask && task?.id) {
@@ -92,7 +93,7 @@ const TaskFlow: React.FC<IProps> = (props) => {
       createdByCurrentUser: false,
       approveByCurrentUser: false,
       parentInstanceId: task?.id,
-      taskType: TaskType.ALTER_SCHEDULE,
+      taskType: TaskType.ALTER_SCHEDULE
     });
     const flowId = flowList?.contents?.[0]?.id;
     if (flowId) {
@@ -119,23 +120,25 @@ const TaskFlow: React.FC<IProps> = (props) => {
         node.status === TaskNodeStatus.WAIT_FOR_CONFIRM
           ? formatMessage({
               id: 'odc.component.CommonTaskDetailModal.TaskFlow.ConfirmPolicy',
-              defaultMessage: '确认策略',
+              defaultMessage: '确认策略'
             })
           : //确认策略
             formatMessage(
               {
                 id: 'odc.component.CommonTaskDetailModal.TaskFlow.ApprovalNodeCurrentapprovalcount',
-                defaultMessage: '审批节点{currentApprovalCount}',
+                defaultMessage: '审批节点{currentApprovalCount}'
               },
               {
-                currentApprovalCount: approvalCount,
-              },
+                currentApprovalCount: approvalCount
+              }
             );
 
       //`审批节点${currentApprovalCount}`
       let status = node.status;
-      let statusContent = nodeStatusMap[TaskFlowNodeType.APPROVAL_TASK][node.status];
-      let deadlineTime = node.status === TaskNodeStatus.EXECUTING ? node.deadlineTime : null;
+      let statusContent =
+        nodeStatusMap[TaskFlowNodeType.APPROVAL_TASK][node.status];
+      let deadlineTime =
+        node.status === TaskNodeStatus.EXECUTING ? node.deadlineTime : null;
       switch (node.status) {
         case TaskNodeStatus.CREATED:
         case TaskNodeStatus.PENDING:
@@ -145,7 +148,7 @@ const TaskFlow: React.FC<IProps> = (props) => {
             status,
             statusContent,
             autoApprove,
-            hasCandidatesLabel: true,
+            hasCandidatesLabel: true
           };
           break;
         case TaskNodeStatus.WAIT_FOR_CONFIRM:
@@ -158,7 +161,7 @@ const TaskFlow: React.FC<IProps> = (props) => {
             deadlineTime,
             autoApprove,
             hasDeadlineTimeLabel: true,
-            hasCandidatesLabel: true,
+            hasCandidatesLabel: true
           };
           break;
         case TaskNodeStatus.FAILED:
@@ -175,14 +178,14 @@ const TaskFlow: React.FC<IProps> = (props) => {
             hasCommentLabel: true,
             hasCandidatesLabel: true,
             hasCompleteTimeLabel: true,
-            hasOperatorLabel: true,
+            hasOperatorLabel: true
           };
           break;
         case TaskNodeStatus.CANCELLED:
           _node = {
             title: formatMessage({
               id: 'odc.component.CommonTaskDetailModal.TaskFlow.Terminate',
-              defaultMessage: '终止',
+              defaultMessage: '终止'
             }),
             //终止
             operator,
@@ -191,7 +194,7 @@ const TaskFlow: React.FC<IProps> = (props) => {
             completeTime,
             autoApprove,
             hasCompleteTimeLabel: true,
-            hasOperatorLabel: true,
+            hasOperatorLabel: true
           };
           break;
         case TaskNodeStatus.EXPIRED:
@@ -203,7 +206,7 @@ const TaskFlow: React.FC<IProps> = (props) => {
             completeTime,
             autoApprove,
             hasCandidatesLabel: true,
-            hasCompleteTimeLabel: true,
+            hasCompleteTimeLabel: true
           };
           break;
       }
@@ -211,7 +214,7 @@ const TaskFlow: React.FC<IProps> = (props) => {
     return {
       ..._node,
       externalFlowInstanceUrl: node?.externalFlowInstanceUrl,
-      externalApprovalName: node?.externalApprovalName,
+      externalApprovalName: node?.externalApprovalName
     };
   };
   const handleTask = (node: Partial<ITaskRenderFlowNode>, index: number) => {
@@ -221,7 +224,9 @@ const TaskFlow: React.FC<IProps> = (props) => {
     }
     if (
       node.nodeType === TaskFlowNodeType.SERVICE_TASK &&
-      ![IFlowTaskType.PRE_CHECK, IFlowTaskType.GENERATE_ROLLBACK].includes(node.taskType)
+      ![IFlowTaskType.PRE_CHECK, IFlowTaskType.GENERATE_ROLLBACK].includes(
+        node.taskType
+      )
     ) {
       const { deadlineTime, completeTime, operator, status, taskType } = node;
       let title =
@@ -229,13 +234,13 @@ const TaskFlow: React.FC<IProps> = (props) => {
           ? formatMessage(
               {
                 id: 'src.component.Task.component.CommonDetailModal.C66A3B3E',
-                defaultMessage: '执行节点{executeNodeCount}',
+                defaultMessage: '执行节点{executeNodeCount}'
               },
-              { executeNodeCount },
+              { executeNodeCount }
             )
           : formatMessage({
               id: 'odc.component.CommonTaskDetailModal.TaskFlow.Run',
-              defaultMessage: '执行',
+              defaultMessage: '执行'
             });
 
       //执行
@@ -248,7 +253,7 @@ const TaskFlow: React.FC<IProps> = (props) => {
             status,
             taskType,
             statusContent,
-            hasOperatorLabel: true,
+            hasOperatorLabel: true
           };
           break;
         }
@@ -262,14 +267,14 @@ const TaskFlow: React.FC<IProps> = (props) => {
             deadlineTime,
             taskType,
             hasDeadlineTimeLabel: true,
-            hasOperatorLabel: true,
+            hasOperatorLabel: true
           };
           break;
         case TaskNodeStatus.CANCELLED:
           _node = {
             title: formatMessage({
               id: 'odc.component.CommonTaskDetailModal.TaskFlow.Terminate',
-              defaultMessage: '终止',
+              defaultMessage: '终止'
             }),
             //终止
             operator,
@@ -277,7 +282,7 @@ const TaskFlow: React.FC<IProps> = (props) => {
             statusContent,
             completeTime,
             hasCompleteTimeLabel: true,
-            hasOperatorLabel: true,
+            hasOperatorLabel: true
           };
           break;
         case TaskNodeStatus.FAILED:
@@ -290,7 +295,7 @@ const TaskFlow: React.FC<IProps> = (props) => {
             completeTime,
             taskType,
             hasCompleteTimeLabel: true,
-            hasOperatorLabel: true,
+            hasOperatorLabel: true
           };
           break;
         case TaskNodeStatus.EXPIRED:
@@ -302,7 +307,7 @@ const TaskFlow: React.FC<IProps> = (props) => {
               statusContent,
               deadlineTime,
               hasDeadlineTimeLabel: true,
-              hasOperatorLabel: true,
+              hasOperatorLabel: true
             };
           }
           break;
@@ -311,11 +316,15 @@ const TaskFlow: React.FC<IProps> = (props) => {
       // 最后一个节点特殊处理（仅任务执行成功后才进行）
       if (index === nodeList?.length - 1 && index >= 1) {
         // 回滚成功 | 回滚失败
-        if ([TaskStatus.ROLLBACK_FAILED, TaskStatus.ROLLBACK_SUCCEEDED].includes(task.status)) {
+        if (
+          [TaskStatus.ROLLBACK_FAILED, TaskStatus.ROLLBACK_SUCCEEDED].includes(
+            task.status
+          )
+        ) {
           _node = {
             title: formatMessage({
               id: 'odc.component.CommonTaskDetailModal.TaskFlow.RollBack',
-              defaultMessage: '回滚',
+              defaultMessage: '回滚'
             }),
             //回滚
             operator,
@@ -323,20 +332,22 @@ const TaskFlow: React.FC<IProps> = (props) => {
             statusContent: statusMap[task.status],
             completeTime,
             hasCompleteTimeLabel: true,
-            hasOperatorLabel: true,
+            hasOperatorLabel: true
           };
         } else {
           if (
-            ![TaskNodeStatus.EXPIRED, TaskNodeStatus.FAILED, TaskNodeStatus.CANCELLED].includes(
-              _node.status,
-            )
+            ![
+              TaskNodeStatus.EXPIRED,
+              TaskNodeStatus.FAILED,
+              TaskNodeStatus.CANCELLED
+            ].includes(_node.status)
           ) {
             completedNode = {
               visible: true,
               hasDescription:
                 task?.type === TaskType.ASYNC && task?.rollbackable
                   ? task?.status === TaskStatus.COMPLETED
-                  : _node?.status === TaskNodeStatus.COMPLETED,
+                  : _node?.status === TaskNodeStatus.COMPLETED
             };
           }
         }
@@ -349,9 +360,12 @@ const TaskFlow: React.FC<IProps> = (props) => {
     .map(handleTask);
   if (
     (task?.type === TaskType.ASYNC && task.status === TaskStatus.COMPLETED) ||
-    (task?.type === TaskType.ASYNC && task.status === TaskStatus.EXECUTION_SUCCEEDED) ||
-    (task?.type === TaskType.LOGICAL_DATABASE_CHANGE && task.status === TaskStatus.COMPLETED) ||
-    (task?.type !== TaskType.ASYNC && task.status === TaskStatus.EXECUTION_SUCCEEDED)
+    (task?.type === TaskType.ASYNC &&
+      task.status === TaskStatus.EXECUTION_SUCCEEDED) ||
+    (task?.type === TaskType.LOGICAL_DATABASE_CHANGE &&
+      task.status === TaskStatus.COMPLETED) ||
+    (task?.type !== TaskType.ASYNC &&
+      task.status === TaskStatus.EXECUTION_SUCCEEDED)
   ) {
     currentNodeIndex = taskFlow.length + 1;
   } else {
@@ -362,11 +376,16 @@ const TaskFlow: React.FC<IProps> = (props) => {
     });
   }
   return (
-    <Steps progressDot current={currentNodeIndex} direction="vertical" className={styles.TaskFlow}>
+    <Steps
+      progressDot
+      current={currentNodeIndex}
+      direction="vertical"
+      className={styles.TaskFlow}
+    >
       <Step
         title={formatMessage({
           id: 'odc.component.CommonTaskDetailModal.TaskFlow.InitiateATask',
-          defaultMessage: '发起任务',
+          defaultMessage: '发起任务'
         })}
         /*发起任务*/ description={
           <Space direction="vertical">
@@ -374,7 +393,7 @@ const TaskFlow: React.FC<IProps> = (props) => {
               <Descriptions.Item
                 label={formatMessage({
                   id: 'odc.component.CommonTaskDetailModal.TaskFlow.Handler',
-                  defaultMessage: '处理人',
+                  defaultMessage: '处理人'
                 })}
 
                 /*处理人*/
@@ -388,7 +407,7 @@ const TaskFlow: React.FC<IProps> = (props) => {
               <Descriptions.Item
                 label={formatMessage({
                   id: 'odc.component.CommonTaskDetailModal.TaskFlow.ProcessingStatus',
-                  defaultMessage: '处理状态',
+                  defaultMessage: '处理状态'
                 })}
 
                 /*处理状态*/
@@ -396,7 +415,7 @@ const TaskFlow: React.FC<IProps> = (props) => {
                 {
                   formatMessage({
                     id: 'odc.component.CommonTaskDetailModal.TaskFlow.Succeeded',
-                    defaultMessage: '已成功',
+                    defaultMessage: '已成功'
                   })
 
                   /*已成功*/
@@ -405,7 +424,7 @@ const TaskFlow: React.FC<IProps> = (props) => {
               <Descriptions.Item
                 label={formatMessage({
                   id: 'odc.component.CommonTaskDetailModal.TaskFlow.ProcessingTime',
-                  defaultMessage: '处理时间',
+                  defaultMessage: '处理时间'
                 })}
 
                 /*处理时间*/
@@ -436,7 +455,7 @@ const TaskFlow: React.FC<IProps> = (props) => {
           externalFlowInstanceUrl,
           externalApprovalName,
           nodeType,
-          taskType,
+          taskType
         } = item;
         const isExternalFlow = !!externalFlowInstanceUrl;
         switch (taskType) {
@@ -451,7 +470,7 @@ const TaskFlow: React.FC<IProps> = (props) => {
                 title={
                   formatMessage({
                     id: 'odc.component.CommonTaskDetailModal.TaskFlow.PreCheck',
-                    defaultMessage: '预检查',
+                    defaultMessage: '预检查'
                   }) //预检查
                 }
                 description={
@@ -470,7 +489,7 @@ const TaskFlow: React.FC<IProps> = (props) => {
                 status={statusContent?.status as any}
                 title={formatMessage({
                   id: 'odc.component.CommonDetailModal.TaskFlow.GenerateABackupRollbackScheme',
-                  defaultMessage: '生成备份回滚方案',
+                  defaultMessage: '生成备份回滚方案'
                 })}
                 /*生成备份回滚方案*/ description={
                   <RollbackNode taskId={task?.id} node={item} result={result} />
@@ -483,13 +502,16 @@ const TaskFlow: React.FC<IProps> = (props) => {
            */
           default: {
             if ((item?.taskType as unknown) === TaskType.MULTIPLE_ASYNC) {
-              const parameters = (task as TaskDetail<IMultipleAsyncTaskParams>)?.parameters;
+              const parameters = (task as TaskDetail<IMultipleAsyncTaskParams>)
+                ?.parameters;
               const databaseMap = parameters?.databases?.reduce((pre, cur) => {
                 pre[cur?.id] = cur;
                 return pre;
               }, {});
               const databaseIdStr =
-                parameters?.orderedDatabaseIds?.[currrentRenderExecuteNodeCount++]
+                parameters?.orderedDatabaseIds?.[
+                  currrentRenderExecuteNodeCount++
+                ]
                   ?.map((id) => {
                     return databaseMap?.[id]?.name;
                   })
@@ -502,7 +524,8 @@ const TaskFlow: React.FC<IProps> = (props) => {
                   title={title}
                   className={classNames({
                     // TODO: 执行状态影响
-                    [styles.multipleErrorExecNode]: item?.status === TaskNodeStatus.FAILED,
+                    [styles.multipleErrorExecNode]:
+                      item?.status === TaskNodeStatus.FAILED
                   })}
                   description={
                     hasDescription && (
@@ -512,7 +535,7 @@ const TaskFlow: React.FC<IProps> = (props) => {
                             <Descriptions.Item
                               label={formatMessage({
                                 id: 'src.component.Task.component.CommonDetailModal.6225C10E',
-                                defaultMessage: '数据库',
+                                defaultMessage: '数据库'
                               })}
 
                               /*处理人*/
@@ -524,7 +547,7 @@ const TaskFlow: React.FC<IProps> = (props) => {
                           <Descriptions.Item
                             label={formatMessage({
                               id: 'odc.component.CommonTaskDetailModal.TaskFlow.ProcessingStatus',
-                              defaultMessage: '处理状态',
+                              defaultMessage: '处理状态'
                             })}
 
                             /*处理状态*/
@@ -532,11 +555,15 @@ const TaskFlow: React.FC<IProps> = (props) => {
                             <Space>
                               {statusContent?.text}
                               {isExternalFlow && (
-                                <a href={externalFlowInstanceUrl} target="_blank" rel="noreferrer">
+                                <a
+                                  href={externalFlowInstanceUrl}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                >
                                   {
                                     formatMessage({
                                       id: 'odc.component.CommonTaskDetailModal.TaskFlow.ViewApprovalDetails',
-                                      defaultMessage: '查看审批详情',
+                                      defaultMessage: '查看审批详情'
                                     })
                                     /*查看审批详情*/
                                   }
@@ -549,7 +576,7 @@ const TaskFlow: React.FC<IProps> = (props) => {
                             <Descriptions.Item
                               label={formatMessage({
                                 id: 'odc.component.CommonTaskDetailModal.TaskFlow.ProcessingTime',
-                                defaultMessage: '处理时间',
+                                defaultMessage: '处理时间'
                               })}
 
                               /*处理时间*/
@@ -576,7 +603,7 @@ const TaskFlow: React.FC<IProps> = (props) => {
                           <Descriptions.Item
                             label={formatMessage({
                               id: 'odc.component.CommonTaskDetailModal.TaskFlow.Handler',
-                              defaultMessage: '处理人',
+                              defaultMessage: '处理人'
                             })}
 
                             /*处理人*/
@@ -584,7 +611,7 @@ const TaskFlow: React.FC<IProps> = (props) => {
                             {isExternalFlow ? (
                               formatMessage({
                                 id: 'odc.src.component.Task.component.CommonDetailModal.ExternalApproval',
-                                defaultMessage: '外部审批',
+                                defaultMessage: '外部审批'
                               }) //'外部审批'
                             ) : (
                               <Space>
@@ -599,7 +626,7 @@ const TaskFlow: React.FC<IProps> = (props) => {
                                     {
                                       formatMessage({
                                         id: 'odc.component.CommonTaskDetailModal.TaskFlow.AutomaticApproval',
-                                        defaultMessage: '(自动审批)',
+                                        defaultMessage: '(自动审批)'
                                       })
 
                                       /*(自动审批)*/
@@ -616,7 +643,7 @@ const TaskFlow: React.FC<IProps> = (props) => {
                             className={styles.userList}
                             label={formatMessage({
                               id: 'odc.component.CommonTaskDetailModal.TaskFlow.Handled',
-                              defaultMessage: '可处理人',
+                              defaultMessage: '可处理人'
                             })}
 
                             /*可处理人*/
@@ -652,7 +679,7 @@ const TaskFlow: React.FC<IProps> = (props) => {
                         <Descriptions.Item
                           label={formatMessage({
                             id: 'odc.component.CommonTaskDetailModal.TaskFlow.ProcessingStatus',
-                            defaultMessage: '处理状态',
+                            defaultMessage: '处理状态'
                           })}
 
                           /*处理状态*/
@@ -660,11 +687,15 @@ const TaskFlow: React.FC<IProps> = (props) => {
                           <Space>
                             {statusContent?.text}
                             {isExternalFlow && (
-                              <a href={externalFlowInstanceUrl} target="_blank" rel="noreferrer">
+                              <a
+                                href={externalFlowInstanceUrl}
+                                target="_blank"
+                                rel="noreferrer"
+                              >
                                 {
                                   formatMessage({
                                     id: 'odc.component.CommonTaskDetailModal.TaskFlow.ViewApprovalDetails',
-                                    defaultMessage: '查看审批详情',
+                                    defaultMessage: '查看审批详情'
                                   })
                                   /*查看审批详情*/
                                 }
@@ -676,7 +707,7 @@ const TaskFlow: React.FC<IProps> = (props) => {
                           <Descriptions.Item
                             label={formatMessage({
                               id: 'odc.component.CommonTaskDetailModal.TaskFlow.HandlingComments',
-                              defaultMessage: '处理意见',
+                              defaultMessage: '处理意见'
                             })}
 
                             /*处理意见*/
@@ -689,7 +720,7 @@ const TaskFlow: React.FC<IProps> = (props) => {
                           <Descriptions.Item
                             label={formatMessage({
                               id: 'odc.component.CommonTaskDetailModal.TaskFlow.ProcessingTime',
-                              defaultMessage: '处理时间',
+                              defaultMessage: '处理时间'
                             })}
 
                             /*处理时间*/
@@ -702,7 +733,7 @@ const TaskFlow: React.FC<IProps> = (props) => {
                           <Descriptions.Item
                             label={formatMessage({
                               id: 'odc.component.CommonTaskDetailModal.TaskFlow.Deadline',
-                              defaultMessage: '截止时间',
+                              defaultMessage: '截止时间'
                             })}
 
                             /*截至时间*/
@@ -723,7 +754,7 @@ const TaskFlow: React.FC<IProps> = (props) => {
         <Step
           title={formatMessage({
             id: 'odc.component.CommonTaskDetailModal.TaskFlow.Completed',
-            defaultMessage: '完成',
+            defaultMessage: '完成'
           })}
           /*完成*/ description={
             completedNode?.hasDescription && (
@@ -732,7 +763,7 @@ const TaskFlow: React.FC<IProps> = (props) => {
                   <Descriptions.Item
                     label={formatMessage({
                       id: 'odc.component.CommonTaskDetailModal.TaskFlow.ProcessingStatus',
-                      defaultMessage: '处理状态',
+                      defaultMessage: '处理状态'
                     })}
 
                     /*处理状态*/
@@ -740,7 +771,7 @@ const TaskFlow: React.FC<IProps> = (props) => {
                     {
                       formatMessage({
                         id: 'odc.component.CommonTaskDetailModal.TaskFlow.TaskCompleted',
-                        defaultMessage: '任务已完成',
+                        defaultMessage: '任务已完成'
                       })
 
                       /*任务已完成*/
@@ -749,13 +780,15 @@ const TaskFlow: React.FC<IProps> = (props) => {
                   <Descriptions.Item
                     label={formatMessage({
                       id: 'odc.component.CommonTaskDetailModal.TaskFlow.ProcessingTime',
-                      defaultMessage: '处理时间',
+                      defaultMessage: '处理时间'
                     })}
 
                     /*处理时间*/
                   >
                     {getLocalFormatDateTime(
-                      isLogicDbChangeTask ? flowDetail?.completeTime : task?.completeTime,
+                      isLogicDbChangeTask
+                        ? flowDetail?.completeTime
+                        : task?.completeTime
                     )}
                   </Descriptions.Item>
                 </Descriptions>

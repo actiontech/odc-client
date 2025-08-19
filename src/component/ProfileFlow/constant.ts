@@ -17,7 +17,7 @@ export const INIT_HEIGHT_GAP = 16;
 export const subNodeSortType = {
   BY_DURATION: 'duration',
   BY_OUTPUT: 'output',
-  BY_MAX_MEMORY: 'maxMemory',
+  BY_MAX_MEMORY: 'maxMemory'
 };
 
 // 子节点信息汇总
@@ -27,23 +27,23 @@ export const subNodesSortMap = {
   [subNodeSortType.BY_DURATION]: {
     label: formatMessage({
       id: 'src.component.ProfileFlow.C966E64A',
-      defaultMessage: '按 DB 耗时排序',
-    }),
+      defaultMessage: '按 DB 耗时排序'
+    })
   },
   [subNodeSortType.BY_MAX_MEMORY]: {
     label: formatMessage({
       id: 'src.component.ProfileFlow.C4791007',
-      defaultMessage: '按内存排序',
+      defaultMessage: '按内存排序'
     }),
-    objectKey: 'Max memory',
+    objectKey: 'Max memory'
   },
   [subNodeSortType.BY_OUTPUT]: {
     label: formatMessage({
       id: 'src.component.ProfileFlow.6B28FD92',
-      defaultMessage: '按吐行排序',
+      defaultMessage: '按吐行排序'
     }),
-    objectKey: 'Output rows',
-  },
+    objectKey: 'Output rows'
+  }
 };
 
 export const CPU_TIME = 'CPU time';

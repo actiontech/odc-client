@@ -21,7 +21,7 @@ import {
   EllipsisOutlined,
   ExclamationCircleFilled,
   LoadingOutlined,
-  StopFilled,
+  StopFilled
 } from '@ant-design/icons';
 import { Space, Tooltip } from 'antd';
 import { EMessageStatusMap } from './interface';
@@ -38,62 +38,64 @@ export const MessageStatus: React.FC<{
             background: 'var(--function-gold6-color)',
             borderRadius: '10px',
             padding: 1,
-            fontSize: 10,
+            fontSize: 10
           }}
         />
-      ),
+      )
     },
     [EMessageStatus.SENDING]: {
       icon: (
         <LoadingOutlined
           style={{
-            color: 'var(--icon-blue-color)',
+            color: 'var(--icon-blue-color)'
           }}
         />
-      ),
+      )
     },
     [EMessageStatus.SENT_SUCCESSFULLY]: {
       icon: (
         <CheckCircleFilled
           style={{
-            color: 'var(--icon-green-color)',
+            color: 'var(--icon-green-color)'
           }}
         />
-      ),
+      )
     },
     [EMessageStatus.SENT_FAILED]: {
       icon: (
         <CloseCircleFilled
           style={{
-            color: 'var(--function-red6-color)',
+            color: 'var(--function-red6-color)'
           }}
         />
-      ),
+      )
     },
     [EMessageStatus.THROWN]: {
       icon: (
         <StopFilled
           style={{
-            color: 'var(--neutral-black45-color)',
+            color: 'var(--neutral-black45-color)'
           }}
         />
-      ),
-    },
+      )
+    }
   };
   return (
     <Space>
       <div>{StatusIconMap?.[message?.status]?.icon}</div>
       <div>{EMessageStatusMap?.[message?.status]}</div>
-      {![EMessageStatus.CREATED, EMessageStatus.SENDING, EMessageStatus.SENT_SUCCESSFULLY].includes(
-        message?.status,
-      ) &&
+      {![
+        EMessageStatus.CREATED,
+        EMessageStatus.SENDING,
+        EMessageStatus.SENT_SUCCESSFULLY
+      ].includes(message?.status) &&
         message?.errorMessage && (
           <div>
             <Tooltip title={message?.errorMessage}>
               <ExclamationCircleFilled
                 style={{
                   color: 'var(--function-gold6-color)',
-                  cursor: 'pointer',
+                  cursor: 'pointer'
                 }}
               />
             </Tooltip>

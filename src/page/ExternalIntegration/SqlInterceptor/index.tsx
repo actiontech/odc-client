@@ -18,17 +18,24 @@ import {
   deleteIntegration,
   getIntegrationDetail,
   getIntegrationList,
-  setIntegration,
+  setIntegration
 } from '@/common/network/manager';
 import { Acess, systemUpdatePermissions } from '@/component/Acess';
 import Action from '@/component/Action';
 import CommonTable from '@/component/CommonTable';
-import type { ITableInstance, ITableLoadOptions } from '@/component/CommonTable/interface';
+import type {
+  ITableInstance,
+  ITableLoadOptions
+} from '@/component/CommonTable/interface';
 import { IOperationOptionType } from '@/component/CommonTable/interface';
 import CommonDetailModal from '@/component/Manage/DetailModal';
 import StatusSwitch from '@/component/StatusSwitch';
 import type { IManagerIntegration, IResponseData } from '@/d.ts';
-import { IManagePagesKeys, IManagerResourceType, IntegrationType } from '@/d.ts';
+import {
+  IManagePagesKeys,
+  IManagerResourceType,
+  IntegrationType
+} from '@/d.ts';
 import { IPageType } from '@/d.ts/_index';
 import type { SettingStore } from '@/store/setting';
 import { formatMessage } from '@/util/intl';
@@ -48,19 +55,19 @@ const pageMeta = {
   [IPageType.ExternalIntegration_Sql]: {
     title: formatMessage({
       id: 'odc.ExternalIntegration.SqlInterceptor.SqlAuditIntegration',
-      defaultMessage: 'SQL 审核集成',
+      defaultMessage: 'SQL 审核集成'
     }), //SQL 审核集成
     type: IntegrationType.SQL_INTERCEPTOR,
-    template: SQL_INTERCEPTOR_TEMPLATE,
+    template: SQL_INTERCEPTOR_TEMPLATE
   },
   [IPageType.ExternalIntegration_Approval]: {
     title: formatMessage({
       id: 'odc.ExternalIntegration.SqlInterceptor.ApprovalIntegration',
-      defaultMessage: '审批集成',
+      defaultMessage: '审批集成'
     }), //审批集成
     type: IntegrationType.APPROVAL,
-    template: APPROVAL_TEMPLATE,
-  },
+    template: APPROVAL_TEMPLATE
+  }
 };
 
 interface IProps {
@@ -114,7 +121,7 @@ const SqlInterceptor: React.FC<IProps> = (props) => {
   const handleStatusChange = (enabled: boolean, data: IManagerIntegration) => {
     handleEnable({
       enabled,
-      data,
+      data
     });
   };
 
@@ -122,11 +129,14 @@ const SqlInterceptor: React.FC<IProps> = (props) => {
     setDetailModalVisible(false);
   };
 
-  const handleEnable = async (param: { data: IManagerIntegration; enabled: boolean }) => {
+  const handleEnable = async (param: {
+    data: IManagerIntegration;
+    enabled: boolean;
+  }) => {
     const { data, enabled } = param;
     const res = await setIntegration({
       id: data.id,
-      enabled,
+      enabled
     });
 
     if (res) {
@@ -134,12 +144,12 @@ const SqlInterceptor: React.FC<IProps> = (props) => {
         enabled
           ? formatMessage({
               id: 'odc.ExternalIntegration.SqlInterceptor.Enabled',
-              defaultMessage: '启用成功',
+              defaultMessage: '启用成功'
             }) //启用成功
           : formatMessage({
               id: 'odc.ExternalIntegration.SqlInterceptor.DisabledSuccessfully',
-              defaultMessage: '停用成功',
-            }), //停用成功
+              defaultMessage: '停用成功'
+            }) //停用成功
       );
       reloadData();
     } else {
@@ -147,18 +157,24 @@ const SqlInterceptor: React.FC<IProps> = (props) => {
         enabled
           ? formatMessage({
               id: 'odc.ExternalIntegration.SqlInterceptor.FailedToEnable',
-              defaultMessage: '启用失败',
+              defaultMessage: '启用失败'
             }) //启用失败
           : formatMessage({
               id: 'odc.ExternalIntegration.SqlInterceptor.DisableFailed',
-              defaultMessage: '停用失败',
-            }), //停用失败
+              defaultMessage: '停用失败'
+            }) //停用失败
       );
     }
   };
 
   const loadData = async (args: ITableLoadOptions) => {
-    const { searchValue = '', filters, sorter, pagination, pageSize } = args ?? {};
+    const {
+      searchValue = '',
+      filters,
+      sorter,
+      pagination,
+      pageSize
+    } = args ?? {};
     const { enabled } = filters ?? {};
     const { column, order } = sorter ?? {};
     const { current = 1 } = pagination ?? {};
@@ -169,13 +185,15 @@ const SqlInterceptor: React.FC<IProps> = (props) => {
       name: searchValue,
       sort: column?.dataIndex,
       page: current,
-      size: pageSize,
+      size: pageSize
     };
 
     // enabled filter
     data.enabled = enabled?.length ? enabled : undefined;
     // sorter
-    data.sort = column ? `${column.dataIndex},${order === 'ascend' ? 'asc' : 'desc'}` : undefined;
+    data.sort = column
+      ? `${column.dataIndex},${order === 'ascend' ? 'asc' : 'desc'}`
+      : undefined;
     const list = await getIntegrationList(data);
     setList(list);
   };
@@ -199,8 +217,8 @@ const SqlInterceptor: React.FC<IProps> = (props) => {
       message.success(
         formatMessage({
           id: 'odc.ExternalIntegration.SqlInterceptor.DeletedSuccessfully',
-          defaultMessage: '删除成功',
-        }), //删除成功
+          defaultMessage: '删除成功'
+        }) //删除成功
       );
       handleCloseAndReload();
     }
@@ -211,23 +229,27 @@ const SqlInterceptor: React.FC<IProps> = (props) => {
       title: formatMessage(
         {
           id: 'odc.ExternalIntegration.SqlInterceptor.AreYouSureYouWant',
-          defaultMessage: '是否确认删除{title}？',
+          defaultMessage: '是否确认删除{title}？'
         },
-        { title },
+        { title }
       ), //`确认要删除${title}吗？`
-      icon: <ExclamationCircleFilled style={{ color: 'var(--icon-orange-color)' }} />,
+      icon: (
+        <ExclamationCircleFilled
+          style={{ color: 'var(--icon-orange-color)' }}
+        />
+      ),
       cancelText: formatMessage({
         id: 'odc.ExternalIntegration.SqlInterceptor.Cancel',
-        defaultMessage: '取消',
+        defaultMessage: '取消'
       }), //取消
       okText: formatMessage({
         id: 'odc.ExternalIntegration.SqlInterceptor.Ok',
-        defaultMessage: '确定',
+        defaultMessage: '确定'
       }), //确定
       centered: true,
       onOk: () => {
         handleConfirmDelete(param as number);
-      },
+      }
     });
   };
 
@@ -236,31 +258,31 @@ const SqlInterceptor: React.FC<IProps> = (props) => {
       {
         title: formatMessage({
           id: 'odc.ExternalIntegration.SqlInterceptor.ConfigurationName',
-          defaultMessage: '配置名称',
+          defaultMessage: '配置名称'
         }), //配置名称
         dataIndex: 'name',
         className: styles.title,
         key: 'name',
         ellipsis: true,
-        fixed: 'left' as FixedType,
+        fixed: 'left' as FixedType
       },
 
       {
         title: formatMessage({
           id: 'odc.ExternalIntegration.SqlInterceptor.CreationTime',
-          defaultMessage: '创建时间',
+          defaultMessage: '创建时间'
         }), //创建时间
         width: 190,
         ellipsis: true,
         key: 'updateTime',
         dataIndex: 'updateTime',
         sorter: true,
-        render: (updateTime) => getLocalFormatDateTime(updateTime),
+        render: (updateTime) => getLocalFormatDateTime(updateTime)
       },
       {
         title: formatMessage({
           id: 'odc.ExternalIntegration.SqlInterceptor.Status',
-          defaultMessage: '状态',
+          defaultMessage: '状态'
         }), //状态
         width: 115,
         ellipsis: true,
@@ -270,18 +292,18 @@ const SqlInterceptor: React.FC<IProps> = (props) => {
           {
             text: formatMessage({
               id: 'odc.ExternalIntegration.SqlInterceptor.Enable',
-              defaultMessage: '启用',
+              defaultMessage: '启用'
             }), //启用
-            value: true,
+            value: true
           },
 
           {
             text: formatMessage({
               id: 'odc.ExternalIntegration.SqlInterceptor.Disable',
-              defaultMessage: '停用',
+              defaultMessage: '停用'
             }), //停用
-            value: false,
-          },
+            value: false
+          }
         ],
 
         render: (enabled, record) => {
@@ -296,12 +318,12 @@ const SqlInterceptor: React.FC<IProps> = (props) => {
               }}
             />
           );
-        },
+        }
       },
       {
         title: formatMessage({
           id: 'odc.ExternalIntegration.SqlInterceptor.Operation',
-          defaultMessage: '操作',
+          defaultMessage: '操作'
         }), //操作
         width: 124,
         key: 'action',
@@ -316,11 +338,13 @@ const SqlInterceptor: React.FC<IProps> = (props) => {
               {
                 formatMessage({
                   id: 'odc.ExternalIntegration.SqlInterceptor.View',
-                  defaultMessage: '查看',
+                  defaultMessage: '查看'
                 }) /*查看*/
               }
             </Action.Link>
-            <Acess {...systemUpdatePermissions[IManagerResourceType.integration]}>
+            <Acess
+              {...systemUpdatePermissions[IManagerResourceType.integration]}
+            >
               <Action.Group>
                 <Action.Link
                   onClick={async () => {
@@ -330,7 +354,7 @@ const SqlInterceptor: React.FC<IProps> = (props) => {
                   {
                     formatMessage({
                       id: 'odc.ExternalIntegration.SqlInterceptor.Edit',
-                      defaultMessage: '编辑',
+                      defaultMessage: '编辑'
                     }) /*编辑*/
                   }
                 </Action.Link>
@@ -343,15 +367,15 @@ const SqlInterceptor: React.FC<IProps> = (props) => {
                   {
                     formatMessage({
                       id: 'odc.ExternalIntegration.SqlInterceptor.Delete',
-                      defaultMessage: '删除',
+                      defaultMessage: '删除'
                     }) /*删除*/
                   }
                 </Action.Link>
               </Action.Group>
             </Acess>
           </Action.Group>
-        ),
-      },
+        )
+      }
     ];
   };
 
@@ -368,16 +392,16 @@ const SqlInterceptor: React.FC<IProps> = (props) => {
                 message: formatMessage({
                   id: 'odc.ExternalIntegration.SqlInterceptor.FollowTheSecuritySpecificationSql',
                   defaultMessage:
-                    '请按照 安全规范 - SQL 开发规范 - SQL 窗口规则 路径，使用您已配置并开启的 SQL 拦截集成',
-                }), //请按照 安全规范 - SQL 开发规范 - SQL 窗口规则 路径，使用您已配置并开启的 SQL 拦截集成
+                    '请按照 安全规范 - SQL 开发规范 - SQL 窗口规则 路径，使用您已配置并开启的 SQL 拦截集成'
+                }) //请按照 安全规范 - SQL 开发规范 - SQL 窗口规则 路径，使用您已配置并开启的 SQL 拦截集成
               }
             : null
         }
         filterContent={{
           searchPlaceholder: formatMessage({
             id: 'odc.ExternalIntegration.SqlInterceptor.EnterAConfigurationName',
-            defaultMessage: '请输入配置名称',
-          }), //请输入配置名称
+            defaultMessage: '请输入配置名称'
+          }) //请输入配置名称
         }}
         operationContent={{
           options: [
@@ -389,18 +413,18 @@ const SqlInterceptor: React.FC<IProps> = (props) => {
                     formatMessage(
                       {
                         id: 'odc.ExternalIntegration.SqlInterceptor.CreateTitle',
-                        defaultMessage: '新建{title}',
+                        defaultMessage: '新建{title}'
                       },
-                      { title },
+                      { title }
                     ) /*新建{title}*/
                   }
                 </span>
               ),
 
               isPrimary: true,
-              onClick: handleCreate,
-            },
-          ],
+              onClick: handleCreate
+            }
+          ]
         }}
         onLoad={loadData}
         onChange={loadData}
@@ -410,8 +434,8 @@ const SqlInterceptor: React.FC<IProps> = (props) => {
           rowKey: 'id',
           pagination: {
             current: list?.page?.number,
-            total: list?.page?.totalElements,
-          },
+            total: list?.page?.totalElements
+          }
         }}
       />
 
@@ -444,7 +468,7 @@ const SqlInterceptor: React.FC<IProps> = (props) => {
               {
                 formatMessage({
                   id: 'odc.ExternalIntegration.SqlInterceptor.Edit',
-                  defaultMessage: '编辑',
+                  defaultMessage: '编辑'
                 }) /*编辑*/
               }
             </Button>
@@ -452,7 +476,7 @@ const SqlInterceptor: React.FC<IProps> = (props) => {
               {
                 formatMessage({
                   id: 'odc.ExternalIntegration.SqlInterceptor.Close',
-                  defaultMessage: '关闭',
+                  defaultMessage: '关闭'
                 }) /*关闭*/
               }
             </Button>

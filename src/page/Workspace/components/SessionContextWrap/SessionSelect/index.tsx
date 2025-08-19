@@ -20,7 +20,11 @@ import SessionContext from '../context';
 import { DatabaseGroup } from '@/d.ts/database';
 
 import ConnectionPopover from '@/component/ConnectionPopover';
-import Icon, { AimOutlined, DownOutlined, LoadingOutlined } from '@ant-design/icons';
+import Icon, {
+  AimOutlined,
+  DownOutlined,
+  LoadingOutlined
+} from '@ant-design/icons';
 import { Divider, Popover, Space, Spin, Tooltip } from 'antd';
 import styles from './index.less';
 
@@ -50,7 +54,13 @@ interface IProps {
 }
 
 const SessionSelect: React.FC<IProps> = (props) => {
-  const { readonly, feature, supportLocation, isIncludeLogicalDb = true, pageStore } = props;
+  const {
+    readonly,
+    feature,
+    supportLocation,
+    isIncludeLogicalDb = true,
+    pageStore
+  } = props;
   const context = useContext(SessionContext);
   const resourceTreeContext = useContext(ResourceTreeContext);
   const activityContext = useContext(ActivityBarContext);
@@ -59,7 +69,8 @@ const SessionSelect: React.FC<IProps> = (props) => {
   }, []);
 
   function focusDataBase(e: React.MouseEvent) {
-    const datasourceId = context?.session?.odcDatabase?.dataSource?.id || context?.datasourceId;
+    const datasourceId =
+      context?.session?.odcDatabase?.dataSource?.id || context?.datasourceId;
     activityContext.setActiveKey(ActivityBarItemType.Database);
     const obj = getShouldExpandedKeysByPage({
       page: pageStore.activePage,
@@ -69,13 +80,13 @@ const SessionSelect: React.FC<IProps> = (props) => {
       databaseList: resourceTreeContext.databaseList,
       setGroupMode: (group: DatabaseGroup) => {
         resourceTreeContext.setGroupMode(group);
-      },
+      }
     });
     resourceTreeContext.setSelectDatasourceId(datasourceId);
     resourceTreeContext.setShouldExpandedKeys(obj?.shouldExpandedKeys || []);
     resourceTreeContext.setCurrentObject({
       value: obj?.currentKey,
-      type: obj?.currentResourceNodeType,
+      type: obj?.currentResourceNodeType
     });
     e.stopPropagation();
     e.preventDefault();
@@ -97,7 +108,9 @@ const SessionSelect: React.FC<IProps> = (props) => {
   function renderSessionInfo() {
     const fromDataSource = context.datasourceMode;
 
-    const dsStyle = getDataSourceStyleByConnectType(context?.session?.connection?.type);
+    const dsStyle = getDataSourceStyleByConnectType(
+      context?.session?.connection?.type
+    );
     const databaseItem = (
       <Popover
         overlayClassName={styles.pop}
@@ -111,10 +124,18 @@ const SessionSelect: React.FC<IProps> = (props) => {
         }
       >
         {fromDataSource ? (
-          <Space style={{ lineHeight: '22px' }} className={styles.link} size={4}>
+          <Space
+            style={{ lineHeight: '22px' }}
+            className={styles.link}
+            size={4}
+          >
             <Icon
               component={dsStyle?.icon?.component}
-              style={{ fontSize: 16, verticalAlign: 'middle', color: dsStyle?.icon?.color }}
+              style={{
+                fontSize: 16,
+                verticalAlign: 'middle',
+                color: dsStyle?.icon?.color
+              }}
             />
 
             <span style={{ lineHeight: 1, color: 'var(--text-color-primary)' }}>
@@ -123,20 +144,28 @@ const SessionSelect: React.FC<IProps> = (props) => {
             <DownOutlined />
           </Space>
         ) : (
-          <Space style={{ lineHeight: '22px' }} className={styles.link} size={4}>
+          <Space
+            style={{ lineHeight: '22px' }}
+            className={styles.link}
+            size={4}
+          >
             <Icon
               component={dsStyle?.dbIcon?.component}
               style={{ fontSize: 16, verticalAlign: 'middle' }}
             />
 
-            <span style={{ lineHeight: 1 }}>{context?.session?.odcDatabase?.name}</span>
+            <span style={{ lineHeight: 1 }}>
+              {context?.session?.odcDatabase?.name}
+            </span>
             <DownOutlined />
           </Space>
         )}
       </Popover>
     );
 
-    const aimItem = <AimOutlined className={styles.aim} onClick={focusDataBase} />;
+    const aimItem = (
+      <AimOutlined className={styles.aim} onClick={focusDataBase} />
+    );
     const datasourceAndProjectItem = !fromDataSource ? (
       <Space
         size={1}
@@ -149,7 +178,7 @@ const SessionSelect: React.FC<IProps> = (props) => {
             <span className={styles.label}>
               {formatMessage({
                 id: 'src.page.Workspace.components.SessionContextWrap.SessionSelect.38EA55F4' /*项目：*/,
-                defaultMessage: '项目：',
+                defaultMessage: '项目：'
               })}
             </span>
             <Tooltip
@@ -168,7 +197,7 @@ const SessionSelect: React.FC<IProps> = (props) => {
             <span className={styles.label}>
               {formatMessage({
                 id: 'src.page.Workspace.components.SessionContextWrap.SessionSelect.CD007EC1' /*数据源：*/,
-                defaultMessage: '数据源：',
+                defaultMessage: '数据源：'
               })}
             </span>
             <Tooltip
@@ -192,7 +221,9 @@ const SessionSelect: React.FC<IProps> = (props) => {
           <div className={classNames(styles.SessionInfo)}>
             {databaseItem}
             {supportLocation && <>{aimItem}</>}
-            <div className={styles.datasourceAndProjectItemBox}>{datasourceAndProjectItem}</div>
+            <div className={styles.datasourceAndProjectItemBox}>
+              {datasourceAndProjectItem}
+            </div>
           </div>
         </>
       );
@@ -207,7 +238,9 @@ const SessionSelect: React.FC<IProps> = (props) => {
           <div>{databaseItem}</div>
         </SessionDropdown>
         <div>{aimItem}</div>
-        <div className={styles.datasourceAndProjectItemBox}>{datasourceAndProjectItem}</div>
+        <div className={styles.datasourceAndProjectItemBox}>
+          {datasourceAndProjectItem}
+        </div>
       </div>
     );
   }
@@ -218,7 +251,8 @@ const SessionSelect: React.FC<IProps> = (props) => {
         <div
           style={{
             background:
-              EnvColorMap[context?.session?.odcDatabase?.environment?.style]?.lineBackground,
+              EnvColorMap[context?.session?.odcDatabase?.environment?.style]
+                ?.lineBackground
           }}
           className={styles.line}
         >
@@ -227,7 +261,7 @@ const SessionSelect: React.FC<IProps> = (props) => {
               {
                 formatMessage({
                   id: 'odc.SessionContextWrap.SessionSelect.SelectADatabase',
-                  defaultMessage: '请选择数据库',
+                  defaultMessage: '请选择数据库'
                 }) /*请选择数据库*/
               }
             </a>
@@ -237,7 +271,8 @@ const SessionSelect: React.FC<IProps> = (props) => {
         <div
           style={{
             background:
-              EnvColorMap[context?.session?.odcDatabase?.environment?.style]?.lineBackground,
+              EnvColorMap[context?.session?.odcDatabase?.environment?.style]
+                ?.lineBackground
           }}
           className={styles.line}
         >

@@ -19,11 +19,15 @@ import snippetStore, {
   EnumSnippetAction,
   ISnippet,
   SNIPPET_ACTIONS,
-  SNIPPET_TYPES,
+  SNIPPET_TYPES
 } from '@/store/snippet';
 import { formatMessage } from '@/util/intl';
 import { getSnippetText, getWrapedSnippetBody } from '@/util/snippet';
-import { CopyOutlined, EllipsisOutlined, QuestionCircleOutlined } from '@ant-design/icons';
+import {
+  CopyOutlined,
+  EllipsisOutlined,
+  QuestionCircleOutlined
+} from '@ant-design/icons';
 import { Card, Dropdown, message, Popover, Typography } from 'antd';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import styles from './index.less';
@@ -47,22 +51,26 @@ export default ({ snippet, handleSnippetMenuClick }, {}) => {
                 {
                   formatMessage({
                     id: 'odc.component.SnippetCard.Syntax',
-                    defaultMessage: '代码',
+                    defaultMessage: '代码'
                   }) /*代码片段*/
                 }
               </dt>
               <dd>
-                <pre style={{ maxHeight: 300 }}>{getSnippetText(snippet.body)}</pre>
+                <pre style={{ maxHeight: 300 }}>
+                  {getSnippetText(snippet.body)}
+                </pre>
               </dd>
               <dt>
                 {
                   formatMessage({
                     id: 'odc.component.SnippetCard.Description',
-                    defaultMessage: '描述',
+                    defaultMessage: '描述'
                   }) /*描述*/
                 }
               </dt>
-              <dd style={{ wordBreak: 'break-all' }}>{snippet.description || 'no descrption'}</dd>
+              <dd style={{ wordBreak: 'break-all' }}>
+                {snippet.description || 'no descrption'}
+              </dd>
             </dl>
             <footer>{snippet.snippetType}</footer>
           </div>
@@ -82,19 +90,19 @@ export default ({ snippet, handleSnippetMenuClick }, {}) => {
       <Dropdown
         menu={{
           style: {
-            width: '100px',
+            width: '100px'
           },
           onClick: (item) => {
             handleSnippetMenuClick(item.key, snippet);
           },
-          items: SNIPPET_ACTIONS.filter((action) => action.key !== EnumSnippetAction.CREATE).map(
-            (action) => {
-              return {
-                key: action.key,
-                label: action.name,
-              };
-            },
-          ),
+          items: SNIPPET_ACTIONS.filter(
+            (action) => action.key !== EnumSnippetAction.CREATE
+          ).map((action) => {
+            return {
+              key: action.key,
+              label: action.name
+            };
+          })
         }}
         placement="bottomRight"
       >
@@ -104,7 +112,9 @@ export default ({ snippet, handleSnippetMenuClick }, {}) => {
   }
 
   function renderSnippetTypeName(snippet: ISnippet) {
-    const snippetTypeItem = SNIPPET_TYPES.find((item) => item.key === snippet.snippetType);
+    const snippetTypeItem = SNIPPET_TYPES.find(
+      (item) => item.key === snippet.snippetType
+    );
     return snippetTypeItem.name;
   }
 
@@ -115,7 +125,7 @@ export default ({ snippet, handleSnippetMenuClick }, {}) => {
       onBegin={() => {
         snippetStore.snippetDragging = {
           ...snippet,
-          body: getWrapedSnippetBody(snippet.body),
+          body: getWrapedSnippetBody(snippet.body)
         };
       }}
     >
@@ -133,7 +143,9 @@ export default ({ snippet, handleSnippetMenuClick }, {}) => {
       >
         <div className={styles['snippet-card-desc']}>
           {snippet.description || (
-            <Typography.Paragraph ellipsis={{ rows: 2 }}>{snippet.body}</Typography.Paragraph>
+            <Typography.Paragraph ellipsis={{ rows: 2 }}>
+              {snippet.body}
+            </Typography.Paragraph>
           )}
         </div>
         <div className={styles['snippet-card-footer']}>
@@ -141,20 +153,20 @@ export default ({ snippet, handleSnippetMenuClick }, {}) => {
           <CopyToClipboard
             key="copy"
             options={{
-              format: 'text/html',
+              format: 'text/html'
             }}
             text={`<meta name='_!isODCSnippet_' content='yes' />${getWrapedSnippetBody(
-              snippet.body,
+              snippet.body
             )}`}
             onCopy={() => {
               message.success(
                 formatMessage(
                   {
                     id: 'odc.component.SnippetCard.SnippetprefixSyntaxHelpsCopySuccessfully',
-                    defaultMessage: '{snippetPrefix} 代码片段复制成功！',
+                    defaultMessage: '{snippetPrefix} 代码片段复制成功！'
                   },
-                  { snippetPrefix: snippet.prefix },
-                ), //`${snippet.prefix} 代码片段复制成功！`
+                  { snippetPrefix: snippet.prefix }
+                ) //`${snippet.prefix} 代码片段复制成功！`
               );
             }}
           >

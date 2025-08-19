@@ -18,7 +18,7 @@ import { DeleteOutlined } from '@ant-design/icons';
 
 export default function Delete({
   size = '13px',
-  onClick,
+  onClick
 }: {
   size?: string;
   onClick?: () => void;
@@ -26,7 +26,11 @@ export default function Delete({
   return (
     <DeleteOutlined
       onClick={onClick}
-      style={{ fontSize: size, cursor: 'pointer', color: 'var(--icon-color-normal)' }}
+      style={{
+        fontSize: size,
+        cursor: 'pointer',
+        color: 'var(--icon-color-normal)'
+      }}
     />
   );
 }

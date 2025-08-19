@@ -35,7 +35,7 @@ const TraceTreeTable: React.FC<{
   totalStartTimestamp,
   totalElapseMicroSeconds,
   handleNodeExpand,
-  countStepBySameParentKey,
+  countStepBySameParentKey
 }) => {
   return (
     <div className={styles.traceTreeTable}>
@@ -46,14 +46,24 @@ const TraceTreeTable: React.FC<{
         <div className={styles.stepContainer}>
           <div className={styles.timeStep}>0 us</div>
           <div className={styles.timeStep}>
-            {formatTimeTemplatMicroSeconds(Math.floor(0.25 * totalElapseMicroSeconds))}
+            {formatTimeTemplatMicroSeconds(
+              Math.floor(0.25 * totalElapseMicroSeconds)
+            )}
           </div>
           <div className={styles.timeStep}>
-            {formatTimeTemplatMicroSeconds(Math.floor(0.5 * totalElapseMicroSeconds))}
+            {formatTimeTemplatMicroSeconds(
+              Math.floor(0.5 * totalElapseMicroSeconds)
+            )}
           </div>
           <div className={styles.timeStep}>
-            <span>{formatTimeTemplatMicroSeconds(Math.floor(0.75 * totalElapseMicroSeconds))}</span>
-            <span>{formatTimeTemplatMicroSeconds(totalElapseMicroSeconds)}</span>
+            <span>
+              {formatTimeTemplatMicroSeconds(
+                Math.floor(0.75 * totalElapseMicroSeconds)
+              )}
+            </span>
+            <span>
+              {formatTimeTemplatMicroSeconds(totalElapseMicroSeconds)}
+            </span>
           </div>
         </div>
       </div>

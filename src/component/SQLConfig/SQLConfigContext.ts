@@ -22,7 +22,7 @@ const SQLConfigContext = React.createContext<{
   pageKey: string;
 }>({
   session: null,
-  pageKey: null,
+  pageKey: null
 });
 
 export default SQLConfigContext;

@@ -15,7 +15,10 @@
  */
 
 import { listDatabases } from '@/common/network/database';
-import { getTableColumnList, getTableListByDatabaseName } from '@/common/network/table';
+import {
+  getTableColumnList,
+  getTableListByDatabaseName
+} from '@/common/network/table';
 import { getTriggerCreateSQL } from '@/common/network/trigger';
 import { ITriggerBaseInfoForm } from '@/d.ts';
 import { openCreateTriggerSQLPage } from '@/store/helper/page';
@@ -41,7 +44,7 @@ const CollapseHeader = ({ status, text }: ICollapseHeader) => {
     [StepStatus.EDITING]: EditOutlined,
     [StepStatus.SAVED]: CheckOutlined,
     [StepStatus.UNSAVED]: CheckOutlined,
-    [StepStatus.ERROR]: CloseOutlined,
+    [StepStatus.ERROR]: CloseOutlined
   };
   const Icon = collapseHeaderIconMap[status];
   return (
@@ -57,11 +60,14 @@ const CollapseHeader = ({ status, text }: ICollapseHeader) => {
 const customPanelStyle = {
   background: 'var(--tab-background-color)',
   borderRadius: 4,
-  overflow: 'hidden',
+  overflow: 'hidden'
 };
 @inject('sqlStore', 'pageStore', 'sessionManagerStore')
 @observer
-class CreateTriggerPage extends Component<IProps & { session: SessionStore }, IState> {
+class CreateTriggerPage extends Component<
+  IProps & { session: SessionStore },
+  IState
+> {
   public readonly state = {
     baseInfo: null,
     adancedInfo: null,
@@ -70,7 +76,7 @@ class CreateTriggerPage extends Component<IProps & { session: SessionStore }, IS
     baseInfoStatus: StepStatus.EDITING,
     advancedStatus: StepStatus.UNSAVED,
     activeKey: Step.BASEINFO,
-    databases: [],
+    databases: []
   };
 
   private advancedInfoFormRef = null;
@@ -78,7 +84,7 @@ class CreateTriggerPage extends Component<IProps & { session: SessionStore }, IS
   componentDidMount() {
     const {
       session,
-      params: { preData = null },
+      params: { preData = null }
     } = this.props;
     if (preData) {
       this.setState(
@@ -87,14 +93,14 @@ class CreateTriggerPage extends Component<IProps & { session: SessionStore }, IS
           adancedInfo: preData.adancedInfo,
           baseInfoStatus: StepStatus.SAVED,
           advancedStatus: StepStatus.SAVED,
-          activeKey: Step.ADVANCED,
+          activeKey: Step.ADVANCED
         },
         () => {
           const { baseInfo } = this.state;
           this.enableSubmit();
           this.loadSchemaMode(baseInfo?.schemaMode);
           this.loadColumns(baseInfo?.schemaName);
-        },
+        }
       );
     } else {
       this.loadSchemaMode(session?.odcDatabase?.name);
@@ -110,10 +116,10 @@ class CreateTriggerPage extends Component<IProps & { session: SessionStore }, IS
       null,
       null,
       null,
-      true,
+      true
     );
     this.setState({
-      databases: res?.contents || [],
+      databases: res?.contents || []
     });
   }
   private getStepStatus = (step: Step): StepStatus => {
@@ -132,12 +138,12 @@ class CreateTriggerPage extends Component<IProps & { session: SessionStore }, IS
     if (step === Step.BASEINFO) {
       this.setState({
         activeKey: Step.BASEINFO,
-        baseInfoStatus: status,
+        baseInfoStatus: status
       });
     } else if (step === Step.ADVANCED) {
       this.setState({
         activeKey: Step.ADVANCED,
-        advancedStatus: status,
+        advancedStatus: status
       });
     }
   };
@@ -153,7 +159,7 @@ class CreateTriggerPage extends Component<IProps & { session: SessionStore }, IS
     } // 切换 collapse
 
     this.setState({
-      activeKey: currentStep,
+      activeKey: currentStep
     });
   }; // 保存信息
 
@@ -164,14 +170,14 @@ class CreateTriggerPage extends Component<IProps & { session: SessionStore }, IS
       this.setState({
         baseInfo: info,
         baseInfoStatus: StepStatus.SAVED,
-        activeKey: Step.ADVANCED,
+        activeKey: Step.ADVANCED
       });
     } else if (step === Step.ADVANCED) {
       // 高级配置标记为已保存，并收起表单面板
       this.setState({
         adancedInfo: info,
         advancedStatus: StepStatus.SAVED,
-        activeKey: null,
+        activeKey: null
       });
     }
   }; // 是否允许提交表单
@@ -179,7 +185,9 @@ class CreateTriggerPage extends Component<IProps & { session: SessionStore }, IS
   private enableSubmit = (): boolean => {
     const { baseInfoStatus, advancedStatus } = this.state; // 基本信息完成，并且高级设置无错误就可以提交
 
-    return baseInfoStatus === StepStatus.SAVED && advancedStatus !== StepStatus.ERROR;
+    return (
+      baseInfoStatus === StepStatus.SAVED && advancedStatus !== StepStatus.ERROR
+    );
   }; // 最终提交创建表单
 
   public handleSubmit = async () => {
@@ -195,14 +203,14 @@ class CreateTriggerPage extends Component<IProps & { session: SessionStore }, IS
       triggerEvents,
       triggerColumns,
       referencesNewValue,
-      referencesOldValue,
+      referencesOldValue
     } = adancedInfo || {};
     const serverData = {
       ...baseInfo,
       triggerMode,
       triggerType,
       rowLevel: triggerGrade === 'row',
-      sqlExpression,
+      sqlExpression
     };
     const pass = this.setEvents(serverData, triggerEvents, triggerColumns);
 
@@ -221,16 +229,16 @@ class CreateTriggerPage extends Component<IProps & { session: SessionStore }, IS
       'TEST_TRIGGER',
       serverData,
       session?.sessionId,
-      session?.database?.dbName,
+      session?.database?.dbName
     );
     await openCreateTriggerSQLPage(
       sql,
       {
         baseInfo: { ...baseInfo },
-        adancedInfo: { ...adancedInfo },
+        adancedInfo: { ...adancedInfo }
       },
       session?.odcDatabase?.id,
-      session?.database?.dbName,
+      session?.database?.dbName
     );
 
     await pageStore.close(pageKey);
@@ -244,7 +252,7 @@ class CreateTriggerPage extends Component<IProps & { session: SessionStore }, IS
       for (let i = 0, len = columns.length; i < len; i++) {
         data.triggerEvents.push({
           dmlEvent: 'UPDATE',
-          column: columns[i],
+          column: columns[i]
         });
       }
     } // 除 UPDATE 事件外，其余的事件不需要和column关联
@@ -253,7 +261,7 @@ class CreateTriggerPage extends Component<IProps & { session: SessionStore }, IS
       if (events[i] !== 'UPDATE') {
         data.triggerEvents.push({
           dmlEvent: events[i],
-          column: null,
+          column: null
         });
       }
     }
@@ -265,14 +273,16 @@ class CreateTriggerPage extends Component<IProps & { session: SessionStore }, IS
       data.references = [];
     }
 
-    const index = data.references.findIndex((item) => item.referenceType === key);
+    const index = data.references.findIndex(
+      (item) => item.referenceType === key
+    );
 
     if (index !== -1) {
       data.references[index].referName = value;
     } else {
       data.references.push({
         referenceType: key,
-        referName: value,
+        referName: value
       });
     }
   };
@@ -287,7 +297,7 @@ class CreateTriggerPage extends Component<IProps & { session: SessionStore }, IS
     const tables = await getTableListByDatabaseName(session?.sessionId, value);
     this.setState({
       tables,
-      columns: [],
+      columns: []
     });
   };
 
@@ -298,15 +308,19 @@ class CreateTriggerPage extends Component<IProps & { session: SessionStore }, IS
 
   loadColumns = async (value: string) => {
     const { session } = this.props;
-    const columns = await getTableColumnList(value, session?.database?.dbName, session.sessionId);
+    const columns = await getTableColumnList(
+      value,
+      session?.database?.dbName,
+      session.sessionId
+    );
     this.setState({
-      columns,
+      columns
     });
   };
 
   resetColumns = () => {
     this.advancedInfoFormRef?.current?.setFieldsValue({
-      triggerColumns: [],
+      triggerColumns: []
     });
   };
 
@@ -317,14 +331,21 @@ class CreateTriggerPage extends Component<IProps & { session: SessionStore }, IS
   public render() {
     const {
       session,
-      params: { preData = null },
+      params: { preData = null }
     } = this.props;
     const sessionId = session?.sessionId;
     const dbName = session?.database?.dbName;
-    const { tables, columns, activeKey, baseInfoStatus, advancedStatus, databases } = this.state;
+    const {
+      tables,
+      columns,
+      activeKey,
+      baseInfoStatus,
+      advancedStatus,
+      databases
+    } = this.state;
     const defaultBaseInfo = {
       schemaType: 'TABLE',
-      schemaMode: dbName,
+      schemaMode: dbName
     };
 
     return (
@@ -334,7 +355,9 @@ class CreateTriggerPage extends Component<IProps & { session: SessionStore }, IS
             className={styles.collapse}
             accordion
             activeKey={activeKey}
-            onChange={this.handleStepChanged as (key: string | string[]) => void}
+            onChange={
+              this.handleStepChanged as (key: string | string[]) => void
+            }
           >
             <Panel
               showArrow={false}
@@ -343,7 +366,7 @@ class CreateTriggerPage extends Component<IProps & { session: SessionStore }, IS
                   status={baseInfoStatus}
                   text={formatMessage({
                     id: 'odc.components.CreateTriggerPage.StepBasicInformation',
-                    defaultMessage: '第一步：基本信息',
+                    defaultMessage: '第一步：基本信息'
                   })}
                   /*第一步：基本信息*/
                 />
@@ -358,8 +381,12 @@ class CreateTriggerPage extends Component<IProps & { session: SessionStore }, IS
                 reloadColumns={this.reloadColumns}
                 databases={databases}
                 tables={tables}
-                initialValues={preData?.baseInfo || (defaultBaseInfo as ITriggerBaseInfoForm)}
-                enableTriggerAlterStatus={session?.supportFeature?.enableTriggerAlterStatus}
+                initialValues={
+                  preData?.baseInfo || (defaultBaseInfo as ITriggerBaseInfoForm)
+                }
+                enableTriggerAlterStatus={
+                  session?.supportFeature?.enableTriggerAlterStatus
+                }
               />
             </Panel>
             <Panel
@@ -369,7 +396,7 @@ class CreateTriggerPage extends Component<IProps & { session: SessionStore }, IS
                   status={advancedStatus}
                   text={formatMessage({
                     id: 'odc.components.CreateTriggerPage.StepAdvancedSettings',
-                    defaultMessage: '第二步：高级设置',
+                    defaultMessage: '第二步：高级设置'
                   })}
                   /*第二步：高级设置*/
                 />
@@ -383,7 +410,9 @@ class CreateTriggerPage extends Component<IProps & { session: SessionStore }, IS
                 setStepStatus={this.setStepStatus}
                 setFormRef={this.setFormRef}
                 initialValues={preData?.adancedInfo}
-                enableTriggerReferences={session?.supportFeature?.enableTriggerReferences}
+                enableTriggerReferences={
+                  session?.supportFeature?.enableTriggerReferences
+                }
               />
             </Panel>
           </Collapse>
@@ -396,7 +425,7 @@ class CreateTriggerPage extends Component<IProps & { session: SessionStore }, IS
             {
               formatMessage({
                 id: 'odc.components.CreateTriggerPage.NextConfirmTheSqlStatement',
-                defaultMessage: '下一步：确认 SQL',
+                defaultMessage: '下一步：确认 SQL'
               }) /*下一步：确认SQL*/
             }
           </Button>

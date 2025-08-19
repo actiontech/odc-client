@@ -67,7 +67,7 @@ export function renderMd(docText: string) {
   };
   const insertBtnText = formatMessage({
     id: 'odc.components.TutorialPage.helper.InsertToWorkbench',
-    defaultMessage: '插入到工作台',
+    defaultMessage: '插入到工作台'
   }); //插入到工作台
   md.renderer.rules.code_block = function (tokens, idx, options, env, self) {
     const type = tokens[idx]?.info;
@@ -78,7 +78,9 @@ export function renderMd(docText: string) {
       defaultCodeRender(tokens, idx, options, env, self) +
       `<button data-insert='${Base64.encode(tokens[idx]?.content)}' class="${
         styles.codeBtn
-      }"><img src="${window.publicPath + 'img/doc_insert.svg'}" />${insertBtnText}</button>`
+      }"><img src="${
+        window.publicPath + 'img/doc_insert.svg'
+      }" />${insertBtnText}</button>`
     );
   };
 
@@ -92,7 +94,9 @@ export function renderMd(docText: string) {
       defaultFenceRender(tokens, idx, options, env, self) +
       `<button data-insert='${Base64.encode(tokens[idx]?.content)}' class="${
         styles.codeBtn
-      }"><img src="${window.publicPath + 'img/doc_insert.svg'}" />${insertBtnText}</button>`
+      }"><img src="${
+        window.publicPath + 'img/doc_insert.svg'
+      }" />${insertBtnText}</button>`
     );
   };
   return md.render(docText);

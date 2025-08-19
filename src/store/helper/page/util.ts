@@ -49,15 +49,19 @@ export function updatePage(pageKey, pageData: any, isDirty?: boolean) {
     pageKey,
     {
       isSaved: typeof isDirty == 'undefined' ? undefined : !isDirty,
-      startSaving: isSaved ? false : undefined,
+      startSaving: isSaved ? false : undefined
     },
-    pageData,
+    pageData
   );
 }
 /**
  * 更新scriptText
  */
-export function updatePageScriptText(pageKey, scriptText: string, isDirty: boolean = true) {
+export function updatePageScriptText(
+  pageKey,
+  scriptText: string,
+  isDirty: boolean = true
+) {
   updatePage(pageKey, { scriptText }, isDirty);
 }
 
@@ -67,7 +71,7 @@ export function updatePageScriptText(pageKey, scriptText: string, isDirty: boole
 export function updatePageByScriptId(
   scriptId: number | string,
   options: IPageOptions,
-  pageData: any,
+  pageData: any
 ) {
   const target = findPageByScriptIdAndType(scriptId);
   if (!target || !scriptId) {
@@ -78,7 +82,10 @@ export function updatePageByScriptId(
 
 export const debounceUpdatePageScriptText = debounce(updatePageScriptText, 200);
 
-export function movePagePostion(movePageKey: string, targetPositionKey: string) {
+export function movePagePostion(
+  movePageKey: string,
+  targetPositionKey: string
+) {
   if (movePageKey == targetPositionKey) {
     return;
   }

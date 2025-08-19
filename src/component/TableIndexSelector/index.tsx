@@ -25,14 +25,18 @@ import { Component } from 'react';
 import DragableColumn from './DragableColumn';
 import styles from './index.less';
 
-export const ColumnIcon = ({ dataShowType }: { dataShowType: ColumnShowType }) => (
+export const ColumnIcon = ({
+  dataShowType
+}: {
+  dataShowType: ColumnShowType;
+}) => (
   <Icon
     component={fieldIconMap[dataShowType]}
     style={{
       fontSize: 16,
       color: '#3FA3FF',
       marginRight: 4,
-      verticalAlign: 'middle',
+      verticalAlign: 'middle'
     }}
   />
 );
@@ -55,10 +59,14 @@ export default class TableIndexSelector extends Component<{
 }> {
   public handleAdd = (columnName: string) => {
     const { value, onChange } = this.props;
-    if (onChange && value && !value.filter((c) => c.columnName === columnName).length) {
+    if (
+      onChange &&
+      value &&
+      !value.filter((c) => c.columnName === columnName).length
+    ) {
       const updateValue = [...value].concat({
         dragIdx: dragIdxGenerator++,
-        columnName,
+        columnName
       });
       onChange(updateValue);
     }
@@ -82,8 +90,8 @@ export default class TableIndexSelector extends Component<{
         const updateValue = update(value, {
           $splice: [
             [dragIndex, 1],
-            [hoverIndex, 0, dragParam],
-          ],
+            [hoverIndex, 0, dragParam]
+          ]
         });
         onChange(updateValue);
       }
@@ -110,7 +118,7 @@ export default class TableIndexSelector extends Component<{
         <Column
           title={formatMessage({
             id: 'workspace.window.table.modal.index.columnNames1',
-            defaultMessage: '可选列',
+            defaultMessage: '可选列'
           })}
           render={() =>
             columns && columns.length ? (
@@ -123,7 +131,10 @@ export default class TableIndexSelector extends Component<{
                   <Col span={24}>
                     {c.dataType && (
                       <ColumnIcon
-                        dataShowType={convertDataTypeToDataShowType(c.dataType, dataTypes)}
+                        dataShowType={convertDataTypeToDataShowType(
+                          c.dataType,
+                          dataTypes
+                        )}
                       />
                     )}
 
@@ -140,7 +151,7 @@ export default class TableIndexSelector extends Component<{
         <Column
           title={formatMessage({
             id: 'workspace.window.table.modal.index.priority',
-            defaultMessage: '已选列（优先级从上到下）',
+            defaultMessage: '已选列（优先级从上到下）'
           })}
           render={() =>
             value && value.length ? (
@@ -149,7 +160,9 @@ export default class TableIndexSelector extends Component<{
                   indexColumn.dragIdx = dragIdxGenerator++;
                 }
                 // @ts-ignore
-                const column = columns.find((c) => c.columnName === indexColumn.columnName);
+                const column = columns.find(
+                  (c) => c.columnName === indexColumn.columnName
+                );
                 return (
                   column && (
                     <DragableColumn
@@ -157,7 +170,10 @@ export default class TableIndexSelector extends Component<{
                       id={indexColumn.dragIdx || 0}
                       index={index}
                       column={indexColumn}
-                      dataShowType={convertDataTypeToDataShowType(column.dataType, dataTypes)}
+                      dataShowType={convertDataTypeToDataShowType(
+                        column.dataType,
+                        dataTypes
+                      )}
                       handleDelete={this.handleDelete}
                       handleMove={this.handleMove}
                     />

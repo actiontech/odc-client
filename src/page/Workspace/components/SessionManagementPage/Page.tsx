@@ -22,5 +22,10 @@ interface IProps {
 }
 
 export default function SessionManagePage(props: IProps) {
-  return <SessionManage showDatasource={true} defaultDatasouceId={props?.params?.cid} />;
+  return (
+    <SessionManage
+      showDatasource={true}
+      defaultDatasouceId={props?.params?.cid}
+    />
+  );
 }

@@ -33,14 +33,17 @@ export function SessionPage({
   databaseId,
   readonly,
   useMaster,
-  supportLocation,
+  supportLocation
 }: IProps) {
   return (
     <SessionContextWrap useMaster={useMaster} defaultDatabaseId={databaseId}>
       {({ session }) => {
         return (
           <div className={styles.sessionWrap}>
-            <SessionSelect readonly={readonly} supportLocation={supportLocation} />
+            <SessionSelect
+              readonly={readonly}
+              supportLocation={supportLocation}
+            />
             <div key={session?.sessionId} className={styles.content}>
               {!session ? <WorkSpacePageLoading /> : children}
             </div>
@@ -55,7 +58,7 @@ export default function WrapSessionPage(
   Component,
   readonly?: boolean,
   useMaster?: boolean,
-  supportLocation?: boolean,
+  supportLocation?: boolean
 ) {
   return function WrapComponent(props) {
     return (

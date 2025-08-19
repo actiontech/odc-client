@@ -31,7 +31,7 @@ import {
   TABLE_INFO_BAR_HEIGHT,
   TABLE_PAGINATION_HEIGHT,
   TABLE_SMALL_HEAD_HEIGHT,
-  TABLE_TOOLBAR_HEIGHT,
+  TABLE_TOOLBAR_HEIGHT
 } from './const';
 import styles from './index.less';
 import type {
@@ -43,7 +43,7 @@ import type {
   ITableLoadOptions,
   ITitleContent,
   TablePaginationConfig,
-  TableProps,
+  TableProps
 } from './interface';
 import { CommonTableMode } from './interface';
 import { TableInfo } from './TableInfo';
@@ -93,7 +93,7 @@ interface IProps<RecordType> {
 
 const CommonTable: <RecordType extends object = any>(
   props: IProps<RecordType>,
-  ref: React.Ref<ITableInstance>,
+  ref: React.Ref<ITableInstance>
 ) => React.ReactElement = (props, ref) => {
   const tableRef = useRef(null);
   const {
@@ -110,40 +110,47 @@ const CommonTable: <RecordType extends object = any>(
     rowSelecter,
     showSelectedInfoBar = true,
     rowSelectedCallback = (selectedRowKeys: any[]) => {},
-    rowHeight = mode === CommonTableMode.BIG ? DEFAULT_BIG_ROW_HEIGHT : DEFAULT_SMALL_ROW_HEIGHT,
+    rowHeight = mode === CommonTableMode.BIG
+      ? DEFAULT_BIG_ROW_HEIGHT
+      : DEFAULT_SMALL_ROW_HEIGHT,
     tableProps = {
-      rowKey: 'id',
+      rowKey: 'id'
     },
     enableResize = false,
     onLoad,
-    onChange,
+    onChange
   } = props;
   const { columns, dataSource, scroll, ...rest } = tableProps;
   const [wrapperHeight, setWrapperHeight] = useState(0);
   const [searchValue, setSearchValue] = useState('');
   const [filters, setFilters] = useControllableValue(filterContent, {
     valuePropName: 'filterValue',
-    trigger: 'onChange',
+    trigger: 'onChange'
   });
   const [cascaderValue, setCascaderValue] = useState<string[]>([]);
   const [sorter, setSorter] = useState(null);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [pagination, setPagination] = useState(null);
-  const [alertInfoVisible, setAlertInfoVisible] = useState(!!alertInfoContent?.message);
+  const [alertInfoVisible, setAlertInfoVisible] = useState(
+    !!alertInfoContent?.message
+  );
   const [loading, setLoading] = useControllableValue(tableProps, {
-    valuePropName: 'loading',
+    valuePropName: 'loading'
   });
   const { getParam, deleteParam } = useURLParams();
   const urlStatusValue = getParam('status');
   const [pageSize, setPageSize] = useState(0);
   const [columnWidthMap, setColumnWidthMap] = useState(null);
   const tableColumns = getFilteredColumns();
-  const showInfoBar = rowSelecter && !!selectedRowKeys?.length && showSelectedInfoBar;
+  const showInfoBar =
+    rowSelecter && !!selectedRowKeys?.length && showSelectedInfoBar;
   const TOOLBAR_HEIGHT = showToolbar ? TABLE_TOOLBAR_HEIGHT : 0;
   const INFO_BAR_HEIGHT = showInfoBar ? TABLE_INFO_BAR_HEIGHT : 0;
   const ALERT_INFO_HEIGHT = alertInfoVisible ? TABLE_ALERT_INFO_HEIGHT : 0;
   const TABLE_HEAD_HEIGHT =
-    mode === CommonTableMode.BIG ? TABLE_BIG_HEAD_HEIGHT : TABLE_SMALL_HEAD_HEIGHT;
+    mode === CommonTableMode.BIG
+      ? TABLE_BIG_HEAD_HEIGHT
+      : TABLE_SMALL_HEAD_HEIGHT;
   const wrapperValidHeight = Math.max(
     wrapperHeight -
       TOOLBAR_HEIGHT -
@@ -151,9 +158,10 @@ const CommonTable: <RecordType extends object = any>(
       ALERT_INFO_HEIGHT -
       TABLE_HEAD_HEIGHT -
       TABLE_PAGINATION_HEIGHT,
-    100,
+    100
   );
-  const scrollHeight = (tableProps?.pagination as TablePaginationConfig)?.pageSize
+  const scrollHeight = (tableProps?.pagination as TablePaginationConfig)
+    ?.pageSize
     ? null
     : computeTableScrollHeight();
 
@@ -164,7 +172,7 @@ const CommonTable: <RecordType extends object = any>(
   useEffect(() => {
     if (pageSize) {
       handleReload({
-        pageSize,
+        pageSize
       });
     }
   }, [pageSize]);
@@ -182,7 +190,7 @@ const CommonTable: <RecordType extends object = any>(
     },
     setSelectedRowKeys: (keys: number[]) => {
       setSelectedRowKeys(keys);
-    },
+    }
   }));
 
   useEffect(() => {
@@ -207,16 +215,17 @@ const CommonTable: <RecordType extends object = any>(
             INFO_BAR_HEIGHT -
             ALERT_INFO_HEIGHT -
             TABLE_PAGINATION_HEIGHT) /
-            rowHeight,
+            rowHeight
         ),
-        1,
+        1
       );
     setPageSize(computedPageSize);
     setWrapperHeight(tableRef.current?.offsetHeight);
   }
 
   function computeTableScrollHeight() {
-    const tableContentHeight = dataSource?.length * rowHeight + subTableTotalHeight;
+    const tableContentHeight =
+      dataSource?.length * rowHeight + subTableTotalHeight;
     return tableContentHeight > wrapperValidHeight ? wrapperValidHeight : null;
   }
 
@@ -227,7 +236,7 @@ const CommonTable: <RecordType extends object = any>(
   function handleFilterChange(name: string, value: string | number) {
     const _filter = {
       ...filters,
-      [name]: value,
+      [name]: value
     };
     setFilters(_filter);
     setPagination(null);
@@ -237,7 +246,7 @@ const CommonTable: <RecordType extends object = any>(
       filters: _filter,
       sorter,
       pagination: null,
-      pageSize,
+      pageSize
     });
   }
 
@@ -250,7 +259,7 @@ const CommonTable: <RecordType extends object = any>(
       filters,
       sorter,
       pagination: null,
-      pageSize,
+      pageSize
     });
   }
   function handleCascaderValueChange(value: string[]) {
@@ -262,7 +271,7 @@ const CommonTable: <RecordType extends object = any>(
       filters,
       sorter,
       pagination: null,
-      pageSize,
+      pageSize
     });
   }
   // Table 主体的 change
@@ -270,11 +279,17 @@ const CommonTable: <RecordType extends object = any>(
     const paginationValue = action === 'paginate' ? _pagination : null;
     const _filter = {
       ...filters,
-      ...filter,
+      ...filter
     };
-    const statusesToCheck = [TaskStatus.ENABLED, TaskStatus.EXECUTION_SUCCEEDED];
+    const statusesToCheck = [
+      TaskStatus.ENABLED,
+      TaskStatus.EXECUTION_SUCCEEDED
+    ];
 
-    if (urlStatusValue && statusesToCheck.some((status) => !_filter?.status?.includes(status))) {
+    if (
+      urlStatusValue &&
+      statusesToCheck.some((status) => !_filter?.status?.includes(status))
+    ) {
       deleteParam('status');
     }
     setFilters(_filter);
@@ -286,7 +301,7 @@ const CommonTable: <RecordType extends object = any>(
       filters: _filter,
       sorter: _sorter,
       pagination: paginationValue,
-      pageSize,
+      pageSize
     });
   }
 
@@ -305,12 +320,16 @@ const CommonTable: <RecordType extends object = any>(
   }
 
   function handleSelectAll(selected, selectedRows, changeRows) {
-    const changeKeys = changeRows?.map((item) => item[tableProps?.rowKey as string]);
+    const changeKeys = changeRows?.map(
+      (item) => item[tableProps?.rowKey as string]
+    );
     handleRowKeyChange(selected, changeKeys);
   }
 
   function handleSelectAllRows() {
-    const changeKeys = dataSource?.map((item) => item[tableProps?.rowKey as string]);
+    const changeKeys = dataSource?.map(
+      (item) => item[tableProps?.rowKey as string]
+    );
     setSelectedRowKeys(changeKeys);
   }
 
@@ -321,22 +340,23 @@ const CommonTable: <RecordType extends object = any>(
       filters,
       sorter,
       pagination,
-      pageSize,
-    },
+      pageSize
+    }
   ) {
     const finalFilters =
       args.filters ||
       filters ||
       columns.reduce((acc, column) => {
         if (column.defaultFilteredValue) {
-          acc[column.key || (column as any).dataIndex] = column.defaultFilteredValue;
+          acc[column.key || (column as any).dataIndex] =
+            column.defaultFilteredValue;
         }
         return acc;
       }, {});
 
     const loadArgs = {
       ...args,
-      filters: finalFilters,
+      filters: finalFilters
     };
 
     setLoading(true);
@@ -353,7 +373,7 @@ const CommonTable: <RecordType extends object = any>(
       searchValue,
       filters,
       sorter,
-      pageSize,
+      pageSize
     });
   }
 
@@ -378,7 +398,7 @@ const CommonTable: <RecordType extends object = any>(
       }
       setColumnWidthMap({
         ...columnWidthMap,
-        [oriColumn.key]: size?.width,
+        [oriColumn.key]: size?.width
       });
     };
   }
@@ -386,7 +406,8 @@ const CommonTable: <RecordType extends object = any>(
   useEffect(() => {
     const defaultFilters = columns.reduce((acc, column) => {
       if (column.defaultFilteredValue) {
-        acc[column.key || (column as any).dataIndex] = column.defaultFilteredValue;
+        acc[column.key || (column as any).dataIndex] =
+          column.defaultFilteredValue;
       }
       return acc;
     }, {});
@@ -397,7 +418,7 @@ const CommonTable: <RecordType extends object = any>(
       cascaderValue: [],
       sorter: null,
       pagination: null,
-      pageSize,
+      pageSize
     });
   }, []);
 
@@ -409,10 +430,10 @@ const CommonTable: <RecordType extends object = any>(
         {
           [styles.infoVisible]: showInfoBar,
           [styles.showToolbar]: showToolbar,
-          [styles.showAlertInfo]: alertInfoVisible,
+          [styles.showAlertInfo]: alertInfoVisible
         },
         tableProps?.className,
-        mode === CommonTableMode.BIG ? null : styles.smallCommonTable,
+        mode === CommonTableMode.BIG ? null : styles.smallCommonTable
       )}
     >
       {showToolbar && (
@@ -426,7 +447,7 @@ const CommonTable: <RecordType extends object = any>(
                   ...cascaderContent,
                   onChange: (value, selectedOptions) => {
                     handleCascaderValueChange(value);
-                  },
+                  }
                 }
               : null
           }
@@ -436,7 +457,7 @@ const CommonTable: <RecordType extends object = any>(
             searchValue,
             filters,
             sorter,
-            pageSize,
+            pageSize
           }}
           enabledReload={enabledReload}
           onFilterChange={handleFilterChange}
@@ -473,13 +494,17 @@ const CommonTable: <RecordType extends object = any>(
             {...rest}
             className={classNames(
               styles.tableSpin,
-              mode === CommonTableMode.BIG ? styles.bigTable : styles.smallTable,
+              mode === CommonTableMode.BIG
+                ? styles.bigTable
+                : styles.smallTable,
               {
-                [styles.scrollAble]: !!scrollHeight,
-              },
+                [styles.scrollAble]: !!scrollHeight
+              }
             )}
             rowClassName={(record, i) =>
-              `${tableProps?.rowClassName} ${i % 2 === 0 ? styles.even : styles.odd}`
+              `${tableProps?.rowClassName} ${
+                i % 2 === 0 ? styles.even : styles.odd
+              }`
             }
             dataSource={dataSource}
             //@ts-ignore
@@ -489,15 +514,17 @@ const CommonTable: <RecordType extends object = any>(
                     return {
                       ...oriColumn,
                       width:
-                        columnWidthMap?.[oriColumn?.key] || oriColumn.width || DEFAULT_COLUMN_WIDTH,
+                        columnWidthMap?.[oriColumn?.key] ||
+                        oriColumn.width ||
+                        DEFAULT_COLUMN_WIDTH,
                       onHeaderCell: (column) =>
                         ({
                           width:
                             columnWidthMap?.[column?.key] ||
                             oriColumn.width ||
                             DEFAULT_COLUMN_WIDTH,
-                          onResize: handleResize(oriColumn),
-                        } as React.HTMLAttributes<HTMLElement>),
+                          onResize: handleResize(oriColumn)
+                        } as React.HTMLAttributes<HTMLElement>)
                     };
                   })
                 : tableColumns
@@ -506,8 +533,8 @@ const CommonTable: <RecordType extends object = any>(
               enableResize
                 ? {
                     header: {
-                      cell: ResizeTitle,
-                    },
+                      cell: ResizeTitle
+                    }
                   }
                 : undefined
             }
@@ -517,7 +544,7 @@ const CommonTable: <RecordType extends object = any>(
                 ...rowSelecter,
                 selectedRowKeys,
                 onSelect: handleRowKeySelect,
-                onSelectAll: handleSelectAll,
+                onSelectAll: handleSelectAll
               }
             }
             pagination={{
@@ -532,15 +559,15 @@ const CommonTable: <RecordType extends object = any>(
                 return formatMessage(
                   {
                     id: 'odc.components.CommonTable.TotalTotals',
-                    defaultMessage: '共 {totals} 条',
+                    defaultMessage: '共 {totals} 条'
                   },
-                  { totals },
+                  { totals }
                 ); // `共 ${totals} 条`
-              },
+              }
             }}
             scroll={{
               x: scroll?.x ?? DEFAULT_MIN_TABLE_WIDTH,
-              y: scroll?.y ?? wrapperValidHeight,
+              y: scroll?.y ?? wrapperValidHeight
             }}
           />
         </Spin>

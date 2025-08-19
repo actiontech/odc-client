@@ -20,7 +20,11 @@ import { getTaskExecStrategyMap } from '@/component/Task';
 import { SimpleTextItem } from '@/component/Task/component/SimpleTextItem';
 import VariableConfigTable from '@/component/Task/component/VariableConfigTable';
 import { isCycleTriggerStrategy } from '@/component/Task/helper';
-import type { CycleTaskDetail, IDataArchiveJobParameters, TaskOperationType } from '@/d.ts';
+import type {
+  CycleTaskDetail,
+  IDataArchiveJobParameters,
+  TaskOperationType
+} from '@/d.ts';
 import { TaskExecStrategy } from '@/d.ts';
 import setting from '@/store/setting';
 import { formatMessage } from '@/util/intl';
@@ -29,10 +33,17 @@ import {
   getLocalFormatDateTime,
   kbToMb,
   mbToKb,
-  milliSecondsToHour,
+  milliSecondsToHour
 } from '@/util/utils';
 import { DownOutlined, UpOutlined } from '@ant-design/icons';
-import { Collapse, Descriptions, Divider, message, Space, Typography } from 'antd';
+import {
+  Collapse,
+  Descriptions,
+  Divider,
+  message,
+  Space,
+  Typography
+} from 'antd';
 import React from 'react';
 import ThrottleEditableCell from '../../component/ThrottleEditableCell';
 import { SyncTableStructureConfig } from '../../const';
@@ -43,7 +54,7 @@ import { shardingStrategyOptions } from '../../component/ShardingStrategyItem';
 import { isConnectTypeBeFileSystemGroup } from '@/util/connection';
 import {
   DirtyRowActionEnum,
-  DirtyRowActionLabelMap,
+  DirtyRowActionLabelMap
 } from '@/component/ExecuteSqlDetailModal/constant';
 
 const { Text } = Typography;
@@ -58,20 +69,22 @@ const DataArchiveTaskContent: React.FC<IProps> = (props) => {
   const { task, hasFlow, onReload } = props;
   const { triggerConfig, jobParameters, id } = task ?? {};
   const taskExecStrategyMap = getTaskExecStrategyMap(task?.type);
-  const isCycleStrategy = isCycleTriggerStrategy(triggerConfig?.triggerStrategy);
+  const isCycleStrategy = isCycleTriggerStrategy(
+    triggerConfig?.triggerStrategy
+  );
   const insertActionLabel = InsertActionOptions?.find(
-    (item) => item.value === jobParameters?.migrationInsertAction,
+    (item) => item.value === jobParameters?.migrationInsertAction
   )?.label;
   const handleRowLimit = async (rowLimit, handleClose) => {
     const res = await updateLimiterConfig(id, {
-      rowLimit,
+      rowLimit
     });
     if (res) {
       message.success(
         formatMessage({
           id: 'odc.src.component.Task.DataArchiveTask.DetailContent.SuccessfullyModified',
-          defaultMessage: '修改成功！',
-        }), //'修改成功！'
+          defaultMessage: '修改成功！'
+        }) //'修改成功！'
       );
       handleClose();
       onReload();
@@ -79,14 +92,14 @@ const DataArchiveTaskContent: React.FC<IProps> = (props) => {
   };
   const handleDataSizeLimit = async (dataSizeLimit, handleClose) => {
     const res = await updateLimiterConfig(id, {
-      dataSizeLimit: mbToKb(dataSizeLimit),
+      dataSizeLimit: mbToKb(dataSizeLimit)
     });
     if (res) {
       message.success(
         formatMessage({
           id: 'odc.src.component.Task.DataArchiveTask.DetailContent.SuccessfullyModified.1',
-          defaultMessage: '修改成功！',
-        }), //'修改成功！'
+          defaultMessage: '修改成功！'
+        }) //'修改成功！'
       );
       handleClose();
       onReload();
@@ -99,7 +112,7 @@ const DataArchiveTaskContent: React.FC<IProps> = (props) => {
           span={2}
           label={formatMessage({
             id: 'odc.DataArchiveTask.DetailContent.TaskNumber',
-            defaultMessage: '任务编号',
+            defaultMessage: '任务编号'
           })} /*任务编号*/
         >
           {task?.id}
@@ -108,13 +121,13 @@ const DataArchiveTaskContent: React.FC<IProps> = (props) => {
           span={2}
           label={formatMessage({
             id: 'odc.DataArchiveTask.DetailContent.TaskType',
-            defaultMessage: '任务类型',
+            defaultMessage: '任务类型'
           })} /*任务类型*/
         >
           {
             formatMessage({
               id: 'odc.DataArchiveTask.DetailContent.DataArchiving',
-              defaultMessage: '数据归档',
+              defaultMessage: '数据归档'
             }) /*数据归档*/
           }
         </Descriptions.Item>
@@ -122,50 +135,57 @@ const DataArchiveTaskContent: React.FC<IProps> = (props) => {
           span={2}
           label={formatMessage({
             id: 'odc.DataArchiveTask.DetailContent.SourceDatabase',
-            defaultMessage: '源数据库',
+            defaultMessage: '源数据库'
           })} /*源数据库*/
         >
           <Space size={2}>
             <span>{jobParameters?.sourceDatabase?.name}</span>
-            <Text type="secondary">{jobParameters?.sourceDatabase?.dataSource?.name}</Text>
+            <Text type="secondary">
+              {jobParameters?.sourceDatabase?.dataSource?.name}
+            </Text>
           </Space>
         </Descriptions.Item>
         <Descriptions.Item
           span={2}
           label={formatMessage({
             id: 'odc.DataArchiveTask.DetailContent.TargetDatabase',
-            defaultMessage: '目标数据库',
+            defaultMessage: '目标数据库'
           })} /*目标数据库*/
         >
           <Space size={2}>
             <span>{jobParameters?.targetDatabase?.name}</span>
-            <Text type="secondary">{jobParameters?.targetDatabase?.dataSource?.name}</Text>
+            <Text type="secondary">
+              {jobParameters?.targetDatabase?.dataSource?.name}
+            </Text>
           </Space>
         </Descriptions.Item>
         {hasFlow && (
           <Descriptions.Item
             label={formatMessage({
               id: 'odc.DataArchiveTask.DetailContent.RiskLevel',
-              defaultMessage: '风险等级',
+              defaultMessage: '风险等级'
             })} /*风险等级*/
           >
-            <RiskLevelLabel level={task?.riskLevel?.level} color={task?.riskLevel?.style} />
+            <RiskLevelLabel
+              level={task?.riskLevel?.level}
+              color={task?.riskLevel?.style}
+            />
           </Descriptions.Item>
         )}
       </Descriptions>
 
       <SimpleTextItem
         style={{
-          marginTop: 12,
+          marginTop: 12
         }}
         label={formatMessage({
           id: 'odc.DataArchiveTask.DetailContent.VariableConfiguration',
-          defaultMessage: '变量配置',
+          defaultMessage: '变量配置'
         })}
         /*变量配置*/ content={
           <div
             style={{
-              margin: '8px 0 12px',
+              margin: '8px 0 12px'
             }}
           >
             <VariableConfigTable variables={jobParameters?.variables} />
@@ -177,12 +197,12 @@ const DataArchiveTaskContent: React.FC<IProps> = (props) => {
       <SimpleTextItem
         label={formatMessage({
           id: 'odc.DataArchiveTask.DetailContent.ArchiveScope',
-          defaultMessage: '归档范围',
+          defaultMessage: '归档范围'
         })}
         /*归档范围*/ content={
           <div
             style={{
-              margin: '8px 0 12px',
+              margin: '8px 0 12px'
             }}
           >
             <ArchiveRange tables={jobParameters?.tables} />
@@ -195,37 +215,39 @@ const DataArchiveTaskContent: React.FC<IProps> = (props) => {
         <Descriptions.Item
           label={formatMessage({
             id: 'odc.DataArchiveTask.DetailContent.CleanUpArchivedDataFrom',
-            defaultMessage: '清理源端已归档的数据',
+            defaultMessage: '清理源端已归档的数据'
           })} /*清理源端已归档的数据*/
         >
           {
             jobParameters?.deleteAfterMigration
               ? formatMessage({
                   id: 'odc.DataArchiveTask.DetailContent.Yes',
-                  defaultMessage: '是',
+                  defaultMessage: '是'
                 }) //是
               : formatMessage({
                   id: 'odc.DataArchiveTask.DetailContent.No',
-                  defaultMessage: '否',
+                  defaultMessage: '否'
                 }) //否
           }
         </Descriptions.Item>
-        {isConnectTypeBeFileSystemGroup(jobParameters?.targetDatabase?.connectType) && (
+        {isConnectTypeBeFileSystemGroup(
+          jobParameters?.targetDatabase?.connectType
+        ) && (
           <Descriptions.Item
             label={formatMessage({
               id: 'src.component.Task.DataArchiveTask.DetailContent.F3FBB17A',
-              defaultMessage: '任务完成后删除归档过程中产生的临时表',
+              defaultMessage: '任务完成后删除归档过程中产生的临时表'
             })}
           >
             {
               jobParameters?.deleteTemporaryTable
                 ? formatMessage({
                     id: 'odc.DataArchiveTask.DetailContent.Yes',
-                    defaultMessage: '是',
+                    defaultMessage: '是'
                   }) //是
                 : formatMessage({
                     id: 'odc.DataArchiveTask.DetailContent.No',
-                    defaultMessage: '否',
+                    defaultMessage: '否'
                   }) //否
             }
           </Descriptions.Item>
@@ -234,7 +256,7 @@ const DataArchiveTaskContent: React.FC<IProps> = (props) => {
           <Descriptions.Item
             label={formatMessage({
               id: 'src.component.Task.DataArchiveTask.DetailContent.3DA547C9',
-              defaultMessage: '源端目标端数据不一致处理',
+              defaultMessage: '源端目标端数据不一致处理'
             })}
           >
             {DirtyRowActionLabelMap[jobParameters?.dirtyRowAction]}
@@ -244,15 +266,17 @@ const DataArchiveTaskContent: React.FC<IProps> = (props) => {
           <Descriptions.Item
             label={formatMessage({
               id: 'src.component.Task.DataArchiveTask.DetailContent.A7A520D7',
-              defaultMessage: '跳过不清理数据',
+              defaultMessage: '跳过不清理数据'
             })}
           >
             {formatMessage(
               {
                 id: 'src.component.Task.DataArchiveTask.DetailContent.A96E9271',
-                defaultMessage: '{LogicalExpression0} 行',
+                defaultMessage: '{LogicalExpression0} 行'
               },
-              { LogicalExpression0: jobParameters?.maxAllowedDirtyRowCount || 0 },
+              {
+                LogicalExpression0: jobParameters?.maxAllowedDirtyRowCount || 0
+              }
             )}
           </Descriptions.Item>
         ) : null}
@@ -261,7 +285,7 @@ const DataArchiveTaskContent: React.FC<IProps> = (props) => {
         <Descriptions.Item
           label={formatMessage({
             id: 'odc.DataArchiveTask.DetailContent.ExecutionMethod',
-            defaultMessage: '执行方式',
+            defaultMessage: '执行方式'
           })} /*执行方式*/
         >
           {taskExecStrategyMap[triggerConfig.triggerStrategy]}
@@ -271,7 +295,7 @@ const DataArchiveTaskContent: React.FC<IProps> = (props) => {
             label={
               formatMessage({
                 id: 'src.component.Task.DataArchiveTask.DetailContent.074676BE',
-                defaultMessage: '执行时间',
+                defaultMessage: '执行时间'
               }) /*"执行时间"*/
             }
           >
@@ -289,7 +313,7 @@ const DataArchiveTaskContent: React.FC<IProps> = (props) => {
                 <SimpleTextItem
                   label={formatMessage({
                     id: 'odc.DataArchiveTask.DetailContent.NextExecutionTime',
-                    defaultMessage: '下一次执行时间',
+                    defaultMessage: '下一次执行时间'
                   })}
                   /*下一次执行时间*/ content={
                     <Space>
@@ -315,7 +339,7 @@ const DataArchiveTaskContent: React.FC<IProps> = (props) => {
           label={
             formatMessage({
               id: 'odc.src.component.Task.DataArchiveTask.DetailContent.InsertionStrategy',
-              defaultMessage: '插入策略',
+              defaultMessage: '插入策略'
             }) /* 插入策略 */
           }
           span={isCycleStrategy ? 2 : 1}
@@ -325,17 +349,18 @@ const DataArchiveTaskContent: React.FC<IProps> = (props) => {
         <Descriptions.Item
           label={formatMessage({
             id: 'src.component.Task.DataArchiveTask.DetailContent.4844C10F',
-            defaultMessage: '搜索策略',
+            defaultMessage: '搜索策略'
           })}
           span={isCycleStrategy ? 2 : 1}
         >
-          {shardingStrategyOptions.find((item) => item.value === jobParameters?.shardingStrategy)
-            ?.label || '-'}
+          {shardingStrategyOptions.find(
+            (item) => item.value === jobParameters?.shardingStrategy
+          )?.label || '-'}
         </Descriptions.Item>
         <Descriptions.Item
           label={formatMessage({
             id: 'src.component.Task.DataArchiveTask.DetailContent.4443BB83',
-            defaultMessage: '指定任务时长',
+            defaultMessage: '指定任务时长'
           })}
           span={1}
         >
@@ -346,28 +371,29 @@ const DataArchiveTaskContent: React.FC<IProps> = (props) => {
         <Descriptions.Item
           label={formatMessage({
             id: 'src.component.Task.DataArchiveTask.DetailContent.5F68CAE7',
-            defaultMessage: '开启目标表结构同步',
+            defaultMessage: '开启目标表结构同步'
           })}
           span={1}
         >
           {jobParameters?.syncTableStructure?.length
             ? formatMessage({
                 id: 'src.component.Task.DataArchiveTask.DetailContent.FFC5907D',
-                defaultMessage: '是',
+                defaultMessage: '是'
               })
             : formatMessage({
                 id: 'src.component.Task.DataArchiveTask.DetailContent.855EA40A',
-                defaultMessage: '否',
+                defaultMessage: '否'
               })}
         </Descriptions.Item>
         <Descriptions.Item
           label={formatMessage({
             id: 'src.component.Task.DataArchiveTask.DetailContent.BC448D6A',
-            defaultMessage: '同步范围',
+            defaultMessage: '同步范围'
           })}
           span={1}
         >
-          {jobParameters?.syncTableStructure && jobParameters?.syncTableStructure?.length
+          {jobParameters?.syncTableStructure &&
+          jobParameters?.syncTableStructure?.length
             ? jobParameters.syncTableStructure
                 ?.map((i) => {
                   return SyncTableStructureConfig[i].label;
@@ -379,7 +405,7 @@ const DataArchiveTaskContent: React.FC<IProps> = (props) => {
           label={
             formatMessage({
               id: 'odc.src.component.Task.DataArchiveTask.DetailContent.RestrictedFlow',
-              defaultMessage: '行限流',
+              defaultMessage: '行限流'
             }) /* 行限流 */
           }
         >
@@ -395,7 +421,7 @@ const DataArchiveTaskContent: React.FC<IProps> = (props) => {
           label={
             formatMessage({
               id: 'odc.src.component.Task.DataArchiveTask.DetailContent.DataSizeLimit',
-              defaultMessage: '数据大小限流',
+              defaultMessage: '数据大小限流'
             }) //'数据大小限流'
           }
         >
@@ -410,7 +436,7 @@ const DataArchiveTaskContent: React.FC<IProps> = (props) => {
         <Descriptions.Item
           label={formatMessage({
             id: 'odc.DataArchiveTask.DetailContent.Remarks',
-            defaultMessage: '备注',
+            defaultMessage: '备注'
           })}
           /*备注*/ span={2}
         >
@@ -420,7 +446,7 @@ const DataArchiveTaskContent: React.FC<IProps> = (props) => {
 
       <Divider
         style={{
-          marginTop: 4,
+          marginTop: 4
         }}
       />
 
@@ -428,7 +454,7 @@ const DataArchiveTaskContent: React.FC<IProps> = (props) => {
         <Descriptions.Item
           label={formatMessage({
             id: 'odc.DataArchiveTask.DetailContent.Founder',
-            defaultMessage: '创建人',
+            defaultMessage: '创建人'
           })} /*创建人*/
         >
           {task?.creator?.name || '-'}
@@ -436,7 +462,7 @@ const DataArchiveTaskContent: React.FC<IProps> = (props) => {
         <Descriptions.Item
           label={formatMessage({
             id: 'odc.DataArchiveTask.DetailContent.CreationTime',
-            defaultMessage: '创建时间',
+            defaultMessage: '创建时间'
           })} /*创建时间*/
         >
           {getFormatDateTime(task.createTime)}

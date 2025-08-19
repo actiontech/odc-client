@@ -181,7 +181,7 @@ export enum TableConstraintDefer {
   /**
    * 可延迟约束的立即检查
    */
-  DEFERRABLE_IMMEDIATE = 'INITIALLY_IMMEDIATE',
+  DEFERRABLE_IMMEDIATE = 'INITIALLY_IMMEDIATE'
 }
 
 export enum TableForeignConstraintOnDeleteType {
@@ -191,7 +191,7 @@ export enum TableForeignConstraintOnDeleteType {
   /**
    * oracle 没这个，效果同 no action
    */
-  RESTRICT = 'RESTRICT',
+  RESTRICT = 'RESTRICT'
 }
 
 export enum TableForeignConstraintOnUpdateType {
@@ -201,7 +201,7 @@ export enum TableForeignConstraintOnUpdateType {
   /**
    * oracle 没这个，效果同 no action
    */
-  RESTRICT = 'RESTRICT',
+  RESTRICT = 'RESTRICT'
 }
 
 /**
@@ -210,12 +210,12 @@ export enum TableForeignConstraintOnUpdateType {
 export enum TablePermissionType {
   QUERY = 'QUERY',
   CHANGE = 'CHANGE',
-  EXPORT = 'EXPORT',
+  EXPORT = 'EXPORT'
 }
 
 export enum UnauthorizedPermissionTypeInSQLExecute {
   ODC_TABLE = 'ODC_TABLE',
-  ODC_DATABASE = 'ODC_DATABASE',
+  ODC_DATABASE = 'ODC_DATABASE'
 }
 
 export interface IUnauthorizedDBResources {
@@ -239,11 +239,11 @@ export interface IColumnStoreServerType {
 
 export enum ColumnStoreType {
   COLUMN = 'each column',
-  ROW = 'all column',
+  ROW = 'all column'
 }
 
 export enum DBDefaultStoreType {
   ROW = 'row',
   COLUMN = 'column',
-  COMPOUND = 'compound',
+  COMPOUND = 'compound'
 }

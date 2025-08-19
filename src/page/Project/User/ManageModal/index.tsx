@@ -24,33 +24,33 @@ import styles from './index.less';
 
 enum EManagePermissionType {
   DATABASE = 'database',
-  TABLE = 'table',
+  TABLE = 'table'
 }
 
 const contentMap = {
   [EManagePermissionType.DATABASE]: {
-    component: ManageDataBaseModal,
+    component: ManageDataBaseModal
   },
   [EManagePermissionType.TABLE]: {
-    component: ManageTableModal,
-  },
+    component: ManageTableModal
+  }
 };
 
 const items: MenuItem[] = [
   {
     label: formatMessage({
       id: 'src.page.Project.User.ManageModal.946C38DA',
-      defaultMessage: '库权限',
+      defaultMessage: '库权限'
     }),
-    key: EManagePermissionType.DATABASE,
+    key: EManagePermissionType.DATABASE
   },
   {
     label: formatMessage({
       id: 'src.page.Project.User.ManageModal.AE2E1625',
-      defaultMessage: '表/视图权限',
+      defaultMessage: '表/视图权限'
     }),
-    key: EManagePermissionType.TABLE,
-  },
+    key: EManagePermissionType.TABLE
+  }
 ];
 
 interface IProps {
@@ -77,7 +77,7 @@ const ManageModal: React.FC<IProps> = (props) => {
       width={925}
       title={formatMessage({
         id: 'src.page.Project.User.ManageModal.A4F73E8C',
-        defaultMessage: '管理权限',
+        defaultMessage: '管理权限'
       })}
       destroyOnClose
       rootClassName={styles.detailDrawer}
@@ -94,7 +94,7 @@ const ManageModal: React.FC<IProps> = (props) => {
             selectedKey: [key],
             handleItemOnClick,
             siderStyle: { flex: '0 0 100px' },
-            contentStyle: { display: 'flex', flexDirection: 'column' },
+            contentStyle: { display: 'flex', flexDirection: 'column' }
           }}
           content={
             <Component

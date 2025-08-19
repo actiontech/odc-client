@@ -17,22 +17,37 @@ import {
   IUpdateGatewayParams,
   IUpdateGatewayReturn,
   IDeleteGatewayParams,
-  IDeleteGatewayReturn,
+  IDeleteGatewayReturn
 } from './index.type';
 
 class GatewayService extends ServiceBase {
-  public ListGateways(params: IListGatewaysParams, options?: AxiosRequestConfig) {
+  public ListGateways(
+    params: IListGatewaysParams,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
-    return this.get<IListGatewaysReturn>('/v1/dms/gateways', paramsData, options);
+    return this.get<IListGatewaysReturn>(
+      '/v1/dms/gateways',
+      paramsData,
+      options
+    );
   }
 
   public AddGateway(params: IAddGatewayParams, options?: AxiosRequestConfig) {
     const paramsData = this.cloneDeep(params);
-    return this.post<IAddGatewayReturn>('/v1/dms/gateways', paramsData, options);
+    return this.post<IAddGatewayReturn>(
+      '/v1/dms/gateways',
+      paramsData,
+      options
+    );
   }
 
   public GetGatewayTips(options?: AxiosRequestConfig) {
-    return this.get<IGetGatewayTipsReturn>('/v1/dms/gateways/tips', undefined, options);
+    return this.get<IGetGatewayTipsReturn>(
+      '/v1/dms/gateways/tips',
+      undefined,
+      options
+    );
   }
 
   public GetGateway(params: IGetGatewayParams, options?: AxiosRequestConfig) {
@@ -40,23 +55,41 @@ class GatewayService extends ServiceBase {
     const gateway_id = paramsData.gateway_id;
     delete paramsData.gateway_id;
 
-    return this.get<IGetGatewayReturn>(`/v1/dms/gateways/${gateway_id}`, paramsData, options);
+    return this.get<IGetGatewayReturn>(
+      `/v1/dms/gateways/${gateway_id}`,
+      paramsData,
+      options
+    );
   }
 
-  public UpdateGateway(params: IUpdateGatewayParams, options?: AxiosRequestConfig) {
+  public UpdateGateway(
+    params: IUpdateGatewayParams,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const gateway_id = paramsData.gateway_id;
     delete paramsData.gateway_id;
 
-    return this.put<IUpdateGatewayReturn>(`/v1/dms/gateways/${gateway_id}`, paramsData, options);
+    return this.put<IUpdateGatewayReturn>(
+      `/v1/dms/gateways/${gateway_id}`,
+      paramsData,
+      options
+    );
   }
 
-  public DeleteGateway(params: IDeleteGatewayParams, options?: AxiosRequestConfig) {
+  public DeleteGateway(
+    params: IDeleteGatewayParams,
+    options?: AxiosRequestConfig
+  ) {
     const paramsData = this.cloneDeep(params);
     const gateway_id = paramsData.gateway_id;
     delete paramsData.gateway_id;
 
-    return this.delete<IDeleteGatewayReturn>(`/v1/dms/gateways/${gateway_id}`, paramsData, options);
+    return this.delete<IDeleteGatewayReturn>(
+      `/v1/dms/gateways/${gateway_id}`,
+      paramsData,
+      options
+    );
   }
 }
 

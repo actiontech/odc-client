@@ -26,7 +26,7 @@ export enum PLPageType {
   pkgHead,
   pkgBody,
   anonymous,
-  plEdit,
+  plEdit
 }
 
 export class PLPage extends Page {
@@ -64,8 +64,8 @@ export class PackageHeadPage extends PLPage {
       plSchema: {
         packageName,
         plName: `${packageName}.head`,
-        plType: PLType.PKG_HEAD,
-      },
+        plType: PLType.PKG_HEAD
+      }
     };
     this.pageTitle = `${packageName}_head`;
   }
@@ -94,8 +94,8 @@ export class PackageBodyPage extends PLPage {
       plSchema: {
         packageName,
         plName: `${packageName}.body`,
-        plType: PLType.PKG_BODY,
-      },
+        plType: PLType.PKG_BODY
+      }
     };
     this.pageTitle = `${packageName}_body`;
   }
@@ -117,8 +117,10 @@ export class AnonymousPage extends PLPage {
   };
   static getTitleByParams(params: AnonymousPage['pageParams']) {
     return (
-      formatMessage({ id: 'workspace.header.create.pl', defaultMessage: '匿名块窗口' }) +
-      `_${params?.pageIndex}`
+      formatMessage({
+        id: 'workspace.header.create.pl',
+        defaultMessage: '匿名块窗口'
+      }) + `_${params?.pageIndex}`
     );
   }
   public findCurrentNum() {
@@ -147,9 +149,9 @@ export class AnonymousPage extends PLPage {
       scriptName: this.pageTitle,
       scriptText: sql ?? getPLScriptTemplate(),
       plSchema: {
-        params: [],
+        params: []
       },
-      pageIndex,
+      pageIndex
     };
   }
 }
@@ -192,7 +194,7 @@ export class PLEditPage extends PLPage {
       | IType
       | ((IFunction | IProcedure) & { key: string; packageName: string }),
     fromPackage: boolean = false,
-    readonly: boolean = false,
+    readonly: boolean = false
   ) {
     super(plType, databaseId);
     this.pageKey = `pl-edit-plName:${plName}-dbid:${databaseId}`;
@@ -207,7 +209,7 @@ export class PLEditPage extends PLPage {
       plType,
       cid: databaseId,
       fromPackage,
-      readonly,
+      readonly
     };
   }
 }

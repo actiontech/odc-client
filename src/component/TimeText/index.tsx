@@ -52,6 +52,8 @@ const TimeText: React.FC<IProps> = (props) => {
   } else if (endTime) {
     return <span>{getTimeDurationText(beginTime, endTime)}</span>;
   }
-  return <span>{getTimeDurationText(beginTime, Math.max(now, beginTime))}</span>;
+  return (
+    <span>{getTimeDurationText(beginTime, Math.max(now, beginTime))}</span>
+  );
 };
 export default TimeText;

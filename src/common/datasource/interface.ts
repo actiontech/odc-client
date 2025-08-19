@@ -28,7 +28,7 @@ export type columnExtraComponent = React.FC<{
 export enum SQLConsoleResourceType {
   DataSource = 'datasource',
   Snippet = 'snippet',
-  Script = 'script',
+  Script = 'script'
 }
 
 interface ICreateTableConfig {
@@ -94,7 +94,13 @@ interface ICreateTableConfig {
 }
 
 interface IFunctionConfig {
-  params: ('paramName' | 'dataType' | 'paramMode' | 'dataLength' | 'defaultValue')[];
+  params: (
+    | 'paramName'
+    | 'dataType'
+    | 'paramMode'
+    | 'dataLength'
+    | 'defaultValue'
+  )[];
   defaultValue?: {
     dataLength?: number;
   };
@@ -104,7 +110,13 @@ interface IFunctionConfig {
 }
 
 interface IProcedureConfig {
-  params: ('paramName' | 'dataType' | 'paramMode' | 'dataLength' | 'defaultValue')[];
+  params: (
+    | 'paramName'
+    | 'dataType'
+    | 'paramMode'
+    | 'dataLength'
+    | 'defaultValue'
+  )[];
   defaultValue?: {
     dataLength?: number;
   };

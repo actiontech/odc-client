@@ -10,13 +10,13 @@ import {
   IGetReportPushConfigListParams,
   IGetReportPushConfigListReturn,
   IUpdateReportPushConfigParams,
-  IUpdateReportPushConfigReturn,
+  IUpdateReportPushConfigReturn
 } from './index.type';
 
 class ReportPushConfigService extends ServiceBase {
   public GetReportPushConfigList(
     params: IGetReportPushConfigListParams,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -25,13 +25,13 @@ class ReportPushConfigService extends ServiceBase {
     return this.get<IGetReportPushConfigListReturn>(
       `/v1/projects/${project_name}/report_push_configs`,
       paramsData,
-      options,
+      options
     );
   }
 
   public UpdateReportPushConfig(
     params: IUpdateReportPushConfigParams,
-    options?: AxiosRequestConfig,
+    options?: AxiosRequestConfig
   ) {
     const paramsData = this.cloneDeep(params);
     const project_name = paramsData.project_name;
@@ -43,7 +43,7 @@ class ReportPushConfigService extends ServiceBase {
     return this.put<IUpdateReportPushConfigReturn>(
       `/v1/projects/${project_name}/report_push_configs/${report_push_config_id}/`,
       paramsData,
-      options,
+      options
     );
   }
 }

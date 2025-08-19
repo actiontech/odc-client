@@ -20,9 +20,11 @@ import request from '@/util/request';
 /**
  * 新建脱敏策略
  */
-export async function createMaskPolicy(data: Partial<IMaskPolicy>): Promise<IMaskPolicy> {
+export async function createMaskPolicy(
+  data: Partial<IMaskPolicy>
+): Promise<IMaskPolicy> {
   const result = await request.post('/api/v2/mask/policies', {
-    data,
+    data
   });
   return result?.data;
 }
@@ -38,9 +40,11 @@ export async function deleteMaskPolicy(id: number): Promise<IMaskPolicy> {
 /**
  * 更新脱敏策略
  */
-export async function updateMaskPolicy(data: Partial<IMaskPolicy>): Promise<IMaskPolicy> {
+export async function updateMaskPolicy(
+  data: Partial<IMaskPolicy>
+): Promise<IMaskPolicy> {
   const result = await request.put(`/api/v2/mask/policies/${data.id}`, {
-    data,
+    data
   });
   return result?.data;
 }
@@ -64,7 +68,7 @@ export async function getMaskPolicyList(params?: {
   size?: number;
 }): Promise<IResponseData<IMaskPolicy>> {
   const result = await request.get('/api/v2/mask/policies', {
-    params,
+    params
   });
   return result?.data;
 }
@@ -75,8 +79,8 @@ export async function getMaskPolicyList(params?: {
 export async function getMaskPolicyExists(name: string): Promise<boolean> {
   const result = await request.post(`/api/v2/mask/policies/exists`, {
     data: {
-      name,
-    },
+      name
+    }
   });
   return result?.data;
 }

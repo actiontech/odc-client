@@ -71,7 +71,9 @@ export default function SideTabs(props: IProps) {
                   }
                   setSelectTabKey(tab.key);
                 }}
-                className={classNames(styles.tab, { [styles.select]: isSelect })}
+                className={classNames(styles.tab, {
+                  [styles.select]: isSelect
+                })}
               >
                 {tab.title}
               </div>
@@ -84,7 +86,11 @@ export default function SideTabs(props: IProps) {
               return action.render();
             }
             return (
-              <Action.Link replaceLoading={true} key={action.key} onClick={action.onClick}>
+              <Action.Link
+                replaceLoading={true}
+                key={action.key}
+                onClick={action.onClick}
+              >
                 <Icon className={styles.acion} component={action.icon} />
               </Action.Link>
             );
@@ -99,7 +105,9 @@ export default function SideTabs(props: IProps) {
                 <div
                   key={tab.key}
                   className={styles.component}
-                  style={{ zIndex: selectTab?.key === tab.key ? 'unset' : -9999 }}
+                  style={{
+                    zIndex: selectTab?.key === tab.key ? 'unset' : -9999
+                  }}
                 >
                   {tab?.render?.()}
                 </div>

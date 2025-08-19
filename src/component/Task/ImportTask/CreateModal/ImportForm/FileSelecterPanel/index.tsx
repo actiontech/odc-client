@@ -17,7 +17,13 @@
 import { getImportUploadUrl } from '@/common/network';
 import ODCDragger from '@/component/OSSDragger';
 import { DbObjsIcon } from '@/constant';
-import { ImportFormData, IMPORT_CONTENT, IMPORT_ENCODING, IMPORT_TYPE, DbObjectType } from '@/d.ts';
+import {
+  ImportFormData,
+  IMPORT_CONTENT,
+  IMPORT_ENCODING,
+  IMPORT_TYPE,
+  DbObjectType
+} from '@/d.ts';
 import { formatMessage } from '@/util/intl';
 import notification from '@/util/notification';
 import Icon from '@ant-design/icons';
@@ -29,7 +35,7 @@ import {
   checkImportFile,
   getFileMIMETypeWithImportType,
   getFileTypeWithImportType,
-  getSizeLimitTip,
+  getSizeLimitTip
 } from '../helper';
 
 import { DbObjectTypeTextMap } from '@/constant/label';
@@ -55,13 +61,13 @@ function getTiltleByFileType(fileType) {
     case IMPORT_TYPE.SQL: {
       return formatMessage({
         id: 'odc.ImportDrawer.ImportForm.ClickOrDragTheFile',
-        defaultMessage: '点击或将文件拖拽到这里上传',
+        defaultMessage: '点击或将文件拖拽到这里上传'
       });
     }
     case IMPORT_TYPE.DIR: {
       return formatMessage({
         id: 'src.component.Task.ImportTask.CreateModal.ImportForm.FileSelecterPanel.051A8387',
-        defaultMessage: '点击或将目录文件拖拽到这里上传',
+        defaultMessage: '点击或将目录文件拖拽到这里上传'
       });
     }
   }
@@ -71,14 +77,14 @@ function getTipByFileType(fileType) {
     case IMPORT_TYPE.ZIP: {
       return formatMessage({
         id: 'odc.ImportForm.FileSelecterPanel.OnlyCompressedFilesExportedBy',
-        defaultMessage: '仅支持上传由 ODC 导出的压缩文件，可批量导入数据或结构',
+        defaultMessage: '仅支持上传由 ODC 导出的压缩文件，可批量导入数据或结构'
       });
       //仅支持上传由 ODC 导出的压缩文件，可批量导入数据或结构
     }
     case IMPORT_TYPE.CSV: {
       return formatMessage({
         id: 'odc.ImportForm.FileSelecterPanel.YouCanImportDataFrom',
-        defaultMessage: '支持导入单表数据，可自定义映射字段',
+        defaultMessage: '支持导入单表数据，可自定义映射字段'
       });
       //支持导入单表数据，可自定义映射字段
     }
@@ -87,8 +93,8 @@ function getTipByFileType(fileType) {
         getSizeLimitTip(),
         formatMessage({
           id: 'odc.ImportForm.FileSelecterPanel.TheFilesAreExecutedIn',
-          defaultMessage: '文件将按磁盘顺序执行',
-        }),
+          defaultMessage: '文件将按磁盘顺序执行'
+        })
         //文件将按磁盘顺序执行
       ]
         .filter(Boolean)
@@ -97,13 +103,16 @@ function getTipByFileType(fileType) {
     case IMPORT_TYPE.DIR: {
       return formatMessage({
         id: 'src.component.Task.ImportTask.CreateModal.ImportForm.FileSelecterPanel.272612BC',
-        defaultMessage: '仅支持上传 ODC 导出的目录文件',
+        defaultMessage: '仅支持上传 ODC 导出的目录文件'
       });
     }
   }
 }
 
-const FileSelecterPanel: React.FC<IProps> = function ({ isSingleImport, form }) {
+const FileSelecterPanel: React.FC<IProps> = function ({
+  isSingleImport,
+  form
+}) {
   const [ctoken, setCtoken] = useState('');
   const messageRef = useRef(false);
   const formContext = useContext(FormContext);
@@ -126,8 +135,8 @@ const FileSelecterPanel: React.FC<IProps> = function ({ isSingleImport, form }) 
       message.warning(
         formatMessage({
           id: 'src.component.Task.ImportTask.CreateModal.ImportForm.FileSelecterPanel.AC29DC3E',
-          defaultMessage: '请上传指定文件格式的文件',
-        }),
+          defaultMessage: '请上传指定文件格式的文件'
+        })
       );
       return Upload.LIST_IGNORE;
     }
@@ -138,31 +147,35 @@ const FileSelecterPanel: React.FC<IProps> = function ({ isSingleImport, form }) 
       message.warning({
         content: formatMessage({
           id: 'odc.ImportDrawer.ImportForm.TooManyFilesAreUploaded',
-          defaultMessage: '同时上传文件过多，单次最多选择 50 个文件',
+          defaultMessage: '同时上传文件过多，单次最多选择 50 个文件'
         }),
 
         // 同时上传文件过多，单次最多选择 50 个文件
         onClose: () => {
           messageRef.current = false;
-        },
+        }
       });
 
       messageRef.current = true;
       return Upload.LIST_IGNORE;
     }
-    const isLimit = [...(form.getFieldValue('importFileName') || []), ...fileList].length > 500;
+    const isLimit =
+      [...(form.getFieldValue('importFileName') || []), ...fileList].length >
+      500;
     if (isLimit) {
       notification.warn(
         formatMessage({
           id: 'odc.ImportDrawer.ImportForm.UpToObjectsCanBe',
-          defaultMessage: '最多上传 500 个文件',
+          defaultMessage: '最多上传 500 个文件'
         }),
 
         // 最多上传 500 个文件
-        false,
+        false
       );
     }
-    return isLimit ? Upload.LIST_IGNORE : checkImportFile(file, fileList, silence);
+    return isLimit
+      ? Upload.LIST_IGNORE
+      : checkImportFile(file, fileList, silence);
   }
 
   const handleOpenFolderSelector = async (fileType: IMPORT_TYPE) => {
@@ -175,9 +188,11 @@ const FileSelecterPanel: React.FC<IProps> = function ({ isSingleImport, form }) 
           uid: Date.now(),
           name: path,
           status: response.errorCode ? 'error' : 'done',
-          response: response.errorCode ? response.errorMessage : { data: response },
-        },
-      ],
+          response: response.errorCode
+            ? response.errorMessage
+            : { data: response }
+        }
+      ]
     });
     handleImportFileChange(response);
   };
@@ -188,16 +203,16 @@ const FileSelecterPanel: React.FC<IProps> = function ({ isSingleImport, form }) 
     const { containsData, containsSchema } = data;
     if (containsData && containsSchema) {
       formContext.updateFormData({
-        importContent: IMPORT_CONTENT.DATA_AND_STRUCT,
+        importContent: IMPORT_CONTENT.DATA_AND_STRUCT
       });
     } else if (containsData) {
       formContext.updateFormData({
         importContent: IMPORT_CONTENT.DATA,
-        replaceSchemaWhenExists: false,
+        replaceSchemaWhenExists: false
       });
     } else if (containsSchema) {
       formContext.updateFormData({
-        importContent: IMPORT_CONTENT.STRUCT,
+        importContent: IMPORT_CONTENT.STRUCT
       });
     } else {
       return;
@@ -208,7 +223,7 @@ const FileSelecterPanel: React.FC<IProps> = function ({ isSingleImport, form }) 
       <FormItem
         label={formatMessage({
           id: 'odc.ImportDrawer.ImportForm.ImportFormat',
-          defaultMessage: '导入文件格式',
+          defaultMessage: '导入文件格式'
         })}
         name="fileType"
         rules={[
@@ -216,9 +231,9 @@ const FileSelecterPanel: React.FC<IProps> = function ({ isSingleImport, form }) 
             required: true,
             message: formatMessage({
               id: 'odc.ImportDrawer.ImportForm.SelectAnImportFormat',
-              defaultMessage: '请选择导入格式',
-            }),
-          },
+              defaultMessage: '请选择导入格式'
+            })
+          }
         ]}
       >
         <Select style={{ width: 152 }}>
@@ -226,7 +241,7 @@ const FileSelecterPanel: React.FC<IProps> = function ({ isSingleImport, form }) 
             {
               formatMessage({
                 id: 'odc.ImportDrawer.ImportForm.ZipCompressedFiles',
-                defaultMessage: 'ZIP 压缩文件',
+                defaultMessage: 'ZIP 压缩文件'
               })
 
               /* ZIP 压缩文件 */
@@ -236,7 +251,7 @@ const FileSelecterPanel: React.FC<IProps> = function ({ isSingleImport, form }) 
             {
               formatMessage({
                 id: 'odc.ImportDrawer.ImportForm.CsvFile',
-                defaultMessage: 'CSV 文件',
+                defaultMessage: 'CSV 文件'
               })
 
               /* CSV 文件 */
@@ -247,7 +262,7 @@ const FileSelecterPanel: React.FC<IProps> = function ({ isSingleImport, form }) 
               {
                 formatMessage({
                   id: 'odc.ImportDrawer.ImportForm.SqlFile.1',
-                  defaultMessage: 'SQL 文件',
+                  defaultMessage: 'SQL 文件'
                 })
 
                 /* SQL 文件 */
@@ -259,7 +274,7 @@ const FileSelecterPanel: React.FC<IProps> = function ({ isSingleImport, form }) 
             <Option key={IMPORT_TYPE.DIR} value={IMPORT_TYPE.DIR}>
               {formatMessage({
                 id: 'src.component.Task.ImportTask.CreateModal.ImportForm.FileSelecterPanel.D738185C',
-                defaultMessage: '目录文件',
+                defaultMessage: '目录文件'
               })}
             </Option>
           )}
@@ -268,7 +283,7 @@ const FileSelecterPanel: React.FC<IProps> = function ({ isSingleImport, form }) 
       <FormItem
         label={formatMessage({
           id: 'odc.ImportDrawer.ImportForm.ImportFiles',
-          defaultMessage: '导入文件',
+          defaultMessage: '导入文件'
         })}
         shouldUpdate
       >
@@ -280,7 +295,7 @@ const FileSelecterPanel: React.FC<IProps> = function ({ isSingleImport, form }) 
               noStyle
               label={formatMessage({
                 id: 'odc.ImportDrawer.ImportForm.ImportFiles',
-                defaultMessage: '导入文件',
+                defaultMessage: '导入文件'
               })}
               name="importFileName"
               rules={[
@@ -288,9 +303,9 @@ const FileSelecterPanel: React.FC<IProps> = function ({ isSingleImport, form }) 
                   required: true,
                   message: formatMessage({
                     id: 'odc.ImportDrawer.ImportForm.PleaseUploadTheImportedFile',
-                    defaultMessage: '请上传导入文件',
-                  }),
-                },
+                    defaultMessage: '请上传导入文件'
+                  })
+                }
               ]}
               valuePropName="fileList"
               getValueFromEvent={(e) => {
@@ -303,10 +318,13 @@ const FileSelecterPanel: React.FC<IProps> = function ({ isSingleImport, form }) 
                     if (!response?.data?.fileName) {
                       item.response = response?.data?.errorMessage;
                       item.status = 'error';
-                    } else if (!response?.data?.containsData && !response?.data?.containsSchema) {
+                    } else if (
+                      !response?.data?.containsData &&
+                      !response?.data?.containsSchema
+                    ) {
                       item.response = formatMessage({
                         id: 'odc.ImportForm.FileSelecterPanel.TheFileHasNoContent',
-                        defaultMessage: '该文件无内容',
+                        defaultMessage: '该文件无内容'
                       }); //该文件无内容
                       item.status = 'error';
                     }
@@ -329,7 +347,7 @@ const FileSelecterPanel: React.FC<IProps> = function ({ isSingleImport, form }) 
                 headers={{
                   'X-XSRF-TOKEN': ctoken || '',
                   'Accept-Language': getLocale(),
-                  currentOrganizationId: login.organizationId?.toString(),
+                  currentOrganizationId: login.organizationId?.toString()
                 }}
                 onChange={(info) => {
                   const file = info.fileList?.[0];
@@ -344,14 +362,18 @@ const FileSelecterPanel: React.FC<IProps> = function ({ isSingleImport, form }) 
                 openFileDialogOnClick={isDirImport(fileType) ? false : true}
               >
                 <div
-                  onClick={isDirImport(fileType) ? () => handleOpenFolderSelector(fileType) : null}
+                  onClick={
+                    isDirImport(fileType)
+                      ? () => handleOpenFolderSelector(fileType)
+                      : null
+                  }
                   className={styles.fileImportUpload}
                 >
                   <p
                     style={{
                       fontSize: 12,
                       color: 'var(--text-color-primary)',
-                      lineHeight: '20px',
+                      lineHeight: '20px'
                     }}
                   >
                     {getTiltleByFileType(fileType)}
@@ -361,7 +383,7 @@ const FileSelecterPanel: React.FC<IProps> = function ({ isSingleImport, form }) 
                       marginTop: 4,
                       fontSize: 12,
                       color: 'var(--text-color-hint)',
-                      lineHeight: '20px',
+                      lineHeight: '20px'
                     }}
                   >
                     {getTipByFileType(fileType)}
@@ -372,12 +394,12 @@ const FileSelecterPanel: React.FC<IProps> = function ({ isSingleImport, form }) 
                         marginTop: 4,
                         fontSize: 12,
                         color: 'var(--text-color-hint)',
-                        lineHeight: '20px',
+                        lineHeight: '20px'
                       }}
                     >
                       {formatMessage({
                         id: 'odc.ImportDrawer.ImportForm.SupportedExtensions',
-                        defaultMessage: '支持扩展名：',
+                        defaultMessage: '支持扩展名：'
                       })}
 
                       {getFileTypeWithImportType(fileType)}
@@ -395,25 +417,29 @@ const FileSelecterPanel: React.FC<IProps> = function ({ isSingleImport, form }) 
             getFieldValue('importFileName') as ImportFormData['importFileName']
           )?.[0]?.response?.data?.importObjects;
           if (importObjects) {
-            const data = Object.entries(importObjects).map(([dataType, list]) => {
-              const ObjIcon = DbObjsIcon[dataType];
-              let icon = null;
-              if (ObjIcon) {
-                icon = <Icon component={ObjIcon} />;
+            const data = Object.entries(importObjects).map(
+              ([dataType, list]) => {
+                const ObjIcon = DbObjsIcon[dataType];
+                let icon = null;
+                if (ObjIcon) {
+                  icon = <Icon component={ObjIcon} />;
+                }
+                return {
+                  title:
+                    DbObjectTypeTextMap(dataType as DbObjectType) +
+                    `(${list?.length})`,
+                  key: dataType,
+                  icon,
+                  children: list?.map((name) => {
+                    return {
+                      title: name,
+                      icon,
+                      key: dataType + '$' + name
+                    };
+                  })
+                };
               }
-              return {
-                title: DbObjectTypeTextMap(dataType as DbObjectType) + `(${list?.length})`,
-                key: dataType,
-                icon,
-                children: list?.map((name) => {
-                  return {
-                    title: name,
-                    icon,
-                    key: dataType + '$' + name,
-                  };
-                }),
-              };
-            });
+            );
             if (!data.length) {
               return null;
             }
@@ -422,7 +448,7 @@ const FileSelecterPanel: React.FC<IProps> = function ({ isSingleImport, form }) 
                 required={false}
                 label={formatMessage({
                   id: 'odc.ImportForm.FileSelecterPanel.ImportObjectPreview',
-                  defaultMessage: '导入对象预览',
+                  defaultMessage: '导入对象预览'
                 })}
                 /*导入对象预览*/ shouldUpdate
               >
@@ -444,7 +470,7 @@ const FileSelecterPanel: React.FC<IProps> = function ({ isSingleImport, form }) 
       <FormItem
         label={formatMessage({
           id: 'odc.ImportDrawer.ImportForm.FileEncoding',
-          defaultMessage: '文件编码',
+          defaultMessage: '文件编码'
         })}
         name="encoding"
         rules={[
@@ -452,9 +478,9 @@ const FileSelecterPanel: React.FC<IProps> = function ({ isSingleImport, form }) 
             required: true,
             message: formatMessage({
               id: 'odc.ImportDrawer.ImportForm.SelectAFileEncoding',
-              defaultMessage: '请选择文件编码',
-            }),
-          },
+              defaultMessage: '请选择文件编码'
+            })
+          }
         ]}
       >
         <Select style={{ width: 152 }}>

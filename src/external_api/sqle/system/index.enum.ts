@@ -13,7 +13,7 @@ export enum getSystemModuleStatusDbTypeEnum {
 
   'DB2' = 'DB2',
 
-  'SQL Server' = 'SQL Server',
+  'SQL Server' = 'SQL Server'
 }
 
 export enum getSystemModuleStatusModuleNameEnum {
@@ -23,5 +23,5 @@ export enum getSystemModuleStatusModuleNameEnum {
 
   'backup' = 'backup',
 
-  'knowledge_base' = 'knowledge_base',
+  'knowledge_base' = 'knowledge_base'
 }

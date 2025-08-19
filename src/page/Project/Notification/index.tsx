@@ -24,18 +24,18 @@ import Policy from './components/Policy';
 enum ENotificationPage {
   MESSAGE = 'message',
   POLICY = 'policy',
-  CHANNEL = 'channel',
+  CHANNEL = 'channel'
 }
 const contentMap = {
   [ENotificationPage.MESSAGE]: {
-    component: Message,
+    component: Message
   },
   [ENotificationPage.POLICY]: {
-    component: Policy,
+    component: Policy
   },
   [ENotificationPage.CHANNEL]: {
-    component: Channel,
-  },
+    component: Channel
+  }
 };
 const Notification: React.FC<{
   id: number;
@@ -44,24 +44,24 @@ const Notification: React.FC<{
     {
       label: formatMessage({
         id: 'src.page.Project.Notification.3538B93C',
-        defaultMessage: '推送记录',
+        defaultMessage: '推送记录'
       }), //'推送记录'
-      key: 'message',
+      key: 'message'
     },
     {
       label: formatMessage({
         id: 'src.page.Project.Notification.25A341FB',
-        defaultMessage: '推送规则',
+        defaultMessage: '推送规则'
       }), //'推送规则'
-      key: 'policy',
+      key: 'policy'
     },
     {
       label: formatMessage({
         id: 'src.page.Project.Notification.87BBE655',
-        defaultMessage: '推送通道',
+        defaultMessage: '推送通道'
       }), //'推送通道'
-      key: 'channel',
-    },
+      key: 'channel'
+    }
   ];
 
   const [key, setKey] = useState<string>(items?.[0]?.key as string);
@@ -75,7 +75,7 @@ const Notification: React.FC<{
         loading: false,
         items,
         selectedKey: [key],
-        handleItemOnClick,
+        handleItemOnClick
       }}
       content={<Component key={key} projectId={id} />}
     />

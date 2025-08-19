@@ -23,7 +23,7 @@ import {
   CloudDownloadOutlined,
   EditOutlined,
   FileSearchOutlined,
-  SyncOutlined,
+  SyncOutlined
 } from '@ant-design/icons';
 import type { DataGridRef } from '@oceanbase-odc/ob-react-data-grid';
 import { Layout, message, Tabs } from 'antd';
@@ -37,7 +37,10 @@ import { IEditor } from '@/component/MonacoEditor';
 import { SQLCodePreviewer } from '@/component/SQLCodePreviewer';
 import { IConStatus } from '@/component/Toolbar/statefulIcon';
 import { PLType } from '@/constant/plType';
-import { openProcedureEditPageByProName, updatePage } from '@/store/helper/page';
+import {
+  openProcedureEditPageByProName,
+  updatePage
+} from '@/store/helper/page';
 import { ProcedurePage as ProcedurePageModel } from '@/store/helper/page/pages';
 import { SessionManagerStore } from '@/store/sessionManager';
 import SessionStore from '@/store/sessionManager/session';
@@ -57,14 +60,14 @@ const { Content } = Layout;
 
 // 顶层 Tab key 枚举
 export enum TopTab {
-  PROPS = 'PROPS',
+  PROPS = 'PROPS'
 }
 
 // 属性 Tab key 枚举
 export enum PropsTab {
   INFO = 'INFO',
   PARAMS = 'PARAMS',
-  DDL = 'DDL',
+  DDL = 'DDL'
 }
 
 interface IProps {
@@ -96,7 +99,7 @@ class ProcedurePage extends Component<
     propsTab: this.props.params.propsTab || PropsTab.INFO,
     procedure: null,
     dataLoading: false,
-    formated: false,
+    formated: false
   };
 
   public UNSAFE_componentWillReceiveProps(nextProps: IProps) {
@@ -107,7 +110,7 @@ class ProcedurePage extends Component<
       nextProps.params.propsTab !== this.state.propsTab
     ) {
       this.setState({
-        propsTab: nextProps.params.propsTab,
+        propsTab: nextProps.params.propsTab
       });
     }
   }
@@ -120,7 +123,7 @@ class ProcedurePage extends Component<
       path: true,
       proName: procedure.proName,
       topTab: TopTab.PROPS,
-      propsTab,
+      propsTab
     });
   };
 
@@ -130,7 +133,7 @@ class ProcedurePage extends Component<
       proName,
       false,
       session?.sessionId,
-      session?.odcDatabase.name,
+      session?.odcDatabase.name
     );
     if (procedure) {
       procedure.params = procedure.params.map((param) => {
@@ -138,7 +141,7 @@ class ProcedurePage extends Component<
         return {
           ...param,
           dataType,
-          dataLength,
+          dataLength
         };
       });
       this.setState({ procedure });
@@ -146,21 +149,24 @@ class ProcedurePage extends Component<
       message.error(
         formatMessage({
           id: 'workspace.window.procedure.load.error',
-          defaultMessage: '加载存储过程失败',
-        }),
+          defaultMessage: '加载存储过程失败'
+        })
       );
     }
   };
 
   public async componentDidMount() {
     const {
-      params: { proName },
+      params: { proName }
     } = this.props;
 
     await this.reloadProcedure(proName);
   }
 
-  public componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<Record<string, any>>) {
+  public componentDidUpdate(
+    prevProps: Readonly<IProps>,
+    prevState: Readonly<Record<string, any>>
+  ) {
     const { procedure } = this.state;
     if (prevState.procedure?.params !== procedure?.params) {
       this.gridRef.current?.setRows?.(procedure?.params ?? []);
@@ -173,7 +179,7 @@ class ProcedurePage extends Component<
       proName,
       session?.sessionId,
       session?.odcDatabase.name,
-      session?.odcDatabase?.id,
+      session?.odcDatabase?.id
     );
   }
 
@@ -190,7 +196,7 @@ class ProcedurePage extends Component<
       this.editor.setValue(procedure?.ddl || '');
     }
     this.setState({
-      formated: !formated,
+      formated: !formated
     });
   };
 
@@ -199,42 +205,44 @@ class ProcedurePage extends Component<
       pageKey,
       params: { proName },
       session,
-      sessionManagerStore,
+      sessionManagerStore
     } = this.props;
     const { propsTab, procedure, formated } = this.state;
-    const isMySQL = isConnectionModeBeMySQLType(session?.connection.dialectType);
+    const isMySQL = isConnectionModeBeMySQLType(
+      session?.connection.dialectType
+    );
 
     const tableColumns = [
       {
         key: 'paramName',
         name: formatMessage({
           id: 'workspace.window.createFunction.paramName',
-          defaultMessage: '名称',
+          defaultMessage: '名称'
         }),
 
         width: 150,
-        sortable: false,
+        sortable: false
       },
 
       {
         key: 'paramMode',
         name: formatMessage({
           id: 'workspace.window.createFunction.paramMode',
-          defaultMessage: '模式',
+          defaultMessage: '模式'
         }),
 
         width: 100,
-        sortable: false,
+        sortable: false
       },
 
       {
         key: 'dataType',
         name: formatMessage({
           id: 'workspace.window.createFunction.dataType',
-          defaultMessage: '数据类型',
+          defaultMessage: '数据类型'
         }),
         sortable: false,
-        width: 140,
+        width: 140
       },
 
       isMySQL
@@ -242,10 +250,10 @@ class ProcedurePage extends Component<
             key: 'dataLength',
             name: formatMessage({
               id: 'odc.components.ProcedurePage.Length',
-              defaultMessage: '长度',
+              defaultMessage: '长度'
             }), // 长度
             sortable: false,
-            width: 100,
+            width: 100
           }
         : null,
 
@@ -253,11 +261,11 @@ class ProcedurePage extends Component<
         key: 'defaultValue',
         name: formatMessage({
           id: 'workspace.window.createFunction.defaultValue',
-          defaultMessage: '默认值',
+          defaultMessage: '默认值'
         }),
 
-        sortable: false,
-      },
+        sortable: false
+      }
     ].filter(Boolean);
 
     return (
@@ -274,15 +282,15 @@ class ProcedurePage extends Component<
                   key: PropsTab.INFO,
                   label: formatMessage({
                     id: 'workspace.window.table.propstab.info',
-                    defaultMessage: '基本信息',
+                    defaultMessage: '基本信息'
                   }),
-                  children: <ShowProcedureBaseInfoForm model={procedure} />,
+                  children: <ShowProcedureBaseInfoForm model={procedure} />
                 },
                 {
                   key: PropsTab.PARAMS,
                   label: formatMessage({
                     id: 'workspace.window.function.propstab.params',
-                    defaultMessage: '参数',
+                    defaultMessage: '参数'
                   }),
                   children: (
                     <>
@@ -290,10 +298,13 @@ class ProcedurePage extends Component<
                         <ToolbarButton
                           text={formatMessage({
                             id: 'workspace.window.session.button.refresh',
-                            defaultMessage: '刷新',
+                            defaultMessage: '刷新'
                           })}
                           icon={<SyncOutlined />}
-                          onClick={this.reloadProcedure.bind(this, procedure.proName)}
+                          onClick={this.reloadProcedure.bind(
+                            this,
+                            procedure.proName
+                          )}
                         />
                       </Toolbar>
                       <EditableTable
@@ -306,7 +317,7 @@ class ProcedurePage extends Component<
                         readonly={true}
                       />
                     </>
-                  ),
+                  )
                 },
                 {
                   key: PropsTab.DDL,
@@ -316,21 +327,25 @@ class ProcedurePage extends Component<
                       <Toolbar>
                         <ToolbarButton
                           disabled={
-                            !getDataSourceModeConfig(session?.connection?.type)?.features?.plEdit
+                            !getDataSourceModeConfig(session?.connection?.type)
+                              ?.features?.plEdit
                           }
                           text={formatMessage({
                             id: 'workspace.window.session.button.edit',
-                            defaultMessage: '编辑',
+                            defaultMessage: '编辑'
                           })}
                           icon={<EditOutlined />}
-                          onClick={this.editProcedure.bind(this, procedure.proName)}
+                          onClick={this.editProcedure.bind(
+                            this,
+                            procedure.proName
+                          )}
                         />
 
                         <ToolbarButton
                           text={
                             formatMessage({
                               id: 'odc.components.ProcedurePage.Download',
-                              defaultMessage: '下载',
+                              defaultMessage: '下载'
                             }) //下载
                           }
                           icon={<CloudDownloadOutlined />}
@@ -339,7 +354,7 @@ class ProcedurePage extends Component<
                               proName,
                               PLType.PROCEDURE,
                               procedure?.ddl,
-                              session?.odcDatabase.name,
+                              session?.odcDatabase.name
                             );
                           }}
                         />
@@ -347,7 +362,7 @@ class ProcedurePage extends Component<
                         <ToolbarButton
                           text={formatMessage({
                             id: 'workspace.window.sql.button.search',
-                            defaultMessage: '查找',
+                            defaultMessage: '查找'
                           })}
                           icon={<FileSearchOutlined />}
                           onClick={this.showSearchWidget.bind(this)}
@@ -358,37 +373,48 @@ class ProcedurePage extends Component<
                             formated
                               ? formatMessage({
                                   id: 'odc.components.ProcedurePage.Unformat',
-                                  defaultMessage: '取消格式化',
+                                  defaultMessage: '取消格式化'
                                 })
                               : // 取消格式化
                                 formatMessage({
                                   id: 'odc.components.ProcedurePage.Formatting',
-                                  defaultMessage: '格式化',
+                                  defaultMessage: '格式化'
                                 })
 
                             // 格式化
                           }
                           icon={<AlignLeftOutlined />}
                           onClick={this.handleFormat}
-                          status={formated ? IConStatus.ACTIVE : IConStatus.INIT}
+                          status={
+                            formated ? IConStatus.ACTIVE : IConStatus.INIT
+                          }
                         />
 
                         <ToolbarButton
                           text={formatMessage({
                             id: 'workspace.window.session.button.refresh',
-                            defaultMessage: '刷新',
+                            defaultMessage: '刷新'
                           })}
                           icon={<SyncOutlined />}
-                          onClick={this.reloadProcedure.bind(this, procedure.proName)}
+                          onClick={this.reloadProcedure.bind(
+                            this,
+                            procedure.proName
+                          )}
                         />
                       </Toolbar>
-                      <div style={{ height: `calc(100% - 38px)`, position: 'relative' }}>
+                      <div
+                        style={{
+                          height: `calc(100% - 38px)`,
+                          position: 'relative'
+                        }}
+                      >
                         <SQLCodePreviewer
                           readOnly
                           defaultValue={(procedure && procedure.ddl) || ''}
                           key={procedure.ddl}
                           language={
-                            getDataSourceModeConfig(session?.connection?.type)?.sql?.language
+                            getDataSourceModeConfig(session?.connection?.type)
+                              ?.sql?.language
                           }
                           onEditorCreated={(editor: IEditor) => {
                             this.editor = editor;
@@ -396,8 +422,8 @@ class ProcedurePage extends Component<
                         />
                       </div>
                     </>
-                  ),
-                },
+                  )
+                }
               ]}
             />
           </Content>
@@ -419,5 +445,5 @@ export default WrapSessionPage(
   },
   true,
   true,
-  true,
+  true
 );

@@ -18,7 +18,7 @@ import type { ProjectUser } from './project';
 
 export enum RuleType {
   SQL_CHECK = 'SQL_CHECK',
-  SQL_CONSOLE = 'SQL_CONSOLE',
+  SQL_CONSOLE = 'SQL_CONSOLE'
 }
 
 export interface IRule {
@@ -61,7 +61,7 @@ export enum DialectType {
   OB_ORACLE = 'OB_ORACLE',
   ORACLE = 'ORACLE',
   MYSQL = 'MYSQL',
-  UNKNOWN = 'UNKNOWN',
+  UNKNOWN = 'UNKNOWN'
 }
 
 export enum PropertyMetadataType {
@@ -69,7 +69,7 @@ export enum PropertyMetadataType {
   INTEGER = 'INTEGER',
   STRING = 'STRING',
   STRING_LIST = 'STRING_LIST',
-  INTEGER_LIST = 'INTEGER_LIST',
+  INTEGER_LIST = 'INTEGER_LIST'
 }
 export enum ComponentType {
   INPUT_STRING = 'INPUT_STRING',
@@ -77,7 +77,7 @@ export enum ComponentType {
   RADIO = 'RADIO',
   SELECT_SINGLE = 'SELECT_SINGLE',
   SELECT_MULTIPLE = 'SELECT_MULTIPLE',
-  SELECT_TAGS = 'SELECT_TAGS',
+  SELECT_TAGS = 'SELECT_TAGS'
 }
 
 export type PropertyMetadata = {

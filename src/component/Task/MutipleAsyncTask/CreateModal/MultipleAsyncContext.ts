@@ -5,5 +5,5 @@ export const MultipleAsyncContext = React.createContext<{
   projectMap: Record<number, string>;
 }>({
   projectId: null,
-  projectMap: {},
+  projectMap: {}
 });

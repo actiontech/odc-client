@@ -28,7 +28,7 @@ export default function () {
         background: 'var(--background-secondry-color)',
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'center'
       }}
     >
       <Spin />

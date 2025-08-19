@@ -43,7 +43,7 @@ class CsvMapping extends React.Component<
   constructor(props) {
     super(props);
     this.state = {
-      columns: [],
+      columns: []
     };
   }
   componentDidMount() {
@@ -54,9 +54,13 @@ class CsvMapping extends React.Component<
     if (!sessionId) {
       return;
     }
-    const columns = await getTableColumnList(this.props.tableName, databaseName, sessionId);
+    const columns = await getTableColumnList(
+      this.props.tableName,
+      databaseName,
+      sessionId
+    );
     this.setState({
-      columns,
+      columns
     });
   };
   componentDidUpdate(
@@ -64,7 +68,9 @@ class CsvMapping extends React.Component<
       csvColumnMappings: CsvColumnMapping[];
       tableName: string;
       sessionId: string;
-      onChangeCsvColumnMappings: (csvColumnMappings: CsvColumnMapping[]) => void;
+      onChangeCsvColumnMappings: (
+        csvColumnMappings: CsvColumnMapping[]
+      ) => void;
       csvMappingErrors: {
         errorMsg: string;
         errorIndex: number;
@@ -72,10 +78,13 @@ class CsvMapping extends React.Component<
     }>,
 
     prevState: Readonly<{ columns: ITableColumn[] }>,
-    snapshot?: any,
+    snapshot?: any
   ): void {
     const { tableName, sessionId } = this.props;
-    if (prevProps.tableName !== tableName || prevProps.sessionId !== sessionId) {
+    if (
+      prevProps.tableName !== tableName ||
+      prevProps.sessionId !== sessionId
+    ) {
       this.getTableColumns();
     }
   }
@@ -88,7 +97,7 @@ class CsvMapping extends React.Component<
       ...newMapping[index],
       destColumnName: value,
       destColumnType: targetColumn?.dataType,
-      destColumnPosition: targetColumn?.ordinalPosition,
+      destColumnPosition: targetColumn?.ordinalPosition
     };
 
     this.props.onChangeCsvColumnMappings(newMapping);
@@ -101,7 +110,7 @@ class CsvMapping extends React.Component<
     this.props.onChangeCsvColumnMappings(
       this.props.csvColumnMappings.map((column, i) => {
         return { ...column, isSelected: indexs.includes(i) };
-      }),
+      })
     );
   };
 
@@ -115,23 +124,23 @@ class CsvMapping extends React.Component<
       {
         title: formatMessage({
           id: 'odc.ImportDrawer.csvMapping.ImportFile',
-          defaultMessage: '导入文件',
+          defaultMessage: '导入文件'
         }), //导入文件
         children: [
           {
             title: formatMessage({
               id: 'odc.ImportDrawer.csvMapping.OriginalField',
-              defaultMessage: '原字段',
+              defaultMessage: '原字段'
             }),
 
             dataIndex: 'srcColumnName',
-            width: 100,
+            width: 100
           },
 
           {
             title: formatMessage({
               id: 'odc.ImportDrawer.csvMapping.FirstLineValue',
-              defaultMessage: '首行值',
+              defaultMessage: '首行值'
             }),
 
             dataIndex: 'firstLineValue',
@@ -139,27 +148,27 @@ class CsvMapping extends React.Component<
               if (t === '') {
                 return formatMessage({
                   id: 'odc.ImportDrawer.csvMapping.Null',
-                  defaultMessage: '(空)',
+                  defaultMessage: '(空)'
                 }); // (空)
               } else if (isNil(t)) {
                 return '(null)';
               }
               return t;
-            },
-          },
-        ],
+            }
+          }
+        ]
       },
 
       {
         title: formatMessage({
           id: 'odc.ImportDrawer.csvMapping.TargetTable',
-          defaultMessage: '目标表',
+          defaultMessage: '目标表'
         }), //目标表
         children: [
           {
             title: formatMessage({
               id: 'odc.ImportDrawer.csvMapping.TargetField',
-              defaultMessage: '目标字段',
+              defaultMessage: '目标字段'
             }),
             dataIndex: 'destColumnName',
             width: 100,
@@ -171,7 +180,7 @@ class CsvMapping extends React.Component<
                       {columnName ||
                         formatMessage({
                           id: 'odc.ImportDrawer.csvMapping.No',
-                          defaultMessage: '无',
+                          defaultMessage: '无'
                         })}
                     </div>
                   </Tooltip>
@@ -190,7 +199,7 @@ class CsvMapping extends React.Component<
                   getPopupContainer={(trigger) => trigger?.parentNode}
                   dropdownStyle={{
                     width: 170,
-                    minWidth: 170,
+                    minWidth: 170
                   }}
                 >
                   {this.state.columns.map((column) => {
@@ -206,20 +215,20 @@ class CsvMapping extends React.Component<
                   })}
                 </Select>
               );
-            },
+            }
           },
 
           {
             title: formatMessage({
               id: 'odc.ImportDrawer.csvMapping.TargetFieldType',
-              defaultMessage: '目标字段类型',
+              defaultMessage: '目标字段类型'
             }),
 
             dataIndex: 'destColumnType',
-            width: 100,
-          },
-        ],
-      },
+            width: 100
+          }
+        ]
+      }
     ];
   };
   render() {
@@ -234,7 +243,7 @@ class CsvMapping extends React.Component<
       } else {
         errorMsg = formatMessage({
           id: 'odc.ImportDrawer.csvMapping.IncorrectFormSettings',
-          defaultMessage: '表单设置有误',
+          defaultMessage: '表单设置有误'
         });
       }
     }
@@ -243,7 +252,7 @@ class CsvMapping extends React.Component<
         <div style={{ lineHeight: '20px', fontSize: 12, margin: '16px 0px' }}>
           {formatMessage({
             id: 'odc.ImportDrawer.csvMapping.FieldMapping',
-            defaultMessage: '字段映射',
+            defaultMessage: '字段映射'
           })}
         </div>
         <Editable
@@ -260,12 +269,14 @@ class CsvMapping extends React.Component<
               .filter(Boolean),
             onChange: (selectedKeys) => {
               this.updateSelectedKeys(selectedKeys as string[]);
-            },
+            }
           }}
           pagination={false}
         />
 
-        {errorMsg && <Row style={{ color: '#FF4D4F', marginTop: 8 }}>{errorMsg}</Row>}
+        {errorMsg && (
+          <Row style={{ color: '#FF4D4F', marginTop: 8 }}>{errorMsg}</Row>
+        )}
       </div>
     );
   }

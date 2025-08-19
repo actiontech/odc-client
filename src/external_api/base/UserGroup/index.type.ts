@@ -7,7 +7,7 @@ import {
   IAddUserGroupReq,
   IAddUserGroupReply,
   IUpdateUserGroupReq,
-  IGenericResp,
+  IGenericResp
 } from '../common.type';
 
 export interface IListUserGroupsParams {

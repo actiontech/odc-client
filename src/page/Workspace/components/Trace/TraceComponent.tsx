@@ -12,11 +12,12 @@ export default (props) => {
     session,
     searchValue,
     updateTotalElapseMicroSeconds,
-    updateOriginStartTimestamp,
+    updateOriginStartTimestamp
   } = props;
   const [treeData, setTreeData] = useState<ExpandTraceSpan[]>([]);
   const [innerTreeData, setInnerTreeData] = useState([]);
-  const [totalElapseMicroSeconds, setTotalElapseMicroSeconds] = useState<number>();
+  const [totalElapseMicroSeconds, setTotalElapseMicroSeconds] =
+    useState<number>();
   const [totalEndTimestamp, setTotalEndTimestamp] = useState<number>(0);
   const [totalStartTimestamp, setTotalStartTimestamp] = useState<number>(0);
   const [originTreeData, setOriginTreeData] = useState<ExpandTraceSpan[]>([]);
@@ -91,12 +92,12 @@ export default (props) => {
     setTreeData(
       newTreeData.filter((_d) => {
         return _d.parentChain.every((e) => newOpenNodes.includes(e));
-      }),
+      })
     );
     setInnerTreeData(
       newTreeData.filter((_d) => {
         return _d.parentChain.every((e) => newOpenNodes.includes(e));
-      }),
+      })
     );
   }
   function countStepBySameParentKey(parentKey) {
@@ -109,10 +110,14 @@ export default (props) => {
   }
   async function getTraceData(traceId, sql, session) {
     if (traceId) {
-      const rawData = await getFullLinkTrace(session?.sessionId, session?.database?.dbName, {
-        sql: sql,
-        tag: traceId,
-      });
+      const rawData = await getFullLinkTrace(
+        session?.sessionId,
+        session?.database?.dbName,
+        {
+          sql: sql,
+          tag: traceId
+        }
+      );
       const resData = await parseTraceTree(rawData?.data);
       // @ts-ignore
       resData.isRoot = true;
@@ -139,7 +144,7 @@ export default (props) => {
     parentKey = null,
     parentChain = [],
     siblings = 0,
-    isRoot = false,
+    isRoot = false
   ) {
     if (Array.isArray(node) && node.length === 0) {
       return [];
@@ -166,7 +171,7 @@ export default (props) => {
       siblings: siblings,
       isExpand: true,
       isSearch: false,
-      isParent: isRoot ? true : node?.children?.length > 0,
+      isParent: isRoot ? true : node?.children?.length > 0
     });
     if (node.children) {
       node.children.forEach((child, _index) =>
@@ -176,8 +181,8 @@ export default (props) => {
           _index,
           key,
           parentChain.concat(key),
-          node?.children?.length,
-        ),
+          node?.children?.length
+        )
       );
     }
     return _data_;
@@ -185,7 +190,9 @@ export default (props) => {
 };
 export function parseTraceTree(data, k = [0]) {
   const children =
-    data?.subSpans?.map((subSpan, index) => parseTraceTree(subSpan, k.concat(index))) || [];
+    data?.subSpans?.map((subSpan, index) =>
+      parseTraceTree(subSpan, k.concat(index))
+    ) || [];
   return {
     title: data?.spanName,
     children: children?.length > 0 ? children : null,
@@ -201,9 +208,12 @@ export function parseTraceTree(data, k = [0]) {
     originEndTimestamp: data?.endTimestamp,
     elapseMicroSeconds: data?.elapseMicroSeconds,
     startTimestamp:
-      Date.parse(data?.startTimestamp) * 1000 + parseInt(data?.startTimestamp?.slice(-3)),
-    endTimestamp: Date.parse(data?.endTimestamp) * 1000 + parseInt(data?.endTimestamp?.slice(-3)),
-    tags: data?.tags,
+      Date.parse(data?.startTimestamp) * 1000 +
+      parseInt(data?.startTimestamp?.slice(-3)),
+    endTimestamp:
+      Date.parse(data?.endTimestamp) * 1000 +
+      parseInt(data?.endTimestamp?.slice(-3)),
+    tags: data?.tags
   };
 }
 

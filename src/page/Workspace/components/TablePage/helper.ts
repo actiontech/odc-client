@@ -18,12 +18,18 @@ import { tableModify } from '@/common/network/table';
 import { formatMessage } from '@/util/intl';
 import { message } from 'antd';
 
-export const handleExecuteTableDMLV2 = async (sql: string, tableName: string) => {
+export const handleExecuteTableDMLV2 = async (
+  sql: string,
+  tableName: string
+) => {
   try {
     const isSuccess = await tableModify(sql, tableName);
     if (isSuccess) {
       message.success(
-        formatMessage({ id: 'portal.connection.form.save.success', defaultMessage: '保存成功' }),
+        formatMessage({
+          id: 'portal.connection.form.save.success',
+          defaultMessage: '保存成功'
+        })
       );
       return true;
     }

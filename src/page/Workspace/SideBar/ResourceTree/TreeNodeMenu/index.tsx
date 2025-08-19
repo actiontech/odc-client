@@ -37,23 +37,37 @@ import ResourceTreeContext from '@/page/Workspace/context/ResourceTreeContext';
 import { SearchOutlined } from '@ant-design/icons';
 import {
   isSupportQuickOpenGlobalSearchNodes,
-  isGroupNode,
+  isGroupNode
 } from '@/page/Workspace/SideBar/ResourceTree/const';
 import { openGlobalSearch } from '@/page/Workspace/SideBar/ResourceTree/const';
 import login from '@/store/login';
 
 export const hasExportPermission = (dbSession: SessionStore) => {
-  return dbSession?.odcDatabase?.authorizedPermissionTypes?.includes(DatabasePermissionType.EXPORT);
+  return dbSession?.odcDatabase?.authorizedPermissionTypes?.includes(
+    DatabasePermissionType.EXPORT
+  );
 };
 export const hasChangePermission = (dbSession: SessionStore) => {
-  return dbSession?.odcDatabase?.authorizedPermissionTypes?.includes(DatabasePermissionType.CHANGE);
+  return dbSession?.odcDatabase?.authorizedPermissionTypes?.includes(
+    DatabasePermissionType.CHANGE
+  );
 };
-export const hasTableExportPermission = (dbSession: SessionStore, node: TreeDataNode) => {
-  return node?.data?.info?.authorizedPermissionTypes?.includes(DatabasePermissionType.EXPORT);
+export const hasTableExportPermission = (
+  dbSession: SessionStore,
+  node: TreeDataNode
+) => {
+  return node?.data?.info?.authorizedPermissionTypes?.includes(
+    DatabasePermissionType.EXPORT
+  );
 };
 
-export const hasTableChangePermission = (dbSession: SessionStore, node: TreeDataNode) => {
-  return node?.data?.info?.authorizedPermissionTypes?.includes(DatabasePermissionType.CHANGE);
+export const hasTableChangePermission = (
+  dbSession: SessionStore,
+  node: TreeDataNode
+) => {
+  return node?.data?.info?.authorizedPermissionTypes?.includes(
+    DatabasePermissionType.CHANGE
+  );
 };
 
 const TreeNodeMenu = (props: IProps) => {
@@ -76,11 +90,12 @@ const TreeNodeMenu = (props: IProps) => {
 
   let isShowGlobalSearchEntrance = isSupportQuickOpenGlobalSearchNodes(
     type as ResourceNodeType,
-    node.key,
+    node.key
   );
   if (type === ResourceNodeType.Database) {
     isShowGlobalSearchEntrance =
-      isShowGlobalSearchEntrance && Boolean(node?.data?.authorizedPermissionTypes?.length);
+      isShowGlobalSearchEntrance &&
+      Boolean(node?.data?.authorizedPermissionTypes?.length);
   }
 
   /**
@@ -100,18 +115,22 @@ const TreeNodeMenu = (props: IProps) => {
       onClick={() => {
         setCurrentObject?.({
           value: node.key,
-          type: node.type,
+          type: node.type
         });
       }}
     >
       {node.title}
       {node.warning ? (
         <Tooltip placement="right" title={node.warning}>
-          <InfoCircleFilled style={{ color: 'var(--icon-color-normal)', paddingLeft: 5 }} />
+          <InfoCircleFilled
+            style={{ color: 'var(--icon-color-normal)', paddingLeft: 5 }}
+          />
         </Tooltip>
       ) : null}
       {node.tip && showTip ? (
-        <span style={{ color: 'var(--text-color-hint)', paddingLeft: 5 }}>{node.tip}</span>
+        <span style={{ color: 'var(--text-color-hint)', paddingLeft: 5 }}>
+          {node.tip}
+        </span>
       ) : null}
       {isGroupNode(type) && isShowGlobalSearchEntrance ? (
         <SearchOutlined
@@ -132,7 +151,7 @@ const TreeNodeMenu = (props: IProps) => {
       key={node.key + '-drag'}
       style={{
         wordBreak: 'break-all',
-        display: 'inline',
+        display: 'inline'
       }}
       useCustomerDragLayer={true}
       onBegin={() => {
@@ -140,7 +159,7 @@ const TreeNodeMenu = (props: IProps) => {
           prefix: node.title?.toString(),
           body: node.title?.toString(),
           objType: node.dbObjectType,
-          databaseId: dbSession?.database?.databaseId,
+          databaseId: dbSession?.database?.databaseId
         };
       }}
     >
@@ -168,7 +187,9 @@ const TreeNodeMenu = (props: IProps) => {
     let menuItems: ItemType[] = [];
     items.forEach((item: IMenuItemConfig, index) => {
       // 菜单子项 显隐可独立配置
-      const disabledItem = item.disabled ? item.disabled(dbSession, node) : false;
+      const disabledItem = item.disabled
+        ? item.disabled(dbSession, node)
+        : false;
       const isHideItem = item.isHide ? item.isHide(dbSession, node) : false;
       let menuItem: ItemType;
       if (isHideItem) {
@@ -183,7 +204,9 @@ const TreeNodeMenu = (props: IProps) => {
           disabled: disabledItem,
           children: item.children
             .map((child) => {
-              const isHideChild = child.isHide ? child.isHide(dbSession, node) : false;
+              const isHideChild = child.isHide
+                ? child.isHide(dbSession, node)
+                : false;
               if (isHideChild) {
                 return null;
               }
@@ -194,26 +217,33 @@ const TreeNodeMenu = (props: IProps) => {
                 label: menuAccessWrap(
                   child?.needAccessTypeList,
                   node?.data?.authorizedPermissionTypes,
-                  child.text as ReactNode,
-                ),
+                  child.text as ReactNode
+                )
               };
             })
-            ?.filter(Boolean),
+            ?.filter(Boolean)
         };
       } else {
         menuItem = {
           key: item.key || index,
           className: styles.ellipsis,
           label: item.subText
-            ? [(item.text as (node: TreeDataNode) => ReactNode)(node), item.subText(node)]
+            ? [
+                (item.text as (node: TreeDataNode) => ReactNode)(node),
+                item.subText(node)
+              ]
             : item.text,
-          disabled: disabledItem,
+          disabled: disabledItem
         };
       }
       menuItems.push(menuItem);
-      if (typeof item.hasDivider === 'function' ? item.hasDivider(node) : item.hasDivider) {
+      if (
+        typeof item.hasDivider === 'function'
+          ? item.hasDivider(node)
+          : item.hasDivider
+      ) {
         menuItems.push({
-          type: 'divider',
+          type: 'divider'
         });
       }
     });
@@ -242,7 +272,9 @@ const TreeNodeMenu = (props: IProps) => {
         )}
         {menuItems
           .map((item) => {
-            const isHideItem = item.isHide ? item.isHide(dbSession, node) : false;
+            const isHideItem = item.isHide
+              ? item.isHide(dbSession, node)
+              : false;
             if (item.ellipsis || isHideItem) {
               return null;
             }
@@ -269,13 +301,13 @@ const TreeNodeMenu = (props: IProps) => {
           <Dropdown
             menu={{
               style: {
-                minWidth: '160px',
+                minWidth: '160px'
               },
               items: ellipsisItemsProp,
               onClick: (info) => {
                 info?.domEvent?.stopPropagation();
                 onMenuClick(clickMap[info.key]);
-              },
+              }
             }}
             trigger={['hover']}
           >
@@ -294,7 +326,10 @@ const TreeNodeMenu = (props: IProps) => {
       return null;
     }
     return (
-      <Badge className={treeStyles.env} color={EnvColorMap[env?.style?.toUpperCase()]?.tipColor} />
+      <Badge
+        className={treeStyles.env}
+        color={EnvColorMap[env?.style?.toUpperCase()]?.tipColor}
+      />
     );
   }
 
@@ -316,13 +351,13 @@ const TreeNodeMenu = (props: IProps) => {
         <Dropdown
           menu={{
             style: {
-              minWidth: '160px',
+              minWidth: '160px'
             },
             items: allItemsProp,
             onClick: (info) => {
               info?.domEvent?.stopPropagation();
               onMenuClick(clickMap[info.key]);
-            },
+            }
           }}
           trigger={['contextMenu']}
         >
@@ -338,7 +373,7 @@ const TreeNodeMenu = (props: IProps) => {
 TreeNodeMenu.defaultProps = {
   style: {},
   disabled: false,
-  options: {},
+  options: {}
 };
 
 export default TreeNodeMenu;

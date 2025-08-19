@@ -4,7 +4,7 @@ import {
   IResourceOverviewResourceListResV1,
   IResourceOverviewResourceTypeDistributionResV1,
   IResourceOverviewStatisticsResV1,
-  IResourceOverviewTopologyResV1,
+  IResourceOverviewTopologyResV1
 } from '../common.type';
 
 export interface IDownloadResourceOverviewListParams {
@@ -41,7 +41,8 @@ export interface IGetResourceOverviewResourceListV1Return
 export interface IGetResourceOverviewResourceTypeDistributionV1Return
   extends IResourceOverviewResourceTypeDistributionResV1 {}
 
-export interface IGetResourceOverviewStatisticsV1Return extends IResourceOverviewStatisticsResV1 {}
+export interface IGetResourceOverviewStatisticsV1Return
+  extends IResourceOverviewStatisticsResV1 {}
 
 export interface IGetResourceOverviewTopologyV1Params {
   filter_by_db_type?: string;
@@ -55,4 +56,5 @@ export interface IGetResourceOverviewTopologyV1Params {
   fuzzy_search_resource_name?: string;
 }
 
-export interface IGetResourceOverviewTopologyV1Return extends IResourceOverviewTopologyResV1 {}
+export interface IGetResourceOverviewTopologyV1Return
+  extends IResourceOverviewTopologyResV1 {}

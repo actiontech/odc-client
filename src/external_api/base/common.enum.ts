@@ -1,13 +1,13 @@
 export enum DBServiceIsConnectableReplyConnectionStatusEnum {
   'connect_success' = 'connect_success',
 
-  'connect_failed' = 'connect_failed',
+  'connect_failed' = 'connect_failed'
 }
 
 export enum DMSProxyTargetScenarioEnum {
   'internal_service' = 'internal_service',
 
-  'thrid_party_integrate' = 'thrid_party_integrate',
+  'thrid_party_integrate' = 'thrid_party_integrate'
 }
 
 export enum GetDataExportTaskStatusEnum {
@@ -19,7 +19,7 @@ export enum GetDataExportTaskStatusEnum {
 
   'failed' = 'failed',
 
-  'file_deleted' = 'file_deleted',
+  'file_deleted' = 'file_deleted'
 }
 
 export enum GetUserAuthenticationTypeEnum {
@@ -29,7 +29,7 @@ export enum GetUserAuthenticationTypeEnum {
 
   'oauth2' = 'oauth2',
 
-  'unknown' = 'unknown',
+  'unknown' = 'unknown'
 }
 
 export enum GetUserStatEnum {
@@ -43,19 +43,19 @@ export enum GetUserStatEnum {
 
   'Disabled' = 'Disabled',
 
-  'Unknown' = 'Unknown',
+  'Unknown' = 'Unknown'
 }
 
 export enum ListDBServiceLastConnectionTestStatusEnum {
   'connect_success' = 'connect_success',
 
-  'connect_failed' = 'connect_failed',
+  'connect_failed' = 'connect_failed'
 }
 
 export enum ListDBServiceV2LastConnectionTestStatusEnum {
   'connect_success' = 'connect_success',
 
-  'connect_failed' = 'connect_failed',
+  'connect_failed' = 'connect_failed'
 }
 
 export enum ListDataExportWorkflowStatusEnum {
@@ -71,19 +71,19 @@ export enum ListDataExportWorkflowStatusEnum {
 
   'failed' = 'failed',
 
-  'finish' = 'finish',
+  'finish' = 'finish'
 }
 
 export enum ListGlobalDBServiceLastConnectionTestStatusEnum {
   'connect_success' = 'connect_success',
 
-  'connect_failed' = 'connect_failed',
+  'connect_failed' = 'connect_failed'
 }
 
 export enum ListGlobalDBServiceV2LastConnectionTestStatusEnum {
   'connect_success' = 'connect_success',
 
-  'connect_failed' = 'connect_failed',
+  'connect_failed' = 'connect_failed'
 }
 
 export enum ListMemberRoleWithOpRangeOpRangeTypeEnum {
@@ -93,7 +93,7 @@ export enum ListMemberRoleWithOpRangeOpRangeTypeEnum {
 
   'project' = 'project',
 
-  'db_service' = 'db_service',
+  'db_service' = 'db_service'
 }
 
 export enum ListOpPermissionRangeTypeEnum {
@@ -103,13 +103,13 @@ export enum ListOpPermissionRangeTypeEnum {
 
   'project' = 'project',
 
-  'db_service' = 'db_service',
+  'db_service' = 'db_service'
 }
 
 export enum ListOpPermissionServiceEnum {
   'dms' = 'dms',
 
-  'sqle' = 'sqle',
+  'sqle' = 'sqle'
 }
 
 export enum ListProjectV1ProjectPriorityEnum {
@@ -119,7 +119,7 @@ export enum ListProjectV1ProjectPriorityEnum {
 
   'low' = 'low',
 
-  'unknown' = 'unknown',
+  'unknown' = 'unknown'
 }
 
 export enum ListProjectV2ProjectPriorityEnum {
@@ -129,7 +129,7 @@ export enum ListProjectV2ProjectPriorityEnum {
 
   'low' = 'low',
 
-  'unknown' = 'unknown',
+  'unknown' = 'unknown'
 }
 
 export enum ListRoleStatEnum {
@@ -143,7 +143,7 @@ export enum ListRoleStatEnum {
 
   'Disabled' = 'Disabled',
 
-  'Unknown' = 'Unknown',
+  'Unknown' = 'Unknown'
 }
 
 export enum ListUserAuthenticationTypeEnum {
@@ -153,7 +153,7 @@ export enum ListUserAuthenticationTypeEnum {
 
   'oauth2' = 'oauth2',
 
-  'unknown' = 'unknown',
+  'unknown' = 'unknown'
 }
 
 export enum ListUserStatEnum {
@@ -167,7 +167,7 @@ export enum ListUserStatEnum {
 
   'Disabled' = 'Disabled',
 
-  'Unknown' = 'Unknown',
+  'Unknown' = 'Unknown'
 }
 
 export enum ListUserGroupStatEnum {
@@ -181,7 +181,7 @@ export enum ListUserGroupStatEnum {
 
   'Disabled' = 'Disabled',
 
-  'Unknown' = 'Unknown',
+  'Unknown' = 'Unknown'
 }
 
 export enum MemberRoleWithOpRangeOpRangeTypeEnum {
@@ -191,7 +191,7 @@ export enum MemberRoleWithOpRangeOpRangeTypeEnum {
 
   'project' = 'project',
 
-  'db_service' = 'db_service',
+  'db_service' = 'db_service'
 }
 
 export enum OpPermissionItemOpPermissionTypeEnum {
@@ -265,7 +265,7 @@ export enum OpPermissionItemOpPermissionTypeEnum {
 
   'desensitization' = 'desensitization',
 
-  'none' = 'none',
+  'none' = 'none'
 }
 
 export enum OpPermissionItemRangeTypeEnum {
@@ -275,11 +275,11 @@ export enum OpPermissionItemRangeTypeEnum {
 
   'project' = 'project',
 
-  'db_service' = 'db_service',
+  'db_service' = 'db_service'
 }
 
 export enum OperationOperationTypeEnum {
-  'SQL' = 'SQL',
+  'SQL' = 'SQL'
 }
 
 export enum ProjectV1ProjectPriorityEnum {
@@ -289,7 +289,7 @@ export enum ProjectV1ProjectPriorityEnum {
 
   'low' = 'low',
 
-  'unknown' = 'unknown',
+  'unknown' = 'unknown'
 }
 
 export enum ProjectV2ProjectPriorityEnum {
@@ -299,7 +299,7 @@ export enum ProjectV2ProjectPriorityEnum {
 
   'low' = 'low',
 
-  'unknown' = 'unknown',
+  'unknown' = 'unknown'
 }
 
 export enum SQLQueryConfigAllowQueryWhenLessThanAuditLevelEnum {
@@ -309,13 +309,13 @@ export enum SQLQueryConfigAllowQueryWhenLessThanAuditLevelEnum {
 
   'warn' = 'warn',
 
-  'error' = 'error',
+  'error' = 'error'
 }
 
 export enum TestFeishuConfigurationAccountTypeEnum {
   'email' = 'email',
 
-  'phone' = 'phone',
+  'phone' = 'phone'
 }
 
 export enum UpdateProjectProjectPriorityEnum {
@@ -325,7 +325,7 @@ export enum UpdateProjectProjectPriorityEnum {
 
   'low' = 'low',
 
-  'unknown' = 'unknown',
+  'unknown' = 'unknown'
 }
 
 export enum UpdateProjectV2ProjectPriorityEnum {
@@ -335,7 +335,7 @@ export enum UpdateProjectV2ProjectPriorityEnum {
 
   'low' = 'low',
 
-  'unknown' = 'unknown',
+  'unknown' = 'unknown'
 }
 
 export enum WorkflowRecordStatusEnum {
@@ -351,7 +351,7 @@ export enum WorkflowRecordStatusEnum {
 
   'failed' = 'failed',
 
-  'finish' = 'finish',
+  'finish' = 'finish'
 }
 
 export enum WorkflowStepStateEnum {
@@ -359,5 +359,5 @@ export enum WorkflowStepStateEnum {
 
   'rejected' = 'rejected',
 
-  'finish' = 'finish',
+  'finish' = 'finish'
 }

@@ -46,13 +46,15 @@ const Node = ({
   parentKey,
   countStepBySameParentKey,
   index,
-  siblings,
+  siblings
 }) => {
   return (
     <div
       className={styles.node}
       style={{
-        borderBottom: lastOne ? '1px solid var(--odc-border-color)' : '1px solid transparent',
+        borderBottom: lastOne
+          ? '1px solid var(--odc-border-color)'
+          : '1px solid transparent'
       }}
     >
       {isRoot && !isExpand ? (
@@ -64,7 +66,7 @@ const Node = ({
           style={{
             position: 'absolute',
             top: '18px',
-            zIndex: 1,
+            zIndex: 1
           }}
         >
           <line
@@ -74,7 +76,7 @@ const Node = ({
             y2={level === 0 && index === siblings - 1 ? '17' : '0'}
             style={{
               stroke: 'grey',
-              strokeWidth: '1',
+              strokeWidth: '1'
             }}
             strokeDasharray={'2 2'}
           />
@@ -86,7 +88,7 @@ const Node = ({
           style={{
             width: '24px',
             height: '24px',
-            flex: '0 0 24px',
+            flex: '0 0 24px'
           }}
         ></div>
       ))}
@@ -99,7 +101,7 @@ const Node = ({
               position: 'absolute',
               left: '-13px',
               top: '-6px',
-              zIndex: 1,
+              zIndex: 1
             }}
           >
             <line
@@ -109,7 +111,7 @@ const Node = ({
               y2={`${24 * countStepBySameParentKey(parentKey) - 6}`}
               style={{
                 stroke: 'grey',
-                strokeWidth: '1',
+                strokeWidth: '1'
               }}
               strokeDasharray={'2 2'}
             />
@@ -126,7 +128,7 @@ const Node = ({
                     position: 'absolute',
                     left: '-24px',
                     top: '-3px',
-                    zIndex: 1,
+                    zIndex: 1
                   }}
                 >
                   <line
@@ -136,7 +138,7 @@ const Node = ({
                     y2="12"
                     style={{
                       stroke: 'grey',
-                      strokeWidth: '1',
+                      strokeWidth: '1'
                     }}
                     strokeDasharray={'2 2'}
                   />
@@ -157,7 +159,7 @@ const Node = ({
               style={{
                 position: 'absolute',
                 zIndex: 1,
-                right: 6,
+                right: 6
               }}
             >
               <line
@@ -167,7 +169,7 @@ const Node = ({
                 y2="1"
                 style={{
                   stroke: 'grey',
-                  strokeWidth: '1',
+                  strokeWidth: '1'
                 }}
                 strokeDasharray={'2 2'}
               />
@@ -176,7 +178,9 @@ const Node = ({
         )}
       </div>
       <div className={styles.nodeTreeTitle}>
-        <div style={{ width: '16px', height: '16px' }}>{getIconByNodeType(node)}</div>
+        <div style={{ width: '16px', height: '16px' }}>
+          {getIconByNodeType(node)}
+        </div>
         <div className={styles.nodeTitleContent}>{title}</div>
       </div>
     </div>

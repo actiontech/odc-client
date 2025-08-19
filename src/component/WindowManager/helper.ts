@@ -16,7 +16,11 @@
 
 import { IPage, PageType } from '@/d.ts';
 import { getTitleByParams } from '@/page/Workspace/components/TaskPage';
-import { BatchCompilePage, OBClientPage, SQLPage } from '@/store/helper/page/pages';
+import {
+  BatchCompilePage,
+  OBClientPage,
+  SQLPage
+} from '@/store/helper/page/pages';
 import { SQLConfirmPage } from '@/store/helper/page/pages/create';
 import { AnonymousPage } from '@/store/helper/page/pages/pl';
 import { formatMessage } from '@/util/intl';
@@ -24,53 +28,53 @@ import { formatMessage } from '@/util/intl';
 const titleText = {
   [PageType.SESSION_MANAGEMENT]: formatMessage({
     id: 'workspace.header.session.management',
-    defaultMessage: '会话管理',
+    defaultMessage: '会话管理'
   }),
   [PageType.SESSION_PARAM]: formatMessage({
     id: 'src.component.WindowManager.2A36DA18',
-    defaultMessage: '全局变量',
+    defaultMessage: '全局变量'
   }),
   [PageType.RECYCLE_BIN]: formatMessage({
     id: 'workspace.header.recycle',
-    defaultMessage: '回收站',
+    defaultMessage: '回收站'
   }),
   [PageType.CREATE_TABLE]:
     formatMessage({
       id: 'workspace.header.create',
-      defaultMessage: '新建',
+      defaultMessage: '新建'
     }) +
     formatMessage({
       id: 'workspace.header.create.table',
-      defaultMessage: '表',
+      defaultMessage: '表'
     }),
   [PageType.CREATE_VIEW]: formatMessage({
     id: 'workspace.window.createView.modal.title',
-    defaultMessage: '新建视图',
+    defaultMessage: '新建视图'
   }),
   [PageType.CREATE_FUNCTION]: formatMessage({
     id: 'workspace.window.createFunction.modal.title',
-    defaultMessage: '新建函数',
+    defaultMessage: '新建函数'
   }),
   [PageType.CREATE_PROCEDURE]: formatMessage({
     id: 'workspace.window.createProcedure.modal.title',
-    defaultMessage: '新建存储过程',
+    defaultMessage: '新建存储过程'
   }),
   [PageType.CREATE_TRIGGER]: formatMessage({
     id: 'odc.helper.page.openPage.CreateATrigger',
-    defaultMessage: '新建触发器',
+    defaultMessage: '新建触发器'
   }),
   [PageType.CREATE_TYPE]: formatMessage({
     id: 'odc.helper.page.openPage.NewType',
-    defaultMessage: '新建类型',
+    defaultMessage: '新建类型'
   }),
   [PageType.CREATE_SEQUENCE]: formatMessage({
     id: 'workspace.window.createSequence.modal.title',
-    defaultMessage: '新建序列',
+    defaultMessage: '新建序列'
   }),
   [PageType.CREATE_SYNONYM]: formatMessage({
     id: 'odc.helper.page.openPage.CreateSynonym',
-    defaultMessage: '新建同义词',
-  }),
+    defaultMessage: '新建同义词'
+  })
 };
 
 export function getPageTitleText(page: IPage) {

@@ -17,7 +17,7 @@
 import { getCurrentUserPermissions } from '@/common/network/manager';
 import {
   ALL_SELECTED_VALUE,
-  getIsSupportCreatedByMeRoles,
+  getIsSupportCreatedByMeRoles
 } from '@/component/Manage/ResourceSelector';
 import { actionTypes, IManagerResourceType } from '@/d.ts';
 import odc from '@/plugins/odc';
@@ -41,7 +41,10 @@ export class AuthStore {
   public async getCurrentUserPermissions() {
     try {
       const response = await getCurrentUserPermissions();
-      const { systemOperationPermissions = [], resourceManagementPermissions = [] } = response;
+      const {
+        systemOperationPermissions = [],
+        resourceManagementPermissions = []
+      } = response;
       /* {
         mock: {
           resourceIds: {
@@ -51,26 +54,28 @@ export class AuthStore {
         }
       } */
       const newPermissions: Permissions = new Map();
-      resourceManagementPermissions?.concat(systemOperationPermissions)?.forEach((permission) => {
-        const { actions = [], resourceId, resourceType } = permission;
-        if (!newPermissions.get(resourceType as IManagerResourceType)) {
-          newPermissions.set(resourceType as IManagerResourceType, {
-            resourceIds: new Map(),
-            all: [],
-          });
-        }
-        const item = newPermissions.get(resourceType as IManagerResourceType);
-        const isAllSelectFunction = getIsSupportCreatedByMeRoles()
-          ? resourceId === ALL_SELECTED_VALUE()
-          : isNull(resourceId);
-        if (isAllSelectFunction) {
-          item.all = item.all.concat((actions as actionTypes[]) || []);
-        } else {
-          const rid = resourceId?.toString();
-          const data = item.resourceIds.get(rid) || [];
-          item.resourceIds.set(rid, data.concat(actions as actionTypes[]));
-        }
-      });
+      resourceManagementPermissions
+        ?.concat(systemOperationPermissions)
+        ?.forEach((permission) => {
+          const { actions = [], resourceId, resourceType } = permission;
+          if (!newPermissions.get(resourceType as IManagerResourceType)) {
+            newPermissions.set(resourceType as IManagerResourceType, {
+              resourceIds: new Map(),
+              all: []
+            });
+          }
+          const item = newPermissions.get(resourceType as IManagerResourceType);
+          const isAllSelectFunction = getIsSupportCreatedByMeRoles()
+            ? resourceId === ALL_SELECTED_VALUE()
+            : isNull(resourceId);
+          if (isAllSelectFunction) {
+            item.all = item.all.concat((actions as actionTypes[]) || []);
+          } else {
+            const rid = resourceId?.toString();
+            const data = item.resourceIds.get(rid) || [];
+            item.resourceIds.set(rid, data.concat(actions as actionTypes[]));
+          }
+        });
       this.permissions = newPermissions;
       return response;
     } catch (e) {
@@ -78,17 +83,25 @@ export class AuthStore {
     }
   }
 
-  public getResourceActions(resourceId: any, resourceType: IManagerResourceType) {
+  public getResourceActions(
+    resourceId: any,
+    resourceType: IManagerResourceType
+  ) {
     return new Set(
       this.permissions
         .get(resourceType)
         ?.all?.concat(
-          this.permissions.get(resourceType).resourceIds.get(resourceId?.toString()) || [],
-        ) || [],
+          this.permissions
+            .get(resourceType)
+            .resourceIds.get(resourceId?.toString()) || []
+        ) || []
     );
   }
 
-  public getResourceByAction(resourceType: IManagerResourceType, action: actionTypes): any[] {
+  public getResourceByAction(
+    resourceType: IManagerResourceType,
+    action: actionTypes
+  ): any[] {
     const resource = this.permissions.get(resourceType);
     if (!resource) {
       return [];

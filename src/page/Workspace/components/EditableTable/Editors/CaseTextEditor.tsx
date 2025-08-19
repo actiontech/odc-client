@@ -36,7 +36,7 @@ export function CaseTextEditor<T>({
   column,
   width,
   caseSensitive,
-  escapes,
+  escapes
 }: EditorProps<T> & CaseOptions) {
   const { key, name } = column;
   const value = row[key];
@@ -48,7 +48,7 @@ export function CaseTextEditor<T>({
     (e: ChangeEvent<HTMLTextAreaElement>) => {
       onRowChange({ ...row, [key]: e.target.value });
     },
-    [onRowChange],
+    [onRowChange]
   );
 
   return (
@@ -60,7 +60,7 @@ export function CaseTextEditor<T>({
             setTimeout(() => {
               editorRef.current?.resizableTextArea.textArea.setSelectionRange(
                 Number.MAX_SAFE_INTEGER,
-                Number.MAX_SAFE_INTEGER,
+                Number.MAX_SAFE_INTEGER
               );
             }, 100);
           }}
@@ -96,7 +96,7 @@ export function CaseTextEditor<T>({
           zIndex={1031}
           okText={formatMessage({
             id: 'odc.EditableTable.Editors.TextEditor.Submitted',
-            defaultMessage: '提交',
+            defaultMessage: '提交'
           })} /* 提交 */
           onCancel={() => {
             setIsShowTextModal(false);

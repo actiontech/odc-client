@@ -21,6 +21,8 @@ interface IFormContext {
   dfaultConfig?: IImportDrawerState['formData'];
 }
 
-const FormConfigContext = React.createContext<IFormContext>({ dfaultConfig: null });
+const FormConfigContext = React.createContext<IFormContext>({
+  dfaultConfig: null
+});
 
 export default FormConfigContext;

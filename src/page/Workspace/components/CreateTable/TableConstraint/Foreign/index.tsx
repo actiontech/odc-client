@@ -27,7 +27,7 @@ import { listDatabases } from '@/common/network/database';
 import {
   TableConstraintDefer,
   TableForeignConstraintOnDeleteType,
-  TableForeignConstraintOnUpdateType,
+  TableForeignConstraintOnUpdateType
 } from '@/d.ts/table';
 import { DataGridRef } from '@oceanbase-odc/ob-react-data-grid';
 import { useRequest } from 'ahooks';
@@ -46,7 +46,7 @@ const defaultForeignConstraint: TableForeignConstraint = {
   onDelete: TableForeignConstraintOnDeleteType.CASCADE,
   onUpdate: TableForeignConstraintOnUpdateType.NO_ACTION,
   enable: true,
-  defer: TableConstraintDefer.NOT,
+  defer: TableConstraintDefer.NOT
 };
 
 interface IProps {
@@ -57,22 +57,31 @@ const ForeignConstraint: React.FC<IProps> = function ({ modified }) {
   const tableContext = useContext(TableContext);
   const [selectedRowsIdx, setSelectedRowIdx] = useState<number[]>([]);
   const { data, run } = useRequest(listDatabases, {
-    manual: true,
+    manual: true
   });
   useEffect(() => {
-    run(null, tableContext?.session?.connection?.id, 1, 999, null, null, null, true);
+    run(
+      null,
+      tableContext?.session?.connection?.id,
+      1,
+      999,
+      null,
+      null,
+      null,
+      true
+    );
   }, [tableContext?.session]);
   const gridColumns: any[] = useColumns(
     tableContext.columns,
     data?.contents || [],
-    tableContext?.session?.connection?.dialectType,
+    tableContext?.session?.connection?.dialectType
   );
   const gridRef = useRef<DataGridRef>();
   const rows = useMemo(() => {
     return tableContext.foreignConstraints.map((index, idx) => {
       return {
         ...index,
-        key: `${index.name || ''}@@${idx}`,
+        key: `${index.name || ''}@@${idx}`
       };
     });
   }, [tableContext.foreignConstraints]);
@@ -91,12 +100,15 @@ const ForeignConstraint: React.FC<IProps> = function ({ modified }) {
         <EditToolbar modified={modified}>
           <Toolbar>
             <Toolbar.Button
-              text={formatMessage({ id: 'workspace.header.create', defaultMessage: '新建' })}
+              text={formatMessage({
+                id: 'workspace.header.create',
+                defaultMessage: '新建'
+              })}
               icon={PlusOutlined}
               onClick={() => {
                 const row = {
                   ...defaultForeignConstraint,
-                  key: generateUniqKey(),
+                  key: generateUniqKey()
                 };
                 gridRef.current?.addRows([row]);
               }}
@@ -105,7 +117,7 @@ const ForeignConstraint: React.FC<IProps> = function ({ modified }) {
             <Toolbar.Button
               text={formatMessage({
                 id: 'odc.TableConstraint.Primary.Delete',
-                defaultMessage: '删除',
+                defaultMessage: '删除'
               })}
               icon={DeleteOutlined}
               disabled={!selectedRowsIdx?.length}
@@ -132,7 +144,7 @@ const ForeignConstraint: React.FC<IProps> = function ({ modified }) {
           setSelectedRowIdx(
             keys.map((key) => {
               return rows.findIndex((row) => row.key === key);
-            }),
+            })
           );
         }}
         gridRef={gridRef}

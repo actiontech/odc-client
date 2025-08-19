@@ -12,21 +12,23 @@ import {
   IListTableBySchemaResV1,
   IGetTableMetadataResV1,
   IGetInstanceTipsResV2,
-  IGetInstanceResV2,
+  IGetInstanceResV2
 } from '../common.type';
 
 import {
   getInstanceTipListV1FunctionalModuleEnum,
-  getInstanceTipListV2FunctionalModuleEnum,
+  getInstanceTipListV2FunctionalModuleEnum
 } from './index.enum';
 
 export interface IGetDatabaseDriverLogosParams {
   db_types: string[];
 }
 
-export interface IGetDatabaseDriverLogosReturn extends IGetDatabaseDriverLogosResV1 {}
+export interface IGetDatabaseDriverLogosReturn
+  extends IGetDatabaseDriverLogosResV1 {}
 
-export interface IGetDatabaseDriverOptionsReturn extends IGetDatabaseDriverOptionsResV1 {}
+export interface IGetDatabaseDriverOptionsReturn
+  extends IGetDatabaseDriverOptionsResV1 {}
 
 export interface IGetInstanceTipListV1Params {
   project_name: string;
@@ -56,7 +58,8 @@ export interface ICheckInstanceIsConnectableByNameV1Params {
   instance_name: string;
 }
 
-export interface ICheckInstanceIsConnectableByNameV1Return extends IGetInstanceConnectableResV1 {}
+export interface ICheckInstanceIsConnectableByNameV1Return
+  extends IGetInstanceConnectableResV1 {}
 
 export interface IGetInstanceRuleListV1Params {
   project_name: string;

@@ -28,28 +28,41 @@ import { getFormatDateTime } from '@/util/utils';
 import { ExclamationCircleFilled } from '@ant-design/icons';
 import { Button, Descriptions, Divider, message, Modal, Space } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { getAuthLabelString, resourceAuthMap, ResourceManagementAction } from '../../../utils';
+import {
+  getAuthLabelString,
+  resourceAuthMap,
+  ResourceManagementAction
+} from '../../../utils';
 
 const authFilters = [
   {
     text: formatMessage({
       id: 'odc.component.DetailContent.CanBeCreated',
-      defaultMessage: '可新建',
+      defaultMessage: '可新建'
     }), //可新建
-    value: ResourceManagementAction.can_create,
+    value: ResourceManagementAction.can_create
   },
   {
-    text: formatMessage({ id: 'odc.component.DetailContent.ViewOnly', defaultMessage: '仅查看' }), //仅查看
-    value: ResourceManagementAction.can_read,
+    text: formatMessage({
+      id: 'odc.component.DetailContent.ViewOnly',
+      defaultMessage: '仅查看'
+    }), //仅查看
+    value: ResourceManagementAction.can_read
   },
   {
-    text: formatMessage({ id: 'odc.component.DetailContent.Editable', defaultMessage: '可编辑' }), //可编辑
-    value: ResourceManagementAction.can_update,
+    text: formatMessage({
+      id: 'odc.component.DetailContent.Editable',
+      defaultMessage: '可编辑'
+    }), //可编辑
+    value: ResourceManagementAction.can_update
   },
   {
-    text: formatMessage({ id: 'odc.component.DetailContent.Manageable', defaultMessage: '可管理' }), //可管理
-    value: ResourceManagementAction.can_manage,
-  },
+    text: formatMessage({
+      id: 'odc.component.DetailContent.Manageable',
+      defaultMessage: '可管理'
+    }), //可管理
+    value: ResourceManagementAction.can_manage
+  }
 ];
 
 const getColumns = () => {
@@ -58,15 +71,15 @@ const getColumns = () => {
       dataIndex: 'name',
       title: formatMessage({
         id: 'odc.component.DetailContent.DataSource',
-        defaultMessage: '数据源',
+        defaultMessage: '数据源'
       }), //数据源
-      ellipsis: true,
+      ellipsis: true
     },
     {
       dataIndex: 'permittedActions',
       title: formatMessage({
         id: 'odc.components.UserPage.component.Permissions',
-        defaultMessage: '权限',
+        defaultMessage: '权限'
       }),
       // 权限
       width: 108,
@@ -75,8 +88,8 @@ const getColumns = () => {
       onFilter: (value, record) => {
         return resourceAuthMap[value].hasAuth(record?.permittedActions);
       },
-      render: (permittedActions) => getAuthLabelString(permittedActions),
-    },
+      render: (permittedActions) => getAuthLabelString(permittedActions)
+    }
   ];
 };
 
@@ -96,7 +109,7 @@ const UserDetail: React.FC<{
     createTime,
     updateTime,
     builtIn,
-    extraProperties,
+    extraProperties
   } = data;
   const [visible, setVisible] = useState(false);
   const relatedRoles = useRoleListByIds(roles, roleIds);
@@ -107,16 +120,16 @@ const UserDetail: React.FC<{
       message.success(
         formatMessage({
           id: 'odc.components.UserPage.component.Deleted',
-          defaultMessage: '删除成功',
-        }), // 删除成功
+          defaultMessage: '删除成功'
+        }) // 删除成功
       );
       handleCloseAndReload();
     } else {
       message.error(
         formatMessage({
           id: 'odc.components.UserPage.component.UnableToDelete',
-          defaultMessage: '删除失败',
-        }),
+          defaultMessage: '删除失败'
+        })
         // 删除失败
       );
     }
@@ -126,33 +139,33 @@ const UserDetail: React.FC<{
     Modal.confirm({
       title: formatMessage({
         id: 'odc.components.UserPage.component.AreYouSureYouWant',
-        defaultMessage: '是否确定删除用户？',
+        defaultMessage: '是否确定删除用户？'
       }),
       // 确定要删除用户吗？
       icon: <ExclamationCircleFilled style={{ color: '#faad14' }} />,
       content: formatMessage({
         id: 'odc.components.UserPage.component.AfterAUserIsDeleted',
-        defaultMessage: '删除用户后，用户将无法登录系统，相关数据也无法恢复',
+        defaultMessage: '删除用户后，用户将无法登录系统，相关数据也无法恢复'
       }), // 删除用户后，用户将无法登录系统，相关数据也无法恢复
       cancelText: formatMessage({
         id: 'odc.components.UserPage.component.Cancel',
-        defaultMessage: '取消',
+        defaultMessage: '取消'
       }),
       // 取消
       okText: formatMessage({
         id: 'odc.components.UserPage.component.Determine',
-        defaultMessage: '确定',
+        defaultMessage: '确定'
       }),
       // 确定
       centered: true,
-      onOk: handleDeleteUser,
+      onOk: handleDeleteUser
     });
   };
 
   const handleSubmit = async ({ password }) => {
     const res = await resetPassword({
       newPassword: password,
-      id,
+      id
     });
 
     if (res) {
@@ -160,8 +173,8 @@ const UserDetail: React.FC<{
       message.success(
         formatMessage({
           id: 'odc.components.UserPage.component.ThePasswordHasBeenReset',
-          defaultMessage: '重置密码成功',
-        }), // 重置密码成功
+          defaultMessage: '重置密码成功'
+        }) // 重置密码成功
       );
     }
   };
@@ -171,15 +184,15 @@ const UserDetail: React.FC<{
       (item) =>
         canAcess({
           resourceIdentifier: IManagerResourceType.user,
-          action: item,
-        }).accessible,
+          action: item
+        }).accessible
     );
   };
 
   const canDelete = () =>
     canAcess({
       resourceIdentifier: IManagerResourceType.user,
-      action: actionTypes.delete,
+      action: actionTypes.delete
     }).accessible;
 
   return (
@@ -189,7 +202,7 @@ const UserDetail: React.FC<{
           contentStyle={{ whiteSpace: 'pre' }}
           label={formatMessage({
             id: 'odc.components.UserPage.component.Account',
-            defaultMessage: '账号',
+            defaultMessage: '账号'
           })}
           /* 账号 */
         >
@@ -198,7 +211,7 @@ const UserDetail: React.FC<{
         <Descriptions.Item
           label={formatMessage({
             id: 'odc.components.UserPage.component.Name',
-            defaultMessage: '姓名',
+            defaultMessage: '姓名'
           })} /* 姓名 */
         >
           {name}
@@ -206,7 +219,7 @@ const UserDetail: React.FC<{
         <Descriptions.Item
           label={formatMessage({
             id: 'odc.components.UserPage.component.Password',
-            defaultMessage: '密码',
+            defaultMessage: '密码'
           })}
           /* 密码 */
         >
@@ -222,7 +235,7 @@ const UserDetail: React.FC<{
                 {
                   formatMessage({
                     id: 'odc.components.UserPage.component.ResetPassword',
-                    defaultMessage: '重置密码',
+                    defaultMessage: '重置密码'
                   })
                   /* 重置密码 */
                 }
@@ -233,7 +246,7 @@ const UserDetail: React.FC<{
         <Descriptions.Item
           label={formatMessage({
             id: 'odc.components.UserPage.component.Role',
-            defaultMessage: '角色',
+            defaultMessage: '角色'
           })}
           /* 角色 */
         >
@@ -242,7 +255,7 @@ const UserDetail: React.FC<{
         <Descriptions.Item
           label={formatMessage({
             id: 'odc.components.UserPage.component.Note',
-            defaultMessage: '备注',
+            defaultMessage: '备注'
           })}
           /* 备注 */
         >
@@ -251,7 +264,7 @@ const UserDetail: React.FC<{
         <Descriptions.Item
           label={formatMessage({
             id: 'odc.components.UserPage.component.ExtraProperties',
-            defaultMessage: '自定义属性',
+            defaultMessage: '自定义属性'
           })}
           /* 自定义属性 */
         >
@@ -263,7 +276,7 @@ const UserDetail: React.FC<{
         <Descriptions.Item
           label={formatMessage({
             id: 'odc.components.UserPage.component.Founder',
-            defaultMessage: '创建人',
+            defaultMessage: '创建人'
           })}
           /* 创建人 */
         >
@@ -272,7 +285,7 @@ const UserDetail: React.FC<{
         <Descriptions.Item
           label={formatMessage({
             id: 'odc.components.UserPage.component.Created',
-            defaultMessage: '创建时间',
+            defaultMessage: '创建时间'
           })}
           /* 创建时间 */
         >
@@ -281,7 +294,7 @@ const UserDetail: React.FC<{
         <Descriptions.Item
           label={formatMessage({
             id: 'odc.components.UserPage.component.UpdateTime',
-            defaultMessage: '更新时间',
+            defaultMessage: '更新时间'
           })}
           /* 更新时间 */
         >
@@ -295,16 +308,21 @@ const UserDetail: React.FC<{
             {
               formatMessage({
                 id: 'odc.components.UserPage.component.AfterAUserIsDeleted',
-                defaultMessage: '删除用户后，用户将无法登录系统，相关数据也无法恢复',
+                defaultMessage:
+                  '删除用户后，用户将无法登录系统，相关数据也无法恢复'
               })
               /* 删除用户后，用户将无法登录系统，相关数据也无法恢复 */
             }
           </span>
-          <Button type="link" onClick={handleDelete} disabled={builtIn || disabledOp}>
+          <Button
+            type="link"
+            onClick={handleDelete}
+            disabled={builtIn || disabledOp}
+          >
             {
               formatMessage({
                 id: 'odc.components.UserPage.component.DeleteAUser',
-                defaultMessage: '删除用户',
+                defaultMessage: '删除用户'
               })
               /* 删除用户 */
             }
@@ -316,7 +334,7 @@ const UserDetail: React.FC<{
         <ChangePasswordModal
           title={formatMessage({
             id: 'odc.components.UserPage.component.ResetPassword',
-            defaultMessage: '重置密码',
+            defaultMessage: '重置密码'
           })}
           /* 重置密码 */
           visible={visible}
@@ -339,7 +357,7 @@ const UserResource: React.FC<{
   const [resource, setResource] = useState([]);
   const loadResource = async () => {
     const res = await getConnectionList({
-      userId: id,
+      userId: id
     });
 
     setResource(res?.contents);
@@ -362,7 +380,7 @@ const UserResource: React.FC<{
 
 const DetailContents = {
   [IManagerDetailTabs.DETAIL]: UserDetail,
-  [IManagerDetailTabs.RESOURCE]: UserResource,
+  [IManagerDetailTabs.RESOURCE]: UserResource
 };
 
 const UserDetailContent: React.FC<{

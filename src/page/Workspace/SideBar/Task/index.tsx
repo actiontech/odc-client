@@ -32,13 +32,16 @@ const Task: React.FC<IProps> = () => {
       key="Task"
       tabs={[
         {
-          title: formatMessage({ id: 'odc.SideBar.Task.Ticket', defaultMessage: '工单' }), //工单
+          title: formatMessage({
+            id: 'odc.SideBar.Task.Ticket',
+            defaultMessage: '工单'
+          }), //工单
           key: 'task',
           actions: [],
           render() {
             return <Sider className={styles.taskSider} isPage={true} />;
-          },
-        },
+          }
+        }
       ]}
     />
   );

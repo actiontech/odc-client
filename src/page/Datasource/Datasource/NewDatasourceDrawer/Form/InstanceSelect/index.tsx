@@ -25,7 +25,7 @@ import React, {
   useEffect,
   useImperativeHandle,
   useMemo,
-  useRef,
+  useRef
 } from 'react';
 import DatasourceFormContext from '../context';
 
@@ -41,13 +41,20 @@ const RefInput = forwardRef<any, any>(function ({ value, onChange }, ref) {
       return {
         onChange(v) {
           return onChange?.(v);
-        },
+        }
       };
     },
-    [onChange],
+    [onChange]
   );
 
-  return <Input disabled style={{ display: 'none' }} value={value} onChange={onChange} />;
+  return (
+    <Input
+      disabled
+      style={{ display: 'none' }}
+      value={value}
+      onChange={onChange}
+    />
+  );
 });
 
 const InstanceSelect: React.FC<IProps> = function ({ clusterStore, disabled }) {
@@ -71,31 +78,36 @@ const InstanceSelect: React.FC<IProps> = function ({ clusterStore, disabled }) {
 
         if (!ClusterTypeList.includes(cluster.type)) {
           const tenantMode = tenantListMap[cluster?.instanceId]?.find(
-            (t) => t.tenantId === cluster?.instanceId,
+            (t) => t.tenantId === cluster?.instanceId
           )?.tenantMode;
-          const tenantType = tenantMode === 'MySQL' ? ConnectType.OB_MYSQL : ConnectType.OB_ORACLE;
+          const tenantType =
+            tenantMode === 'MySQL'
+              ? ConnectType.OB_MYSQL
+              : ConnectType.OB_ORACLE;
           if (tenantType !== type) {
             return;
           }
           result.push({
             value: cluster.instanceId,
             label: cluster.instanceName,
-            isLeaf: true,
+            isLeaf: true
           });
         } else {
           const children = tenants
             ?.map((tenant) => {
               const tenantMode = tenantListMap[cluster?.instanceId]?.find(
-                (t) => t.tenantId === tenant?.tenantId,
+                (t) => t.tenantId === tenant?.tenantId
               )?.tenantMode;
               const tenantType =
-                tenantMode === 'MySQL' ? ConnectType.OB_MYSQL : ConnectType.OB_ORACLE;
+                tenantMode === 'MySQL'
+                  ? ConnectType.OB_MYSQL
+                  : ConnectType.OB_ORACLE;
               if (tenantType !== type) {
                 return null;
               }
               return {
                 value: tenant.tenantId,
-                label: tenant.tenantName,
+                label: tenant.tenantName
               };
             })
             .filter(Boolean);
@@ -106,7 +118,7 @@ const InstanceSelect: React.FC<IProps> = function ({ clusterStore, disabled }) {
             value: cluster.instanceId,
             label: cluster.instanceName,
             isLeaf: false,
-            children: children,
+            children: children
           });
         }
       });
@@ -122,7 +134,10 @@ const InstanceSelect: React.FC<IProps> = function ({ clusterStore, disabled }) {
           let modeText = '';
           if (clusterName) {
             modeText =
-              formatMessage({ id: 'odc.cloud.InstanceSelect.Mode', defaultMessage: '模式：' }) + //`模式：`
+              formatMessage({
+                id: 'odc.cloud.InstanceSelect.Mode',
+                defaultMessage: '模式：'
+              }) + //`模式：`
               (mode === ConnectType.OB_MYSQL ? 'MySQL' : 'Oracle');
           }
           return (
@@ -130,7 +145,10 @@ const InstanceSelect: React.FC<IProps> = function ({ clusterStore, disabled }) {
               {({ getFieldValue, getFieldsError }) => {
                 const cluster = getFieldValue('clusterName');
                 const tenant = getFieldValue('tenantName');
-                const haveError = !!getFieldsError(['clusterName', 'tenantName'])
+                const haveError = !!getFieldsError([
+                  'clusterName',
+                  'tenantName'
+                ])
                   ?.map((e) => e.errors?.length)
                   .filter(Boolean)?.length;
                 let innerValue = [];
@@ -144,14 +162,17 @@ const InstanceSelect: React.FC<IProps> = function ({ clusterStore, disabled }) {
                 }
                 function onChange({ tenantId, cluster }) {
                   const tenantMode = tenantListMap[cluster]?.find(
-                    (t) => t.tenantId === tenantId,
+                    (t) => t.tenantId === tenantId
                   )?.tenantMode;
                   form?.setFieldsValue({
                     clusterName: cluster,
                     tenantName: tenantId,
-                    type: tenantMode === 'MySQL' ? ConnectType.OB_MYSQL : ConnectType.OB_ORACLE,
+                    type:
+                      tenantMode === 'MySQL'
+                        ? ConnectType.OB_MYSQL
+                        : ConnectType.OB_ORACLE,
                     username: null,
-                    password: '',
+                    password: ''
                   });
                 }
                 return (
@@ -163,9 +184,9 @@ const InstanceSelect: React.FC<IProps> = function ({ clusterStore, disabled }) {
                             (option) =>
                               (option.label as string)
                                 .toLowerCase()
-                                .indexOf(inputValue.toLowerCase()) > -1,
+                                .indexOf(inputValue.toLowerCase()) > -1
                           );
-                        },
+                        }
                       }}
                       options={options}
                       disabled={disabled}
@@ -180,7 +201,7 @@ const InstanceSelect: React.FC<IProps> = function ({ clusterStore, disabled }) {
                         if (!v) {
                           onChange({
                             tenantId: null,
-                            cluster: null,
+                            cluster: null
                           });
 
                           return;
@@ -195,7 +216,7 @@ const InstanceSelect: React.FC<IProps> = function ({ clusterStore, disabled }) {
                         }
                         onChange({
                           cluster,
-                          tenantId: tenant,
+                          tenantId: tenant
                         });
 
                         clusterStore.loadTenantDBUsers(cluster, tenant);
@@ -207,7 +228,7 @@ const InstanceSelect: React.FC<IProps> = function ({ clusterStore, disabled }) {
                         {
                           formatMessage({
                             id: 'odc.cloud.InstanceSelect.SelectAConnectionInstance',
-                            defaultMessage: '请选择连接实例',
+                            defaultMessage: '请选择连接实例'
                           }) /*请选择连接实例*/
                         }
                       </Typography.Text>
@@ -219,10 +240,18 @@ const InstanceSelect: React.FC<IProps> = function ({ clusterStore, disabled }) {
           );
         }}
       </Form.Item>
-      <Form.Item rules={[{ required: true, message: '' }]} name="clusterName" noStyle>
+      <Form.Item
+        rules={[{ required: true, message: '' }]}
+        name="clusterName"
+        noStyle
+      >
         <RefInput ref={clusterRef} />
       </Form.Item>
-      <Form.Item rules={[{ required: true, message: '' }]} name="tenantName" noStyle>
+      <Form.Item
+        rules={[{ required: true, message: '' }]}
+        name="tenantName"
+        noStyle
+      >
         <RefInput ref={tenantRef} />
       </Form.Item>
     </>

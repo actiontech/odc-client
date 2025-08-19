@@ -7,7 +7,7 @@ import {
   KILO,
   NODE_HEIGTH,
   NODE_WIDTH,
-  REACT_FLOW_ID,
+  REACT_FLOW_ID
 } from './constant';
 import { Node, Tree } from './treeLayout';
 
@@ -29,7 +29,7 @@ const hiddenChild = (allNodes, node, nodeHidden, isChild = false) => {
 const changeTreeOpen: (...args) => void = (
   nodeId: number | string,
   nodeHidden: boolean,
-  setNodes: React.Dispatch<React.SetStateAction<FlowNode<any, string>[]>>,
+  setNodes: React.Dispatch<React.SetStateAction<FlowNode<any, string>[]>>
 ) => {
   setNodes((nds) =>
     nds.map((node) => {
@@ -39,12 +39,12 @@ const changeTreeOpen: (...args) => void = (
           ...node,
           data: {
             ...node.data,
-            isTreeOpen: !node.data.isTreeOpen,
-          },
+            isTreeOpen: !node.data.isTreeOpen
+          }
         };
       }
       return node;
-    }),
+    })
   );
 };
 
@@ -60,7 +60,7 @@ export const locateNode: (...args) => void = (
   initialNodes,
   setSelectedNode,
   setViewport,
-  setNodes,
+  setNodes
 ) => {
   // 1. 获取节点在画布上的坐标
   const node = initialNodes?.find((n) => n?.id === nodeId);
@@ -74,16 +74,17 @@ export const locateNode: (...args) => void = (
         ...node,
         data: {
           ...node.data,
-          isTreeOpen: true,
-        },
+          isTreeOpen: true
+        }
       };
-    }),
+    })
   );
   // 4. 计算画布应该移动的位移
   const { width, height } = getXYPosition();
   if (node) {
     const x = -node?.position.x + width / 2 - NODE_WIDTH / 2;
-    const y = -node?.position.y + height / 2 - NODE_HEIGTH / 2 - INIT_HEIGHT_GAP;
+    const y =
+      -node?.position.y + height / 2 - NODE_HEIGTH / 2 - INIT_HEIGHT_GAP;
     setViewport({ x, y, zoom: 1 }, { duration: 500 });
   }
 };
@@ -93,7 +94,7 @@ export const getEdgeWidth = (weight: number): number => {
     LEVEL_1: 500 * KILO,
     LEVEL_2: 1 * KILO * KILO,
     LEVEL_3: 10 * KILO * KILO,
-    LEVEL_4: 50 * KILO * KILO,
+    LEVEL_4: 50 * KILO * KILO
   };
 
   if (weight <= LIMITS.LEVEL_1) {
@@ -132,15 +133,18 @@ export const initCenter = (setCenter: SetCenter) => {
 
 export const handleSelectNode = (
   setNodes: React.Dispatch<React.SetStateAction<FlowNode<any, string>[]>>,
-  id: number | string,
+  id: number | string
 ) => {
   setNodes((nds) =>
     nds.map((node) => {
       if (node.id === id) {
-        return { ...node, data: { ...node.data, isSelected: !node.data?.isSelected } };
+        return {
+          ...node,
+          data: { ...node.data, isSelected: !node.data?.isSelected }
+        };
       }
       return { ...node, data: { ...node.data, isSelected: false } };
-    }),
+    })
   );
 };
 
@@ -149,7 +153,7 @@ export function transformDataForReactFlow(
   duration: number,
   setNodes: React.Dispatch<React.SetStateAction<FlowNode<any, string>[]>>,
   setSelectedNode: React.Dispatch<any>,
-  setViewport: SetViewport,
+  setViewport: SetViewport
 ) {
   const nodes = [];
   const edges = [];
@@ -228,12 +232,15 @@ export function transformDataForReactFlow(
           percentageInCompare:
             (
               (node?.data?.overview?.[CPU_TIME] * 100) /
-              (node?.data?.overview?.[CPU_TIME] + node?.data?.overview?.[IO_WAIT_TIME])
+              (node?.data?.overview?.[CPU_TIME] +
+                node?.data?.overview?.[IO_WAIT_TIME])
             ).toFixed(2) || '',
-          percentageInAll: duration ? ((node?.data.duration / duration) * 100).toFixed(2) : '',
-          isSelected: false,
+          percentageInAll: duration
+            ? ((node?.data.duration / duration) * 100).toFixed(2)
+            : '',
+          isSelected: false
         },
-        type: 'customNode',
+        type: 'customNode'
       };
 
       nodes.push(reactFlowNode);
@@ -247,8 +254,8 @@ export function transformDataForReactFlow(
           data: {
             weight: node?.data.inEdges?.[0]?.weight,
             isOverlap: isParantOverlap,
-            isSingleChild: node?.parent?.data?.outEdges?.length === 1,
-          },
+            isSingleChild: node?.parent?.data?.outEdges?.length === 1
+          }
         };
         edges.push(reactFlowEdge);
       }

@@ -22,26 +22,26 @@ export enum IConnectionStatus {
   TESTING = 'TESTING',
   NOPASSWORD = 'NOPASSWORD',
   DISABLED = 'DISABLED',
-  UNKNOWN = 'UNKNOWN',
+  UNKNOWN = 'UNKNOWN'
 }
 
 export enum Cipher {
   RAW = 'RAW',
   BCRYPT = 'BCRYPT',
-  AES256SALT = 'AES256SALT',
+  AES256SALT = 'AES256SALT'
 }
 
 export enum AccessMode {
   DIRECT = 'DIRECT',
   IC_PROXY = 'IC_PROXY',
-  VPC = 'VPC',
+  VPC = 'VPC'
 }
 
 export type IDatasource = IConnection;
 
 export enum ConnectionPropertyType {
   GLOBAL = 'global',
-  SESSION = 'session',
+  SESSION = 'session'
 }
 
 export enum IDataSourceType {
@@ -53,5 +53,5 @@ export enum IDataSourceType {
   ALIYUNOSS = 'ALIYUNOSS',
   QCLOUD = 'QCLOUD',
   HUAWEI = 'HUAWEI',
-  AWSS3 = 'AWSS3',
+  AWSS3 = 'AWSS3'
 }

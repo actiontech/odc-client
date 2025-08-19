@@ -11,8 +11,11 @@ const TreeDataGroupKey = 'Group';
 const TreeDataSecondGroupKey = 'SecondGroup';
 const getGroupKey = (mapId: React.Key, groupMode: DatabaseGroup) =>
   `${TreeDataGroupKey}-${groupMode}-${mapId}`;
-const getSecondGroupKey = (mapId: React.Key, secondMapId: number, groupMode: DatabaseGroup) =>
-  `${TreeDataSecondGroupKey}-${groupMode}-${mapId}-${secondMapId}`;
+const getSecondGroupKey = (
+  mapId: React.Key,
+  secondMapId: number,
+  groupMode: DatabaseGroup
+) => `${TreeDataSecondGroupKey}-${groupMode}-${mapId}-${secondMapId}`;
 
 enum NodeType {
   GroupNodeProject = 'GroupNodeProject',
@@ -23,7 +26,7 @@ enum NodeType {
   GroupNodeTenant = 'GroupNodeTenant',
   SecondGroupNodeDataSource = 'SecondGroupNodeDataSource',
   Database = 'Database',
-  Connection = 'Connection',
+  Connection = 'Connection'
 }
 
 const isGroupNode = (type) => {
@@ -34,7 +37,7 @@ const isGroupNode = (type) => {
     NodeType.GroupNodeEnviponment,
     NodeType.GroupNodeTenant,
     NodeType.GroupNodeDataSource,
-    NodeType.SecondGroupNodeDataSource,
+    NodeType.SecondGroupNodeDataSource
   ].includes(type);
 };
 
@@ -44,7 +47,7 @@ const GroupNodeToNodeType = {
   [DatabaseGroup.tenant]: NodeType.GroupNodeTenant,
   [DatabaseGroup.cluster]: NodeType.GroupNodeCluster,
   [DatabaseGroup.environment]: NodeType.GroupNodeEnviponment,
-  [DatabaseGroup.connectType]: NodeType.GroupNodeConnectType,
+  [DatabaseGroup.connectType]: NodeType.GroupNodeConnectType
 };
 
 const DatabaseGroupArr = [
@@ -54,13 +57,15 @@ const DatabaseGroupArr = [
   DatabaseGroup.cluster,
   DatabaseGroup.environment,
   DatabaseGroup.connectType,
-  DatabaseGroup.none,
+  DatabaseGroup.none
 ];
 
 const hasSecondGroup = (group: DatabaseGroup) => {
-  return [DatabaseGroup.cluster, DatabaseGroup.environment, DatabaseGroup.connectType].includes(
-    group,
-  );
+  return [
+    DatabaseGroup.cluster,
+    DatabaseGroup.environment,
+    DatabaseGroup.connectType
+  ].includes(group);
 };
 
 const getShouldExpandedGroupKeys = (params: {
@@ -94,9 +99,15 @@ const getShouldExpandedGroupKeys = (params: {
   const { mapId: secondMapId } = getMapIdByDB(db, DatabaseGroup.dataSource);
   shouldExpandedKeys.push(
     getGroupKey(mapId, groupMode),
-    getSecondGroupKey(mapId, secondMapId, groupMode),
+    getSecondGroupKey(mapId, secondMapId, groupMode)
   );
-  if ([DatabaseGroup.project, DatabaseGroup.dataSource, DatabaseGroup.tenant].includes(groupMode)) {
+  if (
+    [
+      DatabaseGroup.project,
+      DatabaseGroup.dataSource,
+      DatabaseGroup.tenant
+    ].includes(groupMode)
+  ) {
     shouldExpandedKeys = shouldExpandedKeys.filter((item) => {
       if (isString(item)) {
         return !item.includes(TreeDataSecondGroupKey);
@@ -119,7 +130,11 @@ const filterGroupKey = (keyList: React.Key[]) => {
   });
 };
 
-const getIcon = (params: { type: NodeType; dataSource?: IConnection; database?: IDatabase }) => {
+const getIcon = (params: {
+  type: NodeType;
+  dataSource?: IConnection;
+  database?: IDatabase;
+}) => {
   const { type, dataSource, database } = params;
   let icon;
   switch (type) {
@@ -138,7 +153,7 @@ const getIcon = (params: { type: NodeType; dataSource?: IConnection; database?: 
         <Icon
           component={PjSvg}
           style={{
-            fontSize: 14,
+            fontSize: 14
           }}
         />
       );
@@ -158,5 +173,5 @@ export {
   getGroupKey,
   getSecondGroupKey,
   getShouldExpandedGroupKeys,
-  getIcon,
+  getIcon
 };

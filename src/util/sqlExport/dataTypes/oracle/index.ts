@@ -28,7 +28,7 @@ import OracleTimestampTZ from './timestampTimeZone';
 export default function convertValueToSQLString(
   value: string | null,
   dataType: string,
-  timestamp: number,
+  timestamp: number
 ) {
   const isNls = isNlsColumn(dataType, ConnectionMode.OB_ORACLE);
   dataType = convertColumnType(dataType);

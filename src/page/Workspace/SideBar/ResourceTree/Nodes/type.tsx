@@ -30,16 +30,22 @@ import { ProcedureTreeNodeData } from './procedure';
 
 const THEME = 'var(--icon-color-4)';
 
-export function TypeTreeData(dbSession: SessionStore, database: IDatabase): TreeDataNode {
+export function TypeTreeData(
+  dbSession: SessionStore,
+  database: IDatabase
+): TreeDataNode {
   const dbName = database.name;
   const types = dbSession?.database?.types;
   const treeData: TreeDataNode = {
-    title: formatMessage({ id: 'odc.ResourceTree.Nodes.type.Type', defaultMessage: '类型' }), //类型
+    title: formatMessage({
+      id: 'odc.ResourceTree.Nodes.type.Type',
+      defaultMessage: '类型'
+    }), //类型
     key: `${database.id}-${dbName}-type`,
     type: ResourceNodeType.TypeRoot,
     data: database,
     sessionId: dbSession?.sessionId,
-    isLeaf: false,
+    isLeaf: false
   };
   if (types) {
     treeData.children = types.map((type) => {
@@ -56,14 +62,14 @@ export function TypeTreeData(dbSession: SessionStore, database: IDatabase): Tree
         variablesRoot = {
           title: formatMessage({
             id: 'odc.ResourceTree.Nodes.type.Variable',
-            defaultMessage: '变量',
+            defaultMessage: '变量'
           }), //变量
           key: `${pkgKey}-variable`,
           type: ResourceNodeType.TypeVariableRoot,
           icon: (
             <InfoOutlined
               style={{
-                color: THEME,
+                color: THEME
               }}
             />
           ),
@@ -73,16 +79,16 @@ export function TypeTreeData(dbSession: SessionStore, database: IDatabase): Tree
               title: `${v.varName}:${v.varType}`,
               key: `${pkgKey}-variable-${v.varName}-${v.varType}-${i}`,
               type: ResourceNodeType.TypeVariable,
-              isLeaf: true,
+              isLeaf: true
             };
-          }),
+          })
         };
       }
       if (functions?.length || procedures?.length) {
         programRoot = {
           title: formatMessage({
             id: 'odc.ResourceTree.Nodes.type.Subprogram',
-            defaultMessage: '子程序',
+            defaultMessage: '子程序'
           }), //子程序
           key: `${pkgKey}-program`,
           type: ResourceNodeType.TypeProgramRoot,
@@ -90,7 +96,7 @@ export function TypeTreeData(dbSession: SessionStore, database: IDatabase): Tree
             <Icon
               component={ParameterSvg}
               style={{
-                color: THEME,
+                color: THEME
               }}
             />
           ),
@@ -104,7 +110,7 @@ export function TypeTreeData(dbSession: SessionStore, database: IDatabase): Tree
                 `${pkgKey}-${i}`,
                 ResourceNodeType.TypeFunction,
                 null,
-                i,
+                i
               );
             })
             .concat(
@@ -116,10 +122,10 @@ export function TypeTreeData(dbSession: SessionStore, database: IDatabase): Tree
                   `${pkgKey}-${i}`,
                   ResourceNodeType.TypeProcedure,
                   null,
-                  i,
+                  i
                 );
-              }),
-            ),
+              })
+            )
         };
       }
 
@@ -133,17 +139,21 @@ export function TypeTreeData(dbSession: SessionStore, database: IDatabase): Tree
           <Icon
             component={TypeSvg}
             style={{
-              color: THEME,
+              color: THEME
             }}
           />
         ),
 
         doubleClick(session, node) {
-          openTypeViewPage(type.typeName, undefined, session?.database?.databaseId);
+          openTypeViewPage(
+            type.typeName,
+            undefined,
+            session?.database?.databaseId
+          );
         },
         sessionId: dbSession?.sessionId,
         isLeaf: false,
-        children: [variablesRoot, programRoot].filter(Boolean),
+        children: [variablesRoot, programRoot].filter(Boolean)
       };
     });
   }

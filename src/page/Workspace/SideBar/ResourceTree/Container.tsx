@@ -28,11 +28,11 @@ import { openNewSQLPage } from '@/store/helper/page';
 
 export default inject(
   'userStore',
-  'modalStore',
+  'modalStore'
 )(
   observer(function ResourceTreeContainer({
     userStore,
-    modalStore,
+    modalStore
   }: {
     userStore: UserStore;
     modalStore: ModalStore;
@@ -67,7 +67,9 @@ export default inject(
             : await resourcetreeContext.reloadDatabaseList();
         if (databaseName && databaseListData) {
           const targetDatabase = databaseListData.find(
-            (db) => db.name === databaseName && db?.dataSource?.id === parseInt(tempDatasourceId),
+            (db) =>
+              db.name === databaseName &&
+              db?.dataSource?.id === parseInt(tempDatasourceId)
           );
           if (targetDatabase) {
             // 打开sql窗口
@@ -88,7 +90,9 @@ export default inject(
 
     if (loading) {
       return (
-        <div style={{ display: 'flex', justifyContent: 'center', paddingTop: 20 }}>
+        <div
+          style={{ display: 'flex', justifyContent: 'center', paddingTop: 20 }}
+        >
           <Spin />
         </div>
       );
@@ -96,11 +100,11 @@ export default inject(
     return (
       <TreeStateStore.Provider
         value={{
-          cache: cacheRef?.current,
+          cache: cacheRef?.current
         }}
       >
         <DatabaseTree />
       </TreeStateStore.Provider>
     );
-  }),
+  })
 );

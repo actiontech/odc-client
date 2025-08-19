@@ -41,5 +41,5 @@ export default {
   ...packageBodyMenusConfig,
   ...databaseMenusConfig,
   ...externalTableMenusConfig,
-  ...materializedViewConfig,
+  ...materializedViewConfig
 };

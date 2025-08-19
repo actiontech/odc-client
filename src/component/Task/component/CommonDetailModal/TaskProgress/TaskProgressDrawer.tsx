@@ -24,17 +24,17 @@ const TaskProgressDrawer: React.FC<{
       <Space
         direction="vertical"
         style={{
-          display: 'flex',
+          display: 'flex'
         }}
       >
         <SimpleTextItem
           label={formatMessage({
-            id: 'odc.component.CommonDetailModal.TaskProgress.NewTableDdl',
+            id: 'odc.component.CommonDetailModal.TaskProgress.NewTableDdl'
           })}
           /*新表 DDL*/ content={
             <div
               style={{
-                marginTop: '8px',
+                marginTop: '8px'
               }}
             >
               <SQLContent
@@ -44,7 +44,9 @@ const TaskProgressDrawer: React.FC<{
                 sqlObjectNames={null}
                 taskId={task?.id}
                 language={
-                  getDataSourceModeConfigByConnectionMode(resultJson?.dialectType)?.sql?.language
+                  getDataSourceModeConfigByConnectionMode(
+                    resultJson?.dialectType
+                  )?.sql?.language
                 }
               />
             </div>
@@ -54,12 +56,12 @@ const TaskProgressDrawer: React.FC<{
 
         <SimpleTextItem
           label={formatMessage({
-            id: 'odc.component.CommonDetailModal.TaskProgress.SourceTableDdl',
+            id: 'odc.component.CommonDetailModal.TaskProgress.SourceTableDdl'
           })}
           /*源表 DDL*/ content={
             <div
               style={{
-                marginTop: '8px',
+                marginTop: '8px'
               }}
             >
               <SQLContent
@@ -69,7 +71,9 @@ const TaskProgressDrawer: React.FC<{
                 sqlObjectNames={null}
                 taskId={task?.id}
                 language={
-                  getDataSourceModeConfigByConnectionMode(resultJson?.dialectType)?.sql?.language
+                  getDataSourceModeConfigByConnectionMode(
+                    resultJson?.dialectType
+                  )?.sql?.language
                 }
               />
             </div>

@@ -28,7 +28,7 @@ export enum ConstraintType {
   Primary = 'primary',
   Unique = 'unique',
   Foreign = 'foreign',
-  Check = 'check',
+  Check = 'check'
 }
 
 interface IProps {
@@ -47,34 +47,34 @@ const TableConstraint: React.FC<IProps> = function ({ modified }) {
           key: ConstraintType.Primary,
           label: formatMessage({
             id: 'odc.CreateTable.TableConstraint.PrimaryKeyConstraint',
-            defaultMessage: '主键约束',
+            defaultMessage: '主键约束'
           }),
-          children: <PrimaryConstaint modified={modified} />,
+          children: <PrimaryConstaint modified={modified} />
         },
         {
           key: ConstraintType.Unique,
           label: formatMessage({
             id: 'odc.CreateTable.TableConstraint.UniqueConstraint',
-            defaultMessage: '唯一约束',
+            defaultMessage: '唯一约束'
           }),
-          children: <UniqueConstraints modified={modified} />,
+          children: <UniqueConstraints modified={modified} />
         },
         {
           key: ConstraintType.Foreign,
           label: formatMessage({
             id: 'odc.CreateTable.TableConstraint.ForeignKeyConstraint',
-            defaultMessage: '外键约束',
+            defaultMessage: '外键约束'
           }),
-          children: <Foreign modified={modified} />,
+          children: <Foreign modified={modified} />
         },
         config.enableCheckConstraint && {
           key: ConstraintType.Check,
           label: formatMessage({
             id: 'odc.CreateTable.TableConstraint.CheckConstraints',
-            defaultMessage: '检查约束',
+            defaultMessage: '检查约束'
           }),
-          children: <CheckConstraint modified={modified} />,
-        },
+          children: <CheckConstraint modified={modified} />
+        }
       ].filter(Boolean)}
     />
   );

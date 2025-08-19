@@ -34,9 +34,11 @@ export const mainWebWindowConfig: BrowserWindowConstructorOptions = {
   show: false,
   webPreferences: {
     preload: path.join(
-      process.env.NODE_ENV === 'development' ? process.cwd() : process.resourcesPath || '',
+      process.env.NODE_ENV === 'development'
+        ? process.cwd()
+        : process.resourcesPath || '',
       'libraries/script',
-      'preload.js',
-    ),
-  },
+      'preload.js'
+    )
+  }
 };

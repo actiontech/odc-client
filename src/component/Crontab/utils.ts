@@ -27,29 +27,50 @@ const CronConstraints = [
   { min: 0, max: 23, chars: [] }, // Hour
   { min: 1, max: 31, chars: ['L'] }, // Day of month
   { min: 1, max: 12, chars: [] }, // Month
-  { min: 0, max: 7, chars: ['L'] }, // Day of week
+  { min: 0, max: 7, chars: ['L'] } // Day of week
 ];
 
 const cronLabelMap = {
   [CronInputName.second]: [
-    formatMessage({ id: 'odc.component.Crontab.utils.Seconds', defaultMessage: '秒' }), //秒
+    formatMessage({
+      id: 'odc.component.Crontab.utils.Seconds',
+      defaultMessage: '秒'
+    }) //秒
   ],
   [CronInputName.minute]: [
-    formatMessage({ id: 'odc.component.Crontab.utils.Points', defaultMessage: '分' }), //分
+    formatMessage({
+      id: 'odc.component.Crontab.utils.Points',
+      defaultMessage: '分'
+    }) //分
   ],
   [CronInputName.hour]: [
-    formatMessage({ id: 'odc.component.Crontab.utils.Point', defaultMessage: '点' }), //点
-    formatMessage({ id: 'odc.component.Crontab.utils.Hours', defaultMessage: '小时' }), //小时
+    formatMessage({
+      id: 'odc.component.Crontab.utils.Point',
+      defaultMessage: '点'
+    }), //点
+    formatMessage({
+      id: 'odc.component.Crontab.utils.Hours',
+      defaultMessage: '小时'
+    }) //小时
   ],
   [CronInputName.dayOfMonth]: [
-    formatMessage({ id: 'odc.component.Crontab.utils.Day', defaultMessage: '日' }), //日
+    formatMessage({
+      id: 'odc.component.Crontab.utils.Day',
+      defaultMessage: '日'
+    }) //日
   ],
   [CronInputName.month]: [
-    formatMessage({ id: 'odc.component.Crontab.utils.Month', defaultMessage: '月' }), //月
+    formatMessage({
+      id: 'odc.component.Crontab.utils.Month',
+      defaultMessage: '月'
+    }) //月
   ],
   [CronInputName.dayOfWeek]: [
-    formatMessage({ id: 'odc.component.Crontab.utils.Zhou', defaultMessage: '周' }), //周
-  ],
+    formatMessage({
+      id: 'odc.component.Crontab.utils.Zhou',
+      defaultMessage: '周'
+    }) //周
+  ]
 };
 
 enum CRON_SPEED {
@@ -59,41 +80,41 @@ enum CRON_SPEED {
   daily = 'daily',
   weekly = 'weekly',
   monthly = 'monthly',
-  yearly = 'yearly',
+  yearly = 'yearly'
 }
 
 const cronSpeedLabelMap = {
   [CRON_SPEED.perSecond]: formatMessage({
     id: 'src.component.Crontab.0130A0C7',
-    defaultMessage: '每秒',
+    defaultMessage: '每秒'
   }),
   [CRON_SPEED.minutely]: formatMessage({
     id: 'src.component.Crontab.1978F1C6',
-    defaultMessage: '每分',
+    defaultMessage: '每分'
   }),
   [CRON_SPEED.hourly]: formatMessage({
     id: 'src.component.Crontab.5FE2E112',
-    defaultMessage: '每小时',
+    defaultMessage: '每小时'
   }),
   [CRON_SPEED.daily]: formatMessage({
     id: 'odc.component.Crontab.utils.EveryDay',
-    defaultMessage: '每天',
+    defaultMessage: '每天'
   }),
   //每天
   [CRON_SPEED.weekly]: formatMessage({
     id: 'odc.component.Crontab.utils.Weekly',
-    defaultMessage: '每周',
+    defaultMessage: '每周'
   }),
   //每周
   [CRON_SPEED.monthly]: formatMessage({
     id: 'odc.component.Crontab.utils.Monthly',
-    defaultMessage: '每月',
+    defaultMessage: '每月'
   }),
   //每月
   [CRON_SPEED.yearly]: formatMessage({
     id: 'odc.component.Crontab.utils.EveryYear',
-    defaultMessage: '每年',
-  }),
+    defaultMessage: '每年'
+  })
   //每年
 };
 
@@ -103,7 +124,7 @@ const CronInputName2cronSpeedLabelMap = {
   [CronInputName.hour]: CRON_SPEED.hourly,
   [CronInputName.dayOfMonth]: CRON_SPEED.daily,
   [CronInputName.dayOfWeek]: CRON_SPEED.weekly,
-  [CronInputName.month]: CRON_SPEED.monthly,
+  [CronInputName.month]: CRON_SPEED.monthly
 };
 
 const reg = /[*?]/;
@@ -116,7 +137,7 @@ const CronFieldKeys = [
   CronInputName.hour,
   CronInputName.dayOfMonth,
   CronInputName.month,
-  CronInputName.dayOfWeek,
+  CronInputName.dayOfWeek
 ];
 
 export function getAllHourValue() {
@@ -132,7 +153,7 @@ export function getAllFields() {
     CronInputName.hour,
     CronInputName.dayOfMonth,
     CronInputName.month,
-    CronInputName.dayOfWeek,
+    CronInputName.dayOfWeek
   ];
 }
 
@@ -145,14 +166,14 @@ export function validateCronFields(value: string) {
     if (values?.[3] === '*' && values?.[5] === '*') {
       error = formatMessage({
         id: 'odc.component.Crontab.utils.TheDayAndWeekCannot',
-        defaultMessage: '日和周不能同时设置为 *',
+        defaultMessage: '日和周不能同时设置为 *'
       });
       //日和周不能同时设置为*
     }
     if (values?.[3] === '?' && values?.[5] === '?') {
       error = formatMessage({
         id: 'odc.component.Crontab.utils.CannotBeSetToBoth',
-        defaultMessage: '日和周不能同时设置为?',
+        defaultMessage: '日和周不能同时设置为?'
       }); //日和周不能同时设置为?
     } else if (
       (isDayOfMonthNumber && isDayOfWeekNumber) ||
@@ -161,7 +182,8 @@ export function validateCronFields(value: string) {
     ) {
       error = formatMessage({
         id: 'odc.component.Crontab.utils.ToAvoidConflictsYouCannot',
-        defaultMessage: '为避免冲突, 日和周不能同时指定值，需要将另一个域的值设为?',
+        defaultMessage:
+          '为避免冲突, 日和周不能同时指定值，需要将另一个域的值设为?'
       }); //为避免冲突, 日和周不能同时指定值，需要将另一个域的值设为?
     } else {
       parser.parseExpression(value);
@@ -218,7 +240,9 @@ const getCronLabel = (name: CronInputName, value: number | string) => {
   }
   // 周
   if (name === CronInputName.dayOfWeek) {
-    let weekLabel = weekOptions?.find((item) => item.value === Number(value))?.label;
+    let weekLabel = weekOptions?.find(
+      (item) => item.value === Number(value)
+    )?.label;
     // 特殊符号 # L 的处理
     if (charsReg.test(String(value))) {
       if ((value as string)?.indexOf('L') > -1) {
@@ -226,34 +250,45 @@ const getCronLabel = (name: CronInputName, value: number | string) => {
           const [_value] = (value as string)?.split('L');
           weekLabel =
             weekOptions?.find((item) => item.value === Number(_value))?.label ??
-            formatMessage({ id: 'odc.component.Crontab.utils.Sunday', defaultMessage: '周日' }); //周日
+            formatMessage({
+              id: 'odc.component.Crontab.utils.Sunday',
+              defaultMessage: '周日'
+            }); //周日
           weekLabel =
-            formatMessage({ id: 'odc.component.Crontab.utils.Weekly', defaultMessage: '每周' }) + //每周
+            formatMessage({
+              id: 'odc.component.Crontab.utils.Weekly',
+              defaultMessage: '每周'
+            }) + //每周
             weekLabel;
         } else {
           const [_value] = (value as string)?.split('L');
           weekLabel =
             weekOptions?.find((item) => item.value === Number(_value))?.label ??
-            formatMessage({ id: 'odc.component.Crontab.utils.Sunday', defaultMessage: '周日' }); //周日
+            formatMessage({
+              id: 'odc.component.Crontab.utils.Sunday',
+              defaultMessage: '周日'
+            }); //周日
           weekLabel =
             formatMessage({
               id: 'odc.component.Crontab.utils.LastWeek',
-              defaultMessage: '最后一周的',
+              defaultMessage: '最后一周的'
             }) + //最后一周的
             weekLabel;
         }
       }
       if ((value as string)?.indexOf('#') > -1) {
         const [_value, _value2] = (value as string)?.split('#');
-        weekLabel = weekOptions?.find((item) => item.value === Number(_value))?.label;
+        weekLabel = weekOptions?.find(
+          (item) => item.value === Number(_value)
+        )?.label;
         weekLabel =
           formatMessage(
             {
               id: 'odc.component.Crontab.utils.WeekValue',
-              defaultMessage: '第{value}周的',
+              defaultMessage: '第{value}周的'
             },
 
-            { value: _value2 },
+            { value: _value2 }
           ) +
           //`第${_value2}周的`
           weekLabel;
@@ -266,7 +301,7 @@ const getCronLabel = (name: CronInputName, value: number | string) => {
     const dayLabel = charsReg.test(String(value))
       ? formatMessage({
           id: 'odc.component.Crontab.utils.LastDayOfTheMonth',
-          defaultMessage: '本月最后一天',
+          defaultMessage: '本月最后一天'
         }) //本月最后一天
       : `${value} ${label}`;
     return dayLabel;
@@ -274,7 +309,10 @@ const getCronLabel = (name: CronInputName, value: number | string) => {
   return `${value} ${label}`;
 };
 
-export const getCronExecuteCycleUnitByObject = (name: CronInputName, value: number[]) => {
+export const getCronExecuteCycleUnitByObject = (
+  name: CronInputName,
+  value: number[]
+) => {
   return value
     ?.sort((a, b) => a - b)
     ?.map((i) => getCronLabel(name, i))
@@ -287,37 +325,57 @@ export const getCronExecuteCycleByObject = (
     hour: number[];
     dayOfWeek: number[];
     dayOfMonth: number[];
-  },
+  }
 ) => {
   const { hour, dayOfMonth, dayOfWeek } = value;
   const hourStr = getCronExecuteCycleUnitByObject(CronInputName.hour, hour);
-  const dayOfMonthStr = getCronExecuteCycleUnitByObject(CronInputName.dayOfMonth, dayOfMonth);
-  const dayOfWeekStr = getCronExecuteCycleUnitByObject(CronInputName.dayOfWeek, dayOfWeek);
+  const dayOfMonthStr = getCronExecuteCycleUnitByObject(
+    CronInputName.dayOfMonth,
+    dayOfMonth
+  );
+  const dayOfWeekStr = getCronExecuteCycleUnitByObject(
+    CronInputName.dayOfWeek,
+    dayOfWeek
+  );
   let cycleValue = [];
   if (type === CrontabDateType.daily) {
     cycleValue = [
-      formatMessage({ id: 'odc.component.Crontab.utils.EveryDay', defaultMessage: '每天' }), //每天
-      hourStr,
+      formatMessage({
+        id: 'odc.component.Crontab.utils.EveryDay',
+        defaultMessage: '每天'
+      }), //每天
+      hourStr
     ];
   } else if (type === CrontabDateType.monthly) {
     cycleValue = [
-      formatMessage({ id: 'odc.component.Crontab.utils.Monthly', defaultMessage: '每月' }), //每月
+      formatMessage({
+        id: 'odc.component.Crontab.utils.Monthly',
+        defaultMessage: '每月'
+      }), //每月
       dayOfMonthStr,
-      hourStr,
+      hourStr
     ];
   } else if (type === CrontabDateType.weekly) {
     cycleValue = [
-      formatMessage({ id: 'odc.component.Crontab.utils.Weekly', defaultMessage: '每周' }), //每周
+      formatMessage({
+        id: 'odc.component.Crontab.utils.Weekly',
+        defaultMessage: '每周'
+      }), //每周
       dayOfWeekStr,
-      hourStr,
+      hourStr
     ];
   }
   return cycleValue?.join(' ');
 };
 
-export const getCronExecuteCycle = (cronString: string, fieldStrs: string[]) => {
-  const [second, minute, hour, dayOfMonth, month, dayOfWeek] = cronString?.split(' ');
-  const [secondStr, minuteStr, hourStr, dayOfMonthStr, monthStr, dayOfWeekStr] = fieldStrs;
+export const getCronExecuteCycle = (
+  cronString: string,
+  fieldStrs: string[]
+) => {
+  const [second, minute, hour, dayOfMonth, month, dayOfWeek] =
+    cronString?.split(' ');
+  const [secondStr, minuteStr, hourStr, dayOfMonthStr, monthStr, dayOfWeekStr] =
+    fieldStrs;
   let cycleValue = [];
   if ([dayOfMonth, month, dayOfWeek].every((item) => reg?.test(item))) {
     // 每天
@@ -325,9 +383,12 @@ export const getCronExecuteCycle = (cronString: string, fieldStrs: string[]) => 
       reg?.test(hour) ? '' : cronSpeedLabelMap[CRON_SPEED.daily],
       hourStr,
       minuteStr,
-      secondStr,
+      secondStr
     ].filter(Boolean);
-  } else if ([dayOfMonth, month].every((item) => reg?.test(item)) && dayOfWeek !== '*') {
+  } else if (
+    [dayOfMonth, month].every((item) => reg?.test(item)) &&
+    dayOfWeek !== '*'
+  ) {
     if (!charsReg.test(dayOfWeek)) {
       // 每周
       cycleValue = [
@@ -335,7 +396,7 @@ export const getCronExecuteCycle = (cronString: string, fieldStrs: string[]) => 
         dayOfWeekStr,
         hourStr,
         minuteStr,
-        secondStr,
+        secondStr
       ].filter(Boolean);
     } else {
       // 每月
@@ -344,10 +405,13 @@ export const getCronExecuteCycle = (cronString: string, fieldStrs: string[]) => 
         dayOfWeekStr,
         hourStr,
         minuteStr,
-        secondStr,
+        secondStr
       ].filter(Boolean);
     }
-  } else if ([month].every((item) => reg?.test(item)) && !reg?.test(dayOfMonth)) {
+  } else if (
+    [month].every((item) => reg?.test(item)) &&
+    !reg?.test(dayOfMonth)
+  ) {
     // 每月
     cycleValue = [
       cronSpeedLabelMap[CRON_SPEED.monthly],
@@ -355,7 +419,7 @@ export const getCronExecuteCycle = (cronString: string, fieldStrs: string[]) => 
       dayOfMonthStr,
       hourStr,
       minuteStr,
-      secondStr,
+      secondStr
     ].filter(Boolean);
   } else if (!reg?.test(month)) {
     // 每年
@@ -366,7 +430,7 @@ export const getCronExecuteCycle = (cronString: string, fieldStrs: string[]) => 
       dayOfMonthStr,
       hourStr,
       minuteStr,
-      secondStr,
+      secondStr
     ].filter(Boolean);
   }
   return cycleValue?.join(' ');
@@ -405,7 +469,7 @@ class Translator {
     hour: null,
     dayOfMonth: null,
     month: null,
-    dayOfWeek: null,
+    dayOfWeek: null
   };
 
   value;
@@ -417,7 +481,7 @@ class Translator {
           hour: number[];
           dayOfWeek: number[];
           dayOfMonth: number[];
-        },
+        }
   ) => {
     if (typeof value === 'string') {
       // 自定义
@@ -434,9 +498,15 @@ class Translator {
           let interval, min, max;
           // * ? 符号处理
           if (subTokenValue.indexOf('*') !== -1) {
-            subTokenValue = subTokenValue.replace(/\*/g, constraints.min + '-' + constraints.max);
+            subTokenValue = subTokenValue.replace(
+              /\*/g,
+              constraints.min + '-' + constraints.max
+            );
           } else if (subTokenValue.indexOf('?') !== -1) {
-            subTokenValue = subTokenValue.replace(/\?/g, constraints.min + '-' + constraints.max);
+            subTokenValue = subTokenValue.replace(
+              /\?/g,
+              constraints.min + '-' + constraints.max
+            );
           }
           // interval 处理
           if (subTokenValue.indexOf('/') !== -1) {
@@ -458,8 +528,8 @@ class Translator {
               min,
               max,
               interval,
-              chars: null,
-            }),
+              chars: null
+            })
           );
         });
         this.fields[name] = nodes;
@@ -493,9 +563,9 @@ class Translator {
               str = formatMessage(
                 {
                   id: 'odc.component.Crontab.utils.BeginToEndEveryInterval',
-                  defaultMessage: '{begin}至{end}每{interval}{unit}',
+                  defaultMessage: '{begin}至{end}每{interval}{unit}'
                 },
-                { begin, end, interval, unit },
+                { begin, end, interval, unit }
               );
 
               //`${begin}至${end}每${interval}${unit}`
@@ -506,9 +576,9 @@ class Translator {
               str = formatMessage(
                 {
                   id: 'odc.component.Crontab.utils.BeginStartsEveryIntervalUnit',
-                  defaultMessage: '{begin}开始 每{interval}{unit}',
+                  defaultMessage: '{begin}开始 每{interval}{unit}'
                 },
-                { begin, interval, unit },
+                { begin, interval, unit }
               );
 
               //`${begin}开始 每${interval}${unit}`
@@ -519,9 +589,9 @@ class Translator {
             str = formatMessage(
               {
                 id: 'odc.component.Crontab.utils.BeginToEnd',
-                defaultMessage: '{begin}至{end}',
+                defaultMessage: '{begin}至{end}'
               },
-              { begin, end },
+              { begin, end }
             );
 
             //`${begin}至${end}`

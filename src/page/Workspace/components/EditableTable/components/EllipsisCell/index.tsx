@@ -37,7 +37,10 @@ export default class EllipsisCell extends Component<{
 
     if (isEllipsis) {
       return (
-        <Tooltip placement="topLeft" title={<pre style={{ marginBottom: 0 }}>{value}</pre>}>
+        <Tooltip
+          placement="topLeft"
+          title={<pre style={{ marginBottom: 0 }}>{value}</pre>}
+        >
           <span ref={this.ref} className={styles.cellEllipsis}>
             {value}
           </span>

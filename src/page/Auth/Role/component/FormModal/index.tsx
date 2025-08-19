@@ -14,18 +14,26 @@
  * limitations under the License.
  */
 
-import { createRole, getRoleDetail, updateRole } from '@/common/network/manager';
+import {
+  createRole,
+  getRoleDetail,
+  updateRole
+} from '@/common/network/manager';
 import {
   ALL_I_HAVE_CREATED_ID,
   ALL_I_HAVE_CREATED_VALUE,
   ALL_SELECTED_ID,
   ALL_SELECTED_VALUE,
   isSelectedAll,
-  isSelectedAllThatIHaveCreated,
+  isSelectedAllThatIHaveCreated
 } from '@/component/Manage/ResourceSelector';
 import { EnableRoleSystemPermission } from '@/constant';
 import type { IManagerRole } from '@/d.ts';
-import { IManagerDetailTabs, IManagerResourceType, IManagerRolePermissionType } from '@/d.ts';
+import {
+  IManagerDetailTabs,
+  IManagerResourceType,
+  IManagerRolePermissionType
+} from '@/d.ts';
 import odc from '@/plugins/odc';
 import { formatMessage } from '@/util/intl';
 import tracert from '@/util/tracert';
@@ -45,7 +53,11 @@ interface IProps {
   editId?: number;
   copyId?: number;
   onClose: () => void;
-  handleStatusChange?: (status: boolean, role: IManagerRole, callback: () => void) => void;
+  handleStatusChange?: (
+    status: boolean,
+    role: IManagerRole,
+    callback: () => void
+  ) => void;
 }
 
 interface IManagerRoleFormData {
@@ -72,45 +84,45 @@ const defaultData = {
   systemOperationPermissions: [
     {
       resourceType: IManagerResourceType.odc_audit_event,
-      actions: SystemAction.action_read,
+      actions: SystemAction.action_read
     },
     {
       resourceType: IManagerResourceType.approval_flow,
-      actions: SystemAction.action_create_delete_update,
+      actions: SystemAction.action_create_delete_update
     },
     {
       resourceType: IManagerResourceType.risk_level,
-      actions: SystemAction.action_update,
+      actions: SystemAction.action_update
     },
     {
       resourceType: IManagerResourceType.risk_detect,
-      actions: SystemAction.action_create_delete_update,
+      actions: SystemAction.action_create_delete_update
     },
     {
       resourceType: IManagerResourceType.ruleset,
-      actions: SystemAction.action_update,
+      actions: SystemAction.action_update
     },
     {
       resourceType: IManagerResourceType.integration,
-      actions: SystemAction.action_create_delete_update_read,
+      actions: SystemAction.action_create_delete_update_read
     },
     {
       resourceType: IManagerResourceType.individual_organization,
-      actions: SystemAction.action_update_read,
-    },
+      actions: SystemAction.action_update_read
+    }
   ],
 
   createAbleResource: [
     IManagerResourceType.resource,
     IManagerResourceType.project,
     IManagerResourceType.role,
-    IManagerResourceType.user,
+    IManagerResourceType.user
   ],
 
   permissionType: [
     IManagerRolePermissionType.resourceManagementPermissions,
-    IManagerRolePermissionType.systemOperationPermissions,
-  ],
+    IManagerRolePermissionType.systemOperationPermissions
+  ]
 };
 
 interface IRoleForUpdate extends IManagerRole {
@@ -124,7 +136,9 @@ const FormModal: React.FC<IProps> = (props) => {
   const isEdit = !!editId && !isCopy;
   const [hasChange, setHasChange] = useState(false);
   const [activeKey, setActiveKey] = useState(IManagerDetailTabs.DETAIL);
-  const [permissionActiveKey, setPermissionActiveKey] = useState('resourceManagementPermissions');
+  const [permissionActiveKey, setPermissionActiveKey] = useState(
+    'resourceManagementPermissions'
+  );
   const [data, setData] = useState(isEdit || isCopy ? null : defaultData);
   const [users, setUsers] = useState(null);
   const [isInternal, setInternal] = useState(false);
@@ -137,12 +151,12 @@ const FormModal: React.FC<IProps> = (props) => {
       resourceId: string;
       actions: string[];
     }[],
-    permissionType: IManagerRolePermissionType,
+    permissionType: IManagerRolePermissionType
   ) => {
     return values?.map(({ actions, resourceId, ...rest }) => ({
       ...rest,
       resourceId: getResourceIdByResponseKey(resourceId),
-      actions: resourceActions.getActionStringValue(actions, permissionType),
+      actions: resourceActions.getActionStringValue(actions, permissionType)
     }));
   };
 
@@ -153,7 +167,7 @@ const FormModal: React.FC<IProps> = (props) => {
       enabled,
       name,
       systemOperationPermissions,
-      resourceManagementPermissions,
+      resourceManagementPermissions
     } = detail ?? {};
     const formData: IManagerRoleFormData = {
       description,
@@ -162,43 +176,45 @@ const FormModal: React.FC<IProps> = (props) => {
         ? formatMessage(
             {
               id: 'odc.components.FormRoleModal.NameCopy',
-              defaultMessage: '{name}_复制',
+              defaultMessage: '{name}_复制'
             },
-            { name },
+            { name }
           ) // `${name}_复制`
         : name?.trim(),
       createAbleResource: [],
       permissionType: [],
       systemOperationPermissions: [],
-      resourceManagementPermissions: [],
+      resourceManagementPermissions: []
     };
 
     if (systemOperationPermissions?.length) {
       formData.permissionType.push('systemOperationPermissions');
       formData.systemOperationPermissions = handleUnifyDataForDetail(
         systemOperationPermissions,
-        IManagerRolePermissionType.systemOperationPermissions,
+        IManagerRolePermissionType.systemOperationPermissions
       );
     }
     if (resourceManagementPermissions?.length) {
       const createAbleResource = [];
       const _resourceManagementPermissions = [];
       formData.permissionType.push('resourceManagementPermissions');
-      resourceManagementPermissions?.forEach(({ actions, resourceId, resourceType }) => {
-        if (actions.includes('create')) {
-          createAbleResource.push(resourceType);
-        } else {
-          _resourceManagementPermissions.push({
-            resourceId,
-            resourceType,
-            actions,
-          });
+      resourceManagementPermissions?.forEach(
+        ({ actions, resourceId, resourceType }) => {
+          if (actions.includes('create')) {
+            createAbleResource.push(resourceType);
+          } else {
+            _resourceManagementPermissions.push({
+              resourceId,
+              resourceType,
+              actions
+            });
+          }
         }
-      });
+      );
       formData.createAbleResource = createAbleResource;
       formData.resourceManagementPermissions = handleUnifyDataForDetail(
         _resourceManagementPermissions,
-        IManagerRolePermissionType.resourceManagementPermissions,
+        IManagerRolePermissionType.resourceManagementPermissions
       );
     }
     setPermissionActiveKey(formData.permissionType[0]);
@@ -234,8 +250,8 @@ const FormModal: React.FC<IProps> = (props) => {
       message.success(
         formatMessage({
           id: 'odc.components.FormRoleModal.RoleCreated',
-          defaultMessage: '角色创建成功',
-        }), // 角色创建成功
+          defaultMessage: '角色创建成功'
+        }) // 角色创建成功
       );
       loadRoles();
       handleCloseModal();
@@ -243,8 +259,8 @@ const FormModal: React.FC<IProps> = (props) => {
       message.error(
         formatMessage({
           id: 'odc.components.FormRoleModal.UnableToCreateTheRole',
-          defaultMessage: '角色创建失败',
-        }),
+          defaultMessage: '角色创建失败'
+        })
         // 角色创建失败
       );
     }
@@ -256,8 +272,8 @@ const FormModal: React.FC<IProps> = (props) => {
       message.success(
         formatMessage({
           id: 'odc.components.FormRoleModal.RoleSaved',
-          defaultMessage: '角色保存成功',
-        }), // 角色保存成功
+          defaultMessage: '角色保存成功'
+        }) // 角色保存成功
       );
       loadRoles();
       handleCloseModal();
@@ -265,8 +281,8 @@ const FormModal: React.FC<IProps> = (props) => {
       message.error(
         formatMessage({
           id: 'odc.components.FormRoleModal.UnableToSaveTheRole',
-          defaultMessage: '角色保存失败',
-        }),
+          defaultMessage: '角色保存失败'
+        })
         // 角色保存失败
       );
     }
@@ -275,12 +291,13 @@ const FormModal: React.FC<IProps> = (props) => {
   const handleUsersChange = (type: 'add' | 'delete', values: number[]) => {
     setUsers({
       ...users,
-      [type]: values,
+      [type]: values
     });
   };
 
   function getResourceIdByResponseKey(responseKey) {
-    if (isNull(responseKey) || responseKey === ALL_SELECTED_VALUE()) return ALL_SELECTED_ID;
+    if (isNull(responseKey) || responseKey === ALL_SELECTED_VALUE())
+      return ALL_SELECTED_ID;
     if (responseKey === ALL_I_HAVE_CREATED_VALUE) return ALL_I_HAVE_CREATED_ID;
     return responseKey;
   }
@@ -289,7 +306,8 @@ const FormModal: React.FC<IProps> = (props) => {
     if (type === 'systemOperationPermissions') {
       return ALL_SELECTED_VALUE();
     }
-    if (isSelectedAllThatIHaveCreated(resourceId)) return ALL_I_HAVE_CREATED_VALUE;
+    if (isSelectedAllThatIHaveCreated(resourceId))
+      return ALL_I_HAVE_CREATED_VALUE;
     if (isSelectedAll(resourceId)) return ALL_SELECTED_VALUE();
     return resourceId;
   }
@@ -301,16 +319,16 @@ const FormModal: React.FC<IProps> = (props) => {
       actions?: string;
     }[],
     actionMap: any,
-    type: 'systemOperationPermissions' | 'resourceManagementPermissions',
+    type: 'systemOperationPermissions' | 'resourceManagementPermissions'
   ) => {
     const values = data?.filter((item) =>
-      Object.values(item)?.every((item) => item || isNull(item)),
+      Object.values(item)?.every((item) => item || isNull(item))
     );
     return values?.map(({ resourceId, actions, ...reset }) => {
       return {
         ...reset,
         resourceId: getResourceIdById(type, resourceId),
-        actions: actionMap?.[actions],
+        actions: actionMap?.[actions]
       };
     });
   };
@@ -326,17 +344,19 @@ const FormModal: React.FC<IProps> = (props) => {
           permissionType,
           createAbleResource,
           systemOperationPermissions,
-          resourceManagementPermissions,
+          resourceManagementPermissions
         } = values;
         const formData = {
           name,
           enabled,
           description,
           systemOperationPermissions: [],
-          resourceManagementPermissions: [],
+          resourceManagementPermissions: []
         };
         const filteredPermissionType = permissionType.filter((item) =>
-          EnableRoleSystemPermission ? item : item !== 'systemOperationPermissions',
+          EnableRoleSystemPermission
+            ? item
+            : item !== 'systemOperationPermissions'
         );
 
         if (!EnableRoleSystemPermission) {
@@ -349,10 +369,10 @@ const FormModal: React.FC<IProps> = (props) => {
               errors: [
                 formatMessage({
                   id: 'odc.components.FormRoleModal.SelectAPermissionType',
-                  defaultMessage: '请选择权限类型',
-                }), // 请选择权限类型
-              ],
-            },
+                  defaultMessage: '请选择权限类型'
+                }) // 请选择权限类型
+              ]
+            }
           ]);
 
           throw new Error(null);
@@ -360,30 +380,32 @@ const FormModal: React.FC<IProps> = (props) => {
         formData.resourceManagementPermissions = handleUnifyData(
           resourceManagementPermissions,
           resourceManagementActionMap,
-          'resourceManagementPermissions',
+          'resourceManagementPermissions'
         );
         formData.systemOperationPermissions = handleUnifyData(
           systemOperationPermissions,
           systemActionMap,
-          'systemOperationPermissions',
+          'systemOperationPermissions'
         );
         if (createAbleResource?.length) {
           createAbleResource
             ?.filter((resourceType) =>
-              odc.appConfig.manage.user.create ? true : resourceType !== IManagerResourceType.user,
+              odc.appConfig.manage.user.create
+                ? true
+                : resourceType !== IManagerResourceType.user
             )
             ?.forEach((type) => {
               formData.resourceManagementPermissions?.push({
                 resourceType: type,
                 resourceId: ALL_SELECTED_VALUE(),
-                actions: ['create'],
+                actions: ['create']
               });
             });
         }
 
         if (
           filteredPermissionType?.includes(
-            IManagerRolePermissionType.resourceManagementPermissions,
+            IManagerRolePermissionType.resourceManagementPermissions
           ) &&
           !formData.resourceManagementPermissions?.length
         ) {
@@ -393,27 +415,28 @@ const FormModal: React.FC<IProps> = (props) => {
               errors: [
                 formatMessage({
                   id: 'odc.components.FormRoleModal.SelectANewObject',
-                  defaultMessage: '请选择可新建的对象',
-                }), //请选择可新建的对象
-              ],
-            },
+                  defaultMessage: '请选择可新建的对象'
+                }) //请选择可新建的对象
+              ]
+            }
           ]);
           throw new Error(null);
         }
         // 检查是否存在权限包含关系
         const hasDuplicatePermissions = checkForDuplicatePermissions(
-          formData.resourceManagementPermissions,
+          formData.resourceManagementPermissions
         );
 
         if (hasDuplicatePermissions) {
           Modal.confirm({
             content: formatMessage({
               id: 'src.page.Auth.Role.component.FormModal.3D1B7861',
-              defaultMessage: '当前授予的权限存在包含关系，仅保留权限范围大的记录。',
+              defaultMessage:
+                '当前授予的权限存在包含关系，仅保留权限范围大的记录。'
             }),
             onOk: () => {
               submitRoleData(formData);
-            },
+            }
           });
         } else {
           submitRoleData(formData);
@@ -421,12 +444,16 @@ const FormModal: React.FC<IProps> = (props) => {
       })
       .catch((error) => {
         if (
-          error?.errorFields?.some(({ name }) => name.includes('resourceManagementPermissions'))
+          error?.errorFields?.some(({ name }) =>
+            name.includes('resourceManagementPermissions')
+          )
         ) {
           setPermissionActiveKey('resourceManagementPermissions');
         } else if (
           EnableRoleSystemPermission &&
-          error?.errorFields?.some(({ name }) => name.includes('systemOperationPermissions'))
+          error?.errorFields?.some(({ name }) =>
+            name.includes('systemOperationPermissions')
+          )
         ) {
           setPermissionActiveKey('systemOperationPermissions');
         }
@@ -440,28 +467,28 @@ const FormModal: React.FC<IProps> = (props) => {
         title: isEdit
           ? formatMessage({
               id: 'odc.components.FormRoleModal.AreYouSureYouWant',
-              defaultMessage: '是否确定取消编辑？取消后，编辑的内容将不生效',
+              defaultMessage: '是否确定取消编辑？取消后，编辑的内容将不生效'
             })
           : // 确定要取消编辑吗？取消保存后，所编辑的内容将不生效
             formatMessage({
               id: 'odc.components.FormRoleModal.AreYouSureYouWant.1',
-              defaultMessage: '是否确定取消新建?',
+              defaultMessage: '是否确定取消新建?'
             }),
         // 确定要取消新建吗?
         cancelText: formatMessage({
           id: 'odc.components.FormRoleModal.Cancel',
-          defaultMessage: '取消',
+          defaultMessage: '取消'
         }),
         // 取消
         okText: formatMessage({
           id: 'odc.components.FormRoleModal.Determine',
-          defaultMessage: '确定',
+          defaultMessage: '确定'
         }), // 确定
         centered: true,
         onOk: () => {
           setHasChange(false);
           handleCloseModal();
-        },
+        }
       });
     } else {
       handleCloseModal();
@@ -472,8 +499,8 @@ const FormModal: React.FC<IProps> = (props) => {
     formRef.current.setFields([
       {
         name: 'createAbleResource',
-        errors: [],
-      },
+        errors: []
+      }
     ]);
   };
 
@@ -485,7 +512,7 @@ const FormModal: React.FC<IProps> = (props) => {
   const handleFieldChange = (label: string, value: any) => {
     const newData = set({ ...data }, label, value);
     formRef.current.setFieldsValue({
-      [label]: value,
+      [label]: value
     });
     setData(newData);
   };
@@ -526,7 +553,9 @@ const FormModal: React.FC<IProps> = (props) => {
   };
 
   const isCreateOnlyPermission = (permission) => {
-    return permission?.actions?.length === 1 && permission?.actions?.[0] === 'create';
+    return (
+      permission?.actions?.length === 1 && permission?.actions?.[0] === 'create'
+    );
   };
 
   const submitRoleData = (formData) => {
@@ -536,7 +565,7 @@ const FormModal: React.FC<IProps> = (props) => {
         ...formData,
         bindUserIds: users?.add,
         unbindUserIds: users?.delete,
-        id: editId,
+        id: editId
       });
     } else {
       handleCreate(formData);
@@ -550,11 +579,11 @@ const FormModal: React.FC<IProps> = (props) => {
         isEdit
           ? formatMessage({
               id: 'odc.components.FormRoleModal.EditARole',
-              defaultMessage: '编辑角色',
+              defaultMessage: '编辑角色'
             }) // 编辑角色
           : formatMessage({
               id: 'odc.components.FormRoleModal.CreateARole',
-              defaultMessage: '新建角色',
+              defaultMessage: '新建角色'
             }) // 新建角色
       }
       rootClassName={styles.userModal}
@@ -564,7 +593,7 @@ const FormModal: React.FC<IProps> = (props) => {
             {
               formatMessage({
                 id: 'odc.components.FormRoleModal.Cancel',
-                defaultMessage: '取消',
+                defaultMessage: '取消'
               })
               /* 取消 */
             }
@@ -572,8 +601,14 @@ const FormModal: React.FC<IProps> = (props) => {
           <Button type="primary" onClick={handleSubmit}>
             {
               isEdit
-                ? formatMessage({ id: 'odc.components.FormRoleModal.Save', defaultMessage: '保存' }) // 保存
-                : formatMessage({ id: 'odc.components.FormRoleModal.New', defaultMessage: '新建' }) // 新建
+                ? formatMessage({
+                    id: 'odc.components.FormRoleModal.Save',
+                    defaultMessage: '保存'
+                  }) // 保存
+                : formatMessage({
+                    id: 'odc.components.FormRoleModal.New',
+                    defaultMessage: '新建'
+                  }) // 新建
             }
           </Button>
         </Space>
@@ -583,12 +618,16 @@ const FormModal: React.FC<IProps> = (props) => {
       onClose={handleCancel}
     >
       {isEdit && (
-        <Radio.Group onChange={handleChangeKey} value={activeKey} style={{ marginBottom: '8px' }}>
+        <Radio.Group
+          onChange={handleChangeKey}
+          value={activeKey}
+          style={{ marginBottom: '8px' }}
+        >
           <Radio.Button value={IManagerDetailTabs.DETAIL}>
             {
               formatMessage({
                 id: 'odc.components.FormRoleModal.RoleDetails',
-                defaultMessage: '角色详情',
+                defaultMessage: '角色详情'
               })
               /* 角色详情 */
             }
@@ -597,7 +636,7 @@ const FormModal: React.FC<IProps> = (props) => {
             {
               formatMessage({
                 id: 'odc.components.FormRoleModal.RelatedUsers',
-                defaultMessage: '相关用户',
+                defaultMessage: '相关用户'
               })
               /* 相关用户 */
             }

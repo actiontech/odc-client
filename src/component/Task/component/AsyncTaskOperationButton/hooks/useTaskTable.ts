@@ -1,5 +1,8 @@
 import { useState } from 'react';
-import type { AsyncTaskType, ISwitchOdcTaskListResponse } from '@/d.ts/migrateTask';
+import type {
+  AsyncTaskType,
+  ISwitchOdcTaskListResponse
+} from '@/d.ts/migrateTask';
 import { UnfinishedScheduleListType } from '@/d.ts/migrateTask';
 import { TaskRecord, TaskRecordParameters, TaskStatus } from '@/d.ts';
 
@@ -29,12 +32,15 @@ export function useAsyncTaskTable() {
   const [confirmRiskUnFinished, setConfirmRiskUnFinished] = useState(false);
   const [exportSpaceScopes, setExportSpaceScopes] = useState<string[]>([
     UnfinishedScheduleListType.TEAM,
-    UnfinishedScheduleListType.INDIVIDUAL,
+    UnfinishedScheduleListType.INDIVIDUAL
   ]);
 
   const showModal = () => {
     setVisible(true);
-    setExportSpaceScopes([UnfinishedScheduleListType.TEAM, UnfinishedScheduleListType.INDIVIDUAL]);
+    setExportSpaceScopes([
+      UnfinishedScheduleListType.TEAM,
+      UnfinishedScheduleListType.INDIVIDUAL
+    ]);
   };
 
   const hideModal = () => {
@@ -56,7 +62,7 @@ export function useAsyncTaskTable() {
     showModal,
     hideModal,
     exportSpaceScopes,
-    handleExportSpaceScopesChange,
+    handleExportSpaceScopesChange
   };
 }
 

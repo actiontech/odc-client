@@ -17,7 +17,13 @@ import { createTask } from '@/common/network/task';
 import CommonIDE from '@/component/CommonIDE';
 import FormItemPanel from '@/component/FormItemPanel';
 import DescriptionInput from '@/component/Task/component/DescriptionInput';
-import { SQLContentType, TaskExecStrategy, TaskPageScope, TaskPageType, TaskType } from '@/d.ts';
+import {
+  SQLContentType,
+  TaskExecStrategy,
+  TaskPageScope,
+  TaskPageType,
+  TaskType
+} from '@/d.ts';
 import type { ModalStore } from '@/store/modal';
 import type { SQLStore } from '@/store/sql';
 import type { TaskStore } from '@/store/task';
@@ -39,7 +45,7 @@ import {
   Radio,
   Space,
   Tooltip,
-  Typography,
+  Typography
 } from 'antd';
 import { inject, observer } from 'mobx-react';
 import dayjs from 'dayjs';
@@ -75,7 +81,7 @@ const CreateModal: React.FC<IProps> = (props) => {
     const {
       jobParameters,
       description,
-      triggerConfig: { triggerStrategy, startAt },
+      triggerConfig: { triggerStrategy, startAt }
     } = task;
     const { databaseId, delimiter, sqlContent, timeoutMillis } = jobParameters;
     const formData = {
@@ -85,10 +91,11 @@ const CreateModal: React.FC<IProps> = (props) => {
       delimiter,
       sqlContent,
       timeoutMillis: timeoutMillis / 1000 / 60 / 60,
-      triggerStrategy,
+      triggerStrategy
     };
     if (triggerStrategy === TaskExecStrategy.START_AT) {
-      formData.startAt = startAt && startAt > new Date().getTime() ? dayjs(startAt) : null;
+      formData.startAt =
+        startAt && startAt > new Date().getTime() ? dayjs(startAt) : null;
     }
     form.setFieldsValue(formData);
   };
@@ -102,7 +109,7 @@ const CreateModal: React.FC<IProps> = (props) => {
 
   const handleSqlChange = (type: 'sqlContent', sql: string) => {
     form?.setFieldsValue({
-      [type]: sql,
+      [type]: sql
     });
     setHasEdit(true);
   };
@@ -121,7 +128,7 @@ const CreateModal: React.FC<IProps> = (props) => {
       Modal.confirm({
         title: formatMessage({
           id: 'src.component.Task.LogicDatabaseAsyncTask.CreateModal.0C94A1FF',
-          defaultMessage: '确认取消逻辑库变更吗？',
+          defaultMessage: '确认取消逻辑库变更吗？'
         }),
         centered: true,
         onOk: () => {
@@ -130,12 +137,12 @@ const CreateModal: React.FC<IProps> = (props) => {
         },
         okText: formatMessage({
           id: 'src.component.Task.LogicDatabaseAsyncTask.CreateModal.CA071ACE',
-          defaultMessage: '确认',
+          defaultMessage: '确认'
         }),
         cancelText: formatMessage({
           id: 'src.component.Task.LogicDatabaseAsyncTask.CreateModal.4421F0D6',
-          defaultMessage: '取消',
-        }),
+          defaultMessage: '取消'
+        })
       });
     } else {
       modalStore.changeLogicialDatabaseModal(false);
@@ -154,33 +161,35 @@ const CreateModal: React.FC<IProps> = (props) => {
           description,
           delimiter,
           triggerStrategy,
-          startAt,
+          startAt
         } = values;
         const parameters = {
           type: TaskType.LOGICAL_DATABASE_CHANGE,
           operationType: TaskOperationType.CREATE,
           scheduleTaskParameters: {
-            timeoutMillis: timeoutMillis ? timeoutMillis * 60 * 60 * 1000 : undefined,
+            timeoutMillis: timeoutMillis
+              ? timeoutMillis * 60 * 60 * 1000
+              : undefined,
             errorStrategy,
             sqlContent,
             delimiter,
-            databaseId,
+            databaseId
           },
           triggerConfig: {
-            triggerStrategy,
-          } as ICycleTaskTriggerConfig,
+            triggerStrategy
+          } as ICycleTaskTriggerConfig
         };
         if (triggerStrategy === TaskExecStrategy.START_AT) {
           parameters.triggerConfig = {
             triggerStrategy: TaskExecStrategy.START_AT,
-            startAt: startAt?.valueOf(),
+            startAt: startAt?.valueOf()
           };
         }
         const data = {
           databaseId,
           taskType: TaskType.ALTER_SCHEDULE,
           parameters,
-          description,
+          description
         };
         setConfirmLoading(true);
         const res = await createTask(data);
@@ -190,12 +199,12 @@ const CreateModal: React.FC<IProps> = (props) => {
           message.success(
             formatMessage({
               id: 'src.component.Task.LogicDatabaseAsyncTask.CreateModal.E7B4AE89',
-              defaultMessage: '创建成功',
-            }),
+              defaultMessage: '创建成功'
+            })
           );
           openTasksPage(
             TaskPageType.LOGICAL_DATABASE_CHANGE,
-            TaskPageScope.CREATED_BY_CURRENT_USER,
+            TaskPageScope.CREATED_BY_CURRENT_USER
           );
         } else {
           setConfirmLoading(false);
@@ -220,19 +229,19 @@ const CreateModal: React.FC<IProps> = (props) => {
     if (!sqlContent) {
       return formatMessage({
         id: 'src.component.Task.LogicDatabaseAsyncTask.CreateModal.170CC893',
-        defaultMessage: '未输入SQL，无可预览内容',
+        defaultMessage: '未输入SQL，无可预览内容'
       });
     }
     if (!databaseId) {
       return formatMessage({
         id: 'src.component.Task.LogicDatabaseAsyncTask.CreateModal.76DCD3C0',
-        defaultMessage: '未选择逻辑库，无可预览内容',
+        defaultMessage: '未选择逻辑库，无可预览内容'
       });
     }
     if (!delimiter) {
       return formatMessage({
         id: 'src.component.Task.LogicDatabaseAsyncTask.CreateModal.F1374DF3',
-        defaultMessage: '未选择分隔符，无可预览内容',
+        defaultMessage: '未选择分隔符，无可预览内容'
       });
     }
     return null;
@@ -252,7 +261,7 @@ const CreateModal: React.FC<IProps> = (props) => {
         width={905}
         title={formatMessage({
           id: 'src.component.Task.LogicDatabaseAsyncTask.CreateModal.6CD30B75',
-          defaultMessage: '新建逻辑库变更',
+          defaultMessage: '新建逻辑库变更'
         })}
         footer={
           <Space>
@@ -263,13 +272,17 @@ const CreateModal: React.FC<IProps> = (props) => {
             >
               {formatMessage({
                 id: 'src.component.Task.LogicDatabaseAsyncTask.CreateModal.77329812',
-                defaultMessage: '取消',
+                defaultMessage: '取消'
               })}
             </Button>
-            <Button type="primary" loading={confirmLoading} onClick={handleSubmit}>
+            <Button
+              type="primary"
+              loading={confirmLoading}
+              onClick={handleSubmit}
+            >
               {formatMessage({
                 id: 'src.component.Task.LogicDatabaseAsyncTask.CreateModal.12C8523B',
-                defaultMessage: '新建',
+                defaultMessage: '新建'
               })}
             </Button>
           </Space>
@@ -287,12 +300,12 @@ const CreateModal: React.FC<IProps> = (props) => {
               {formatMessage({
                 id: 'src.component.Task.LogicDatabaseAsyncTask.CreateModal.435C79D4',
                 defaultMessage:
-                  '逻辑库变更仅支持 DDL 语句，多条 SQL 将依次在所有实际数据库上执行。',
+                  '逻辑库变更仅支持 DDL 语句，多条 SQL 将依次在所有实际数据库上执行。'
               })}
               {formatMessage({
                 id: 'src.component.Task.LogicDatabaseAsyncTask.CreateModal.C53810BF',
                 defaultMessage:
-                  '逻辑库变更内容暂不支持注释解析，编写注释可能会导致 SQL 语句解析异常。',
+                  '逻辑库变更内容暂不支持注释解析，编写注释可能会导致 SQL 语句解析异常。'
               })}
             </Space>
           }
@@ -302,7 +315,7 @@ const CreateModal: React.FC<IProps> = (props) => {
           name="basic"
           initialValues={{
             triggerStrategy: TaskExecStrategy.START_NOW,
-            databaseId: logicDatabaseInfo?.databaseId,
+            databaseId: logicDatabaseInfo?.databaseId
           }}
           layout="vertical"
           requiredMark="optional"
@@ -313,7 +326,7 @@ const CreateModal: React.FC<IProps> = (props) => {
             isLogicalDatabase
             label={formatMessage({
               id: 'src.component.Task.LogicDatabaseAsyncTask.CreateModal.9398BE2A',
-              defaultMessage: '逻辑库',
+              defaultMessage: '逻辑库'
             })}
             type={TaskType.LOGICAL_DATABASE_CHANGE}
           />
@@ -321,7 +334,7 @@ const CreateModal: React.FC<IProps> = (props) => {
           <Form.Item
             label={formatMessage({
               id: 'src.component.Task.LogicDatabaseAsyncTask.CreateModal.844AC838',
-              defaultMessage: 'SQL 内容',
+              defaultMessage: 'SQL 内容'
             })}
             required
           >
@@ -329,13 +342,13 @@ const CreateModal: React.FC<IProps> = (props) => {
               style={{
                 display: 'flex',
                 width: '100%',
-                justifyContent: 'space-between',
+                justifyContent: 'space-between'
               }}
             >
               <Form.Item
                 noStyle
                 style={{
-                  display: 'block',
+                  display: 'block'
                 }}
                 name="sqlContentType"
                 initialValue={SQLContentType.TEXT}
@@ -344,16 +357,16 @@ const CreateModal: React.FC<IProps> = (props) => {
                     required: true,
                     message: formatMessage({
                       id: 'src.component.Task.LogicDatabaseAsyncTask.CreateModal.FED011D0',
-                      defaultMessage: '请选择 SQL 内容',
-                    }),
-                  },
+                      defaultMessage: '请选择 SQL 内容'
+                    })
+                  }
                 ]}
               >
                 <Radio.Group>
                   <Radio.Button value={SQLContentType.TEXT}>
                     {formatMessage({
                       id: 'src.component.Task.LogicDatabaseAsyncTask.CreateModal.0A3EB502',
-                      defaultMessage: 'SQL录入',
+                      defaultMessage: 'SQL录入'
                     })}
                   </Radio.Button>
                 </Radio.Group>
@@ -366,7 +379,7 @@ const CreateModal: React.FC<IProps> = (props) => {
                 >
                   {formatMessage({
                     id: 'src.component.Task.LogicDatabaseAsyncTask.CreateModal.DE2BB1F6',
-                    defaultMessage: '预览实际 SQL',
+                    defaultMessage: '预览实际 SQL'
                   })}
                 </Button>
               </Tooltip>
@@ -382,13 +395,13 @@ const CreateModal: React.FC<IProps> = (props) => {
                 required: sqlContentType === SQLContentType.TEXT,
                 message: formatMessage({
                   id: 'src.component.Task.LogicDatabaseAsyncTask.CreateModal.FD315879',
-                  defaultMessage: '请填写 SQL 内容',
-                }),
-              },
+                  defaultMessage: '请填写 SQL 内容'
+                })
+              }
             ]}
             style={{
               height: '280px',
-              paddingTop: 8,
+              paddingTop: 8
             }}
           >
             <CommonIDE
@@ -400,26 +413,26 @@ const CreateModal: React.FC<IProps> = (props) => {
                 handleSqlChange('sqlContent', sql);
               }}
               editorProps={{
-                theme,
+                theme
               }}
               placeholder={formatMessage({
                 id: 'src.component.Task.LogicDatabaseAsyncTask.CreateModal.56CD71B9',
                 defaultMessage:
-                  '使用逻辑表表达式需要在表达式上加上`号，如：`db_[00-31].test_[00-31]`,否则将无法识别逻辑表拓扑',
+                  '使用逻辑表表达式需要在表达式上加上`号，如：`db_[00-31].test_[00-31]`,否则将无法识别逻辑表拓扑'
               })}
             />
           </Form.Item>
           <div
             style={{
               display: 'flex',
-              columnGap: '24px',
+              columnGap: '24px'
             }}
           >
             <Form.Item
               name="delimiter"
               label={formatMessage({
                 id: 'src.component.Task.LogicDatabaseAsyncTask.CreateModal.03CE0FA3',
-                defaultMessage: '分隔符',
+                defaultMessage: '分隔符'
               })}
               initialValue=";"
               required
@@ -428,18 +441,18 @@ const CreateModal: React.FC<IProps> = (props) => {
                   required: true,
                   message: formatMessage({
                     id: 'src.component.Task.LogicDatabaseAsyncTask.CreateModal.3AA56015',
-                    defaultMessage: '请输入分隔符',
-                  }),
-                },
+                    defaultMessage: '请输入分隔符'
+                  })
+                }
               ]}
             >
               <AutoComplete
                 style={{
-                  width: 128,
+                  width: 128
                 }}
                 options={[';', '/', '//', '$', '$$'].map((value) => {
                   return {
-                    value,
+                    value
                   };
                 })}
               />
@@ -448,14 +461,14 @@ const CreateModal: React.FC<IProps> = (props) => {
           <FormItemPanel
             label={formatMessage({
               id: 'odc.component.DataMockerDrawer.form.TaskSettings',
-              defaultMessage: '任务设置',
+              defaultMessage: '任务设置'
             })}
             /*任务设置*/ keepExpand
           >
             <Form.Item
               label={formatMessage({
                 id: 'odc.DataClearTask.CreateModal.ExecutionMethod',
-                defaultMessage: '执行方式',
+                defaultMessage: '执行方式'
               })}
               /*执行方式*/ name="triggerStrategy"
               required
@@ -465,7 +478,7 @@ const CreateModal: React.FC<IProps> = (props) => {
                   {
                     formatMessage({
                       id: 'odc.DataClearTask.CreateModal.ExecuteNow',
-                      defaultMessage: '立即执行',
+                      defaultMessage: '立即执行'
                     }) /*立即执行*/
                   }
                 </Radio.Button>
@@ -473,7 +486,7 @@ const CreateModal: React.FC<IProps> = (props) => {
                   {
                     formatMessage({
                       id: 'odc.DataClearTask.CreateModal.ScheduledExecution',
-                      defaultMessage: '定时执行',
+                      defaultMessage: '定时执行'
                     }) /*定时执行*/
                   }
                 </Radio.Button>
@@ -488,7 +501,7 @@ const CreateModal: React.FC<IProps> = (props) => {
                       name="startAt"
                       label={formatMessage({
                         id: 'odc.DataArchiveTask.CreateModal.ExecutionTime',
-                        defaultMessage: '执行时间',
+                        defaultMessage: '执行时间'
                       })}
                       /*执行时间*/ required
                     >
@@ -508,14 +521,14 @@ const CreateModal: React.FC<IProps> = (props) => {
           <Form.Item
             label={formatMessage({
               id: 'src.component.Task.LogicDatabaseAsyncTask.CreateModal.64467306',
-              defaultMessage: '执行超时时间',
+              defaultMessage: '执行超时时间'
             })}
             required
           >
             <Form.Item
               label={formatMessage({
                 id: 'src.component.Task.LogicDatabaseAsyncTask.CreateModal.4899307D',
-                defaultMessage: '小时',
+                defaultMessage: '小时'
               })}
               name="timeoutMillis"
               rules={[
@@ -523,17 +536,17 @@ const CreateModal: React.FC<IProps> = (props) => {
                   required: true,
                   message: formatMessage({
                     id: 'src.component.Task.LogicDatabaseAsyncTask.CreateModal.5AF8C707',
-                    defaultMessage: '请输入超时时间',
-                  }),
+                    defaultMessage: '请输入超时时间'
+                  })
                 },
                 {
                   type: 'number',
                   max: 480,
                   message: formatMessage({
                     id: 'src.component.Task.LogicDatabaseAsyncTask.CreateModal.7BAA8D0E',
-                    defaultMessage: '最大不超过480小时',
-                  }),
-                },
+                    defaultMessage: '最大不超过480小时'
+                  })
+                }
               ]}
               initialValue={48}
               noStyle
@@ -543,7 +556,7 @@ const CreateModal: React.FC<IProps> = (props) => {
             <span className={styles.hour}>
               {formatMessage({
                 id: 'src.component.Task.LogicDatabaseAsyncTask.CreateModal.CD58DA91',
-                defaultMessage: '小时',
+                defaultMessage: '小时'
               })}
             </span>
           </Form.Item>
@@ -560,4 +573,8 @@ const CreateModal: React.FC<IProps> = (props) => {
     </>
   );
 };
-export default inject('sqlStore', 'taskStore', 'modalStore')(observer(CreateModal));
+export default inject(
+  'sqlStore',
+  'taskStore',
+  'modalStore'
+)(observer(CreateModal));

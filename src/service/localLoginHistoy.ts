@@ -34,7 +34,10 @@ class localLoginHistory {
   }
   private setMetaData(data: Partial<LocalLoginHistoryData>) {
     const oldData = this.getMetaData();
-    localStorage.setItem(this.getKey(), JSON.stringify(Object.assign(oldData, data)));
+    localStorage.setItem(
+      this.getKey(),
+      JSON.stringify(Object.assign(oldData, data))
+    );
   }
   public getLastLoginVersion() {
     return this.getMetaData().version;

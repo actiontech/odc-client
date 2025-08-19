@@ -14,7 +14,10 @@ const ScheduleItem = ({ title, progress, type }) => {
   const navigate = useNavigate();
 
   const total = progress?.taskStat
-    ? statusType.reduce((sum, key) => sum + (parseInt(progress?.taskStat?.[key]) || 0), 0)
+    ? statusType.reduce(
+        (sum, key) => sum + (parseInt(progress?.taskStat?.[key]) || 0),
+        0
+      )
     : undefined;
 
   return (
@@ -29,22 +32,25 @@ const ScheduleItem = ({ title, progress, type }) => {
                 const baseRoute = `/${IPageType.Task}?task=${type}`;
 
                 if (type === TaskType.PARTITION_PLAN) {
-                  navigate(baseRoute + `&status=${TaskStatus.EXECUTION_SUCCEEDED}`);
+                  navigate(
+                    baseRoute + `&status=${TaskStatus.EXECUTION_SUCCEEDED}`
+                  );
                 } else {
                   navigate(
-                    baseRoute + `&status=${TaskStatus.ENABLED}&filtered=${TaskExecStrategy.CRON}`,
+                    baseRoute +
+                      `&status=${TaskStatus.ENABLED}&filtered=${TaskExecStrategy.CRON}`
                   );
                 }
               }}
             >
               {formatMessage({
                 id: 'src.page.Console.components.ScheduleItem.4E8811DF',
-                defaultMessage: '已启用',
+                defaultMessage: '已启用'
               })}
               <span className={styles.count}>{successEnabledCount || 0}</span>
               {formatMessage({
                 id: 'src.page.Console.components.ScheduleItem.728A17A0',
-                defaultMessage: '个',
+                defaultMessage: '个'
               })}
             </span>
           }
@@ -60,14 +66,14 @@ const ScheduleItem = ({ title, progress, type }) => {
         <CounterCard
           title={formatMessage({
             id: 'src.page.Console.components.ScheduleItem.1ADBD842',
-            defaultMessage: '共执行',
+            defaultMessage: '共执行'
           })}
           counter={total}
         />
         <CounterCard
           title={formatMessage({
             id: 'src.page.Console.components.ScheduleItem.6F6BDC9E',
-            defaultMessage: '执行失败',
+            defaultMessage: '执行失败'
           })}
           counter={parseInt(failedExecutionCount)}
           status="failed"

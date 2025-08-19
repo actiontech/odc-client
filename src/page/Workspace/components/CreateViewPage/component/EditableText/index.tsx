@@ -25,12 +25,15 @@ interface IProps {
 }
 
 const EditableText: React.FC<IProps> = React.memo((props) => {
-  const [state, setState] = useState({ editable: props.editable || false, value: props.initValue });
+  const [state, setState] = useState({
+    editable: props.editable || false,
+    value: props.initValue
+  });
 
   const changeToEditable = () => {
     setState({
       ...state,
-      editable: true,
+      editable: true
     });
   };
 
@@ -39,7 +42,7 @@ const EditableText: React.FC<IProps> = React.memo((props) => {
     if (editable) {
       setState({
         ...state,
-        editable: false,
+        editable: false
       });
       props?.onChange(value);
     }
@@ -48,15 +51,21 @@ const EditableText: React.FC<IProps> = React.memo((props) => {
   const handleChange = (e) => {
     setState({
       ...state,
-      value: e.target.value,
+      value: e.target.value
     });
   };
 
   if (!state.editable) {
     if (props.hideArrow) {
-      return <a onClick={changeToEditable}>{state.value || props.placeholder}</a>;
+      return (
+        <a onClick={changeToEditable}>{state.value || props.placeholder}</a>
+      );
     } else {
-      return <a onClick={changeToEditable}>&lt;{state.value || props.placeholder}&gt;</a>;
+      return (
+        <a onClick={changeToEditable}>
+          &lt;{state.value || props.placeholder}&gt;
+        </a>
+      );
     }
   }
   return (

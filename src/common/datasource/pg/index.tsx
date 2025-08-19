@@ -30,41 +30,41 @@ const tableConfig = {
     id: 'int',
     name: 'varchar',
     date: 'datetime',
-    time: 'timestamp',
-  },
+    time: 'timestamp'
+  }
 };
 
 const functionConfig: IDataSourceModeConfig['schema']['func'] = {
   params: ['paramName', 'dataType', 'dataLength'],
   defaultValue: {
-    dataLength: 45,
+    dataLength: 45
   },
   dataNature: true,
   sqlSecurity: true,
-  deterministic: true,
+  deterministic: true
 };
 
 const procedureConfig: IDataSourceModeConfig['schema']['proc'] = {
   params: ['paramName', 'paramMode', 'dataType', 'dataLength'],
   defaultValue: {
-    dataLength: 45,
+    dataLength: 45
   },
   dataNature: true,
   sqlSecurity: true,
-  deterministic: true,
+  deterministic: true
 };
 
 const items: Record<ConnectType.PG, IDataSourceModeConfig> = {
   [ConnectType.PG]: {
     connection: {
       address: {
-        items: ['ip', 'port', 'catalogName'],
+        items: ['ip', 'port', 'catalogName']
       },
       account: true,
       sys: false,
       ssl: false,
       jdbcDoc: 'https://jdbc.postgresql.org/documentation/use/',
-      disableURLParse: true,
+      disableURLParse: true
     },
     features: {
       task: [TaskType.DATA_ARCHIVE, TaskType.DATA_DELETE],
@@ -77,21 +77,21 @@ const items: Record<ConnectType.PG, IDataSourceModeConfig> = {
       sqlconsole: false,
       export: {
         fileLimit: false,
-        snapshot: false,
-      },
+        snapshot: false
+      }
     },
     schema: {
       table: tableConfig,
       func: functionConfig,
       proc: procedureConfig,
-      innerSchema: ['postgres'],
+      innerSchema: ['postgres']
     },
     sql: {
       language: 'mysql',
       escapeChar: '"',
-      caseSensitivity: true,
-    },
-  },
+      caseSensitivity: true
+    }
+  }
 };
 
 if (haveOCP()) {

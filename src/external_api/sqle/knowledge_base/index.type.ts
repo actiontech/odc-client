@@ -3,7 +3,7 @@
 import {
   IGetKnowledgeBaseListRes,
   IGetKnowledgeGraphResp,
-  IGetKnowledgeBaseTagListRes,
+  IGetKnowledgeBaseTagListRes
 } from '../common.type';
 
 export interface IGetKnowledgeBaseListParams {
@@ -24,4 +24,5 @@ export interface IGetKnowledgeGraphParams {
 
 export interface IGetKnowledgeGraphReturn extends IGetKnowledgeGraphResp {}
 
-export interface IGetKnowledgeBaseTagListReturn extends IGetKnowledgeBaseTagListRes {}
+export interface IGetKnowledgeBaseTagListReturn
+  extends IGetKnowledgeBaseTagListRes {}

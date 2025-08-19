@@ -17,7 +17,7 @@
 import {
   batchDeleteSensitiveColumns,
   listSensitiveColumns,
-  setEnabled,
+  setEnabled
 } from '@/common/network/sensitiveColumn';
 import CommonTable from '@/component/CommonTable';
 import {
@@ -25,7 +25,7 @@ import {
   IOperationOptionType,
   IRowSelecter,
   ITableInstance,
-  ITableLoadOptions,
+  ITableLoadOptions
 } from '@/component/CommonTable/interface';
 import StatusSwitch from '@/component/StatusSwitch';
 import TooltipContent from '@/component/TooltipContent';
@@ -67,7 +67,7 @@ export const PopoverContainer: React.FC<{
         <Descriptions
           column={1}
           style={{
-            width: '250px',
+            width: '250px'
           }}
         >
           {descriptionsData?.map((description, index) => {
@@ -93,7 +93,7 @@ const getColumns: ({
   dataSourceIdMap,
   hasRowSelected,
   maskingAlgorithmIdMap,
-  hideColumns,
+  hideColumns
 }) => ColumnsType<ISensitiveColumn> = ({
   handleStatusSwitch,
   handleEdit,
@@ -103,37 +103,38 @@ const getColumns: ({
   dataSourceIdMap,
   hasRowSelected,
   maskingAlgorithmIdMap,
-  hideColumns = [],
+  hideColumns = []
 }) => {
   const columns: ColumnsType<ISensitiveColumn> = [
     {
       title: formatMessage({
         id: 'odc.components.SensitiveColumn.DataSource',
-        defaultMessage: '数据源',
+        defaultMessage: '数据源'
       }),
       //数据源
       width: 170,
       dataIndex: 'datasource',
       key: 'datasource',
       ellipsis: true,
-      render: (text, record, index) => dataSourceIdMap[record?.database?.dataSource?.id],
+      render: (text, record, index) =>
+        dataSourceIdMap[record?.database?.dataSource?.id]
     },
     {
       title: formatMessage({
         id: 'odc.components.SensitiveColumn.DatabaseSchema',
-        defaultMessage: '数据库/schema',
+        defaultMessage: '数据库/schema'
       }),
       //数据库/schema
       width: 170,
       dataIndex: 'database',
       key: 'database',
       ellipsis: true,
-      render: (text, record, index) => record?.database?.name,
+      render: (text, record, index) => record?.database?.name
     },
     {
       title: formatMessage({
         id: 'odc.src.page.Project.Sensitive.components.SensitiveColumn.TableView',
-        defaultMessage: '表/视图',
+        defaultMessage: '表/视图'
       }), //'表/视图'
       //表
       width: 170,
@@ -145,7 +146,7 @@ const getColumns: ({
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '8px',
+            gap: '8px'
           }}
         >
           <span
@@ -153,35 +154,37 @@ const getColumns: ({
               display: 'flex',
               lineHeight: 1,
               fontSize: 14,
-              color: 'var(--icon-color-disable)',
+              color: 'var(--icon-color-disable)'
             }}
           >
             <Icon
               component={
-                record?.type === ESensitiveColumnType.TABLE_COLUMN ? TableOutlined : ViewSvg
+                record?.type === ESensitiveColumnType.TABLE_COLUMN
+                  ? TableOutlined
+                  : ViewSvg
               }
             />
           </span>
           <TooltipContent content={text} maxWdith={170} />
         </span>
-      ),
+      )
     },
     {
       title: formatMessage({
         id: 'odc.components.SensitiveColumn.Column',
-        defaultMessage: '列',
+        defaultMessage: '列'
       }),
       //列
       width: 170,
       dataIndex: 'columnName',
       key: 'columnName',
       ellipsis: true,
-      render: (text, record, index) => text, //<TooltipContent content={text} maxWdith={170} />,
+      render: (text, record, index) => text //<TooltipContent content={text} maxWdith={170} />,
     },
     {
       title: formatMessage({
         id: 'odc.components.SensitiveColumn.DesensitizationAlgorithm',
-        defaultMessage: '脱敏算法',
+        defaultMessage: '脱敏算法'
       }),
       //脱敏算法
       width: 170,
@@ -191,7 +194,8 @@ const getColumns: ({
       ellipsis: true,
       render: (text, record, index) => {
         const target = maskingAlgorithms?.find(
-          (maskingAlgorithm) => maskingAlgorithm?.id === record?.maskingAlgorithmId,
+          (maskingAlgorithm) =>
+            maskingAlgorithm?.id === record?.maskingAlgorithmId
         );
         return (
           <PopoverContainer
@@ -201,24 +205,24 @@ const getColumns: ({
               {
                 label: formatMessage({
                   id: 'odc.src.page.Project.Sensitive.components.SensitiveColumn.DesensitizationMethod',
-                  defaultMessage: '脱敏方式',
+                  defaultMessage: '脱敏方式'
                 }) /* 脱敏方式 */,
-                value: maskRuleTypeMap?.[target?.type],
+                value: maskRuleTypeMap?.[target?.type]
               },
               {
                 label: formatMessage({
                   id: 'odc.src.page.Project.Sensitive.components.SensitiveColumn.TestData',
-                  defaultMessage: '测试数据',
+                  defaultMessage: '测试数据'
                 }) /* 测试数据 */,
-                value: target?.sampleContent,
+                value: target?.sampleContent
               },
               {
                 label: formatMessage({
                   id: 'odc.src.page.Project.Sensitive.components.SensitiveColumn.Preview',
-                  defaultMessage: '结果预览',
+                  defaultMessage: '结果预览'
                 }) /* 结果预览 */,
-                value: target?.maskedContent,
-              },
+                value: target?.maskedContent
+              }
             ]}
             children={() => (
               <div className={styles.hover}>
@@ -227,12 +231,12 @@ const getColumns: ({
             )}
           />
         );
-      },
+      }
     },
     {
       title: formatMessage({
         id: 'odc.components.SensitiveColumn.EnableStatus',
-        defaultMessage: '启用状态',
+        defaultMessage: '启用状态'
       }),
       //启用状态
       width: 120,
@@ -242,19 +246,19 @@ const getColumns: ({
         {
           text: formatMessage({
             id: 'odc.components.SensitiveColumn.Enable',
-            defaultMessage: '启用',
+            defaultMessage: '启用'
           }),
           //启用
-          value: true,
+          value: true
         },
         {
           text: formatMessage({
             id: 'odc.components.SensitiveColumn.Disable',
-            defaultMessage: '禁用',
+            defaultMessage: '禁用'
           }),
           //禁用
-          value: false,
-        },
+          value: false
+        }
       ],
 
       render: (text, { id, enabled }, index) => (
@@ -265,12 +269,12 @@ const getColumns: ({
           onConfirm={() => handleStatusSwitch(id, !enabled)}
           onCancel={() => handleStatusSwitch(id, !enabled)}
         />
-      ),
+      )
     },
     {
       title: formatMessage({
         id: 'odc.components.SensitiveColumn.Operation',
-        defaultMessage: '操作',
+        defaultMessage: '操作'
       }),
       //操作
       width: 154,
@@ -279,7 +283,7 @@ const getColumns: ({
         <Space>
           <Button
             style={{
-              padding: 0,
+              padding: 0
             }}
             type="link"
             disabled={hasRowSelected}
@@ -288,13 +292,13 @@ const getColumns: ({
             {
               formatMessage({
                 id: 'odc.components.SensitiveColumn.Edit',
-                defaultMessage: '编辑',
+                defaultMessage: '编辑'
               }) /*编辑*/
             }
           </Button>
           <Button
             style={{
-              padding: 0,
+              padding: 0
             }}
             type="link"
             disabled={hasRowSelected}
@@ -303,13 +307,13 @@ const getColumns: ({
             {
               formatMessage({
                 id: 'odc.components.SensitiveColumn.Delete',
-                defaultMessage: '删除',
+                defaultMessage: '删除'
               }) /*删除*/
             }
           </Button>
         </Space>
-      ),
-    },
+      )
+    }
   ];
   return columns.filter((item) => !hideColumns.includes(item.key));
 };
@@ -317,20 +321,24 @@ const SensitiveColumn = ({
   projectId,
   maskingAlgorithmFilters,
   cascaderOptions,
-  initSensitiveColumn,
+  initSensitiveColumn
 }) => {
   const tableRef = useRef<ITableInstance>();
   const sensitiveContext = useContext(SensitiveContext);
   const { project } = useContext(ProjectContext);
   const projectArchived = isProjectArchived(project);
-  const { dataSourceIdMap, maskingAlgorithms, maskingAlgorithmIdMap, maskingAlgorithmOptions } =
-    sensitiveContext;
+  const {
+    dataSourceIdMap,
+    maskingAlgorithms,
+    maskingAlgorithmIdMap,
+    maskingAlgorithmOptions
+  } = sensitiveContext;
   const [sensitiveColumnIds, setSensitiveColumnIds] = useState<number[]>([]);
-  const [addSensitiveColumnType, setAddSensitiveColumnType] = useState<AddSensitiveColumnType>(
-    AddSensitiveColumnType.Scan,
-  );
+  const [addSensitiveColumnType, setAddSensitiveColumnType] =
+    useState<AddSensitiveColumnType>(AddSensitiveColumnType.Scan);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-  const [sensitiveColumn, setSensitiveColumn] = useState<IResponseData<ISensitiveColumn>>(null);
+  const [sensitiveColumn, setSensitiveColumn] =
+    useState<IResponseData<ISensitiveColumn>>(null);
   const [submiting, setSubmiting] = useState<boolean>(false);
   const [visible, setVisible] = useState<boolean>(false);
   const [isEdit, setIsEdit] = useState<boolean>(false);
@@ -345,24 +353,24 @@ const SensitiveColumn = ({
       {
         okText: formatMessage({
           id: 'odc.components.SensitiveColumn.BatchEdit',
-          defaultMessage: '批量编辑',
+          defaultMessage: '批量编辑'
         }),
         //批量编辑
         onOk: (keys) => {
           handleEdit(maskingAlgorithms?.[0]?.id, keys as number[], true);
-        },
+        }
       },
       {
         okText: formatMessage({
           id: 'odc.components.SensitiveColumn.BatchDeletion',
-          defaultMessage: '批量删除',
+          defaultMessage: '批量删除'
         }),
         //批量删除
         onOk: (keys) => {
           handleDelete(keys as number[], true);
-        },
-      },
-    ],
+        }
+      }
+    ]
   };
   const loadData = async (args: ITableLoadOptions) => {
     const {
@@ -371,7 +379,7 @@ const SensitiveColumn = ({
       sorter,
       pagination,
       pageSize,
-      cascaderValue = [undefined, undefined],
+      cascaderValue = [undefined, undefined]
     } = args ?? {};
     const datasource = [];
     const database = [];
@@ -400,10 +408,12 @@ const SensitiveColumn = ({
       maskingAlgorithm: wrapArgs(maskingAlgorithmId),
       sort: column?.dataIndex,
       page: current,
-      size: pageSize,
+      size: pageSize
     };
     data.enabled = enabled?.length ? enabled : undefined;
-    data.sort = column ? `${column.dataIndex},${order === 'ascend' ? 'asc' : 'desc'}` : undefined;
+    data.sort = column
+      ? `${column.dataIndex},${order === 'ascend' ? 'asc' : 'desc'}`
+      : undefined;
     const result = await listSensitiveColumns(projectId, data);
     setSensitiveColumn(result);
     initSensitiveColumn();
@@ -415,7 +425,7 @@ const SensitiveColumn = ({
     return Modal.confirm({
       title: formatMessage({
         id: 'odc.components.SensitiveColumn.AreYouSureYouWant',
-        defaultMessage: '是否确认取消新建？',
+        defaultMessage: '是否确认取消新建？'
       }),
       //确认要取消新建吗？
       onOk: async () => {
@@ -425,13 +435,13 @@ const SensitiveColumn = ({
       onCancel: () => {},
       okText: formatMessage({
         id: 'odc.components.SensitiveColumn.Ok',
-        defaultMessage: '确定',
+        defaultMessage: '确定'
       }),
       //确定
       cancelText: formatMessage({
         id: 'odc.components.SensitiveColumn.Cancel',
-        defaultMessage: '取消',
-      }), //取消
+        defaultMessage: '取消'
+      }) //取消
     });
   };
 
@@ -447,7 +457,7 @@ const SensitiveColumn = ({
   const handleEdit = async (
     maskingAlgorithmId: number,
     ids: number[] = [],
-    multiClick: boolean = false,
+    multiClick: boolean = false
   ) => {
     if (hasRowSelected && !multiClick) {
       // 多行选中 且 事件非多选按钮触发
@@ -464,8 +474,8 @@ const SensitiveColumn = ({
       message.success(
         formatMessage({
           id: 'odc.components.SensitiveColumn.UpdatedSuccessfully',
-          defaultMessage: '更新成功',
-        }), //更新成功
+          defaultMessage: '更新成功'
+        }) //更新成功
       );
 
       tableRef.current?.resetSelectedRows();
@@ -473,14 +483,17 @@ const SensitiveColumn = ({
       message.error(
         formatMessage({
           id: 'odc.components.SensitiveColumn.UpdateFailed',
-          defaultMessage: '更新失败',
-        }), //更新失败
+          defaultMessage: '更新失败'
+        }) //更新失败
       );
     }
 
     tableRef.current?.reload?.();
   };
-  const handleDelete = async (ids: number[] = [], multiClick: boolean = false) => {
+  const handleDelete = async (
+    ids: number[] = [],
+    multiClick: boolean = false
+  ) => {
     if (hasRowSelected && !multiClick) {
       // 多行选中 且 事件非多选按钮触发
       return;
@@ -488,7 +501,7 @@ const SensitiveColumn = ({
     return Modal.confirm({
       title: formatMessage({
         id: 'odc.components.SensitiveColumn.AreYouSureYouWant.1',
-        defaultMessage: '确认要删除敏感列吗？',
+        defaultMessage: '确认要删除敏感列吗？'
       }),
       //确认要删除敏感列吗？
       onOk: debounce(async () => {
@@ -499,26 +512,28 @@ const SensitiveColumn = ({
             message.success(
               formatMessage({
                 id: 'odc.components.SensitiveColumn.DeletedSuccessfully',
-                defaultMessage: '删除成功',
-              }), //删除成功
+                defaultMessage: '删除成功'
+              }) //删除成功
             );
           } else {
             message.error(
               formatMessage({
                 id: 'odc.components.SensitiveColumn.FailedToDelete',
-                defaultMessage: '删除失败',
-              }), //删除失败
+                defaultMessage: '删除失败'
+              }) //删除失败
             );
           }
 
           const { page } = sensitiveColumn;
-          const newCurrent = Math.ceil((page?.totalElements - ids?.length) / page?.size);
+          const newCurrent = Math.ceil(
+            (page?.totalElements - ids?.length) / page?.size
+          );
           tableRef.current?.reload?.({
             pagination: {
               current: newCurrent >= page?.number ? page?.number : newCurrent,
-              pageSize: page?.size,
+              pageSize: page?.size
             },
-            pageSize: page?.size,
+            pageSize: page?.size
           });
           tableRef.current?.resetSelectedRows();
           setSubmiting(false);
@@ -527,13 +542,13 @@ const SensitiveColumn = ({
       onCancel: () => {},
       okText: formatMessage({
         id: 'odc.components.SensitiveColumn.Ok',
-        defaultMessage: '确定',
+        defaultMessage: '确定'
       }),
       //确定
       cancelText: formatMessage({
         id: 'odc.components.SensitiveColumn.Cancel',
-        defaultMessage: '取消',
-      }), //取消
+        defaultMessage: '取消'
+      }) //取消
     });
   };
 
@@ -546,7 +561,7 @@ const SensitiveColumn = ({
     maskingAlgorithms,
     dataSourceIdMap: dataSourceIdMap,
     maskingAlgorithmIdMap: maskingAlgorithmIdMap,
-    hideColumns: projectArchived ? ['action'] : [],
+    hideColumns: projectArchived ? ['action'] : []
   });
   const operationOptions: IOperationOption[] = [];
   operationOptions.push({
@@ -559,7 +574,7 @@ const SensitiveColumn = ({
             {
               formatMessage({
                 id: 'odc.components.SensitiveColumn.AddSensitiveColumns',
-                defaultMessage: '添加敏感列',
+                defaultMessage: '添加敏感列'
               }) /*添加敏感列*/
             }
 
@@ -575,30 +590,30 @@ const SensitiveColumn = ({
           key: AddSensitiveColumnType.Manual,
           label: formatMessage({
             id: 'odc.components.SensitiveColumn.ManuallyAdd',
-            defaultMessage: '手动添加',
+            defaultMessage: '手动添加'
           }),
           onClick: () => {
             setAddSensitiveColumnType(AddSensitiveColumnType.Manual);
             // handleOpenEditSensitiveColumnDrawer();
             setModalOpen(true);
             tracert.click('a3112.b64002.c330861.d367388');
-          },
+          }
         },
         {
           key: AddSensitiveColumnType.Scan,
           label: formatMessage({
             id: 'odc.components.SensitiveColumn.ScanAdd',
-            defaultMessage: '扫描添加',
+            defaultMessage: '扫描添加'
           }),
           onClick: () => {
             setAddSensitiveColumnType(AddSensitiveColumnType.Scan);
             handleOpenEditSensitiveColumnDrawer();
             tracert.click('a3112.b64002.c330861.d367389');
-          },
-        },
-      ],
+          }
+        }
+      ]
     },
-    onClick: () => {},
+    onClick: () => {}
   });
 
   return (
@@ -610,19 +625,19 @@ const SensitiveColumn = ({
         filterContent={{
           searchPlaceholder: formatMessage({
             id: 'odc.components.SensitiveColumn.EnterATableNameColumn',
-            defaultMessage: '请输入表名/列名',
-          }), //请输入表名/列名
+            defaultMessage: '请输入表名/列名'
+          }) //请输入表名/列名
         }}
         cascaderContent={{
           options: cascaderOptions,
           placeholder: formatMessage({
             id: 'odc.src.page.Project.Sensitive.components.SensitiveColumn.PleaseSelectTheDataSource',
-            defaultMessage: '请选择数据源和库',
-          }), //'请选择数据源和库'
+            defaultMessage: '请选择数据源和库'
+          }) //'请选择数据源和库'
         }}
         operationContent={{
           options: projectArchived ? [] : operationOptions,
-          isNeedOccupyElement: projectArchived,
+          isNeedOccupyElement: projectArchived
         }}
         onLoad={loadData}
         onChange={loadData}
@@ -632,8 +647,8 @@ const SensitiveColumn = ({
           rowKey: 'id',
           pagination: {
             current: sensitiveColumn?.page?.number,
-            total: sensitiveColumn?.page?.totalElements,
-          },
+            total: sensitiveColumn?.page?.totalElements
+          }
         }}
         rowSelecter={projectArchived ? null : rowSelector}
         rowSelectedCallback={rowSelectedCallback}
@@ -647,7 +662,7 @@ const SensitiveColumn = ({
           onClose,
           onOk,
           addSensitiveColumnType,
-          initSensitiveColumn,
+          initSensitiveColumn
         }}
       />
 
@@ -661,7 +676,7 @@ const SensitiveColumn = ({
           setModalVisible,
           maskingAlgorithms,
           maskingAlgorithmOptions,
-          initSensitiveColumn,
+          initSensitiveColumn
         }}
       />
 

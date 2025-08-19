@@ -25,7 +25,9 @@ import { CompileStatus } from '../../index';
 import { Status } from '../Status';
 import styles from './index.less';
 
-const getPageColumns = (openEditPage: (title: string, type?: string) => void) => {
+const getPageColumns = (
+  openEditPage: (title: string, type?: string) => void
+) => {
   return [
     {
       width: 40,
@@ -33,11 +35,14 @@ const getPageColumns = (openEditPage: (title: string, type?: string) => void) =>
       dataIndex: 'status',
       render: (text, _, index) => {
         return index + 1;
-      },
+      }
     },
 
     {
-      title: formatMessage({ id: 'odc.components.CompileResult.Status', defaultMessage: '状态' }), //状态
+      title: formatMessage({
+        id: 'odc.components.CompileResult.Status',
+        defaultMessage: '状态'
+      }), //状态
       width: 64,
       key: 'status',
       dataIndex: 'status',
@@ -46,50 +51,50 @@ const getPageColumns = (openEditPage: (title: string, type?: string) => void) =>
           value: 'VALID',
           text: formatMessage({
             id: 'odc.components.CompileResult.Effective',
-            defaultMessage: '有效',
-          }), //有效
+            defaultMessage: '有效'
+          }) //有效
         },
         {
           value: 'INVALID',
           text: formatMessage({
             id: 'odc.components.CompileResult.Invalid',
-            defaultMessage: '无效',
-          }), //无效
-        },
+            defaultMessage: '无效'
+          }) //无效
+        }
       ],
 
       onFilter: (value: string, record) => {
         return value === record.status;
       },
-      render: (status) => <Status status={status} isShowErrorTooltip={false} />,
+      render: (status) => <Status status={status} isShowErrorTooltip={false} />
     },
 
     {
       title: formatMessage({
         id: 'odc.components.CompileResult.ObjectName',
-        defaultMessage: '对象名称',
+        defaultMessage: '对象名称'
       }), //对象名称
       width: 275,
       ellipsis: true,
       key: 'name',
-      dataIndex: 'name',
+      dataIndex: 'name'
     },
 
     {
       title: formatMessage({
         id: 'odc.components.CompileResult.CompilationResults',
-        defaultMessage: '编译结果',
+        defaultMessage: '编译结果'
       }),
       //编译结果
       ellipsis: true,
       key: 'result',
-      dataIndex: 'result',
+      dataIndex: 'result'
     },
 
     {
       title: formatMessage({
         id: 'odc.components.CompileResult.Operation',
-        defaultMessage: '操作',
+        defaultMessage: '操作'
       }), //操作
       width: 120,
       key: 'type',
@@ -105,14 +110,14 @@ const getPageColumns = (openEditPage: (title: string, type?: string) => void) =>
             {
               formatMessage({
                 id: 'odc.components.CompileResult.Edit',
-                defaultMessage: '编辑',
+                defaultMessage: '编辑'
               })
               /*编辑*/
             }
           </Action.Link>
         );
-      },
-    },
+      }
+    }
   ];
 };
 
@@ -149,7 +154,7 @@ const CompileResult: React.FC<IProps> = (props) => {
         status: item.successful ? 'VALID' : 'INVALID',
         name: item.plidentity.plName,
         result: item.errorMessage,
-        type: item.plidentity.obDbObjectType,
+        type: item.plidentity.obDbObjectType
       };
     }) ?? [];
 
@@ -161,7 +166,7 @@ const CompileResult: React.FC<IProps> = (props) => {
           key: 'result',
           label: formatMessage({
             id: 'odc.components.CompileResult.CompilationResults',
-            defaultMessage: '编译结果',
+            defaultMessage: '编译结果'
           }),
           children:
             status === CompileStatus.RUNNING ? (
@@ -172,10 +177,11 @@ const CompileResult: React.FC<IProps> = (props) => {
                     formatMessage(
                       {
                         id: 'odc.components.CompileResult.CompilingCompletedcountTotalcount',
-                        defaultMessage: '编译中 ({completedCount}/{totalCount})...',
+                        defaultMessage:
+                          '编译中 ({completedCount}/{totalCount})...'
                       },
 
-                      { completedCount, totalCount },
+                      { completedCount, totalCount }
                     )
                     //`编译中 (${completedCount}/${totalCount})...`
                   }
@@ -189,11 +195,11 @@ const CompileResult: React.FC<IProps> = (props) => {
                 dataSource={dataSource}
                 disablePagination={true}
                 scroll={{
-                  y: tableHeight,
+                  y: tableHeight
                 }}
               />
-            ),
-        },
+            )
+        }
       ]}
     />
   );

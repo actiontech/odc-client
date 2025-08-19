@@ -20,7 +20,7 @@ import {
   CopyOutlined,
   DownloadOutlined,
   FileSearchOutlined,
-  RedoOutlined,
+  RedoOutlined
 } from '@ant-design/icons';
 import { useDebounceFn } from 'ahooks';
 import { Empty, message, Space, Spin, Typography } from 'antd';
@@ -49,7 +49,7 @@ const Log: React.FC<LogProps> = ({
   style = {},
   emptyDescription = formatMessage({
     id: 'odc.component.Log.NoDataAvailable',
-    defaultMessage: '暂无数据',
+    defaultMessage: '暂无数据'
   }), //暂无数据
   onReload,
   defaultPosition = 'start',
@@ -58,7 +58,7 @@ const Log: React.FC<LogProps> = ({
   enableCopy = true,
   enableHighLight = false,
   language,
-  downloadUrl,
+  downloadUrl
 }) => {
   /** 关键字 */
   const [keyword, setkeyword] = useState('');
@@ -87,22 +87,28 @@ const Log: React.FC<LogProps> = ({
     {
       key: 'find',
       icon: <FileSearchOutlined />,
-      text: formatMessage({ id: 'odc.component.Log.Find', defaultMessage: '查找' }), //查找
+      text: formatMessage({
+        id: 'odc.component.Log.Find',
+        defaultMessage: '查找'
+      }), //查找
       onClick: () => {
         setSearchInputVisible(!searchInputVisible);
-      },
+      }
     },
 
     {
       key: 'download',
       icon: <DownloadOutlined />,
-      text: formatMessage({ id: 'odc.component.Log.Download', defaultMessage: '下载' }), //下载
+      text: formatMessage({
+        id: 'odc.component.Log.Download',
+        defaultMessage: '下载'
+      }), //下载
       visible: enableDownload,
       onClick: () => {
         if (logData.data.length) {
           downloadUrl ? downloadFile(downloadUrl) : download(logData.data);
         }
-      },
+      }
     },
 
     {
@@ -117,36 +123,44 @@ const Log: React.FC<LogProps> = ({
                 message.success(
                   formatMessage({
                     id: 'odc.component.Log.CopiedSuccessfully',
-                    defaultMessage: '复制成功',
-                  }), //复制成功
+                    defaultMessage: '复制成功'
+                  }) //复制成功
                 );
               } else {
                 message.error(
                   formatMessage({
                     id: 'odc.component.Log.ReplicationFailed',
-                    defaultMessage: '复制失败',
-                  }), //复制失败
+                    defaultMessage: '复制失败'
+                  }) //复制失败
                 );
               }
             }
           }}
         >
           <span>
-            {formatMessage({ id: 'odc.component.Log.Copy', defaultMessage: '复制' }) /*复制*/}
+            {
+              formatMessage({
+                id: 'odc.component.Log.Copy',
+                defaultMessage: '复制'
+              }) /*复制*/
+            }
           </span>
         </CopyToClipboard>
       ),
 
-      visible: enableCopy,
-    },
+      visible: enableCopy
+    }
   ];
 
   if (onReload) {
     actionList.push({
       key: 'refresh',
       icon: <RedoOutlined />,
-      text: formatMessage({ id: 'odc.component.Log.Refresh', defaultMessage: '刷新' }), //刷新
-      onClick: onReload,
+      text: formatMessage({
+        id: 'odc.component.Log.Refresh',
+        defaultMessage: '刷新'
+      }), //刷新
+      onClick: onReload
     });
   }
 
@@ -246,7 +260,8 @@ const Log: React.FC<LogProps> = ({
     const lineWrapNode = getLineWrapNode(node);
     let index = null;
     if (!lineWrapNode) {
-      index = copyData.current.scrollDirection === 'up' ? 0 : logData.data.length;
+      index =
+        copyData.current.scrollDirection === 'up' ? 0 : logData.data.length;
     } else {
       index = Number(lineWrapNode.firstChild.innerText);
     }
@@ -271,7 +286,8 @@ const Log: React.FC<LogProps> = ({
         const focusNode = getSelection().focusNode;
         const anchorIndex = getLineIndexByNode(anchorNode);
         const focusIndex = getLineIndexByNode(focusNode as HTMLElement);
-        const startIndex = scrollDirection === 'down' ? anchorIndex : focusIndex;
+        const startIndex =
+          scrollDirection === 'down' ? anchorIndex : focusIndex;
         const endIndex = scrollDirection === 'down' ? focusIndex : anchorIndex;
         const data = logData.data.slice(startIndex, endIndex + 1);
         copyStr = dealData(data).copyStr;
@@ -286,14 +302,14 @@ const Log: React.FC<LogProps> = ({
 
   const handleMouseDown = () => {
     copyData.current = {
-      isMouseDown: true,
+      isMouseDown: true
     };
   };
 
   const handleMouseUp = () => {
     copyData.current = {
       ...copyData.current,
-      isMouseDown: false,
+      isMouseDown: false
     };
   };
 
@@ -303,7 +319,7 @@ const Log: React.FC<LogProps> = ({
       copyData.current = {
         ...copyData.current,
         anchorNode: getSelection().anchorNode,
-        scrollTop: e.scrollTop,
+        scrollTop: e.scrollTop
       };
     }
 
@@ -311,7 +327,7 @@ const Log: React.FC<LogProps> = ({
       copyData.current = {
         ...copyData.current,
         scrollDirection: e.scrollTop > scrollTop ? 'down' : 'up',
-        scrollTop: e.scrollTop,
+        scrollTop: e.scrollTop
       };
     }
   };
@@ -335,7 +351,9 @@ const Log: React.FC<LogProps> = ({
                 key={item.key}
               >
                 <Typography.Text className={`${prefixCls}-toolbar-icon`}>
-                  <span className={`${prefixCls}-toolbar-icon-target`}>{item.icon}</span>
+                  <span className={`${prefixCls}-toolbar-icon-target`}>
+                    {item.icon}
+                  </span>
                 </Typography.Text>
                 <Typography.Text className={`${prefixCls}-toolbar-text`}>
                   {item.text}
@@ -379,7 +397,7 @@ const Log: React.FC<LogProps> = ({
             {({ height, width }) => (
               <VirtualList
                 className={classNames(`${prefixCls}-vir-list`, {
-                  [`${prefixCls}-highlight`]: enableHighLight,
+                  [`${prefixCls}-highlight`]: enableHighLight
                 })}
                 rowCount={logData.data.length}
                 rowRenderer={({ key, index, style: _style }) => (

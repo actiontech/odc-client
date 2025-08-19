@@ -6,7 +6,11 @@ export const renderTool = (tool: IOperation, index) => {
   if (tool.hasOwnProperty('visible') && !tool?.visible) return null;
   if (tool?.confirmText) {
     return (
-      <Popconfirm key={tool?.key || index} title={tool?.confirmText} onConfirm={tool?.action}>
+      <Popconfirm
+        key={tool?.key || index}
+        title={tool?.confirmText}
+        onConfirm={tool?.action}
+      >
         <Action.Link
           key={tool?.key || index}
           disabled={tool?.disable}

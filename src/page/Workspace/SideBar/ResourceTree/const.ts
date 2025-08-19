@@ -45,7 +45,7 @@ const isGroupNode = (type) => {
     ResourceNodeType.GroupNodeEnviponment,
     ResourceNodeType.GroupNodeTenant,
     ResourceNodeType.GroupNodeDataSource,
-    ResourceNodeType.SecondGroupNodeDataSource,
+    ResourceNodeType.SecondGroupNodeDataSource
   ].includes(type);
 };
 
@@ -55,15 +55,18 @@ const GroupNodeToResourceNodeType = {
   [DatabaseGroup.tenant]: ResourceNodeType.GroupNodeTenant,
   [DatabaseGroup.cluster]: ResourceNodeType.GroupNodeCluster,
   [DatabaseGroup.environment]: ResourceNodeType.GroupNodeEnviponment,
-  [DatabaseGroup.connectType]: ResourceNodeType.GroupNodeConnectType,
+  [DatabaseGroup.connectType]: ResourceNodeType.GroupNodeConnectType
 };
 
 const TreeDataGroupKey = 'Group';
 const TreeDataSecondGroupKey = 'SecondGroup';
 const getGroupKey = (mapId: React.Key, groupMode: DatabaseGroup) =>
   `${TreeDataGroupKey}-${groupMode}-${mapId}`;
-const getSecondGroupKey = (mapId: React.Key, secondMapId: number, groupMode: DatabaseGroup) =>
-  `${TreeDataSecondGroupKey}-${groupMode}-${mapId}-${secondMapId}`;
+const getSecondGroupKey = (
+  mapId: React.Key,
+  secondMapId: number,
+  groupMode: DatabaseGroup
+) => `${TreeDataSecondGroupKey}-${groupMode}-${mapId}-${secondMapId}`;
 
 /**
  * 获取应该展开的groupkey
@@ -105,9 +108,15 @@ const getShouldExpandedGroupKeys = (params: {
   const { mapId: secondMapId } = getMapIdByDB(db, DatabaseGroup.dataSource);
   shouldExpandedKeys.push(
     getGroupKey(mapId, groupMode),
-    getSecondGroupKey(mapId, secondMapId, groupMode),
+    getSecondGroupKey(mapId, secondMapId, groupMode)
   );
-  if ([DatabaseGroup.project, DatabaseGroup.dataSource, DatabaseGroup.tenant].includes(groupMode)) {
+  if (
+    [
+      DatabaseGroup.project,
+      DatabaseGroup.dataSource,
+      DatabaseGroup.tenant
+    ].includes(groupMode)
+  ) {
     shouldExpandedKeys = shouldExpandedKeys.filter((item) => {
       if (isString(item)) {
         return !item.includes(TreeDataSecondGroupKey);
@@ -138,7 +147,7 @@ const getShouldExpandedKeysByObject = (params: {
     const { mapId: secondMapId } = getMapIdByDB(db, DatabaseGroup.dataSource);
     shouldExpandedKeys.push(
       getGroupKey(mapId, groupMode),
-      getSecondGroupKey(mapId, secondMapId, groupMode),
+      getSecondGroupKey(mapId, secondMapId, groupMode)
     );
   }
   switch (type) {
@@ -170,7 +179,7 @@ const getShouldExpandedKeysByObject = (params: {
         db.id,
         `${db.id}-${db.name}-table`,
         `${db.id}-${db.name}-table-${objectName}`,
-        `${db.id}-${db.name}-table-${objectName}-column`,
+        `${db.id}-${db.name}-table-${objectName}-column`
       );
       currentKey = `${db.id}-${db.name}-table-${objectName}-column-${name}`;
       currentResourceNodeType = ResourceNodeType.TableColumn;
@@ -225,7 +234,13 @@ const getShouldExpandedKeysByObject = (params: {
       break;
     }
   }
-  if ([DatabaseGroup.project, DatabaseGroup.dataSource, DatabaseGroup.tenant].includes(groupMode)) {
+  if (
+    [
+      DatabaseGroup.project,
+      DatabaseGroup.dataSource,
+      DatabaseGroup.tenant
+    ].includes(groupMode)
+  ) {
     shouldExpandedKeys = shouldExpandedKeys.filter((item) => {
       if (isString(item)) {
         return !item?.includes(TreeDataSecondGroupKey);
@@ -236,12 +251,14 @@ const getShouldExpandedKeysByObject = (params: {
   return {
     shouldExpandedKeys,
     currentKey,
-    currentResourceNodeType,
+    currentResourceNodeType
   };
 };
 
 /** 根据page信息定位至数据源 */
-const getDataSourceShouldExpandedKeysByPage = (params: { datasourceId: number }) => {
+const getDataSourceShouldExpandedKeysByPage = (params: {
+  datasourceId: number;
+}) => {
   const { datasourceId } = params;
   let shouldExpandedKeys: React.Key[] = [];
   let currentKey: React.Key;
@@ -253,7 +270,7 @@ const getDataSourceShouldExpandedKeysByPage = (params: { datasourceId: number })
   return {
     shouldExpandedKeys,
     currentKey,
-    currentResourceNodeType,
+    currentResourceNodeType
   };
 };
 
@@ -271,7 +288,7 @@ const getObjectShouldExpandedKeysByPage = (params: {
     const { mapId: secondMapId } = getMapIdByDB(db, DatabaseGroup.dataSource);
     shouldExpandedKeys.push(
       getGroupKey(mapId, groupMode),
-      getSecondGroupKey(mapId, secondMapId, groupMode),
+      getSecondGroupKey(mapId, secondMapId, groupMode)
     );
   }
   switch (page.type) {
@@ -414,7 +431,13 @@ const getObjectShouldExpandedKeysByPage = (params: {
       break;
     }
   }
-  if ([DatabaseGroup.project, DatabaseGroup.dataSource, DatabaseGroup.tenant].includes(groupMode)) {
+  if (
+    [
+      DatabaseGroup.project,
+      DatabaseGroup.dataSource,
+      DatabaseGroup.tenant
+    ].includes(groupMode)
+  ) {
     shouldExpandedKeys = shouldExpandedKeys.filter((item) => {
       if (isString(item)) {
         return !item?.includes(TreeDataSecondGroupKey);
@@ -425,7 +448,7 @@ const getObjectShouldExpandedKeysByPage = (params: {
   return {
     shouldExpandedKeys,
     currentKey,
-    currentResourceNodeType,
+    currentResourceNodeType
   };
 };
 
@@ -440,7 +463,11 @@ const getShouldExpandedKeysByPage = (params: {
   const { page, datasourceId, setGroupMode } = params;
   // 定位到数据源的情况
   if (
-    [PageType.SESSION_PARAM, PageType.SESSION_MANAGEMENT, PageType.RECYCLE_BIN].includes(page.type)
+    [
+      PageType.SESSION_PARAM,
+      PageType.SESSION_MANAGEMENT,
+      PageType.RECYCLE_BIN
+    ].includes(page.type)
   ) {
     setGroupMode(DatabaseGroup.dataSource);
     return getDataSourceShouldExpandedKeysByPage({ datasourceId });
@@ -456,7 +483,7 @@ const openGlobalSearch = (node: TreeDataNode) => {
     case ResourceNodeType.Database: {
       params = {
         initStatus: SearchStatus.databaseforObject,
-        databaseId: node.data.id,
+        databaseId: node.data.id
       };
       break;
     }
@@ -464,7 +491,7 @@ const openGlobalSearch = (node: TreeDataNode) => {
       const [, , mapId] = (node.key as String).split('-');
       params = {
         initStatus: SearchStatus.projectforObject,
-        projectId: Number(mapId),
+        projectId: Number(mapId)
       };
       break;
     }
@@ -472,7 +499,7 @@ const openGlobalSearch = (node: TreeDataNode) => {
       const [, , mapId] = (node.key as String).split('-');
       params = {
         initStatus: SearchStatus.dataSourceforObject,
-        dataSourceId: Number(mapId),
+        dataSourceId: Number(mapId)
       };
       break;
     }
@@ -480,7 +507,7 @@ const openGlobalSearch = (node: TreeDataNode) => {
       const [, , , mapId] = (node.key as String).split('-');
       params = {
         initStatus: SearchStatus.dataSourceforObject,
-        dataSourceId: Number(mapId),
+        dataSourceId: Number(mapId)
       };
       break;
     }
@@ -499,5 +526,5 @@ export {
   getShouldExpandedKeysByPage,
   isGroupNode,
   GroupNodeToResourceNodeType,
-  openGlobalSearch,
+  openGlobalSearch
 };
