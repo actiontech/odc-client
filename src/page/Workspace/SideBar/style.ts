@@ -1,11 +1,13 @@
-.sideBar {
+import { styled } from '@mui/material';
+
+export const SideBarStyleWrapper = styled('section')`
   position: relative;
   display: flex;
   flex-flow: column;
   align-items: stretch;
   width: 100%;
   height: 100%;
-  background-color: var(--background-tertraiy-color);
+  background-color: ${({ theme }) => theme.sharedTheme.uiToken.colorBgBase};
 
   .title {
     flex-grow: 0;
@@ -15,6 +17,7 @@
     font-size: 14px;
     line-height: 22px;
   }
+
   .content {
     position: absolute;
     top: 0px;
@@ -24,8 +27,9 @@
     z-index: -9999;
     overflow-x: hidden;
     overflow-y: auto;
+
     &.active {
       z-index: unset;
     }
   }
-}
+`;

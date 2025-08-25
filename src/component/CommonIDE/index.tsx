@@ -213,6 +213,7 @@ class CommonIDE extends React.PureComponent<ICommonIDEProps, ICommonIDEState> {
                     : []
                   )
                     .concat(
+                      // @ts-expect-error
                       resultSets?.map((set, i) => {
                         return {
                           key: `resultset-${set.uniqKey}`,

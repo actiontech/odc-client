@@ -1,12 +1,12 @@
 import { formatMessage } from '@/util/intl';
-import React, { useContext, useState } from 'react';
-import { Dropdown } from 'antd';
+import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { UserStore } from '@/store/login';
 import { ReactComponent as GroupSvg } from '@/svgr/group.svg';
-import Icon from '@ant-design/icons';
-import type { MenuProps } from 'antd';
+import { Dropdown, type MenuProps } from 'antd';
 import { DatabaseGroup } from '@/d.ts/database';
+import { DatabaseGroupTriggerStyleWrapper } from './style';
+
 const items: MenuProps['items'] = [
   {
     key: DatabaseGroup.none,
@@ -89,13 +89,9 @@ const Group: React.FC<IProps> = function (props) {
         onClick: handleSelectGroupBy
       }}
     >
-      <Icon
+      <DatabaseGroupTriggerStyleWrapper
         component={GroupSvg}
-        style={
-          groupMode !== DatabaseGroup.none
-            ? { color: 'var(--icon-color-focus)', fontSize: 14 }
-            : { color: 'var(--icon-color-normal)', fontSize: 14 }
-        }
+        $selected={groupMode !== DatabaseGroup.none}
       />
     </Dropdown>
   );

@@ -43,17 +43,14 @@ import { isString, toInteger } from 'lodash';
 import { isGroupNode } from '@/page/Workspace/SideBar/ResourceTree/const';
 import { inject, observer } from 'mobx-react';
 import React, { useContext, useEffect, useState } from 'react';
-import ActivityBar from './ActivityBar/ index';
 import ResourceTreeContext from './context/ResourceTreeContext';
 import WorkspaceStore from './context/WorkspaceStore';
 import GlobalModals from './GlobalModals';
 import WorkBenchLayout from './Layout';
-import SideBar from './SideBar';
 import { isLogicalDatabase } from '@/util/database';
 import { DatabaseGroup } from '@/d.ts/database';
 import { ResourceNodeType } from '@/page/Workspace/SideBar/ResourceTree/type';
 import { getAsyncResultSet } from '@/common/network/task';
-import ActivityBarNew from './ActivityBarNew';
 
 let _closeMsg = '';
 export function changeCloseMsg(t: any) {
@@ -368,7 +365,6 @@ const Workspace: React.FC<WorkspaceProps> = (props: WorkspaceProps) => {
   return (
     <>
       <WorkBenchLayout
-        sideBar={<SideBar />}
         editorGroup={
           isReady ? (
             <WindowManager

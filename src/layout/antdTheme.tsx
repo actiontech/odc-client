@@ -37,6 +37,9 @@ export const theme: ThemeConfig = {
     Table: {
       fontSize: 13,
       fontWeightStrong: 500
+    },
+    Dropdown: {
+      fontSize: 13
     }
   },
   algorithm: antdTheme.defaultAlgorithm,

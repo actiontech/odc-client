@@ -18,7 +18,7 @@ import { formatMessage } from '@/util/intl';
 import { IDatabase, DatabaseGroup } from '@/d.ts/database';
 import { UserStore } from '@/store/login';
 import { SessionManagerStore } from '@/store/sessionManager';
-import { Space, Tree, Spin, Button } from 'antd';
+import { Space, Tree, Spin } from 'antd';
 import { EventDataNode } from 'antd/lib/tree';
 import { throttle } from 'lodash';
 import { useUpdate } from 'ahooks';
@@ -27,7 +27,6 @@ import React, {
   useCallback,
   useContext,
   useEffect,
-  useMemo,
   useRef,
   useState
 } from 'react';
@@ -67,6 +66,7 @@ import { isString } from 'lodash';
 import DatabaseSelectEmpty from '@/component/Empty/DatabaseSelectEmpty';
 import { ReactComponent as ProjectSvg } from '@/svgr/project_space.svg';
 import Icon from '@ant-design/icons';
+import { BasicButton } from '@actiontech/dms-kit';
 
 interface IProps {
   sessionManagerStore?: SessionManagerStore;
@@ -128,6 +128,7 @@ const ResourceTree: React.FC<IProps> = function ({
     reloadDatasourceList,
     reloadDatabaseList
   } = treeContext;
+  console.log(datasourceList);
   const [wrapperHeight, setWrapperHeight] = useState(0);
   const clockRef = useRef(null);
   const [envs, setEnvs] = useState<number[]>([]);
@@ -458,7 +459,6 @@ const ResourceTree: React.FC<IProps> = function ({
     },
     [sessionIds]
   );
-
   return (
     <>
       <div className={styles.resourceTree}>
@@ -499,7 +499,6 @@ const ResourceTree: React.FC<IProps> = function ({
                 onClick={() => {
                   reload();
                 }}
-                style={{ display: 'flex' }}
               />
             </Space>
           </span>
@@ -511,7 +510,7 @@ const ResourceTree: React.FC<IProps> = function ({
           />
           {userStore.isPrivateSpace() ? (
             <NewDatasourceButton onSuccess={dataSourceChangeReload}>
-              <Button
+              <BasicButton
                 size="small"
                 type="primary"
                 className={styles.newDataSourceButton}

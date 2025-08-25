@@ -49,8 +49,7 @@ import { ConfigProvider, Spin } from 'antd';
 import {
   ConfigProvider as DmsKitConfigProvider,
   SpinIndicator,
-  SupportLanguage,
-  SupportTheme
+  SupportLanguage
 } from '@actiontech/dms-kit';
 import antd_zh_CN from 'antd/locale/zh_CN';
 import antd_en_US from 'antd/locale/en_US';

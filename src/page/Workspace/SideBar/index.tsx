@@ -14,18 +14,16 @@
  * limitations under the License.
  */
 
-import React, { useContext, useRef } from 'react';
+import React, { FunctionComponent, useContext, useRef } from 'react';
 
 import classNames from 'classnames';
 import { ActivityBarItemType } from '../ActivityBar/type';
 import ActivityBarContext from '../context/ActivityBarContext';
-import styles from './index.less';
 import Manager from './Manager';
 import ResourceTree from './ResourceTree/Container';
 import Script from './Script';
 import Task from './Task';
-
-interface IProps {}
+import { SideBarStyleWrapper } from './style';
 
 const items = {
   [ActivityBarItemType.Database]: ResourceTree,
@@ -34,7 +32,7 @@ const items = {
   [ActivityBarItemType.Manager]: Manager
 };
 
-const SideBar: React.FC<IProps> = function () {
+const SideBar: React.FC = function () {
   const activityBarContext = useContext(ActivityBarContext);
 
   const loadedKeys = useRef<Set<ActivityBarItemType>>(new Set());
@@ -42,9 +40,9 @@ const SideBar: React.FC<IProps> = function () {
   loadedKeys.current.add(activityBarContext?.activeKey);
 
   return (
-    <div className={styles.sideBar}>
+    <SideBarStyleWrapper>
       {Object.entries(items).map(
-        ([key, Component]: [ActivityBarItemType, any]) => {
+        ([key, Component]: [ActivityBarItemType, FunctionComponent]) => {
           if (
             loadedKeys.current.has(key) ||
             key === activityBarContext?.activeKey
@@ -52,8 +50,8 @@ const SideBar: React.FC<IProps> = function () {
             return (
               <div
                 key={key}
-                className={classNames(styles.content, {
-                  [styles?.active]: key === activityBarContext?.activeKey
+                className={classNames('content', {
+                  active: key === activityBarContext?.activeKey
                 })}
               >
                 <Component />
@@ -63,7 +61,7 @@ const SideBar: React.FC<IProps> = function () {
           return null;
         }
       )}
-    </div>
+    </SideBarStyleWrapper>
   );
 };
 

@@ -344,6 +344,7 @@ const SQLResultSet: React.FC<IProps> = function (props) {
             : null
         ]
           .concat(
+            // @ts-expect-error
             resultSets?.map((set: IResultSet, i: number) => {
               const isResultTab =
                 set.columns?.length &&
@@ -434,7 +435,7 @@ const SQLResultSet: React.FC<IProps> = function (props) {
                 };
               }
               if (isLogTab) {
-                let count = {
+                const count = {
                   [ISqlExecuteResultStatus.CREATED]: {
                     lable: SqlExecuteResultStatusLabel.CREATED,
                     count: set?.total

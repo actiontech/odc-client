@@ -95,7 +95,7 @@ let isInitialized = false;
 
 export async function initIntl() {
   if (isInitialized) return;
-  let locale: string = getEnvLocale();
+  const locale: string = getEnvLocale();
   setLocale(locale);
   let messages: Record<string, string> = {};
   switch (locale) {
@@ -124,7 +124,7 @@ export async function initIntl() {
   isInitialized = true;
   return true;
 }
-export function formatMessage(...args) {
+export function formatMessage(...args): string {
   if (!isInitialized) {
     console.warn('Intl not ready, return default message');
     return args[0]?.defaultMessage || '';

@@ -181,10 +181,10 @@ const TreeNodeMenu = (props: IProps) => {
     run?.(dbSession, node, pollingDatabase);
   }
 
-  let clickMap = {};
+  const clickMap = {};
 
   function getMenuItems(items: IMenuItemConfig[]) {
-    let menuItems: ItemType[] = [];
+    const menuItems: ItemType[] = [];
     items.forEach((item: IMenuItemConfig, index) => {
       // 菜单子项 显隐可独立配置
       const disabledItem = item.disabled
@@ -250,14 +250,14 @@ const TreeNodeMenu = (props: IProps) => {
     return menuItems;
   }
 
-  let allItemsProp: ItemType[] = getMenuItems(menuItems);
+  const allItemsProp: ItemType[] = getMenuItems(menuItems);
 
   function actionsRender() {
-    let ellipsisItems = menuItems.filter((item) => {
+    const ellipsisItems = menuItems.filter((item) => {
       return item.ellipsis;
     });
 
-    let ellipsisItemsProp: ItemType[] = getMenuItems(ellipsisItems);
+    const ellipsisItemsProp: ItemType[] = getMenuItems(ellipsisItems);
     return (
       <div className={treeStyles.menuActions}>
         {isShowGlobalSearchEntrance ? (

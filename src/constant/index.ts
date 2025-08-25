@@ -74,7 +74,7 @@ export const TABLE_ROW_HEIGHT = 24; // 表格底部高度（分页器）
 
 export const TABLE_FOOTER_HEIGHT = 40; // 固定结果集展示提醒
 
-export const SQL_PAGE_RESULT_HEIGHT = 250;
+export const SQL_PAGE_RESULT_HEIGHT = 350;
 
 export const LOCK_RESULT_SET_COOKIE_KEY = 'LOCK_RESULT_SET_COOKIE'; // TODO: 布尔值图标
 

@@ -1,5 +1,4 @@
 import { formatMessage } from '@/util/intl';
-import { Input } from 'antd';
 import { inject, observer } from 'mobx-react';
 import { ModalStore } from '@/store/modal';
 import { SettingStore } from '@/store/setting';
@@ -7,6 +6,7 @@ import { SearchStatus } from '@/page/Workspace/SideBar/ResourceTree/DatabaseSear
 import { isMac } from '@/util/env';
 import { useMemo } from 'react';
 import styles from '../index.less';
+import { SearchInput } from '@actiontech/dms-kit';
 interface IProps {
   modalStore?: ModalStore;
   settingStore?: SettingStore;
@@ -28,7 +28,7 @@ const DatabaseSearch: React.FC<IProps> = (props) => {
   }, []);
 
   return (
-    <Input.Search
+    <SearchInput
       className={styles.searchInput}
       placeholder={formatMessage({
         id: 'src.page.Workspace.SideBar.ResourceTree.DatabaseSearch.86200ED0',
@@ -36,7 +36,7 @@ const DatabaseSearch: React.FC<IProps> = (props) => {
       })}
       size="small"
       onChange={(e) => {
-        setSearchValue(e.target.value);
+        setSearchValue(e);
       }}
       suffix={getShortcut}
       onSearch={() => {

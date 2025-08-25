@@ -20,25 +20,30 @@ import { movePagePostion, openNewDefaultPLPage } from '@/store/helper/page';
 import { SQLStore } from '@/store/sql';
 import { formatMessage } from '@/util/intl';
 import tracert from '@/util/tracert';
-import {
-  CloseOutlined,
-  DownOutlined,
-  EllipsisOutlined,
-  PlusOutlined
-} from '@ant-design/icons';
-import { Badge, Dropdown, MenuProps, Space, Tooltip } from 'antd';
+import { CloseOutlined, EllipsisOutlined } from '@ant-design/icons';
+import { Badge, Dropdown, MenuProps, Space } from 'antd';
 import { inject, observer } from 'mobx-react';
 import { MenuInfo } from 'rc-menu/lib/interface';
 import { ReactNode, useContext, useState } from 'react';
 import { pageMap } from './config';
-import DefaultPage from './DefaultPage';
-import DraggableTabs from './DraggableTabs';
+import DefaultPage from './components/DefaultPage';
+import CustomAddTabTrigger from './components/CustomAddTabTrigger';
 import { getPageTitleText } from './helper';
-import styles from './index.less';
+import {
+  PageTitleStyleWrapper,
+  TitleTextStyleWrapper,
+  IconStyleWrapper,
+  ExtraStatusBoxStyleWrapper,
+  CloseButtonStyleWrapper,
+  TooltipTitleStyleWrapper,
+  TabBarExtraContentStyleWrapper
+} from './style';
 import { isGroupNode } from '@/page/Workspace/SideBar/ResourceTree/const';
 import { isLogicalDatabase } from '@/util/database';
 import { isString } from 'lodash';
 import { ResourceNodeType } from '@/page/Workspace/SideBar/ResourceTree/type';
+import DraggableTabs from './DraggableTabs';
+import { BasicToolTip } from '@actiontech/dms-kit';
 
 interface IProps {
   pages: IPage[];
@@ -65,6 +70,28 @@ const WindowManager: React.FC<IProps> = function (props) {
   const handleSwitchTab = (clickParam: MenuInfo) => {
     const { onActivatePage } = props;
     onActivatePage(clickParam.key?.toString());
+  };
+
+  const handleNewSQL = () => {
+    tracert.click('a3112.b41896.c330993.d367629');
+    props.onOpenPage();
+  };
+
+  const handleNewPL = () => {
+    const { value, type } = treeContext.currentObject || {};
+    let dbId;
+    if (!isGroupNode(type)) {
+      if (type === ResourceNodeType.Database) {
+        dbId = value;
+      }
+      if (isString(value)) {
+        dbId = Number(value.split('-')?.[0]);
+      }
+    }
+    const isLogicalDb = isLogicalDatabase(
+      treeContext?.databaseList?.find((_db) => _db?.id === dbId)
+    );
+    openNewDefaultPLPage(undefined, isLogicalDb ? null : dbId);
   };
 
   const handleEditPage = (targetKey: any, action: string) => {
@@ -138,7 +165,8 @@ const WindowManager: React.FC<IProps> = function (props) {
     }
   };
 
-  function getPageTitle(page: IPage): ReactNode {
+  // 计算页面状态的辅助函数
+  const getPageState = (page: IPage) => {
     const iconColor = page?.params?.isDisabled
       ? '#bfbfbf'
       : pageMap[page.type]?.color;
@@ -152,145 +180,168 @@ const WindowManager: React.FC<IProps> = function (props) {
       PageType.BATCH_COMPILE_TRIGGER,
       PageType.BATCH_COMPILE_TYPE
     ].includes(page.type);
+
+    return {
+      iconColor,
+      isDocked,
+      pageTitle,
+      isPageProcessing,
+      isCompiler
+    };
+  };
+
+  // 页面状态提示内容组件
+  const PageTooltipContent = ({
+    page,
+    pageTitle,
+    isCompiler,
+    isPageProcessing
+  }) => (
+    <TooltipTitleStyleWrapper>
+      <div>{pageTitle}</div>
+      {!page.isSaved && !isCompiler && !isPageProcessing && (
+        <Badge
+          className="not-saved-badge"
+          status="default"
+          text={formatMessage({
+            id: 'odc.component.WindowManager.NotSaved',
+            defaultMessage: '未保存'
+          })}
+        />
+      )}
+      {isPageProcessing && (
+        <Badge
+          className="running-badge"
+          status="processing"
+          text={formatMessage({
+            id: 'odc.component.WindowManager.Running',
+            defaultMessage: '运行中'
+          })}
+        />
+      )}
+    </TooltipTitleStyleWrapper>
+  );
+
+  // 页面状态徽章组件
+  const PageStatusBadge = ({ page, isPageProcessing }) => {
+    if (isPageProcessing) {
+      return <Badge status="processing" />;
+    } else if (!page.isSaved) {
+      return <Badge status="default" />;
+    }
+    return null;
+  };
+
+  // 页面关闭按钮组件
+  const PageCloseButton = ({ page, isDocked, onClose }) => {
+    if (isDocked) {
+      return <span style={{ width: '8px' }} />;
+    }
+
+    return (
+      <CloseButtonStyleWrapper
+        className="close-btn"
+        onClick={(e) => {
+          e.stopPropagation();
+          onClose(page.key);
+        }}
+      >
+        <CloseOutlined />
+      </CloseButtonStyleWrapper>
+    );
+  };
+
+  // 上下文菜单配置
+  const getContextMenuItems = (page, isDocked): MenuProps['items'] =>
+    [
+      !isDocked && {
+        key: 'closePage',
+        label: formatMessage({
+          id: 'odc.component.WindowManager.CloseThisWindow',
+          defaultMessage: '关闭该窗口'
+        })
+      },
+      {
+        key: 'closeOtherPage',
+        label: formatMessage({
+          id: 'odc.component.WindowManager.CloseOtherWindows',
+          defaultMessage: '关闭其它窗口'
+        })
+      },
+      !isDocked && {
+        key: 'closeAllPage',
+        label: formatMessage({
+          id: 'odc.component.WindowManager.CloseAllWindows',
+          defaultMessage: '关闭所有窗口'
+        })
+      },
+      {
+        type: 'divider' as const
+      },
+      page.type === PageType.SQL && {
+        key: 'copyPage',
+        label: formatMessage({
+          id: 'odc.src.component.WindowManager.CopyTheSQLWindow',
+          defaultMessage: '复制 SQL 窗口'
+        })
+      },
+      {
+        key: 'openNewPage',
+        label: formatMessage({
+          id: 'odc.component.WindowManager.OpenANewSqlWindow',
+          defaultMessage: '打开新的 SQL 窗口'
+        })
+      }
+    ].filter(Boolean);
+
+  function getPageTitle(page: IPage): ReactNode {
+    const { iconColor, isDocked, pageTitle, isPageProcessing, isCompiler } =
+      getPageState(page);
+
     return (
       <Dropdown
         trigger={['contextMenu']}
         menu={{
-          className: styles.tabsContextMenu,
           onClick: doTabAction.bind(null, page),
-          items: [
-            !isDocked && {
-              key: 'closePage',
-              label: formatMessage({
-                id: 'odc.component.WindowManager.CloseThisWindow',
-                defaultMessage: '关闭该窗口'
-              })
-            },
-            {
-              key: 'closeOtherPage',
-              label: formatMessage({
-                id: 'odc.component.WindowManager.CloseOtherWindows',
-                defaultMessage: '关闭其它窗口'
-              })
-            },
-            !isDocked && {
-              key: 'closeAllPage',
-              label: formatMessage({
-                id: 'odc.component.WindowManager.CloseAllWindows',
-                defaultMessage: '关闭所有窗口'
-              })
-            },
-            {
-              type: 'divider'
-            },
-            page.type === PageType.SQL && {
-              key: 'copyPage',
-              label: formatMessage({
-                id: 'odc.src.component.WindowManager.CopyTheSQLWindow',
-                defaultMessage: '复制 SQL 窗口'
-              })
-            },
-            {
-              key: 'openNewPage',
-              label: formatMessage({
-                id: 'odc.component.WindowManager.OpenANewSqlWindow',
-                defaultMessage: '打开新的 SQL 窗口'
-              })
-            }
-          ].filter(Boolean) as MenuProps['items']
+          items: getContextMenuItems(page, isDocked)
         }}
       >
-        <Tooltip
+        <BasicToolTip
           placement="bottom"
-          classNames={{
-            root: styles.tabTooltip
-          }}
-          arrow={false}
           title={
-            <div>
-              <div>{pageTitle}</div>
-              {!page.isSaved && !isCompiler && !isPageProcessing ? (
-                <div>
-                  <Badge
-                    status={'default'}
-                    text={formatMessage({
-                      id: 'odc.component.WindowManager.NotSaved',
-                      defaultMessage: '未保存'
-                    })} /*未保存*/
-                  />
-                </div>
-              ) : null}
-              {isPageProcessing ? (
-                <div>
-                  <Badge
-                    status={'processing'}
-                    text={formatMessage({
-                      id: 'odc.component.WindowManager.Running',
-                      defaultMessage: '运行中'
-                    })} /*运行中*/
-                  />
-                </div>
-              ) : null}
-            </div>
+            <PageTooltipContent
+              page={page}
+              pageTitle={pageTitle}
+              isCompiler={isCompiler}
+              isPageProcessing={isPageProcessing}
+            />
           }
         >
-          <span className={styles.pageTitle}>
-            <span
-              className={styles.icon}
-              style={{
-                display: 'flex',
-                color: `${iconColor}`,
-                lineHeight: 1,
-                fontSize: 14
-              }}
-            >
+          <PageTitleStyleWrapper>
+            <IconStyleWrapper style={{ color: iconColor }}>
               {pageMap[page.type].icon}
-            </span>
-            <span className={styles.title}>{pageTitle}</span>
-            <span className={styles.extraStatusBox}>
-              {(() => {
-                if (isPageProcessing) {
-                  return <Badge status={'processing'} />;
-                } else if (!page.isSaved) {
-                  return <Badge status={'default'} />;
-                } else {
-                  return null;
-                }
-              })()}
-            </span>
-            {!page.params.isDocked ? (
-              <span
-                style={{
-                  width: 16
-                }}
-              >
-                <CloseOutlined
-                  className={styles.closeBtn}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleCloseTab(page.key);
-                  }}
-                  style={{
-                    fontSize: '8px'
-                  }}
-                />
-              </span>
-            ) : (
-              <span
-                style={{
-                  width: '16px'
-                }}
+            </IconStyleWrapper>
+            <TitleTextStyleWrapper>{pageTitle}</TitleTextStyleWrapper>
+            <ExtraStatusBoxStyleWrapper className="extra-status-box">
+              <PageStatusBadge
+                page={page}
+                isPageProcessing={isPageProcessing}
               />
-            )}
-          </span>
-        </Tooltip>
+            </ExtraStatusBoxStyleWrapper>
+            <PageCloseButton
+              page={page}
+              isDocked={isDocked}
+              onClose={handleCloseTab}
+            />
+          </PageTitleStyleWrapper>
+        </BasicToolTip>
       </Dropdown>
     );
   }
 
-  const menu: MenuProps = {
+  const existPagesMenu: MenuProps = {
     style: {
-      width: '320px'
+      width: 320
     },
     selectedKeys: [activeKey],
     onClick: handleSwitchTab,
@@ -299,17 +350,9 @@ const WindowManager: React.FC<IProps> = function (props) {
         key: page.key,
         label: (
           <Space>
-            <span
-              className={styles.icon}
-              style={{
-                display: 'flex',
-                color: `${pageMap[page.type]?.color}`,
-                lineHeight: 1,
-                fontSize: 14
-              }}
-            >
+            <IconStyleWrapper style={{ color: pageMap[page.type]?.color }}>
               {pageMap[page.type].icon}
-            </span>
+            </IconStyleWrapper>
             {getPageTitleText(page)}
           </Space>
         )
@@ -319,7 +362,6 @@ const WindowManager: React.FC<IProps> = function (props) {
   return (
     <>
       <DraggableTabs
-        className={styles.tabs}
         onChange={onActivatePage}
         activeKey={activeKey}
         type="editable-card"
@@ -329,83 +371,17 @@ const WindowManager: React.FC<IProps> = function (props) {
         }}
         tabBarGutter={0}
         addIcon={
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'stretch',
-              flexDirection: 'row',
-              height: '100%',
-              alignItems: 'center'
-            }}
-          >
-            <PlusOutlined style={{ color: 'var(--icon-color-normal)' }} />
-            <Dropdown
-              trigger={['click']}
-              menu={{
-                items: [
-                  {
-                    label: formatMessage({
-                      id: 'odc.src.component.WindowManager.NewSQLWindow',
-                      defaultMessage: '新建 SQL 窗口'
-                    }), //'新建 SQL 窗口'
-                    key: 'newSQL',
-                    onClick: (e) => {
-                      e.domEvent.stopPropagation();
-                      handleEditPage(null, 'add');
-                    }
-                  },
-                  {
-                    label: formatMessage({
-                      id: 'odc.src.component.WindowManager.CreateAnonymousBlockWindow',
-                      defaultMessage: '新建匿名块窗口'
-                    }), //'新建匿名块窗口'
-                    key: 'newPL',
-                    onClick(e) {
-                      e.domEvent.stopPropagation();
-                      const { value, type } = treeContext.currentObject || {};
-                      let dbId;
-                      if (!isGroupNode(type)) {
-                        if (type === ResourceNodeType.Database) {
-                          dbId = value;
-                        }
-                        if (isString(value)) {
-                          dbId = Number(value.split('-')?.[0]);
-                        }
-                      }
-                      const isLogicalDb = isLogicalDatabase(
-                        treeContext?.databaseList?.find(
-                          (_db) => _db?.id === dbId
-                        )
-                      );
-                      openNewDefaultPLPage(
-                        undefined,
-                        isLogicalDb ? null : dbId
-                      );
-                    }
-                  }
-                ]
-              }}
-            >
-              <div
-                className={styles.addMoreIcon}
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                }}
-              >
-                <DownOutlined style={{ color: 'var(--icon-color-normal)' }} />
-              </div>
-            </Dropdown>
-          </div>
+          <CustomAddTabTrigger onNewSQL={handleNewSQL} onNewPL={handleNewPL} />
         }
         tabBarExtraContent={
           <Dropdown
-            overlayClassName={styles.menuList}
-            menu={menu}
+            menu={existPagesMenu}
             trigger={['click']}
             placement="bottomRight"
           >
-            <EllipsisOutlined className={styles.moreBtn} />
+            <TabBarExtraContentStyleWrapper>
+              <EllipsisOutlined className="tab-bar-extra-content-icon" />
+            </TabBarExtraContentStyleWrapper>
           </Dropdown>
         }
         items={pages

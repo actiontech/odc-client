@@ -19,17 +19,17 @@ import React, { useCallback, useContext, useRef, useState } from 'react';
 import { debounce } from 'lodash';
 import SplitPane from 'react-split-pane';
 import ActivityBarContext from '../context/ActivityBarContext';
-import styles from './index.less';
-import ActivityBarNew from '../ActivityBarNew';
+import ActivityBar from '../ActivityBar';
+import SideBar from '../SideBar';
+import { WorkspaceLayoutStyleWrapper } from './style';
 
 const MinWidth = 180;
 
 type IProps = {
-  sideBar: React.ReactNode;
   editorGroup: React.ReactNode;
 };
 
-const WorkBenchLayout: React.FC<IProps> = function ({ sideBar, editorGroup }) {
+const WorkBenchLayout: React.FC<IProps> = function ({ editorGroup }) {
   const [sideWidth, setSideWidth] = useState(MinWidth + 100);
   const minSizeEventCountRef = useRef(0);
   const splitRef = useRef<SplitPane>();
@@ -67,12 +67,10 @@ const WorkBenchLayout: React.FC<IProps> = function ({ sideBar, editorGroup }) {
     }
   };
   return (
-    <div className={styles.workbench}>
-      <div className={styles.activityBar}>
-        <ActivityBarNew />
-      </div>
+    <WorkspaceLayoutStyleWrapper className="workbench">
+      <ActivityBar />
 
-      <div className={styles.splitPane}>
+      <div className="splitPane">
         <SplitPane
           ref={splitRef}
           split="vertical"
@@ -98,14 +96,14 @@ const WorkBenchLayout: React.FC<IProps> = function ({ sideBar, editorGroup }) {
               minWidth: sideWidth,
               zIndex: !haveActiveKey ? -9999 : 'unset'
             }}
-            className={styles.sideBar}
+            className="sideBar"
           >
-            {sideBar}
+            <SideBar />
           </div>
-          <div className={styles.editorGroup}>{editorGroup}</div>
+          <div className="editorGroup">{editorGroup}</div>
         </SplitPane>
       </div>
-    </div>
+    </WorkspaceLayoutStyleWrapper>
   );
 };
 

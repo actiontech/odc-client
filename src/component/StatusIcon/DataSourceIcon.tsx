@@ -27,8 +27,9 @@ import datasourceStatus from '@/store/datasourceStatus';
 
 export default function StatusIcon({ item }: { item: IConnection }) {
   const statusInfo = datasourceStatus.statusMap.get(item.id) || item.status;
-  let status = statusInfo?.status;
+  const status = statusInfo?.status;
   const icon = getDataSourceStyleByConnectType(item.type)?.icon;
+
   switch (status) {
     case IConnectionStatus.TESTING: {
       return (

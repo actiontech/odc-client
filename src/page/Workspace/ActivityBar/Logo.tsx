@@ -18,7 +18,6 @@ import { formatMessage } from '@/util/intl';
 import { ReactComponent as ODCBlackSvg } from '@/svgr/odc_logo_color.svg';
 import { haveOCP, isClient } from '@/util/env';
 import Icon, { HomeOutlined } from '@ant-design/icons';
-import { Tooltip } from 'antd';
 import { useState } from 'react';
 import styles from './index.less';
 import login from '@/store/login';

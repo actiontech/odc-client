@@ -13,17 +13,14 @@ import { ReactComponent as TaskSvg } from '@/svgr/icon_task.svg';
 import { ReactComponent as ManagerSvg } from '@/svgr/operate.svg';
 import { ReactComponent as CodeSvg } from '@/svgr/Snippet.svg';
 
-import {
-  ActivityBarItemType,
-  ActivityBarItemTypeText
-} from '../ActivityBar/type';
+import { ActivityBarItemType, ActivityBarItemTypeText } from './type';
 import ActivityBarContext from '../context/ActivityBarContext';
 
 import { formatMessage } from '@/util/intl';
 import { getFirstEnabledTask } from '@/component/Task/helper';
 import { openTasksPage } from '@/store/helper/page';
 
-import Logo from '../ActivityBar/Logo';
+import Logo from './Logo';
 import SettingItem from '@/layout/SpaceContainer/Sider/SettingItem';
 import HelpItem from '@/layout/SpaceContainer/Sider/HelpItem';
 import MineItem from '@/layout/SpaceContainer/Sider/MineItem';
@@ -36,7 +33,6 @@ import {
   ItemsWrapperStyleWrapper,
   NavItemStyleWrapper,
   ItemLabelStyleWrapper,
-  ToggleButtonStyleWrapper,
   DividerLineStyleWrapper
 } from './style';
 import { BasicToolTip } from '@actiontech/dms-kit';

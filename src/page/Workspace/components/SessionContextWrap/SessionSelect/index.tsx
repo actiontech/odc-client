@@ -33,7 +33,6 @@ import { IDataSourceModeConfig } from '@/common/datasource/interface';
 import RiskLevelLabel from '@/component/RiskLevelLabel';
 import { EnvColorMap } from '@/constant';
 import { ConnectionMode } from '@/d.ts';
-import { ActivityBarItemType } from '@/page/Workspace/ActivityBar/type';
 import ActivityBarContext from '@/page/Workspace/context/ActivityBarContext';
 import ResourceTreeContext from '@/page/Workspace/context/ResourceTreeContext';
 import login from '@/store/login';
@@ -43,6 +42,7 @@ import SessionDropdown from './SessionDropdown';
 import { getShouldExpandedKeysByPage } from '@/page/Workspace/SideBar/ResourceTree/const';
 import { inject, observer } from 'mobx-react';
 import type { PageStore } from '@/store/page';
+import { ActivityBarItemType } from '../../../ActivityBar/type';
 
 interface IProps {
   readonly?: boolean;
