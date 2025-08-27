@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-import React from 'react';
+import { styled } from '@mui/material';
 
-import { TableCardLayoutStyleWrapper } from './style';
+export const SessionWrapStyleWrapper = styled('div')`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+`;
 
-interface IProps {
-  toolbar: React.ReactNode;
-}
-
-const TableCardLayout: React.FC<IProps> = function ({ toolbar, children }) {
-  return (
-    <TableCardLayoutStyleWrapper className="tableCard">
-      <div className="toolbar">{toolbar}</div>
-      <div className="table">{children}</div>
-    </TableCardLayoutStyleWrapper>
-  );
-};
-
-export default TableCardLayout;
+export const ContentStyleWrapper = styled('div')`
+  position: relative;
+  flex: 1;
+  min-height: 0px;
+  overflow: hidden;
+  border-top: 1px solid
+    ${({ theme }) => theme.sharedTheme.uiToken.colorBorderSecondary};
+  background-color: ${({ theme }) => theme.sharedTheme.uiToken.colorBgBase};
+`;

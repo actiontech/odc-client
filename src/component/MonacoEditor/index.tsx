@@ -24,7 +24,6 @@ import setting, { SettingStore } from '@/store/setting';
 import editorUtils from '@/util/editor';
 import { getUnWrapedSnippetBody } from '@/util/snippet';
 import { inject, observer } from 'mobx-react';
-import styles from './index.less';
 import * as groovy from './plugins/languageSupport/groovy';
 import { apply as markerPluginApply } from './plugins/marker';
 import { getModelService } from './plugins/ob-language/service';
@@ -32,6 +31,8 @@ import logger from '@/util/logger';
 import { getFontSize } from './config';
 import { apply as themeApply } from './plugins/theme';
 import PlaceholderContentWidget from './PlaceholderContentWidget';
+import { MonacoEditorContainerStyleWrapper } from './style';
+import { CUSTOM_DIFF_EDITOR_THEME_NAME } from './plugins/theme/dms';
 export interface IEditor extends monaco.editor.IStandaloneCodeEditor {
   doFormat: () => void;
   getSelectionContent: () => string;
@@ -104,10 +105,10 @@ const MonacoEditor: React.FC<IProps> = function (props) {
 
   const themeValue = useMemo(() => {
     if (!theme) {
-      return settingTheme;
+      return CUSTOM_DIFF_EDITOR_THEME_NAME;
     }
     return theme;
-  }, [theme, settingTheme]);
+  }, [theme]);
 
   useEffect(() => {
     sessionRef.current = sessionStore;
@@ -292,9 +293,9 @@ const MonacoEditor: React.FC<IProps> = function (props) {
   }, []);
 
   return (
-    <div className={styles.container}>
-      <div ref={domRef} className={styles.editor}></div>
-    </div>
+    <MonacoEditorContainerStyleWrapper>
+      <div ref={domRef} className="editor"></div>
+    </MonacoEditorContainerStyleWrapper>
   );
 };
 

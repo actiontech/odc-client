@@ -40,7 +40,7 @@ export interface IDatabaseObject {
 
 export interface IOdcDBObject {
   id: number;
-  name: String;
+  name: string;
   type: DbObjectType;
   database: IDatabase;
   organizationId: number;
@@ -50,7 +50,7 @@ export interface IOdcDBObject {
 
 export interface IOdcDBColumn {
   id: number;
-  name: String;
+  name: string;
   dbObject: IOdcDBObject;
   organizationId: number;
   createTime: Date;

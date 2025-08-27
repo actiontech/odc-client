@@ -15,12 +15,10 @@
  */
 
 import { EditorProps } from '@oceanbase-odc/ob-react-data-grid';
-import { AutoComplete, Select } from 'antd';
+import { AutoComplete } from 'antd';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import AntdEditorWrap from './AntdEditorWrap';
-
-const Option = Select.Option;
 
 interface IProps<T> extends EditorProps<T> {
   options: string[];
@@ -46,7 +44,7 @@ function AutoCompleteEditor<T>({
   }, [editorRef]);
   const innerOnChange = useCallback(
     (value: string | string[]) => {
-      let realValue = value;
+      const realValue = value;
       onRowChange({ ...row, [key]: realValue });
     },
     [onRowChange]

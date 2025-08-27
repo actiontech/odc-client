@@ -16,7 +16,7 @@
 
 import { generateUpdateTableDDL } from '@/common/network/table';
 import { formatMessage } from '@/util/intl';
-import { Space } from 'antd';
+import { Space, Typography } from 'antd';
 import { cloneDeep } from 'lodash';
 import React, { useContext, useState } from 'react';
 import { useTableConfig } from '../../CreateTable/config';
@@ -30,10 +30,9 @@ import UniqueConstraints from '../../CreateTable/TableConstraint/Unique';
 import TableContext from '../../CreateTable/TableContext';
 import TablePageContext from '../context';
 import styles from './index.less';
+import { TableConstraintsStyleWrapper } from './style';
 
-interface IProps {}
-
-const TableConstraints: React.FC<IProps> = function ({}) {
+const TableConstraints: React.FC = function () {
   const [editPrimaryConstraints, setEditPrimaryConstraints] =
     useState<ITableModel['primaryConstraints']>(null);
   const [editUniqueConstraints, setEditUniqueConstraints] =
@@ -122,7 +121,7 @@ const TableConstraints: React.FC<IProps> = function ({}) {
             }}
             modified={modified}
           >
-            <span style={{ paddingLeft: 12 }}>
+            <Typography.Text style={{ paddingLeft: 12 }}>
               {
                 formatMessage({
                   id: 'odc.TablePage.Constraints.PrimaryKeyConstraintsCannotBe',
@@ -130,16 +129,16 @@ const TableConstraints: React.FC<IProps> = function ({}) {
                     '主键约束不可修改；已存在的约束无法修改，仅支持新增/删除'
                 }) /*主键约束不可修改；已存在的约束无法修改，仅支持新增/删除*/
               }
-            </span>
+            </Typography.Text>
           </EditToolbar>
         }
       >
-        <Space
+        <TableConstraintsStyleWrapper
           style={{ width: '100%', padding: '16px 16px' }}
           direction="vertical"
         >
           <div>
-            <div className={styles.title}>
+            <div className="title">
               {
                 formatMessage({
                   id: 'odc.TablePage.Constraints.PrimaryKeyConstraint',
@@ -148,7 +147,7 @@ const TableConstraints: React.FC<IProps> = function ({}) {
               }
             </div>
             <div
-              className={styles.itembox}
+              className="itembox"
               style={{
                 /**
                  * 这里的高度最小为175，因为select的下拉框最大高度为170，要避免被截断的情况
@@ -162,8 +161,9 @@ const TableConstraints: React.FC<IProps> = function ({}) {
               <PrimaryConstaint />
             </div>
           </div>
+
           <div>
-            <div className={styles.title}>
+            <div className="title">
               {
                 formatMessage({
                   id: 'odc.TablePage.Constraints.UniqueConstraint',
@@ -172,7 +172,7 @@ const TableConstraints: React.FC<IProps> = function ({}) {
               }
             </div>
             <div
-              className={styles.itembox}
+              className="itembox"
               style={{
                 height: Math.max(
                   175,
@@ -184,7 +184,7 @@ const TableConstraints: React.FC<IProps> = function ({}) {
             </div>
           </div>
           <div>
-            <div className={styles.title}>
+            <div className="title">
               {
                 formatMessage({
                   id: 'odc.TablePage.Constraints.ForeignKeyConstraint',
@@ -193,7 +193,7 @@ const TableConstraints: React.FC<IProps> = function ({}) {
               }
             </div>
             <div
-              className={styles.itembox}
+              className="itembox"
               style={{
                 height: Math.max(
                   175,
@@ -206,7 +206,7 @@ const TableConstraints: React.FC<IProps> = function ({}) {
           </div>
           {config.enableCheckConstraint && (
             <div>
-              <div className={styles.title}>
+              <div className="title">
                 {
                   formatMessage({
                     id: 'odc.TablePage.Constraints.CheckConstraints',
@@ -215,7 +215,7 @@ const TableConstraints: React.FC<IProps> = function ({}) {
                 }
               </div>
               <div
-                className={styles.itembox}
+                className="itembox"
                 style={{
                   height: Math.max(
                     175,
@@ -227,7 +227,7 @@ const TableConstraints: React.FC<IProps> = function ({}) {
               </div>
             </div>
           )}
-        </Space>
+        </TableConstraintsStyleWrapper>
       </TableCardLayout>
     </TableContext.Provider>
   );

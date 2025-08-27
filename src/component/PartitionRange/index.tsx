@@ -22,6 +22,7 @@ import PartitionValueInput from './PartitionValueInput';
 // @ts-ignore
 import { formatMessage } from '@/util/intl';
 import styles from './index.less';
+import { BasicButton, BasicInput } from '@actiontech/dms-kit';
 
 export interface ISinglePartitionRule {
   name: string;
@@ -117,7 +118,7 @@ const PartitionRange: React.FC<IProps> = ({
             validateStatus={errorMessage ? 'error' : null}
             help={errorMessage || ''}
           >
-            <Input
+            <BasicInput
               onChange={(e) => {
                 handlePartitionNameChange(index, e.target.value);
               }}
@@ -174,7 +175,7 @@ const PartitionRange: React.FC<IProps> = ({
         bordered
         pagination={false}
       />
-      <Button
+      <BasicButton
         className={styles.btnAdd}
         icon={<PlusOutlined />}
         size="small"
@@ -184,7 +185,7 @@ const PartitionRange: React.FC<IProps> = ({
           id: 'workspace.window.createTable.partition.button.add',
           defaultMessage: '添加分区'
         })}
-      </Button>
+      </BasicButton>
     </>
   );
 };

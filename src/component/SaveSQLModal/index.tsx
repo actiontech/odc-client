@@ -16,7 +16,8 @@
 
 import { ISQLScript } from '@/d.ts';
 import { formatMessage } from '@/util/intl';
-import { Form, Input, Modal } from 'antd';
+import { BasicButton, BasicInput, BasicModal } from '@actiontech/dms-kit';
+import { Form, Space } from 'antd';
 import type { FormInstance } from 'antd/lib/form';
 import React, { Component } from 'react';
 
@@ -64,8 +65,8 @@ class SaveSQLModal extends Component<IProps> {
     };
 
     return (
-      <Modal
-        destroyOnClose
+      <BasicModal
+        destroyOnHidden
         title={
           formatMessage({
             id: 'odc.component.SaveSQLModal.SaveScript',
@@ -74,9 +75,24 @@ class SaveSQLModal extends Component<IProps> {
         }
         open={visible}
         confirmLoading={this.state.saving}
-        onOk={this.handleSubmit}
         onCancel={onCancel}
         centered
+        footer={
+          <Space>
+            <BasicButton onClick={onCancel}>
+              {formatMessage({
+                id: 'app.button.cancel',
+                defaultMessage: '取消'
+              })}
+            </BasicButton>
+            <BasicButton type="primary" onClick={this.handleSubmit.bind(this)}>
+              {formatMessage({
+                id: 'app.button.save',
+                defaultMessage: '保存'
+              })}
+            </BasicButton>
+          </Space>
+        }
       >
         <Form
           {...formItemLayout}
@@ -109,7 +125,7 @@ class SaveSQLModal extends Component<IProps> {
               }
             ]}
           >
-            <Input
+            <BasicInput
               placeholder={
                 formatMessage({
                   id: 'odc.component.SaveSQLModal.EnterAScriptName',
@@ -120,7 +136,7 @@ class SaveSQLModal extends Component<IProps> {
             />
           </Form.Item>
         </Form>
-      </Modal>
+      </BasicModal>
     );
   }
 }

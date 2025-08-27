@@ -20,7 +20,7 @@ import { formatTimeTemplate } from '@/util/utils';
 import { Timeline, Typography } from 'antd';
 import BigNumber from 'bignumber.js';
 import dayjs from 'dayjs';
-import styles from './index.less';
+import { TimelineStyleWrapper } from './style';
 
 interface IProps {
   row: ISqlExecuteResult;
@@ -98,7 +98,7 @@ export default function DBTimeline({ row }: IProps) {
   ];
 
   return (
-    <Timeline className={styles.executeTimerLine}>
+    <TimelineStyleWrapper className="executeTimerLine">
       {renderList.map((item) => {
         const stage = timer?.stages?.find(
           (stage) => stage.stageName === item.key
@@ -175,6 +175,6 @@ export default function DBTimeline({ row }: IProps) {
           {formatTimeTemplate(timer?.totalDurationMicroseconds / 1000000)})
         </Typography.Text>
       </Timeline.Item>
-    </Timeline>
+    </TimelineStyleWrapper>
   );
 }

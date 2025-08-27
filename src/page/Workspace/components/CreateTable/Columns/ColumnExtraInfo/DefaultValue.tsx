@@ -15,11 +15,12 @@
  */
 
 import { formatMessage } from '@/util/intl';
-import { Checkbox, Form, Input, Space } from 'antd';
+import { Checkbox, Form, Space } from 'antd';
 import { isNil } from 'lodash';
 import React, { useContext, useMemo } from 'react';
 import TablePageContext from '../../../TablePage/context';
 import { TableColumn } from '../../interface';
+import { BasicInput } from '@actiontech/dms-kit';
 
 interface IProps {
   column: TableColumn;
@@ -34,7 +35,7 @@ const DefaultValue: React.FC<IProps> = function ({
 }) {
   const { defaultValueOrExpr } = column;
   const pageContext = useContext(TablePageContext);
-  let enable = useMemo(() => {
+  const enable = useMemo(() => {
     if (!pageContext.editMode || isNil(column.ordinalPosition)) {
       /**
        * 与自增列互斥
@@ -64,7 +65,8 @@ const DefaultValue: React.FC<IProps> = function ({
         })}
       >
         <Space>
-          <Input
+          <BasicInput
+            placeholder=""
             disabled={!enable || isNullValue}
             style={{ width: 175 }}
             value={defaultValueOrExpr}

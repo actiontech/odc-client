@@ -362,6 +362,7 @@ const WindowManager: React.FC<IProps> = function (props) {
   return (
     <>
       <DraggableTabs
+        className="window-manager-wrapper-tabs"
         onChange={onActivatePage}
         activeKey={activeKey}
         type="editable-card"

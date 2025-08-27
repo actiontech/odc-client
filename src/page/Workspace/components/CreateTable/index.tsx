@@ -15,7 +15,7 @@
  */
 
 import { InfoCircleOutlined } from '@ant-design/icons';
-import { Button, Card, message, Space, Tabs, Tooltip, Typography } from 'antd';
+import { message, Space, Tabs, Typography } from 'antd';
 import React, { useContext, useMemo, useState } from 'react';
 import BaseInfo from './BaseInfo';
 import {
@@ -49,10 +49,11 @@ import { inject, observer } from 'mobx-react';
 import SessionContext from '../SessionContextWrap/context';
 import WrapSessionPage from '../SessionContextWrap/SessionPageWrap';
 import Columns, { defaultColumn } from './Columns';
-import styles from './index.less';
 import Partition from './Partition';
 import TableConstraint from './TableConstraint';
 import TableIndex from './TableIndex';
+import { BasicButton, BasicToolTip } from '@actiontech/dms-kit';
+import { CreateTableStyleWrapper } from './style';
 
 interface IProps {
   pageKey: string;
@@ -143,9 +144,9 @@ const CreateTable: React.FC<IProps> = function ({
     return <WorkSpacePageLoading />;
   }
   return (
-    <Card
-      className={styles.card}
-      bordered={false}
+    <CreateTableStyleWrapper
+      className="create-table-card-style-wrapper"
+      variant="borderless"
       title={
         <Typography.Text style={{ fontSize: 12 }} type="secondary">
           <Space>
@@ -162,7 +163,7 @@ const CreateTable: React.FC<IProps> = function ({
       }
       extra={
         <Space>
-          <Tooltip
+          <BasicToolTip
             title={
               isComplete
                 ? null
@@ -172,7 +173,7 @@ const CreateTable: React.FC<IProps> = function ({
                   }) //请填写基本信息和列
             }
           >
-            <Button
+            <BasicButton
               type="primary"
               disabled={!isComplete}
               loading={loading}
@@ -185,8 +186,8 @@ const CreateTable: React.FC<IProps> = function ({
                 })
                 /*提交并确认 SQL*/
               }
-            </Button>
-          </Tooltip>
+            </BasicButton>
+          </BasicToolTip>
         </Space>
       }
     >
@@ -377,7 +378,7 @@ const CreateTable: React.FC<IProps> = function ({
           }}
         />
       </TableContext.Provider>
-    </Card>
+    </CreateTableStyleWrapper>
   );
 };
 export default inject(

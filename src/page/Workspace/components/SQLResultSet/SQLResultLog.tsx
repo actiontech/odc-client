@@ -24,6 +24,7 @@ import {
 } from '@/d.ts';
 import { RenderLevel } from '@/page/Secure/Env/components/InnerEnvironment';
 import { formatMessage } from '@/util/intl';
+import { BasicButton } from '@actiontech/dms-kit';
 import {
   CheckCircleFilled,
   CloseCircleFilled,
@@ -31,9 +32,8 @@ import {
   FileTextFilled,
   StopFilled
 } from '@ant-design/icons';
-import { Button, Space, Spin, Typography } from 'antd';
+import { Space, Spin, Typography } from 'antd';
 import React from 'react';
-import styles from './index.less';
 
 const { Link } = Typography;
 
@@ -124,7 +124,7 @@ const runningLogPage = (
     (item) => item.sqlTuple?.sqlId === currentExecuteInfo?.executingSQLId
   );
   return (
-    <div className={styles.runningSql}>
+    <div className="runningSql">
       <Spin style={{ marginBottom: 16 }} />
       <Space direction="vertical" size="small" align="center">
         <div>
@@ -167,12 +167,12 @@ const runningLogPage = (
         </div>
       </Space>
       {!!stopRunning && (
-        <Button onClick={stopRunning} style={{ marginTop: 16 }}>
+        <BasicButton onClick={stopRunning} style={{ marginTop: 16 }}>
           {formatMessage({
             id: 'src.page.Workspace.components.SQLResultSet.D3F95049',
             defaultMessage: '终 止'
           })}
-        </Button>
+        </BasicButton>
       )}
     </div>
   );
@@ -189,7 +189,7 @@ const SQLResultLog: React.FC<IProps> = function (props) {
   } = props;
   if (loading)
     return (
-      <div className={styles.runningSql}>
+      <div className="runningSql">
         <Spin />
       </div>
     );
@@ -215,7 +215,7 @@ const SQLResultLog: React.FC<IProps> = function (props) {
                       }
                     </span>
                   </Space>
-                  <div className={styles.sqlLabel}>
+                  <div className="sqlLabel">
                     {
                       formatMessage({
                         id: 'odc.components.SQLResultSet.SQLResultLog.AlertDetails',
@@ -224,7 +224,7 @@ const SQLResultLog: React.FC<IProps> = function (props) {
                       /* 告警详情: */
                     }
                   </div>
-                  <div className={styles.track}>{logData.track}</div>
+                  <div className="track">{logData.track}</div>
                 </>
               ) : (
                 <>
@@ -233,7 +233,7 @@ const SQLResultLog: React.FC<IProps> = function (props) {
                     <span>{getSuccessLog(logData.sqlType, logData.total)}</span>
                   </Space>
                   <MultiLineOverflowText
-                    className={styles.executedSQL}
+                    className="executedSQL"
                     content={logData.executeSql}
                   />
                 </>
@@ -256,7 +256,7 @@ const SQLResultLog: React.FC<IProps> = function (props) {
                       }
                     </span>
                   </Space>
-                  <div className={styles.dbms}>{logData.dbmsOutput}</div>
+                  <div className="dbms">{logData.dbmsOutput}</div>
                 </div>
               )}
             </>
@@ -284,10 +284,10 @@ const SQLResultLog: React.FC<IProps> = function (props) {
                   })}
             </Space>
             <MultiLineOverflowText
-              className={styles.executedSQL}
+              className="executedSQL"
               content={logData.executeSql}
             />
-            <div className={styles.failReason}>
+            <div className="failReason">
               {isCanceled
                 ? formatMessage({
                     id: 'odc.components.SQLResultSet.SQLResultLog.ReasonForCancellation',
@@ -299,14 +299,14 @@ const SQLResultLog: React.FC<IProps> = function (props) {
                     defaultMessage: '失败原因：'
                   })}
             </div>
-            <div className={styles.track}>{logData.track}</div>
+            <div className="track">{logData.track}</div>
           </>
         );
       })
       .filter(Boolean);
     return (
       <div
-        className={styles.result}
+        className="result"
         style={{
           maxHeight: `${resultHeight - TAB_HEADER_HEIGHT}px`,
           overflowY: 'auto'

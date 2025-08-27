@@ -25,8 +25,18 @@ import Icon, {
   DownOutlined,
   LoadingOutlined
 } from '@ant-design/icons';
-import { Divider, Popover, Space, Spin, Tooltip } from 'antd';
-import styles from './index.less';
+import { Divider, Popover, Spin, Tooltip } from 'antd';
+import {
+  LineStyleWrapper,
+  ContentStyleWrapper,
+  LinkStyleWrapper,
+  AimStyleWrapper,
+  SessionInfoStyleWrapper,
+  EllipsisStyleWrapper,
+  DatasourceAndProjectItemStyleWrapper,
+  DescribeItemStyleWrapper,
+  DatasourceAndProjectItemBoxStyleWrapper
+} from './style';
 
 import { getDataSourceStyleByConnectType } from '@/common/datasource';
 import { IDataSourceModeConfig } from '@/common/datasource/interface';
@@ -37,7 +47,7 @@ import ActivityBarContext from '@/page/Workspace/context/ActivityBarContext';
 import ResourceTreeContext from '@/page/Workspace/context/ResourceTreeContext';
 import login from '@/store/login';
 import tracert from '@/util/tracert';
-import classNames from 'classnames';
+
 import SessionDropdown from './SessionDropdown';
 import { getShouldExpandedKeysByPage } from '@/page/Workspace/SideBar/ResourceTree/const';
 import { inject, observer } from 'mobx-react';
@@ -97,12 +107,10 @@ const SessionSelect: React.FC<IProps> = (props) => {
       return null;
     }
     return (
-      <div className={styles.tag}>
-        <RiskLevelLabel
-          color={context?.session?.odcDatabase?.environment?.style}
-          content={context?.session?.odcDatabase?.environment?.name}
-        />
-      </div>
+      <RiskLevelLabel
+        color={context?.session?.odcDatabase?.environment?.style}
+        content={context?.session?.odcDatabase?.environment?.name}
+      />
     );
   }
   function renderSessionInfo() {
@@ -113,7 +121,7 @@ const SessionSelect: React.FC<IProps> = (props) => {
     );
     const databaseItem = (
       <Popover
-        overlayClassName={styles.pop}
+        overlayClassName="sessionSelectPop"
         placement="bottomLeft"
         content={
           <ConnectionPopover
@@ -124,11 +132,7 @@ const SessionSelect: React.FC<IProps> = (props) => {
         }
       >
         {fromDataSource ? (
-          <Space
-            style={{ lineHeight: '22px' }}
-            className={styles.link}
-            size={4}
-          >
+          <LinkStyleWrapper size={4}>
             <Icon
               component={dsStyle?.icon?.component}
               style={{
@@ -142,13 +146,9 @@ const SessionSelect: React.FC<IProps> = (props) => {
               {context?.session?.connection?.name}
             </span>
             <DownOutlined />
-          </Space>
+          </LinkStyleWrapper>
         ) : (
-          <Space
-            style={{ lineHeight: '22px' }}
-            className={styles.link}
-            size={4}
-          >
+          <LinkStyleWrapper style={{ lineHeight: '22px' }} size={4}>
             <Icon
               component={dsStyle?.dbIcon?.component}
               style={{ fontSize: 16, verticalAlign: 'middle' }}
@@ -158,24 +158,23 @@ const SessionSelect: React.FC<IProps> = (props) => {
               {context?.session?.odcDatabase?.name}
             </span>
             <DownOutlined />
-          </Space>
+          </LinkStyleWrapper>
         )}
       </Popover>
     );
 
     const aimItem = (
-      <AimOutlined className={styles.aim} onClick={focusDataBase} />
+      <AimStyleWrapper as={AimOutlined} onClick={focusDataBase} />
     );
     const datasourceAndProjectItem = !fromDataSource ? (
-      <Space
+      <DatasourceAndProjectItemStyleWrapper
         size={1}
         split={<Divider type="vertical" />}
-        style={{ color: 'var(--text-color-hint)' }}
-        className={styles.datasourceAndProjectItem}
+        align="center"
       >
         {login.isPrivateSpace() ? null : (
-          <span className={styles.describeItem}>
-            <span className={styles.label}>
+          <DescribeItemStyleWrapper>
+            <span className="label">
               {formatMessage({
                 id: 'src.page.Workspace.components.SessionContextWrap.SessionSelect.38EA55F4' /*项目：*/,
                 defaultMessage: '项目：'
@@ -184,17 +183,17 @@ const SessionSelect: React.FC<IProps> = (props) => {
             <Tooltip
               title={context?.session?.odcDatabase?.project?.name}
               placement="bottom"
-              overlayClassName={styles.tooltip}
+              overlayClassName="sessionSelectTooltip"
             >
-              <span className={styles.ellipsis}>
+              <EllipsisStyleWrapper>
                 {context?.session?.odcDatabase?.project?.name}
-              </span>
+              </EllipsisStyleWrapper>
             </Tooltip>
-          </span>
+          </DescribeItemStyleWrapper>
         )}
         {context?.session?.odcDatabase?.dataSource?.name && (
-          <span className={styles.describeItem}>
-            <span className={styles.label}>
+          <DescribeItemStyleWrapper>
+            <span className="label">
               {formatMessage({
                 id: 'src.page.Workspace.components.SessionContextWrap.SessionSelect.CD007EC1' /*数据源：*/,
                 defaultMessage: '数据源：'
@@ -203,33 +202,33 @@ const SessionSelect: React.FC<IProps> = (props) => {
             <Tooltip
               title={context?.session?.odcDatabase?.dataSource?.name}
               placement="bottom"
-              overlayClassName={styles.tooltip}
+              overlayClassName="sessionSelectTooltip"
             >
-              <span className={styles.ellipsis}>
+              <EllipsisStyleWrapper>
                 {context?.session?.odcDatabase?.dataSource?.name}
-              </span>
+              </EllipsisStyleWrapper>
             </Tooltip>
-          </span>
+          </DescribeItemStyleWrapper>
         )}
-      </Space>
+      </DatasourceAndProjectItemStyleWrapper>
     ) : null;
 
     if (readonly) {
       return (
         <>
           {renderEnv()}
-          <div className={classNames(styles.SessionInfo)}>
+          <SessionInfoStyleWrapper>
             {databaseItem}
             {supportLocation && <>{aimItem}</>}
-            <div className={styles.datasourceAndProjectItemBox}>
+            <DatasourceAndProjectItemBoxStyleWrapper>
               {datasourceAndProjectItem}
-            </div>
-          </div>
+            </DatasourceAndProjectItemBoxStyleWrapper>
+          </SessionInfoStyleWrapper>
         </>
       );
     }
     return (
-      <div className={styles.content}>
+      <ContentStyleWrapper>
         {renderEnv()}
         <SessionDropdown
           filters={{ feature, isIncludeLogicalDb }}
@@ -238,23 +237,22 @@ const SessionSelect: React.FC<IProps> = (props) => {
           <div>{databaseItem}</div>
         </SessionDropdown>
         <div>{aimItem}</div>
-        <div className={styles.datasourceAndProjectItemBox}>
+        <DatasourceAndProjectItemBoxStyleWrapper>
           {datasourceAndProjectItem}
-        </div>
-      </div>
+        </DatasourceAndProjectItemBoxStyleWrapper>
+      </ContentStyleWrapper>
     );
   }
 
   return (
     <>
       {!context?.databaseId && !context?.datasourceId ? (
-        <div
+        <LineStyleWrapper
           style={{
             background:
               EnvColorMap[context?.session?.odcDatabase?.environment?.style]
                 ?.lineBackground
           }}
-          className={styles.line}
         >
           <SessionDropdown groupMode={resourceTreeContext.groupMode}>
             <a>
@@ -266,15 +264,14 @@ const SessionSelect: React.FC<IProps> = (props) => {
               }
             </a>
           </SessionDropdown>
-        </div>
+        </LineStyleWrapper>
       ) : (
-        <div
+        <LineStyleWrapper
           style={{
             background:
               EnvColorMap[context?.session?.odcDatabase?.environment?.style]
                 ?.lineBackground
           }}
-          className={styles.line}
         >
           {context?.session ? (
             renderSessionInfo()
@@ -285,7 +282,7 @@ const SessionSelect: React.FC<IProps> = (props) => {
               indicator={<LoadingOutlined style={{ fontSize: 18 }} spin />}
             />
           )}
-        </div>
+        </LineStyleWrapper>
       )}
     </>
   );

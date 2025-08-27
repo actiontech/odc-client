@@ -23,10 +23,11 @@ import PartitionRange from '@/component/PartitionRange';
 import TableIndexSelector from '@/component/TableIndexSelector';
 import { IDataType, IPartitionType, ITablePartition } from '@/d.ts';
 import SessionStore from '@/store/sessionManager/session';
-import { Form, FormInstance, Input, InputNumber, Select } from 'antd';
+import { Form, FormInstance, Select } from 'antd';
 import { TableColumn, TablePartition } from '../../interface';
 import { getPartitionValueLabel, partitionValuePlaceholder } from './config';
 import styles from './index.less';
+import { BasicInput, BasicInputNumber, BasicSelect } from '@actiontech/dms-kit';
 
 interface IProps {
   dataTypes: IDataType[];
@@ -162,7 +163,7 @@ class CreateTablePartitionRuleForm extends Component<
           }
         ]}
       >
-        <Select disabled={addMode} allowClear style={{ width: 240 }}>
+        <BasicSelect disabled={addMode} allowClear style={{ width: 240 }}>
           {(columns || []).map((c) => {
             if (customRenderOptions) {
               return customRenderOptions(c);
@@ -173,7 +174,7 @@ class CreateTablePartitionRuleForm extends Component<
               </Option>
             );
           })}
-        </Select>
+        </BasicSelect>
       </Form.Item>
     );
 
@@ -185,7 +186,7 @@ class CreateTablePartitionRuleForm extends Component<
         })}
         name={'expression'}
       >
-        <Input disabled={addMode} style={{ width: 240 }} />
+        <BasicInput disabled={addMode} style={{ width: 240 }} placeholder="" />
       </Form.Item>
     );
 
@@ -244,7 +245,7 @@ class CreateTablePartitionRuleForm extends Component<
         })}
         name="partNumber"
       >
-        <InputNumber precision={0} disabled={addMode} min={1} />
+        <BasicInputNumber precision={0} disabled={addMode} min={1} />
       </Form.Item>
     );
 
@@ -336,7 +337,7 @@ class CreateTablePartitionRuleForm extends Component<
                 }
               ]}
             >
-              <Select
+              <BasicSelect
                 // 暂时禁掉非分区表，OB 2.3.1 不支持
                 disabled={disablePartition || addMode}
                 onChange={this.handleChangeType}
@@ -374,7 +375,7 @@ class CreateTablePartitionRuleForm extends Component<
                     {partitionNameMap[IPartitionType.KEY]}
                   </Option>
                 )}
-              </Select>
+              </BasicSelect>
             </Form.Item>
             {this.renderPartitions()}
           </div>

@@ -19,11 +19,9 @@ import { ISQLLintReuslt } from '@/component/SQLLintResult/type';
 import { ModalStore } from '@/store/modal';
 import SessionStore from '@/store/sessionManager/session';
 import { groupByPropertyName } from '@/util/utils';
-import { Button, Table } from 'antd';
-import classNames from 'classnames';
 import { useCallback, useEffect, useState } from 'react';
 import getColumns from './columns';
-import styles from './index.less';
+import { BasicButton, BasicTable } from '@actiontech/dms-kit';
 const LintResultTip = {
   default: formatMessage({
     id: 'odc.src.page.Workspace.components.SQLResultSet.CurrentSQLCanBeExecuted',
@@ -68,10 +66,9 @@ const LintResultTable: React.FC<ILintResultTableProps> = ({
   const CallbackTable = useCallback(() => {
     const columns = getColumns(showLocate, sqlChanged, ctx, baseOffset);
     return (
-      <Table
+      <BasicTable
         rowKey="row"
-        className={classNames('o-table--no-lr-border', styles.thFilter)}
-        bordered={true}
+        className="o-table--no-lr-border"
         columns={columns}
         dataSource={dataSource || []}
         pagination={
@@ -147,8 +144,8 @@ const LintResultTable: React.FC<ILintResultTableProps> = ({
         }}
       >
         {hasExtraOpt && (
-          <div className={styles.lintResultTableHeader}>
-            <Button
+          <div className="lintResultTableHeader">
+            <BasicButton
               type="primary"
               disabled={disabled}
               onClick={() => {
@@ -167,13 +164,12 @@ const LintResultTable: React.FC<ILintResultTableProps> = ({
             发起审批
             */
               }
-            </Button>
-            <div className={styles.tip}>{tip}</div>
+            </BasicButton>
+            <div className="tip">{tip}</div>
           </div>
         )}
 
         <div
-          className={styles.table}
           style={{
             flexGrow: 1,
             paddingBottom: 8

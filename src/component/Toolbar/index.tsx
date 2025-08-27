@@ -18,7 +18,6 @@ import { formatMessage } from '@/util/intl';
 import Icon, { CaretDownOutlined } from '@ant-design/icons';
 import {
   Badge,
-  Button,
   Divider,
   Dropdown,
   MenuProps,
@@ -35,7 +34,7 @@ import {
   DividerStyleWrapper
 } from './style';
 import statefulIcon, { IConStatus } from './statefulIcon';
-import { BasicToolTip } from '@actiontech/dms-kit';
+import { BasicButton, BasicToolTip } from '@actiontech/dms-kit';
 
 const noop = () => {
   // TODO
@@ -123,20 +122,20 @@ function TButton({
   switch (type) {
     case 'BUTTON':
       content = (
-        <Button
+        <BasicButton
           {...rest}
           icon={icon}
           disabled={disabled}
           onClick={!disabled ? onClick : null}
         >
           {text}
-        </Button>
+        </BasicButton>
       );
 
       break;
     case 'BUTTON_PRIMARY':
       content = (
-        <Button
+        <BasicButton
           {...rest}
           icon={icon}
           type="primary"
@@ -145,7 +144,7 @@ function TButton({
           loading={isRunning}
         >
           {text}
-        </Button>
+        </BasicButton>
       );
 
       break;

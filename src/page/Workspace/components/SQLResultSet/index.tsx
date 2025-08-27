@@ -16,7 +16,7 @@
 
 import { formatMessage } from '@/util/intl';
 import { CloseOutlined, LockOutlined } from '@ant-design/icons';
-import { Badge, Dropdown, MenuProps, Tabs, Tooltip } from 'antd';
+import { Badge, Dropdown, MenuProps } from 'antd';
 import Cookie from 'js-cookie';
 import type { ReactNode } from 'react';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -37,9 +37,10 @@ import DDLResultSet from '../DDLResultSet';
 import { SqlExecuteResultStatusLabel } from './const';
 import DBPermissionTable from './DBPermissionTable';
 import ExecuteHistory from './ExecuteHistory';
-import styles from './index.less';
 import LintResultTable from './LintResultTable';
 import SQLResultLog from './SQLResultLog';
+import { ResultTabsStyleWrapper } from './style';
+import { BasicToolTip } from '@actiontech/dms-kit';
 
 export const recordsTabKey = 'records';
 export const sqlLintTabKey = 'sqlLint';
@@ -196,7 +197,7 @@ const SQLResultSet: React.FC<IProps> = function (props) {
     return (
       <>
         {resultSetIdx === 0 && showLockResultSetHint && (
-          <div className={styles.lockHint}>
+          <div className="lockHint">
             <LockResultSetHint
               onClose={() => setShowLockResultSetHint(false)}
             />
@@ -205,12 +206,12 @@ const SQLResultSet: React.FC<IProps> = function (props) {
 
         <Dropdown menu={menu} trigger={['contextMenu']}>
           <span
-            className={styles.resultSetTitle}
+            className="resultSetTitle"
             style={{
               background: 'transparent'
             }}
           >
-            <Tooltip
+            <BasicToolTip
               placement="topLeft"
               title={
                 <div
@@ -223,17 +224,17 @@ const SQLResultSet: React.FC<IProps> = function (props) {
                 </div>
               }
             >
-              <span className={styles.title}>{title}</span>
-            </Tooltip>
-            <span className={styles.extraBox}>
+              <span className="title">{title}</span>
+            </BasicToolTip>
+            <span className="extraBox">
               {locked ? (
                 <LockOutlined
-                  className={styles.closeBtn}
+                  className="closeBtn"
                   style={{ fontSize: '10px' }}
                 />
               ) : (
                 <CloseOutlined
-                  className={styles.closeBtn}
+                  className="closeBtn"
                   onClick={(e) => {
                     e.stopPropagation();
                     handleCloseResultSet(resultSetKey);
@@ -282,263 +283,258 @@ const SQLResultSet: React.FC<IProps> = function (props) {
   const isSupportProfile = session?.supportFeature.enableProfile;
 
   return (
-    <>
-      <Tabs
-        className={styles.tabs}
-        activeKey={activeKey}
-        tabBarGutter={0}
-        onChange={onChangeResultSetTab}
-        animated={false}
-        items={[
-          {
-            label: formatMessage({
-              id: 'workspace.window.sql.record.title',
-              defaultMessage: '执行记录'
-            }),
-            key: recordsTabKey,
-            children: (
-              <ExecuteHistory
-                resultHeight={resultHeight}
-                onShowExecuteDetail={onShowExecuteDetail}
-                onOpenExecutingDetailModal={onOpenExecutingDetailModal}
-              />
-            )
-          },
-          lintResultSet?.length
-            ? {
-                label: (
-                  <span className={styles.resultSetTitle}>
-                    {
-                      formatMessage({
-                        id: 'odc.components.SQLResultSet.Problem',
-                        defaultMessage: '问题'
-                      }) /*问题*/
-                    }
+    <ResultTabsStyleWrapper
+      className="tabs"
+      activeKey={activeKey}
+      tabBarGutter={0}
+      onChange={onChangeResultSetTab}
+      animated={false}
+      items={[
+        {
+          label: formatMessage({
+            id: 'workspace.window.sql.record.title',
+            defaultMessage: '执行记录'
+          }),
+          key: recordsTabKey,
+          children: (
+            <ExecuteHistory
+              resultHeight={resultHeight}
+              onShowExecuteDetail={onShowExecuteDetail}
+              onOpenExecutingDetailModal={onOpenExecutingDetailModal}
+            />
+          )
+        },
+        lintResultSet?.length
+          ? {
+              label: (
+                <span className="resultSetTitle">
+                  {
+                    formatMessage({
+                      id: 'odc.components.SQLResultSet.Problem',
+                      defaultMessage: '问题'
+                    }) /*问题*/
+                  }
 
-                    <span className={styles.extraBox}>
-                      <CloseOutlined
-                        className={styles.closeBtn}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          hanldeCloseLintPage();
-                        }}
-                        style={{ fontSize: '8px' }}
-                      />
-                    </span>
+                  <span className="extraBox">
+                    <CloseOutlined
+                      className="closeBtn"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        hanldeCloseLintPage();
+                      }}
+                      style={{ fontSize: '8px' }}
+                    />
                   </span>
-                ),
+                </span>
+              ),
 
-                key: sqlLintTabKey,
+              key: sqlLintTabKey,
+              children: (
+                <LintResultTable
+                  session={session}
+                  resultHeight={resultHeight}
+                  modalStore={modalStore}
+                  ctx={ctx?.editor}
+                  lintResultSet={lintResultSet}
+                  sqlChanged={sqlChanged}
+                  baseOffset={baseOffset}
+                />
+              )
+            }
+          : null
+      ]
+        .concat(
+          // @ts-expect-error(ts error)
+          resultSets?.map((set: IResultSet, i: number) => {
+            const isResultTab =
+              set.columns?.length &&
+              set.status === ISqlExecuteResultStatus.SUCCESS;
+            const isLogTab = set.type === 'LOG';
+            const tableName = set.resultSetMetaData?.table?.tableName;
+            if (isResultTab && resultTabCount < 30) {
+              const executeStage = set.timer?.stages?.find(
+                (stage) => stage.stageName === 'Execute'
+              );
+
+              const executeSQLStage = executeStage?.subStages?.find(
+                (stage) => stage.stageName === 'OBServer Execute SQL'
+              );
+
+              resultTabCount += 1;
+              return {
+                key: set.uniqKey,
+                label: getResultSetTitle(
+                  i,
+                  set.executeSql,
+                  formatMessage({
+                    id: 'workspace.window.sql.result',
+                    defaultMessage: '结果'
+                  }) + resultTabCount,
+                  set.locked,
+                  set.uniqKey
+                ),
                 children: (
-                  <LintResultTable
+                  <DDLResultSet
+                    key={set.uniqKey || i}
+                    dbTotalDurationMicroseconds={
+                      executeSQLStage?.totalDurationMicroseconds
+                    }
+                    showExplain={true}
+                    showExecutePlan={session?.supportFeature.enableProfile}
+                    showPagination={true}
+                    showTrace={session?.supportFeature?.enableSQLTrace}
+                    onOpenExecutingDetailModal={onOpenExecutingDetailModal}
+                    columns={set.columns}
+                    timer={set.timer}
                     session={session}
-                    resultHeight={resultHeight}
-                    modalStore={modalStore}
-                    ctx={ctx?.editor}
-                    lintResultSet={lintResultSet}
-                    sqlChanged={sqlChanged}
-                    baseOffset={baseOffset}
+                    sqlId={set.sqlId}
+                    autoCommit={session?.params?.autoCommit}
+                    table={{
+                      tableName,
+                      columns: set.resultSetMetaData?.columnList
+                    }}
+                    disableEdit={
+                      !set.resultSetMetaData?.editable ||
+                      !!set.resultSetMetaData?.columnList?.filter((c) => !c)
+                        ?.length
+                    }
+                    rows={set.rows}
+                    enableRowId={true}
+                    originSql={set.originSql}
+                    resultHeight={resultHeight - TAB_HEADER_HEIGHT}
+                    generalSqlType={set.generalSqlType}
+                    traceId={set.traceId}
+                    onExport={
+                      set.allowExport
+                        ? (limit) => onExportResultSet(i, limit, tableName)
+                        : null
+                    }
+                    onShowExecuteDetail={() =>
+                      onShowExecuteDetail(set.initialSql, set.traceId)
+                    }
+                    onShowTrace={() => onShowTrace(set.initialSql, set.traceId)}
+                    onSubmitRows={(newRows, limit, autoCommit, columns) =>
+                      onSubmitRows(
+                        i,
+                        newRows,
+                        limit,
+                        autoCommit,
+                        columns,
+                        set?.resultSetMetaData?.table?.databaseName
+                      )
+                    }
+                    onUpdateEditing={(editing) => onUpdateEditing(i, editing)}
+                    isEditing={editingMap[set.uniqKey]}
+                    withFullLinkTrace={set?.withFullLinkTrace}
+                    traceEmptyReason={set?.traceEmptyReason}
+                    withQueryProfile={set?.withQueryProfile}
                   />
                 )
-              }
-            : null
-        ]
-          .concat(
-            // @ts-expect-error
-            resultSets?.map((set: IResultSet, i: number) => {
-              const isResultTab =
-                set.columns?.length &&
-                set.status === ISqlExecuteResultStatus.SUCCESS;
-              const isLogTab = set.type === 'LOG';
-              const tableName = set.resultSetMetaData?.table?.tableName;
-              if (isResultTab && resultTabCount < 30) {
-                const executeStage = set.timer?.stages?.find(
-                  (stage) => stage.stageName === 'Execute'
-                );
+              };
+            }
+            if (isLogTab) {
+              const count = {
+                [ISqlExecuteResultStatus.CREATED]: {
+                  lable: SqlExecuteResultStatusLabel.CREATED,
+                  count: set?.total
+                },
+                [ISqlExecuteResultStatus.SUCCESS]: {
+                  lable: SqlExecuteResultStatusLabel.SUCCESS,
+                  //执行成功
+                  count: 0
+                },
 
-                const executeSQLStage = executeStage?.subStages?.find(
-                  (stage) => stage.stageName === 'OBServer Execute SQL'
-                );
+                [ISqlExecuteResultStatus.FAILED]: {
+                  lable: SqlExecuteResultStatusLabel.FAILED,
+                  //执行失败
+                  count: 0
+                },
 
-                resultTabCount += 1;
-                return {
-                  key: set.uniqKey,
-                  label: getResultSetTitle(
-                    i,
-                    set.executeSql,
-                    formatMessage({
-                      id: 'workspace.window.sql.result',
-                      defaultMessage: '结果'
-                    }) + resultTabCount,
-                    set.locked,
-                    set.uniqKey
-                  ),
-                  children: (
-                    <DDLResultSet
-                      key={set.uniqKey || i}
-                      dbTotalDurationMicroseconds={
-                        executeSQLStage?.totalDurationMicroseconds
-                      }
-                      showExplain={true}
-                      showExecutePlan={session?.supportFeature.enableProfile}
-                      showPagination={true}
-                      showTrace={session?.supportFeature?.enableSQLTrace}
-                      onOpenExecutingDetailModal={onOpenExecutingDetailModal}
-                      columns={set.columns}
-                      timer={set.timer}
-                      session={session}
-                      sqlId={set.sqlId}
-                      autoCommit={session?.params?.autoCommit}
-                      table={{
-                        tableName,
-                        columns: set.resultSetMetaData?.columnList
-                      }}
-                      disableEdit={
-                        !set.resultSetMetaData?.editable ||
-                        !!set.resultSetMetaData?.columnList?.filter((c) => !c)
-                          ?.length
-                      }
-                      rows={set.rows}
-                      enableRowId={true}
-                      originSql={set.originSql}
-                      resultHeight={resultHeight - TAB_HEADER_HEIGHT}
-                      generalSqlType={set.generalSqlType}
-                      traceId={set.traceId}
-                      onExport={
-                        set.allowExport
-                          ? (limit) => onExportResultSet(i, limit, tableName)
-                          : null
-                      }
-                      onShowExecuteDetail={() =>
-                        onShowExecuteDetail(set.initialSql, set.traceId)
-                      }
-                      onShowTrace={() =>
-                        onShowTrace(set.initialSql, set.traceId)
-                      }
-                      onSubmitRows={(newRows, limit, autoCommit, columns) =>
-                        onSubmitRows(
-                          i,
-                          newRows,
-                          limit,
-                          autoCommit,
-                          columns,
-                          set?.resultSetMetaData?.table?.databaseName
-                        )
-                      }
-                      onUpdateEditing={(editing) => onUpdateEditing(i, editing)}
-                      isEditing={editingMap[set.uniqKey]}
-                      withFullLinkTrace={set?.withFullLinkTrace}
-                      traceEmptyReason={set?.traceEmptyReason}
-                      withQueryProfile={set?.withQueryProfile}
-                    />
-                  )
-                };
-              }
-              if (isLogTab) {
-                const count = {
-                  [ISqlExecuteResultStatus.CREATED]: {
-                    lable: SqlExecuteResultStatusLabel.CREATED,
-                    count: set?.total
-                  },
-                  [ISqlExecuteResultStatus.SUCCESS]: {
-                    lable: SqlExecuteResultStatusLabel.SUCCESS,
-                    //执行成功
-                    count: 0
-                  },
+                [ISqlExecuteResultStatus.CANCELED]: {
+                  lable: SqlExecuteResultStatusLabel.CANCELED,
+                  //执行取消
+                  count: 0
+                }
+              };
 
-                  [ISqlExecuteResultStatus.FAILED]: {
-                    lable: SqlExecuteResultStatusLabel.FAILED,
-                    //执行失败
-                    count: 0
-                  },
+              set?.logTypeData?.forEach((item) => {
+                count[item.status].count += 1;
+                count[ISqlExecuteResultStatus.CREATED].count -= 1;
+              });
+              const hasError =
+                count[ISqlExecuteResultStatus.SUCCESS].count !==
+                set?.logTypeData?.length;
+              return {
+                label: (
+                  <BasicToolTip
+                    title={
+                      <pre style={{ marginBottom: 0 }}>
+                        {Object.entries(count)
+                          .map(([status, item]) => {
+                            return formatMessage(
+                              {
+                                id: 'odc.components.SQLResultSet.ItemcountSqlItemlabel',
+                                defaultMessage: '{itemCount} 条 SQL {itemLabel}'
+                              },
 
-                  [ISqlExecuteResultStatus.CANCELED]: {
-                    lable: SqlExecuteResultStatusLabel.CANCELED,
-                    //执行取消
-                    count: 0
-                  }
-                };
+                              { itemCount: item.count, itemLabel: item.lable }
+                            );
 
-                set?.logTypeData?.forEach((item) => {
-                  count[item.status].count += 1;
-                  count[ISqlExecuteResultStatus.CREATED].count -= 1;
-                });
-                const hasError =
-                  count[ISqlExecuteResultStatus.SUCCESS].count !==
-                  set?.logTypeData?.length;
-                return {
-                  label: (
-                    <Tooltip
-                      title={
-                        <pre style={{ marginBottom: 0 }}>
-                          {Object.entries(count)
-                            .map(([status, item]) => {
-                              return formatMessage(
-                                {
-                                  id: 'odc.components.SQLResultSet.ItemcountSqlItemlabel',
-                                  defaultMessage:
-                                    '{itemCount} 条 SQL {itemLabel}'
-                                },
-
-                                { itemCount: item.count, itemLabel: item.lable }
-                              );
-
-                              //`${item.count} 条 SQL ${item.lable}`
-                            })
-                            .join('\n')}
-                        </pre>
-                      }
-                    >
-                      <span className={styles.resultSetTitle}>
-                        {
-                          formatMessage({
-                            id: 'odc.components.SQLResultSet.Log',
-                            defaultMessage: '日志'
+                            //`${item.count} 条 SQL ${item.lable}`
                           })
+                          .join('\n')}
+                      </pre>
+                    }
+                  >
+                    <span className="resultSetTitle">
+                      {
+                        formatMessage({
+                          id: 'odc.components.SQLResultSet.Log',
+                          defaultMessage: '日志'
+                        })
 
-                          /* 日志 */
-                        }
-
-                        <span className={styles.extraStatusBox}>
-                          <Badge status={hasError ? 'error' : 'success'} />
-                        </span>
-                        <span className={styles.extraBox}>
-                          <CloseOutlined
-                            className={styles.closeBtn}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleCloseResultSet(set.uniqKey);
-                            }}
-                            style={{ fontSize: '8px' }}
-                          />
-                        </span>
-                      </span>
-                    </Tooltip>
-                  ),
-
-                  key: set.uniqKey,
-                  children: (
-                    <SQLResultLog
-                      resultHeight={resultHeight}
-                      resultSet={set}
-                      stopRunning={
-                        (ctx?.getSession() as SessionStore)?.params
-                          ?.killCurrentQuerySupported
-                          ? stopRunning
-                          : null
+                        /* 日志 */
                       }
-                      onOpenExecutingDetailModal={onOpenExecutingDetailModal}
-                      loading={sqlStore.logLoading}
-                      isSupportProfile={isSupportProfile}
-                    />
-                  )
-                };
-              }
-            })
-          )
-          .filter(Boolean)}
-      />
-    </>
+
+                      <span className="extraStatusBox">
+                        <Badge status={hasError ? 'error' : 'success'} />
+                      </span>
+                      <span className="extraBox">
+                        <CloseOutlined
+                          className="closeBtn"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleCloseResultSet(set.uniqKey);
+                          }}
+                          style={{ fontSize: '8px' }}
+                        />
+                      </span>
+                    </span>
+                  </BasicToolTip>
+                ),
+
+                key: set.uniqKey,
+                children: (
+                  <SQLResultLog
+                    resultHeight={resultHeight}
+                    resultSet={set}
+                    stopRunning={
+                      (ctx?.getSession() as SessionStore)?.params
+                        ?.killCurrentQuerySupported
+                        ? stopRunning
+                        : null
+                    }
+                    onOpenExecutingDetailModal={onOpenExecutingDetailModal}
+                    loading={sqlStore.logLoading}
+                    isSupportProfile={isSupportProfile}
+                  />
+                )
+              };
+            }
+          })
+        )
+        .filter(Boolean)}
+    />
   );
 };
 

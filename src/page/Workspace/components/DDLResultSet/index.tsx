@@ -76,13 +76,11 @@ import { useControllableValue, useUpdate } from 'ahooks';
 import {
   Checkbox,
   Col,
-  Input,
   InputNumber,
   message,
   Popover,
   Row,
   Spin,
-  Tooltip,
   Typography
 } from 'antd';
 import BigNumber from 'bignumber.js';
@@ -111,6 +109,11 @@ import ResultContext from './ResultContext';
 import StatusBar from './StatusBar';
 import { copyToSQL, getColumnNameByColumnKey } from './util';
 import Sync from './Sync';
+import {
+  BasicInputNumber,
+  BasicToolTip,
+  SearchInput
+} from '@actiontech/dms-kit';
 
 // @ts-ignore
 const ToolbarButton = Toolbar.Button;
@@ -252,7 +255,7 @@ const DDLResultSet: React.FC<IProps> = function (props) {
   /**
    * 表数据搜索
    */
-  const [searchKey, _setSearchKey] = useState('');
+  const [searchKey, setSearchKey] = useState('');
   /**
    * 列模式展示隐藏
    */
@@ -684,11 +687,10 @@ const DDLResultSet: React.FC<IProps> = function (props) {
     },
     [getMenus]
   );
-  const setSearchKey = useCallback(
+  const handleChangeSearchKey = useCallback(
     debounce(
       (v) => {
-        console.log(v);
-        _setSearchKey(v);
+        setSearchKey(v);
       },
       500,
       {
@@ -844,7 +846,7 @@ const DDLResultSet: React.FC<IProps> = function (props) {
           );
         } else {
           buttons.push(
-            <Tooltip
+            <BasicToolTip
               key="execute-plan-disabled"
               title={
                 [GeneralSQLType.DDL, GeneralSQLType.OTHER].includes(
@@ -868,7 +870,7 @@ const DDLResultSet: React.FC<IProps> = function (props) {
                 }}
                 disabled
               />
-            </Tooltip>
+            </BasicToolTip>
           );
         }
       }
@@ -1312,13 +1314,14 @@ const DDLResultSet: React.FC<IProps> = function (props) {
                     id: 'workspace.window.sql.limit',
                     defaultMessage: '展示数据量'
                   })}
-                  <InputNumber
+                  <BasicInputNumber
                     onInput={(limit) => {
                       if (limit == '' || isNil(limit)) {
                         setLimit(0);
                       }
                     }}
-                    onChange={(limit) => setLimit(limit || 0)}
+                    size="small"
+                    onChange={(limit) => setLimit(Number(limit) || 0)}
                     min={1}
                     precision={0}
                     placeholder={formatMessage({
@@ -1335,7 +1338,7 @@ const DDLResultSet: React.FC<IProps> = function (props) {
                   />
                 </>
               ) : null}
-              <Input.Search
+              <SearchInput
                 className={styles.search}
                 placeholder={
                   formatMessage({
@@ -1346,9 +1349,8 @@ const DDLResultSet: React.FC<IProps> = function (props) {
                   // 请输入关键字
                 }
                 onChange={(e) => {
-                  setSearchKey(e.target?.value);
+                  handleChangeSearchKey(e);
                 }}
-                onSearch={setSearchKey}
               />
             </span>
             <Popover

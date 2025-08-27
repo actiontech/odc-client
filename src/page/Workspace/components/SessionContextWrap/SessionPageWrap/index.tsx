@@ -19,7 +19,7 @@ import SessionContextWrap from '..';
 import SessionSelect from '../SessionSelect';
 
 import WorkSpacePageLoading from '@/component/Loading/WorkSpacePageLoading';
-import styles from './index.less';
+import { SessionWrapStyleWrapper, ContentStyleWrapper } from './style';
 
 interface IProps extends PropsWithChildren<any> {
   databaseId: number;
@@ -39,15 +39,15 @@ export function SessionPage({
     <SessionContextWrap useMaster={useMaster} defaultDatabaseId={databaseId}>
       {({ session }) => {
         return (
-          <div className={styles.sessionWrap}>
+          <SessionWrapStyleWrapper>
             <SessionSelect
               readonly={readonly}
               supportLocation={supportLocation}
             />
-            <div key={session?.sessionId} className={styles.content}>
+            <ContentStyleWrapper key={session?.sessionId}>
               {!session ? <WorkSpacePageLoading /> : children}
-            </div>
-          </div>
+            </ContentStyleWrapper>
+          </SessionWrapStyleWrapper>
         );
       }}
     </SessionContextWrap>

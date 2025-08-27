@@ -20,20 +20,15 @@ import type { SQLStore } from '@/store/sql';
 import { ReactComponent as WaitingSvg } from '@/svgr/Waiting.svg';
 import { formatMessage } from '@/util/intl';
 import { formatTimeTemplate } from '@/util/utils';
-import Icon, {
-  CheckCircleFilled,
-  CloseCircleFilled,
-  InfoCircleOutlined,
-  LoadingOutlined,
-  StopFilled
-} from '@ant-design/icons';
-import { Alert, message, Space, Table, Tooltip, Typography } from 'antd';
+import Icon, { LoadingOutlined, StopFilled } from '@ant-design/icons';
+import { Alert, message, Space, Typography } from 'antd';
 import BigNumber from 'bignumber.js';
 import { inject, observer } from 'mobx-react';
 import dayjs from 'dayjs';
 import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import DBTimeline from './DBTimeline';
-import styles from './index.less';
+import { BasicTable, BasicToolTip, formatTime } from '@actiontech/dms-kit';
+import { CheckCircleFilled, CloseCircleFilled } from '@actiontech/icons';
 
 const { Link } = Typography;
 
@@ -61,9 +56,7 @@ export function getResultText(rs: ISqlExecuteResult) {
 export const getSqlExecuteResultStatusIcon = (status) => {
   switch (status) {
     case ISqlExecuteResultStatus.SUCCESS: {
-      return (
-        <CheckCircleFilled style={{ color: 'var(--function-green6-color)' }} />
-      );
+      return <CheckCircleFilled />;
     }
     case ISqlExecuteResultStatus.FAILED: {
       return (
@@ -90,6 +83,7 @@ export const getSqlExecuteResultStatusIcon = (status) => {
 };
 
 const ExecuteHistory: React.FC<IProps> = function (props) {
+  const [messageApi, messageContextHolder] = message.useMessage();
   const {
     onShowExecuteDetail,
     resultHeight,
@@ -135,7 +129,7 @@ const ExecuteHistory: React.FC<IProps> = function (props) {
           defaultMessage: '状态'
         }),
 
-        width: 50,
+        width: 80,
         render: (value: ISqlExecuteResultStatus) =>
           getSqlExecuteResultStatusIcon(value)
       },
@@ -147,19 +141,22 @@ const ExecuteHistory: React.FC<IProps> = function (props) {
           defaultMessage: '时间'
         }),
 
-        width: isSmallMode ? 80 : 100,
+        width: isSmallMode ? 120 : 240,
         render: (_, record: ISqlExecuteResult) => {
           return record.timer
-            ? dayjs(
-                record.timer?.stages?.find(
-                  (item) => item.stageName === 'Execute'
-                )?.startTimeMillis
-              ).format('HH:mm:ss')
+            ? formatTime(
+                dayjs(
+                  record.timer?.stages?.find(
+                    (item) => item.stageName === 'Execute'
+                  )?.startTimeMillis
+                )
+              )
             : '-';
         }
       },
 
       {
+        // TODO SQLRender
         dataIndex: 'executeSql',
         title: formatMessage({
           id: 'workspace.window.sql.record.column.executeSql',
@@ -169,7 +166,7 @@ const ExecuteHistory: React.FC<IProps> = function (props) {
         width: isSmallMode ? 150 : 300,
         ellipsis: true,
         render: (value: string) => (
-          <Tooltip
+          <BasicToolTip
             placement="topLeft"
             title={
               <div
@@ -183,7 +180,7 @@ const ExecuteHistory: React.FC<IProps> = function (props) {
             }
           >
             {value || '-'}
-          </Tooltip>
+          </BasicToolTip>
         )
       },
 
@@ -198,7 +195,7 @@ const ExecuteHistory: React.FC<IProps> = function (props) {
           row.status === ISqlExecuteResultStatus.SUCCESS ? (
             getResultText(row)
           ) : (
-            <Tooltip
+            <BasicToolTip
               placement="topLeft"
               title={
                 <div
@@ -212,7 +209,7 @@ const ExecuteHistory: React.FC<IProps> = function (props) {
               }
             >
               {value || '-'}
-            </Tooltip>
+            </BasicToolTip>
           )
       },
 
@@ -253,7 +250,7 @@ const ExecuteHistory: React.FC<IProps> = function (props) {
           </span>
         ),
 
-        width: isSmallMode ? 80 : 100,
+        width: isSmallMode ? 100 : 120,
         render: (value: string, row: ISqlExecuteResult) => {
           const { timer } = row;
           const executeStage = timer?.stages?.find(
@@ -276,21 +273,17 @@ const ExecuteHistory: React.FC<IProps> = function (props) {
             <Space size={5}>
               <span>{DBCostTime}</span>
               {showDBTimeline ? (
-                <Tooltip
+                <BasicToolTip
                   overlayStyle={{ maxWidth: 370 }}
-                  color="var(--background-primary-color)"
                   overlayInnerStyle={{
                     maxHeight: 500,
-                    overflow: 'auto'
+                    overflow: 'auto',
+                    padding: 0
                   }}
                   placement="leftTop"
-                  showArrow={false}
                   title={<DBTimeline row={row} />}
-                >
-                  <InfoCircleOutlined
-                    style={{ color: 'var(--text-color-hint)' }}
-                  />
-                </Tooltip>
+                  prefixIcon
+                />
               ) : null}
             </Space>
           );
@@ -304,6 +297,7 @@ const ExecuteHistory: React.FC<IProps> = function (props) {
     resultHeight - TAB_HEADER_HEIGHT - 24 - (showTimeAlert ? 36 : 0) - 56;
   return (
     <>
+      {messageContextHolder}
       {showTimeAlert && (
         <Alert
           message={
@@ -337,22 +331,24 @@ const ExecuteHistory: React.FC<IProps> = function (props) {
 
             // `已选择 ${selectedRowKeys.length} 个记录`
           }
-          closeText={
-            <Typography.Text type="danger">
-              {
-                formatMessage({
-                  id: 'odc.components.SQLResultSet.ExecuteHistory.Delete',
-                  defaultMessage: '删除'
-                })
-                /* 删除 */
-              }
-            </Typography.Text>
-          }
+          closable={{
+            closeIcon: (
+              <Typography.Text type="danger">
+                {
+                  formatMessage({
+                    id: 'odc.components.SQLResultSet.ExecuteHistory.Delete',
+                    defaultMessage: '删除'
+                  })
+                  /* 删除 */
+                }
+              </Typography.Text>
+            )
+          }}
           type="error"
           onClose={() => {
             sqlStore.deleteRecords(selectedRowKeys);
             setSelectedRowKeys([]);
-            message.success(
+            messageApi.success(
               formatMessage({
                 id: 'odc.components.SQLResultSet.ExecuteHistory.Deleted',
                 defaultMessage: '删除成功'
@@ -362,45 +358,18 @@ const ExecuteHistory: React.FC<IProps> = function (props) {
           }}
         />
       ) : null}
-      <div ref={tableRef} className={styles.table}>
-        <Table
+      <div ref={tableRef}>
+        <BasicTable
           rowKey="id"
           className="o-table--no-lr-border"
-          bordered={true}
           columns={executeRecordColumns}
           dataSource={records}
           rowSelection={{
             selectedRowKeys,
-            selections: [
-              {
-                text: formatMessage({
-                  id: 'app.button.selectAll',
-                  defaultMessage: '全选'
-                }),
-                key: 'selectAll',
-                onSelect: () => {
-                  setSelectedRowKeys(records?.map((r) => r.id));
-                }
-              },
 
-              {
-                text: formatMessage({
-                  id: 'app.button.deselectAll',
-                  defaultMessage: '取消全选'
-                }),
-                key: 'deselectAll',
-                onSelect: () => {
-                  setSelectedRowKeys([]);
-                }
-              }
-            ],
-
-            onChange: (selectedRowKeys, selectedRows) => {
+            onChange: (selectedRowKeys) => {
               setSelectedRowKeys(selectedRowKeys);
             }
-          }}
-          scroll={{
-            y: tableHeight - (showDeleteAlert ? 50 : 0)
           }}
           pagination={{
             pageSize: Math.max(Math.ceil(tableHeight / 25), 2),

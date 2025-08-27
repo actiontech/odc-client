@@ -39,7 +39,7 @@ import EditToolbar from '../EditToolbar';
 import { removeGridParams } from '../helper';
 import { TableColumn } from '../interface';
 import TableCardLayout from '../TableCardLayout';
-import styles from './index.less';
+import { ColumnsContentStyleWrapper } from './style';
 interface IProps {
   isExternalTable?: boolean;
 }
@@ -109,7 +109,7 @@ const Columns: React.FC<IProps> = function ({ isExternalTable }) {
   );
 
   const onRowsChange = useCallback((rows) => {
-    let newRows: any[] = cloneDeep(rows);
+    const newRows: any[] = cloneDeep(rows);
     newRows.forEach((row) => {
       /**
        * 自增列去除表达式和默认值
@@ -126,10 +126,10 @@ const Columns: React.FC<IProps> = function ({ isExternalTable }) {
   }, []);
   const haveColumnExtra = !!ColumnExtraComponent;
   return (
-    <div className={styles.main}>
+    <ColumnsContentStyleWrapper className="main">
       <div
-        className={classnames(styles.content, {
-          [styles.contentWithExtraColumn]: haveColumnExtra
+        className={classnames('content', {
+          contentWithExtraColumn: haveColumnExtra
         })}
       >
         <TableCardLayout
@@ -197,7 +197,7 @@ const Columns: React.FC<IProps> = function ({ isExternalTable }) {
                       icon={DeleteOutlined}
                       disabled={!selectedRowsIdx?.length}
                       onClick={() => {
-                        let newRows = [...rows]?.filter((row, index) => {
+                        const newRows = [...rows]?.filter((row, index) => {
                           return !selectedRowsIdx?.includes(index);
                         });
                         if (editMode) {
@@ -246,7 +246,7 @@ const Columns: React.FC<IProps> = function ({ isExternalTable }) {
         </TableCardLayout>
       </div>
       {haveColumnExtra && (
-        <div className={styles.bottom}>
+        <div className="bottom">
           <ColumnExtraComponent
             originColumns={columns}
             column={rows[focusRowIdx]}
@@ -263,7 +263,7 @@ const Columns: React.FC<IProps> = function ({ isExternalTable }) {
           />
         </div>
       )}
-    </div>
+    </ColumnsContentStyleWrapper>
   );
 };
 

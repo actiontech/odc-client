@@ -20,10 +20,11 @@ import { DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons';
 
 // compatible
 
-import { Form, Input, Tooltip } from 'antd';
+import { Form, Input, Space, Tooltip } from 'antd';
 // @ts-ignore
 import { formatMessage } from '@/util/intl';
 import styles from './PartitionValueInput.less';
+import { BasicInput, BasicToolTip } from '@actiontech/dms-kit';
 
 interface PartitionValueInputProps {
   index: number;
@@ -110,7 +111,7 @@ class ToolTipInput extends React.PureComponent<ToolTipInputProos> {
   render() {
     const { minWidth } = this.props;
     return (
-      <Tooltip
+      <BasicToolTip
         trigger="focus"
         open={this.state.isShowTop}
         title={
@@ -121,9 +122,9 @@ class ToolTipInput extends React.PureComponent<ToolTipInputProos> {
           })
         }
         placement="topLeft"
-        arrowPointAtCenter
+        arrow={{ pointAtCenter: true }}
       >
-        <Input
+        <BasicInput
           {...this.props}
           // @ts-ignore
           ref={this.inputRef}
@@ -136,7 +137,7 @@ class ToolTipInput extends React.PureComponent<ToolTipInputProos> {
             });
           }}
         />
-      </Tooltip>
+      </BasicToolTip>
     );
   }
 }
@@ -238,7 +239,7 @@ class PartitionValueInput extends React.PureComponent<PartitionValueInputProps> 
               className={styles.inputGroupWrap}
               key={`list-colum-${i}`}
             >
-              <Input.Group compact>
+              <Space.Compact>
                 {selectColums.map((col) => {
                   const { columnName } = col;
                   return (
@@ -258,7 +259,7 @@ class PartitionValueInput extends React.PureComponent<PartitionValueInputProps> 
                     />
                   );
                 })}
-              </Input.Group>
+              </Space.Compact>
               {vauleList.length > 1 ? (
                 <DeleteOutlined
                   className={styles.close}
@@ -297,7 +298,7 @@ class PartitionValueInput extends React.PureComponent<PartitionValueInputProps> 
         validateStatus={error ? 'error' : null}
         help={error}
       >
-        <Input style={{ flex: 1 }} placeholder={placeholder} />
+        <BasicInput style={{ flex: 1 }} placeholder={placeholder} />
       </Form.Item>
     );
   }

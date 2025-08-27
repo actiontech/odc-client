@@ -19,10 +19,11 @@ import { formatMessage } from '@/util/intl';
  * 多行溢出文本 通用组件
  * 说明：若使用纯CSS的方式实现有兼容性问题
  */
-import { Button, Tooltip } from 'antd';
 import classNames from 'classnames';
 import React, { useEffect, useRef, useState } from 'react';
 import styles from './index.less';
+import { BasicToolTip } from '@actiontech/dms-kit';
+import { Button } from 'antd';
 
 interface IProps {
   content: React.ReactNode;
@@ -68,11 +69,11 @@ const MultiLineOverflowText: React.FC<IProps> = ({
           {content}
         </div>
       ) : (
-        <Tooltip title={content}>
+        <BasicToolTip title={content}>
           <div ref={contentRef} className={styles.content}>
             {content}
           </div>
-        </Tooltip>
+        </BasicToolTip>
       )}
 
       {isShowMore && overflow && (

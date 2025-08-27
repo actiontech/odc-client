@@ -17,13 +17,13 @@
 import { formatMessage } from '@/util/intl';
 import { EditOutlined } from '@ant-design/icons';
 import type { EditorProps } from '@oceanbase-odc/ob-react-data-grid';
-import { Modal } from 'antd';
 import type { ChangeEvent } from 'react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 
 import { CaseTextArea } from '@/component/Input/Case';
 import type { TextAreaRef } from 'antd/lib/input/TextArea';
 import AntdEditorWrap from './AntdEditorWrap';
+import { BasicModal } from '@actiontech/dms-kit';
 
 interface CaseOptions {
   caseSensitive: boolean;
@@ -90,7 +90,7 @@ export function CaseTextEditor<T>({
         </a>
       </div>
       {isShowTextModal ? (
-        <Modal
+        <BasicModal
           open={true}
           title={name}
           zIndex={1031}
@@ -120,7 +120,7 @@ export function CaseTextEditor<T>({
               setModalTextValue(e.target.value);
             }}
           />
-        </Modal>
+        </BasicModal>
       ) : null}
     </AntdEditorWrap>
   );

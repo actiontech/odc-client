@@ -20,6 +20,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { isString } from 'lodash';
 import AntdEditorWrap from './AntdEditorWrap';
+import { BasicSelect } from '@actiontech/dms-kit';
 
 const Option = Select.Option;
 
@@ -46,11 +47,10 @@ export function SelectEditor<T>({
   if (multiple && isString(realValue)) {
     realValue = realValue?.split(',');
   }
-  const editorRef = useRef<any>(null);
   const innerOnChange = useCallback(
     (value: string | string[]) => {
       console.log('onchange event');
-      let realValue = value;
+      const realValue = value;
       // if (isArray(value)) {
       //     realValue = value.join(',')
       // }
@@ -60,8 +60,7 @@ export function SelectEditor<T>({
   );
   return (
     <AntdEditorWrap>
-      <Select
-        ref={editorRef}
+      <BasicSelect
         open={open}
         autoFocus
         showSearch
@@ -106,7 +105,7 @@ export function SelectEditor<T>({
             </Option>
           );
         })}
-      </Select>
+      </BasicSelect>
     </AntdEditorWrap>
   );
 }

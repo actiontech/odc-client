@@ -88,3 +88,10 @@ export const TabBarExtraContentStyleWrapper = styled('span')`
     font-size: 16px;
   }
 `;
+
+export const WithConfirmModalStyleWrapper = styled('div')`
+  height: 100%;
+  overflow: auto;
+  background-color: ${({ theme }) => theme.sharedTheme.uiToken.colorBgBase};
+  position: relative;
+`;

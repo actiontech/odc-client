@@ -22,6 +22,7 @@ import TablePageContext from '../../../TablePage/context';
 import { getDefaultCollation } from '../../helper';
 import { TableColumn } from '../../interface';
 import TableContext from '../../TableContext';
+import { BasicSelect } from '@actiontech/dms-kit';
 
 const Option = Select.Option;
 
@@ -52,7 +53,7 @@ export default function ({ column, onChange }: IProps) {
               defaultMessage: '字符集'
             })} /*字符集*/
           >
-            <Select
+            <BasicSelect
               disabled={pageContext?.editMode && !isNil(ordinalPosition)}
               value={character}
               onChange={(v) => {
@@ -68,7 +69,7 @@ export default function ({ column, onChange }: IProps) {
                   {c}
                 </Option>
               ))}
-            </Select>
+            </BasicSelect>
           </Form.Item>
         </Col>
         <Col span={12}>
@@ -78,7 +79,7 @@ export default function ({ column, onChange }: IProps) {
               defaultMessage: '排序规则'
             })} /*排序规则*/
           >
-            <Select
+            <BasicSelect
               disabled={pageContext?.editMode && !isNil(ordinalPosition)}
               value={collation}
               onChange={(v) => {
@@ -90,7 +91,7 @@ export default function ({ column, onChange }: IProps) {
             >
               {collations
                 ?.filter((c) => {
-                  let _character = character || '';
+                  const _character = character || '';
                   return c.indexOf(_character) > -1;
                 })
                 .map((c) => (
@@ -98,7 +99,7 @@ export default function ({ column, onChange }: IProps) {
                     {c}
                   </Option>
                 ))}
-            </Select>
+            </BasicSelect>
           </Form.Item>
         </Col>
       </Row>

@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-import DataGrid, { DataGridRef } from '@oceanbase-odc/ob-react-data-grid';
+import { DataGridRef } from '@oceanbase-odc/ob-react-data-grid';
 import type { DataGridProps } from '@oceanbase-odc/ob-react-data-grid/lib/types';
 import React, { useRef } from 'react';
 import { SettingStore } from '@/store/setting';
 import classNames from 'classnames';
 import { inject, observer } from 'mobx-react';
-import styles from './index.less';
+import { EditableTableStyleWrapper } from './style';
 
 export interface RowType<R = any> {
   _created?: boolean;
@@ -98,7 +98,7 @@ export default inject('settingStore')(
       const innerGridRef = useRef<DataGridRef>(null);
 
       return (
-        <DataGrid
+        <EditableTableStyleWrapper
           initialRows={initialRows}
           initialColumns={initialColumns}
           rowKeyName={rowKey}
@@ -117,10 +117,9 @@ export default inject('settingStore')(
           style={{
             height: minHeight
           }}
-          className={classNames(
-            styles.fillGrid,
-            !bordered ? styles.removeBordered : ''
-          )}
+          className={classNames('fillGrid', {
+            removeBordered: !bordered
+          })}
           ref={(ref) => {
             innerGridRef.current = ref;
             //@ts-ignore

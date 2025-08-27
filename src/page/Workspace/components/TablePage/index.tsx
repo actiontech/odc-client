@@ -20,8 +20,7 @@ import { PageStore } from '@/store/page';
 import { SettingStore } from '@/store/setting';
 import { formatMessage } from '@/util/intl';
 import { ExportOutlined } from '@ant-design/icons';
-import { Radio, Space, Spin, Tabs } from 'antd';
-import type { RadioChangeEvent } from 'antd/lib/radio';
+import { Space, Spin, Tabs } from 'antd';
 import { inject, observer } from 'mobx-react';
 import React, {
   useCallback,
@@ -53,6 +52,8 @@ import SessionContext from '../SessionContextWrap/context';
 import WrapSessionPage from '../SessionContextWrap/SessionPageWrap';
 import styles from './index.less';
 import { isLogicalDatabase } from '@/util/database';
+import { BasicSegmented, BasicSegmentedProps } from '@actiontech/dms-kit';
+import { TableDetailInfoPageStyleWrapper } from './style';
 
 interface IProps {
   pageKey: string;
@@ -182,8 +183,8 @@ const TablePage: React.FC<IProps> = function ({
     }
   }, [params.propsTab, params.topTab]);
 
-  const handleTopTabChanged = (v: RadioChangeEvent) => {
-    const topTab = v.target.value;
+  const handleTopTabChanged: BasicSegmentedProps['onChange'] = (v) => {
+    const topTab = v;
 
     // 更新 url
     pageStore.updatePage(
@@ -214,28 +215,28 @@ const TablePage: React.FC<IProps> = function ({
 
   return table ? (
     <>
-      <div style={{ height: '100%', overflow: 'auto' }}>
-        <div className={styles.header}>
-          <Radio.Group
+      <TableDetailInfoPageStyleWrapper className="table-page">
+        <div className="header">
+          <BasicSegmented
             onChange={handleTopTabChanged}
-            value={topTab}
-            className={styles.topbar}
-          >
-            <Radio.Button value={TopTab.PROPS}>
-              {formatMessage({
-                id: 'workspace.window.table.toptab.props',
-                defaultMessage: '属性'
-              })}
-            </Radio.Button>
-            {!isLogicalDatabase(session?.odcDatabase) && (
-              <Radio.Button value={TopTab.DATA}>
-                {formatMessage({
+            options={[
+              {
+                label: formatMessage({
+                  id: 'workspace.window.table.toptab.props',
+                  defaultMessage: '属性'
+                }),
+                value: TopTab.PROPS
+              },
+              {
+                label: formatMessage({
                   id: 'workspace.window.table.toptab.data',
                   defaultMessage: '数据'
-                })}
-              </Radio.Button>
-            )}
-          </Radio.Group>
+                }),
+                value: TopTab.DATA
+              }
+            ]}
+            value={topTab}
+          />
           <Space>
             {settingStore.enableDBExport &&
             getDataSourceModeConfig(
@@ -279,7 +280,7 @@ const TablePage: React.FC<IProps> = function ({
           <Tabs
             defaultActiveKey={TopTab.PROPS}
             activeKey={topTab}
-            className={styles.topbarTab}
+            className="table-page-topbar-tab"
             animated={false}
             items={[
               {
@@ -287,9 +288,9 @@ const TablePage: React.FC<IProps> = function ({
                 label: '',
                 children: (
                   <Tabs
+                    className="table-page-props-tab"
                     activeKey={propsTab}
                     tabPosition="left"
-                    className={styles.propsTab}
                     onChange={handlePropsTabChanged}
                     items={[
                       {
@@ -313,11 +314,9 @@ const TablePage: React.FC<IProps> = function ({
                         }),
                         key: PropsTab.COLUMN,
                         children: (
-                          <Spin spinning={false}>
-                            <TableColumns
-                              isExternalTable={params.isExternalTable}
-                            />
-                          </Spin>
+                          <TableColumns
+                            isExternalTable={params.isExternalTable}
+                          />
                         )
                       },
                       // 外表不展示索引
@@ -327,20 +326,12 @@ const TablePage: React.FC<IProps> = function ({
                           id: 'workspace.window.table.propstab.index',
                           defaultMessage: '索引'
                         }),
-                        children: (
-                          <Spin spinning={false}>
-                            <TableIndexes />
-                          </Spin>
-                        )
+                        children: <TableIndexes />
                       },
                       // 外表不展示约束
                       enableConstraint &&
                         !isExternalTable && {
-                          children: (
-                            <Spin spinning={false}>
-                              <TableConstraints />
-                            </Spin>
-                          ),
+                          children: <TableConstraints />,
 
                           key: PropsTab.CONSTRAINT,
                           label: formatMessage({
@@ -356,11 +347,7 @@ const TablePage: React.FC<IProps> = function ({
                               id: 'workspace.window.table.propstab.partition',
                               defaultMessage: '分区'
                             }),
-                            children: (
-                              <Spin spinning={false}>
-                                <TablePartitions />
-                              </Spin>
-                            )
+                            children: <TablePartitions />
                           }
                         : null,
                       {
@@ -393,7 +380,7 @@ const TablePage: React.FC<IProps> = function ({
             ]}
           />
         </TablePageContext.Provider>
-      </div>
+      </TableDetailInfoPageStyleWrapper>
       <ShowExecuteModal
         session={session}
         ref={executeRef}

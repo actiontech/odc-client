@@ -28,7 +28,7 @@ import { SettingStore } from '@/store/setting';
 import { default as snippet, default as snippetStore } from '@/store/snippet';
 import editorUtils from '@/util/editor';
 import { getUnWrapedSnippetBody } from '@/util/snippet';
-import { Layout, message } from 'antd';
+import { message } from 'antd';
 import { inject, observer } from 'mobx-react';
 import React, { PureComponent } from 'react';
 import SplitPane from 'react-split-pane';
@@ -38,9 +38,13 @@ import TemplateInsertModal, {
   CLOSE_INSERT_PROMPT_KEY,
   getCopyText
 } from '../TemplateInsertModal';
-import styles from './index.less';
-
-const { Content } = Layout;
+import {
+  ScriptPageLayoutStyleWrapper,
+  ContentStyleWrapper,
+  StackListStyleWrapper,
+  StackItemStyleWrapper,
+  IconActiveStyleWrapper
+} from './style';
 
 interface IProps {
   settingStore?: SettingStore;
@@ -124,14 +128,8 @@ export default class ScriptPage extends PureComponent<IProps> {
     const { defaultValue } = editor;
 
     return (
-      <Layout
-        style={{
-          minHeight: 'auto',
-          height: '100%',
-          background: 'var(--background-primary-color)'
-        }}
-      >
-        <Content style={{ position: 'relative' }}>
+      <ScriptPageLayoutStyleWrapper>
+        <ContentStyleWrapper>
           {toolbar && (
             <EditorToolBar
               {...toolbar}
@@ -150,22 +148,21 @@ export default class ScriptPage extends PureComponent<IProps> {
           )}
 
           {isShowDebugStackBar ? (
-            <div className={styles.stackList}>
+            <StackListStyleWrapper>
               {stackbar.list.map((stack) => {
                 return (
-                  <div
-                    className="stack-item"
+                  <StackItemStyleWrapper
                     onClick={() => {
                       stackbar.onClick(stack);
                     }}
                     title={stack.plName}
                   >
                     {stack.plName}{' '}
-                    {stack.isActive && <i className="icon-active" />}
-                  </div>
+                    {stack.isActive && <IconActiveStyleWrapper />}
+                  </StackItemStyleWrapper>
                 );
               })}
-            </div>
+            </StackListStyleWrapper>
           ) : null}
           <DropWrapper
             style={{
@@ -178,7 +175,7 @@ export default class ScriptPage extends PureComponent<IProps> {
               left: 0,
               right: 0
             }}
-            onHover={(item, monitor) => {
+            onHover={(_, monitor) => {
               ctx.editor?.focus();
               const clientOffset = monitor.getClientOffset();
               editorUtils.updateEditorCursorPositionByClientPosition(
@@ -189,7 +186,7 @@ export default class ScriptPage extends PureComponent<IProps> {
                 }
               );
             }}
-            onDrop={async (item, monitor) => {
+            onDrop={async () => {
               const snippetBody = snippetStore.snippetDragging?.body;
               if (!snippetBody) {
                 return;
@@ -264,7 +261,7 @@ export default class ScriptPage extends PureComponent<IProps> {
             />
           </DropWrapper>
           {this.props.Others}
-        </Content>
+        </ContentStyleWrapper>
         {editor?.enableSnippet && ctx.state.showGrammerHelpSider ? (
           <GrammerHelpSider
             collapsed={!ctx.state.showGrammerHelpSider}
@@ -273,24 +270,15 @@ export default class ScriptPage extends PureComponent<IProps> {
             }}
           />
         ) : null}
-      </Layout>
+      </ScriptPageLayoutStyleWrapper>
     );
   };
 
   render() {
     const { statusBar, style, Result, ctx, session } = this.props;
-    const { templateInsertModalVisible, templateName, offset } = this.state;
+    const { templateInsertModalVisible, templateName } = this.state;
     return (
-      <Layout
-        style={{
-          ...{
-            minHeight: 'auto',
-            height: '100%',
-            background: 'var(--background-primary-color)'
-          },
-          ...style
-        }}
-      >
+      <ScriptPageLayoutStyleWrapper style={style}>
         {Result ? (
           <SplitPane
             split="horizontal"
@@ -341,7 +329,7 @@ export default class ScriptPage extends PureComponent<IProps> {
         />
 
         <CustomDragLayer />
-      </Layout>
+      </ScriptPageLayoutStyleWrapper>
     );
   }
 }

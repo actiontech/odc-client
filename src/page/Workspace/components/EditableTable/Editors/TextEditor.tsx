@@ -17,12 +17,12 @@
 import { formatMessage } from '@/util/intl';
 import { EditOutlined } from '@ant-design/icons';
 import type { EditorProps } from '@oceanbase-odc/ob-react-data-grid';
-import { Input, Modal } from 'antd';
 import type { ChangeEvent } from 'react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 
 import type { TextAreaRef } from 'antd/lib/input/TextArea';
 import AntdEditorWrap from './AntdEditorWrap';
+import { BasicInput, BasicModal } from '@actiontech/dms-kit';
 
 export function TextEditor<T>({
   row,
@@ -48,7 +48,7 @@ export function TextEditor<T>({
   return (
     <AntdEditorWrap>
       <div>
-        <Input.TextArea
+        <BasicInput.TextArea
           ref={editorRef}
           autoFocus
           onFocus={() => {
@@ -82,7 +82,7 @@ export function TextEditor<T>({
         </a>
       </div>
       {isShowTextModal ? (
-        <Modal
+        <BasicModal
           open={true}
           title={name}
           zIndex={1031}
@@ -98,7 +98,7 @@ export function TextEditor<T>({
             onRowChange({ ...row, [key]: modalTextValue }, true);
           }}
         >
-          <Input.TextArea
+          <BasicInput.TextArea
             autoFocus
             autoSize={{ minRows: 15, maxRows: 15 }}
             value={modalTextValue}
@@ -111,7 +111,7 @@ export function TextEditor<T>({
               setModalTextValue(e.target.value);
             }}
           />
-        </Modal>
+        </BasicModal>
       ) : null}
     </AntdEditorWrap>
   );

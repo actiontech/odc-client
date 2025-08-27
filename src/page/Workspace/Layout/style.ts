@@ -36,7 +36,8 @@ export const WorkspaceLayoutStyleWrapper = styled('div')`
       background-color: ${({ theme }) => theme.sharedTheme.uiToken.colorBgBase};
       border-left: 1px solid
         ${({ theme }) => theme.sharedTheme.uiToken.colorBorderSecondary};
-      .ant-tabs {
+
+      .window-manager-wrapper-tabs.ant-tabs {
         height: 100%;
         .ant-tabs-content-holder {
           height: 100%;

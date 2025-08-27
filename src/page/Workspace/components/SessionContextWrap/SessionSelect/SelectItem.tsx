@@ -29,10 +29,10 @@ import React, { useEffect, useState } from 'react';
 import SessionContext from '../context';
 import { DEFALT_WIDTH } from './const';
 import { IDatabase } from '@/d.ts/database';
-import styles from './index.less';
 import SessionDropdown, {
   ISessionDropdownFiltersProps
 } from './SessionDropdown';
+import { EllipsisStyleWrapper } from './style';
 
 interface IProps {
   value?: number;
@@ -153,12 +153,9 @@ const SelectItem: React.FC<IProps> = ({
                 verticalAlign: 'textBottom'
               }}
             />
-            <span
-              className={styles.ellipsis}
-              title={logicalDatabase?.data?.name}
-            >
+            <EllipsisStyleWrapper title={logicalDatabase?.data?.name}>
               {logicalDatabase?.data?.name}
-            </span>
+            </EllipsisStyleWrapper>
           </>
         </div>
       );
@@ -221,7 +218,6 @@ const SelectItem: React.FC<IProps> = ({
             placeholder={getPlaceholder()}
             style={{ width: width || DEFALT_WIDTH }}
             open={false}
-            className={styles.select}
           />
         </SessionDropdown>
         {value && database?.data ? (

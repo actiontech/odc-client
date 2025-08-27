@@ -459,6 +459,9 @@ const ResourceTree: React.FC<IProps> = function ({
     },
     [sessionIds]
   );
+
+  console.log(wrapperHeight, 'wrapperHeight');
+
   return (
     <>
       <div className={styles.resourceTree}>

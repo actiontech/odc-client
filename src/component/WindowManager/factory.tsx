@@ -16,11 +16,12 @@
 
 import { IPage } from '@/d.ts';
 import { QuestionCircleFilled } from '@ant-design/icons';
-import { Button, Modal } from 'antd';
 import { Component, ReactNode } from 'react';
 
 import { formatMessage } from '@/util/intl';
 import styles from './index.less';
+import { WithConfirmModalStyleWrapper } from './style';
+import { BasicButton, BasicModal } from '@actiontech/dms-kit';
 
 export default function withConfirmModal(WrappedComponent: any) {
   return class extends Component<
@@ -103,15 +104,7 @@ export default function withConfirmModal(WrappedComponent: any) {
         closeImmediately
       } = this.state;
       return (
-        <div
-          style={{
-            // 减去 topbar 和 tabbar 高度
-            height: '100%',
-            background: 'var(--background-secondry-color)',
-            position: 'relative',
-            overflow: 'auto'
-          }}
-        >
+        <WithConfirmModalStyleWrapper className="with-confirm-modal">
           <WrappedComponent
             pageKey={pageKey}
             page={page}
@@ -140,7 +133,7 @@ export default function withConfirmModal(WrappedComponent: any) {
           />
 
           {showUnsavedModal && (
-            <Modal
+            <BasicModal
               className={styles.modal}
               centered={true}
               open={showUnsavedModal}
@@ -148,7 +141,7 @@ export default function withConfirmModal(WrappedComponent: any) {
               onCancel={onCancelUnsavedModal}
               footer={[
                 !disableUnsavedModalCloseUnsaveButton && (
-                  <Button
+                  <BasicButton
                     key="close"
                     onClick={() => onCloseUnsavedModal(pageKey)}
                   >
@@ -156,16 +149,16 @@ export default function withConfirmModal(WrappedComponent: any) {
                       id: 'app.button.dontsave',
                       defaultMessage: '不保存'
                     })}
-                  </Button>
+                  </BasicButton>
                 ),
 
-                <Button key="back" onClick={onCancelUnsavedModal}>
+                <BasicButton key="back" onClick={onCancelUnsavedModal}>
                   {formatMessage({
                     id: 'app.button.cancel',
                     defaultMessage: '取消'
                   })}
-                </Button>,
-                <Button
+                </BasicButton>,
+                <BasicButton
                   key="submit"
                   type="primary"
                   onClick={() =>
@@ -173,7 +166,7 @@ export default function withConfirmModal(WrappedComponent: any) {
                   }
                 >
                   {unsavedModalSaveButtonText}
-                </Button>
+                </BasicButton>
               ]}
             >
               <div className="ant-modal-confirm-body">
@@ -185,9 +178,9 @@ export default function withConfirmModal(WrappedComponent: any) {
                   {unsavedModalContent}
                 </div>
               </div>
-            </Modal>
+            </BasicModal>
           )}
-        </div>
+        </WithConfirmModalStyleWrapper>
       );
     }
   };

@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-import { Input, InputRef } from 'antd';
+import { BasicInput } from '@actiontech/dms-kit';
+import { InputRef } from 'antd';
 import { InputProps } from 'antd/lib/input';
 import BigNumber from 'bignumber.js';
 import React, { useRef, useState } from 'react';
@@ -37,9 +38,9 @@ const InputBigNumber: React.FC<IProps> = React.forwardRef(function (
 ) {
   let { max, min, value: inValue, onChange, isInt, inputRef, ...rest } = props;
   const [, forceUpdate] = useState(0);
-  let bigMax =
+  const bigMax =
     typeof max == 'undefined' ? new BigNumber(Infinity) : new BigNumber(max);
-  let bigMin =
+  const bigMin =
     typeof min == 'undefined' ? new BigNumber(-Infinity) : new BigNumber(min);
   if (typeof inValue === 'number') {
     /**
@@ -51,7 +52,7 @@ const InputBigNumber: React.FC<IProps> = React.forwardRef(function (
    * input的实际值
    */
   const inputValue = useRef(null);
-  if ((props as Object).hasOwnProperty('value')) {
+  if ((props as object).hasOwnProperty('value')) {
     inputValue.current = inValue;
   }
 
@@ -121,7 +122,7 @@ const InputBigNumber: React.FC<IProps> = React.forwardRef(function (
     },
     value: inputValue.current
   };
-  return <Input ref={inputRef} {...inputProps} {...rest} />;
+  return <BasicInput ref={inputRef} {...inputProps} {...rest} />;
 });
 
 export default InputBigNumber;

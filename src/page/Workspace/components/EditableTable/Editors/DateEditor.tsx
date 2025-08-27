@@ -27,6 +27,7 @@ import { isNil } from 'lodash';
 import { PickerMode } from 'rc-picker/es/interface';
 import ResultContext from '../../DDLResultSet/ResultContext';
 import AntdEditorWrap from './AntdEditorWrap';
+import { BasicDatePicker } from '@actiontech/dms-kit';
 
 interface IProps<T> extends EditorProps<T> {
   picker: PickerMode;
@@ -136,7 +137,7 @@ export function CommonDateEditor<T>({
         />
       ) : (
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          <DatePicker
+          <BasicDatePicker
             ref={editorRef}
             /**
              * 不要开启这个配置，交互行为会不顺畅
@@ -249,7 +250,7 @@ export function NlsEditor<T>({ row, onRowChange, column, width }: IProps<T>) {
   );
   const innerOnPointChange = useCallback(
     (value: dayjs.Dayjs) => {
-      let stringValue = value?.format('YYYY-MM-DD HH:mm:ss');
+      const stringValue = value?.format('YYYY-MM-DD HH:mm:ss');
       const targetValue =
         stringValue + '.' + (pointRef.current?.input?.value || 0);
       async function updateValue() {

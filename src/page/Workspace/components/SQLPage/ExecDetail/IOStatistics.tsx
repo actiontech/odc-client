@@ -17,61 +17,61 @@
 import { ISQLExecuteDetail } from '@/d.ts';
 import { formatMessage } from '@/util/intl';
 import { Card, Col, Row, Statistic } from 'antd';
-import classNames from 'classnames';
-import styles from './index.less';
+import { IOStatisticsCardStyleWrapper } from './style';
 const IOStatistics: React.FC<{
   sqlExecuteDetailToShow: ISQLExecuteDetail;
 }> = ({ sqlExecuteDetailToShow }) => {
   return (
-    <Card
-      title={formatMessage({
-        id: 'workspace.window.sql.explain.tab.detail.card.io.title',
-        defaultMessage: 'I/O 统计'
-      })}
-      headStyle={{
-        padding: '0 16px',
-        fontSize: 14,
-        border: 'none'
-      }}
-      bodyStyle={{
-        height: 158,
-        padding: 16
-      }}
-      className={classNames([styles.card, styles.ioCard])}
-    >
-      <Row>
-        <Col span={8}>
-          <Statistic
-            title={formatMessage({
-              id: 'workspace.window.sql.explain.tab.detail.card.io.rpcCount',
-              defaultMessage: 'RPC（次）'
-            })}
-            value={sqlExecuteDetailToShow?.rpcCount}
-            valueStyle={{ fontSize: '24px' }}
-          />
-        </Col>
-        <Col span={8}>
-          <Statistic
-            title={formatMessage({
-              id: 'workspace.window.sql.explain.tab.detail.card.io.physicalRead',
-              defaultMessage: '物理读（次）'
-            })}
-            value={sqlExecuteDetailToShow?.physicalRead}
-            valueStyle={{ fontSize: '24px' }}
-          />
-        </Col>
-        <Col span={8}>
-          <Statistic
-            title={formatMessage({
-              id: 'workspace.window.sql.explain.tab.detail.card.io.ssstoreRead',
-              defaultMessage: 'SSSTORE 中读取（行）'
-            })}
-            value={sqlExecuteDetailToShow?.ssstoreRead}
-            valueStyle={{ fontSize: '24px' }}
-          />
-        </Col>
-      </Row>
-    </Card>
+    <IOStatisticsCardStyleWrapper>
+      <Card
+        title={formatMessage({
+          id: 'workspace.window.sql.explain.tab.detail.card.io.title',
+          defaultMessage: 'I/O 统计'
+        })}
+        headStyle={{
+          padding: '0 16px',
+          fontSize: 14,
+          border: 'none'
+        }}
+        bodyStyle={{
+          height: 158,
+          padding: 16
+        }}
+      >
+        <Row>
+          <Col span={8}>
+            <Statistic
+              title={formatMessage({
+                id: 'workspace.window.sql.explain.tab.detail.card.io.rpcCount',
+                defaultMessage: 'RPC（次）'
+              })}
+              value={sqlExecuteDetailToShow?.rpcCount}
+              valueStyle={{ fontSize: '24px' }}
+            />
+          </Col>
+          <Col span={8}>
+            <Statistic
+              title={formatMessage({
+                id: 'workspace.window.sql.explain.tab.detail.card.io.physicalRead',
+                defaultMessage: '物理读（次）'
+              })}
+              value={sqlExecuteDetailToShow?.physicalRead}
+              valueStyle={{ fontSize: '24px' }}
+            />
+          </Col>
+          <Col span={8}>
+            <Statistic
+              title={formatMessage({
+                id: 'workspace.window.sql.explain.tab.detail.card.io.ssstoreRead',
+                defaultMessage: 'SSSTORE 中读取（行）'
+              })}
+              value={sqlExecuteDetailToShow?.ssstoreRead}
+              valueStyle={{ fontSize: '24px' }}
+            />
+          </Col>
+        </Row>
+      </Card>
+    </IOStatisticsCardStyleWrapper>
   );
 };
 export default IOStatistics;

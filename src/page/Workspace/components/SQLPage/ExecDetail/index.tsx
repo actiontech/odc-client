@@ -43,7 +43,7 @@ import SessionStore from '@/store/sessionManager/session';
 import setting from '@/store/setting';
 import SQLExplain from '../../SQLExplain';
 import BasicInfo from './BasicInfo';
-import styles from './index.less';
+import { ExplainDrawerStyleWrapper } from './style';
 import IOStatistics from './IOStatistics';
 import TimeStatistics from './TimeStatistics';
 
@@ -237,65 +237,66 @@ const ExecDetail: React.FC<IProps> = function (props) {
   }, []);
 
   return (
-    <Drawer
-      title={formatMessage({
-        id: 'workspace.window.sql.explain.tab.detail.title',
-        defaultMessage: '执行详情'
-      })}
-      placement="right"
-      closable
-      onClose={() => {
-        onClose();
-      }}
-      destroyOnClose={true}
-      width="96vw"
-      open={visible}
-      rootClassName={styles.explainDrawer}
-      bodyStyle={{
-        position: 'absolute',
-        top: 55,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        overflow: 'auto'
-      }}
-    >
-      <div
-        style={{
-          width: '100%',
-          minWidth: 1280
+    <ExplainDrawerStyleWrapper>
+      <Drawer
+        title={formatMessage({
+          id: 'workspace.window.sql.explain.tab.detail.title',
+          defaultMessage: '执行详情'
+        })}
+        placement="right"
+        closable
+        onClose={() => {
+          onClose();
+        }}
+        destroyOnClose={true}
+        width="96vw"
+        open={visible}
+        bodyStyle={{
+          position: 'absolute',
+          top: 55,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          overflow: 'auto'
         }}
       >
-        <Spin spinning={loadingExplain}>
-          <Row
-            gutter={16}
-            justify="space-between"
-            style={{
-              marginBottom: 16
-            }}
-          >
-            <Col span={8}>
-              <BasicInfo sqlExecuteDetailToShow={sqlExecuteDetailToShow} />
-            </Col>
-            <Col span={8}>
-              <TimeStatistics stackBarBox={stackBarBox} />
-            </Col>
-            <Col span={8}>
-              <IOStatistics sqlExecuteDetailToShow={sqlExecuteDetailToShow} />
-            </Col>
-          </Row>
-        </Spin>
-        <Spin spinning={loadingExplain}>
-          <SQLExplain
-            tableHeight={300}
-            sql={sqlExecuteDetailToShow?.sql ?? sql}
-            explain={sqlExecuteExplainToShow}
-            session={session}
-            traceId={traceId}
-          />
-        </Spin>
-      </div>
-    </Drawer>
+        <div
+          style={{
+            width: '100%',
+            minWidth: 1280
+          }}
+        >
+          <Spin spinning={loadingExplain}>
+            <Row
+              gutter={16}
+              justify="space-between"
+              style={{
+                marginBottom: 16
+              }}
+            >
+              <Col span={8}>
+                <BasicInfo sqlExecuteDetailToShow={sqlExecuteDetailToShow} />
+              </Col>
+              <Col span={8}>
+                <TimeStatistics stackBarBox={stackBarBox} />
+              </Col>
+              <Col span={8}>
+                <IOStatistics sqlExecuteDetailToShow={sqlExecuteDetailToShow} />
+              </Col>
+            </Row>
+          </Spin>
+          <Spin spinning={loadingExplain}>
+            <SQLExplain
+              tableHeight={300}
+              sql={sqlExecuteDetailToShow?.sql ?? sql}
+              explain={sqlExecuteExplainToShow}
+              session={session}
+              traceId={traceId}
+            />
+          </Spin>
+        </div>
+      </Drawer>
+    </ExplainDrawerStyleWrapper>
   );
 };
 

@@ -15,18 +15,11 @@
  */
 
 import { removeTableQuote } from '@/util/sql';
-import { getQuoteTableName } from '@/util/utils';
-import { Input, InputProps } from 'antd';
+import { BasicInput } from '@actiontech/dms-kit';
+import { InputProps } from 'antd';
 import { InputRef, TextAreaProps } from 'antd/lib/input';
 import { TextAreaRef } from 'antd/lib/input/TextArea';
-import React, {
-  forwardRef,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState
-} from 'react';
+import React, { forwardRef, useEffect, useMemo, useRef, useState } from 'react';
 
 interface Options {
   caseSensitive?: boolean;
@@ -122,7 +115,7 @@ export function CaseInput(props: InputProps & WrapProps) {
     [caseSensitive, escapes]
   );
   return (
-    <Input
+    <BasicInput
       ref={inputRef}
       {...rest}
       value={innerValue}
@@ -179,7 +172,7 @@ const CaseTextArea = forwardRef<TextAreaRef, ICaseTextAreaProps>(
       [caseSensitive, escapes]
     );
     return (
-      <Input.TextArea
+      <BasicInput.TextArea
         ref={(_ref) => {
           inputRef.current = _ref;
           if (typeof ref === 'function') {
@@ -257,7 +250,7 @@ const CaseEditableText: React.FC<CaseEditableTextProps> = React.memo(
     }
 
     return (
-      <Input
+      <BasicInput
         autoFocus={true}
         size="small"
         style={{ minWidth: '50px' }}

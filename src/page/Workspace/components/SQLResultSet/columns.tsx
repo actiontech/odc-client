@@ -43,7 +43,7 @@ const getColumns = (
       //'序号'
       dataIndex: 'row',
       key: 'row',
-      width: 60
+      width: 100
     },
     {
       title: formatMessage({

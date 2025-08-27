@@ -28,7 +28,17 @@ import React, {
 } from 'react';
 import SessionContext from '../../context';
 import { DEFALT_HEIGHT, DEFALT_WIDTH } from '../const';
-import styles from './index.less';
+import {
+  MainStyleWrapper,
+  HeaderStyleWrapper,
+  SearchStyleWrapper,
+  GroupIconStyleWrapper,
+  FooterStyleWrapper,
+  SessionSelectPopoverStyleWrapper,
+  TreeContainerStyleWrapper,
+  TreeStyleWrapper,
+  TextOverflowStyleWrapper
+} from './style';
 import Search, { SearchType } from './components/Search';
 import Group from '@/page/Workspace/SideBar/ResourceTree/DatabaseGroup';
 import { DatabaseGroup } from '@/d.ts/database';
@@ -408,7 +418,9 @@ const SessionDropdown: React.FC<IProps> = (props) => {
                 placement={'right'}
                 content={<ConnectionPopover connection={dataSource} />}
               >
-                <div className={styles.textoverflow}>{dataSource?.name}</div>
+                <TextOverflowStyleWrapper>
+                  {dataSource?.name}
+                </TextOverflowStyleWrapper>
               </Popover>
             ),
 
@@ -530,9 +542,8 @@ const SessionDropdown: React.FC<IProps> = (props) => {
 
   function TreeRender() {
     return (
-      <Tree
+      <TreeStyleWrapper
         ref={treeRef}
-        className={styles.tree}
         expandAction="click"
         height={215}
         onSelect={async (_, info) => {
@@ -580,7 +591,7 @@ const SessionDropdown: React.FC<IProps> = (props) => {
   function footerRender() {
     if (!checkModeConfig || !treeData?.length) return;
     return (
-      <div className={styles.footer}>
+      <FooterStyleWrapper>
         {checkedKeys.length !== canCheckedDbKeys?.length && (
           <Button
             type="link"
@@ -612,7 +623,7 @@ const SessionDropdown: React.FC<IProps> = (props) => {
             })}
           </Button>
         )}
-      </div>
+      </FooterStyleWrapper>
     );
   }
 
@@ -627,10 +638,9 @@ const SessionDropdown: React.FC<IProps> = (props) => {
   }, [context.datasourceMode, tab]);
 
   return (
-    <Popover
+    <SessionSelectPopoverStyleWrapper
       trigger={['click']}
       placement="bottom"
-      overlayClassName={styles.sessionSelectPopover}
       open={isOpen}
       showArrow={false}
       onOpenChange={onOpen}
@@ -638,11 +648,8 @@ const SessionDropdown: React.FC<IProps> = (props) => {
       content={
         disabled ? null : (
           <Spin spinning={loading || fetchLoading || databaseHistoryLoading}>
-            <div className={styles.main}>
-              <div
-                className={styles.header}
-                style={{ width: width || DEFALT_WIDTH }}
-              >
+            <MainStyleWrapper>
+              <HeaderStyleWrapper style={{ width: width || DEFALT_WIDTH }}>
                 {!context.datasourceMode &&
                   !checkModeConfig &&
                   !userStore.isPrivateSpace() && (
@@ -659,18 +666,17 @@ const SessionDropdown: React.FC<IProps> = (props) => {
                   />
                 )}
                 {!context.datasourceMode && tab === TabsType.all && (
-                  <span className={styles.groupIcon}>
+                  <GroupIconStyleWrapper>
                     <Group setGroupMode={setGroupMode} groupMode={groupMode} />
-                  </span>
+                  </GroupIconStyleWrapper>
                 )}
-              </div>
-              <div
+              </HeaderStyleWrapper>
+              <TreeContainerStyleWrapper
                 style={{ height: DEFALT_HEIGHT, width: width || DEFALT_WIDTH }}
-                className={styles.treeContainer}
               >
                 {treeData?.length > 0 ? TreeRender() : empty}
-              </div>
-            </div>
+              </TreeContainerStyleWrapper>
+            </MainStyleWrapper>
 
             {footerRender()}
           </Spin>
@@ -678,7 +684,7 @@ const SessionDropdown: React.FC<IProps> = (props) => {
       }
     >
       {children}
-    </Popover>
+    </SessionSelectPopoverStyleWrapper>
   );
 };
 export default inject(

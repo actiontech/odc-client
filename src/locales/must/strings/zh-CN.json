@@ -201,6 +201,7 @@
   "workspace.window.createProcedure.success": "创建存储过程成功",
   "odc.ExportDrawer.ExportForm.EnterTheNumberOfBatch": "请填写批量提交数量",
   "app.button.cancel": "取消",
+  "app.button.confirm": "确认",
   "odc.component.SaveSQLModal.CannotContainBlankCharacters": "不能含有空白字符",
   "workspace.window.createTable.column.name.validation": "请填写字段名称",
   "register.success": "注册用户成功",

@@ -16,7 +16,7 @@
 
 import { EditorProps } from '@oceanbase-odc/ob-react-data-grid';
 import { InputRef } from 'antd';
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useRef } from 'react';
 
 import InputBigNumber from '@/component/InputBigNumber';
 import AntdEditorWrap from './AntdEditorWrap';

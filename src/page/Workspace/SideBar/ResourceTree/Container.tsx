@@ -89,13 +89,7 @@ export default inject(
     }, []);
 
     if (loading) {
-      return (
-        <div
-          style={{ display: 'flex', justifyContent: 'center', paddingTop: 20 }}
-        >
-          <Spin />
-        </div>
-      );
+      return <Spin spinning delay={200} />;
     }
     return (
       <TreeStateStore.Provider

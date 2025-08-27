@@ -18,7 +18,7 @@ import { CaseInput } from '@/component/Input/Case';
 import { columnGroupsText } from '@/constant/label';
 import { ColumnStoreType, DBDefaultStoreType } from '@/d.ts/table';
 import { formatMessage } from '@/util/intl';
-import { Col, Form, Input, Row, Select } from 'antd';
+import { Col, Form, Row } from 'antd';
 import { FormInstance } from 'antd/es/form/Form';
 import React, { useContext, useEffect, useImperativeHandle } from 'react';
 import { useDataSourceConfig, useTableConfig } from '../config';
@@ -27,14 +27,13 @@ import TableContext from '../TableContext';
 import styles from './index.less';
 import { DBType } from '@/d.ts/database';
 import LogicTableBaseInfo from './LogicTableBaseInfo';
+import { BasicInput, BasicSelect } from '@actiontech/dms-kit';
 
 interface IProps {
   isEdit?: boolean;
   formRef?: React.Ref<FormInstance<any>>;
   dbType?: DBType;
 }
-
-const { Option } = Select;
 
 const CreateTableBaseInfoForm: React.FC<IProps> = (props) => {
   const { isEdit, formRef, dbType } = props;
@@ -154,7 +153,7 @@ const CreateTableBaseInfoForm: React.FC<IProps> = (props) => {
                   }
                 ]}
               >
-                <Select
+                <BasicSelect
                   disabled={isEdit}
                   showSearch
                   onSelect={(v) => {
@@ -162,13 +161,8 @@ const CreateTableBaseInfoForm: React.FC<IProps> = (props) => {
                       collation: getDefaultCollation(v.toString(), collations)
                     });
                   }}
-                >
-                  {charsets?.map((c) => (
-                    <Option key={c} value={c}>
-                      {c}
-                    </Option>
-                  ))}
-                </Select>
+                  options={charsets?.map((c) => ({ label: c, value: c }))}
+                />
               </Form.Item>
             </Col>
             <Col span={layout.pop()}>
@@ -192,19 +186,17 @@ const CreateTableBaseInfoForm: React.FC<IProps> = (props) => {
                       ]}
                       shouldUpdate
                     >
-                      <Select disabled={isEdit} showSearch>
-                        {collations
+                      <BasicSelect
+                        disabled={isEdit}
+                        showSearch
+                        options={collations
                           ?.filter((c) => {
                             const character =
                               getFieldValue('character') || 'utf8mb4';
                             return c.indexOf(character) > -1;
                           })
-                          .map((c) => (
-                            <Option key={c} value={c}>
-                              {c}
-                            </Option>
-                          ))}
-                      </Select>
+                          .map((c) => ({ label: c, value: c }))}
+                      />
                     </Form.Item>
                   );
                 }}
@@ -222,7 +214,7 @@ const CreateTableBaseInfoForm: React.FC<IProps> = (props) => {
                 defaultMessage: '存储模式'
               })}
             >
-              <Select
+              <BasicSelect
                 mode="multiple"
                 showSearch
                 allowClear
@@ -251,7 +243,7 @@ const CreateTableBaseInfoForm: React.FC<IProps> = (props) => {
           style={{ width: '100%' }}
           required={false}
         >
-          <Input.TextArea
+          <BasicInput.TextArea
             style={{ width: '100%' }}
             autoSize={{ maxRows: 3, minRows: 3 }}
             placeholder={formatMessage({
