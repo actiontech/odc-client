@@ -43,7 +43,7 @@ import { isLogicalDatabase } from '@/util/database';
 import { isString } from 'lodash';
 import { ResourceNodeType } from '@/page/Workspace/SideBar/ResourceTree/type';
 import DraggableTabs from './DraggableTabs';
-import { BasicToolTip } from '@actiontech/dms-kit';
+import { BasicToolTip, EmptyBox } from '@actiontech/dms-kit';
 
 interface IProps {
   pages: IPage[];
@@ -237,7 +237,6 @@ const WindowManager: React.FC<IProps> = function (props) {
     if (isDocked) {
       return <span style={{ width: '8px' }} />;
     }
-
     return (
       <CloseButtonStyleWrapper
         className="close-btn"
@@ -359,8 +358,9 @@ const WindowManager: React.FC<IProps> = function (props) {
       };
     })
   };
+
   return (
-    <>
+    <EmptyBox if={!!activeKey && !!pages?.length} defaultNode={<DefaultPage />}>
       <DraggableTabs
         className="window-manager-wrapper-tabs"
         onChange={onActivatePage}
@@ -421,9 +421,7 @@ const WindowManager: React.FC<IProps> = function (props) {
           })
           .filter(Boolean)}
       />
-
-      {(!activeKey || !pages?.length) && <DefaultPage />}
-    </>
+    </EmptyBox>
   );
 };
 export default inject('sqlStore')(observer(WindowManager));
