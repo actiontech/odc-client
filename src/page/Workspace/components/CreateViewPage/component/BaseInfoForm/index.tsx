@@ -16,6 +16,7 @@
 
 import { ConnectionMode } from '@/d.ts';
 import { formatMessage } from '@/util/intl';
+import { BasicButton, BasicInput, BasicSelect } from '@actiontech/dms-kit';
 import { Button, Col, Form, Input, Row, Select } from 'antd';
 import React from 'react';
 const { Option } = Select;
@@ -82,7 +83,7 @@ const BaseInfoForm: React.FC<IProps> = React.memo((props) => {
               }
             ]}
           >
-            <Input
+            <BasicInput
               autoFocus
               placeholder={formatMessage({
                 id: 'odc.component.BaseInfoForm.EnterAViewName',
@@ -99,24 +100,28 @@ const BaseInfoForm: React.FC<IProps> = React.memo((props) => {
             })}
             /* 检查项 */ name="checkOption"
           >
-            <Select style={{ width: 120 }}>
+            <BasicSelect style={{ width: 120 }}>
               {checkOptions.map((item) => (
                 <Option key={item.value} value={item.value}>
                   {item.name}
                 </Option>
               ))}
-            </Select>
+            </BasicSelect>
           </Form.Item>
         </Col>
       </Row>
-      <Button type="primary" htmlType="submit" style={{ marginTop: '4px' }}>
+      <BasicButton
+        type="primary"
+        htmlType="submit"
+        style={{ marginTop: '4px' }}
+      >
         {
           formatMessage({
             id: 'odc.component.BaseInfoForm.Determine',
             defaultMessage: '确定'
           }) /* 确定 */
         }
-      </Button>
+      </BasicButton>
     </Form>
   );
 });

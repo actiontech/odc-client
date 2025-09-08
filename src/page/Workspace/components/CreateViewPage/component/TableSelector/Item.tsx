@@ -25,6 +25,7 @@ import { ReactComponent as DragSvg } from '@/svgr/DragItem.svg';
 import EditableText from '../EditableText';
 import { formatMessage } from '@/util/intl';
 import { CaseEditableText } from '@/component/Input/Case';
+import { BasicSelect } from '@actiontech/dms-kit';
 const { Option } = Select;
 
 interface IProps {
@@ -107,7 +108,7 @@ const Item: React.FC<IProps> = React.memo((props) => {
             )}
 
             {!isLast && (
-              <Select
+              <BasicSelect
                 defaultValue={joinKeywords[0]}
                 dropdownStyle={{ minWidth: '150px' }}
                 onChange={handleChangeOperation}
@@ -119,7 +120,7 @@ const Item: React.FC<IProps> = React.memo((props) => {
                     {keyword.toUpperCase()}
                   </Option>
                 ))}
-              </Select>
+              </BasicSelect>
             )}
           </Space>
           <DeleteOutlined

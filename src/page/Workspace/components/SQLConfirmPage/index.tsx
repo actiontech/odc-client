@@ -54,6 +54,7 @@ import SessionContext from '../SessionContextWrap/context';
 import WrapSessionPage from '../SessionContextWrap/SessionPageWrap';
 import styles from './index.less';
 import type { IProps, IState } from './type';
+import { BasicButton } from '@actiontech/dms-kit';
 
 @inject('sqlStore', 'pageStore', 'sessionManagerStore')
 @observer
@@ -466,17 +467,17 @@ class SQLConfirmPage extends Component<
           toolbarActions={
             <Space>
               {hasPre && (
-                <Button onClick={this.handlePre}>
+                <BasicButton onClick={this.handlePre}>
                   {
                     formatMessage({
                       id: 'odc.components.SQLConfirmPage.PreviousStep',
                       defaultMessage: '上一步'
                     }) /* 上一步 */
                   }
-                </Button>
+                </BasicButton>
               )}
 
-              <Button
+              <BasicButton
                 type="primary"
                 onClick={this.handleSubmit}
                 loading={loading}
@@ -487,7 +488,7 @@ class SQLConfirmPage extends Component<
                     defaultMessage: '创建'
                   }) /* 创建 */
                 }
-              </Button>
+              </BasicButton>
             </Space>
           }
         />

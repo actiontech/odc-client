@@ -16,7 +16,7 @@
 
 import SessionStore from '@/store/sessionManager/session';
 import { formatMessage } from '@/util/intl';
-import { Button, Empty, Spin, Transfer, Tree } from 'antd';
+import { Empty, Spin, Tree } from 'antd';
 import { uniqueId } from 'lodash';
 import { parse } from 'query-string';
 import styles from './index.less';
@@ -26,6 +26,8 @@ import { ICON_DATABASE, ICON_TABLE, ICON_VIEW } from '../ObjectName';
 import SortableContainer, {
   DraggableItem
 } from '@/component/SortableContainer';
+import { BasicButton, BasicEmpty } from '@actiontech/dms-kit';
+import { TransferStyleWrapper } from './style';
 
 const { TreeNode, DirectoryTree } = Tree;
 
@@ -103,7 +105,6 @@ const TreeSelector: React.FC<IProps> = React.memo((props) => {
   const handleTreeNodeSelect = (item, selectedKeys, onItemSelect) => {
     const { eventKey } = item.node.props;
     const isChecked = selectedKeys.indexOf(eventKey) !== -1;
-    console.log(!isChecked, eventKey);
     onItemSelect(eventKey, !isChecked);
   };
 
@@ -225,10 +226,9 @@ const TreeSelector: React.FC<IProps> = React.memo((props) => {
   };
 
   const renderSourcePanel = (onItemSelect, selectedKeys) => {
-    const { targetKeys, treeData, expandedKeys, loading, autoExpandParent } =
-      state;
+    const { treeData, expandedKeys, loading, autoExpandParent } = state;
     if (loading) {
-      return <Spin className={styles.spin} />;
+      return <Spin />;
     }
     return (
       <DirectoryTree
@@ -263,7 +263,7 @@ const TreeSelector: React.FC<IProps> = React.memo((props) => {
     const { targetKeys } = state;
     if (!targetKeys.length) {
       return (
-        <Empty
+        <BasicEmpty
           style={{ marginTop: '80px' }}
           image={Empty.PRESENTED_IMAGE_SIMPLE}
         />
@@ -314,8 +314,9 @@ const TreeSelector: React.FC<IProps> = React.memo((props) => {
     return result;
   }, [state.treeData]);
   return (
-    <div>
-      <Transfer
+    <>
+      <TransferStyleWrapper
+        hideHeader={true}
         showSearch={!state.loading}
         targetKeys={state.targetKeys}
         dataSource={dataSource}
@@ -336,7 +337,6 @@ const TreeSelector: React.FC<IProps> = React.memo((props) => {
           if (direction === 'left') {
             selectedKeys = selectedKeys;
             return renderSourcePanel((key: any, check: boolean) => {
-              console.log(key, check);
               onItemSelect(key, check);
             }, selectedKeys);
           }
@@ -345,8 +345,8 @@ const TreeSelector: React.FC<IProps> = React.memo((props) => {
             return renderTargetPanel();
           }
         }}
-      </Transfer>
-      <Button
+      </TransferStyleWrapper>
+      <BasicButton
         type="primary"
         onClick={handleSubmit}
         style={{ marginTop: '20px' }}
@@ -357,8 +357,8 @@ const TreeSelector: React.FC<IProps> = React.memo((props) => {
             defaultMessage: '确定'
           }) /* 确定 */
         }
-      </Button>
-    </div>
+      </BasicButton>
+    </>
   );
 });
 

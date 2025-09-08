@@ -15,28 +15,18 @@
  */
 
 import { styled } from '@mui/material';
-import { Tree, Popover } from 'antd';
+import { Tree } from 'antd';
 
-export const MainStyleWrapper = styled('div')``;
-
-export const HeaderStyleWrapper = styled('div')`
+export const HeaderStyleWrapper = styled('div')<{ $width: number | string }>`
   display: flex;
-  align-items: center;
+  align-items: start;
   padding: 12px;
-`;
+  width: ${({ $width }) =>
+    typeof $width === 'string' ? $width : `${$width}px`};
 
-export const TabStyleWrapper = styled('div')`
-  margin-right: 6px;
-
-  :global {
-    .ant-radio-button-wrapper {
-      padding-inline: 6px !important;
-    }
+  .database-select-tab {
+    margin-right: 12px;
   }
-`;
-
-export const SearchStyleWrapper = styled('div')`
-  flex: 1;
 `;
 
 export const GroupIconStyleWrapper = styled('span')`
@@ -48,17 +38,16 @@ export const FooterStyleWrapper = styled('div')`
     ${({ theme }) => theme.sharedTheme.uiToken.colorBorderSecondary};
 `;
 
-export const SessionSelectPopoverStyleWrapper = styled(Popover)`
-  :global {
-    .ant-popover-inner {
-      padding: 0 !important;
-    }
-  }
-`;
-
-export const TreeContainerStyleWrapper = styled('div')`
+export const TreeContainerStyleWrapper = styled('div')<{
+  $height: string | number;
+  $width: string | number;
+}>`
   overflow: hidden;
   padding: 0px 4px 12px 12px;
+  height: ${({ $height }) =>
+    typeof $height === 'string' ? $height : `${$height}px`};
+  width: ${({ $width }) =>
+    typeof $width === 'string' ? $width : `${$width}px`};
 `;
 
 export const TreeStyleWrapper = styled(Tree)`
@@ -104,58 +93,56 @@ export const TreeStyleWrapper = styled(Tree)`
     align-items: center;
   }
 
-  :global {
-    .ant-tree-treenode {
-      width: 100%;
+  .ant-tree-treenode {
+    width: 100%;
 
-      .ant-tree-switcher {
-        margin-inline-end: 0px !important;
-      }
-
-      .ant-tree-checkbox {
-        margin-right: 0;
-      }
+    .ant-tree-switcher {
+      margin-inline-end: 0px !important;
     }
 
-    .ant-tree-treenode-leaf {
-      .ant-tree-checkbox {
-        margin-left: 25px;
-      }
+    .ant-tree-checkbox {
+      margin-right: 0;
+    }
+  }
+
+  .ant-tree-treenode-leaf {
+    .ant-tree-checkbox {
+      margin-left: 25px;
+    }
+  }
+
+  .ant-tree-switcher-noop {
+    display: none;
+  }
+
+  .ant-tree-node-content-wrapper {
+    display: flex;
+    flex-grow: 1;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    .ant-tree-iconEle {
+      width: auto;
+      min-width: 24px;
     }
 
-    .ant-tree-switcher-noop {
-      display: none;
-    }
-
-    .ant-tree-node-content-wrapper {
-      display: flex;
-      flex-grow: 1;
+    .ant-tree-title {
+      flex: 1;
+      padding-right: 8px;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
-
-      .ant-tree-iconEle {
-        width: auto;
-        min-width: 24px;
-      }
-
-      .ant-tree-title {
-        flex: 1;
-        padding-right: 8px;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-      }
     }
+  }
 
-    .ant-badge {
-      position: absolute;
-      top: 0px;
-      right: 4px;
+  .ant-badge {
+    position: absolute;
+    top: 0px;
+    right: 4px;
 
-      .ant-badge-status-dot {
-        border-radius: 0px;
-      }
+    .ant-badge-status-dot {
+      border-radius: 0px;
     }
   }
 `;

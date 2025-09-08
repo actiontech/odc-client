@@ -2,6 +2,11 @@
  * Copyright 2025
  */
 
+/**
+ * 最左侧功能菜单栏组件
+ * 切换数据库、脚本、工单以及运维管理功能
+ */
+
 import React, { useMemo, useState, useContext, useCallback } from 'react';
 import { Space } from 'antd';
 import Icon from '@ant-design/icons';

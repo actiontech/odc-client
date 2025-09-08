@@ -15,7 +15,7 @@
  */
 import SessionStore from '@/store/sessionManager/session';
 import { formatMessage } from '@/util/intl';
-import { Button, Checkbox, Empty, Spin, Transfer, Tree } from 'antd';
+import { Button, Checkbox, Empty, Spin, Tree, Typography } from 'antd';
 
 import update from 'immutability-helper';
 import { parse } from 'query-string';
@@ -33,6 +33,8 @@ import { getView } from '@/common/network/view';
 import SortableContainer, {
   DraggableItem
 } from '@/component/SortableContainer';
+import { TransferStyleWrapper } from '../TableSelector/style';
+import { BasicButton } from '@actiontech/dms-kit';
 const { TreeNode, DirectoryTree } = Tree;
 
 interface IProps {
@@ -435,7 +437,7 @@ const TreeSelector: React.FC<IProps> = React.memo((props) => {
 
   return (
     <div>
-      <Transfer
+      <TransferStyleWrapper
         dataSource={dataSource}
         targetKeys={state.targetKeys}
         showSearch={!state.loading}
@@ -445,15 +447,15 @@ const TreeSelector: React.FC<IProps> = React.memo((props) => {
         titles={[
           null,
           <>
-            <span className={styles['header-tip']}>
+            <Typography.Text type="secondary">
               {
                 formatMessage({
                   id: 'odc.component.ColumnSelector.TipYouCanClickCustom',
                   defaultMessage: '提示：可点击自定义新建字段'
                 }) /* 提示：可点击自定义新建字段 */
               }
-            </span>
-            <a onClick={handleItemAdd}>
+            </Typography.Text>
+            <Typography.Link onClick={handleItemAdd}>
               <PlusOutlined />
               {
                 formatMessage({
@@ -461,7 +463,7 @@ const TreeSelector: React.FC<IProps> = React.memo((props) => {
                   defaultMessage: '自定义'
                 }) /* 自定义 */
               }
-            </a>
+            </Typography.Link>
           </>
         ]}
         locale={{
@@ -483,8 +485,8 @@ const TreeSelector: React.FC<IProps> = React.memo((props) => {
             return renderTargetPanel();
           }
         }}
-      </Transfer>
-      <Button
+      </TransferStyleWrapper>
+      <BasicButton
         type="primary"
         onClick={handleSubmit}
         style={{ marginTop: '20px' }}
@@ -495,7 +497,7 @@ const TreeSelector: React.FC<IProps> = React.memo((props) => {
             defaultMessage: '确定'
           }) /* 确定 */
         }
-      </Button>
+      </BasicButton>
     </div>
   );
 });

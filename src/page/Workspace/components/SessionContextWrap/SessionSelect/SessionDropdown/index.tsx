@@ -29,12 +29,9 @@ import React, {
 import SessionContext from '../../context';
 import { DEFALT_HEIGHT, DEFALT_WIDTH } from '../const';
 import {
-  MainStyleWrapper,
   HeaderStyleWrapper,
-  SearchStyleWrapper,
   GroupIconStyleWrapper,
   FooterStyleWrapper,
-  SessionSelectPopoverStyleWrapper,
   TreeContainerStyleWrapper,
   TreeStyleWrapper,
   TextOverflowStyleWrapper
@@ -638,7 +635,7 @@ const SessionDropdown: React.FC<IProps> = (props) => {
   }, [context.datasourceMode, tab]);
 
   return (
-    <SessionSelectPopoverStyleWrapper
+    <Popover
       trigger={['click']}
       placement="bottom"
       open={isOpen}
@@ -648,8 +645,8 @@ const SessionDropdown: React.FC<IProps> = (props) => {
       content={
         disabled ? null : (
           <Spin spinning={loading || fetchLoading || databaseHistoryLoading}>
-            <MainStyleWrapper>
-              <HeaderStyleWrapper style={{ width: width || DEFALT_WIDTH }}>
+            <>
+              <HeaderStyleWrapper $width={width || DEFALT_WIDTH}>
                 {!context.datasourceMode &&
                   !checkModeConfig &&
                   !userStore.isPrivateSpace() && (
@@ -672,11 +669,12 @@ const SessionDropdown: React.FC<IProps> = (props) => {
                 )}
               </HeaderStyleWrapper>
               <TreeContainerStyleWrapper
-                style={{ height: DEFALT_HEIGHT, width: width || DEFALT_WIDTH }}
+                $height={DEFALT_HEIGHT}
+                $width={width || DEFALT_WIDTH}
               >
                 {treeData?.length > 0 ? TreeRender() : empty}
               </TreeContainerStyleWrapper>
-            </MainStyleWrapper>
+            </>
 
             {footerRender()}
           </Spin>
@@ -684,7 +682,7 @@ const SessionDropdown: React.FC<IProps> = (props) => {
       }
     >
       {children}
-    </SessionSelectPopoverStyleWrapper>
+    </Popover>
   );
 };
 export default inject(

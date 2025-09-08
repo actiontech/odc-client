@@ -77,6 +77,7 @@ const Workspace: React.FC<WorkspaceProps> = (props: WorkspaceProps) => {
     sessionManagerStore
   } = props;
   const { pages = [], activePageKey } = pageStore;
+  console.log(pages);
   const { serverSystemInfo } = settingStore;
   const location = useLocation();
   const [params] = useSearchParams(location.hash);

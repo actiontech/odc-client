@@ -52,6 +52,225 @@ export class PageStore {
     return this.pages.find((p) => p.key === pageKey);
   }
 
+  /** 获取默认页面数据 */
+  private getDefaultPages(): IPage[] {
+    return [
+      {
+        key: 'default-sql',
+        title: 'SQL查询页',
+        type: PageType.SQL,
+        isSaved: true,
+        params: { type: PageType.SQL }
+      }
+      // {
+      //   key: 'default-pl',
+      //   title: 'PL查询页',
+      //   type: PageType.PL,
+      //   isSaved: true,
+      //   params: { type: PageType.PL }
+      // }
+      // {
+      //   key: 'default-create-table',
+      //   title: '创建表',
+      //   type: PageType.CREATE_TABLE,
+      //   isSaved: true
+      // },
+      // {
+      //   key: 'default-table',
+      //   title: '表详情',
+      //   type: PageType.TABLE,
+      //   isSaved: true
+      // },
+      // {
+      //   key: 'default-session-param',
+      //   title: '会话参数',
+      //   type: PageType.SESSION_PARAM,
+      //   isSaved: true
+      // },
+      // {
+      //   key: 'default-session-management',
+      //   title: '会话管理',
+      //   type: PageType.SESSION_MANAGEMENT,
+      //   isSaved: true
+      // },
+      // {
+      //   key: 'default-recycle-bin',
+      //   title: '回收站',
+      //   type: PageType.RECYCLE_BIN,
+      //   isSaved: true
+      // },
+      // {
+      //   key: 'default-tasks',
+      //   title: '任务管理',
+      //   type: PageType.TASKS,
+      //   isSaved: true
+      // },
+      // {
+      //   key: 'default-create-view',
+      //   title: '创建视图',
+      //   type: PageType.CREATE_VIEW,
+      //   isSaved: true
+      // },
+      // {
+      //   key: 'default-view',
+      //   title: '视图详情',
+      //   type: PageType.VIEW,
+      //   isSaved: true
+      // },
+      // {
+      //   key: 'default-create-materialized-view',
+      //   title: '创建物化视图',
+      //   type: PageType.CREATE_MATERIALIZED_VIEW,
+      //   isSaved: true
+      // },
+      // {
+      //   key: 'default-materialized-view',
+      //   title: '物化视图详情',
+      //   type: PageType.MATERIALIZED_VIEW,
+      //   isSaved: true
+      // },
+      // {
+      //   key: 'default-create-function',
+      //   title: '创建函数',
+      //   type: PageType.CREATE_FUNCTION,
+      //   isSaved: true
+      // },
+      // {
+      //   key: 'default-function',
+      //   title: '函数详情',
+      //   type: PageType.FUNCTION,
+      //   isSaved: true
+      // },
+      // {
+      //   key: 'default-create-procedure',
+      //   title: '创建存储过程',
+      //   type: PageType.CREATE_PROCEDURE,
+      //   isSaved: true
+      // },
+      // {
+      //   key: 'default-procedure',
+      //   title: '存储过程详情',
+      //   type: PageType.PROCEDURE,
+      //   isSaved: true
+      // },
+      // {
+      //   key: 'default-create-sequence',
+      //   title: '创建序列',
+      //   type: PageType.CREATE_SEQUENCE,
+      //   isSaved: true
+      // },
+      // {
+      //   key: 'default-sequence',
+      //   title: '序列详情',
+      //   type: PageType.SEQUENCE,
+      //   isSaved: true
+      // },
+      // {
+      //   key: 'default-create-package',
+      //   title: '创建包',
+      //   type: PageType.CREATE_PACKAGE,
+      //   isSaved: true
+      // },
+      // {
+      //   key: 'default-package',
+      //   title: '包详情',
+      //   type: PageType.PACKAGE,
+      //   isSaved: true
+      // },
+      // {
+      //   key: 'default-ob-client',
+      //   title: 'OB客户端',
+      //   type: PageType.OB_CLIENT,
+      //   isSaved: true
+      // },
+      // {
+      //   key: 'default-create-trigger',
+      //   title: '创建触发器',
+      //   type: PageType.CREATE_TRIGGER,
+      //   isSaved: true
+      // },
+      // {
+      //   key: 'default-create-trigger-sql',
+      //   title: '触发器创建SQL',
+      //   type: PageType.CREATE_TRIGGER_SQL,
+      //   isSaved: true
+      // },
+      // {
+      //   key: 'default-create-synonym',
+      //   title: '创建同义词',
+      //   type: PageType.CREATE_SYNONYM,
+      //   isSaved: true
+      // },
+      // {
+      //   key: 'default-trigger',
+      //   title: '触发器详情',
+      //   type: PageType.TRIGGER,
+      //   isSaved: true
+      // },
+      // {
+      //   key: 'default-synonym',
+      //   title: '同义词详情',
+      //   type: PageType.SYNONYM,
+      //   isSaved: true
+      // },
+      // {
+      //   key: 'default-type',
+      //   title: '类型详情',
+      //   type: PageType.TYPE,
+      //   isSaved: true
+      // },
+      // {
+      //   key: 'default-create-type',
+      //   title: '创建类型',
+      //   type: PageType.CREATE_TYPE,
+      //   isSaved: true
+      // },
+      // {
+      //   key: 'default-sql-resultset-view',
+      //   title: 'SQL结果集查看',
+      //   type: PageType.SQL_RESULTSET_VIEW,
+      //   isSaved: true
+      // },
+      // {
+      //   key: 'default-batch-compile-function',
+      //   title: '批量编译函数',
+      //   type: PageType.BATCH_COMPILE_FUNCTION,
+      //   isSaved: true
+      // },
+      // {
+      //   key: 'default-batch-compile-package',
+      //   title: '批量编译包',
+      //   type: PageType.BATCH_COMPILE_PACKAGE,
+      //   isSaved: true
+      // },
+      // {
+      //   key: 'default-batch-compile-procedure',
+      //   title: '批量编译存储过程',
+      //   type: PageType.BATCH_COMPILE_PROCEDURE,
+      //   isSaved: true
+      // },
+      // {
+      //   key: 'default-batch-compile-trigger',
+      //   title: '批量编译触发器',
+      //   type: PageType.BATCH_COMPILE_TRIGGER,
+      //   isSaved: true
+      // },
+      // {
+      //   key: 'default-batch-compile-type',
+      //   title: '批量编译类型',
+      //   type: PageType.BATCH_COMPILE_TYPE,
+      //   isSaved: true
+      // },
+      // {
+      //   key: 'default-tutorial',
+      //   title: '教程页',
+      //   type: PageType.TUTORIAL,
+      //   isSaved: true,
+      //   params: { scriptType: PageType.SQL }
+      // }
+    ];
+  }
+
   /** 初始化store */
   @action
   public async initStore() {
@@ -63,6 +282,11 @@ export class PageStore {
     this._saveDisposers.push(
       await autoSave(this, 'activePageKey', 'activePageKey', null)
     );
+
+    // 如果pages为空，则设置默认页面数据
+    if (!this.pages || this.pages.length === 0) {
+      this.pages = this.getDefaultPages();
+    }
   }
   /** 切换打开的page，更新一下URL */
   @action
@@ -74,7 +298,7 @@ export class PageStore {
 
   @action
   public async openPage(page: Page, insertHead?: boolean) {
-    let { pageTitle, pageKey, pageParams, pageType } = page;
+    const { pageTitle, pageKey, pageParams, pageType } = page;
     const existed = !!this.pages.find((p) => p.key === pageKey);
     switch (pageType) {
       case PageType.SQL:

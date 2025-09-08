@@ -128,7 +128,6 @@ const ResourceTree: React.FC<IProps> = function ({
     reloadDatasourceList,
     reloadDatabaseList
   } = treeContext;
-  console.log(datasourceList);
   const [wrapperHeight, setWrapperHeight] = useState(0);
   const clockRef = useRef(null);
   const [envs, setEnvs] = useState<number[]>([]);
@@ -459,8 +458,6 @@ const ResourceTree: React.FC<IProps> = function ({
     },
     [sessionIds]
   );
-
-  console.log(wrapperHeight, 'wrapperHeight');
 
   return (
     <>

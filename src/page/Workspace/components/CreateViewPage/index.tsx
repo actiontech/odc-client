@@ -19,24 +19,11 @@ import React, { useState } from 'react';
 import { SQLStore } from '@/store/sql';
 import { PageStore } from '@/store/page';
 import { SessionManagerStore } from '@/store/sessionManager';
-import {
-  ConnectionMode,
-  ICreateView,
-  ICreateViewColumn,
-  ICreateViewViewUnit
-} from '@/d.ts';
+import { ConnectionMode, ICreateView, ICreateViewViewUnit } from '@/d.ts';
 import { CreateViewPage as CreateViewPageModel } from '@/store/helper/page/pages/create';
 import { formatMessage } from '@/util/intl';
 import SessionStore from '@/store/sessionManager/session';
-import {
-  Button,
-  Collapse,
-  Layout,
-  message,
-  Space,
-  Tabs,
-  Typography
-} from 'antd';
+import { Collapse, Layout, message, Space, Tabs, Typography } from 'antd';
 import styles from './index.less';
 import {
   CheckOutlined,
@@ -60,6 +47,11 @@ import SessionContext from '../SessionContextWrap/context';
 import WrapSessionPage from '../SessionContextWrap/SessionPageWrap';
 import DBPermissionTableContent from '../DBPermissionTableContent';
 import { IUnauthorizedDBResources } from '@/d.ts/table';
+import {
+  CreateViewCollapseStyleWrapper,
+  CreateViewStepPanelStyleWrapper
+} from './style';
+import { BasicButton } from '@actiontech/dms-kit';
 
 const { Content } = Layout;
 const { Panel } = Collapse;
@@ -98,6 +90,7 @@ const CreateViewPage: React.FC<IProps> = inject(
   'pageStore'
 )(
   observer((props) => {
+    const [messageApi, messageContextHolder] = message.useMessage();
     const [state, setState] = useState({
       activeStepKey: EnumStep.BASEINFO,
       sql: '',
@@ -148,7 +141,7 @@ const CreateViewPage: React.FC<IProps> = inject(
       }
       const { dbObjectName: viewName, track } = results.executeResult[0];
       if (!track) {
-        message.success(
+        messageApi.success(
           formatMessage(
             {
               id: 'odc.components.CreateViewPage.TheViewViewnameHasBeen',
@@ -166,7 +159,7 @@ const CreateViewPage: React.FC<IProps> = inject(
         /**
          * sql-execute 返回的还是不区分大小写，所以需要自己处理一下
          */
-        let realViewName = getRealTableName(
+        const realViewName = getRealTableName(
           viewName,
           session?.connection.dialectType === ConnectionMode.OB_ORACLE
         );
@@ -198,7 +191,7 @@ const CreateViewPage: React.FC<IProps> = inject(
         return;
       }
       setState({ ...state, activeStepKey: step.key });
-      step.onShow && step.onShow();
+      step.onShow?.();
     };
 
     const renderStepHeader = ({
@@ -272,7 +265,7 @@ const CreateViewPage: React.FC<IProps> = inject(
         })
       };
 
-      let sql = await getViewCreateSQL(
+      const sql = await getViewCreateSQL(
         reqCreateView,
         session?.sessionId,
         session?.odcDatabase?.name
@@ -356,7 +349,7 @@ const CreateViewPage: React.FC<IProps> = inject(
           required: false,
           onShow() {
             if (!viewUnits.length) {
-              message.warning(
+              messageApi.warning(
                 formatMessage({
                   id: 'odc.components.CreateViewPage.SelectABaseTableFirst',
                   defaultMessage: '请先选择基表'
@@ -395,14 +388,12 @@ const CreateViewPage: React.FC<IProps> = inject(
 
       const lastStep = steps[steps.length - 1];
       return (
-        <Content
+        <CreateViewStepPanelStyleWrapper
           style={{
-            padding: 24,
             display: activeStepKey === EnumStep.SQL_PAGE ? 'none' : ''
           }}
         >
-          <Collapse
-            className={styles.collapse}
+          <CreateViewCollapseStyleWrapper
             accordion
             activeKey={activeStepKey}
             onChange={(stepkeys: EnumStep[]) => {
@@ -414,7 +405,6 @@ const CreateViewPage: React.FC<IProps> = inject(
               if (!step.render) {
                 return null;
               }
-              step.render;
               const stepStatus =
                 activeStepKey === step.key
                   ? EnumStepStatus.EDITING
@@ -455,16 +445,15 @@ const CreateViewPage: React.FC<IProps> = inject(
                 </Panel>
               );
             })}
-          </Collapse>
-          <Button
+          </CreateViewCollapseStyleWrapper>
+          <BasicButton
             onClick={getCreateSql}
             type="primary"
             disabled={!viewName}
-            style={{ marginTop: '-4px' }}
           >
             {lastStep.title}
-          </Button>
-        </Content>
+          </BasicButton>
+        </CreateViewStepPanelStyleWrapper>
       );
     };
 
@@ -480,7 +469,7 @@ const CreateViewPage: React.FC<IProps> = inject(
           viewUnitsMap[uid] = true;
         } else {
           const _t = `${viewName || tableName}(${dbName})`;
-          message.warning(
+          messageApi.warning(
             formatMessage(
               {
                 id: 'odc.components.CreateViewPage.MultipleTExistYouNeed',
@@ -639,6 +628,7 @@ const CreateViewPage: React.FC<IProps> = inject(
 
     return (
       <>
+        {messageContextHolder}
         {renderSQLPanel()}
         {renderStepPanel()}
       </>

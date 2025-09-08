@@ -1,10 +1,11 @@
-import { AutoComplete, Input } from 'antd';
+import { AutoComplete } from 'antd';
 import React, { forwardRef, useContext, useRef, useState } from 'react';
 import type { BaseSelectRef } from 'rc-select';
 import { formatMessage } from '@/util/intl';
 import { SearchOutlined } from '@ant-design/icons';
 import styles from '../index.less';
 import SessionContext from '@/page/Workspace/components/SessionContextWrap/context';
+import { BasicInput } from '@actiontech/dms-kit';
 
 interface IProps {
   searchValue: { value: string; type: SearchType };
@@ -50,9 +51,11 @@ const RemoveSplitInput = forwardRef(function RemoveSplitInput(
     type = arr?.[1];
   }
   return (
-    <Input
+    <BasicInput
+      size="small"
       ref={ref}
       value={value}
+      placeholder=""
       prefix={<SearchOutlined style={{ color: 'var(--icon-color-normal)' }} />}
       suffix={
         <span style={{ paddingRight: 15, color: 'var(--text-color-hint)' }}>
@@ -78,7 +81,8 @@ const Search: React.FC<IProps> = function (props) {
 
   if (context.datasourceMode) {
     return (
-      <Input
+      <BasicInput
+        size="small"
         value={searchValueByDataSource}
         suffix={
           <SearchOutlined style={{ color: 'var(--icon-color-normal)' }} />

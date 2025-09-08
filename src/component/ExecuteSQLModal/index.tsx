@@ -29,7 +29,7 @@ import LintResultTable from '@/page/Workspace/components/SQLResultSet/LintResult
 import modal from '@/store/modal';
 import SessionStore from '@/store/sessionManager/session';
 import { useUpdate } from 'ahooks';
-import { Alert, Button, message, Modal } from 'antd';
+import { Alert, message } from 'antd';
 import { editor } from 'monaco-editor/esm/vs/editor/editor.api';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import MonacoEditor from '../MonacoEditor';
@@ -37,6 +37,7 @@ import { ISQLLintReuslt } from '../SQLLintResult/type';
 import styles from './index.less';
 import { IUnauthorizedDBResources } from '@/d.ts/table';
 import DBPermissionTableContent from '@/page/Workspace/components/DBPermissionTableContent';
+import { BasicButton, BasicModal } from '@actiontech/dms-kit';
 
 interface IProps {
   sessionStore: SessionStore;
@@ -156,10 +157,10 @@ const ExecuteSQLModal: React.FC<IProps> = (props) => {
   };
   return (
     <>
-      <Modal
+      <BasicModal
         zIndex={1002}
         width={840}
-        destroyOnClose={true}
+        destroyOnHidden={true}
         title={formatMessage({
           id: 'workspace.window.session.modal.sql.title',
           defaultMessage: 'SQL 确认'
@@ -168,7 +169,7 @@ const ExecuteSQLModal: React.FC<IProps> = (props) => {
         onOk={handleSubmit}
         onCancel={handleCancel}
         footer={[
-          <Button key="format" onClick={handleFormat}>
+          <BasicButton key="format" onClick={handleFormat}>
             {
               formatMessage({
                 id: 'odc.component.ExecuteSQLModal.Format',
@@ -176,7 +177,7 @@ const ExecuteSQLModal: React.FC<IProps> = (props) => {
               })
               /*格式化*/
             }
-          </Button>,
+          </BasicButton>,
           <CopyToClipboard
             key="copy"
             text={sql}
@@ -189,14 +190,14 @@ const ExecuteSQLModal: React.FC<IProps> = (props) => {
               );
             }}
           >
-            <Button>
+            <BasicButton>
               {formatMessage({ id: 'app.button.copy', defaultMessage: '复制' })}
-            </Button>
+            </BasicButton>
           </CopyToClipboard>,
-          <Button key="back" onClick={handleCancel}>
+          <BasicButton key="back" onClick={handleCancel}>
             {formatMessage({ id: 'app.button.cancel', defaultMessage: '取消' })}
-          </Button>,
-          <Button
+          </BasicButton>,
+          <BasicButton
             key="submit"
             type="primary"
             onClick={handleSubmit}
@@ -207,7 +208,7 @@ const ExecuteSQLModal: React.FC<IProps> = (props) => {
               id: 'app.button.execute',
               defaultMessage: '执行'
             })}
-          </Button>
+          </BasicButton>
         ].filter(Boolean)}
         className={styles.executeSqlModal}
       >
@@ -266,7 +267,7 @@ const ExecuteSQLModal: React.FC<IProps> = (props) => {
             />
           )}
         </div>
-      </Modal>
+      </BasicModal>
     </>
   );
 };
