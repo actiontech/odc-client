@@ -24,7 +24,8 @@ import login from '@/store/login';
 import setting from '@/store/setting';
 import sqlStore from '@/store/sql';
 import { formatMessage } from '@/util/intl';
-import { SaveOutlined } from '@ant-design/icons';
+import notification from '@/util/notification';
+import { SaveOutlined, UploadOutlined } from '@ant-design/icons';
 import { ToolBarActions } from '..';
 
 const sqlActions: ToolBarActions = {
@@ -278,6 +279,88 @@ const sqlActions: ToolBarActions = {
     },
     async action(ctx: SQLPage) {
       sqlStore.stopExec(ctx.props.pageKey, ctx?.getSession()?.sessionId);
+    }
+  },
+
+  SQL_IMPORT_FILE: {
+    name: formatMessage({
+      id: 'odc.EditorToolBar.actions.sql.ImportFile',
+      defaultMessage: '导入文件'
+    }),
+    icon: UploadOutlined,
+    statusFunc: (ctx: SQLPage) => {
+      const { pageKey } = ctx.props;
+      if (sqlStore.runningPageKey.has(pageKey)) {
+        return IConStatus.DISABLE;
+      }
+      return IConStatus.INIT;
+    },
+    async action(ctx: SQLPage) {
+      // 创建隐藏的文件输入元素
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = '.sql,.txt';
+      input.style.display = 'none';
+
+      // 文件大小限制 (10MB)
+      const MAX_FILE_SIZE = 10 * 1024 * 1024;
+
+      input.onchange = (event: Event) => {
+        const target = event.target as HTMLInputElement;
+        const file = target.files?.[0];
+
+        if (!file) return;
+
+        // 检查文件类型
+        const allowedTypes = ['.sql', '.txt'];
+        const fileExtension = '.' + file.name.split('.').pop()?.toLowerCase();
+        if (!allowedTypes.includes(fileExtension)) {
+          notification.error({
+            track: formatMessage({
+              id: 'odc.EditorToolBar.actions.sql.FileTypeErrorContent',
+              defaultMessage: '仅支持 .sql 和 .txt 文件'
+            })
+          });
+          return;
+        }
+
+        // 检查文件大小
+        if (file.size > MAX_FILE_SIZE) {
+          notification.error({
+            track: formatMessage({
+              id: 'odc.EditorToolBar.actions.sql.FileSizeErrorContent',
+              defaultMessage: '文件大小不能超过 10MB'
+            })
+          });
+          return;
+        }
+
+        // 读取文件内容
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const content = e.target?.result as string;
+          if (content && ctx.editor) {
+            // 将文件内容设置到编辑器中
+            ctx.editor.setValue(content);
+            // 触发内容变化事件
+            ctx.handleSQLChanged(content);
+          }
+        };
+        reader.onerror = () => {
+          notification.error({
+            track: formatMessage({
+              id: 'odc.EditorToolBar.actions.sql.ReadFileErrorContent',
+              defaultMessage: '无法读取文件内容，请检查文件是否损坏'
+            })
+          });
+        };
+        reader.readAsText(file, 'utf-8');
+      };
+
+      // 触发文件选择
+      document.body.appendChild(input);
+      input.click();
+      document.body.removeChild(input);
     }
   },
 

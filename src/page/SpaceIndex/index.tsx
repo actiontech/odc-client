@@ -46,9 +46,7 @@ const SpaceSelectModal: React.FC<IProps> = ({ userStore }) => {
   ) => {
     const isSuccess = await userStore.switchCurrentOrganization(id);
     if (isSuccess) {
-      type === SpaceType.PRIVATE
-        ? handleGoto('/sqlworkspace')
-        : handleGoto('/project');
+      handleGoto('/');
     }
   };
 

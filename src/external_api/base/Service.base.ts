@@ -2,16 +2,18 @@ import { AxiosRequestConfig } from 'axios';
 import { cloneDeep } from 'lodash';
 import ApiBase from '../utils/apiClient';
 
+const apiClient = new ApiBase();
+
 class ServiceBase {
   protected get<T>(url: string, data: any = {}, options?: AxiosRequestConfig) {
-    return ApiBase.get<T>(url, {
+    return apiClient.get<T>(url, {
       params: data,
       ...options
     });
   }
 
   protected post<T>(url: string, data: any = {}, options?: AxiosRequestConfig) {
-    return ApiBase.post<T>(url, data, options);
+    return apiClient.post<T>(url, data, options);
   }
 
   protected delete<T>(
@@ -19,14 +21,14 @@ class ServiceBase {
     data: any = {},
     options?: AxiosRequestConfig
   ) {
-    return ApiBase.delete<T>(url, {
+    return apiClient.delete<T>(url, {
       data,
       ...options
     });
   }
 
   protected put<T>(url: string, data: any = {}, options?: AxiosRequestConfig) {
-    return ApiBase.put<T>(url, data, options);
+    return apiClient.put<T>(url, data, options);
   }
 
   protected patch<T>(
@@ -34,7 +36,7 @@ class ServiceBase {
     data: any = {},
     options?: AxiosRequestConfig
   ) {
-    return ApiBase.patch<T>(url, data, options);
+    return apiClient.patch<T>(url, data, options);
   }
 
   protected cloneDeep(data: any = {}) {

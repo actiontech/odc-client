@@ -1163,31 +1163,31 @@ const DDLResultSet: React.FC<IProps> = function (props) {
     }
 
     // 模拟数据按钮
-    if (
-      !isEditing &&
-      !isExternalTable &&
-      showMock &&
-      getDataSourceModeConfig(
-        session?.connection?.type
-      )?.features?.task?.includes(TaskType.DATAMOCK)
-    ) {
-      buttons.push(
-        <ToolbarButton
-          key="mock"
-          text={formatMessage({
-            id: 'odc.components.DDLResultSet.AnalogData',
-            defaultMessage: '模拟数据'
-          })}
-          icon={<Icon component={MockSvg} />}
-          onClick={() => {
-            modal.changeDataMockerModal(true, {
-              tableName: table?.tableName,
-              databaseId: session?.database?.databaseId
-            });
-          }}
-        />
-      );
-    }
+    // if (
+    //   !isEditing &&
+    //   !isExternalTable &&
+    //   showMock &&
+    //   getDataSourceModeConfig(
+    //     session?.connection?.type
+    //   )?.features?.task?.includes(TaskType.DATAMOCK)
+    // ) {
+    //   buttons.push(
+    //     <ToolbarButton
+    //       key="mock"
+    //       text={formatMessage({
+    //         id: 'odc.components.DDLResultSet.AnalogData',
+    //         defaultMessage: '模拟数据'
+    //       })}
+    //       icon={<Icon component={MockSvg} />}
+    //       onClick={() => {
+    //         modal.changeDataMockerModal(true, {
+    //           tableName: table?.tableName,
+    //           databaseId: session?.database?.databaseId
+    //         });
+    //       }}
+    //     />
+    //   );
+    // }
 
     return buttons;
   };

@@ -1,6 +1,6 @@
 import { IDatabasesTitleProps } from '../index';
-import { hasPermission, TaskTypeMap } from '@/component/Task/helper';
-import { Badge, Popover, Spin, Tooltip, Tree, Button, Radio } from 'antd';
+import { TaskTypeMap } from '@/component/Task/helper';
+import { Badge, Popover, Tooltip } from 'antd';
 import { formatMessage } from '@/util/intl';
 import styles from '../index.less';
 import { EnvColorMap } from '@/constant';
@@ -52,9 +52,6 @@ const DatabasesTitle: React.FC<IDatabasesTitleProps> = (props) => {
         >
           <div className={styles.databaseItem}>
             <span className={styles.textoverflow}>{db.name}</span>
-            <span className={styles.dataSourceInfo}>
-              {db?.dataSource?.name}
-            </span>
           </div>
         </Popover>
       )}

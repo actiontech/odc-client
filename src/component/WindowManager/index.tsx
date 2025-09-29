@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { IPage, PageType } from '@/d.ts';
+import { DbObjectType, IPage, PageType } from '@/d.ts';
 import ResourceTreeContext from '@/page/Workspace/context/ResourceTreeContext';
 import { movePagePostion, openNewDefaultPLPage } from '@/store/helper/page';
 import { SQLStore } from '@/store/sql';
@@ -24,7 +24,13 @@ import { CloseOutlined, EllipsisOutlined } from '@ant-design/icons';
 import { Badge, Dropdown, MenuProps, Space } from 'antd';
 import { inject, observer } from 'mobx-react';
 import { MenuInfo } from 'rc-menu/lib/interface';
-import { ReactNode, useContext, useState } from 'react';
+import { ReactNode, useContext, useState, useEffect, useRef } from 'react';
+import { useLocation, useSearchParams } from '@umijs/max';
+import { openTableViewPage } from '@/store/helper/page/openPage';
+import { getConnectionList } from '@/common/network/connection';
+import { listDatabases } from '@/common/network/database';
+import { getTableListWithoutSession } from '@/common/network/table';
+import sessionManager from '@/store/sessionManager';
 import { pageMap } from './config';
 import DefaultPage from './components/DefaultPage';
 import CustomAddTabTrigger from './components/CustomAddTabTrigger';
@@ -36,14 +42,17 @@ import {
   ExtraStatusBoxStyleWrapper,
   CloseButtonStyleWrapper,
   TooltipTitleStyleWrapper,
-  TabBarExtraContentStyleWrapper
+  TabBarExtraContentStyleWrapper,
+  ChromeStyleTabsWrapper
 } from './style';
 import { isGroupNode } from '@/page/Workspace/SideBar/ResourceTree/const';
 import { isLogicalDatabase } from '@/util/database';
 import { isString } from 'lodash';
 import { ResourceNodeType } from '@/page/Workspace/SideBar/ResourceTree/type';
 import DraggableTabs from './DraggableTabs';
-import { BasicToolTip, EmptyBox } from '@actiontech/dms-kit';
+import { BasicToolTip, EmitterKey, EmptyBox } from '@actiontech/dms-kit';
+import { PropsTab, TopTab } from '@/page/Workspace/components/TablePage';
+import { eventEmitter } from '@/util/utils';
 
 interface IProps {
   pages: IPage[];
@@ -64,8 +73,136 @@ interface IProps {
 const WindowManager: React.FC<IProps> = function (props) {
   const [closePageKey, setClosePageKey] = useState<string>(null);
   const treeContext = useContext(ResourceTreeContext);
+  const location = useLocation();
+  const [params] = useSearchParams(location.hash);
+  const isProcessOpenTableDetailSearchParams = useRef(false);
 
   const { pages, activeKey, onActivatePage } = props;
+
+  useEffect(() => {
+    if (isProcessOpenTableDetailSearchParams.current) {
+      return;
+    }
+    isProcessOpenTableDetailSearchParams.current = true;
+    const findIdsByNames = async (
+      tableName: string,
+      schemaName: string,
+      datasourceName: string
+    ) => {
+      try {
+        // 1. 根据数据源名称查找数据源ID
+        const datasourceResponse = await getConnectionList({
+          name: datasourceName,
+          size: 1
+        });
+        const datasource = datasourceResponse?.contents?.[0];
+        if (!datasource) {
+          eventEmitter.emit(EmitterKey.OPEN_GLOBAL_NOTIFICATION, 'error', {
+            message: `未找到数据源: ${datasourceName}`
+          });
+          return null;
+        }
+
+        // 2. 根据数据源ID和schema名称查找数据库ID
+        const databaseResponse = await listDatabases(
+          undefined, // projectId
+          datasource.id, // dataSourceId
+          1, // page
+          9999, // size
+          schemaName // name
+        );
+        const database = databaseResponse?.contents?.[0];
+        if (!database) {
+          eventEmitter.emit(EmitterKey.OPEN_GLOBAL_NOTIFICATION, 'error', {
+            message: `未找到数据库: ${schemaName}`
+          });
+          return null;
+        }
+
+        // 3. 创建会话并获取表ID
+        const session = await sessionManager.createSession(null, database.id);
+        if (!session || session === 'NotFound') {
+          eventEmitter.emit(EmitterKey.OPEN_GLOBAL_NOTIFICATION, 'error', {
+            message: '无法创建会话'
+          });
+          return null;
+        }
+
+        // 4. 根据表名查找表ID
+        const tables = await getTableListWithoutSession(
+          database.id,
+          DbObjectType.table
+        );
+        const table = tables?.find((t) => t.name === tableName);
+        if (!table) {
+          eventEmitter.emit(EmitterKey.OPEN_GLOBAL_NOTIFICATION, 'error', {
+            message: `未找到表: ${tableName}`
+          });
+          return null;
+        }
+
+        // TODO table id 为 null，需要后端检查原因
+        return {
+          datasourceId: datasource.id,
+          databaseId: database.id,
+          tableId: table.id,
+          sessionId: session.sessionId
+        };
+      } catch (error) {
+        eventEmitter.emit(EmitterKey.OPEN_GLOBAL_NOTIFICATION, 'error', {
+          message: `查找表信息失败: ${error?.message || String(error)}`
+        });
+        return null;
+      }
+    };
+
+    const tableName = params.get('tableName');
+    const schemaName = params.get('schemaName');
+    const datasourceName = params.get('datasourceName');
+    const showTableDetail = params.get('showTableDetail');
+    const topTabType = params.get('topTabType');
+    const propsTabType = params.get('propsTabType');
+
+    const isTopTabEnum = (topTabType?: string): topTabType is TopTab => {
+      if (!topTabType) return true;
+      return Object.values(TopTab).includes(topTabType as TopTab);
+    };
+    const isPropsTabEnum = (
+      propsTabType?: string
+    ): propsTabType is PropsTab => {
+      if (!propsTabType) return true;
+      return Object.values(PropsTab).includes(propsTabType as PropsTab);
+    };
+    if (
+      showTableDetail === String(true) &&
+      tableName &&
+      schemaName &&
+      datasourceName
+    ) {
+      const existingPage = pages.find((page) => {
+        return (
+          page.type === PageType.TABLE && page.params?.tableName === tableName
+        );
+      });
+
+      if (!existingPage) {
+        findIdsByNames(tableName, schemaName, datasourceName).then((result) => {
+          if (result) {
+            openTableViewPage(
+              tableName,
+              isTopTabEnum(topTabType) ? topTabType : TopTab.PROPS,
+              isPropsTabEnum(propsTabType) ? propsTabType : PropsTab.COLUMN,
+              result.databaseId,
+              result.tableId
+            );
+          }
+        });
+      } else {
+        onActivatePage(existingPage.key);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params, pages]);
 
   const handleSwitchTab = (clickParam: MenuInfo) => {
     const { onActivatePage } = props;
@@ -305,7 +442,7 @@ const WindowManager: React.FC<IProps> = function (props) {
           items: getContextMenuItems(page, isDocked)
         }}
       >
-        <BasicToolTip
+        {/* <BasicToolTip
           placement="bottom"
           title={
             <PageTooltipContent
@@ -316,24 +453,22 @@ const WindowManager: React.FC<IProps> = function (props) {
             />
           }
         >
-          <PageTitleStyleWrapper>
-            <IconStyleWrapper style={{ color: iconColor }}>
-              {pageMap[page.type].icon}
-            </IconStyleWrapper>
-            <TitleTextStyleWrapper>{pageTitle}</TitleTextStyleWrapper>
-            <ExtraStatusBoxStyleWrapper className="extra-status-box">
-              <PageStatusBadge
-                page={page}
-                isPageProcessing={isPageProcessing}
-              />
-            </ExtraStatusBoxStyleWrapper>
-            <PageCloseButton
-              page={page}
-              isDocked={isDocked}
-              onClose={handleCloseTab}
-            />
-          </PageTitleStyleWrapper>
-        </BasicToolTip>
+          
+        </BasicToolTip> */}
+        <PageTitleStyleWrapper>
+          <IconStyleWrapper style={{ color: iconColor }}>
+            {pageMap[page.type].icon}
+          </IconStyleWrapper>
+          <TitleTextStyleWrapper>{pageTitle}</TitleTextStyleWrapper>
+          <ExtraStatusBoxStyleWrapper className="extra-status-box">
+            <PageStatusBadge page={page} isPageProcessing={isPageProcessing} />
+          </ExtraStatusBoxStyleWrapper>
+          <PageCloseButton
+            page={page}
+            isDocked={isDocked}
+            onClose={handleCloseTab}
+          />
+        </PageTitleStyleWrapper>
       </Dropdown>
     );
   }
@@ -361,7 +496,7 @@ const WindowManager: React.FC<IProps> = function (props) {
 
   return (
     <EmptyBox if={!!activeKey && !!pages?.length} defaultNode={<DefaultPage />}>
-      <DraggableTabs
+      <ChromeStyleTabsWrapper
         className="window-manager-wrapper-tabs"
         onChange={onActivatePage}
         activeKey={activeKey}

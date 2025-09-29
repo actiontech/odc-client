@@ -102,13 +102,7 @@ const MonacoEditor: React.FC<IProps> = function (props) {
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor>();
 
   const sessionRef = useRef<SessionStore>(sessionStore);
-
-  const themeValue = useMemo(() => {
-    if (!theme) {
-      return CUSTOM_DIFF_EDITOR_THEME_NAME;
-    }
-    return theme;
-  }, [theme]);
+  const themeValue = CUSTOM_DIFF_EDITOR_THEME_NAME;
 
   useEffect(() => {
     sessionRef.current = sessionStore;
@@ -179,12 +173,41 @@ const MonacoEditor: React.FC<IProps> = function (props) {
       fontSize: getFontSize(
         settingStore.configurations['odc.editor.style.fontSize']
       ),
+      fontFamily: 'SF Mono',
       automaticLayout: true,
       unicodeHighlight: {
         invisibleCharacters: false,
         ambiguousCharacters: false
       },
-      readOnly: readOnly
+      readOnly: readOnly,
+      fontWeight: '400',
+      suggestFontSize: 14,
+      scrollBeyondLastLine: false,
+      lineHeight: 24,
+      letterSpacing: 0.8,
+      overviewRulerBorder: false,
+      wordWrap: 'on',
+      wrappingStrategy: 'advanced',
+      wrappingIndent: 'indent',
+      // 滚动配置
+      scrollbar: {
+        vertical: 'visible',
+        horizontal: 'visible',
+        useShadows: false,
+        verticalScrollbarSize: 12,
+        horizontalScrollbarSize: 12,
+        alwaysConsumeMouseWheel: false
+      },
+
+      folding: false,
+      glyphMargin: false,
+      lineDecorationsWidth: 50,
+      renderValidationDecorations: 'on',
+
+      guides: {
+        indentation: true,
+        highlightActiveIndentation: true
+      }
     });
 
     /* 初始化 PlaceholderContentWidget */

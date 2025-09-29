@@ -24,7 +24,7 @@ export default ({ showIcon, height = 280 }: IProps) => {
                 defaultMessage: '暂无数据库'
               })}
             </div>
-            {login.isPrivateSpace() ? (
+            {/* {login.isPrivateSpace() ? (
               <></>
             ) : (
               <div className={styles.subDescription}>
@@ -50,7 +50,7 @@ export default ({ showIcon, height = 280 }: IProps) => {
                   {showIcon && <ExportOutlined style={{ marginLeft: 4 }} />}
                 </span>
               </div>
-            )}
+            )} */}
           </div>
         }
       />

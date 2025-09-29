@@ -49,8 +49,7 @@ import React from 'react';
 import ExportForm, { FormType } from './ExportForm';
 import FormContext from './ExportForm/FormContext';
 import styles from './index.less';
-import { getTaskDetail } from '@/common/network/task';
-import { FormInstance, useForm } from 'antd/es/form/Form';
+
 export interface IProps {
   modalStore?: ModalStore;
   projectId?: number;

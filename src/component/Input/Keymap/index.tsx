@@ -15,12 +15,11 @@
  */
 
 import { useControllableValue } from 'ahooks';
-import { Select, Tag } from 'antd';
 import React, { useMemo } from 'react';
 import { KEY_CODE_MAP, getKeyCodeText } from './keycodemap';
 import { KeyCode, KeyMod } from 'monaco-editor';
-import { BaseSelectRef, CustomTagProps } from 'rc-select/lib/BaseSelect';
-import { PlusOutlined } from '@ant-design/icons';
+import { CustomTagProps } from 'rc-select/lib/BaseSelect';
+import { BasicSelect, BasicTag } from '@actiontech/dms-kit';
 
 interface IProps {
   className?: string;
@@ -33,7 +32,6 @@ const KeymapInput: React.FC<IProps> = (props) => {
   const [value, setValue] = useControllableValue(props, {
     defaultValue: ''
   });
-  const selectRef = React.useRef<BaseSelectRef>(null);
 
   const displayValue = useMemo(() => {
     return getKeyCodeText(value);
@@ -49,12 +47,12 @@ const KeymapInput: React.FC<IProps> = (props) => {
       return;
     }
     const monacoKeyCode = KEY_CODE_MAP[keyCode];
-    let mod = [];
+    const mod = [];
     metaKey && mod.push(KeyCode.Meta);
     ctrlKey && mod.push(KeyCode.Ctrl);
     shiftKey && mod.push(KeyCode.Shift);
     altKey && mod.push(KeyCode.Alt);
-    let isSpecialKey = [
+    const isSpecialKey = [
       KeyCode.Ctrl,
       KeyCode.Shift,
       KeyCode.Alt,
@@ -73,38 +71,31 @@ const KeymapInput: React.FC<IProps> = (props) => {
       event.stopPropagation();
     };
     return (
-      <Tag
+      <BasicTag
         onMouseDown={onPreventMouseDown}
         closable={false}
         onClose={onClose}
         style={{ marginRight: 3 }}
       >
         {value}
-      </Tag>
+      </BasicTag>
     );
   }
   return (
-    <Select
-      ref={selectRef}
+    <BasicSelect
       mode="multiple"
       value={displayValue}
       allowClear
       onClear={() => {
         setValue('');
       }}
+      placeholder=""
       options={[]}
       onKeyDown={onKeyDown}
       tagRender={tagRender}
       open={false}
       style={props.style}
       className={props.className}
-      suffixIcon={
-        <PlusOutlined
-          onClick={function () {
-            selectRef.current.focus();
-          }}
-        />
-      }
     />
   );
 };

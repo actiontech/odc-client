@@ -28,15 +28,15 @@ export const SearchTypeText = {
   [SearchType.DATASOURCE]: formatMessage({
     id: 'odc.component.RecordPopover.column.DataSource',
     defaultMessage: '数据源'
-  }), //数据源
-  [SearchType.CLUSTER]: formatMessage({
-    id: 'odc.Connecion.ConnectionList.ParamContext.Cluster',
-    defaultMessage: '集群'
-  }), //集群
-  [SearchType.TENANT]: formatMessage({
-    id: 'odc.Connecion.ConnectionList.ParamContext.Tenant',
-    defaultMessage: '租户'
-  }) //租户
+  }) //数据源
+  // [SearchType.CLUSTER]: formatMessage({
+  //   id: 'odc.Connecion.ConnectionList.ParamContext.Cluster',
+  //   defaultMessage: '集群'
+  // }), //集群
+  // [SearchType.TENANT]: formatMessage({
+  //   id: 'odc.Connecion.ConnectionList.ParamContext.Tenant',
+  //   defaultMessage: '租户'
+  // }) //租户
 };
 const splitKey = '_$$$odc$$$_';
 
@@ -52,7 +52,6 @@ const RemoveSplitInput = forwardRef(function RemoveSplitInput(
   }
   return (
     <BasicInput
-      size="small"
       ref={ref}
       value={value}
       placeholder=""
@@ -82,7 +81,6 @@ const Search: React.FC<IProps> = function (props) {
   if (context.datasourceMode) {
     return (
       <BasicInput
-        size="small"
         value={searchValueByDataSource}
         suffix={
           <SearchOutlined style={{ color: 'var(--icon-color-normal)' }} />
@@ -102,9 +100,9 @@ const Search: React.FC<IProps> = function (props) {
     setOptions(
       [
         SearchType.DATABASE,
-        SearchType.DATASOURCE,
-        SearchType.CLUSTER,
-        SearchType.TENANT
+        SearchType.DATASOURCE
+        // SearchType.CLUSTER,
+        // SearchType.TENANT
       ]?.map((v) => {
         return {
           value: value + splitKey + v,

@@ -19,11 +19,11 @@ import React, { FunctionComponent, useContext, useRef } from 'react';
 import classNames from 'classnames';
 import { ActivityBarItemType } from '../ActivityBar/type';
 import ActivityBarContext from '../context/ActivityBarContext';
-import Manager from './Manager';
 import ResourceTree from './ResourceTree/Container';
 import Script from './Script';
 import Task from './Task';
 import { SideBarStyleWrapper } from './style';
+import Manager from './Manager';
 
 const items = {
   [ActivityBarItemType.Database]: ResourceTree,

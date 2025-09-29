@@ -32,6 +32,7 @@ import { isLinux, isWin64, kbToMb } from '@/util/utils';
 import { message } from 'antd';
 import { action, observable } from 'mobx';
 import login, { sessionKey } from '@/store/login';
+import { CUSTOM_DIFF_EDITOR_THEME_NAME } from '../component/MonacoEditor/plugins/theme/dms';
 
 export const themeKey = 'odc-theme';
 const SPACE_CONFIG_EXPIRES = 60 * 1000;
@@ -60,7 +61,8 @@ const themeConfig: { [key: string]: IThemeConfig } = {
       OceanBase: 'obwhite',
       'VSCode-HC': 'hc-light',
       GitHub: 'github',
-      Monokai: 'vs'
+      Monokai: 'vs',
+      DMS: CUSTOM_DIFF_EDITOR_THEME_NAME
     },
     className: 'odc-white',
     sheetTheme: 'white',
@@ -355,7 +357,7 @@ export class SettingStore {
         return data;
       }, {});
       this.configurations = config;
-      this.theme = themeConfig[this.configurations['odc.appearance.scheme']];
+      // this.theme = themeConfig[this.configurations['odc.appearance.scheme']];
     } else {
       this.configurations = {};
     }

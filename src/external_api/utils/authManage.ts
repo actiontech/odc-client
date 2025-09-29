@@ -1,15 +1,16 @@
+import axios, { AxiosRequestConfig } from 'axios';
 import {
   DMS_REDIRECT_KEY_PARAMS_NAME,
-  EmitterKey,
+  ResponseCode,
+  StorageKey,
   getErrorMessage,
-  getResponseCode,
-  ResponseCode
+  getResponseCode
 } from '@actiontech/dms-kit';
-import axios, { AxiosRequestConfig } from 'axios';
-import type { IRefreshSessionReturn } from '../base/Session/index.type';
+import EmitterKey from '@actiontech/dms-kit/es/data/EmitterKey';
+import { eventEmitter } from '@actiontech/dms-kit/es/utils/EventEmitter';
+import { ArgsProps } from 'antd/es/notification/interface';
 import { NotificationInstanceKeyType } from '@/hooks/useNotificationContext';
-import { eventEmitter } from '@/util/utils';
-import { ArgsProps } from 'antd/es/notification';
+import { IRefreshSessionReturn } from '@/external_api/base/Session/index.type';
 import { formatMessage } from '@/util/intl';
 
 class AuthManager {
@@ -25,18 +26,15 @@ class AuthManager {
     const currentPath = window.location.pathname;
     const currentSearch = window.location.search;
 
-    // store.dispatch(updateToken({ token: '' }));
-    // store.dispatch(updateUser({ username: '', role: '' }));
-    // store.dispatch(updateUserUid({ uid: '' }));
-    // store.dispatch(updateManagementPermissions({ managementPermissions: [] }));
-    // store.dispatch(updateBindProjects({ bindProjects: [] }));
-    // store.dispatch(updateUserInfoFetchStatus(false));
+    localStorage.removeItem(StorageKey.Token);
+    localStorage.removeItem(StorageKey.USER_UID);
+    localStorage.removeItem(StorageKey.DMS_AVAILABILITY_ZONE);
 
     if (currentPath === '/login') {
       return;
     }
 
-    const targetUrl = 'cloud-beaver' + currentSearch;
+    const targetUrl = currentPath + currentSearch;
     window.location.href = `/login?${DMS_REDIRECT_KEY_PARAMS_NAME}=${encodeURIComponent(
       targetUrl
     )}`;
@@ -64,7 +62,7 @@ class AuthManager {
             ? `Bearer ${res.data.data.token}`
             : '';
           if (newToken) {
-            // store.dispatch(updateToken({ token: newToken }));
+            localStorage.setItem(StorageKey.Token, newToken);
 
             this.failedRequestsQueue.forEach((request) => {
               const newConfig = { ...request.config };
@@ -91,10 +89,10 @@ class AuthManager {
             EmitterKey.OPEN_GLOBAL_NOTIFICATION,
             'error',
             {
-              message: formatMessage({
+              message: `${formatMessage({
                 id: 'odc.src.util.notification.RequestFailed',
                 defaultMessage: '请求失败'
-              }),
+              })}`,
               description: errorMessage
             }
           );
@@ -107,20 +105,15 @@ class AuthManager {
         );
         this.failedRequestsQueue.length = 0;
 
-        const errorMessage =
-          error.message ||
-          formatMessage({
-            id: 'odc.src.util.notification.RequestFailed',
-            defaultMessage: '请求失败'
-          });
+        const errorMessage = error.message || formatMessage({});
         eventEmitter.emit<[NotificationInstanceKeyType, ArgsProps]>(
           EmitterKey.OPEN_GLOBAL_NOTIFICATION,
           'error',
           {
-            message: formatMessage({
+            message: `${formatMessage({
               id: 'odc.src.util.notification.RequestFailed',
               defaultMessage: '请求失败'
-            }),
+            })}`,
             description: errorMessage
           }
         );
@@ -128,12 +121,8 @@ class AuthManager {
         this.redirectToLogin();
         return Promise.reject(error);
       })
-      // mock finally
-      .then(
-        () => {},
-        () => {}
-      )
-      .then(() => {
+      // @ts-ignore
+      .finally(() => {
         this.isRefreshing = false;
         this.refreshPromise = null;
       });

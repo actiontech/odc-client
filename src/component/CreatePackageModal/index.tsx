@@ -19,7 +19,8 @@ import { openCreatePackagePage } from '@/store/helper/page';
 import { ModalStore } from '@/store/modal';
 import { useDBSession } from '@/store/sessionManager/hooks';
 import { formatMessage } from '@/util/intl';
-import { Form, Input, Modal } from 'antd';
+import { BasicButton, BasicInput, BasicModal } from '@actiontech/dms-kit';
+import { Form, Space } from 'antd';
 import { inject, observer } from 'mobx-react';
 
 interface IProps {
@@ -60,8 +61,12 @@ function CreatePackageModal(props: IProps) {
       });
   };
 
+  const onCancel = () => {
+    modalStore.changeCreatePackageModalVisible(false);
+  };
+
   return (
-    <Modal
+    <BasicModal
       centered={true}
       width={600}
       destroyOnClose={true}
@@ -70,14 +75,27 @@ function CreatePackageModal(props: IProps) {
         defaultMessage: '新建程序包'
       })}
       open={modalStore.createPackageModalVisible}
+      onCancel={onCancel}
       okText={formatMessage({
         id: 'odc.component.CreatePackageModal.NextConfirmTheSqlStatement',
         defaultMessage: '下一步：确认 SQL'
       })} /* 下一步：确认 SQL */
-      onOk={save}
-      onCancel={() => {
-        modalStore.changeCreatePackageModalVisible(false);
-      }}
+      footer={
+        <Space>
+          <BasicButton onClick={onCancel}>
+            {formatMessage({
+              id: 'app.button.cancel',
+              defaultMessage: '取消'
+            })}
+          </BasicButton>
+          <BasicButton type="primary" onClick={save}>
+            {formatMessage({
+              id: 'app.button.save',
+              defaultMessage: '保存'
+            })}
+          </BasicButton>
+        </Space>
+      }
     >
       <Form
         layout="vertical"
@@ -101,8 +119,7 @@ function CreatePackageModal(props: IProps) {
             }
           ]}
         >
-          <Input
-            // eslint-disable-next-line
+          <BasicInput
             autoComplete={'off'}
             placeholder={formatMessage({
               id: 'workspace.window.createPackage.packageName.placeholder',
@@ -111,7 +128,7 @@ function CreatePackageModal(props: IProps) {
           />
         </Form.Item>
       </Form>
-    </Modal>
+    </BasicModal>
   );
 }
 

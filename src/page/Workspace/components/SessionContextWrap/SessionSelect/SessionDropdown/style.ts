@@ -43,7 +43,7 @@ export const TreeContainerStyleWrapper = styled('div')<{
   $width: string | number;
 }>`
   overflow: hidden;
-  padding: 0px 4px 12px 12px;
+  padding: 0px 4px 12px 0;
   height: ${({ $height }) =>
     typeof $height === 'string' ? $height : `${$height}px`};
   width: ${({ $width }) =>

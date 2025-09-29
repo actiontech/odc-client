@@ -9,7 +9,7 @@ import { formatMessage } from '@/util/intl';
 import tracert from '@/util/tracert';
 import { useParams } from '@umijs/max';
 import { useRequest } from 'ahooks';
-import { Badge, Popover, Spin, Tooltip, Tree, Button, Radio } from 'antd';
+import { Popover, Spin, Typography } from 'antd';
 import { DataNode } from 'antd/lib/tree';
 import { toInteger } from 'lodash';
 import { UserStore } from '@/store/login';
@@ -590,8 +590,7 @@ const SessionDropdown: React.FC<IProps> = (props) => {
     return (
       <FooterStyleWrapper>
         {checkedKeys.length !== canCheckedDbKeys?.length && (
-          <Button
-            type="link"
+          <Typography.Link
             onClick={() => {
               const KeyList = filterGroupKey(
                 Array.from(new Set([...expandedKeys, ...canCheckedDbKeys]))
@@ -604,11 +603,10 @@ const SessionDropdown: React.FC<IProps> = (props) => {
               id: 'src.page.Workspace.components.SessionContextWrap.SessionSelect.SessionDropdown.86AE09B0',
               defaultMessage: '全选'
             })}
-          </Button>
+          </Typography.Link>
         )}
         {checkedKeys?.length === canCheckedDbKeys?.length && (
-          <Button
-            type="link"
+          <Typography.Link
             onClick={() => {
               setCheckedKeys([]);
               onSelect?.([]);
@@ -618,7 +616,7 @@ const SessionDropdown: React.FC<IProps> = (props) => {
               id: 'src.page.Workspace.components.SessionContextWrap.SessionSelect.SessionDropdown.7FA7CC62',
               defaultMessage: '取消全选'
             })}
-          </Button>
+          </Typography.Link>
         )}
       </FooterStyleWrapper>
     );
@@ -641,7 +639,7 @@ const SessionDropdown: React.FC<IProps> = (props) => {
       open={isOpen}
       showArrow={false}
       onOpenChange={onOpen}
-      overlayStyle={{ paddingTop: 2, width }}
+      styles={{ root: { padding: 0 } }}
       content={
         disabled ? null : (
           <Spin spinning={loading || fetchLoading || databaseHistoryLoading}>
@@ -662,11 +660,11 @@ const SessionDropdown: React.FC<IProps> = (props) => {
                     }}
                   />
                 )}
-                {!context.datasourceMode && tab === TabsType.all && (
+                {/* {!context.datasourceMode && tab === TabsType.all && (
                   <GroupIconStyleWrapper>
                     <Group setGroupMode={setGroupMode} groupMode={groupMode} />
                   </GroupIconStyleWrapper>
-                )}
+                )} */}
               </HeaderStyleWrapper>
               <TreeContainerStyleWrapper
                 $height={DEFALT_HEIGHT}

@@ -33,6 +33,7 @@ import SessionDropdown, {
   ISessionDropdownFiltersProps
 } from './SessionDropdown';
 import { EllipsisStyleWrapper } from './style';
+import { BasicSelect } from '@actiontech/dms-kit';
 
 interface IProps {
   value?: number;
@@ -213,7 +214,7 @@ const SelectItem: React.FC<IProps> = ({
           taskType={taskType}
           disabled={disabled}
         >
-          <Select
+          <BasicSelect
             disabled={disabled}
             placeholder={getPlaceholder()}
             style={{ width: width || DEFALT_WIDTH }}

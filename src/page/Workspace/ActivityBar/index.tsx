@@ -9,38 +9,31 @@
 
 import React, { useMemo, useState, useContext, useCallback } from 'react';
 import { Space } from 'antd';
-import Icon from '@ant-design/icons';
-import { BulbOutlined, UserOutlined } from '@ant-design/icons';
+import Icon, { UserOutlined } from '@ant-design/icons';
 import { inject, observer } from 'mobx-react';
-
 import { ReactComponent as DBSvg } from '@/svgr/database_outline.svg';
 import { ReactComponent as TaskSvg } from '@/svgr/icon_task.svg';
 import { ReactComponent as ManagerSvg } from '@/svgr/operate.svg';
 import { ReactComponent as CodeSvg } from '@/svgr/Snippet.svg';
-
 import { ActivityBarItemType, ActivityBarItemTypeText } from './type';
 import ActivityBarContext from '../context/ActivityBarContext';
-
-import { formatMessage } from '@/util/intl';
 import { getFirstEnabledTask } from '@/component/Task/helper';
 import { openTasksPage } from '@/store/helper/page';
-
 import Logo from './Logo';
-import SettingItem from '@/layout/SpaceContainer/Sider/SettingItem';
-import HelpItem from '@/layout/SpaceContainer/Sider/HelpItem';
-import MineItem from '@/layout/SpaceContainer/Sider/MineItem';
-import MenuItem from '@/layout/SpaceContainer/Sider/MenuItem';
 import {
   ActivityBarRootStyleWrapper,
   TopSectionStyleWrapper,
-  BottomSectionStyleWrapper,
   HeaderStyleWrapper,
   ItemsWrapperStyleWrapper,
   NavItemStyleWrapper,
   ItemLabelStyleWrapper,
-  DividerLineStyleWrapper
+  BottomSectionStyleWrapper
 } from './style';
 import { BasicToolTip } from '@actiontech/dms-kit';
+import MineItem from '@/layout/SpaceContainer/Sider/MineItem';
+import { formatMessage } from '@/util/intl';
+import MenuItem from '@/layout/SpaceContainer/Sider/MenuItem';
+import AvailabilityZoneSwitcher from './AvailabilityZoneSwitcher';
 
 interface IItem {
   title: string;
@@ -49,9 +42,7 @@ interface IItem {
   isVisible?: boolean;
 }
 
-interface IProps {}
-
-const ActivityBarNew: React.FC<IProps> = () => {
+const ActivityBarNew: React.FC = () => {
   const context = useContext(ActivityBarContext);
   const [collapsed, setCollapsed] = useState<boolean>(true);
 
@@ -108,6 +99,7 @@ const ActivityBarNew: React.FC<IProps> = () => {
         <HeaderStyleWrapper>
           <Logo />
         </HeaderStyleWrapper>
+        <AvailabilityZoneSwitcher collapsed={collapsed} />
         <ItemsWrapperStyleWrapper>
           <Space size={8} direction="vertical">
             {items
@@ -152,7 +144,7 @@ const ActivityBarNew: React.FC<IProps> = () => {
                   defaultMessage: '折叠',
                 })}
           </ItemLabelStyleWrapper>
-        </ToggleButtonStyleWrapper> */}
+        </ToggleButtonStyleWrapper>
         <DividerLineStyleWrapper />
         <Space size={8} direction="vertical">
           <SettingItem collapsed={collapsed} />
@@ -166,19 +158,18 @@ const ActivityBarNew: React.FC<IProps> = () => {
                 defaultMessage: '帮助'
               })}
             />
-          </HelpItem>
-          <MineItem>
-            <MenuItem
-              disableTip={true}
-              icon={UserOutlined}
-              collapsed={collapsed}
-              label={formatMessage({
-                id: 'odc.Index.Sider.Mine',
-                defaultMessage: '我的'
-              })}
-            />
-          </MineItem>
-        </Space>
+          </HelpItem> */}
+        <MineItem>
+          <MenuItem
+            disableTip={true}
+            icon={UserOutlined}
+            collapsed={collapsed}
+            label={formatMessage({
+              id: 'odc.Index.Sider.Mine',
+              defaultMessage: '我的'
+            })}
+          />
+        </MineItem>
       </BottomSectionStyleWrapper>
     </ActivityBarRootStyleWrapper>
   );

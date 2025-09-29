@@ -50,6 +50,8 @@ import { IMenuItemConfig } from '../type';
 import { isSupportExport } from './helper';
 import { isLogicalDatabase } from '@/util/database';
 import { DatabasePermissionType } from '@/d.ts/database';
+import { generateDMSExportUrl } from '@/util/dms/export';
+
 export const tableMenusConfig: Partial<
   Record<ResourceNodeType, IMenuItemConfig[]>
 > = {
@@ -162,32 +164,32 @@ export const tableMenusConfig: Partial<
         );
       }
     },
-    {
-      key: ResourceTreeNodeMenuKeys.IMPORT_TABLE,
-      text: formatMessage({
-        id: 'odc.TreeNodeMenu.config.table.Import',
-        defaultMessage: '导入'
-      }) /*导入*/,
-      actionType: actionTypes.update,
-      ellipsis: true,
-      disabled: (session, node) => {
-        return !hasTableChangePermission(session, node);
-      },
-      isHide: (session) => {
-        return (
-          !setting.enableDBImport ||
-          !getDataSourceModeConfig(
-            session?.connection?.type
-          )?.features?.task?.includes(TaskType.IMPORT) ||
-          isLogicalDatabase(session?.odcDatabase)
-        );
-      },
-      run(session, node) {
-        modalStore.changeImportModal(true, {
-          table: node.data
-        });
-      }
-    },
+    // {
+    //   key: ResourceTreeNodeMenuKeys.IMPORT_TABLE,
+    //   text: formatMessage({
+    //     id: 'odc.TreeNodeMenu.config.table.Import',
+    //     defaultMessage: '导入'
+    //   }) /*导入*/,
+    //   actionType: actionTypes.update,
+    //   ellipsis: true,
+    //   disabled: (session, node) => {
+    //     return !hasTableChangePermission(session, node);
+    //   },
+    //   isHide: (session) => {
+    //     return (
+    //       !setting.enableDBImport ||
+    //       !getDataSourceModeConfig(
+    //         session?.connection?.type
+    //       )?.features?.task?.includes(TaskType.IMPORT) ||
+    //       isLogicalDatabase(session?.odcDatabase)
+    //     );
+    //   },
+    //   run(session, node) {
+    //     modalStore.changeImportModal(true, {
+    //       table: node.data
+    //     });
+    //   }
+    // },
     {
       key: ResourceTreeNodeMenuKeys.EXPORT_TABLE,
       text: [
@@ -208,11 +210,18 @@ export const tableMenusConfig: Partial<
       },
       run(session, node) {
         const table = node.data as ITableModel;
-        modalStore.changeExportModal(true, {
-          type: DbObjectType.table,
-          name: table?.info?.tableName,
-          databaseId: session?.database.databaseId
+        // modalStore.changeExportModal(true, {
+        //   type: DbObjectType.table,
+        //   name: table?.info?.tableName,
+        //   databaseId: session?.database.databaseId
+        // });
+        const url = generateDMSExportUrl({
+          instanceName: session.odcDatabase.dataSource.name,
+          schemaName: session.database.dbName,
+          // todo
+          projectName: 'default'
         });
+        window.open(url);
       }
     },
     {
@@ -243,40 +252,40 @@ export const tableMenusConfig: Partial<
         }
       }
     },
-    {
-      key: ResourceTreeNodeMenuKeys.MOCK_DATA,
-      text: [
-        formatMessage({
-          id: 'odc.TreeNodeMenu.config.table.AnalogData',
-          defaultMessage: '模拟数据'
-        }) // 模拟数据
-      ],
+    // {
+    //   key: ResourceTreeNodeMenuKeys.MOCK_DATA,
+    //   text: [
+    //     formatMessage({
+    //       id: 'odc.TreeNodeMenu.config.table.AnalogData',
+    //       defaultMessage: '模拟数据'
+    //     }) // 模拟数据
+    //   ],
 
-      ellipsis: true,
-      disabled: (session, node) => {
-        return (
-          !hasTableChangePermission(session, node) ||
-          isLogicalDatabase(session?.odcDatabase)
-        );
-      },
-      isHide: (session) => {
-        return (
-          !setting.enableMockdata ||
-          !getDataSourceModeConfig(
-            session?.connection?.type
-          )?.features?.task?.includes(TaskType.DATAMOCK)
-        );
-      },
-      actionType: actionTypes.update,
-      hasDivider: true,
-      run(session, node) {
-        const tableName = (node.data as ITableModel)?.info?.tableName;
-        modalStore.changeDataMockerModal(true, {
-          tableName,
-          databaseId: session?.database?.databaseId
-        });
-      }
-    },
+    //   ellipsis: true,
+    //   disabled: (session, node) => {
+    //     return (
+    //       !hasTableChangePermission(session, node) ||
+    //       isLogicalDatabase(session?.odcDatabase)
+    //     );
+    //   },
+    //   isHide: (session) => {
+    //     return (
+    //       !setting.enableMockdata ||
+    //       !getDataSourceModeConfig(
+    //         session?.connection?.type
+    //       )?.features?.task?.includes(TaskType.DATAMOCK)
+    //     );
+    //   },
+    //   actionType: actionTypes.update,
+    //   hasDivider: true,
+    //   run(session, node) {
+    //     const tableName = (node.data as ITableModel)?.info?.tableName;
+    //     modalStore.changeDataMockerModal(true, {
+    //       tableName,
+    //       databaseId: session?.database?.databaseId
+    //     });
+    //   }
+    // },
     {
       key: ResourceTreeNodeMenuKeys.OPEN_TABLE_SQLWINDOW,
       ellipsis: true,
@@ -419,67 +428,67 @@ export const tableMenusConfig: Partial<
 
       hasDivider: true
     },
-    {
-      key: ResourceTreeNodeMenuKeys.DELETE_TABLE,
-      text: [
-        formatMessage({
-          id: 'odc.TreeNodeMenu.config.table.Delete',
-          defaultMessage: '删除'
-        })
-      ],
-      actionType: actionTypes.delete,
-      ellipsis: true,
-      disabled: (session, node) => {
-        return !hasTableChangePermission(session, node);
-      },
-      run(session, node) {
-        const table = node.data as ITableModel;
-        const tableName = table?.info?.tableName;
-        Modal.confirm({
-          title: formatMessage(
-            {
-              id: 'workspace.window.createTable.modal.delete',
-              defaultMessage: '是否确定删除 {name} ？'
-            },
-            {
-              name: tableName
-            }
-          ),
-          okText: formatMessage({
-            id: 'app.button.ok',
-            defaultMessage: '确定'
-          }),
-          cancelText: formatMessage({
-            id: 'app.button.cancel',
-            defaultMessage: '取消'
-          }),
-          icon: <QuestionCircleFilled />,
-          centered: true,
-          onOk: async () => {
-            const success = await dropObject(
-              tableName,
-              DbObjectType.table,
-              session.sessionId
-            );
-            if (success) {
-              await session.database.getTableList();
-              message.success(
-                formatMessage({
-                  id: 'workspace.window.createTable.modal.delete.success',
-                  defaultMessage: '删除表成功'
-                })
-              );
-              const openedPage = pageStore!.pages.find(
-                (p) => p.params.tableName === tableName
-              );
-              if (openedPage) {
-                pageStore!.close(openedPage.key);
-              }
-            }
-          }
-        });
-      }
-    },
+    // {
+    //   key: ResourceTreeNodeMenuKeys.DELETE_TABLE,
+    //   text: [
+    //     formatMessage({
+    //       id: 'odc.TreeNodeMenu.config.table.Delete',
+    //       defaultMessage: '删除'
+    //     })
+    //   ],
+    //   actionType: actionTypes.delete,
+    //   ellipsis: true,
+    //   disabled: (session, node) => {
+    //     return !hasTableChangePermission(session, node);
+    //   },
+    //   run(session, node) {
+    //     const table = node.data as ITableModel;
+    //     const tableName = table?.info?.tableName;
+    //     Modal.confirm({
+    //       title: formatMessage(
+    //         {
+    //           id: 'workspace.window.createTable.modal.delete',
+    //           defaultMessage: '是否确定删除 {name} ？'
+    //         },
+    //         {
+    //           name: tableName
+    //         }
+    //       ),
+    //       okText: formatMessage({
+    //         id: 'app.button.ok',
+    //         defaultMessage: '确定'
+    //       }),
+    //       cancelText: formatMessage({
+    //         id: 'app.button.cancel',
+    //         defaultMessage: '取消'
+    //       }),
+    //       icon: <QuestionCircleFilled />,
+    //       centered: true,
+    //       onOk: async () => {
+    //         const success = await dropObject(
+    //           tableName,
+    //           DbObjectType.table,
+    //           session.sessionId
+    //         );
+    //         if (success) {
+    //           await session.database.getTableList();
+    //           message.success(
+    //             formatMessage({
+    //               id: 'workspace.window.createTable.modal.delete.success',
+    //               defaultMessage: '删除表成功'
+    //             })
+    //           );
+    //           const openedPage = pageStore!.pages.find(
+    //             (p) => p.params.tableName === tableName
+    //           );
+    //           if (openedPage) {
+    //             pageStore!.close(openedPage.key);
+    //           }
+    //         }
+    //       }
+    //     });
+    //   }
+    // },
     {
       key: ResourceTreeNodeMenuKeys.REFRESH_TABLE,
       text: [

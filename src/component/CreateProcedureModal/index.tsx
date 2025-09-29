@@ -25,10 +25,11 @@ import { openCreateProcedurePage } from '@/store/helper/page';
 import type { ModalStore } from '@/store/modal';
 import { SessionManagerStore } from '@/store/sessionManager';
 import { useDBSession } from '@/store/sessionManager/hooks';
-import { Form, Input, message, Modal, Spin } from 'antd';
+import { Form, message, Modal, Spin, Space } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import ProcedureParam from '../ProcedureParam';
 import ExtraOptions from '../ProcedureParam/ExtraOptions';
+import { BasicButton, BasicInput, BasicModal } from '@actiontech/dms-kit';
 
 interface IProps {
   modalStore?: ModalStore;
@@ -121,7 +122,7 @@ const CreateProcedureModal: React.FC<IProps> = inject(
       }
     }, [visible]);
     return (
-      <Modal
+      <BasicModal
         centered={true}
         width={760}
         destroyOnClose={true}
@@ -130,8 +131,23 @@ const CreateProcedureModal: React.FC<IProps> = inject(
           defaultMessage: '新建存储过程'
         })}
         open={visible}
-        onOk={save}
         onCancel={onCancel}
+        footer={
+          <Space>
+            <BasicButton onClick={onCancel}>
+              {formatMessage({
+                id: 'app.button.cancel',
+                defaultMessage: '取消'
+              })}
+            </BasicButton>
+            <BasicButton type="primary" onClick={save}>
+              {formatMessage({
+                id: 'app.button.save',
+                defaultMessage: '保存'
+              })}
+            </BasicButton>
+          </Space>
+        }
       >
         <Spin spinning={loading}>
           <Form form={form} requiredMark="optional" layout="vertical">
@@ -151,7 +167,7 @@ const CreateProcedureModal: React.FC<IProps> = inject(
                 }
               ]}
             >
-              <Input
+              <BasicInput
                 style={{
                   width: 320
                 }}
@@ -182,7 +198,7 @@ const CreateProcedureModal: React.FC<IProps> = inject(
             </Form.Item>
           </Form>
         </Spin>
-      </Modal>
+      </BasicModal>
     );
   })
 );

@@ -5,7 +5,6 @@ import {
   isExportFileResponse,
   isFileStreamResponse,
   ResponseCode,
-  EmitterKey,
   LocalStorageWrapper,
   StorageKey,
   getRecentlySelectedZone
@@ -20,19 +19,39 @@ import { eventEmitter } from '@/util/utils';
 import type { NotificationInstanceKeyType } from '@/hooks/useNotificationContext';
 import { formatMessage } from '@/util/intl';
 import { ArgsProps } from 'antd/es/notification';
+import EmitterKey from '@actiontech/dms-kit/es/data/EmitterKey';
+import { addFailedRequest } from './authManage';
 
 const doNotAddAuthRequest = ['v1/dms/sessions'];
 
 class ApiBase {
-  private static instance: AxiosInstance = axios.create({});
-  private static _interceptorsReady = false;
+  constructor(baseUrl: string = '') {
+    let externalApiPrefix = '';
 
-  private static authInvalid(config: AxiosRequestConfig) {}
+    if (process.env.NODE_ENV === 'development') {
+      externalApiPrefix = '/external_api';
+    }
+    this.instance = axios.create({
+      baseURL: externalApiPrefix + baseUrl
+    });
+  }
 
-  private static async successHandle(res: AxiosResponse<any, any>) {
+  private instance: AxiosInstance;
+
+  private _interceptorsReady = false;
+
+  private authInvalid(config: AxiosRequestConfig) {
+    addFailedRequest(config);
+  }
+
+  public setInstanceBaseURL = (baseURL: string) => {
+    this.instance.defaults.baseURL = baseURL;
+  };
+
+  private async successHandle(res: AxiosResponse<any, any>) {
     const code = await getResponseCode(res);
     if (res.status === 401) {
-      ApiBase.authInvalid(res.config);
+      this.authInvalid(res.config);
       return res;
     } else if (isExportFileResponse(res)) {
       const disposition: string = res.headers?.['content-disposition'];
@@ -74,9 +93,9 @@ class ApiBase {
     return res;
   }
 
-  private static async errorHandle(error: any) {
+  private async errorHandle(error: any) {
     if (error?.response?.status === 401) {
-      return await ApiBase.authInvalid(error.config);
+      return await this.authInvalid(error.config);
     } else if (error?.response?.status !== 200) {
       const message = await getResponseErrorMessage(error.response);
       eventEmitter.emit<[NotificationInstanceKeyType, ArgsProps]>(
@@ -95,8 +114,8 @@ class ApiBase {
   }
 
   // 初始化拦截器
-  private static setupInterceptors(): void {
-    ApiBase.instance.interceptors.request.use((config) => {
+  private setupInterceptors(): void {
+    this.instance.interceptors.request.use((config) => {
       const token = LocalStorageWrapper.get(StorageKey.Token);
       if (!token || doNotAddAuthRequest.some((url) => config.url === url)) {
         return config;
@@ -130,71 +149,69 @@ class ApiBase {
     });
 
     // 响应拦截器
-    ApiBase.instance.interceptors.response.use(
+    this.instance.interceptors.response.use(
       (response) => {
-        return ApiBase.successHandle(response);
+        return this.successHandle(response);
       },
       (error) => {
-        return ApiBase.errorHandle(error);
+        return this.errorHandle(error);
       }
     );
   }
 
-  private static ensureReady(): void {
+  ensureReady(): void {
     // 懒加载初始化拦截器，避免重复注册
-    if (ApiBase._interceptorsReady) return;
-    ApiBase.setupInterceptors();
-    ApiBase._interceptorsReady = true;
+    if (this._interceptorsReady) return;
+    this.setupInterceptors();
+    this._interceptorsReady = true;
   }
 
-  static request<T = any>(
-    config: AxiosRequestConfig
-  ): Promise<AxiosResponse<T>> {
-    ApiBase.ensureReady();
-    return ApiBase.instance.request<T>(config);
+  request<T = any>(config: AxiosRequestConfig): Promise<AxiosResponse<T>> {
+    this.ensureReady();
+    return this.instance.request<T>(config);
   }
 
-  static get<T = any>(
+  get<T = any>(
     url: string,
     config?: AxiosRequestConfig
   ): Promise<AxiosResponse<T>> {
-    ApiBase.ensureReady();
-    return ApiBase.instance.get<T>(url, config);
+    this.ensureReady();
+    return this.instance.get<T>(url, config);
   }
 
-  static post<T = any>(
+  post<T = any>(
     url: string,
     data?: any,
     config?: AxiosRequestConfig
   ): Promise<AxiosResponse<T>> {
-    ApiBase.ensureReady();
-    return ApiBase.instance.post<T>(url, data, config);
+    this.ensureReady();
+    return this.instance.post<T>(url, data, config);
   }
 
-  static delete<T = any>(
+  delete<T = any>(
     url: string,
     config?: AxiosRequestConfig
   ): Promise<AxiosResponse<T>> {
-    ApiBase.ensureReady();
-    return ApiBase.instance.delete<T>(url, config);
+    this.ensureReady();
+    return this.instance.delete<T>(url, config);
   }
 
-  static put<T = any>(
-    url: string,
-    data?: any,
-    config?: AxiosRequestConfig
-  ): Promise<AxiosResponse<T>> {
-    ApiBase.ensureReady();
-    return ApiBase.instance.put<T>(url, data, config);
-  }
-
-  static patch<T = any>(
+  put<T = any>(
     url: string,
     data?: any,
     config?: AxiosRequestConfig
   ): Promise<AxiosResponse<T>> {
-    ApiBase.ensureReady();
-    return ApiBase.instance.patch<T>(url, data, config);
+    this.ensureReady();
+    return this.instance.put<T>(url, data, config);
+  }
+
+  patch<T = any>(
+    url: string,
+    data?: any,
+    config?: AxiosRequestConfig
+  ): Promise<AxiosResponse<T>> {
+    this.ensureReady();
+    return this.instance.patch<T>(url, data, config);
   }
 }
 

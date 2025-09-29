@@ -888,7 +888,7 @@ const TaskTable: React.FC<IProps> = inject(
           showSelectedInfoBar={false}
         />
 
-        <ImportModal
+        {/* <ImportModal
           taskType={taskTabType as any}
           open={importModalVisible}
           onCancel={() => setImportModalVisible(false)}
@@ -897,7 +897,7 @@ const TaskTable: React.FC<IProps> = inject(
             setImportProjectId(projectId);
             debounceSubmit(scheduleTaskImportRequest, previewData);
           }}
-        />
+        /> */}
       </>
     );
   })

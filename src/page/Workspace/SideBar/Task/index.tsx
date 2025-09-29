@@ -21,9 +21,7 @@ import React, { useEffect } from 'react';
 import SideTabs from '../components/SideTabs';
 import styles from './index.less';
 
-interface IProps {}
-
-const Task: React.FC<IProps> = () => {
+const Task: React.FC = () => {
   useEffect(() => {
     tracert.expo('a3112.b41896.c330990');
   }, []);

@@ -18,13 +18,10 @@ import Action from '@/component/Action';
 import Icon, { DeleteOutlined } from '@ant-design/icons';
 import { message, Modal, Tooltip } from 'antd';
 import classNames from 'classnames';
-import styles from './index.less';
-
 import { deleteScript, downloadScript, syncScript } from '@/common/network';
 import { ReactComponent as ConsoleSQLSvg } from '@/svgr/Console-SQL.svg';
 import { formatMessage } from '@/util/intl';
 import { useCallback } from 'react';
-
 import { IScriptMeta } from '@/d.ts';
 import { closePageByScriptIdAndType } from '@/store/helper/page';
 import login from '@/store/login';
@@ -32,6 +29,7 @@ import setting from '@/store/setting';
 import { formatBytes } from '@/util/utils';
 import copyToCB from 'copy-to-clipboard';
 import { toString } from 'lodash';
+import { ScriptFileItemStyleWrapper } from './style';
 
 interface IProps {
   name: string;
@@ -112,16 +110,16 @@ export default function Item({
 
   return (
     <Tooltip title={errorMsg}>
-      <div
+      <ScriptFileItemStyleWrapper
         onClick={onClick}
         onDoubleClick={onDoubleClick}
-        className={classNames(styles.item, {
-          [styles.error]: !!errorMsg,
-          [styles.uploading]: uploading,
-          [styles.active]: !!activeFile
+        className={classNames({
+          error: !!errorMsg,
+          uploading: uploading,
+          active: !!activeFile
         })}
       >
-        <div className={styles.icon}>
+        <div className="icon">
           <Icon
             component={ConsoleSQLSvg}
             style={{
@@ -133,13 +131,13 @@ export default function Item({
           />
         </div>
         <div
-          className={classNames(styles.label, {
-            [styles.active]: !!activeFile
+          className={classNames('label', {
+            active: !!activeFile
           })}
         >
           {name}
         </div>
-        <div className={styles.action}>
+        <div className="action">
           {isSuccess ? (
             <Action.Group ellipsisIcon="vertical" size={0}>
               <Action.Link
@@ -218,7 +216,7 @@ export default function Item({
             />
           )}
         </div>
-      </div>
+      </ScriptFileItemStyleWrapper>
     </Tooltip>
   );
 }

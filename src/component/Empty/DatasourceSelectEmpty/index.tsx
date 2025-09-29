@@ -37,7 +37,7 @@ export default ({ height = 160 }: IProps) => {
 
         <Divider />
 
-        <div className={styles.setting}>
+        {/* <div className={styles.setting}>
           <SettingOutlined color="#1890ff" />
           <span
             className={styles.action}
@@ -48,7 +48,7 @@ export default ({ height = 160 }: IProps) => {
               defaultMessage: '管理数据源'
             })}
           </span>
-        </div>
+        </div> */}
       </div>
     </Acess>
   );

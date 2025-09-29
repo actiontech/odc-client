@@ -7,6 +7,12 @@ export default {
     chrome: 83,
   },
   proxy: {
+    '/v/': {
+      target: 'http://10.186.62.13:11000'
+    },
+    '/sqle/v/': {
+      target: 'http://10.186.62.13:11000'
+    },
     // 本地开发或者对内 Site 应用的开发环境的代理配置
     '/api/v1/webSocket/obclient': {
       target: 'http://localhost:8989',

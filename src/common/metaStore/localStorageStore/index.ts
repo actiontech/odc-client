@@ -17,6 +17,7 @@
 import store from 'store';
 import expirePlugin from 'store/plugins/expire';
 import { IMetaStore } from '..';
+import { StorageKey } from '@actiontech/dms-kit';
 
 store.addPlugin(expirePlugin);
 
@@ -35,7 +36,7 @@ export default class LocalStorageStore implements IMetaStore {
   }
   async clear(): Promise<boolean> {
     store.each((v, key) => {
-      if (['umi_locale'].includes(key)) {
+      if (['umi_locale', StorageKey.Language].includes(key)) {
         return;
       }
       this.removeItem(key);

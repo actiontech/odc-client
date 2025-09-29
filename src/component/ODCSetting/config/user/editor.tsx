@@ -20,6 +20,7 @@ import { formatMessage } from '@/util/intl';
 import { IODCSetting, ODCSettingGroup } from '../../config';
 import RadioItem from '../../Item/RadioItem';
 import SelectItem from '../../Item/SelectItem';
+import { CUSTOM_DIFF_EDITOR_THEME_NAME } from '../../../MonacoEditor/plugins/theme/dms';
 
 const editorGroup: ODCSettingGroup = {
   label: formatMessage({
@@ -58,6 +59,10 @@ const editorSettings: IODCSetting[] = [
       return (
         <SelectItem
           options={[
+            {
+              label: 'DMS',
+              value: 'DMS'
+            },
             {
               label: 'OceanBase',
               value: 'OceanBase'

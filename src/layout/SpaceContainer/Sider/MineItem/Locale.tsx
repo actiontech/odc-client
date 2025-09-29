@@ -22,6 +22,14 @@ import React from 'react';
 import ContextMenu from '../ContextMenu';
 import { ArrowRightOutlined } from '@actiontech/icons';
 import { LocalLabelStyleWrapper } from './style';
+import { useRequest } from 'ahooks';
+import {
+  LocalStorageWrapper,
+  ResponseCode,
+  StorageKey,
+  SupportLanguage
+} from '@actiontech/dms-kit';
+import { UserService } from '../../../../external_api/base';
 
 interface IProps {}
 
@@ -34,6 +42,23 @@ const Locale: React.FC<IProps> = function () {
     localeList.find(
       (item) => item.value?.toLowerCase() === defaultLocale?.toLowerCase()
     );
+
+  const { run: updateLanguage, loading: updateLanguagePending } = useRequest(
+    (language: SupportLanguage) =>
+      UserService.UpdateCurrentUser({
+        current_user: {
+          language
+        }
+      }).then((res) => {
+        if (res.data.code === ResponseCode.SUCCESS) {
+          LocalStorageWrapper.set(StorageKey.Language, language);
+        }
+      }),
+    {
+      manual: true
+    }
+  );
+
   return (
     <ContextMenu
       popoverProps={{
@@ -47,6 +72,7 @@ const Locale: React.FC<IProps> = function () {
           <Radio
             className="full-width-element"
             checked={localeObj?.value === item.value}
+            disabled={updateLanguagePending}
           >
             {item.label}
           </Radio>
@@ -57,6 +83,8 @@ const Locale: React.FC<IProps> = function () {
           }
           window._forceRefresh = true;
           setLocale(item.value);
+          updateLanguage(item.value as SupportLanguage);
+
           window._forceRefresh = false;
         }
       }))}

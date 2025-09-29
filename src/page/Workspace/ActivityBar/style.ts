@@ -36,6 +36,7 @@ export const HeaderStyleWrapper = styled('div')`
   padding-left: 8px;
   padding-right: 8px;
   padding-bottom: 8px;
+  cursor: pointer;
 `;
 
 export const ItemsWrapperStyleWrapper = styled('div')`

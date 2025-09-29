@@ -48,9 +48,9 @@ import WorkspaceStore from './context/WorkspaceStore';
 import GlobalModals from './GlobalModals';
 import WorkBenchLayout from './Layout';
 import { isLogicalDatabase } from '@/util/database';
-import { DatabaseGroup } from '@/d.ts/database';
 import { ResourceNodeType } from '@/page/Workspace/SideBar/ResourceTree/type';
 import { getAsyncResultSet } from '@/common/network/task';
+import DMSIframeModal from '../../component/DMSIframeModal';
 
 let _closeMsg = '';
 export function changeCloseMsg(t: any) {
@@ -77,7 +77,6 @@ const Workspace: React.FC<WorkspaceProps> = (props: WorkspaceProps) => {
     sessionManagerStore
   } = props;
   const { pages = [], activePageKey } = pageStore;
-  console.log(pages);
   const { serverSystemInfo } = settingStore;
   const location = useLocation();
   const [params] = useSearchParams(location.hash);
@@ -120,8 +119,7 @@ const Workspace: React.FC<WorkspaceProps> = (props: WorkspaceProps) => {
     } else {
       return;
     }
-    console.log('openPage', projectId, datasourceId, databaseId);
-    history.replace('/sqlworkspace');
+    history.replace('/');
   }
   useEffect(() => {
     if (!isReady) {
@@ -394,6 +392,7 @@ const Workspace: React.FC<WorkspaceProps> = (props: WorkspaceProps) => {
       )}
 
       <WrapWorkSpaceExecuteSQLModal modalStore={modalStore} />
+      <DMSIframeModal modalStore={modalStore} />
     </>
   );
 };

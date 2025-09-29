@@ -46,7 +46,14 @@ export const ACTION_GROUPS = {
   SQL_DEFAULT_ACTION_GROUP: {
     left: [
       ['SQL_COMMIT', 'SQL_ROLLBACK'],
-      ['SQL_EXEC', 'SQL_EXEC_SECTION', 'SQL_STOP', 'SQL_LINT', 'SQL_PLAN'],
+      [
+        'SQL_EXEC',
+        'SQL_EXEC_SECTION',
+        'SQL_STOP',
+        'SQL_LINT',
+        'SQL_PLAN',
+        'SQL_IMPORT_FILE'
+      ],
       ...TEXT_ACTION_GROUPS
     ],
     right: [['SQL_SAVE', 'SQL_CONFIG']]

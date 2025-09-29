@@ -90,6 +90,39 @@ interface ITaskGroupLabel {
     enabled: boolean;
   }[];
 }
+
+export const getDMSTaskGroupLabels: () => ITaskGroupLabel[] = () => {
+  return [
+    {
+      groupName: '',
+      group: [
+        {
+          label: formatMessage({
+            id: 'osc.src.component.TASK.SQLOrders',
+            defaultMessage: 'SQL 工单'
+          }),
+          value: TaskPageType.CREATED_BY_CURRENT_USER,
+          enabled: true
+        }
+      ]
+    }
+    // {
+    //   groupName: '',
+    //   group: [
+    //     {
+    //       value: TaskPageType.EXPORT,
+    //       label: formatMessage({
+    //         id: 'odc.component.Task.helper.DataExport',
+    //         defaultMessage: '数据导出'
+    //       }),
+    //       // 导出
+    //       enabled: true
+    //     }
+    //   ]
+    // }
+  ];
+};
+
 export const getTaskGroupLabels: () => ITaskGroupLabel[] = () => {
   const isPersonal = login?.isPrivateSpace();
   return [
@@ -310,7 +343,7 @@ export const getTaskGroupLabels: () => ITaskGroupLabel[] = () => {
 };
 
 export function getTaskLabels() {
-  return flatten(getTaskGroupLabels()?.map((item) => item?.group));
+  return flatten(getDMSTaskGroupLabels()?.map((item) => item?.group));
 }
 export function getFirstEnabledTask() {
   return getTaskLabels()?.find((item) => item?.enabled);

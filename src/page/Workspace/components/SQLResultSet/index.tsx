@@ -18,6 +18,7 @@ import { formatMessage } from '@/util/intl';
 import { CloseOutlined, LockOutlined } from '@ant-design/icons';
 import { Badge, Dropdown, MenuProps } from 'antd';
 import Cookie from 'js-cookie';
+import LZString from 'lz-string';
 import type { ReactNode } from 'react';
 import React, { useCallback, useEffect, useState } from 'react';
 // @ts-ignore
@@ -41,6 +42,8 @@ import LintResultTable from './LintResultTable';
 import SQLResultLog from './SQLResultLog';
 import { ResultTabsStyleWrapper } from './style';
 import { BasicToolTip } from '@actiontech/dms-kit';
+import { generateDMSExportUrl } from '@/util/dms/export';
+import { getDMSProjectNameByDatasourceName } from '../../../../util/dms/project';
 
 export const recordsTabKey = 'records';
 export const sqlLintTabKey = 'sqlLint';
@@ -87,6 +90,83 @@ interface IProps {
   onUpdateEditing: (resultSetIndex: number, editing: boolean) => void;
 }
 
+/**
+ * 处理导出URL参数的工具函数
+ */
+const createExportUrlParams = (params: {
+  baseUrl?: string;
+  sql?: string;
+  instanceName?: string;
+  databaseName?: string;
+  taskName?: string;
+  desc?: string;
+}): string => {
+  const MAX_URL_LENGTH = 2000; // 安全的URL长度限制
+
+  const { baseUrl } = params;
+  try {
+    // 构建数据对象
+    const exportData: Record<string, any> = {};
+
+    if (params.databaseName) {
+      exportData.databaseName = params.databaseName;
+    }
+    if (params.instanceName) {
+      exportData.instanceName = params.instanceName;
+    }
+    if (params.taskName) {
+      exportData.taskName = params.taskName;
+    }
+    if (params.sql && params.sql.trim() !== '') {
+      exportData.sql = params.sql.trim();
+    }
+
+    if (params.desc) {
+      exportData.desc = params.desc;
+    }
+
+    if (Object.keys(exportData).length === 0) {
+      return baseUrl;
+    }
+
+    const jsonStr = JSON.stringify(exportData);
+
+    let compressedData = '';
+    try {
+      compressedData = LZString.compressToEncodedURIComponent(jsonStr);
+    } catch {
+      return baseUrl;
+    }
+
+    const fullUrl = `${baseUrl}&compression_data=${compressedData}`;
+
+    if (fullUrl.length <= MAX_URL_LENGTH) {
+      return fullUrl;
+    }
+
+    // URL过长，尝试不传递SQL的版本
+    const dataWithoutSql = { ...exportData };
+    delete dataWithoutSql.sql;
+
+    if (Object.keys(dataWithoutSql).length > 0) {
+      try {
+        const jsonStrWithoutSql = JSON.stringify(dataWithoutSql);
+        const compressedDataWithoutSql =
+          LZString.compressToEncodedURIComponent(jsonStrWithoutSql);
+        const urlWithoutSql = `${baseUrl}&compression_data=${compressedDataWithoutSql}`;
+
+        if (urlWithoutSql.length <= MAX_URL_LENGTH) {
+          return urlWithoutSql;
+        }
+      } catch {}
+    }
+
+    return baseUrl;
+  } catch {
+    return baseUrl;
+  }
+};
+
 const SQLResultSet: React.FC<IProps> = function (props) {
   const {
     activeKey,
@@ -103,7 +183,6 @@ const SQLResultSet: React.FC<IProps> = function (props) {
     sqlChanged,
     baseOffset,
     onSubmitRows,
-    onExportResultSet,
     onChangeResultSetTab,
     onShowExecuteDetail,
     onShowTrace,
@@ -404,11 +483,20 @@ const SQLResultSet: React.FC<IProps> = function (props) {
                     resultHeight={resultHeight - TAB_HEADER_HEIGHT}
                     generalSqlType={set.generalSqlType}
                     traceId={set.traceId}
-                    onExport={
-                      set.allowExport
-                        ? (limit) => onExportResultSet(i, limit, tableName)
-                        : null
-                    }
+                    onExport={() => {
+                      if (set.allowExport) {
+                        const url = generateDMSExportUrl({
+                          sql: set.originSql,
+                          instanceName: session.odcDatabase.dataSource.name,
+                          schemaName:
+                            set.resultSetMetaData?.table?.databaseName,
+                          projectName: getDMSProjectNameByDatasourceName(
+                            session.odcDatabase.dataSource.name
+                          )
+                        });
+                        window.open(url);
+                      }
+                    }}
                     onShowExecuteDetail={() =>
                       onShowExecuteDetail(set.initialSql, set.traceId)
                     }
@@ -470,7 +558,7 @@ const SQLResultSet: React.FC<IProps> = function (props) {
                     title={
                       <pre style={{ marginBottom: 0 }}>
                         {Object.entries(count)
-                          .map(([status, item]) => {
+                          .map(([, item]) => {
                             return formatMessage(
                               {
                                 id: 'odc.components.SQLResultSet.ItemcountSqlItemlabel',

@@ -19,15 +19,16 @@ import { openTasksPage } from '@/store/helper/page';
 import type { PageStore } from '@/store/page';
 import { TaskStore } from '@/store/task';
 import Icon from '@ant-design/icons';
-import { Space, Tooltip, Typography } from 'antd';
+import { Space, Typography } from 'antd';
 import classNames from 'classnames';
 import { inject, observer } from 'mobx-react';
 import React, { useEffect } from 'react';
-import { getFirstEnabledTask, getTaskGroupLabels } from './helper';
+import { getDMSTaskGroupLabels, getFirstEnabledTask } from './helper';
 
 import styles from './index.less';
 import useUrlAction, { URL_ACTION } from '@/util/hooks/useUrlAction';
 import useURLParams from '@/util/hooks/useUrlParams';
+import { TaskSideGroupItemStyleWrapper } from './style';
 
 interface IProps {
   taskStore?: TaskStore;
@@ -68,7 +69,7 @@ const Sider: React.FC<IProps> = function ({
   };
 
   function renderTaskTypeList() {
-    return getTaskGroupLabels()
+    return getDMSTaskGroupLabels()
       ?.map((taskGroup) => {
         const { groupName, icon, group } = taskGroup;
         const tasks = group?.filter((task) => task.enabled);
@@ -86,20 +87,15 @@ const Sider: React.FC<IProps> = function ({
             ) : null}
             {tasks.map((item) => {
               return (
-                <div
-                  className={classNames(
-                    {
-                      [styles.selected]: pageKey === item.value
-                    },
-                    styles.groupItem
-                  )}
+                <TaskSideGroupItemStyleWrapper
+                  className={classNames({
+                    selected: pageKey === item.value
+                  })}
                   key={item.value}
                   onClick={() => handleClick(item.value)}
                 >
-                  <Tooltip title={item.label} placement="right">
-                    <Text ellipsis>{item.label}</Text>
-                  </Tooltip>
-                </div>
+                  <Text ellipsis>{item.label}</Text>
+                </TaskSideGroupItemStyleWrapper>
               );
             })}
           </div>

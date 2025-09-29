@@ -51,7 +51,7 @@ const OrganizationListenWrap: React.FC<IProps> = function ({
       /**
        * 私人空间禁止
        */
-      navigate('/sqlworkspace');
+      navigate('/');
     }
   }, [location.pathname, organizationId, userStore.organizations]);
   return isSwitching ? (

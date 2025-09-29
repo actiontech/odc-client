@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { InputNumber } from 'antd';
+import { BasicInputNumber } from '@actiontech/dms-kit';
 import { useState } from 'react';
 
 export default function InputIntergerItem(props: {
@@ -26,7 +26,7 @@ export default function InputIntergerItem(props: {
   const minValue = props?.min || '0';
 
   return (
-    <InputNumber
+    <BasicInputNumber
       min={minValue}
       precision={0}
       style={{ width: 140 }}

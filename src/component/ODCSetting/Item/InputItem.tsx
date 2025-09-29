@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Input, Radio, RadioGroupProps } from 'antd';
+import { BasicInput } from '@actiontech/dms-kit';
 import { useState } from 'react';
 
 export default function InputItem(props: {
@@ -23,7 +23,7 @@ export default function InputItem(props: {
 }) {
   const [loading, setLoading] = useState(false);
   return (
-    <Input
+    <BasicInput
       style={{ width: 140 }}
       key={props.value}
       defaultValue={props.value}

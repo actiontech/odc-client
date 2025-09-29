@@ -78,6 +78,8 @@ const databaseSettings: IODCSetting[] = [
     render: (value, onChange) => {
       return (
         <RadioItem
+          value={value}
+          onChange={onChange}
           options={[
             {
               label: formatMessage({
@@ -94,8 +96,6 @@ const databaseSettings: IODCSetting[] = [
               value: AutoCommitMode.OFF
             }
           ]}
-          value={value}
-          onChange={onChange}
         />
       );
     }

@@ -124,7 +124,7 @@ const ActionBar: React.FC<IProps> = inject(
     const [openRollback, setOpenRollback] = useState(false);
     const [taskList, setTaskList] = useState<ICycleSubTaskRecord[]>([]);
     const [viewLoading, setViewLoading] = useState(false);
-    const isSqlworkspace = location?.hash?.includes('sqlworkspace');
+    const isSqlworkspace = true;
     const disabledApproval =
       task?.status === TaskStatus.WAIT_FOR_CONFIRM && !isDetailModal
         ? true
@@ -447,7 +447,7 @@ const ActionBar: React.FC<IProps> = inject(
             window.open(
               location.origin +
                 location.pathname +
-                `#/sqlworkspace?taskId=${
+                `#/?taskId=${
                   task.id
                 }&resultSets=${true}&sqlContent=${JSON.stringify(
                   (task?.parameters as IAsyncTaskParams)?.sqlContent

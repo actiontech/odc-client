@@ -40,11 +40,11 @@ export async function getSQLTokens(sql, isMysql: boolean) {
   const lexer = new Lexer(chars);
   const tokens = new CommonTokenStream(lexer);
   tokens.fill();
-  console.log(
-    `${isMysql ? 'mysql' : 'oracle'} sql parser token time(${
-      performance.now() - now
-    }): ${sql}`
-  );
+  // console.log(
+  //   `${isMysql ? 'mysql' : 'oracle'} sql parser token time(${
+  //     performance.now() - now
+  //   }): ${sql}`
+  // );
   return tokens.tokens.filter((token) => {
     return token.channel !== Token.HIDDEN_CHANNEL && token.type != Token.EOF;
   });
@@ -58,7 +58,7 @@ export async function getSQLEntryName(sql: string) {
   const OracleLexer = await import(
     '@oceanbase-odc/ob-parser-js/esm/parser/oracle/PlSqlLexer'
   ).then((module) => module.PlSqlLexer);
-  let name = [];
+  const name = [];
   for (let i = 0; i < tokens.length; i++) {
     const token = tokens[i];
     const tokenType = token.type;

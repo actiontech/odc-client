@@ -6,6 +6,7 @@ export const ResultTabsStyleWrapper = styled(Tabs)`
       border-top: none;
 
       .ant-tabs-nav {
+        height: 28px !important;
         background: ${({ theme }) => theme.sharedTheme.uiToken.colorBgBase};
         border-bottom: none !important;
         .ant-tabs-nav-operations {

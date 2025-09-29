@@ -25,12 +25,17 @@ import snippetStore, {
   SNIPPET_TYPES
 } from '@/store/snippet';
 import { formatMessage } from '@/util/intl';
-import { Button, Drawer, Form, Input, message, Modal, Select } from 'antd';
+import {
+  BasicButton,
+  BasicDrawer,
+  BasicInput,
+  BasicSelect
+} from '@actiontech/dms-kit';
+import { Form, message, Modal, Select } from 'antd';
 import type { FormInstance } from 'antd/lib/form';
 import React, { PureComponent } from 'react';
 const MAX_SNIPPRT_SIZE = 10000;
 const { Option } = Select;
-const { TextArea } = Input;
 interface IProps {
   visible: boolean;
   action: EnumSnippetAction;
@@ -162,7 +167,7 @@ class SnippetFormDrawer extends PureComponent<IProps> {
       body: snippet?.body
     };
     return (
-      <Drawer
+      <BasicDrawer
         title={
           formatMessage(
             {
@@ -226,7 +231,7 @@ class SnippetFormDrawer extends PureComponent<IProps> {
                 }
               ]}
             >
-              <Input
+              <BasicInput
                 placeholder={
                   formatMessage({
                     id: 'odc.component.SnippetForm.EnterASyntaxName',
@@ -253,7 +258,7 @@ class SnippetFormDrawer extends PureComponent<IProps> {
                 }
               ]}
             >
-              <Select
+              <BasicSelect
                 placeholder={formatMessage({
                   id: 'odc.component.SnippetForm.SelectASyntaxType',
                   defaultMessage: '请选择代码片段类型'
@@ -269,7 +274,7 @@ class SnippetFormDrawer extends PureComponent<IProps> {
                     {snippetType.name}
                   </Option>
                 ))}
-              </Select>
+              </BasicSelect>
             </Form.Item>
             <Form.Item
               label={formatMessage({
@@ -362,7 +367,7 @@ class SnippetFormDrawer extends PureComponent<IProps> {
                 }
               ]}
             >
-              <TextArea
+              <BasicInput.TextArea
                 placeholder={formatMessage({
                   id: 'odc.component.SnippetForm.EnterASyntaxDescription',
                   defaultMessage: '请输入代码片段描述'
@@ -384,7 +389,7 @@ class SnippetFormDrawer extends PureComponent<IProps> {
                 textAlign: 'right'
               }}
             >
-              <Button
+              <BasicButton
                 onClick={this.onClose}
                 style={{
                   marginRight: 8
@@ -397,8 +402,8 @@ class SnippetFormDrawer extends PureComponent<IProps> {
                   })
                   /* 取消 */
                 }
-              </Button>
-              <Button type="primary" onClick={this.handleSubmit}>
+              </BasicButton>
+              <BasicButton type="primary" onClick={this.handleSubmit}>
                 {
                   formatMessage({
                     id: 'odc.component.SnippetForm.Determine',
@@ -406,11 +411,11 @@ class SnippetFormDrawer extends PureComponent<IProps> {
                   })
                   /* 确定 */
                 }
-              </Button>
+              </BasicButton>
             </div>
           </Form>
         )}
-      </Drawer>
+      </BasicDrawer>
     );
   }
 }

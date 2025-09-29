@@ -45,39 +45,6 @@ const CustomDropdown = ({
 
   const menuItems = node.data
     ? [
-        {
-          label: formatMessage({
-            id: 'odc.src.page.Workspace.SideBar.ResourceTree.SelectPanel.Datasource.Clone',
-            defaultMessage: '克隆'
-          }),
-          key: 'clone',
-          onClick: (e) =>
-            handleMenuClick(e, () => setCopyDatasourceId(node.data.id))
-        },
-        {
-          label: formatMessage({
-            id: 'odc.ResourceTree.Datasource.Edit',
-            defaultMessage: '编辑'
-          }),
-          key: 'edit',
-          onClick: (e) =>
-            handleMenuClick(e, () => {
-              setEditDatasourceId(node.data.id);
-              setAddDSVisiable(true);
-            })
-        },
-        {
-          label: formatMessage({
-            id: 'odc.ResourceTree.Datasource.Delete',
-            defaultMessage: '删除'
-          }),
-          key: 'delete',
-          onClick: (e) =>
-            handleMenuClick(e, () => {
-              const name = node.title;
-              deleteDataSource(name as string, node.data.id as string);
-            })
-        },
         userStore.isPrivateSpace()
           ? {
               label: formatMessage({
@@ -227,48 +194,6 @@ const DataSourceNodeMenu = (props: IProps) => {
               )}
               {userStore.isPrivateSpace() && (
                 <Action.Group ellipsisIcon="vertical" size={0}>
-                  <Action.Link
-                    onClick={() => {
-                      setCopyDatasourceId(dataSource.id);
-                    }}
-                    key={'clone'}
-                  >
-                    {
-                      formatMessage({
-                        id: 'odc.src.page.Workspace.SideBar.ResourceTree.SelectPanel.Datasource.Clone.1',
-                        defaultMessage:
-                          '\n                                  克隆\n                                '
-                      }) /* 
-                               克隆
-                               */
-                    }
-                  </Action.Link>
-
-                  <Action.Link
-                    onClick={() => {
-                      setEditDatasourceId(dataSource.id);
-                      setAddDSVisiable(true);
-                    }}
-                    key={'edit'}
-                  >
-                    {formatMessage({
-                      id: 'odc.ResourceTree.Datasource.Edit',
-                      defaultMessage: '编辑'
-                    })}
-                  </Action.Link>
-
-                  <Action.Link
-                    onClick={() =>
-                      deleteDataSource(node.title as string, dataSource.id)
-                    }
-                    key={'delete'}
-                  >
-                    {formatMessage({
-                      id: 'odc.ResourceTree.Datasource.Delete',
-                      defaultMessage: '删除'
-                    })}
-                  </Action.Link>
-
                   <Action.Link onClick={() => sync(dataSource.id)} key={'sync'}>
                     {formatMessage({
                       id: 'src.page.Workspace.SideBar.ResourceTree.DatabaseSearchModal.components.884084AB',

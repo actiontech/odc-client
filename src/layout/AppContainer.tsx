@@ -48,12 +48,17 @@ import StoreProvider from './StoreProvider';
 import { ConfigProvider, Spin } from 'antd';
 import {
   ConfigProvider as DmsKitConfigProvider,
+  LocalStorageWrapper,
   SpinIndicator,
+  StorageKey,
   SupportLanguage
 } from '@actiontech/dms-kit';
 import antd_zh_CN from 'antd/locale/zh_CN';
 import antd_en_US from 'antd/locale/en_US';
 import { theme } from './antdTheme';
+import useNotificationContext from '../hooks/useNotificationContext';
+import Watermark from '../component/Watermark';
+import { compressToBase64, decompressFromBase64 } from 'lz-string';
 
 // // TODO：支持英文版
 // setLocale('zh-CN');
@@ -98,6 +103,8 @@ let timer = null;
 const AppContainer: React.FC<IBasicLayoutProps> = (
   props: IBasicLayoutProps
 ) => {
+  const { notificationContextHolder } = useNotificationContext();
+  const [edition, setEdition] = useState();
   const [isServerReady, setIsServerReady] = useState<boolean>(false);
   const [waitNumber, setWaitNumber] = useState<number>(-1);
   const { route } = useRouteData();
@@ -143,6 +150,14 @@ const AppContainer: React.FC<IBasicLayoutProps> = (
     return 'OceanBase Developer Center';
   };
   useEffect(() => {
+    // LocalStorageWrapper.set(
+    //   StorageKey.Token,
+    //   'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTkwNDY1NTgsImlhdCI6MTc1OTAzOTM1OCwiaXNzIjoiYWN0aW9udGVjaCBkbXMiLCJ0eXAiOiJkbXMtdG9rZW4iLCJ1aWQiOiI3MDAyMDAifQ.9AiOmIEv1eJycibhtpbCQs2BNWvJD_OXZMj1VGNu26E'
+    // );
+    // LocalStorageWrapper.set(
+    //   StorageKey.DMS_CB_CHANNEL,
+    //   compressToBase64(JSON.stringify({ type: 'sqle_edition', data: 'ee' }))
+    // );
     async function asyncEffect() {
       const { userStore, settingStore } = props;
       const authority = undefined;
@@ -170,6 +185,21 @@ const AppContainer: React.FC<IBasicLayoutProps> = (
     };
   }, []);
   const pageLoadingContext = useContext(PageLoadingContext);
+
+  useEffect(() => {
+    const channel = LocalStorageWrapper.get(StorageKey.DMS_CB_CHANNEL);
+    if (channel) {
+      try {
+        const json = JSON.parse(decompressFromBase64(channel));
+        if (json.type === 'sqle_edition') {
+          setEdition(json.data);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }, []);
+
   useEffect(() => {
     if (isReady) {
       pageLoadingContext?.removeTask();
@@ -196,10 +226,10 @@ const AppContainer: React.FC<IBasicLayoutProps> = (
   }, [isReady, isServerReady, waitNumber, settingStore.settingLoadStatus]);
   return (
     <React.Fragment>
-      {
+      {/* {
         // 只在客户端开启用户信息采集窗口
         isClient() && <AskeventTrackingPermissionModal />
-      }
+      } */}
 
       <Helmet>
         <title>{getPageTitle(pathname)}</title>
@@ -214,6 +244,10 @@ const AppContainer: React.FC<IBasicLayoutProps> = (
                 }}
                 className={classNames(params)}
               >
+                {notificationContextHolder}
+                {userStore?.user?.name && edition === 'ee' && (
+                  <Watermark text={userStore?.user?.name} />
+                )}
                 <Outlet />
               </div>
             ) : (

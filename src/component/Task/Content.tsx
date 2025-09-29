@@ -53,6 +53,8 @@ import styles from './index.less';
 import { UserStore } from '@/store/login';
 import { TaskDetailContext } from './TaskDetailContext';
 import useURLParams from '@/util/hooks/useUrlParams';
+import ExecuteTask from './DMSTask/Execute';
+import ExportTask from './DMSTask/Export';
 
 interface IProps {
   taskStore?: TaskStore;
@@ -97,7 +99,7 @@ const TaskManaerContent: React.FC<IProps> = (props) => {
     status: null
   });
   const location = useLocation();
-  const isSqlworkspace = location?.pathname?.includes('/sqlworkspace');
+  const isSqlworkspace = true;
   const { detailId, detailType, detailVisible, cycleTasks, tasks } = state;
   const taskList = isCycleTaskPage(taskTabType) ? cycleTasks : tasks;
   const theme = isSqlworkspace ? null : 'vs';
@@ -373,7 +375,7 @@ const TaskManaerContent: React.FC<IProps> = (props) => {
         setState
       }}
     >
-      <div className={styles.content}>
+      {/* <div className={styles.content}>
         <TaskTable
           disableProjectCol={disableProjectCol}
           tableRef={tableRef}
@@ -385,8 +387,11 @@ const TaskManaerContent: React.FC<IProps> = (props) => {
           onReloadList={reloadList}
           onMenuClick={handleMenuClick}
         />
-      </div>
-      <DetailModal
+      </div> */}
+      {taskTabType === TaskPageType.CREATED_BY_CURRENT_USER && <ExecuteTask />}
+      {/* TODO 先隐藏，等后续后端接口 */}
+      {/* {taskTabType === TaskPageType.EXPORT && <ExportTask />} */}
+      {/* <DetailModal
         theme={theme}
         taskOpenRef={taskOpenRef}
         type={detailType}
@@ -394,7 +399,7 @@ const TaskManaerContent: React.FC<IProps> = (props) => {
         visible={detailVisible}
         onDetailVisible={handleDetailVisible}
         onReloadList={reloadList}
-      />
+      /> */}
     </TaskDetailContext.Provider>
   );
 };

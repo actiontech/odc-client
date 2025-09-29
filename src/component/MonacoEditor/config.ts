@@ -15,10 +15,10 @@
  */
 
 export const fontSizeMap = {
-  Small: 10,
-  Normal: 12,
-  Large: 14
+  Small: 12,
+  Normal: 14,
+  Large: 16
 };
 export function getFontSize(fontSizeType: string) {
-  return fontSizeMap[fontSizeType] || 12;
+  return fontSizeMap[fontSizeType] || 14;
 }

@@ -33,10 +33,17 @@ import {
   message,
   Modal,
   Row,
+  Space,
   Spin
 } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import ExtraOptions from '../ProcedureParam/ExtraOptions';
+import {
+  BasicButton,
+  BasicInput,
+  BasicModal,
+  BasicSelect
+} from '@actiontech/dms-kit';
 
 interface IProps {
   modalStore?: ModalStore;
@@ -54,6 +61,7 @@ const CreateFunctionModal: React.FC<IProps> = inject(
 )(
   observer((props: IProps) => {
     const { modalStore, model, sessionManagerStore } = props;
+    const [ModalApi, modalContextHolder] = Modal.useModal();
     const dbId = modalStore?.createFunctionModalData?.databaseId;
     const dbName = modalStore?.createFunctionModalData?.dbName;
     const { session, loading } = useDBSession(dbId);
@@ -65,7 +73,7 @@ const CreateFunctionModal: React.FC<IProps> = inject(
     }>();
 
     const onCancel = useCallback(() => {
-      Modal.confirm({
+      ModalApi.confirm({
         title: formatMessage({
           id: 'odc.component.CreateFunctionModal.ConfirmToClose',
           defaultMessage: '确认关闭'
@@ -140,115 +148,132 @@ const CreateFunctionModal: React.FC<IProps> = inject(
       }
     }, [visible, session]);
     return (
-      <Modal
-        centered={true}
-        width={760}
-        destroyOnClose={true}
-        title={formatMessage({
-          id: 'workspace.window.createFunction.modal.title',
-          defaultMessage: '新建函数'
-        })}
-        open={visible}
-        onOk={save}
-        onCancel={onCancel}
-      >
-        <Spin spinning={loading}>
-          <Form
-            requiredMark="optional"
-            layout="vertical"
-            form={form}
-            initialValues={{ ...model }}
-          >
-            <Row>
-              <Col span={12}>
-                <Form.Item
-                  name="funName"
-                  label={formatMessage({
-                    id: 'workspace.window.createFunction.funName',
-                    defaultMessage: '函数名称'
-                  })}
-                  rules={[
-                    {
-                      required: true,
-                      message: formatMessage({
-                        id: 'workspace.window.createFunction.funName.validation',
-                        defaultMessage: '请输入函数名称'
-                      })
-                    }
-                  ]}
-                >
-                  <Input
-                    style={{
-                      width: 320
-                    }}
-                    placeholder={formatMessage({
-                      id: 'workspace.window.createFunction.funName.placeholder',
-                      defaultMessage: '请输入函数名称'
-                    })}
-                  />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item
-                  name="returnType"
-                  label={formatMessage({
-                    id: 'workspace.window.createFunction.returnType',
-                    defaultMessage: '返回类型'
-                  })}
-                  rules={[
-                    {
-                      required: true,
-                      message: formatMessage({
-                        id: 'workspace.window.createFunction.returnType.validation',
-                        defaultMessage: '请输入函数返回值'
-                      })
-                    }
-                  ]}
-                >
-                  <AutoComplete
-                    style={{
-                      width: 160
-                    }}
-                    options={session?.dataTypes
-                      ?.map((d) =>
-                        dbMode === ConnectionMode.OB_ORACLE
-                          ? d.databaseType.replace('(', '').replace(')', '')
-                          : d.databaseType
-                      )
-                      .map((a) => ({ value: a }))}
-                    filterOption={(inputValue, option) =>
-                      // @ts-ignore
-                      option.value
-                        .toUpperCase()
-                        .indexOf(inputValue.toUpperCase()) !== -1
-                    }
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
-            <ExtraOptions
-              connectType={session?.connection?.type}
-              dbType={DbObjectType.function}
-            />
-            <Form.Item
-              label={formatMessage({
-                id: 'odc.component.CreateFunctionModal.Parameter',
-                defaultMessage: '参数'
-              })}
-              /* 参数 */ required
+      <>
+        {modalContextHolder}
+        <BasicModal
+          centered={true}
+          width={760}
+          destroyOnClose={true}
+          title={formatMessage({
+            id: 'workspace.window.createFunction.modal.title',
+            defaultMessage: '新建函数'
+          })}
+          open={visible}
+          onCancel={onCancel}
+          footer={
+            <Space>
+              <BasicButton onClick={onCancel}>
+                {formatMessage({
+                  id: 'app.button.cancel',
+                  defaultMessage: '取消'
+                })}
+              </BasicButton>
+              <BasicButton type="primary" onClick={save}>
+                {formatMessage({
+                  id: 'app.button.save',
+                  defaultMessage: '保存'
+                })}
+              </BasicButton>
+            </Space>
+          }
+        >
+          <Spin spinning={loading}>
+            <Form
+              requiredMark="optional"
+              layout="vertical"
+              form={form}
+              initialValues={{ ...model }}
             >
-              {session ? (
-                <FunctionOrProcedureParams
-                  session={session}
-                  dbMode={dbMode}
-                  mode={DbObjectType.function}
-                  paramsRef={paramsRef}
-                />
-              ) : null}
-            </Form.Item>
-          </Form>
-        </Spin>
-      </Modal>
+              <Row>
+                <Col span={12}>
+                  <Form.Item
+                    name="funName"
+                    label={formatMessage({
+                      id: 'workspace.window.createFunction.funName',
+                      defaultMessage: '函数名称'
+                    })}
+                    rules={[
+                      {
+                        required: true,
+                        message: formatMessage({
+                          id: 'workspace.window.createFunction.funName.validation',
+                          defaultMessage: '请输入函数名称'
+                        })
+                      }
+                    ]}
+                  >
+                    <BasicInput
+                      style={{
+                        width: 320
+                      }}
+                      placeholder={formatMessage({
+                        id: 'workspace.window.createFunction.funName.placeholder',
+                        defaultMessage: '请输入函数名称'
+                      })}
+                    />
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item
+                    name="returnType"
+                    label={formatMessage({
+                      id: 'workspace.window.createFunction.returnType',
+                      defaultMessage: '返回类型'
+                    })}
+                    rules={[
+                      {
+                        required: true,
+                        message: formatMessage({
+                          id: 'workspace.window.createFunction.returnType.validation',
+                          defaultMessage: '请输入函数返回值'
+                        })
+                      }
+                    ]}
+                  >
+                    <BasicSelect
+                      showSearch
+                      style={{
+                        width: 160
+                      }}
+                      placeholder={formatMessage({
+                        id: 'workspace.window.createFunction.returnType.placeholder',
+                        defaultMessage: '请选择函数返回值'
+                      })}
+                      options={session?.dataTypes
+                        ?.map((d) =>
+                          dbMode === ConnectionMode.OB_ORACLE
+                            ? d.databaseType.replace('(', '').replace(')', '')
+                            : d.databaseType
+                        )
+                        .map((a) => ({ value: a }))}
+                    />
+                  </Form.Item>
+                </Col>
+              </Row>
+              <ExtraOptions
+                connectType={session?.connection?.type}
+                dbType={DbObjectType.function}
+              />
+              <Form.Item
+                label={formatMessage({
+                  id: 'odc.component.CreateFunctionModal.Parameter',
+                  defaultMessage: '参数'
+                })}
+                /* 参数 */ required
+              >
+                {session ? (
+                  <FunctionOrProcedureParams
+                    session={session}
+                    dbMode={dbMode}
+                    mode={DbObjectType.function}
+                    paramsRef={paramsRef}
+                  />
+                ) : null}
+              </Form.Item>
+            </Form>
+          </Spin>
+        </BasicModal>
+      </>
     );
   })
 );

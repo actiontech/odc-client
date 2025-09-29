@@ -139,7 +139,7 @@ export class UserStore {
     form.append('password', encrypt(password));
     testId && form.append('testId', testId);
     registrationId && form.append('registrationId', registrationId);
-    let result = await request.post(`/api/v2/iam/ldap/login`, {
+    const result = await request.post(`/api/v2/iam/ldap/login`, {
       data: form,
       params: {
         ignoreError: true
@@ -303,7 +303,7 @@ export class UserStore {
         item.type ===
         setting?.configurations?.['odc.account.defaultOrganizationType']
     );
-    let defaultOrganization = firstOrganization || this.organizations?.[0];
+    const defaultOrganization = firstOrganization || this.organizations?.[0];
     return defaultOrganization;
   }
 

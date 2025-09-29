@@ -17,6 +17,7 @@
 import login from '@/store/login';
 import setting from '@/store/setting';
 import { formatMessage } from '@/util/intl';
+import { BasicInput } from '@actiontech/dms-kit';
 import { Form, Input } from 'antd';
 
 const DescriptionInput = () => {
@@ -42,7 +43,7 @@ const DescriptionInput = () => {
         }
       ]}
     >
-      <Input.TextArea
+      <BasicInput.TextArea
         rows={6}
         placeholder={
           login.isPrivateSpace()

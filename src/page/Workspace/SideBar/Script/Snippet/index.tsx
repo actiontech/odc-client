@@ -42,6 +42,7 @@ import { getWrapedSnippetBody } from '@/util/snippet';
 import tracert from '@/util/tracert';
 import copyToCB from 'copy-to-clipboard';
 import SnippetInfoToolTip from './Info';
+import { SearchInput } from '@actiontech/dms-kit';
 
 export default inject('snippetStore')(
   observer(
@@ -87,8 +88,10 @@ export default inject('snippetStore')(
       return (
         <div className={styles.script}>
           <div className={styles.search}>
-            <Input.Search
-              onSearch={(v) => setSearchValue(v)}
+            <SearchInput
+              value={searchValue}
+              onChange={(v) => setSearchValue(v)}
+              onPressEnter={() => setSearchValue(searchValue)}
               placeholder={formatMessage({
                 id: 'odc.Script.Snippet.SearchForCodeSnippets',
                 defaultMessage: '搜索代码片段'

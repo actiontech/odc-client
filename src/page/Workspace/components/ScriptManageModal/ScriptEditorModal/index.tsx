@@ -21,9 +21,9 @@ import {
 import CommonIDE from '@/component/CommonIDE';
 import { updatePageByScriptId } from '@/store/helper/page';
 import { formatMessage } from '@/util/intl';
-import { Button, Drawer, Form, Input, Modal, Space, Spin } from 'antd';
+import { Form, Modal, Space, Spin } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
-import styles from './index.less';
+import { BasicButton, BasicDrawer, BasicInput } from '@actiontech/dms-kit';
 
 interface IProps {
   visible: boolean;
@@ -129,9 +129,9 @@ const ScriptEditorModal: React.FC<IProps> = function ({
 
   const scriptName = script?.scriptName;
   return (
-    <Drawer
+    <BasicDrawer
       width={520}
-      destroyOnClose
+      destroyOnHidden
       open={visible}
       title={
         formatMessage(
@@ -147,7 +147,7 @@ const ScriptEditorModal: React.FC<IProps> = function ({
       onClose={onClose}
       footer={
         <Space style={{ float: 'right' }}>
-          <Button onClick={onClose}>
+          <BasicButton onClick={onClose} disabled={loading}>
             {
               formatMessage({
                 id: 'odc.ScriptManageModal.ScriptEditorModal.Cancel',
@@ -156,8 +156,8 @@ const ScriptEditorModal: React.FC<IProps> = function ({
 
               /*取消*/
             }
-          </Button>
-          <Button type="primary" onClick={onSave}>
+          </BasicButton>
+          <BasicButton type="primary" onClick={onSave} loading={loading}>
             {
               formatMessage({
                 id: 'odc.ScriptManageModal.ScriptEditorModal.Save',
@@ -166,7 +166,7 @@ const ScriptEditorModal: React.FC<IProps> = function ({
 
               /*保存*/
             }
-          </Button>
+          </BasicButton>
         </Space>
       }
     >
@@ -188,7 +188,7 @@ const ScriptEditorModal: React.FC<IProps> = function ({
 
             /*脚本名称*/
           >
-            <Input />
+            <BasicInput />
           </Form.Item>
           <Form.Item
             label={formatMessage({
@@ -196,7 +196,6 @@ const ScriptEditorModal: React.FC<IProps> = function ({
               defaultMessage: '脚本内容'
             })}
             style={{ height: 500 }}
-            className={styles.sqlContent}
           >
             <div style={{ height: 500 }}>
               <CommonIDE
@@ -206,7 +205,9 @@ const ScriptEditorModal: React.FC<IProps> = function ({
                 initialSQL={script?.scriptText}
                 language={'sql'}
                 onSQLChange={(sql) => {
-                  !changed && setChanged(true);
+                  if (!changed) {
+                    setChanged(true);
+                  }
                   setScript(Object.assign({}, script, { scriptText: sql }));
                 }}
               />
@@ -214,7 +215,7 @@ const ScriptEditorModal: React.FC<IProps> = function ({
           </Form.Item>
         </Form>
       </Spin>
-    </Drawer>
+    </BasicDrawer>
   );
 };
 

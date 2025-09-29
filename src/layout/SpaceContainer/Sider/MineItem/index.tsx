@@ -98,19 +98,19 @@ const MineItem: React.FC<IProps> = function ({
       } catch (e) {}
     };
 
-    if (allowEditUser && havePasswordLogin) {
-      menus.push({
-        icon: <EditFilled />,
-        key: 'change-password',
-        text: formatMessage({
-          id: 'odc.component.GlobalHeader.ChangePassword',
-          defaultMessage: '修改密码'
-        }),
-        onClick: () => {
-          setChangePasswordModalVisible(true);
-        }
-      });
-    }
+    // if (allowEditUser && havePasswordLogin) {
+    //   menus.push({
+    //     icon: <EditFilled />,
+    //     key: 'change-password',
+    //     text: formatMessage({
+    //       id: 'odc.component.GlobalHeader.ChangePassword',
+    //       defaultMessage: '修改密码'
+    //     }),
+    //     onClick: () => {
+    //       setChangePasswordModalVisible(true);
+    //     }
+    //   });
+    // }
 
     if (isClient()) {
       menus.push({
@@ -132,20 +132,20 @@ const MineItem: React.FC<IProps> = function ({
       });
     }
 
-    if (settingStore.enablePersonalRecord) {
-      menus.push({
-        key: 'record',
-        icon: <ProfileEditFilled />,
-        text: formatMessage({
-          id: 'odc.Sider.MineItem.OperationRecord',
-          defaultMessage: '操作记录'
-        }),
-        onClick: () => {
-          tracert.click('a3112.b46782.c330850.d367366');
-          recordRef.current?.handleOpenDrawer();
-        }
-      });
-    }
+    // if (settingStore.enablePersonalRecord) {
+    //   menus.push({
+    //     key: 'record',
+    //     icon: <ProfileEditFilled />,
+    //     text: formatMessage({
+    //       id: 'odc.Sider.MineItem.OperationRecord',
+    //       defaultMessage: '操作记录'
+    //     }),
+    //     onClick: () => {
+    //       tracert.click('a3112.b46782.c330850.d367366');
+    //       recordRef.current?.handleOpenDrawer();
+    //     }
+    //   });
+    // }
 
     if (allowEditUser) {
       menus.push({

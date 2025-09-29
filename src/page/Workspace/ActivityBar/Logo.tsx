@@ -16,29 +16,38 @@ import { formatMessage } from '@/util/intl';
  */
 
 import { ReactComponent as ODCBlackSvg } from '@/svgr/odc_logo_color.svg';
-import { haveOCP, isClient } from '@/util/env';
+import { isClient } from '@/util/env';
 import Icon, { HomeOutlined } from '@ant-design/icons';
 import { useState } from 'react';
 import styles from './index.less';
 import login from '@/store/login';
-import { BasicToolTip } from '@actiontech/dms-kit';
+import {
+  BasicToolTip,
+  ODC_WORKBENCH_NAME,
+  SQL_WORKBENCH_FROM_PARAM_NAME
+} from '@actiontech/dms-kit';
 
 export default function Logo() {
   const [isHover, setHoverSatate] = useState<boolean>(false);
 
-  const backToHome = () => {
-    if (isClient()) return;
-    if (login.isPrivateSpace()) return;
-    if (haveOCP) {
-      window.open(location.origin + location.pathname);
-      return;
-    }
-    window.open(location.origin + '/#/');
+  // const backToHome = () => {
+  //   if (isClient()) return;
+  //   if (login.isPrivateSpace()) return;
+  //   if (haveOCP) {
+  //     window.open(location.origin + location.pathname);
+  //     return;
+  //   }
+  //   window.open(location.origin + '/#/');
+  // };
+
+  const backToDMS = () => {
+    // TODO 需要调整
+    window.location.href = `/?${SQL_WORKBENCH_FROM_PARAM_NAME}=${ODC_WORKBENCH_NAME}`;
   };
 
   return (
     <span
-      onClick={backToHome}
+      onClick={backToDMS}
       className={styles.logo}
       onMouseEnter={() => setHoverSatate(true)}
       onMouseLeave={() => setHoverSatate(false)}

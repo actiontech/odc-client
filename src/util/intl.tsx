@@ -20,6 +20,7 @@ import { setLocale } from '@umijs/max';
 import odc from '@/plugins/odc';
 import { IntlShape, createIntl } from 'react-intl';
 import { ObDocsUrlMap } from '@/constant';
+import { StorageKey } from '@actiontech/dms-kit';
 export const defaultLocale = 'en-us';
 
 let intl;
@@ -29,7 +30,7 @@ let intl;
 function getLocale() {
   const lang =
     navigator.cookieEnabled && typeof localStorage !== 'undefined'
-      ? window.localStorage.getItem('umi_locale')
+      ? window.localStorage.getItem(StorageKey.Language)
       : '';
   // support baseNavigator, default true
   let browserLang;

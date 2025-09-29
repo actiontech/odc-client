@@ -12,8 +12,8 @@ importers:
   .:
     dependencies:
       '@actiontech/dms-kit':
-        specifier: 0.0.1-rc.27
-        version: 0.0.1-rc.27(cd89dbab51689ed03f5751ef6cbc1b84)
+        specifier: ^1.0.0
+        version: 1.0.0(2eda0ae4fec4f2d57ea96a7847ed75ee)
       '@actiontech/icons':
         specifier: 0.0.1-rc.7
         version: 0.0.1-rc.7(react@17.0.2)
@@ -131,6 +131,9 @@ importers:
       loglevel:
         specifier: ^1.8.0
         version: 1.9.2
+      lz-string:
+        specifier: 1.5.0
+        version: 1.5.0
       markdown-it:
         specifier: ^13.0.1
         version: 13.0.2
@@ -391,10 +394,9 @@ packages:
     resolution: {integrity: sha512-+r8rQbwDEi2oOwMpZJlJ8YYZ+s+v6Txun3XrVyWq77f+MyUMV61KcGmBo0esPIBcZ+O+48TroMzemY8VGTjeIw==}
     hasBin: true
 
-  '@actiontech/dms-kit@0.0.1-rc.27':
-    resolution: {integrity: sha512-afX2hlltJD6oF5FlqdvNe7Q9kfg0uNicZso90A0lk7haOrjNW8g8zr6aVcdzTJPL8Voe0wZaSSf7i36KDVb9sA==}
+  '@actiontech/dms-kit@1.0.0':
+    resolution: {integrity: sha512-yo0Bk6kp1KM8LDrwGCw7jGCTq0vyGjdInQgPjhVHE/yq3gtIxljhzgKz7uYy4M8MBcoMFtcbaxes5gTJhuWDQg==}
     peerDependencies:
-      '@actiontech/icons': ^0.0.1-rc.7
       '@ant-design/cssinjs': ^1.17.0
       '@ant-design/icons': ^4.7.0
       '@emotion/react': ^11.14.0
@@ -402,20 +404,12 @@ packages:
       '@mui/material': ^5.11.16
       '@mui/styles': ^5.11.16
       '@mui/system': ^5.9.1
-      ahooks: ^3.7.0
       antd: '>=5.7.3'
-      axios: '>=0.27.2'
-      classnames: ^2.3.0
-      dayjs: ^1
-      i18next: ^23.0.0
-      nprogress: ^0.2.0
-      rc-input-number: ~8.0.2
-      rc-tree-select: ~5.9.0
+      i18next: ^21.8.14
       react: '>=17'
       react-dom: '>=17'
-      react-i18next: ^15.0.0
+      react-i18next: ^11.18.6
       react-router-dom: ^6.10.0
-      sql-formatter: ^12.2.4
       typescript: ^5.0.2
 
   '@actiontech/icons@0.0.1-rc.7':
@@ -2471,6 +2465,13 @@ packages:
       react: '>=16.9.0'
       react-dom: '>=16.9.0'
 
+  '@rc-component/trigger@1.18.3':
+    resolution: {integrity: sha512-Ksr25pXreYe1gX6ayZ1jLrOrl9OAUHUqnuhEx6MeHnNa1zVM5Y2Aj3Q35UrER0ns8D2cJYtmJtVli+i+4eKrvA==}
+    engines: {node: '>=8.x'}
+    peerDependencies:
+      react: '>=16.9.0'
+      react-dom: '>=16.9.0'
+
   '@rc-component/trigger@2.2.6':
     resolution: {integrity: sha512-/9zuTnWwhQ3S3WT1T8BubuFTT46kvnXgaERR9f4BTKyn61/wpf/BvbImzYBubzJibU707FxwbKszLlHjcLiv1Q==}
     engines: {node: '>=8.x'}
@@ -3139,6 +3140,9 @@ packages:
 
   '@types/js-cookie@2.2.7':
     resolution: {integrity: sha512-aLkWa0C0vO5b4Sr798E26QgOkss68Un0bLjs7u9qxzPT5CG+8DuNTffWES58YzJs3hrVAOs1wonycqEBqNJubA==}
+
+  '@types/js-cookie@3.0.6':
+    resolution: {integrity: sha512-wkw9yd1kEXOPnvEeEV1Go1MmxtBJL0RR79aOTAApecWFVu7w0NNXNqhcWgvw2YgZDYadliXkl14pa3WXw5jlCQ==}
 
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
@@ -3821,6 +3825,13 @@ packages:
     engines: {node: '>=8.0.0'}
     peerDependencies:
       react: ^16.8.6 || ^17.0
+
+  ahooks@3.9.5:
+    resolution: {integrity: sha512-TrjXie49Q8HuHKTa84Fm9A+famMDAG1+7a9S9Gq6RQ0h90Jgqmiq3CkObuRjWT/C4d6nRZCw35Y2k2fmybb5eA==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
   ajv-errors@1.0.1:
     resolution: {integrity: sha512-DCRfO/4nQ+89p/RK43i8Ezd41EqdGIU4ld7nGF8OQ14oc/we5rEntLCUa7+jrn3nn83BosfwZA0wb4pon2o8iQ==}
@@ -6645,6 +6656,9 @@ packages:
     resolution: {integrity: sha512-agE4QfB2Lkp9uICn7BAqoscw4SZP9kTE2hxiFI3jBPmXJfdqiahTbUuKGsMoN2GtqL9AxhYioAcVvgsb1HvRbA==}
     engines: {node: '>= 0.10'}
 
+  intersection-observer@0.12.2:
+    resolution: {integrity: sha512-7m1vEcPCxXYI8HqnL8CKI6siDyD+eIWSwgB3DZA+ZTogxk9I4CDnj4wilt9x/+/QbHI4YG5YZNmC6458/e9Ktg==}
+
   intersection-observer@0.7.0:
     resolution: {integrity: sha512-Id0Fij0HsB/vKWGeBe9PxeY45ttRiBmhFyyt/geBdDHBYNctMRTE3dC1U3ujzz3lap+hVXlEcVaB56kZP/eEUg==}
 
@@ -7077,6 +7091,10 @@ packages:
 
   js-cookie@2.2.1:
     resolution: {integrity: sha512-HvdH2LzI/EAZcUwA8+0nKNtWHqS+ZmijLA30RwZA0bo7ToCckjK5MkGhjED9KoRcXO6BaGI3I9UIzSA1FKFPOQ==}
+
+  js-cookie@3.0.5:
+    resolution: {integrity: sha512-cEiJEAEoIbWfCZYKWhVwFuvPX1gETRYPw6LlaTKoxD3s2AkXzkCjnp6h0V77ozyqj0jakteJ4YqDJT830+lVGw==}
+    engines: {node: '>=14'}
 
   js-sdsl@4.4.2:
     resolution: {integrity: sha512-dwXFwByc/ajSV6m5bcKAPwe4yDDF6D614pxmIi5odytzxRlwqF6nwoiCek80Ixc7Cvma5awClxrzFtxCQvcM8w==}
@@ -8818,6 +8836,10 @@ packages:
     resolution: {integrity: sha512-XDxAeVmpfu1/6IjyT/gXHOl+S0vQ9owggJ30hhWKdHAsNPOcasn5o9BW0eejZqL2e4vMjhAxoW3jVHcD6mbcYw==}
     engines: {node: '>=6'}
 
+  query-string@7.1.3:
+    resolution: {integrity: sha512-hh2WYhq4fi8+b+/2Kg9CEge4fDPvHS534aOOvOZeQ3+Vf2mCFsaFBYj0i+iXcAq6I9Vzp5fjMFBlONvayDC1qg==}
+    engines: {node: '>=6'}
+
   querystring-es3@0.2.1:
     resolution: {integrity: sha512-773xhDQnZBMFobEiztv8LIl70ch5MSF/jUQVlhwFyBILqq96anmoctVIYz+ZRp0qbCKATTn6ev02M3r7Ga5vqA==}
     engines: {node: '>=0.4.x'}
@@ -8975,6 +8997,12 @@ packages:
       react: '>=16.9.0'
       react-dom: '>=16.9.0'
 
+  rc-input-number@8.0.4:
+    resolution: {integrity: sha512-TP+G5b7mZtbwXJ/YEZXF/OgbEZ6iqD4+RSuxZJ8VGKGXDcdt0FKIvpFoNQr/knspdFC4OxA0OfsWfFWfN4XSyA==}
+    peerDependencies:
+      react: '>=16.9.0'
+      react-dom: '>=16.9.0'
+
   rc-input-number@9.5.0:
     resolution: {integrity: sha512-bKaEvB5tHebUURAEXw35LDcnRZLq3x1k7GxfAqBMzmpHkDGzjAtnUL8y4y5N15rIFIg5IJgwr211jInl3cipag==}
     peerDependencies:
@@ -8983,6 +9011,12 @@ packages:
 
   rc-input@0.1.4:
     resolution: {integrity: sha512-FqDdNz+fV2dKNgfXzcSLKvC+jEs1709t7nD+WdfjrdSaOcefpgc7BUJYadc3usaING+b7ediMTfKxuJBsEFbXA==}
+    peerDependencies:
+      react: '>=16.0.0'
+      react-dom: '>=16.0.0'
+
+  rc-input@1.1.1:
+    resolution: {integrity: sha512-NTR1Z4em681L8/ewb2KR80RykSmN8I2mzqzJDCoUmTrV1BB9Hk5d7ha4TnfgdEPPL148N+603sW2LExSXk1IbA==}
     peerDependencies:
       react: '>=16.0.0'
       react-dom: '>=16.0.0'
@@ -9152,6 +9186,13 @@ packages:
       react: '*'
       react-dom: '*'
 
+  rc-select@14.5.2:
+    resolution: {integrity: sha512-Np/lDHvxCnVhVsheQjSV1I/OMJTWJf1n10wq8q1AGy3ytyYLfjNpi6uaz/pmjsbbiSddSWzJnNZCli9LmgBZsA==}
+    engines: {node: '>=8.x'}
+    peerDependencies:
+      react: '*'
+      react-dom: '*'
+
   rc-slider@10.0.1:
     resolution: {integrity: sha512-igTKF3zBet7oS/3yNiIlmU8KnZ45npmrmHlUUio8PNbIhzMcsh+oE/r2UD42Y6YD2D/s+kzCQkzQrPD6RY435Q==}
     engines: {node: '>=8.x'}
@@ -9259,6 +9300,12 @@ packages:
 
   rc-tree-select@5.5.5:
     resolution: {integrity: sha512-k2av7jF6tW9bIO4mQhaVdV4kJ1c54oxV3/hHVU+oD251Gb5JN+m1RbJFTMf1o0rAFqkvto33rxMdpafaGKQRJw==}
+    peerDependencies:
+      react: '*'
+      react-dom: '*'
+
+  rc-tree-select@5.9.0:
+    resolution: {integrity: sha512-oh3blESzLfLCBPSiVDtZ2irzrWWZUMeHvnSwRvFo79br8Z+K/1OhXhXBZmROvfKwaH8YUugAQy8B2j5EGQbdyA==}
     peerDependencies:
       react: '*'
       react-dom: '*'
@@ -11355,7 +11402,7 @@ snapshots:
       - supports-color
       - ws
 
-  '@actiontech/dms-kit@0.0.1-rc.27(cd89dbab51689ed03f5751ef6cbc1b84)':
+  '@actiontech/dms-kit@1.0.0(2eda0ae4fec4f2d57ea96a7847ed75ee)':
     dependencies:
       '@actiontech/icons': 0.0.1-rc.7(react@17.0.2)
       '@ant-design/cssinjs': 1.23.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
@@ -11365,21 +11412,26 @@ snapshots:
       '@mui/material': 5.11.16(@emotion/react@11.14.0(@types/react@16.14.65)(react@17.0.2))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@16.14.65)(react@17.0.2))(@types/react@16.14.65)(react@17.0.2))(@types/react@16.14.65)(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       '@mui/styles': 5.11.16(@types/react@16.14.65)(react@17.0.2)
       '@mui/system': 5.9.1(@emotion/react@11.14.0(@types/react@16.14.65)(react@17.0.2))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@16.14.65)(react@17.0.2))(@types/react@16.14.65)(react@17.0.2))(@types/react@16.14.65)(react@17.0.2)
-      ahooks: 2.10.14(react@17.0.2)
+      ahooks: 3.9.5(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       antd: 5.25.4(date-fns@2.30.0)(luxon@3.6.1)(moment@2.30.1)(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       axios: 1.9.0
       classnames: 2.5.1
+      cron-parser: 4.9.0
       dayjs: 1.11.13
+      highlight.js: 11.11.1
       i18next: 23.16.8
       nprogress: 0.2.0
-      rc-input-number: 9.5.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
-      rc-tree-select: 5.27.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
+      query-string: 7.1.3
+      rc-input-number: 8.0.4(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
+      rc-tree-select: 5.9.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       react: 17.0.2
       react-dom: 17.0.2(react@17.0.2)
       react-i18next: 15.6.1(i18next@23.16.8)(react-dom@17.0.2(react@17.0.2))(react@17.0.2)(typescript@4.9.5)
       react-router-dom: 6.3.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       sql-formatter: 12.2.4
       typescript: 4.9.5
+    transitivePeerDependencies:
+      - debug
 
   '@actiontech/icons@0.0.1-rc.7(react@17.0.2)':
     dependencies:
@@ -11468,7 +11520,7 @@ snapshots:
       '@ant-design/icons': 5.6.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       '@ant-design/pro-provider': 2.15.4(antd@4.24.16(react-dom@17.0.2(react@17.0.2))(react@17.0.2))(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       '@ant-design/pro-utils': 2.17.0(antd@4.24.16(react-dom@17.0.2(react@17.0.2))(react@17.0.2))(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
-      '@babel/runtime': 7.27.4
+      '@babel/runtime': 7.28.2
       antd: 4.24.16(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       classnames: 2.5.1
       rc-resize-observer: 1.3.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
@@ -11503,7 +11555,7 @@ snapshots:
       '@ant-design/pro-provider': 2.15.4(antd@4.24.16(react-dom@17.0.2(react@17.0.2))(react@17.0.2))(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       '@ant-design/pro-skeleton': 2.2.1(antd@4.24.16(react-dom@17.0.2(react@17.0.2))(react@17.0.2))(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       '@ant-design/pro-utils': 2.17.0(antd@4.24.16(react-dom@17.0.2(react@17.0.2))(react@17.0.2))(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
-      '@babel/runtime': 7.27.4
+      '@babel/runtime': 7.28.2
       antd: 4.24.16(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       rc-resize-observer: 0.2.6(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       rc-util: 5.44.4(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
@@ -11517,7 +11569,7 @@ snapshots:
       '@ant-design/icons': 5.6.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       '@ant-design/pro-provider': 2.15.4(antd@4.24.16(react-dom@17.0.2(react@17.0.2))(react@17.0.2))(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       '@ant-design/pro-utils': 2.17.0(antd@4.24.16(react-dom@17.0.2(react@17.0.2))(react@17.0.2))(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
-      '@babel/runtime': 7.27.4
+      '@babel/runtime': 7.28.2
       '@chenshuai2144/sketch-color': 1.0.9(react@17.0.2)
       antd: 4.24.16(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       classnames: 2.5.1
@@ -11536,7 +11588,7 @@ snapshots:
       '@ant-design/pro-field': 3.0.4(antd@4.24.16(react-dom@17.0.2(react@17.0.2))(react@17.0.2))(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       '@ant-design/pro-provider': 2.15.4(antd@4.24.16(react-dom@17.0.2(react@17.0.2))(react@17.0.2))(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       '@ant-design/pro-utils': 2.17.0(antd@4.24.16(react-dom@17.0.2(react@17.0.2))(react@17.0.2))(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
-      '@babel/runtime': 7.27.4
+      '@babel/runtime': 7.28.2
       '@chenshuai2144/sketch-color': 1.0.9(react@17.0.2)
       '@umijs/use-params': 1.0.9(react@17.0.2)
       antd: 4.24.16(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
@@ -11556,7 +11608,7 @@ snapshots:
       '@ant-design/icons': 5.6.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       '@ant-design/pro-provider': 2.15.4(antd@4.24.16(react-dom@17.0.2(react@17.0.2))(react@17.0.2))(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       '@ant-design/pro-utils': 2.17.0(antd@4.24.16(react-dom@17.0.2(react@17.0.2))(react@17.0.2))(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
-      '@babel/runtime': 7.27.4
+      '@babel/runtime': 7.28.2
       '@umijs/route-utils': 4.0.1
       '@umijs/use-params': 1.0.9(react@17.0.2)
       antd: 4.24.16(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
@@ -11579,7 +11631,7 @@ snapshots:
       '@ant-design/pro-field': 3.0.4(antd@4.24.16(react-dom@17.0.2(react@17.0.2))(react@17.0.2))(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       '@ant-design/pro-table': 3.19.0(antd@4.24.16(react-dom@17.0.2(react@17.0.2))(react@17.0.2))(rc-field-form@2.7.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2))(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       '@ant-design/pro-utils': 2.17.0(antd@4.24.16(react-dom@17.0.2(react@17.0.2))(react@17.0.2))(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
-      '@babel/runtime': 7.27.4
+      '@babel/runtime': 7.28.2
       antd: 4.24.16(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       classnames: 2.5.1
       dayjs: 1.11.13
@@ -11593,7 +11645,7 @@ snapshots:
   '@ant-design/pro-provider@2.15.4(antd@4.24.16(react-dom@17.0.2(react@17.0.2))(react@17.0.2))(react-dom@17.0.2(react@17.0.2))(react@17.0.2)':
     dependencies:
       '@ant-design/cssinjs': 1.23.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
-      '@babel/runtime': 7.27.4
+      '@babel/runtime': 7.28.2
       '@ctrl/tinycolor': 3.6.1
       antd: 4.24.16(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       dayjs: 1.11.13
@@ -11604,7 +11656,7 @@ snapshots:
 
   '@ant-design/pro-skeleton@2.2.1(antd@4.24.16(react-dom@17.0.2(react@17.0.2))(react@17.0.2))(react-dom@17.0.2(react@17.0.2))(react@17.0.2)':
     dependencies:
-      '@babel/runtime': 7.27.4
+      '@babel/runtime': 7.28.2
       antd: 4.24.16(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       react: 17.0.2
       react-dom: 17.0.2(react@17.0.2)
@@ -11618,7 +11670,7 @@ snapshots:
       '@ant-design/pro-form': 2.31.7(antd@4.24.16(react-dom@17.0.2(react@17.0.2))(react@17.0.2))(rc-field-form@2.7.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2))(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       '@ant-design/pro-provider': 2.15.4(antd@4.24.16(react-dom@17.0.2(react@17.0.2))(react@17.0.2))(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       '@ant-design/pro-utils': 2.17.0(antd@4.24.16(react-dom@17.0.2(react@17.0.2))(react@17.0.2))(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
-      '@babel/runtime': 7.27.4
+      '@babel/runtime': 7.28.2
       '@dnd-kit/core': 6.3.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       '@dnd-kit/modifiers': 6.0.1(@dnd-kit/core@6.3.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2))(react@17.0.2)
       '@dnd-kit/sortable': 7.0.2(@dnd-kit/core@6.3.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2))(react@17.0.2)
@@ -11638,7 +11690,7 @@ snapshots:
     dependencies:
       '@ant-design/icons': 5.6.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       '@ant-design/pro-provider': 2.15.4(antd@4.24.16(react-dom@17.0.2(react@17.0.2))(react@17.0.2))(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
-      '@babel/runtime': 7.27.4
+      '@babel/runtime': 7.28.2
       antd: 4.24.16(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       classnames: 2.5.1
       dayjs: 1.11.13
@@ -13478,14 +13530,14 @@ snapshots:
 
   '@loadable/component@5.15.2(react@17.0.2)':
     dependencies:
-      '@babel/runtime': 7.23.6
+      '@babel/runtime': 7.28.2
       hoist-non-react-statics: 3.3.2
       react: 17.0.2
       react-is: 16.13.1
 
   '@loadable/component@5.15.2(react@18.3.1)':
     dependencies:
-      '@babel/runtime': 7.23.6
+      '@babel/runtime': 7.28.2
       hoist-non-react-statics: 3.3.2
       react: 18.3.1
       react-is: 16.13.1
@@ -13922,7 +13974,7 @@ snapshots:
 
   '@rc-component/mini-decimal@1.1.0':
     dependencies:
-      '@babel/runtime': 7.27.4
+      '@babel/runtime': 7.28.2
 
   '@rc-component/mutate-observer@1.1.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2)':
     dependencies:
@@ -13954,6 +14006,17 @@ snapshots:
       '@rc-component/portal': 1.1.2(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       '@rc-component/trigger': 2.2.6(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       classnames: 2.5.1
+      rc-util: 5.44.4(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
+
+  '@rc-component/trigger@1.18.3(react-dom@17.0.2(react@17.0.2))(react@17.0.2)':
+    dependencies:
+      '@babel/runtime': 7.28.2
+      '@rc-component/portal': 1.1.2(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
+      classnames: 2.5.1
+      rc-motion: 2.9.5(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
+      rc-resize-observer: 1.3.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       rc-util: 5.44.4(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       react: 17.0.2
       react-dom: 17.0.2(react@17.0.2)
@@ -14690,6 +14753,8 @@ snapshots:
 
   '@types/js-cookie@2.2.7': {}
 
+  '@types/js-cookie@3.0.6': {}
+
   '@types/json-schema@7.0.15': {}
 
   '@types/json5@0.0.29': {}
@@ -15419,7 +15484,7 @@ snapshots:
 
   '@umijs/history@5.3.1':
     dependencies:
-      '@babel/runtime': 7.23.6
+      '@babel/runtime': 7.28.2
       query-string: 6.14.1
 
   '@umijs/lint@4.4.11(eslint@8.35.0)(stylelint@14.8.2)(typescript@4.9.5)':
@@ -15942,6 +16007,21 @@ snapshots:
       react: 17.0.2
       resize-observer-polyfill: 1.5.1
       screenfull: 5.2.0
+
+  ahooks@3.9.5(react-dom@17.0.2(react@17.0.2))(react@17.0.2):
+    dependencies:
+      '@babel/runtime': 7.28.2
+      '@types/js-cookie': 3.0.6
+      dayjs: 1.11.13
+      intersection-observer: 0.12.2
+      js-cookie: 3.0.5
+      lodash: 4.17.21
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
+      react-fast-compare: 3.2.2
+      resize-observer-polyfill: 1.5.1
+      screenfull: 5.2.0
+      tslib: 2.8.1
 
   ajv-errors@1.0.1(ajv@6.12.6):
     dependencies:
@@ -19537,7 +19617,7 @@ snapshots:
 
   history@5.3.0:
     dependencies:
-      '@babel/runtime': 7.23.6
+      '@babel/runtime': 7.28.2
 
   hmac-drbg@1.0.1:
     dependencies:
@@ -19735,7 +19815,7 @@ snapshots:
 
   import-html-entry@1.17.0:
     dependencies:
-      '@babel/runtime': 7.27.4
+      '@babel/runtime': 7.28.2
 
   import-lazy@4.0.0: {}
 
@@ -19772,6 +19852,8 @@ snapshots:
       side-channel: 1.1.0
 
   interpret@1.4.0: {}
+
+  intersection-observer@0.12.2: {}
 
   intersection-observer@0.7.0: {}
 
@@ -20205,6 +20287,8 @@ snapshots:
   js-base64@3.7.7: {}
 
   js-cookie@2.2.1: {}
+
+  js-cookie@3.0.5: {}
 
   js-sdsl@4.4.2: {}
 
@@ -21857,7 +21941,7 @@ snapshots:
       lodash: 4.17.21
       postcss: 8.5.4
 
-  postcss-syntax@0.36.2(postcss-html@0.36.0(postcss-syntax@0.36.2(postcss@8.5.4))(postcss@7.0.39))(postcss-less@3.1.4)(postcss-scss@2.1.1)(postcss@7.0.39):
+  postcss-syntax@0.36.2(postcss-html@0.36.0)(postcss-less@3.1.4)(postcss-scss@2.1.1)(postcss@7.0.39):
     dependencies:
       postcss: 7.0.39
     optionalDependencies:
@@ -22056,6 +22140,13 @@ snapshots:
       split-on-first: 1.1.0
       strict-uri-encode: 2.0.0
 
+  query-string@7.1.3:
+    dependencies:
+      decode-uri-component: 0.2.2
+      filter-obj: 1.1.0
+      split-on-first: 1.1.0
+      strict-uri-encode: 2.0.0
+
   querystring-es3@0.2.1: {}
 
   querystring@0.2.0: {}
@@ -22097,7 +22188,7 @@ snapshots:
 
   rc-align@4.0.15(react-dom@17.0.2(react@17.0.2))(react@17.0.2):
     dependencies:
-      '@babel/runtime': 7.27.4
+      '@babel/runtime': 7.28.2
       classnames: 2.5.1
       dom-align: 1.12.4
       rc-util: 5.44.4(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
@@ -22265,6 +22356,16 @@ snapshots:
       react: 17.0.2
       react-dom: 17.0.2(react@17.0.2)
 
+  rc-input-number@8.0.4(react-dom@17.0.2(react@17.0.2))(react@17.0.2):
+    dependencies:
+      '@babel/runtime': 7.28.2
+      '@rc-component/mini-decimal': 1.1.0
+      classnames: 2.5.1
+      rc-input: 1.1.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
+      rc-util: 5.44.4(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
+
   rc-input-number@9.5.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2):
     dependencies:
       '@babel/runtime': 7.27.4
@@ -22278,6 +22379,14 @@ snapshots:
   rc-input@0.1.4(react-dom@17.0.2(react@17.0.2))(react@17.0.2):
     dependencies:
       '@babel/runtime': 7.27.4
+      classnames: 2.5.1
+      rc-util: 5.44.4(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
+
+  rc-input@1.1.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2):
+    dependencies:
+      '@babel/runtime': 7.28.2
       classnames: 2.5.1
       rc-util: 5.44.4(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       react: 17.0.2
@@ -22449,7 +22558,7 @@ snapshots:
 
   rc-resize-observer@0.2.6(react-dom@17.0.2(react@17.0.2))(react@17.0.2):
     dependencies:
-      '@babel/runtime': 7.27.4
+      '@babel/runtime': 7.28.2
       classnames: 2.5.1
       rc-util: 5.44.4(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       react: 17.0.2
@@ -22508,6 +22617,18 @@ snapshots:
     dependencies:
       '@babel/runtime': 7.27.4
       '@rc-component/trigger': 2.2.6(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
+      classnames: 2.5.1
+      rc-motion: 2.9.5(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
+      rc-overflow: 1.4.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
+      rc-util: 5.44.4(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
+      rc-virtual-list: 3.18.6(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
+
+  rc-select@14.5.2(react-dom@17.0.2(react@17.0.2))(react@17.0.2):
+    dependencies:
+      '@babel/runtime': 7.28.2
+      '@rc-component/trigger': 1.18.3(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       classnames: 2.5.1
       rc-motion: 2.9.5(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
       rc-overflow: 1.4.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
@@ -22678,6 +22799,16 @@ snapshots:
       react: 17.0.2
       react-dom: 17.0.2(react@17.0.2)
 
+  rc-tree-select@5.9.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2):
+    dependencies:
+      '@babel/runtime': 7.28.2
+      classnames: 2.5.1
+      rc-select: 14.5.2(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
+      rc-tree: 5.7.12(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
+      rc-util: 5.44.4(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
+
   rc-tree@5.13.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2):
     dependencies:
       '@babel/runtime': 7.27.4
@@ -22808,7 +22939,7 @@ snapshots:
 
   react-helmet-async@1.3.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2):
     dependencies:
-      '@babel/runtime': 7.23.6
+      '@babel/runtime': 7.28.2
       invariant: 2.2.4
       prop-types: 15.8.1
       react: 17.0.2
@@ -22818,7 +22949,7 @@ snapshots:
 
   react-helmet-async@1.3.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
-      '@babel/runtime': 7.23.6
+      '@babel/runtime': 7.28.2
       invariant: 2.2.4
       prop-types: 15.8.1
       react: 18.3.1
@@ -24116,7 +24247,7 @@ snapshots:
       postcss-sass: 0.4.4
       postcss-scss: 2.1.1
       postcss-selector-parser: 6.1.2
-      postcss-syntax: 0.36.2(postcss-html@0.36.0(postcss-syntax@0.36.2(postcss@8.5.4))(postcss@7.0.39))(postcss-less@3.1.4)(postcss-scss@2.1.1)(postcss@7.0.39)
+      postcss-syntax: 0.36.2(postcss-html@0.36.0)(postcss-less@3.1.4)(postcss-scss@2.1.1)(postcss@7.0.39)
       postcss-value-parser: 4.2.0
       resolve-from: 5.0.0
       slash: 3.0.0

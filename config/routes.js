@@ -81,16 +81,16 @@ module.exports = [
         },
       ],
     },
-    {
-      path: '/exception/403',
-      name: '403',
-      component: '@/page/Exception/403',
-      spmBPos: 'b41897',
-    },
-    {
-      path: '/*',
-      component: '@/page/Exception/404',
-      spmBPos: 'b41898',
-    },
+    // {
+    //   path: '/exception/403',
+    //   name: '403',
+    //   component: '@/page/Exception/403',
+    //   spmBPos: 'b41897',
+    // },
+    // {
+    //   path: '/*',
+    //   component: '@/page/Exception/404',
+    //   spmBPos: 'b41898',
+    // },
   ];
   

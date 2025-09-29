@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Input, Radio, RadioGroupProps } from 'antd';
+import { BasicInput } from '@actiontech/dms-kit';
 import { useState } from 'react';
 
 export default function TextAreaItem(props: {
@@ -28,7 +28,7 @@ export default function TextAreaItem(props: {
 }) {
   const [loading, setLoading] = useState(false);
   return (
-    <Input.TextArea
+    <BasicInput.TextArea
       autoSize={{ minRows: 3, maxRows: 8 }}
       allowClear
       showCount={props?.config?.showCount || false}

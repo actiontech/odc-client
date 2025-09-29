@@ -1,4 +1,3 @@
-//@ts-ignore
 import { IApi } from 'umi';
 
 export default (api: IApi) => {
@@ -69,7 +68,7 @@ export default (api: IApi) => {
           console.error("[BrowserUpdate ERROR]", navigator.userAgent, e);
         }
       })();
-      </script>`,
+      </script>`
     ]);
     $('#' + api.config.mountElementId).append([
       `<div class="odc-loading">
@@ -243,10 +242,10 @@ export default (api: IApi) => {
                 <div class="dot"></div>
             </div>
         </div>
-        <img src="/img/odc_icon.svg" width="90px" />
+        <img src="/odc_query/img/odc_icon.svg" width="90px" />
         <span class='loading-tip'>Downloading</span>
     </div>`,
-      `<img id="ob-loading-icon" src="/img/ob_logo.svg" />`,
+      `<img id="ob-loading-icon" src="/odc_query/img/ob_logo.svg" />`
     ]);
     return $;
   });

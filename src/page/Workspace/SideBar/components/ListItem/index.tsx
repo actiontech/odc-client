@@ -61,7 +61,7 @@ export default function ListItem({
             {actions?.map((action, i) => {
               return (
                 <Action.Link
-                  tooltip={action.title}
+                  // tooltip={action.title}
                   key={i}
                   onClick={action.onClick}
                 >

@@ -41,6 +41,8 @@ import tracert from '@/util/tracert';
 import { action, observable } from 'mobx';
 import setting from './setting';
 import { getSpaceConfigForFormInitialValue } from '@/util/utils';
+import { truncate } from 'lodash';
+import { DMSIframeModalProps } from '../component/DMSIframeModal';
 
 interface ConnectionData {
   data: any;
@@ -362,6 +364,12 @@ export class ModalStore {
       lintResultSet: null
     };
 
+  @observable
+  public dmsIframeModalVisible: boolean = false;
+
+  @observable
+  public dmsIframeModalData: DMSIframeModalProps = null;
+
   @action
   public changeCreateSequenceModalVisible(
     isShow: boolean = true,
@@ -594,6 +602,15 @@ export class ModalStore {
   ) {
     this.workSpaceExecuteSQLModalProps = data ? data : {};
   }
+
+  @action
+  public changeDMSIframeModalVisible = (
+    isShow: boolean,
+    data?: DMSIframeModalProps
+  ) => {
+    this.dmsIframeModalVisible = isShow;
+    this.dmsIframeModalData = isShow ? data : null;
+  };
 
   @action
   public changeCreateResultSetExportTaskModal = (

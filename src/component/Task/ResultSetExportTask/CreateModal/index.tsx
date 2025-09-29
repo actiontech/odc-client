@@ -53,10 +53,15 @@ import {
 import { inject, observer } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
 import DatabaseSelect from '../../component/DatabaseSelect';
-import { CsvFormItemPanel } from './CsvFormItemPanel';
 import styles from './index.less';
 import setting from '@/store/setting';
 import dayjs from 'dayjs';
+import {
+  BasicButton,
+  BasicDrawer,
+  BasicInput,
+  BasicSelect
+} from '@actiontech/dms-kit';
 
 const { Text } = Typography;
 const { Option } = Select;
@@ -68,6 +73,7 @@ interface IProps {
 }
 const CreateModal: React.FC<IProps> = (props) => {
   const { modalStore, projectId, theme } = props;
+  const [ModalApi, modalContextHolder] = Modal.useModal();
 
   const [form] = Form.useForm();
   const [hasEdit, setHasEdit] = useState(false);
@@ -93,7 +99,7 @@ const CreateModal: React.FC<IProps> = (props) => {
   };
   const handleCancel = (hasEdit: boolean) => {
     if (hasEdit) {
-      Modal.confirm({
+      ModalApi.confirm({
         title: formatMessage({
           id: 'odc.src.component.Task.ResultSetExportTask.CreateModal.DoYouConfirmTheCancellation',
           defaultMessage: '确认取消导出结果集吗？'
@@ -206,8 +212,8 @@ const CreateModal: React.FC<IProps> = (props) => {
   }, [resultSetExportData, modalStore?.createResultSetExportTaskVisible]);
 
   return (
-    <Drawer
-      destroyOnClose
+    <BasicDrawer
+      destroyOnHidden
       rootClassName={styles.drawer}
       width={520}
       title={
@@ -218,7 +224,7 @@ const CreateModal: React.FC<IProps> = (props) => {
       }
       footer={
         <Space>
-          <Button
+          <BasicButton
             onClick={() => {
               handleCancel(hasEdit);
             }}
@@ -231,8 +237,8 @@ const CreateModal: React.FC<IProps> = (props) => {
           取消
           */
             }
-          </Button>
-          <Button
+          </BasicButton>
+          <BasicButton
             type="primary"
             loading={confirmLoading}
             onClick={handleSubmit}
@@ -245,7 +251,7 @@ const CreateModal: React.FC<IProps> = (props) => {
           新建
           */
             }
-          </Button>
+          </BasicButton>
         </Space>
       }
       open={modalStore.createResultSetExportTaskVisible}
@@ -253,6 +259,7 @@ const CreateModal: React.FC<IProps> = (props) => {
         handleCancel(hasEdit);
       }}
     >
+      {modalContextHolder}
       <Form
         name="basic"
         initialValues={{
@@ -300,7 +307,6 @@ const CreateModal: React.FC<IProps> = (props) => {
             </Space>
           }
           name="sql"
-          className={styles.sqlContent}
           rules={[
             {
               required: true,
@@ -310,11 +316,8 @@ const CreateModal: React.FC<IProps> = (props) => {
               }) //'请填写 SQL 内容'
             }
           ]}
-          style={{
-            height: '280px'
-          }}
         >
-          <CommonIDE
+          {/* <CommonIDE
             initialSQL={initSql}
             language={getDataSourceModeConfig(connection?.type)?.sql?.language}
             editorProps={{
@@ -322,6 +325,14 @@ const CreateModal: React.FC<IProps> = (props) => {
             }}
             onSQLChange={(sql) => {
               handleSqlChange(sql);
+            }}
+          /> */}
+          <BasicInput.TextArea
+            rows={6}
+            value={initSql}
+            disabled
+            onChange={(e) => {
+              handleSqlChange(e.target.value);
             }}
           />
         </Form.Item>
@@ -389,7 +400,7 @@ const CreateModal: React.FC<IProps> = (props) => {
             ChineseAndEnglishAndNumberAndUnderline
           ]}
         >
-          <Input
+          <BasicInput
             style={{
               width: 320
             }}
@@ -405,7 +416,7 @@ const CreateModal: React.FC<IProps> = (props) => {
             }) /* 文件格式 */
           }
         >
-          <Select
+          <BasicSelect
             style={{
               width: 200
             }}
@@ -419,7 +430,7 @@ const CreateModal: React.FC<IProps> = (props) => {
             <Option value={IExportResultSetFileType.EXCEL}>
               {IExportResultSetFileType.EXCEL}
             </Option>
-          </Select>
+          </BasicSelect>
         </Form.Item>
         <Row>
           <Col span={11}>
@@ -433,7 +444,7 @@ const CreateModal: React.FC<IProps> = (props) => {
                 }) /* 文件编码 */
               }
             >
-              <Select
+              <BasicSelect
                 style={{
                   width: 200
                 }}
@@ -453,11 +464,10 @@ const CreateModal: React.FC<IProps> = (props) => {
                 <Option value={IMPORT_ENCODING.BIG5}>
                   {IMPORT_ENCODING.BIG5}
                 </Option>
-              </Select>
+              </BasicSelect>
             </Form.Item>
           </Col>
         </Row>
-        <CsvFormItemPanel />
         <FormItemPanel
           label={
             formatMessage({
@@ -471,7 +481,7 @@ const CreateModal: React.FC<IProps> = (props) => {
         </FormItemPanel>
         <DescriptionInput />
       </Form>
-    </Drawer>
+    </BasicDrawer>
   );
 };
 export default inject('taskStore', 'modalStore')(observer(CreateModal));

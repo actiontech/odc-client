@@ -15,20 +15,10 @@ import { formatMessage } from '@/util/intl';
  * limitations under the License.
  */
 
-import {
-  Badge,
-  Checkbox,
-  Radio,
-  RadioGroupProps,
-  Select,
-  SelectProps,
-  Space,
-  Tag,
-  Typography
-} from 'antd';
+import { Checkbox, SelectProps, Space, Tag, Typography } from 'antd';
 import { useState } from 'react';
-import React from 'react';
 import styles from './index.less';
+import { BasicSelect } from '@actiontech/dms-kit';
 
 export default function SelectItem(props: {
   options: SelectProps['options'];
@@ -76,7 +66,7 @@ export default function SelectItem(props: {
   };
 
   return props?.config?.showDefault ? (
-    <Select
+    <BasicSelect
       style={{ width: props.config?.width || 140 }}
       tagRender={(tag) => {
         return (
@@ -110,7 +100,7 @@ export default function SelectItem(props: {
       }}
     />
   ) : (
-    <Select
+    <BasicSelect
       style={{ width: props.config?.width || 140 }}
       options={props.options}
       key={props.value}

@@ -14,6 +14,7 @@ import notification from '../notification';
 import type { AxiosInstance, AxiosHeaders } from 'axios';
 import { cloneDeep } from 'lodash';
 import qs from 'qs';
+import { getRecentlySelectedZone } from '@actiontech/dms-kit';
 
 //  https://www.axios-http.cn/docs/req_config
 const service: AxiosInstance = axios.create({
@@ -76,7 +77,8 @@ service.interceptors.request.use((config) => {
       ...(config?.headers || {}),
       'X-XSRF-TOKEN': Cookies?.get('XSRF-TOKEN') || '',
       'Accept-Language': getLocale(),
-      'X-Request-ID': requestId
+      'X-Request-ID': requestId,
+      zone: getRecentlySelectedZone() || ''
     }
   };
 });

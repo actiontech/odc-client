@@ -37,7 +37,6 @@ import TreeNodeMenu from './TreeNodeMenu';
 import { ResourceNodeType, TreeDataNode } from './type';
 import tracert from '@/util/tracert';
 import Reload from '@/component/Button/Reload';
-import datasourceStatus from '@/store/datasourceStatus';
 import DatasourceFilter from './DatasourceFilter';
 import { ConnectType } from '@/d.ts';
 import useTreeState from './hooks/useTreeState';
@@ -52,7 +51,6 @@ import NewDatasourceButton from '@/page/Datasource/Datasource/NewDatasourceDrawe
 import StatusIcon from '@/component/StatusIcon/DataSourceIcon';
 import NewDatasourceDrawer from '@/page/Datasource/Datasource/NewDatasourceDrawer';
 import { GroupNodeToResourceNodeType } from '@/page/Workspace/SideBar/ResourceTree/const';
-import { isConnectTypeBeFileSystemGroup } from '@/util/connection';
 import {
   getGroupKey,
   getSecondGroupKey,
@@ -66,7 +64,6 @@ import { isString } from 'lodash';
 import DatabaseSelectEmpty from '@/component/Empty/DatabaseSelectEmpty';
 import { ReactComponent as ProjectSvg } from '@/svgr/project_space.svg';
 import Icon from '@ant-design/icons';
-import { BasicButton } from '@actiontech/dms-kit';
 
 interface IProps {
   sessionManagerStore?: SessionManagerStore;
@@ -488,12 +485,12 @@ const ResourceTree: React.FC<IProps> = function ({
                   }}
                 />
               ) : null}
-              <Group setGroupMode={setGroupMode} groupMode={groupMode} />
+              {/* <Group setGroupMode={setGroupMode} groupMode={groupMode} />
 
               <SyncMetadata
                 reload={reload}
                 databaseList={[...allDatabasesMap.values()]}
-              />
+              /> */}
               <Reload
                 key="ResourceTreeReload"
                 onClick={() => {
@@ -508,7 +505,7 @@ const ResourceTree: React.FC<IProps> = function ({
             searchValue={searchValue}
             setSearchValue={setSearchValue}
           />
-          {userStore.isPrivateSpace() ? (
+          {/* {userStore.isPrivateSpace() ? (
             <NewDatasourceButton onSuccess={dataSourceChangeReload}>
               <BasicButton
                 size="small"
@@ -517,7 +514,7 @@ const ResourceTree: React.FC<IProps> = function ({
                 icon={<PlusOutlined />}
               />
             </NewDatasourceButton>
-          ) : null}
+          ) : null} */}
         </div>
         <div ref={treeWrapperRef} className={styles.tree}>
           <Spin spinning={loading}>
@@ -550,7 +547,7 @@ const ResourceTree: React.FC<IProps> = function ({
           </Spin>
         </div>
       </div>
-      <NewDatasourceDrawer
+      {/* <NewDatasourceDrawer
         isEdit={!!editDatasourceId}
         visible={addDSVisiable}
         id={editDatasourceId}
@@ -570,7 +567,7 @@ const ResourceTree: React.FC<IProps> = function ({
           setCopyDatasourceId(null);
         }}
         onSuccess={dataSourceChangeReload}
-      />
+      /> */}
     </>
   );
 };

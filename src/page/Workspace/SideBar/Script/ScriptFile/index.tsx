@@ -23,15 +23,16 @@ import { UserStore } from '@/store/login';
 import { formatMessage } from '@/util/intl';
 import { batchDownloadScript } from '@/common/network';
 import tracert from '@/util/tracert';
-import { Input, Spin, Dropdown } from 'antd';
+import { Spin, Dropdown } from 'antd';
 import { UploadFile } from 'antd/es/upload/interface';
 import { inject, observer } from 'mobx-react';
-import { useEffect, useMemo, useState, useContext } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import styles from './index.less';
 import Item from './Item';
 import { IScriptMeta } from '@/d.ts';
 import useKeyBoardSensor from './hooks/useKeyBoardSensor';
 import odc from '@/plugins/odc';
+import { SearchInput } from '@actiontech/dms-kit';
 
 interface IProps {
   userStore?: UserStore;
@@ -46,7 +47,7 @@ export default inject('userStore')(
     setUploadFiles
   }: IProps) {
     const [loading, setLoading] = useState(false);
-    const [searchVaue, setSearchVaue] = useState('');
+    const [searchValue, setSearchValue] = useState('');
     const [editingScriptId, setEditingScriptId] = useState(null);
     const [activeFileList, setActiveFileList] = useState<React.Key[]>([]);
     const [interval, setInterval] = useState<React.Key[]>([]);
@@ -66,20 +67,20 @@ export default inject('userStore')(
     const filteredUploadFiles = useMemo(() => {
       return uploadFiles.filter((file) => {
         return (
-          !searchVaue ||
-          file.name?.toUpperCase()?.includes(searchVaue?.toUpperCase())
+          !searchValue ||
+          file.name?.toUpperCase()?.includes(searchValue?.toUpperCase())
         );
       });
-    }, [searchVaue, uploadFiles]);
+    }, [searchValue, uploadFiles]);
 
     const filteredScripts = useMemo(() => {
       return userStore?.scriptStore?.scripts.filter((script) => {
         return (
-          !searchVaue ||
-          script.objectName?.toUpperCase()?.includes(searchVaue?.toUpperCase())
+          !searchValue ||
+          script.objectName?.toUpperCase()?.includes(searchValue?.toUpperCase())
         );
       });
-    }, [searchVaue, userStore?.scriptStore?.scripts]);
+    }, [searchValue, userStore?.scriptStore?.scripts]);
 
     const onFileSelect = (script: IScriptMeta) => {
       if (!odc.appConfig?.workspaceConfig?.batchDownloadScripts) {
@@ -180,9 +181,10 @@ export default inject('userStore')(
     return (
       <div className={styles.script}>
         <div className={styles.search}>
-          <Input.Search
-            onSearch={(v) => setSearchVaue(v)}
-            onBlur={(e) => setSearchVaue(e.target.value)}
+          <SearchInput
+            value={searchValue}
+            onChange={(v) => setSearchValue(v)}
+            onBlur={(e) => setSearchValue(e.target.value)}
             placeholder={formatMessage({
               id: 'odc.Script.ScriptFile.SearchScript',
               defaultMessage: '搜索脚本'
@@ -232,7 +234,7 @@ export default inject('userStore')(
               })}
               {filteredScripts?.length === 0 &&
                 filteredUploadFiles?.length === 0 &&
-                (searchVaue ? (
+                (searchValue ? (
                   <SQLConsoleEmpty />
                 ) : (
                   <SQLConsoleEmpty type={SQLConsoleResourceType.Script} />

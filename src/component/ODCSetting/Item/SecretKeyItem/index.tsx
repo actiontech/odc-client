@@ -20,6 +20,7 @@ import { Input, Typography, Button, Checkbox } from 'antd';
 import styles from './index.less';
 import CopyOperation from './CopyOpertaion';
 import setting from '@/store/setting';
+import { BasicButton, BasicInput } from '@actiontech/dms-kit';
 
 const { Text } = Typography;
 const INPUT_PASSWORD = 'password';
@@ -118,25 +119,24 @@ const SecretKeyInput = (props: {
             <>
               {/* 初始状态：显示密码隐藏和修改按钮 */}
               <div>
-                <Input.Password value={props.value} hidden />
-                <Input prefix={<>********</>} disabled />
+                <BasicInput.Password value={props.value} hidden />
+                <BasicInput placeholder="" prefix={<>********</>} disabled />
               </div>
-              <Button
-                type="link"
-                style={{ padding: 0, marginTop: 8 }}
+              <Typography.Link
+                style={{ padding: 0, marginTop: 12 }}
                 onClick={handleEdit}
               >
                 {formatMessage({
                   id: 'src.component.ODCSetting.Item.SecretKeyItem.C1F93F6F',
                   defaultMessage: '修改密钥'
                 })}
-              </Button>
+              </Typography.Link>
             </>
           ) : (
             <>
               {/* 编辑状态：显示输入框和操作按钮 */}
               <div style={{ display: 'flex' }}>
-                <Input
+                <BasicInput
                   key={props.value}
                   defaultValue={props.value}
                   placeholder={formatMessage({
@@ -150,7 +150,7 @@ const SecretKeyInput = (props: {
                   status={hasError ? 'error' : ''}
                 />
 
-                <Button
+                <BasicButton
                   style={{ marginLeft: 8 }}
                   onClick={generateRandomPassword}
                 >
@@ -158,7 +158,7 @@ const SecretKeyInput = (props: {
                     id: 'src.component.ODCSetting.Item.SecretKeyItem.F2B4A8FF',
                     defaultMessage: '生成密钥'
                   })}
-                </Button>
+                </BasicButton>
               </div>
               {hasError && (
                 <Text type="danger" style={{ marginTop: 8, display: 'block' }}>
@@ -169,8 +169,7 @@ const SecretKeyInput = (props: {
                 </Text>
               )}
               <div className={styles.scondOperations}>
-                <Button
-                  type="link"
+                <Typography.Link
                   style={{ padding: 0, marginRight: 8 }}
                   onClick={handleCancelEdit}
                 >
@@ -178,7 +177,7 @@ const SecretKeyInput = (props: {
                     id: 'src.component.ODCSetting.Item.SecretKeyItem.723D08EC',
                     defaultMessage: '取消修改'
                   })}
-                </Button>
+                </Typography.Link>
                 {props.value && inputType === '' && (
                   <CopyOperation password={props.value} />
                 )}

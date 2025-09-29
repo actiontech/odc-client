@@ -9,7 +9,7 @@ import {
   NotificationMessageStyleWrapper
 } from './style';
 import { eventEmitter } from '../../util/utils';
-import { EmitterKey } from '@actiontech/dms-kit';
+import EmitterKey from '@actiontech/dms-kit/es/data/EmitterKey';
 
 export type NotificationInstanceKeyType = keyof Omit<
   NotificationInstance,

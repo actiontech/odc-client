@@ -19,6 +19,7 @@ import { ConnectType, DbObjectType } from '@/d.ts';
 import { formatMessage } from '@/util/intl';
 import { Col, Form, Row, Select } from 'antd';
 import HelpDoc from '../helpDoc';
+import { BasicSelect } from '@actiontech/dms-kit';
 export default function ExtraOptions({
   dbType,
   connectType
@@ -55,14 +56,15 @@ export default function ExtraOptions({
               }
               name={['characteristic', 'deterministic']}
             >
-              <Select
+              <BasicSelect
+                placeholder={''}
                 style={{
                   width: '100%'
                 }}
               >
                 <Select.Option value={true}>DETERMINISTIC</Select.Option>
                 <Select.Option value={false}>NOT DETERMINISTIC</Select.Option>
-              </Select>
+              </BasicSelect>
             </Form.Item>
           </Col>
         ) : null}
@@ -77,10 +79,11 @@ export default function ExtraOptions({
               }
               name={['characteristic', 'dataNature']}
             >
-              <Select
+              <BasicSelect
                 style={{
                   width: '100%'
                 }}
+                placeholder={''}
               >
                 <Select.Option value={'CONTAINS SQL'}>
                   CONTAINS SQL
@@ -90,7 +93,7 @@ export default function ExtraOptions({
                 <Select.Option value={'MODIFIES SQL'}>
                   MODIFIES SQL
                 </Select.Option>
-              </Select>
+              </BasicSelect>
             </Form.Item>
           </Col>
         ) : null}
@@ -105,14 +108,15 @@ export default function ExtraOptions({
               }
               name={['characteristic', 'sqlSecurity']}
             >
-              <Select
+              <BasicSelect
+                placeholder={''}
                 style={{
                   width: '100%'
                 }}
               >
                 <Select.Option value={'INVOKER'}>INVOKER</Select.Option>
                 <Select.Option value={'DEFINER'}>DEFINER</Select.Option>
-              </Select>
+              </BasicSelect>
             </Form.Item>
           </Col>
         ) : null}

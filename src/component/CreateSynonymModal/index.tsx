@@ -31,6 +31,12 @@ import { FormInstance } from 'antd/lib/form';
 import { inject, observer } from 'mobx-react';
 import React, { Component } from 'react';
 import styles from './index.less';
+import {
+  BasicButton,
+  BasicInput,
+  BasicModal,
+  BasicSelect
+} from '@actiontech/dms-kit';
 
 interface IProps {
   sessionManagerStore?: SessionManagerStore;
@@ -248,7 +254,7 @@ class CreateSynonymModal extends Component<
     const { objectList, tableOwner, objectType, databases } = this.state;
     const formItemStyle = { width: '328px' };
     return (
-      <Modal
+      <BasicModal
         width={480}
         title={formatMessage({
           id: 'odc.component.CreateSynonymModal.CreateSynonym',
@@ -260,7 +266,7 @@ class CreateSynonymModal extends Component<
         centered
         footer={
           <Space>
-            <Button onClick={this.close}>
+            <BasicButton onClick={this.close}>
               {
                 formatMessage({
                   id: 'odc.component.CreateSynonymModal.Cancel',
@@ -268,8 +274,8 @@ class CreateSynonymModal extends Component<
                 })
                 /* 取消 */
               }
-            </Button>
-            <Button type="primary" onClick={this.handleConfirm}>
+            </BasicButton>
+            <BasicButton type="primary" onClick={this.handleConfirm}>
               {
                 formatMessage({
                   id: 'odc.component.CreateSynonymModal.NextConfirmTheSqlStatement',
@@ -278,7 +284,7 @@ class CreateSynonymModal extends Component<
 
                 /* 下一步：确认SQL */
               }
-            </Button>
+            </BasicButton>
           </Space>
         }
         className={styles.synonymModal}
@@ -318,7 +324,7 @@ class CreateSynonymModal extends Component<
               }
             ]}
           >
-            <Input
+            <BasicInput
               placeholder={formatMessage({
                 id: 'odc.component.CreateSynonymModal.EnterASynonymName',
                 defaultMessage: '请输入同义词名称'
@@ -348,7 +354,7 @@ class CreateSynonymModal extends Component<
             ]}
             initialValue={tableOwner}
           >
-            <Select
+            <BasicSelect
               placeholder={formatMessage({
                 id: 'odc.component.CreateSynonymModal.EnterAnObjectOwner',
                 defaultMessage: '请输入对象所有者'
@@ -365,7 +371,7 @@ class CreateSynonymModal extends Component<
                     </Option>
                   );
                 })}
-            </Select>
+            </BasicSelect>
           </Form.Item>
           <Form.Item
             style={formItemStyle}
@@ -387,7 +393,7 @@ class CreateSynonymModal extends Component<
             ]}
             initialValue={objectType}
           >
-            <Select
+            <BasicSelect
               placeholder={formatMessage({
                 id: 'odc.component.CreateSynonymModal.SelectAnObjectType',
                 defaultMessage: '请选择对象类型'
@@ -400,7 +406,7 @@ class CreateSynonymModal extends Component<
               <Option key={ObjectType.VIEW} value={ObjectType.VIEW}>
                 {ObjectType.VIEW}
               </Option>
-            </Select>
+            </BasicSelect>
           </Form.Item>
           <Form.Item
             style={formItemStyle}
@@ -422,7 +428,7 @@ class CreateSynonymModal extends Component<
               }
             ]}
           >
-            <Select
+            <BasicSelect
               placeholder={formatMessage({
                 id: 'odc.component.CreateSynonymModal.EnterAnObjectName',
                 defaultMessage: '请选择对象'
@@ -442,7 +448,7 @@ class CreateSynonymModal extends Component<
                     </Option>
                   );
                 })}
-            </Select>
+            </BasicSelect>
           </Form.Item>
           <Form.Item
             style={{ width: '105px' }}
@@ -465,7 +471,7 @@ class CreateSynonymModal extends Component<
               }
             ]}
           >
-            <Select onChange={this.handleTypeChange}>
+            <BasicSelect onChange={this.handleTypeChange}>
               <Option value={SynonymType.COMMON}>
                 {
                   formatMessage({
@@ -486,10 +492,10 @@ class CreateSynonymModal extends Component<
                   /* 公用同义词 */
                 }
               </Option>
-            </Select>
+            </BasicSelect>
           </Form.Item>
         </Form>
-      </Modal>
+      </BasicModal>
     );
   }
 }

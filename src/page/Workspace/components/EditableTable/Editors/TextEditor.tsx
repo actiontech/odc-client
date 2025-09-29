@@ -22,7 +22,8 @@ import { useCallback, useRef, useState } from 'react';
 
 import type { TextAreaRef } from 'antd/lib/input/TextArea';
 import AntdEditorWrap from './AntdEditorWrap';
-import { BasicInput, BasicModal } from '@actiontech/dms-kit';
+import { BasicButton, BasicInput, BasicModal } from '@actiontech/dms-kit';
+import { Space } from 'antd';
 
 export function TextEditor<T>({
   row,
@@ -44,6 +45,15 @@ export function TextEditor<T>({
     },
     [onRowChange]
   );
+
+  const handleCancel = () => {
+    setIsShowTextModal(false);
+    setModalTextValue(null);
+  };
+
+  const handleOk = () => {
+    onRowChange({ ...row, [key]: modalTextValue }, true);
+  };
 
   return (
     <AntdEditorWrap>
@@ -86,17 +96,23 @@ export function TextEditor<T>({
           open={true}
           title={name}
           zIndex={1031}
-          okText={formatMessage({
-            id: 'odc.EditableTable.Editors.TextEditor.Submitted',
-            defaultMessage: '提交'
-          })} /* 提交 */
-          onCancel={() => {
-            setIsShowTextModal(false);
-            setModalTextValue(null);
-          }}
-          onOk={() => {
-            onRowChange({ ...row, [key]: modalTextValue }, true);
-          }}
+          onCancel={handleCancel}
+          footer={
+            <Space>
+              <BasicButton onClick={handleCancel}>
+                {formatMessage({
+                  id: 'app.button.cancel',
+                  defaultMessage: '取消'
+                })}
+              </BasicButton>
+              <BasicButton type="primary" onClick={handleOk}>
+                {formatMessage({
+                  id: 'odc.EditableTable.Editors.TextEditor.Submitted',
+                  defaultMessage: '提交'
+                })}
+              </BasicButton>
+            </Space>
+          }
         >
           <BasicInput.TextArea
             autoFocus

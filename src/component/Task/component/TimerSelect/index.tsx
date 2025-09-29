@@ -18,9 +18,10 @@ import { TaskExecStrategy } from '@/d.ts';
 import { isClient } from '@/util/env';
 import { formatMessage } from '@/util/intl';
 import { FieldTimeOutlined } from '@ant-design/icons';
-import { DatePicker, Form, Radio } from 'antd';
+import { Form, Radio } from 'antd';
 import React from 'react';
 import { disabledDate, disabledTime } from '@/util/utils';
+import { BasicDatePicker } from '@actiontech/dms-kit';
 
 interface IProps {}
 
@@ -88,7 +89,7 @@ const TimerSelect: React.FC<IProps> = (props) => {
                   }) //若执行时间前未完成审批，则任务将终止不执行
                 }
               >
-                <DatePicker
+                <BasicDatePicker
                   disabledDate={disabledDate}
                   disabledTime={disabledTime}
                   showTime

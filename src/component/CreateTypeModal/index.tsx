@@ -20,7 +20,13 @@ import { openCreateTypePage } from '@/store/helper/page';
 import { ModalStore } from '@/store/modal';
 import { useDBSession } from '@/store/sessionManager/hooks';
 import { formatMessage } from '@/util/intl';
-import { Button, Form, Input, Modal, Select, Space } from 'antd';
+import {
+  BasicButton,
+  BasicInput,
+  BasicModal,
+  BasicSelect
+} from '@actiontech/dms-kit';
+import { Form, Select, Space } from 'antd';
 import { inject, observer } from 'mobx-react';
 import { useState } from 'react';
 
@@ -75,7 +81,7 @@ function CreateTypeModal(props: IProps) {
   };
 
   return (
-    <Modal
+    <BasicModal
       width={480}
       destroyOnClose
       title={formatMessage({
@@ -89,7 +95,7 @@ function CreateTypeModal(props: IProps) {
       centered
       footer={
         <Space>
-          <Button onClick={handleCancel}>
+          <BasicButton onClick={handleCancel}>
             {
               formatMessage({
                 id: 'odc.component.CreateTypeModal.Cancel',
@@ -97,8 +103,8 @@ function CreateTypeModal(props: IProps) {
               })
               /* 取消 */
             }
-          </Button>
-          <Button type="primary" loading={loading} onClick={handleConfirm}>
+          </BasicButton>
+          <BasicButton type="primary" loading={loading} onClick={handleConfirm}>
             {
               formatMessage({
                 id: 'odc.component.CreateTypeModal.NextConfirmTheSqlStatement',
@@ -106,7 +112,7 @@ function CreateTypeModal(props: IProps) {
               })
               /* 下一步: 确认SQL */
             }
-          </Button>
+          </BasicButton>
         </Space>
       }
     >
@@ -142,7 +148,7 @@ function CreateTypeModal(props: IProps) {
             }
           ]}
         >
-          <Input
+          <BasicInput
             placeholder={formatMessage({
               id: 'odc.component.CreateTypeModal.EnterATypeName',
               defaultMessage: '请输入类型名称'
@@ -170,7 +176,7 @@ function CreateTypeModal(props: IProps) {
           initialValue={TypeCode.OBJECT}
           style={{ width: '144px' }}
         >
-          <Select
+          <BasicSelect
             placeholder={formatMessage({
               id: 'odc.component.CreateTypeModal.EnterAType',
               defaultMessage: '请输入类型'
@@ -205,10 +211,10 @@ function CreateTypeModal(props: IProps) {
                 /* 表类型 */
               }
             </Option>
-          </Select>
+          </BasicSelect>
         </Form.Item>
       </Form>
-    </Modal>
+    </BasicModal>
   );
 }
 

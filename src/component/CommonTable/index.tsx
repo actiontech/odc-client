@@ -50,6 +50,7 @@ import { TableInfo } from './TableInfo';
 import { Toolbar } from './Toolbar';
 import { TaskStatus } from '@/d.ts';
 import useURLParams from '@/util/hooks/useUrlParams';
+import { BasicTable } from '@actiontech/dms-kit';
 
 interface IProps<RecordType> {
   // 表格支持的2种模式
@@ -490,7 +491,7 @@ const CommonTable: <RecordType extends object = any>(
 
       {
         <Spin key="wrapTableSpin" spinning={loading}>
-          <Table
+          <BasicTable
             {...rest}
             className={classNames(
               styles.tableSpin,

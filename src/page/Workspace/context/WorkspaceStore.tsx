@@ -43,9 +43,7 @@ export default function WorkspaceStore({ children }) {
     type: ResourceNodeType;
   }>(undefined);
   const [shouldExpandedKeys, setShouldExpandedKeys] = useState<React.Key[]>([]);
-  const [groupMode, _setGroupMode] = useState(
-    login.isPrivateSpace() ? DatabaseGroup.dataSource : DatabaseGroup.project
-  );
+  const [groupMode, _setGroupMode] = useState(DatabaseGroup.dataSource);
 
   const setGroupMode = (type: DatabaseGroup) => {
     localStorage.setItem('resourceTreeGroupMode', type);
