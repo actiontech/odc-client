@@ -105,21 +105,21 @@ export const getDMSTaskGroupLabels: () => ITaskGroupLabel[] = () => {
           enabled: true
         }
       ]
+    },
+    {
+      groupName: '',
+      group: [
+        {
+          value: TaskPageType.EXPORT,
+          label: formatMessage({
+            id: 'odc.component.Task.helper.DataExport',
+            defaultMessage: '数据导出'
+          }),
+          // 导出
+          enabled: true
+        }
+      ]
     }
-    // {
-    //   groupName: '',
-    //   group: [
-    //     {
-    //       value: TaskPageType.EXPORT,
-    //       label: formatMessage({
-    //         id: 'odc.component.Task.helper.DataExport',
-    //         defaultMessage: '数据导出'
-    //       }),
-    //       // 导出
-    //       enabled: true
-    //     }
-    //   ]
-    // }
   ];
 };
 

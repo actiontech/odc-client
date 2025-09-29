@@ -1,11 +1,13 @@
 import { BasicSegmented } from '@actiontech/dms-kit';
-import { ListDataExportWorkflowsFilterByStatusEnum } from '@/external_api/base/DataExportWorkflows/index.enum';
+import { ListAllDataExportWorkflowsFilterByStatusEnum } from '@/external_api/base/DataExportWorkflows/index.enum';
 import { formatMessage } from '@/util/intl';
 import { DataExportStatusDictionary } from '../data';
 
 const WorkflowStatusFilter: React.FC<{
-  status: ListDataExportWorkflowsFilterByStatusEnum | 'all';
-  onChange: (status: ListDataExportWorkflowsFilterByStatusEnum | 'all') => void;
+  status: ListAllDataExportWorkflowsFilterByStatusEnum | 'all';
+  onChange: (
+    status: ListAllDataExportWorkflowsFilterByStatusEnum | 'all'
+  ) => void;
 }> = ({ status, onChange }) => {
   return (
     <BasicSegmented
@@ -16,7 +18,7 @@ const WorkflowStatusFilter: React.FC<{
       }}
       options={[
         'all',
-        ...Object.keys(ListDataExportWorkflowsFilterByStatusEnum)
+        ...Object.keys(ListAllDataExportWorkflowsFilterByStatusEnum)
       ].map((v) => {
         const key = v as typeof status;
         return {
@@ -27,7 +29,7 @@ const WorkflowStatusFilter: React.FC<{
                   defaultMessage: '全部'
                 })
               : DataExportStatusDictionary[
-                  ListDataExportWorkflowsFilterByStatusEnum[key]
+                  ListAllDataExportWorkflowsFilterByStatusEnum[key]
                 ],
           value: key
         };

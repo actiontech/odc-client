@@ -389,8 +389,7 @@ const TaskManaerContent: React.FC<IProps> = (props) => {
         />
       </div> */}
       {taskTabType === TaskPageType.CREATED_BY_CURRENT_USER && <ExecuteTask />}
-      {/* TODO 先隐藏，等后续后端接口 */}
-      {/* {taskTabType === TaskPageType.EXPORT && <ExportTask />} */}
+      {taskTabType === TaskPageType.EXPORT && <ExportTask />}
       {/* <DetailModal
         theme={theme}
         taskOpenRef={taskOpenRef}
