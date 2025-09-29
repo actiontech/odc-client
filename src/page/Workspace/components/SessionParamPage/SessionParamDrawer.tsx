@@ -26,13 +26,17 @@ interface IProps {
   onClose: () => void;
 }
 
-const SessionParamDrawer: React.FC<IProps> = function ({ visible, sessionId, onClose }) {
+const SessionParamDrawer: React.FC<IProps> = function ({
+  visible,
+  sessionId,
+  onClose
+}) {
   return (
     <Drawer
       title={
         formatMessage({
           id: 'odc.components.SessionParamPage.SessionParamDrawer.SessionVariables',
-          defaultMessage: '会话变量',
+          defaultMessage: '会话变量'
         }) //会话变量
       }
       open={visible}

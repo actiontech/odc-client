@@ -17,18 +17,20 @@
 import login from '@/store/login';
 import setting from '@/store/setting';
 import { formatMessage } from '@/util/intl';
+import { BasicInput } from '@actiontech/dms-kit';
 import { Form, Input } from 'antd';
 
 const DescriptionInput = () => {
   const defaultPlaceholder = formatMessage({
     id: 'odc.component.DescriptionInput.EnterADescriptionLessThan',
-    defaultMessage: '请输入描述，200字以内；未输入时，系统会根据对象和工单类型自动生成描述信息',
+    defaultMessage:
+      '请输入描述，200字以内；未输入时，系统会根据对象和工单类型自动生成描述信息'
   });
   return (
     <Form.Item
       label={formatMessage({
         id: 'odc.component.DescriptionInput.Description',
-        defaultMessage: '描述',
+        defaultMessage: '描述'
       })} /*描述*/
       name="description"
       rules={[
@@ -36,18 +38,19 @@ const DescriptionInput = () => {
           max: 200,
           message: formatMessage({
             id: 'odc.component.DescriptionInput.TheDescriptionCannotExceedCharacters',
-            defaultMessage: '描述不超过 200 个字符',
-          }), //描述不超过 200 个字符
-        },
+            defaultMessage: '描述不超过 200 个字符'
+          }) //描述不超过 200 个字符
+        }
       ]}
     >
-      <Input.TextArea
+      <BasicInput.TextArea
         rows={6}
         placeholder={
           login.isPrivateSpace()
             ? defaultPlaceholder
-            : setting.getSpaceConfigByKey('odc.task.default.taskDescriptionPrompt') ||
-              defaultPlaceholder
+            : setting.getSpaceConfigByKey(
+                'odc.task.default.taskDescriptionPrompt'
+              ) || defaultPlaceholder
         }
       />
     </Form.Item>

@@ -19,15 +19,20 @@ import { Modal } from 'antd';
 export default function showSysAccountConfigModal(isSysError: boolean = false) {
   Modal.confirm({
     centered: true,
-    title: formatMessage({ id: 'odc.component.SysAccountConfigModal.Cue', defaultMessage: '提示' }), //提示
+    title: formatMessage({
+      id: 'odc.component.SysAccountConfigModal.Cue',
+      defaultMessage: '提示'
+    }), //提示
     content: isSysError
       ? formatMessage({
           id: 'odc.component.SysAccountConfigModal.ThisFeatureRequiresAccessTo',
-          defaultMessage: '该功能需要访问 sys 租户视图，root@sys 账号连通性检查未通过',
+          defaultMessage:
+            '该功能需要访问 sys 租户视图，root@sys 账号连通性检查未通过'
         }) //该功能需要访问 sys 租户视图，root@sys 账号连通性检查未通过
       : formatMessage({
           id: 'odc.component.SysAccountConfigModal.ToAccessTheSysTenant',
-          defaultMessage: '该功能需要访问 sys 租户视图，请配置 root@sys 账号信息',
+          defaultMessage:
+            '该功能需要访问 sys 租户视图，请配置 root@sys 账号信息'
         }), //该功能需要访问 sys 租户视图，请配置 root@sys 账号信息
     // okText: formatMessage({ id: 'odc.component.SysAccountConfigModal.Configure' }), //去配置
     onOk: () => {
@@ -38,6 +43,6 @@ export default function showSysAccountConfigModal(isSysError: boolean = false) {
       //   resetConnect: true,
       //   forceSys: true,
       // });
-    },
+    }
   });
 }

@@ -18,13 +18,22 @@ import { dropObject } from '@/common/network/database';
 import { getSynonym } from '@/common/network/synonym';
 import { actionTypes } from '@/component/Acess';
 import { PLType } from '@/constant/plType';
-import { DbObjectType, ISynonym, ResourceTreeNodeMenuKeys, SynonymType } from '@/d.ts';
+import {
+  DbObjectType,
+  ISynonym,
+  ResourceTreeNodeMenuKeys,
+  SynonymType
+} from '@/d.ts';
 import { openSynonymViewPage } from '@/store/helper/page';
 import modal from '@/store/modal';
 import page from '@/store/page';
 import { formatMessage } from '@/util/intl';
 import { downloadPLDDL } from '@/util/sqlExport';
-import { PlusOutlined, QuestionCircleFilled, ReloadOutlined } from '@ant-design/icons';
+import {
+  PlusOutlined,
+  QuestionCircleFilled,
+  ReloadOutlined
+} from '@ant-design/icons';
 import { message, Modal } from 'antd';
 import { ResourceNodeType } from '../../type';
 import { hasChangePermission, hasExportPermission } from '../index';
@@ -38,8 +47,8 @@ function getMenu(synonymType: SynonymType): IMenuItemConfig[] {
       text: [
         formatMessage({
           id: 'odc.TreeNodeMenu.config.synonym.ViewSynonyms',
-          defaultMessage: '查看同义词',
-        }), //查看同义词
+          defaultMessage: '查看同义词'
+        }) //查看同义词
       ],
       run(session, node) {
         const synonym: Partial<ISynonym> = node.data;
@@ -47,9 +56,9 @@ function getMenu(synonymType: SynonymType): IMenuItemConfig[] {
           synonym.synonymName,
           synonymType,
           session?.odcDatabase?.id,
-          session?.database?.dbName,
+          session?.database?.dbName
         );
-      },
+      }
     },
 
     {
@@ -58,8 +67,8 @@ function getMenu(synonymType: SynonymType): IMenuItemConfig[] {
       text: [
         formatMessage({
           id: 'odc.TreeNodeMenu.config.sequence.Delete',
-          defaultMessage: '删除',
-        }),
+          defaultMessage: '删除'
+        })
       ],
 
       actionType: actionTypes.delete,
@@ -73,15 +82,18 @@ function getMenu(synonymType: SynonymType): IMenuItemConfig[] {
           title: formatMessage(
             {
               id: 'odc.components.ResourceTree.SynonymTree.AreYouSureYouWant',
-              defaultMessage: '是否确定删除同义词{synonymName}？',
+              defaultMessage: '是否确定删除同义词{synonymName}？'
             },
-            { synonymName: synonym?.synonymName },
+            { synonymName: synonym?.synonymName }
           ), // `确定要删除同义词${synonymName}吗？`
-          okText: formatMessage({ id: 'app.button.ok', defaultMessage: '确定' }),
+          okText: formatMessage({
+            id: 'app.button.ok',
+            defaultMessage: '确定'
+          }),
 
           cancelText: formatMessage({
             id: 'app.button.cancel',
-            defaultMessage: '取消',
+            defaultMessage: '取消'
           }),
 
           centered: true,
@@ -89,11 +101,15 @@ function getMenu(synonymType: SynonymType): IMenuItemConfig[] {
           onOk: async () => {
             const isSuccess =
               synonymType === SynonymType.COMMON
-                ? await dropObject(synonym?.synonymName, DbObjectType.synonym, session?.sessionId)
+                ? await dropObject(
+                    synonym?.synonymName,
+                    DbObjectType.synonym,
+                    session?.sessionId
+                  )
                 : await dropObject(
                     synonym?.synonymName,
                     DbObjectType.public_synonym,
-                    session?.sessionId,
+                    session?.sessionId
                   );
             if (!isSuccess) {
               return;
@@ -105,27 +121,30 @@ function getMenu(synonymType: SynonymType): IMenuItemConfig[] {
             message.success(
               formatMessage({
                 id: 'odc.components.ResourceTree.SynonymTree.SynonymDeletedSuccessfully',
-                defaultMessage: '删除同义词成功',
-              }),
+                defaultMessage: '删除同义词成功'
+              })
               // 删除同义词成功
             );
             // TODO：如果当前有视图详情页面，需要关闭
 
             const openedPage = page?.pages.find(
-              (p) => p.params.synonymName === synonym?.synonymName,
+              (p) => p.params.synonymName === synonym?.synonymName
             );
 
             if (openedPage) {
               page?.close(openedPage.key);
             }
-          },
+          }
         });
-      },
+      }
     },
 
     {
       key: ResourceTreeNodeMenuKeys.EXPORT_TABLE,
-      text: formatMessage({ id: 'odc.TreeNodeMenu.config.synonym.Export', defaultMessage: '导出' }), //导出
+      text: formatMessage({
+        id: 'odc.TreeNodeMenu.config.synonym.Export',
+        defaultMessage: '导出'
+      }), //导出
       ellipsis: true,
       disabled: (session) => {
         return !hasExportPermission(session);
@@ -137,17 +156,19 @@ function getMenu(synonymType: SynonymType): IMenuItemConfig[] {
         const synonym: Partial<ISynonym> = node.data;
         modal.changeExportModal(true, {
           type:
-            synonymType === SynonymType.PUBLIC ? DbObjectType.public_synonym : DbObjectType.synonym,
+            synonymType === SynonymType.PUBLIC
+              ? DbObjectType.public_synonym
+              : DbObjectType.synonym,
           name: synonym?.synonymName,
-          databaseId: session?.database.databaseId,
+          databaseId: session?.database.databaseId
         });
-      },
+      }
     },
     {
       key: ResourceTreeNodeMenuKeys.DOWNLOAD,
       text: formatMessage({
         id: 'odc.TreeNodeMenu.config.synonym.Download',
-        defaultMessage: '下载',
+        defaultMessage: '下载'
       }), //下载
       ellipsis: true,
       hasDivider: true,
@@ -157,12 +178,17 @@ function getMenu(synonymType: SynonymType): IMenuItemConfig[] {
           synonym?.synonymName,
           synonymType,
           session.sessionId,
-          session?.database?.dbName,
+          session?.database?.dbName
         );
         if (obj) {
-          downloadPLDDL(synonym?.synonymName, PLType.SYNONYM, obj.ddl, session?.database?.dbName);
+          downloadPLDDL(
+            synonym?.synonymName,
+            PLType.SYNONYM,
+            obj.ddl,
+            session?.database?.dbName
+          );
         }
-      },
+      }
     },
 
     {
@@ -171,27 +197,29 @@ function getMenu(synonymType: SynonymType): IMenuItemConfig[] {
       text: [
         formatMessage({
           id: 'odc.TreeNodeMenu.config.sequence.Refresh',
-          defaultMessage: '刷新',
-        }),
+          defaultMessage: '刷新'
+        })
       ],
 
       async run(session, node) {
         synonymType === SynonymType.COMMON
           ? await session.database?.getSynonymList()
           : await session.database?.getPublicSynonymList();
-      },
-    },
+      }
+    }
   ];
 }
-export const synonymMenusConfig: Partial<Record<ResourceNodeType, IMenuItemConfig[]>> = {
+export const synonymMenusConfig: Partial<
+  Record<ResourceNodeType, IMenuItemConfig[]>
+> = {
   [ResourceNodeType.SynonymRoot]: [
     {
       key: ResourceTreeNodeMenuKeys.CREATE_SYNONYM,
       text: [
         formatMessage({
           id: 'odc.TreeNodeMenu.config.synonym.CreateSynonym',
-          defaultMessage: '新建同义词',
-        }), //新建同义词
+          defaultMessage: '新建同义词'
+        }) //新建同义词
       ],
       icon: PlusOutlined,
       actionType: actionTypes.create,
@@ -199,21 +227,24 @@ export const synonymMenusConfig: Partial<Record<ResourceNodeType, IMenuItemConfi
         modal.changeCreateSynonymModalVisible(
           true,
           session?.odcDatabase?.id,
-          session?.database?.dbName,
+          session?.database?.dbName
         );
-      },
+      }
     },
     {
       key: 'REFRESH',
       text: [
-        formatMessage({ id: 'odc.ResourceTree.actions.Refresh', defaultMessage: '刷新' }), //刷新
+        formatMessage({
+          id: 'odc.ResourceTree.actions.Refresh',
+          defaultMessage: '刷新'
+        }) //刷新
       ],
       icon: ReloadOutlined,
       actionType: actionTypes.read,
       async run(session, node) {
         await session.database.getSynonymList();
-      },
-    },
+      }
+    }
   ],
 
   [ResourceNodeType.PublicSynonymRoot]: [
@@ -222,8 +253,8 @@ export const synonymMenusConfig: Partial<Record<ResourceNodeType, IMenuItemConfi
       text: [
         formatMessage({
           id: 'odc.TreeNodeMenu.config.synonym.CreateSynonym',
-          defaultMessage: '新建同义词',
-        }), //新建同义词
+          defaultMessage: '新建同义词'
+        }) //新建同义词
       ],
       icon: PlusOutlined,
       actionType: actionTypes.create,
@@ -231,23 +262,26 @@ export const synonymMenusConfig: Partial<Record<ResourceNodeType, IMenuItemConfi
         modal.changeCreateSynonymModalVisible(
           true,
           session?.odcDatabase?.id,
-          session?.database?.dbName,
+          session?.database?.dbName
         );
-      },
+      }
     },
     {
       key: 'REFRESH',
       text: [
-        formatMessage({ id: 'odc.ResourceTree.actions.Refresh', defaultMessage: '刷新' }), //刷新
+        formatMessage({
+          id: 'odc.ResourceTree.actions.Refresh',
+          defaultMessage: '刷新'
+        }) //刷新
       ],
       icon: ReloadOutlined,
       actionType: actionTypes.read,
       async run(session, node) {
         await session.database.getPublicSynonymList();
-      },
-    },
+      }
+    }
   ],
 
   [ResourceNodeType.Synonym]: getMenu(SynonymType.COMMON),
-  [ResourceNodeType.PublicSynonym]: getMenu(SynonymType.PUBLIC),
+  [ResourceNodeType.PublicSynonym]: getMenu(SynonymType.PUBLIC)
 };

@@ -21,84 +21,84 @@ import { IDataTypeParamType, IDataTypes } from './interface';
  */
 export const dataTypes: IDataTypes = {
   integer: {
-    params: [],
+    params: []
   },
   number: {
-    params: [IDataTypeParamType.DISPLAY_WIDTH, IDataTypeParamType.SCALE],
+    params: [IDataTypeParamType.DISPLAY_WIDTH, IDataTypeParamType.SCALE]
   },
   char: {
     params: [IDataTypeParamType.SIZE],
-    defaultValues: [120],
+    defaultValues: [120]
   },
   varchar2: {
     params: [IDataTypeParamType.SIZE],
-    defaultValues: [120],
+    defaultValues: [120]
   },
   varchar: {
     params: [IDataTypeParamType.SIZE],
-    defaultValues: [120],
+    defaultValues: [120]
   },
   nchar: {
     params: [IDataTypeParamType.SIZE],
-    defaultValues: [120],
+    defaultValues: [120]
   },
   nvarchar2: {
     params: [IDataTypeParamType.SIZE],
-    defaultValues: [120],
+    defaultValues: [120]
   },
   blob: {
-    params: [],
+    params: []
   },
   clob: {
-    params: [],
+    params: []
   },
   binary_double: {
-    params: [],
+    params: []
   },
   binary_float: {
-    params: [],
+    params: []
   },
   float: {
-    params: [IDataTypeParamType.DISPLAY_WIDTH],
+    params: [IDataTypeParamType.DISPLAY_WIDTH]
   },
   rowid: {
-    params: [IDataTypeParamType.BYTE_LENGTH],
+    params: [IDataTypeParamType.BYTE_LENGTH]
   },
   urowid: {
-    params: [IDataTypeParamType.BYTE_LENGTH],
+    params: [IDataTypeParamType.BYTE_LENGTH]
   },
   date: {
-    params: [],
+    params: []
   },
   timestamp: {
     params: [],
-    secondPrecision: true,
+    secondPrecision: true
   },
   timestamp_with_time_zone: {
     params: [],
-    secondPrecision: true,
+    secondPrecision: true
   },
   timestamp_with_local_time_zone: {
     params: [],
-    secondPrecision: true,
+    secondPrecision: true
   },
   raw: {
     params: [IDataTypeParamType.BYTE_LENGTH],
-    defaultValues: [200],
+    defaultValues: [200]
   },
   interval_year_to_month: {
     params: [],
-    yearPrecision: true,
+    yearPrecision: true
   },
   interval_day_to_second: {
     params: [],
     dayPrecision: true,
-    secondPrecision: true,
+    secondPrecision: true
   },
   sdo_geometry: {
-    params: [],
+    params: []
   },
   st_geometry: {
-    params: [],
-  },
+    params: []
+  }
 };

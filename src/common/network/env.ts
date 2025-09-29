@@ -23,9 +23,11 @@ export async function listEnvironments(
     sort: string;
     page: number;
     size: number;
-  }>,
+  }>
 ): Promise<IEnvironment[]> {
-  const ret = await request.get(`/api/v2/collaboration/environments`, { params });
+  const ret = await request.get(`/api/v2/collaboration/environments`, {
+    params
+  });
   return ret?.data?.contents || [];
 }
 /**
@@ -33,9 +35,11 @@ export async function listEnvironments(
  * @param data
  * @returns
  */
-export async function createEnvironment(data: Partial<IEnvironment>): Promise<IEnvironment> {
+export async function createEnvironment(
+  data: Partial<IEnvironment>
+): Promise<IEnvironment> {
   const res = await request.post(`/api/v2/collaboration/environments`, {
-    data,
+    data
   });
   return res;
 }
@@ -44,8 +48,12 @@ export async function createEnvironment(data: Partial<IEnvironment>): Promise<IE
  * @param environmentId
  * @returns
  */
-export async function deleteEnvironment(environmentId: number): Promise<boolean> {
-  const res = await request.delete(`/api/v2/collaboration/environments/${environmentId}`);
+export async function deleteEnvironment(
+  environmentId: number
+): Promise<boolean> {
+  const res = await request.delete(
+    `/api/v2/collaboration/environments/${environmentId}`
+  );
   return res?.successful;
 }
 /**
@@ -56,11 +64,14 @@ export async function deleteEnvironment(environmentId: number): Promise<boolean>
  */
 export async function updateEnvironment(
   environmentId: number,
-  data: Pick<IEnvironment, 'description' | 'style'>,
+  data: Pick<IEnvironment, 'description' | 'style'>
 ): Promise<IEnvironment> {
-  const res = await request.put(`/api/v2/collaboration/environments/${environmentId}`, {
-    data,
-  });
+  const res = await request.put(
+    `/api/v2/collaboration/environments/${environmentId}`,
+    {
+      data
+    }
+  );
   return res;
 }
 /**
@@ -70,11 +81,14 @@ export async function updateEnvironment(
  * @returns
  */
 export async function setEnabled(environmentId: number, enabled: boolean) {
-  const res = await request.post(`/api/v2/collaboration/environments/${environmentId}/setEnabled`, {
-    data: {
-      enabled,
-    },
-  });
+  const res = await request.post(
+    `/api/v2/collaboration/environments/${environmentId}/setEnabled`,
+    {
+      data: {
+        enabled
+      }
+    }
+  );
   return res?.successful;
 }
 
@@ -89,8 +103,8 @@ export async function getEnvironmentExists(environmentName: string): Promise<{
 }> {
   const res = await request.post(`/api/v2/collaboration/environments/exists`, {
     params: {
-      name: environmentName,
-    },
+      name: environmentName
+    }
   });
   return res?.data;
 }

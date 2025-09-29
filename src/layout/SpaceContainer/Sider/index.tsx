@@ -14,7 +14,11 @@
  * limitations under the License.
  */
 
-import { AccessResourceTypePermission, Acess, createPermission } from '@/component/Acess';
+import {
+  AccessResourceTypePermission,
+  Acess,
+  createPermission
+} from '@/component/Acess';
 import { actionTypes, IManagerResourceType } from '@/d.ts';
 import { IPageType } from '@/d.ts/_index';
 import odc from '@/plugins/odc';
@@ -35,7 +39,7 @@ import Icon, {
   ForkOutlined,
   HomeOutlined,
   TeamOutlined,
-  UserOutlined,
+  UserOutlined
 } from '@ant-design/icons';
 import { Link, useLocation } from '@umijs/max';
 import { useRequest } from 'ahooks';
@@ -67,12 +71,14 @@ const Sider: React.FC<IProps> = function (props) {
   const count = !isClient() ? _count : 0;
 
   function setCollapsed(v: boolean) {
-    tracert.click(v ? 'a3112.b46782.c330851.d367368' : 'a3112.b46782.c330851.d367367');
+    tracert.click(
+      v ? 'a3112.b46782.c330851.d367368' : 'a3112.b46782.c330851.d367367'
+    );
     _setCollapsed(v);
   }
 
   const { run } = useRequest(props.taskStore?.getTaskMetaInfo, {
-    pollingInterval: 5000,
+    pollingInterval: 5000
   });
 
   useEffect(() => {
@@ -85,7 +91,7 @@ const Sider: React.FC<IProps> = function (props) {
   return (
     <div
       className={classNames(styles.sider, {
-        [styles.siderCollapsed]: collapsed,
+        [styles.siderCollapsed]: collapsed
       })}
     >
       <div>
@@ -97,7 +103,11 @@ const Sider: React.FC<IProps> = function (props) {
           </>
         )}
 
-        <Space size={mentItemGap} direction="vertical" style={{ width: '100%' }}>
+        <Space
+          size={mentItemGap}
+          direction="vertical"
+          style={{ width: '100%' }}
+        >
           {setting.enableWorkbench ? (
             <Link to={`/${IPageType.Console}`}>
               <MenuItem
@@ -107,7 +117,7 @@ const Sider: React.FC<IProps> = function (props) {
                 collapsed={collapsed}
                 label={formatMessage({
                   id: 'src.layout.SpaceContainer.Sider.DC8F533F',
-                  defaultMessage: '工作台',
+                  defaultMessage: '工作台'
                 })}
               />
             </Link>
@@ -120,7 +130,7 @@ const Sider: React.FC<IProps> = function (props) {
               collapsed={collapsed}
               label={formatMessage({
                 id: 'odc.SpaceContainer.Sider.Project',
-                defaultMessage: '项目',
+                defaultMessage: '项目'
               })} /*项目*/
             />
           </Link>
@@ -135,15 +145,20 @@ const Sider: React.FC<IProps> = function (props) {
                 collapsed ? (
                   formatMessage({
                     id: 'odc.SpaceContainer.Sider.Ticket',
-                    defaultMessage: '工单',
+                    defaultMessage: '工单'
                   }) /*工单*/
                 ) : (
-                  <Badge showZero={false} count={count} overflowCount={100} offset={[-8, 5]}>
+                  <Badge
+                    showZero={false}
+                    count={count}
+                    overflowCount={100}
+                    offset={[-8, 5]}
+                  >
                     <div style={{ width: '100px' }} className={styles.ticket}>
                       {
                         formatMessage({
                           id: 'odc.SpaceContainer.Sider.Ticket',
-                          defaultMessage: '工单',
+                          defaultMessage: '工单'
                         }) /*工单*/
                       }
                     </div>
@@ -155,8 +170,14 @@ const Sider: React.FC<IProps> = function (props) {
           <AccessResourceTypePermission
             permissions={[
               createPermission(IManagerResourceType.resource, actionTypes.read),
-              createPermission(IManagerResourceType.resource, actionTypes.update),
-              createPermission(IManagerResourceType.resource, actionTypes.create),
+              createPermission(
+                IManagerResourceType.resource,
+                actionTypes.update
+              ),
+              createPermission(
+                IManagerResourceType.resource,
+                actionTypes.create
+              )
             ]}
           >
             <Link to={`/${IPageType.Datasource}`}>
@@ -167,7 +188,7 @@ const Sider: React.FC<IProps> = function (props) {
                 collapsed={collapsed}
                 label={formatMessage({
                   id: 'odc.SpaceContainer.Sider.DataSource',
-                  defaultMessage: '数据源',
+                  defaultMessage: '数据源'
                 })} /*数据源*/
               />
             </Link>
@@ -178,7 +199,7 @@ const Sider: React.FC<IProps> = function (props) {
               createPermission(IManagerResourceType.user, actionTypes.create),
               createPermission(IManagerResourceType.role, actionTypes.read),
               createPermission(IManagerResourceType.role, actionTypes.create),
-              createPermission(IManagerResourceType.auto_auth, actionTypes.read),
+              createPermission(IManagerResourceType.auto_auth, actionTypes.read)
             ]}
           >
             <Link to={`/${IPageType.Auth}/${IPageType.Auth_User}`}>
@@ -189,7 +210,7 @@ const Sider: React.FC<IProps> = function (props) {
                 collapsed={collapsed}
                 label={formatMessage({
                   id: 'odc.SpaceContainer.Sider.UserPermissions',
-                  defaultMessage: '用户权限',
+                  defaultMessage: '用户权限'
                 })} /*用户权限*/
               />
             </Link>
@@ -202,12 +223,17 @@ const Sider: React.FC<IProps> = function (props) {
               collapsed={collapsed}
               label={formatMessage({
                 id: 'odc.SpaceContainer.Sider.SafetySpecifications',
-                defaultMessage: '安全规范',
+                defaultMessage: '安全规范'
               })} /*安全规范*/
             />
           </Link>
           {odc.appConfig?.manage?.integration?.enable ? (
-            <Acess {...createPermission(IManagerResourceType.integration, actionTypes.read)}>
+            <Acess
+              {...createPermission(
+                IManagerResourceType.integration,
+                actionTypes.read
+              )}
+            >
               <Link
                 to={`/${IPageType.ExternalIntegration}/${IPageType.ExternalIntegration_Approval}`}
               >
@@ -218,7 +244,7 @@ const Sider: React.FC<IProps> = function (props) {
                   collapsed={collapsed}
                   label={formatMessage({
                     id: 'odc.SpaceContainer.Sider.ExternalIntegration',
-                    defaultMessage: '外部集成',
+                    defaultMessage: '外部集成'
                   })} /*外部集成*/
                 />
               </Link>
@@ -236,7 +262,10 @@ const Sider: React.FC<IProps> = function (props) {
           collapsed={collapsed}
           label={
             <span>
-              {formatMessage({ id: 'src.page.Project.8635398D', defaultMessage: 'SQL 控制台' })}
+              {formatMessage({
+                id: 'src.page.Project.8635398D',
+                defaultMessage: 'SQL 控制台'
+              })}
               <Icon
                 style={{ marginLeft: 8, color: 'var(--text-color-hint)' }}
                 component={NewOpenSvg}
@@ -252,7 +281,10 @@ const Sider: React.FC<IProps> = function (props) {
             disableTip={true}
             icon={BulbOutlined}
             collapsed={collapsed}
-            label={formatMessage({ id: 'odc.Index.Sider.Help', defaultMessage: '帮助' })} /*帮助*/
+            label={formatMessage({
+              id: 'odc.Index.Sider.Help',
+              defaultMessage: '帮助'
+            })} /*帮助*/
           />
         </HelpItem>
         <MineItem>
@@ -260,11 +292,17 @@ const Sider: React.FC<IProps> = function (props) {
             disableTip={true}
             icon={UserOutlined}
             collapsed={collapsed}
-            label={formatMessage({ id: 'odc.Index.Sider.Mine', defaultMessage: '我的' })} /*我的*/
+            label={formatMessage({
+              id: 'odc.Index.Sider.Mine',
+              defaultMessage: '我的'
+            })} /*我的*/
           />
         </MineItem>
       </Space>
-      <div className={styles.collapsedBtn} onClick={() => setCollapsed(!collapsed)}>
+      <div
+        className={styles.collapsedBtn}
+        onClick={() => setCollapsed(!collapsed)}
+      >
         <Icon component={collapsed ? CaretRightOutlined : CaretLeftOutlined} />
       </div>
     </div>

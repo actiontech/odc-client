@@ -20,9 +20,9 @@ const useDataSourceDrawer = () => {
       title: formatMessage(
         {
           id: 'odc.ResourceTree.Datasource.AreYouSureYouWant',
-          defaultMessage: '确认删除数据源 {name}?',
+          defaultMessage: '确认删除数据源 {name}?'
         },
-        { name },
+        { name }
       ),
       async onOk() {
         const isSuccess = await deleteConnection(key?.toString());
@@ -30,8 +30,8 @@ const useDataSourceDrawer = () => {
           message.success(
             formatMessage({
               id: 'odc.ResourceTree.Datasource.DeletedSuccessfully',
-              defaultMessage: '删除成功',
-            }), //删除成功
+              defaultMessage: '删除成功'
+            }) //删除成功
           );
 
           if (selectKeys.includes(key)) {
@@ -42,7 +42,7 @@ const useDataSourceDrawer = () => {
             context?.reloadDatabaseList();
           }, 500);
         }
-      },
+      }
     });
   };
 
@@ -53,7 +53,7 @@ const useDataSourceDrawer = () => {
     setEditDatasourceId,
     copyDatasourceId,
     setCopyDatasourceId,
-    deleteDataSource,
+    deleteDataSource
   };
 };
 

@@ -5,12 +5,12 @@ import { formatMessage } from '@/util/intl';
 import { getLocalFormatDateTime } from '@/util/utils';
 import { LoadingOutlined } from '@ant-design/icons';
 import { Tooltip } from 'antd';
-import { useEffect, useRef, useState, useContext } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export default function Reload({
   size = '13px',
   databaseList,
-  reload,
+  reload
 }: {
   size?: string;
   databaseList?: IDatabase[];
@@ -21,33 +21,47 @@ export default function Reload({
       message: (e) =>
         formatMessage({
           id: 'src.component.Button.SyncMetadata.9F1736BB',
-          defaultMessage: '元数据同步',
+          defaultMessage: '元数据同步'
         }),
-      icon: <SyncMetadataSvg onClick={_onClick} style={{ fontSize: size, cursor: 'pointer' }} />,
+      icon: (
+        <SyncMetadataSvg
+          onClick={_onClick}
+          style={{ fontSize: size, cursor: 'pointer' }}
+        />
+      )
     },
     SYNCING: {
       message: (e) =>
         formatMessage({
           id: 'src.component.Button.SyncMetadata.30BFD3E6',
-          defaultMessage: '元数据同步中，请等待',
+          defaultMessage: '元数据同步中，请等待'
         }),
       icon: (
         <LoadingOutlined
-          style={{ fontSize: size, cursor: 'pointer', color: 'var(--brand-blue6-color)' }}
+          style={{
+            fontSize: size,
+            cursor: 'pointer',
+            color: 'var(--brand-blue6-color)'
+          }}
         />
-      ),
+      )
     },
     SYNCED: {
       message: (time) =>
         formatMessage(
           {
             id: 'src.component.Button.SyncMetadata.FD352980',
-            defaultMessage: '元数据同步（上一次同步时间：{time}）',
+            defaultMessage: '元数据同步（上一次同步时间：{time}）'
           },
-          { time },
+          { time }
         ),
-      icon: <SyncMetadataSvg onClick={_onClick} style={{ fontSize: size, cursor: 'pointer' }} />,
-    },
+      icon: (
+        <SyncMetadataSvg
+          onClick={_onClick}
+          style={{ fontSize: size, cursor: 'pointer' }}
+        />
+      )
+    }
   };
 
   const [lastSyncTime, setLastSyncTime] = useState();
@@ -57,7 +71,9 @@ export default function Reload({
   function updateState() {
     if (
       databaseList?.every((item) =>
-        [DBObjectSyncStatus.SYNCED, DBObjectSyncStatus.FAILED].includes(item.objectSyncStatus),
+        [DBObjectSyncStatus.SYNCED, DBObjectSyncStatus.FAILED].includes(
+          item.objectSyncStatus
+        )
       )
     ) {
       // 全部都是SYNCED或者FAILED, 就展示上次同步时间(取最小时间)
@@ -65,7 +81,9 @@ export default function Reload({
       setState(statusMap.SYNCED);
     } else if (
       databaseList?.find((item) =>
-        [DBObjectSyncStatus.SYNCING, DBObjectSyncStatus.PENDING].includes(item.objectSyncStatus),
+        [DBObjectSyncStatus.SYNCING, DBObjectSyncStatus.PENDING].includes(
+          item.objectSyncStatus
+        )
       )
     ) {
       // 有状态为初始化同步中的, 就是 元数据同步中,请稍等
@@ -75,7 +93,7 @@ export default function Reload({
       }, 30000);
     } else if (
       databaseList?.find((item) =>
-        [DBObjectSyncStatus.INITIALIZED, null].includes(item.objectSyncStatus),
+        [DBObjectSyncStatus.INITIALIZED, null].includes(item.objectSyncStatus)
       )
     ) {
       // 只要有一个是INITIALIZED, null, 就还没整体初始化过, 展示初始态
@@ -105,8 +123,9 @@ export default function Reload({
     const compareDates = (a, b) => new Date(a.date) - new Date(b.date);
     const findEarliest = (data) =>
       data.reduce(
-        (earliest, item) => (compareDates(earliest, item) < 0 ? earliest : item),
-        Infinity,
+        (earliest, item) =>
+          compareDates(earliest, item) < 0 ? earliest : item,
+        Infinity
       );
     return findEarliest(data);
   };
@@ -115,7 +134,7 @@ export default function Reload({
     <Tooltip
       placement="bottom"
       styles={{
-        root: { maxWidth: 340 },
+        root: { maxWidth: 340 }
       }}
       title={state?.message(getLocalFormatDateTime(lastSyncTime))}
     >
@@ -123,7 +142,7 @@ export default function Reload({
         style={{
           display: 'flex',
           justifyContent: 'center',
-          alignContent: 'center',
+          alignContent: 'center'
         }}
       >
         {state?.icon}

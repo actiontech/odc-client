@@ -26,9 +26,13 @@ import React, {
   useLayoutEffect,
   useMemo,
   useRef,
-  useState,
+  useState
 } from 'react';
-import { AutoSizer, InfiniteLoader, List as TableList } from 'react-virtualized';
+import {
+  AutoSizer,
+  InfiniteLoader,
+  List as TableList
+} from 'react-virtualized';
 import ParamContext, { SearchType } from '../../ParamContext';
 import ListItem from '../ListItem';
 import LoadingItem from '../ListItem/Loading';
@@ -59,7 +63,7 @@ interface IProps {
 
 const List: React.FC<IProps> = forwardRef(function (
   { width, height, dataSourceStatusStore, clusterStore },
-  ref,
+  ref
 ) {
   const [_connectionList, setConnectionList] = useState<IConnection[]>([]);
 
@@ -81,7 +85,7 @@ const List: React.FC<IProps> = forwardRef(function (
     return _connectionList.map((c) => {
       return {
         ...c,
-        status: dataSourceStatusStore.statusMap.get(c.id) || c.status,
+        status: dataSourceStatusStore.statusMap.get(c.id) || c.status
       };
     });
   }, [_connectionList, dataSourceStatusStore.statusMap]);
@@ -95,8 +99,8 @@ const List: React.FC<IProps> = forwardRef(function (
       message.info(
         formatMessage({
           id: 'src.page.Datasource.Datasource.Content.List.75724B17',
-          defaultMessage: '对象存储数据源暂不支持查看详情',
-        }),
+          defaultMessage: '对象存储数据源暂不支持查看详情'
+        })
       );
       return;
     }
@@ -149,15 +153,21 @@ const List: React.FC<IProps> = forwardRef(function (
       }
       const currentPage = Math.floor(offset / fetchSize) + 1;
       const result = await getConnectionList({
-        clusterName: [searchValue.type == SearchType.CLUSTER ? searchValue.value : null],
-        tenantName: [searchValue.type == SearchType.TENANT ? searchValue.value : null],
+        clusterName: [
+          searchValue.type == SearchType.CLUSTER ? searchValue.value : null
+        ],
+        tenantName: [
+          searchValue.type == SearchType.TENANT ? searchValue.value : null
+        ],
         name: searchValue.type == SearchType.NAME ? searchValue.value : null,
-        hostPort: searchValue.type == SearchType.HOST ? searchValue.value : null,
+        hostPort:
+          searchValue.type == SearchType.HOST ? searchValue.value : null,
         type: connectType,
-        fuzzySearchKeyword: searchValue.type == SearchType.ALL ? searchValue.value : null,
+        fuzzySearchKeyword:
+          searchValue.type == SearchType.ALL ? searchValue.value : null,
         sort: sortType,
         page: currentPage,
-        size: fetchSize,
+        size: fetchSize
       });
 
       if (currentVersion !== versionRef.current) {
@@ -200,10 +210,10 @@ const List: React.FC<IProps> = forwardRef(function (
       return {
         reload() {
           _fetchNextConnectList(true);
-        },
+        }
       };
     },
-    [_fetchNextConnectList],
+    [_fetchNextConnectList]
   );
 
   useEffect(() => {
@@ -223,7 +233,10 @@ const List: React.FC<IProps> = forwardRef(function (
 
   function getClusterName(cluster) {
     if (haveOCP()) {
-      return clusterStore.clusterList.find((c) => c.instanceId === cluster)?.instanceName || '-';
+      return (
+        clusterStore.clusterList.find((c) => c.instanceId === cluster)
+          ?.instanceName || '-'
+      );
     }
     return cluster || '-';
   }
@@ -232,10 +245,15 @@ const List: React.FC<IProps> = forwardRef(function (
     if (haveOCP()) {
       const tenantInstance = clusterStore.tenantListMap?.[tenantName];
       if (tenantInstance) {
-        return tenantInstance?.find((tenant) => tenant.tenantId === tenantName)?.tenantName || '-';
+        return (
+          tenantInstance?.find((tenant) => tenant.tenantId === tenantName)
+            ?.tenantName || '-'
+        );
       }
       const tenantList = clusterStore.tenantListMap[clusterName];
-      return tenantList?.find((t) => t.tenantId === tenantName)?.tenantName || '-';
+      return (
+        tenantList?.find((t) => t.tenantId === tenantName)?.tenantName || '-'
+      );
     }
     return tenantName || '-';
   }
@@ -255,12 +273,24 @@ const List: React.FC<IProps> = forwardRef(function (
           key={connection.id}
           isConnecting={isConnecting === connection.id}
           connectionName={
-            <ConnectionName openNewConnection={openNewConnection} connection={connection} />
+            <ConnectionName
+              openNewConnection={openNewConnection}
+              connection={connection}
+            />
           }
           connectType={connection?.type}
           cluster={<div>{getClusterName(connection.clusterName)}</div>}
-          tenant={<div>{getTenantName(connection.clusterName, connection.tenantName)}</div>}
-          host={<div>{[connection.host, connection.port].filter(Boolean).join(':') || '-'}</div>}
+          tenant={
+            <div>
+              {getTenantName(connection.clusterName, connection.tenantName)}
+            </div>
+          }
+          host={
+            <div>
+              {[connection.host, connection.port].filter(Boolean).join(':') ||
+                '-'}
+            </div>
+          }
           action={
             <Space size={14}>
               <MoreBtn connection={connection} />
@@ -271,7 +301,10 @@ const List: React.FC<IProps> = forwardRef(function (
               color={connection?.environmentStyle}
               content={
                 connection?.environmentName ||
-                formatMessage({ id: 'odc.Content.List.NoEnvironment', defaultMessage: '无环境' }) //无环境
+                formatMessage({
+                  id: 'odc.Content.List.NoEnvironment',
+                  defaultMessage: '无环境'
+                }) //无环境
               }
             />
           }
@@ -298,14 +331,19 @@ const List: React.FC<IProps> = forwardRef(function (
           right: 0,
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'center',
+          justifyContent: 'center'
         }}
       >
         {isLoading ? (
           <Spin />
         ) : (
           <DataSourceEmpty
-            extra={[<TitleButton onReload={() => context.reloadTable()} key="titleButton" />]}
+            extra={[
+              <TitleButton
+                onReload={() => context.reloadTable()}
+                key="titleButton"
+              />
+            ]}
           />
         )}
       </div>
@@ -348,7 +386,7 @@ const ListWrap = inject(
   'commonStore',
   'pageStore',
   'clusterStore',
-  'dataSourceStatusStore',
+  'dataSourceStatusStore'
 )(observer(List));
 
 function AutoSizerWrap(props, ref) {
@@ -356,7 +394,9 @@ function AutoSizerWrap(props, ref) {
     <>
       <AutoSizer>
         {({ width, height }) => {
-          return <ListWrap ref={ref} width={width} height={height} {...props} />;
+          return (
+            <ListWrap ref={ref} width={width} height={height} {...props} />
+          );
         }}
       </AutoSizer>
     </>

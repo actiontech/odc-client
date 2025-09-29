@@ -41,8 +41,8 @@ export default class ViewColumn extends Component<IProps> {
       onChange(
         [...value].concat({
           dragIdx: dragIdxGenerator++,
-          paramName: '',
-        }),
+          paramName: ''
+        })
       );
     }
   };
@@ -60,7 +60,7 @@ export default class ViewColumn extends Component<IProps> {
     if (value) {
       value.splice(idx, 1, {
         ...value[idx],
-        ...rule,
+        ...rule
       });
       if (onChange) {
         onChange(value);
@@ -78,9 +78,9 @@ export default class ViewColumn extends Component<IProps> {
           update(value, {
             $splice: [
               [dragIndex, 1],
-              [hoverIndex, 0, dragParam],
-            ],
-          }),
+              [hoverIndex, 0, dragParam]
+            ]
+          })
         );
       }
     }
@@ -105,11 +105,13 @@ export default class ViewColumn extends Component<IProps> {
 
     return (
       <>
-        <div className={styles.list}>{value && value.map(this.renderSingleRule)}</div>
+        <div className={styles.list}>
+          {value && value.map(this.renderSingleRule)}
+        </div>
         <Button icon={<PlusOutlined />} size="small" onClick={this.handleAdd}>
           {formatMessage({
             id: 'workspace.window.createView.button.addColumn',
-            defaultMessage: '添加字段',
+            defaultMessage: '添加字段'
           })}
         </Button>
       </>

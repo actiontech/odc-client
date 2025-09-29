@@ -22,14 +22,14 @@ import { ConnectType, DbObjectType, ConnectionMode } from '@/d.ts';
 export enum DatabaseSyncStatus {
   FAILED = 'FAILED',
   SUCCEEDED = 'SUCCEEDED',
-  PENDING = 'PENDING',
+  PENDING = 'PENDING'
 }
 
 export enum DatabasePermissionType {
   QUERY = 'QUERY',
   CHANGE = 'CHANGE',
   EXPORT = 'EXPORT',
-  ACCESS = 'ACCESS',
+  ACCESS = 'ACCESS'
 }
 
 export interface IDatabaseObject {
@@ -40,7 +40,7 @@ export interface IDatabaseObject {
 
 export interface IOdcDBObject {
   id: number;
-  name: String;
+  name: string;
   type: DbObjectType;
   database: IDatabase;
   organizationId: number;
@@ -50,7 +50,7 @@ export interface IOdcDBObject {
 
 export interface IOdcDBColumn {
   id: number;
-  name: String;
+  name: string;
   dbObject: IOdcDBObject;
   organizationId: number;
   createTime: Date;
@@ -63,17 +63,17 @@ export enum DBObjectSyncStatus {
   PENDING = 'PENDING',
   SYNCING = 'SYNCING',
   SYNCED = 'SYNCED',
-  FAILED = 'FAILED',
+  FAILED = 'FAILED'
 }
 
 export enum DBType {
   LOGICAL = 'LOGICAL',
-  PHYSICAL = 'PHYSICAL',
+  PHYSICAL = 'PHYSICAL'
 }
 
 export enum BooleanOptionType {
   TRUE = 'true',
-  FALSE = 'false',
+  FALSE = 'false'
 }
 
 export interface IDatabase {
@@ -132,7 +132,7 @@ export enum PreviewLogicalTableTopologiesErrorEnum {
   LogicalTableExpressionNotEvenlyDivided = 'LogicalTableExpressionNotEvenlyDivided',
   LogicalTableExpressionNotPositiveStep = 'LogicalTableExpressionNotPositiveStep',
   LogicalTableExpressionRangeStartGreaterThanEnd = 'LogicalTableExpressionRangeStartGreaterThanEnd',
-  LogicalTableExpressionNotValidIntegerRange = 'LogicalTableExpressionNotValidIntegerRange',
+  LogicalTableExpressionNotValidIntegerRange = 'LogicalTableExpressionNotValidIntegerRange'
 }
 
 export enum DatabaseGroup {
@@ -149,5 +149,5 @@ export enum DatabaseGroup {
   /** 按集群 */
   cluster = 'CLUSTER',
   /** 按租户 */
-  tenant = 'Tenant',
+  tenant = 'Tenant'
 }

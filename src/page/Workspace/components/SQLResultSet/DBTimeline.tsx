@@ -20,7 +20,7 @@ import { formatTimeTemplate } from '@/util/utils';
 import { Timeline, Typography } from 'antd';
 import BigNumber from 'bignumber.js';
 import dayjs from 'dayjs';
-import styles from './index.less';
+import { TimelineStyleWrapper } from './style';
 
 interface IProps {
   row: ISqlExecuteResult;
@@ -33,96 +33,109 @@ export default function DBTimeline({ row }: IProps) {
     {
       title: formatMessage({
         id: 'odc.components.SQLResultSet.ExecuteHistory.OdcParsesSql',
-        defaultMessage: 'ODC 解析 SQL',
+        defaultMessage: 'ODC 解析 SQL'
       }), //ODC 解析 SQL
-      key: 'ODC Parse SQL',
+      key: 'ODC Parse SQL'
     },
 
     {
       title: formatMessage({
         id: 'odc.components.SQLResultSet.ExecuteHistory.OdcRewriteSql',
-        defaultMessage: 'ODC 重写 SQL',
+        defaultMessage: 'ODC 重写 SQL'
       }), //ODC 重写 SQL
-      key: 'ODC Rewrite SQL',
+      key: 'ODC Rewrite SQL'
     },
     {
       title: formatMessage({
         id: 'odc.components.SQLResultSet.DBTimeline.SqlPrecheck',
-        defaultMessage: 'SQL 预检查',
+        defaultMessage: 'SQL 预检查'
       }), //SQL 预检查
-      key: 'Sql intercept pre-check',
+      key: 'Sql intercept pre-check'
     },
     {
       title: formatMessage({
         id: 'odc.components.SQLResultSet.ExecuteHistory.Run',
-        defaultMessage: '执行',
+        defaultMessage: '执行'
       }), //执行
-      key: 'Execute',
+      key: 'Execute'
     },
 
     {
       title: formatMessage({
         id: 'odc.components.SQLResultSet.ExecuteHistory.ObtainTheSqlType',
-        defaultMessage: '获取 SQL 类型',
+        defaultMessage: '获取 SQL 类型'
       }), //获取 SQL 类型
-      key: 'Init SQL type',
+      key: 'Init SQL type'
     },
     {
       title: formatMessage({
         id: 'odc.components.SQLResultSet.ExecuteHistory.ObtainEditableInformation',
-        defaultMessage: '获取可编辑信息',
+        defaultMessage: '获取可编辑信息'
       }), //获取可编辑信息
-      key: 'Init editable info',
+      key: 'Init editable info'
     },
     {
       title: formatMessage({
         id: 'odc.components.SQLResultSet.ExecuteHistory.GetColumnInformation',
-        defaultMessage: '获取列信息',
+        defaultMessage: '获取列信息'
       }), //获取列信息
-      key: 'Init column info',
+      key: 'Init column info'
     },
     {
       title: formatMessage({
         id: 'odc.components.SQLResultSet.ExecuteHistory.ObtainAlertContent',
-        defaultMessage: '获取告警内容',
+        defaultMessage: '获取告警内容'
       }), //获取告警内容
-      key: 'Init warning message',
+      key: 'Init warning message'
     },
     {
       title: formatMessage({
         id: 'odc.components.SQLResultSet.DBTimeline.SqlPostCheck',
-        defaultMessage: 'SQL 后置检查',
+        defaultMessage: 'SQL 后置检查'
       }), //SQL 后置检查
-      key: 'Sql intercept after-check',
-    },
+      key: 'Sql intercept after-check'
+    }
   ];
 
   return (
-    <Timeline className={styles.executeTimerLine}>
+    <TimelineStyleWrapper className="executeTimerLine">
       {renderList.map((item) => {
-        const stage = timer?.stages?.find((stage) => stage.stageName === item.key);
+        const stage = timer?.stages?.find(
+          (stage) => stage.stageName === item.key
+        );
         if (!stage) {
           return null;
         }
         const totalDurationMicroseconds = stage?.totalDurationMicroseconds ?? 1;
-        const time = BigNumber(totalDurationMicroseconds).div(1000000).toNumber();
+        const time = BigNumber(totalDurationMicroseconds)
+          .div(1000000)
+          .toNumber();
         const hasInitColumnInfoWarning =
-          stage.stageName === 'Init column info' && totalDurationMicroseconds / 1000 / 1000 > 1;
+          stage.stageName === 'Init column info' &&
+          totalDurationMicroseconds / 1000 / 1000 > 1;
         return (
-          <Timeline.Item color={hasInitColumnInfoWarning ? 'var(--icon-orange-color)' : 'blue'}>
+          <Timeline.Item
+            color={
+              hasInitColumnInfoWarning ? 'var(--icon-orange-color)' : 'blue'
+            }
+          >
             <Typography.Text strong>
               <Typography.Text type="secondary">
                 [{dayjs(stage?.startTimeMillis).format('HH:mm:ss')}]
               </Typography.Text>
               {item.title}
-              <Typography.Text type="secondary">({formatTimeTemplate(time)})</Typography.Text>
+              <Typography.Text type="secondary">
+                ({formatTimeTemplate(time)})
+              </Typography.Text>
               {stage?.subStages?.map((stage) => {
-                const time = BigNumber(stage?.totalDurationMicroseconds).div(1000000).toNumber();
+                const time = BigNumber(stage?.totalDurationMicroseconds)
+                  .div(1000000)
+                  .toNumber();
                 return (
                   <div>
                     <Typography.Text type="secondary">
-                      [{dayjs(stage?.startTimeMillis).format('HH:mm:ss')}]{stage?.stageName}(
-                      {formatTimeTemplate(time)})
+                      [{dayjs(stage?.startTimeMillis).format('HH:mm:ss')}]
+                      {stage?.stageName}({formatTimeTemplate(time)})
                     </Typography.Text>
                   </div>
                 );
@@ -134,7 +147,7 @@ export default function DBTimeline({ row }: IProps) {
                       formatMessage({
                         id: 'odc.components.SQLResultSet.ExecuteHistory.ItTakesTooMuchTime',
                         defaultMessage:
-                          '耗时过大，建议在 SQL 窗口设置中关闭获取，关闭后不再查询列注释及可编辑的列信息',
+                          '耗时过大，建议在 SQL 窗口设置中关闭获取，关闭后不再查询列注释及可编辑的列信息'
                       }) /*耗时过大，建议在SQL窗口设置中关闭获取，关闭后不再查询列注释及可编辑的列信息*/
                     }
                   </Typography.Text>
@@ -148,7 +161,7 @@ export default function DBTimeline({ row }: IProps) {
         {
           formatMessage({
             id: 'odc.components.SQLResultSet.ExecuteHistory.Completed',
-            defaultMessage: '完成',
+            defaultMessage: '完成'
           }) /*完成*/
         }
 
@@ -156,12 +169,12 @@ export default function DBTimeline({ row }: IProps) {
           {
             formatMessage({
               id: 'odc.components.SQLResultSet.ExecuteHistory.TotalTimeConsumed',
-              defaultMessage: '(总耗时:',
+              defaultMessage: '(总耗时:'
             }) /*(总耗时:*/
           }
           {formatTimeTemplate(timer?.totalDurationMicroseconds / 1000000)})
         </Typography.Text>
       </Timeline.Item>
-    </Timeline>
+    </TimelineStyleWrapper>
   );
 }

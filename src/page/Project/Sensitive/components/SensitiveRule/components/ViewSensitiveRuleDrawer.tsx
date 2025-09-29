@@ -36,21 +36,21 @@ const renderByType = (type: SensitiveRuleType, params?: any) => {
             label={
               formatMessage({
                 id: 'odc.SensitiveRule.components.ViewSensitiveRuleDrawer.PathRecognitionExpression',
-                defaultMessage: '路径识别表达式',
+                defaultMessage: '路径识别表达式'
               }) //路径识别表达式
             }
           >
             <span
               style={{
                 display: 'flex',
-                flexDirection: 'column',
+                flexDirection: 'column'
               }}
             >
               <div>
                 {
                   formatMessage({
                     id: 'odc.SensitiveRule.components.ViewSensitiveRuleDrawer.Match',
-                    defaultMessage: '匹配：',
+                    defaultMessage: '匹配：'
                   }) /*匹配：*/
                 }
 
@@ -60,7 +60,7 @@ const renderByType = (type: SensitiveRuleType, params?: any) => {
                 {
                   formatMessage({
                     id: 'odc.SensitiveRule.components.ViewSensitiveRuleDrawer.Exclude',
-                    defaultMessage: '排除：',
+                    defaultMessage: '排除：'
                   }) /*排除：*/
                 }
 
@@ -76,43 +76,43 @@ const renderByType = (type: SensitiveRuleType, params?: any) => {
         databaseRegexExpression = '',
         tableRegexExpression = '',
         columnRegexExpression = '',
-        columnCommentRegexExpression = '',
+        columnCommentRegexExpression = ''
       } = params;
       const dataSource = [];
       if (databaseRegexExpression !== '') {
         dataSource.push({
           name: formatMessage({
             id: 'odc.SensitiveRule.components.ViewSensitiveRuleDrawer.LibraryName',
-            defaultMessage: '库名',
+            defaultMessage: '库名'
           }), //库名
-          content: databaseRegexExpression,
+          content: databaseRegexExpression
         });
       }
       if (tableRegexExpression !== '') {
         dataSource.push({
           name: formatMessage({
             id: 'odc.SensitiveRule.components.ViewSensitiveRuleDrawer.TableName',
-            defaultMessage: '表名',
+            defaultMessage: '表名'
           }), //表名
-          content: tableRegexExpression,
+          content: tableRegexExpression
         });
       }
       if (columnRegexExpression !== '') {
         dataSource.push({
           name: formatMessage({
             id: 'odc.SensitiveRule.components.ViewSensitiveRuleDrawer.ColumnName',
-            defaultMessage: '列名',
+            defaultMessage: '列名'
           }), //列名
-          content: columnRegexExpression,
+          content: columnRegexExpression
         });
       }
       if (columnCommentRegexExpression !== '') {
         dataSource.push({
           name: formatMessage({
             id: 'odc.SensitiveRule.components.ViewSensitiveRuleDrawer.ColumnRemarks',
-            defaultMessage: '列备注',
+            defaultMessage: '列备注'
           }), //列备注
-          content: columnCommentRegexExpression,
+          content: columnCommentRegexExpression
         });
       }
       return (
@@ -121,7 +121,7 @@ const renderByType = (type: SensitiveRuleType, params?: any) => {
             label={
               formatMessage({
                 id: 'odc.SensitiveRule.components.ViewSensitiveRuleDrawer.IdentificationRules',
-                defaultMessage: '识别规则',
+                defaultMessage: '识别规则'
               }) //识别规则
             }
           >
@@ -135,12 +135,12 @@ const renderByType = (type: SensitiveRuleType, params?: any) => {
               filterContent={{
                 searchPlaceholder: formatMessage({
                   id: 'odc.components.UserPage.EnterAUserOrAccount',
-                  defaultMessage: '请输入用户/账号搜索',
-                }),
+                  defaultMessage: '请输入用户/账号搜索'
+                })
                 /* 请输入用户/账号搜索 */
               }}
               operationContent={{
-                options: [],
+                options: []
               }}
               onLoad={null}
               tableProps={{
@@ -148,34 +148,34 @@ const renderByType = (type: SensitiveRuleType, params?: any) => {
                   {
                     title: formatMessage({
                       id: 'odc.SensitiveRule.components.ViewSensitiveRuleDrawer.RuleName',
-                      defaultMessage: '规则名称',
+                      defaultMessage: '规则名称'
                     }), //规则名称
                     width: 170,
                     dataIndex: 'name',
                     key: 'name',
-                    render: (text) => text || '-',
+                    render: (text) => text || '-'
                   },
                   {
                     title: formatMessage({
                       id: 'odc.SensitiveRule.components.ViewSensitiveRuleDrawer.RegularExpression',
-                      defaultMessage: '正则表达式',
+                      defaultMessage: '正则表达式'
                     }), //正则表达式
                     width: 170,
                     dataIndex: 'content',
                     key: 'content',
-                    render: (text) => text || '-',
-                  },
+                    render: (text) => text || '-'
+                  }
                 ],
 
                 dataSource: dataSource,
                 rowKey: 'id',
                 pagination: {
                   hideOnSinglePage: true,
-                  pageSize: 4,
+                  pageSize: 4
                 },
                 scroll: {
-                  x: 564,
-                },
+                  x: 564
+                }
               }}
             />
           </div>
@@ -190,7 +190,7 @@ const renderByType = (type: SensitiveRuleType, params?: any) => {
             label={
               formatMessage({
                 id: 'odc.SensitiveRule.components.ViewSensitiveRuleDrawer.IdentificationRules',
-                defaultMessage: '识别规则',
+                defaultMessage: '识别规则'
               }) //识别规则
             }
           >
@@ -202,7 +202,7 @@ const renderByType = (type: SensitiveRuleType, params?: any) => {
               height: '300px',
               width: '100%',
               padding: '16px',
-              backgroundColor: 'var(--neutral-grey1-color)',
+              backgroundColor: 'var(--neutral-grey1-color)'
             }}
           >
             <div
@@ -211,7 +211,7 @@ const renderByType = (type: SensitiveRuleType, params?: any) => {
                 height: '300px',
                 width: '100%',
                 position: 'relative',
-                overflowY: 'hidden',
+                overflowY: 'hidden'
               }}
             >
               <MonacoEditor
@@ -219,7 +219,7 @@ const renderByType = (type: SensitiveRuleType, params?: any) => {
                 defaultValue={groovyScript}
                 readOnly={true}
                 {...{
-                  lineNumbers: 'off',
+                  lineNumbers: 'off'
                 }}
               />
             </div>
@@ -235,14 +235,17 @@ const ViewSensitiveRuleDrawer = ({
   projectId,
   sensitiveRuleId,
   selectedRecord,
-  maskingAlgorithmIdMap,
+  maskingAlgorithmIdMap
 }) => {
   const [record, setRecord] = useState<ISensitiveRule>(selectedRecord);
-  const getDetailSensitiveRule = async (projectId: number, sensitiveRuleId: number) => {
+  const getDetailSensitiveRule = async (
+    projectId: number,
+    sensitiveRuleId: number
+  ) => {
     const rawData = await detailSensitiveRule(projectId, sensitiveRuleId);
     setRecord({
       ...selectedRecord,
-      ...rawData,
+      ...rawData
     });
   };
 
@@ -261,7 +264,7 @@ const ViewSensitiveRuleDrawer = ({
       title={
         formatMessage({
           id: 'odc.SensitiveRule.components.ViewSensitiveRuleDrawer.ViewIdentificationRules',
-          defaultMessage: '查看识别规则',
+          defaultMessage: '查看识别规则'
         }) //查看识别规则
       }
       open={viewDrawerVisible}
@@ -271,14 +274,14 @@ const ViewSensitiveRuleDrawer = ({
         <div
           style={{
             display: 'flex',
-            justifyContent: 'flex-end',
+            justifyContent: 'flex-end'
           }}
         >
           <Button onClick={handleViewDrawerClose}>
             {
               formatMessage({
                 id: 'odc.SensitiveRule.components.ViewSensitiveRuleDrawer.Close',
-                defaultMessage: '关闭',
+                defaultMessage: '关闭'
               }) /*关闭*/
             }
           </Button>
@@ -291,7 +294,7 @@ const ViewSensitiveRuleDrawer = ({
           label={
             formatMessage({
               id: 'odc.SensitiveRule.components.ViewSensitiveRuleDrawer.RuleName',
-              defaultMessage: '规则名称',
+              defaultMessage: '规则名称'
             }) //规则名称
           }
         >
@@ -301,7 +304,7 @@ const ViewSensitiveRuleDrawer = ({
           label={
             formatMessage({
               id: 'odc.SensitiveRule.components.ViewSensitiveRuleDrawer.RuleStatus',
-              defaultMessage: '规则状态',
+              defaultMessage: '规则状态'
             }) //规则状态
           }
         >
@@ -309,11 +312,11 @@ const ViewSensitiveRuleDrawer = ({
             record?.enabled
               ? formatMessage({
                   id: 'odc.SensitiveRule.components.ViewSensitiveRuleDrawer.Enable',
-                  defaultMessage: '启用',
+                  defaultMessage: '启用'
                 }) //启用
               : formatMessage({
                   id: 'odc.SensitiveRule.components.ViewSensitiveRuleDrawer.NotEnabled',
-                  defaultMessage: '未启用',
+                  defaultMessage: '未启用'
                 }) //未启用
           }
         </Descriptions.Item>
@@ -321,7 +324,7 @@ const ViewSensitiveRuleDrawer = ({
           label={
             formatMessage({
               id: 'odc.SensitiveRule.components.ViewSensitiveRuleDrawer.IdentificationMethod',
-              defaultMessage: '识别方式',
+              defaultMessage: '识别方式'
             }) //识别方式
           }
         >
@@ -333,7 +336,7 @@ const ViewSensitiveRuleDrawer = ({
           label={
             formatMessage({
               id: 'odc.SensitiveRule.components.ViewSensitiveRuleDrawer.DesensitizationAlgorithm',
-              defaultMessage: '脱敏算法',
+              defaultMessage: '脱敏算法'
             }) //脱敏算法
           }
         >
@@ -343,7 +346,7 @@ const ViewSensitiveRuleDrawer = ({
           label={
             formatMessage({
               id: 'odc.SensitiveRule.components.ViewSensitiveRuleDrawer.RuleDescription',
-              defaultMessage: '规则描述',
+              defaultMessage: '规则描述'
             }) //规则描述
           }
         >
@@ -354,7 +357,7 @@ const ViewSensitiveRuleDrawer = ({
           label={
             formatMessage({
               id: 'odc.SensitiveRule.components.ViewSensitiveRuleDrawer.Founder',
-              defaultMessage: '创建人',
+              defaultMessage: '创建人'
             }) //创建人
           }
         >
@@ -364,7 +367,7 @@ const ViewSensitiveRuleDrawer = ({
           label={
             formatMessage({
               id: 'odc.SensitiveRule.components.ViewSensitiveRuleDrawer.CreationTime',
-              defaultMessage: '创建时间',
+              defaultMessage: '创建时间'
             }) //创建时间
           }
         >
@@ -374,7 +377,7 @@ const ViewSensitiveRuleDrawer = ({
           label={
             formatMessage({
               id: 'odc.SensitiveRule.components.ViewSensitiveRuleDrawer.UpdateTime',
-              defaultMessage: '更新时间',
+              defaultMessage: '更新时间'
             }) //更新时间
           }
         >

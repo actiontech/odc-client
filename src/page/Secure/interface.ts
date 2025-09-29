@@ -17,10 +17,22 @@
 import { formatMessage } from '@/util/intl';
 export const RiskLevelMap = (level: number) => {
   const textMap = {
-    0: formatMessage({ id: 'odc.page.Secure.interface.DefaultRisk', defaultMessage: '默认风险' }), //默认风险
-    1: formatMessage({ id: 'odc.page.Secure.interface.LowRisk', defaultMessage: '低风险' }), //低风险
-    2: formatMessage({ id: 'odc.page.Secure.interface.MediumRisk', defaultMessage: '中风险' }), //中风险
-    3: formatMessage({ id: 'odc.page.Secure.interface.HighRisk', defaultMessage: '高风险' }), //高风险
+    0: formatMessage({
+      id: 'odc.page.Secure.interface.DefaultRisk',
+      defaultMessage: '默认风险'
+    }), //默认风险
+    1: formatMessage({
+      id: 'odc.page.Secure.interface.LowRisk',
+      defaultMessage: '低风险'
+    }), //低风险
+    2: formatMessage({
+      id: 'odc.page.Secure.interface.MediumRisk',
+      defaultMessage: '中风险'
+    }), //中风险
+    3: formatMessage({
+      id: 'odc.page.Secure.interface.HighRisk',
+      defaultMessage: '高风险'
+    }) //高风险
   };
   return textMap?.[level];
 };
@@ -28,28 +40,28 @@ export const RiskLevelMap = (level: number) => {
 export enum RiskLevelEnum {
   DEFAULT = 0,
   SUGGEST = 1,
-  MUST = 2,
+  MUST = 2
 }
 
 export const levelMap = {
   [RiskLevelEnum.DEFAULT]: 'default',
   [RiskLevelEnum.SUGGEST]: 'suggest',
-  [RiskLevelEnum.MUST]: 'must',
+  [RiskLevelEnum.MUST]: 'must'
 };
 
 export function RiskLevelTextMap() {
   return {
     [RiskLevelEnum.DEFAULT]: formatMessage({
       id: 'odc.page.Secure.interface.NoNeedToImprove',
-      defaultMessage: '无需改进',
+      defaultMessage: '无需改进'
     }), //无需改进
     [RiskLevelEnum.SUGGEST]: formatMessage({
       id: 'odc.page.Secure.interface.ApprovalRequired',
-      defaultMessage: '需要审批',
+      defaultMessage: '需要审批'
     }), //需要审批
     [RiskLevelEnum.MUST]: formatMessage({
       id: 'odc.page.Secure.interface.MustBeImproved',
-      defaultMessage: '必须改进',
-    }), //必须改进
+      defaultMessage: '必须改进'
+    }) //必须改进
   };
 }

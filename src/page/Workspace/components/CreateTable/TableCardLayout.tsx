@@ -16,7 +16,7 @@
 
 import React from 'react';
 
-import styles from './index.less';
+import { TableCardLayoutStyleWrapper } from './style';
 
 interface IProps {
   toolbar: React.ReactNode;
@@ -24,10 +24,10 @@ interface IProps {
 
 const TableCardLayout: React.FC<IProps> = function ({ toolbar, children }) {
   return (
-    <div className={styles.tableCard}>
-      <div className={styles.toolbar}>{toolbar}</div>
-      <div className={styles.table}>{children}</div>
-    </div>
+    <TableCardLayoutStyleWrapper className="tableCard">
+      <div className="toolbar">{toolbar}</div>
+      <div className="table">{children}</div>
+    </TableCardLayoutStyleWrapper>
   );
 };
 

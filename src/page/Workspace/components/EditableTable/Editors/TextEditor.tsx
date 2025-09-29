@@ -17,14 +17,22 @@
 import { formatMessage } from '@/util/intl';
 import { EditOutlined } from '@ant-design/icons';
 import type { EditorProps } from '@oceanbase-odc/ob-react-data-grid';
-import { Input, Modal } from 'antd';
 import type { ChangeEvent } from 'react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 
 import type { TextAreaRef } from 'antd/lib/input/TextArea';
 import AntdEditorWrap from './AntdEditorWrap';
+import { BasicButton, BasicInput, BasicModal } from '@actiontech/dms-kit';
+import { Space } from 'antd';
 
-export function TextEditor<T>({ row, onRowChange, column, left, top, width }: EditorProps<T>) {
+export function TextEditor<T>({
+  row,
+  onRowChange,
+  column,
+  left,
+  top,
+  width
+}: EditorProps<T>) {
   const { key, name } = column;
   const value = row[key];
   const editorRef = useRef<TextAreaRef>(null);
@@ -35,20 +43,29 @@ export function TextEditor<T>({ row, onRowChange, column, left, top, width }: Ed
     (e: ChangeEvent<HTMLTextAreaElement>) => {
       onRowChange({ ...row, [key]: e.target.value });
     },
-    [onRowChange],
+    [onRowChange]
   );
+
+  const handleCancel = () => {
+    setIsShowTextModal(false);
+    setModalTextValue(null);
+  };
+
+  const handleOk = () => {
+    onRowChange({ ...row, [key]: modalTextValue }, true);
+  };
 
   return (
     <AntdEditorWrap>
       <div>
-        <Input.TextArea
+        <BasicInput.TextArea
           ref={editorRef}
           autoFocus
           onFocus={() => {
             setTimeout(() => {
               editorRef.current?.resizableTextArea.textArea.setSelectionRange(
                 Number.MAX_SAFE_INTEGER,
-                Number.MAX_SAFE_INTEGER,
+                Number.MAX_SAFE_INTEGER
               );
             }, 100);
           }}
@@ -75,23 +92,29 @@ export function TextEditor<T>({ row, onRowChange, column, left, top, width }: Ed
         </a>
       </div>
       {isShowTextModal ? (
-        <Modal
+        <BasicModal
           open={true}
           title={name}
           zIndex={1031}
-          okText={formatMessage({
-            id: 'odc.EditableTable.Editors.TextEditor.Submitted',
-            defaultMessage: '提交',
-          })} /* 提交 */
-          onCancel={() => {
-            setIsShowTextModal(false);
-            setModalTextValue(null);
-          }}
-          onOk={() => {
-            onRowChange({ ...row, [key]: modalTextValue }, true);
-          }}
+          onCancel={handleCancel}
+          footer={
+            <Space>
+              <BasicButton onClick={handleCancel}>
+                {formatMessage({
+                  id: 'app.button.cancel',
+                  defaultMessage: '取消'
+                })}
+              </BasicButton>
+              <BasicButton type="primary" onClick={handleOk}>
+                {formatMessage({
+                  id: 'odc.EditableTable.Editors.TextEditor.Submitted',
+                  defaultMessage: '提交'
+                })}
+              </BasicButton>
+            </Space>
+          }
         >
-          <Input.TextArea
+          <BasicInput.TextArea
             autoFocus
             autoSize={{ minRows: 15, maxRows: 15 }}
             value={modalTextValue}
@@ -104,7 +127,7 @@ export function TextEditor<T>({ row, onRowChange, column, left, top, width }: Ed
               setModalTextValue(e.target.value);
             }}
           />
-        </Modal>
+        </BasicModal>
       ) : null}
     </AntdEditorWrap>
   );

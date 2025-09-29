@@ -31,7 +31,11 @@ type params =
       anonymousBlockDdl: string;
     };
 
-export async function executePL(parmas: params, sessionId: string, ignoreError: boolean = false) {
+export async function executePL(
+  parmas: params,
+  sessionId: string,
+  ignoreError: boolean = false
+) {
   let createTask: string, fetchResult: string, data: Record<string, any>;
   const sid = generateSessionSid(sessionId);
   switch (parmas.type) {
@@ -40,7 +44,7 @@ export async function executePL(parmas: params, sessionId: string, ignoreError: 
       fetchResult = `/api/v2/pl/procedure/${sid}/getResult`;
       data = {
         procedure: parmas.procedure,
-        anonymousBlockDdl: parmas.anonymousBlockDdl,
+        anonymousBlockDdl: parmas.anonymousBlockDdl
       };
       break;
     }
@@ -49,7 +53,7 @@ export async function executePL(parmas: params, sessionId: string, ignoreError: 
       fetchResult = `/api/v2/pl/function/${sid}/getResult`;
       data = {
         function: parmas.function,
-        anonymousBlockDdl: parmas.anonymousBlockDdl,
+        anonymousBlockDdl: parmas.anonymousBlockDdl
       };
       break;
     }
@@ -58,8 +62,8 @@ export async function executePL(parmas: params, sessionId: string, ignoreError: 
     const taskResponse = await request.get(fetchResult, {
       params: {
         resultId,
-        ignoreError,
-      },
+        ignoreError
+      }
     });
     const taskResult = taskResponse?.data;
     if (taskResponse?.isError || taskResult) {

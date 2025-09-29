@@ -21,7 +21,11 @@ import Toolbar from '@/component/Toolbar';
 import { IConStatus } from '@/component/Toolbar/statefulIcon';
 import { formatMessage } from '@/util/intl';
 import { downloadPLDDL } from '@/util/sqlExport';
-import { AlignLeftOutlined, CloudDownloadOutlined, SyncOutlined } from '@ant-design/icons';
+import {
+  AlignLeftOutlined,
+  CloudDownloadOutlined,
+  SyncOutlined
+} from '@ant-design/icons';
 import { observer } from 'mobx-react';
 import React, { useContext, useRef, useState } from 'react';
 import TablePageContext from '../context';
@@ -50,11 +54,11 @@ const TableDDL: React.FC<IProps> = function ({}) {
             formated
               ? formatMessage({
                   id: 'odc.components.TablePage.Unformat',
-                  defaultMessage: '取消格式化',
+                  defaultMessage: '取消格式化'
                 }) // 取消格式化
               : formatMessage({
                   id: 'odc.components.TablePage.Formatting',
-                  defaultMessage: '格式化',
+                  defaultMessage: '格式化'
                 }) // 格式化
           }
           icon={<AlignLeftOutlined />}
@@ -66,7 +70,7 @@ const TableDDL: React.FC<IProps> = function ({}) {
           text={
             formatMessage({
               id: 'odc.components.ViewPage.Download',
-              defaultMessage: '下载',
+              defaultMessage: '下载'
             }) //下载
           }
           icon={<CloudDownloadOutlined />}
@@ -75,7 +79,7 @@ const TableDDL: React.FC<IProps> = function ({}) {
               table?.info?.tableName,
               'TABLE',
               table?.info?.DDL,
-              session.database.dbName,
+              session.database.dbName
             );
           }}
         />
@@ -84,7 +88,7 @@ const TableDDL: React.FC<IProps> = function ({}) {
           icon={<SyncOutlined />}
           text={formatMessage({
             id: 'odc.components.ShowTableBaseInfoForm.Refresh',
-            defaultMessage: '刷新',
+            defaultMessage: '刷新'
           })}
           /* 刷新 */ onClick={onRefresh}
         />
@@ -93,13 +97,15 @@ const TableDDL: React.FC<IProps> = function ({}) {
         style={{
           flex: 1,
           overflow: 'hidden',
-          position: 'relative',
+          position: 'relative'
         }}
       >
         <SQLCodePreviewer
           readOnly
           defaultValue={table?.info?.DDL}
-          language={getDataSourceModeConfig(session?.connection?.type)?.sql?.language}
+          language={
+            getDataSourceModeConfig(session?.connection?.type)?.sql?.language
+          }
           onEditorCreated={(editor: IEditor) => {
             editorRef.current = editor;
           }}

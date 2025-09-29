@@ -17,14 +17,18 @@ const TaskDurationItem: React.FC<IProps> = ({ form }) => {
       <Form.Item
         extra={formatMessage({
           id: 'src.component.Task.component.TaskdurationItem.7B7A6912',
-          defaultMessage: '任务启动指定时长后，若未完成则会暂停调度，等待下一次调度',
+          defaultMessage:
+            '任务启动指定时长后，若未完成则会暂停调度，等待下一次调度'
         })}
         style={{ marginBottom: hasTaskDuration ? 8 : 24 }}
       >
-        <Checkbox checked={hasTaskDuration} onChange={(e) => setTaskDuration(e.target.checked)}>
+        <Checkbox
+          checked={hasTaskDuration}
+          onChange={(e) => setTaskDuration(e.target.checked)}
+        >
           {formatMessage({
             id: 'src.component.Task.component.TaskdurationItem.4569BC79',
-            defaultMessage: '指定任务时长',
+            defaultMessage: '指定任务时长'
           })}
         </Checkbox>
       </Form.Item>
@@ -32,7 +36,7 @@ const TaskDurationItem: React.FC<IProps> = ({ form }) => {
         <Space size={4} align="center" style={{ marginBottom: 24 }}>
           <Form.Item
             style={{
-              marginBottom: 0,
+              marginBottom: 0
             }}
             name="timeoutMillis"
             rules={[
@@ -44,11 +48,11 @@ const TaskDurationItem: React.FC<IProps> = ({ form }) => {
                         new Error(
                           formatMessage({
                             id: 'src.component.Task.component.TaskdurationItem.90E3EDCE',
-                            defaultMessage: '请输入时长 (值不小于0)',
-                          }),
-                        ),
-                      ),
-              },
+                            defaultMessage: '请输入时长 (值不小于0)'
+                          })
+                        )
+                      )
+              }
             ]}
             initialValue={1}
           >
@@ -62,7 +66,7 @@ const TaskDurationItem: React.FC<IProps> = ({ form }) => {
           <span>
             {formatMessage({
               id: 'src.component.Task.component.TaskdurationItem.5C35A19A',
-              defaultMessage: '小时',
+              defaultMessage: '小时'
             })}
           </span>
         </Space>

@@ -12,7 +12,7 @@ import {
   TaskExecStrategy,
   TaskPageScope,
   TaskPageType,
-  TaskType,
+  TaskType
 } from '@/d.ts';
 import { IDatabase } from '@/d.ts/database';
 import MultipleLintResultTable from '@/page/Workspace/components/SQLResultSet/MultipleAsyncSQLLintTable';
@@ -32,7 +32,7 @@ import {
   Modal,
   Radio,
   Tabs,
-  Tooltip,
+  Tooltip
 } from 'antd';
 import type { UploadFile } from 'antd/lib/upload/interface';
 import Cookies from 'js-cookie';
@@ -57,10 +57,14 @@ const CreateModal: React.FC<IProps> = (props) => {
   const editorRef = useRef<CommonIDE>();
   const scrollSwitcher = useRef<Boolean>(true);
   const formBoxRef = React.createRef<HTMLDivElement>();
-  const [activeKey, setActiveKey] = useState<SiderTabKeys>(SiderTabKeys.SELECT_DATABASE);
+  const [activeKey, setActiveKey] = useState<SiderTabKeys>(
+    SiderTabKeys.SELECT_DATABASE
+  );
 
   const [sqlContentType, setSqlContentType] = useState(SQLContentType.TEXT);
-  const [rollbackContentType, setRollbackContentType] = useState(SQLContentType.TEXT);
+  const [rollbackContentType, setRollbackContentType] = useState(
+    SQLContentType.TEXT
+  );
   const [hasEdit, setHasEdit] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
   const [projectOptions, setProjectOptions] = useState<
@@ -73,7 +77,10 @@ const CreateModal: React.FC<IProps> = (props) => {
   const [defaultDatasource, setDefaultDatasource] = useState<IConnection>();
   const _projectId = Form.useWatch<number>('projectId', form);
   const sqlContent = Form.useWatch<string>(['parameters', 'sqlContent'], form);
-  const orderedDatabaseIds = Form.useWatch<number[][]>(['parameters', 'orderedDatabaseIds'], form);
+  const orderedDatabaseIds = Form.useWatch<number[][]>(
+    ['parameters', 'orderedDatabaseIds'],
+    form
+  );
   const [preCheckLoading, setPreLoading] = useState<boolean>(false);
   const [hasPreCheck, setHasPreCheck] = useState<boolean>(false);
   const [lintResultSet, setLintResultSet] = useState<
@@ -119,7 +126,8 @@ const CreateModal: React.FC<IProps> = (props) => {
     // 获取容器A的当前滚动位置和高度
     const scrollTop = formBoxRef.current?.scrollTop;
     // 遍历所有子节点
-    const children = formBoxRef.current?.querySelectorAll<HTMLHeadingElement>('[data-name]'); // 假定子节点有共同的类名'child'
+    const children =
+      formBoxRef.current?.querySelectorAll<HTMLHeadingElement>('[data-name]'); // 假定子节点有共同的类名'child'
     let min = Number.MAX_SAFE_INTEGER;
     let key;
     children.forEach((child) => {
@@ -153,7 +161,7 @@ const CreateModal: React.FC<IProps> = (props) => {
     return {
       ids,
       names,
-      size: ids.length,
+      size: ids.length
     };
   };
   const checkFileSizeAmount = (files: UploadFile[]): boolean => {
@@ -167,8 +175,8 @@ const CreateModal: React.FC<IProps> = (props) => {
       message.warning(
         formatMessage({
           id: 'odc.components.CreateAsyncTaskModal.TheMaximumSizeOfThe',
-          defaultMessage: '文件最多不超过 256 MB',
-        }),
+          defaultMessage: '文件最多不超过 256 MB'
+        })
         //文件最多不超过 256MB
       );
 
@@ -176,14 +184,20 @@ const CreateModal: React.FC<IProps> = (props) => {
     }
     return true;
   };
-  const handleChange = (type: 'sqlContentType' | 'rollbackContentType', value: SQLContentType) => {
+  const handleChange = (
+    type: 'sqlContentType' | 'rollbackContentType',
+    value: SQLContentType
+  ) => {
     if (type === 'sqlContentType') {
       setSqlContentType(value);
     } else {
       setRollbackContentType(value);
     }
   };
-  const handleSqlChange = (type: 'sqlContent' | 'rollbackSqlContent', sql: string) => {
+  const handleSqlChange = (
+    type: 'sqlContent' | 'rollbackSqlContent',
+    sql: string
+  ) => {
     form?.setFieldValue(['parameters', type], sql);
     setHasEdit(true);
   };
@@ -198,25 +212,28 @@ const CreateModal: React.FC<IProps> = (props) => {
           type,
           formatMessage({
             id: 'odc.components.CreateAsyncTaskModal.TheMaximumSizeOfThe',
-            defaultMessage: '文件最多不超过 256 MB',
-          }),
+            defaultMessage: '文件最多不超过 256 MB'
+          })
           //文件最多不超过 256MB
         );
       }, 0);
     }
     return isLt20M;
   };
-  const handleFileChange = (files: UploadFile[], type: 'sqlFiles' | 'rollbackSqlFiles') => {
+  const handleFileChange = (
+    files: UploadFile[],
+    type: 'sqlFiles' | 'rollbackSqlFiles'
+  ) => {
     form?.setFieldsValue({
-      [type]: files,
+      [type]: files
     });
     if (files.some((item) => item?.error?.isLimit)) {
       setFormStatus(
         type,
         formatMessage({
           id: 'odc.components.CreateAsyncTaskModal.TheMaximumSizeOfThe',
-          defaultMessage: '文件最多不超过 256 MB',
-        }),
+          defaultMessage: '文件最多不超过 256 MB'
+        })
         //文件最多不超过 256MB
       );
     } else {
@@ -227,8 +244,8 @@ const CreateModal: React.FC<IProps> = (props) => {
     form.setFields([
       {
         name: [fieldName],
-        errors: errorMessage ? [errorMessage] : [],
-      },
+        errors: errorMessage ? [errorMessage] : []
+      }
     ]);
   };
   const hadleReset = () => {
@@ -246,7 +263,7 @@ const CreateModal: React.FC<IProps> = (props) => {
       Modal.confirm({
         title: formatMessage({
           id: 'src.component.Task.MutipleAsyncTask.CreateModal.C3F6AD52',
-          defaultMessage: '确认取消多库变更吗？',
+          defaultMessage: '确认取消多库变更吗？'
         }),
         centered: true,
         onOk: () => {
@@ -255,12 +272,12 @@ const CreateModal: React.FC<IProps> = (props) => {
         },
         okText: formatMessage({
           id: 'src.component.Task.MutipleAsyncTask.CreateModal.B13CF0A4',
-          defaultMessage: '确认',
+          defaultMessage: '确认'
         }),
         cancelText: formatMessage({
           id: 'src.component.Task.MutipleAsyncTask.CreateModal.3FBE491C',
-          defaultMessage: '取消',
-        }),
+          defaultMessage: '取消'
+        })
       });
     } else {
       modalStore.changeMultiDatabaseChangeModal(false);
@@ -276,10 +293,10 @@ const CreateModal: React.FC<IProps> = (props) => {
           errors: [
             formatMessage({
               id: 'src.component.Task.MutipleAsyncTask.CreateModal.51536A7D',
-              defaultMessage: '至少共需要2个数据库',
-            }),
-          ],
-        },
+              defaultMessage: '至少共需要2个数据库'
+            })
+          ]
+        }
       ]);
     }
     form
@@ -303,15 +320,17 @@ const CreateModal: React.FC<IProps> = (props) => {
             sqlContent,
             timeoutMillis,
             manualTimeoutMillis,
-            autoErrorStrategy,
-          },
+            autoErrorStrategy
+          }
         } = values;
         const sqlFileIdAndNames = getFileIdAndNames(sqlFiles);
         const rollbackSqlFileIdAndNames = getFileIdAndNames(rollbackSqlFiles);
         const parameters = {
           projectId: _projectId,
           orderedDatabaseIds,
-          timeoutMillis: timeoutMillis ? timeoutMillis * 60 * 60 * 1000 : undefined,
+          timeoutMillis: timeoutMillis
+            ? timeoutMillis * 60 * 60 * 1000
+            : undefined,
           manualTimeoutMillis: manualTimeoutMillis
             ? manualTimeoutMillis * 60 * 60 * 1000
             : undefined,
@@ -326,9 +345,12 @@ const CreateModal: React.FC<IProps> = (props) => {
           rollbackSqlObjectNames: rollbackSqlFileIdAndNames?.names,
           queryLimit,
           delimiter,
-          retryTimes,
+          retryTimes
         };
-        if (!checkFileSizeAmount(sqlFiles) || !checkFileSizeAmount(rollbackSqlFiles)) {
+        if (
+          !checkFileSizeAmount(sqlFiles) ||
+          !checkFileSizeAmount(rollbackSqlFiles)
+        ) {
           return;
         }
         if (sqlContentType === SQLContentType.FILE) {
@@ -338,20 +360,23 @@ const CreateModal: React.FC<IProps> = (props) => {
               'sqlFiles',
               formatMessage({
                 id: 'odc.components.CreateAsyncTaskModal.TheMaximumSizeOfThe',
-                defaultMessage: '文件最多不超过 256 MB',
-              }),
+                defaultMessage: '文件最多不超过 256 MB'
+              })
               //文件最多不超过 256MB
             );
 
             return;
           }
-          if (!sqlFileIdAndNames?.size || sqlFileIdAndNames?.size !== sqlFiles?.length) {
+          if (
+            !sqlFileIdAndNames?.size ||
+            sqlFileIdAndNames?.size !== sqlFiles?.length
+          ) {
             setFormStatus(
               'sqlFiles',
               formatMessage({
                 id: 'odc.components.CreateAsyncTaskModal.UploadAnSqlFile',
-                defaultMessage: '请上传 SQL 文件',
-              }),
+                defaultMessage: '请上传 SQL 文件'
+              })
 
               //请上传 SQL 文件
             );
@@ -374,14 +399,17 @@ const CreateModal: React.FC<IProps> = (props) => {
           taskType: TaskType.MULTIPLE_ASYNC,
           executionStrategy,
           parameters,
-          description,
+          description
         };
         setConfirmLoading(true);
         const res = await createTask(data);
         handleCancel(false);
         setConfirmLoading(false);
         if (res) {
-          openTasksPage(TaskPageType.MULTIPLE_ASYNC, TaskPageScope.CREATED_BY_CURRENT_USER);
+          openTasksPage(
+            TaskPageType.MULTIPLE_ASYNC,
+            TaskPageScope.CREATED_BY_CURRENT_USER
+          );
           modalStore.changeMultiDatabaseChangeModal(false);
         }
       })
@@ -405,9 +433,9 @@ const CreateModal: React.FC<IProps> = (props) => {
         {
           delimiter,
           databaseIds,
-          scriptContent: sqlContent as string,
+          scriptContent: sqlContent as string
         },
-        login.organizationId?.toString(),
+        login.organizationId?.toString()
       );
       if (result) {
         setExecuteOrPreCheckSql(sqlContent);
@@ -418,11 +446,11 @@ const CreateModal: React.FC<IProps> = (props) => {
             cur?.checkResultList?.forEach((item) => {
               pre.push({
                 checkResult: item,
-                database: cur?.database,
+                database: cur?.database
               });
             });
             return pre;
-          }, []),
+          }, [])
         );
       }
       setPreLoading(false);
@@ -440,11 +468,15 @@ const CreateModal: React.FC<IProps> = (props) => {
       retryTimes: 0,
       parameters: {
         orderedDatabaseIds: [[undefined]],
-        queryLimit: Number(setting.getSpaceConfigByKey('odc.sqlexecute.default.queryLimit')),
+        queryLimit: Number(
+          setting.getSpaceConfigByKey('odc.sqlexecute.default.queryLimit')
+        ),
         generateRollbackPlan:
           multipleAsyncTaskData?.task?.parameters?.generateRollbackPlan ||
-          setting.getSpaceConfigByKey('odc.task.default.rollbackPlanEnabled') === 'true',
-      },
+          setting.getSpaceConfigByKey(
+            'odc.task.default.rollbackPlanEnabled'
+          ) === 'true'
+      }
     };
     if (multipleAsyncTaskData?.task) {
       const { parameters, description, executionStrategy, rollbackable } =
@@ -461,17 +493,17 @@ const CreateModal: React.FC<IProps> = (props) => {
           timeoutMillis: parameters?.timeoutMillis / 1000 / 60 / 60,
           errorStrategy: parameters?.errorStrategy,
           autoErrorStrategy: parameters?.autoErrorStrategy,
-          manualTimeoutMillis: parameters?.timeoutMillis / 1000 / 60 / 60,
+          manualTimeoutMillis: parameters?.timeoutMillis / 1000 / 60 / 60
         },
-        description,
+        description
       });
     }
     if (multipleAsyncTaskData?.projectId) {
       return merge(defaultFormData, {
         projectId: multipleAsyncTaskData?.projectId,
         parameters: {
-          orderedDatabaseIds: multipleAsyncTaskData?.orderedDatabaseIds,
-        },
+          orderedDatabaseIds: multipleAsyncTaskData?.orderedDatabaseIds
+        }
       });
     }
     return defaultFormData;
@@ -485,12 +517,19 @@ const CreateModal: React.FC<IProps> = (props) => {
     }
   };
   const loadProjectOptions = async () => {
-    const response = await listProjects(undefined, undefined, Number.MAX_SAFE_INTEGER, undefined);
+    const response = await listProjects(
+      undefined,
+      undefined,
+      Number.MAX_SAFE_INTEGER,
+      undefined
+    );
     if (response?.contents?.length) {
-      const projectOptions = response?.contents?.map(({ name, id, currentUserResourceRoles }) => ({
-        label: name,
-        value: id,
-      }));
+      const projectOptions = response?.contents?.map(
+        ({ name, id, currentUserResourceRoles }) => ({
+          label: name,
+          value: id
+        })
+      );
       const rawProjectMap = response?.contents?.reduce((pre, cur) => {
         pre[cur?.id] = cur?.name;
         return pre;
@@ -514,8 +553,8 @@ const CreateModal: React.FC<IProps> = (props) => {
         retryTimes: 0,
         projectId: undefined,
         parameters: {
-          orderedDatabaseIds: [[undefined]],
-        },
+          orderedDatabaseIds: [[undefined]]
+        }
       });
     } else {
       form.resetFields();
@@ -535,7 +574,7 @@ const CreateModal: React.FC<IProps> = (props) => {
     <MultipleAsyncContext.Provider
       value={{
         projectId: _projectId,
-        projectMap,
+        projectMap
       }}
     >
       <Drawer
@@ -544,7 +583,7 @@ const CreateModal: React.FC<IProps> = (props) => {
         width={905}
         title={formatMessage({
           id: 'src.component.Task.MutipleAsyncTask.CreateModal.493673D9',
-          defaultMessage: '新建多库变更工单',
+          defaultMessage: '新建多库变更工单'
         })}
         footer={
           <DrawerFooter
@@ -563,7 +602,7 @@ const CreateModal: React.FC<IProps> = (props) => {
           <div
             style={{
               flexGrow: 1,
-              maxWidth: 'calc(100% - 136px)',
+              maxWidth: 'calc(100% - 136px)'
             }}
           >
             <Form
@@ -584,7 +623,7 @@ const CreateModal: React.FC<IProps> = (props) => {
                 <Form.Item
                   label={formatMessage({
                     id: 'src.component.Task.MutipleAsyncTask.CreateModal.1DFE930F',
-                    defaultMessage: 'SQL 内容',
+                    defaultMessage: 'SQL 内容'
                   })}
                   name="sqlContentType"
                   initialValue={SQLContentType.TEXT}
@@ -593,11 +632,11 @@ const CreateModal: React.FC<IProps> = (props) => {
                       required: true,
                       message: formatMessage({
                         id: 'odc.components.CreateAsyncTaskModal.SelectSqlContent',
-                        defaultMessage: '请选择 SQL 内容',
-                      }),
+                        defaultMessage: '请选择 SQL 内容'
+                      })
 
                       // 请选择 SQL 内容
-                    },
+                    }
                   ]}
                 >
                   <Radio.Group
@@ -609,7 +648,7 @@ const CreateModal: React.FC<IProps> = (props) => {
                       {
                         formatMessage({
                           id: 'odc.components.CreateAsyncTaskModal.SqlEntry',
-                          defaultMessage: 'SQL 录入',
+                          defaultMessage: 'SQL 录入'
                         })
 
                         /* SQL录入 */
@@ -619,7 +658,7 @@ const CreateModal: React.FC<IProps> = (props) => {
                       {
                         formatMessage({
                           id: 'odc.components.CreateAsyncTaskModal.UploadAttachments',
-                          defaultMessage: '上传附件',
+                          defaultMessage: '上传附件'
                         })
 
                         /* 上传附件 */
@@ -637,23 +676,24 @@ const CreateModal: React.FC<IProps> = (props) => {
                       required: sqlContentType === SQLContentType.TEXT,
                       message: formatMessage({
                         id: 'src.component.Task.MutipleAsyncTask.CreateModal.20CA9283',
-                        defaultMessage: '请填写 SQL 内容',
-                      }),
-                    },
+                        defaultMessage: '请填写 SQL 内容'
+                      })
+                    }
                   ]}
                   style={{
-                    height: '280px',
+                    height: '280px'
                   }}
                 >
                   <CommonIDE
                     ref={editorRef}
                     initialSQL={initSqlContent}
                     language={
-                      getDataSourceModeConfig(defaultDatasource?.type || ConnectType.OB_MYSQL)?.sql
-                        ?.language
+                      getDataSourceModeConfig(
+                        defaultDatasource?.type || ConnectType.OB_MYSQL
+                      )?.sql?.language
                     }
                     editorProps={{
-                      theme,
+                      theme
                     }}
                     onEditorAfterCreatedCallback={onEditorAfterCreatedCallback}
                     onSQLChange={(sql) => {
@@ -668,7 +708,9 @@ const CreateModal: React.FC<IProps> = (props) => {
                 </Form.Item>
                 <Form.Item
                   name="sqlFiles"
-                  className={sqlContentType !== SQLContentType.FILE && styles.hide}
+                  className={
+                    sqlContentType !== SQLContentType.FILE && styles.hide
+                  }
                 >
                   <ODCDragger
                     ref={sqlFileRef}
@@ -680,14 +722,15 @@ const CreateModal: React.FC<IProps> = (props) => {
                     multiple={true}
                     tip={formatMessage({
                       id: 'odc.component.OSSDragger2.YouCanDragAndDrop',
-                      defaultMessage: '支持拖拽文件上传，任务将按文件排列的先后顺序执行',
+                      defaultMessage:
+                        '支持拖拽文件上传，任务将按文件排列的先后顺序执行'
                     })}
                     maxCount={500}
                     action={getAsyncTaskUploadUrl()}
                     headers={{
                       'X-XSRF-TOKEN': Cookies.get('XSRF-TOKEN') || '',
                       'Accept-Language': getLocale(),
-                      currentOrganizationId: login.organizationId?.toString(),
+                      currentOrganizationId: login.organizationId?.toString()
                     }}
                     onFileChange={(files) => {
                       handleFileChange(files, 'sqlFiles');
@@ -697,7 +740,7 @@ const CreateModal: React.FC<IProps> = (props) => {
                       {
                         formatMessage({
                           id: 'odc.components.CreateAsyncTaskModal.ClickOrDragMultipleFiles',
-                          defaultMessage: '点击或将多个文件拖拽到这里上传',
+                          defaultMessage: '点击或将多个文件拖拽到这里上传'
                         })
                         /*点击或将多个文件拖拽到这里上传*/
                       }
@@ -706,7 +749,8 @@ const CreateModal: React.FC<IProps> = (props) => {
                       {
                         formatMessage({
                           id: 'odc.components.CreateAsyncTaskModal.TheMaximumSizeOfThe.2',
-                          defaultMessage: '文件最多不超过 256 MB ，支持扩展名 .sql',
+                          defaultMessage:
+                            '文件最多不超过 256 MB ，支持扩展名 .sql'
                         })
                         /*文件最多不超过 256MB ，支持扩展名 .sql*/
                       }
@@ -718,14 +762,15 @@ const CreateModal: React.FC<IProps> = (props) => {
                     sqlContentType === SQLContentType.FILE
                       ? formatMessage({
                           id: 'src.component.Task.MutipleAsyncTask.CreateModal.F7476B91',
-                          defaultMessage: '请使用 SQL 录入，上传附件暂不支持 SQL 检查',
+                          defaultMessage:
+                            '请使用 SQL 录入，上传附件暂不支持 SQL 检查'
                         })
                       : null
                   }
                 >
                   <Button
                     style={{
-                      marginBottom: '12px',
+                      marginBottom: '12px'
                     }}
                     onClick={preCheck}
                     disabled={
@@ -739,11 +784,11 @@ const CreateModal: React.FC<IProps> = (props) => {
                       preCheckLoading
                         ? formatMessage({
                             id: 'odc.src.component.Task.AsyncTask.CreateModal.InInspection',
-                            defaultMessage: '检查中',
+                            defaultMessage: '检查中'
                           }) //'检查中'
                         : formatMessage({
                             id: 'odc.src.component.Task.AsyncTask.CreateModal.SQLCheck',
-                            defaultMessage: 'SQL 检查',
+                            defaultMessage: 'SQL 检查'
                           }) //'SQL 检查'
                     }
                   </Button>
@@ -756,17 +801,17 @@ const CreateModal: React.FC<IProps> = (props) => {
                         {
                           id: 'odc.src.component.Task.AsyncTask.CreateModal.ThePreExaminationIs',
                           defaultMessage:
-                            '预检查完成，{lintResultSetLength} 处语句违反 SQL 开发规范。',
+                            '预检查完成，{lintResultSetLength} 处语句违反 SQL 开发规范。'
                         },
                         {
-                          lintResultSetLength: lintResultSet?.length || 0,
-                        },
+                          lintResultSetLength: lintResultSet?.length || 0
+                        }
                       ) //`预检查完成，${lintResultSet.length} 处语句违反 SQL 开发规范。`
                     }
                     type={lintResultSet?.length === 0 ? 'success' : 'warning'}
                     showIcon
                     style={{
-                      marginBottom: '8px',
+                      marginBottom: '8px'
                     }}
                   />
                 )}
@@ -787,7 +832,7 @@ const CreateModal: React.FC<IProps> = (props) => {
                 <Form.Item
                   label={formatMessage({
                     id: 'src.component.Task.MutipleAsyncTask.CreateModal.D521A9F8',
-                    defaultMessage: '回滚方案',
+                    defaultMessage: '回滚方案'
                   })}
                 >
                   <Form.Item
@@ -796,13 +841,13 @@ const CreateModal: React.FC<IProps> = (props) => {
                     extra={formatMessage({
                       id: 'src.component.Task.MutipleAsyncTask.CreateModal.DA9F492E',
                       defaultMessage:
-                        '可针对 Update、Delete 语句自动生成回滚方案，并以附件形式提供下载，该方案仅供参考',
+                        '可针对 Update、Delete 语句自动生成回滚方案，并以附件形式提供下载，该方案仅供参考'
                     })}
                   >
                     <Checkbox>
                       {formatMessage({
                         id: 'src.component.Task.MutipleAsyncTask.CreateModal.2549497E',
-                        defaultMessage: '生成备份回滚方案',
+                        defaultMessage: '生成备份回滚方案'
                       })}
                     </Checkbox>
                   </Form.Item>
@@ -819,13 +864,13 @@ const CreateModal: React.FC<IProps> = (props) => {
                       <Radio.Button value={SQLContentType.TEXT}>
                         {formatMessage({
                           id: 'src.component.Task.MutipleAsyncTask.CreateModal.F79FDCAD',
-                          defaultMessage: 'SQL 录入',
+                          defaultMessage: 'SQL 录入'
                         })}
                       </Radio.Button>
                       <Radio.Button value={SQLContentType.FILE}>
                         {formatMessage({
                           id: 'src.component.Task.MutipleAsyncTask.CreateModal.447DDBF6',
-                          defaultMessage: '上传附件',
+                          defaultMessage: '上传附件'
                         })}
                       </Radio.Button>
                     </Radio.Group>
@@ -837,17 +882,18 @@ const CreateModal: React.FC<IProps> = (props) => {
                     rollbackContentType !== SQLContentType.TEXT && styles.hide
                   }`}
                   style={{
-                    height: '280px',
+                    height: '280px'
                   }}
                 >
                   <CommonIDE
                     initialSQL={initRollbackContent}
                     language={
-                      getDataSourceModeConfig(defaultDatasource?.type || ConnectType.OB_MYSQL)?.sql
-                        ?.language
+                      getDataSourceModeConfig(
+                        defaultDatasource?.type || ConnectType.OB_MYSQL
+                      )?.sql?.language
                     }
                     editorProps={{
-                      theme,
+                      theme
                     }}
                     onSQLChange={(sql) => {
                       handleSqlChange('rollbackSqlContent', sql);
@@ -856,7 +902,9 @@ const CreateModal: React.FC<IProps> = (props) => {
                 </Form.Item>
                 <Form.Item
                   name="rollbackSqlFiles"
-                  className={rollbackContentType !== SQLContentType.FILE && styles.hide}
+                  className={
+                    rollbackContentType !== SQLContentType.FILE && styles.hide
+                  }
                 >
                   <ODCDragger
                     ref={rollbackSqlFileRef}
@@ -871,7 +919,7 @@ const CreateModal: React.FC<IProps> = (props) => {
                     headers={{
                       'X-XSRF-TOKEN': Cookies.get('XSRF-TOKEN') || '',
                       'Accept-Language': getLocale(),
-                      currentOrganizationId: login.organizationId?.toString(),
+                      currentOrganizationId: login.organizationId?.toString()
                     }}
                     onFileChange={(files) => {
                       handleFileChange(files, 'rollbackSqlFiles');
@@ -880,13 +928,13 @@ const CreateModal: React.FC<IProps> = (props) => {
                     <p className={styles.tip}>
                       {formatMessage({
                         id: 'src.component.Task.MutipleAsyncTask.CreateModal.533E6CE4',
-                        defaultMessage: '点击或将多个文件拖拽到这里上传',
+                        defaultMessage: '点击或将多个文件拖拽到这里上传'
                       })}
                     </p>
                     <p className={styles.desc}>
                       {formatMessage({
                         id: 'src.component.Task.MutipleAsyncTask.CreateModal.8BE86C8A',
-                        defaultMessage: '文件最多不超过 256MB ，支持扩展名 .sql',
+                        defaultMessage: '文件最多不超过 256MB ，支持扩展名 .sql'
                       })}
                     </p>
                   </ODCDragger>
@@ -916,4 +964,8 @@ const CreateModal: React.FC<IProps> = (props) => {
     </MultipleAsyncContext.Provider>
   );
 };
-export default inject('sqlStore', 'taskStore', 'modalStore')(observer(CreateModal));
+export default inject(
+  'sqlStore',
+  'taskStore',
+  'modalStore'
+)(observer(CreateModal));

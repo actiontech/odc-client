@@ -19,20 +19,25 @@ import request from '@/util/request';
 export async function getOBCloudClusterList(organizationId?: number) {
   const ret = await request.get(`/api/v2/cloud/metadata/clusters`, {
     params: {
-      organizationId,
-    },
+      organizationId
+    }
   });
   return ret?.data?.contents;
 }
 
 export async function getOBCloudTenantListByCluster(clusterId: string) {
-  const ret = await request.get(`/api/v2/cloud/metadata/clusters/${clusterId}/tenants`);
+  const ret = await request.get(
+    `/api/v2/cloud/metadata/clusters/${clusterId}/tenants`
+  );
   return ret?.data?.contents;
 }
 
-export async function getOBCloudUserListByTenant(clusterId: string, tenantId: string) {
+export async function getOBCloudUserListByTenant(
+  clusterId: string,
+  tenantId: string
+) {
   const ret = await request.get(
-    `/api/v2/cloud/metadata/clusters/${clusterId}/tenants/${tenantId}/users`,
+    `/api/v2/cloud/metadata/clusters/${clusterId}/tenants/${tenantId}/users`
   );
   return ret?.data?.contents;
 }

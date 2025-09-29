@@ -14,7 +14,11 @@
  * limitations under the License.
  */
 
-import { EllipsisOutlined, LoadingOutlined, MoreOutlined } from '@ant-design/icons';
+import {
+  EllipsisOutlined,
+  LoadingOutlined,
+  MoreOutlined
+} from '@ant-design/icons';
 import { Button, Dropdown, Menu, Space, Tooltip, Typography } from 'antd';
 import { isBoolean, max, omit } from 'lodash';
 import React from 'react';
@@ -60,9 +64,10 @@ export default ({
   shouldDisabled,
   enableLoading,
   moreText,
-  ellipsisIcon = 'horizontal',
+  ellipsisIcon = 'horizontal'
 }: GroupProps) => {
-  const EllipsisIcon = ellipsisIcon === 'vertical' ? MoreOutlined : EllipsisOutlined;
+  const EllipsisIcon =
+    ellipsisIcon === 'vertical' ? MoreOutlined : EllipsisOutlined;
   const visibleActions = Array.isArray(children)
     ? children.filter((c) => {
         if (!c) {
@@ -86,7 +91,7 @@ export default ({
   });
 
   const fixedSize = visibleActionsSort.filter(
-    (action) => action?.props.type === 'primary' || action?.props.fixed,
+    (action) => action?.props.type === 'primary' || action?.props.fixed
   ).length;
   const realSize = max([fixedSize, size]);
 
@@ -98,13 +103,14 @@ export default ({
   if (
     visibleActionsSort.every(
       // @ts-ignore
-      (action) => action.type.__DISPLAY_NAME === 'button',
+      (action) => action.type.__DISPLAY_NAME === 'button'
     )
   ) {
     ellipsisType = 'default';
   }
 
-  const getDefaultDisabled = (key: string) => shouldDisabled?.(key as string) ?? false;
+  const getDefaultDisabled = (key: string) =>
+    shouldDisabled?.(key as string) ?? false;
 
   let moreDom: string | React.ReactElement;
 
@@ -135,7 +141,7 @@ export default ({
           enableLoading: enableLoading,
           disabled: isBoolean(action.props.disabled)
             ? action.props.disabled
-            : getDefaultDisabled(action.key as string),
+            : getDefaultDisabled(action.key as string)
         });
       })}
       {ellipsisActions.length > 0 && (
@@ -145,8 +151,10 @@ export default ({
             items: ellipsisActions.map((action, index) => {
               const actionKey = action.key;
               let disabled = false;
-              if (isBoolean(action.props.disabled)) disabled = action.props.disabled;
-              else if (shouldDisabled) disabled = shouldDisabled(action.key as string);
+              if (isBoolean(action.props.disabled))
+                disabled = action.props.disabled;
+              else if (shouldDisabled)
+                disabled = shouldDisabled(action.key as string);
               // 当用户传入loading 或者 传入 disabled 的情况都要禁用按钮
               const actionDisabled =
                 action.props.loading ||
@@ -156,7 +164,13 @@ export default ({
               return {
                 key: (actionKey as string) ?? index.toString(),
                 style: { minWidth: 120 },
-                ...omit(action.props, 'disabled', 'children', 'onClick', 'type'),
+                ...omit(
+                  action.props,
+                  'disabled',
+                  'children',
+                  'onClick',
+                  'type'
+                ),
                 disabled: actionDisabled,
                 onClick: (info) => {
                   info.domEvent.stopPropagation();
@@ -164,11 +178,12 @@ export default ({
                 },
                 label: (
                   <Tooltip title={action.props.tooltip}>
-                    {action.props.loading && <LoadingOutlined />} {action.props.children}
+                    {action.props.loading && <LoadingOutlined />}{' '}
+                    {action.props.children}
                   </Tooltip>
-                ),
+                )
               };
-            }),
+            })
           }}
         >
           {moreDom}

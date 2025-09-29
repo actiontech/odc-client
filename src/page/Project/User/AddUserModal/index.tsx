@@ -31,7 +31,12 @@ interface IProps {
   visible: boolean;
 }
 
-export default function AddUserModal({ close, onSuccess, visible, project }: IProps) {
+export default function AddUserModal({
+  close,
+  onSuccess,
+  visible,
+  project
+}: IProps) {
   const [form] = Form.useForm<{
     roles: ProjectRole[];
     users: number[];
@@ -40,9 +45,9 @@ export default function AddUserModal({ close, onSuccess, visible, project }: IPr
   const {
     data: userList,
     run,
-    loading,
+    loading
   } = useRequest(getUserSummaryList, {
-    manual: true,
+    manual: true
   });
   const addedUsers = new Set(project?.members?.map((m) => m.id) || []);
 
@@ -72,20 +77,20 @@ export default function AddUserModal({ close, onSuccess, visible, project }: IPr
           id: user.id,
           role: role,
           accountName: user.accountName,
-          name: user.name,
+          name: user.name
         });
       });
     });
     const isSuccess = await addProjectMember({
       projectId: project?.id,
-      members: newUsers,
+      members: newUsers
     });
     if (isSuccess) {
       message.success(
         formatMessage({
           id: 'odc.User.AddUserModal.AddedSuccessfully',
-          defaultMessage: '添加成功',
-        }), //添加成功
+          defaultMessage: '添加成功'
+        }) //添加成功
       );
       close();
       onSuccess();
@@ -94,7 +99,10 @@ export default function AddUserModal({ close, onSuccess, visible, project }: IPr
 
   return (
     <Modal
-      title={formatMessage({ id: 'odc.User.AddUserModal.AddMembers', defaultMessage: '添加成员' })}
+      title={formatMessage({
+        id: 'odc.User.AddUserModal.AddMembers',
+        defaultMessage: '添加成员'
+      })}
       /*添加成员*/ onCancel={() => close()}
       onOk={submit}
       open={visible}
@@ -106,7 +114,7 @@ export default function AddUserModal({ close, onSuccess, visible, project }: IPr
           name={'roles'}
           label={formatMessage({
             id: 'odc.User.AddUserModal.ProjectRole',
-            defaultMessage: '项目角色',
+            defaultMessage: '项目角色'
           })} /*项目角色*/
         >
           <Checkbox.Group
@@ -118,7 +126,7 @@ export default function AddUserModal({ close, onSuccess, visible, project }: IPr
                   </HelpDoc>
                 ),
 
-                value: ProjectRole.OWNER,
+                value: ProjectRole.OWNER
               },
               {
                 label: (
@@ -127,7 +135,7 @@ export default function AddUserModal({ close, onSuccess, visible, project }: IPr
                   </HelpDoc>
                 ),
 
-                value: ProjectRole.DBA,
+                value: ProjectRole.DBA
               },
               {
                 label: (
@@ -136,7 +144,7 @@ export default function AddUserModal({ close, onSuccess, visible, project }: IPr
                   </HelpDoc>
                 ),
 
-                value: ProjectRole.DEVELOPER,
+                value: ProjectRole.DEVELOPER
               },
               {
                 label: (
@@ -145,7 +153,7 @@ export default function AddUserModal({ close, onSuccess, visible, project }: IPr
                   </HelpDoc>
                 ),
 
-                value: ProjectRole.SECURITY_ADMINISTRATOR,
+                value: ProjectRole.SECURITY_ADMINISTRATOR
               },
               {
                 label: (
@@ -154,8 +162,8 @@ export default function AddUserModal({ close, onSuccess, visible, project }: IPr
                   </HelpDoc>
                 ),
 
-                value: ProjectRole.PARTICIPANT,
-              },
+                value: ProjectRole.PARTICIPANT
+              }
             ]}
           />
         </Form.Item>
@@ -186,7 +194,7 @@ export default function AddUserModal({ close, onSuccess, visible, project }: IPr
                 return {
                   key: item.id,
                   title: `${item.name}(${item.accountName})`,
-                  isLeaf: true,
+                  isLeaf: true
                 };
               })
               .filter(Boolean)}

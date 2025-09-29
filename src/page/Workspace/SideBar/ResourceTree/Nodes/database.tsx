@@ -39,7 +39,7 @@ export function DataBaseTreeData(
   dbSession: SessionStore,
   database: IDatabase,
   cid: number,
-  showDBTypeIcon: boolean = false,
+  showDBTypeIcon: boolean = false
 ): TreeDataNode {
   const dbName = database.name;
 
@@ -109,7 +109,10 @@ export function DataBaseTreeData(
     icon: showDBTypeIcon ? (
       <DataBaseStatusIcon item={database} />
     ) : (
-      <Icon component={DatabaseSvg} style={{ color: '#3FA3FF', fontSize: 14 }} />
+      <Icon
+        component={DatabaseSvg}
+        style={{ color: '#3FA3FF', fontSize: 14 }}
+      />
     ),
     children: dbSession
       ? [
@@ -124,8 +127,8 @@ export function DataBaseTreeData(
           sequenceTreeData,
           synonymTreeData,
           publicSynonymTreeData,
-          materializedViewTreeData,
+          materializedViewTreeData
         ].filter(Boolean)
-      : null,
+      : null
   };
 }

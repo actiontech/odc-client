@@ -7,7 +7,7 @@ import styles from './index.less';
 import {
   SEARCH_OBJECT_FROM_ALL_DATABASE,
   privateSpaceSupportSearchOptionList,
-  publicSpaceSupportSearchOptionList,
+  publicSpaceSupportSearchOptionList
 } from './constant';
 import ObjectList from './components/ObjectList';
 import { UserStore } from '@/store/login';
@@ -42,7 +42,7 @@ const DatabaseSearchModal = ({ modalStore, userStore }: IProps) => {
     dataSource,
     update,
     setDataSource,
-    setProject,
+    setProject
   } = useSearchStatus(SearchStatus.defalut);
   const [activeKey, setActiveKey] = useState(SEARCH_OBJECT_FROM_ALL_DATABASE);
   const {
@@ -50,7 +50,7 @@ const DatabaseSearchModal = ({ modalStore, userStore }: IProps) => {
     dataSourceId: initDataSourceId,
     projectId: initProjectId,
     databaseId: initDatabaseId,
-    initSearchKey,
+    initSearchKey
   } = modalStore.golbalSearchData || {};
 
   const {
@@ -60,8 +60,14 @@ const DatabaseSearchModal = ({ modalStore, userStore }: IProps) => {
     objectloading,
     syncAllLoading,
     databaseList,
-    databaseLoading,
-  } = useGlobalSearchData({ project, database, dataSource, activeKey, modalStore });
+    databaseLoading
+  } = useGlobalSearchData({
+    project,
+    database,
+    dataSource,
+    activeKey,
+    modalStore
+  });
   const treeContext = useContext(ResourceTreeContext);
   const { projectList, datasourceList } = treeContext;
   const actions = useActions({ modalStore, project });
@@ -77,7 +83,9 @@ const DatabaseSearchModal = ({ modalStore, userStore }: IProps) => {
       update(initStatus);
       setSearchKey(initSearchKey);
       setDatabase(databaseList.find((item) => item.id === initDatabaseId));
-      setDataSource(datasourceList.find((item) => item.id === initDataSourceId));
+      setDataSource(
+        datasourceList.find((item) => item.id === initDataSourceId)
+      );
       setProject(projectList.find((item) => item.id === initProjectId));
     }
   }, [databaseList, projectList, datasourceList]);
@@ -107,9 +115,13 @@ const DatabaseSearchModal = ({ modalStore, userStore }: IProps) => {
               {formatMessage(
                 {
                   id: 'src.page.Workspace.SideBar.ResourceTree.DatabaseSearchModal.3788E8F0',
-                  defaultMessage: '搜索{SearchOptionTypeTextMapType}"{searchKey}"',
+                  defaultMessage:
+                    '搜索{SearchOptionTypeTextMapType}"{searchKey}"'
                 },
-                { SearchOptionTypeTextMapType: SearchOptionTypeTextMap?.[type], searchKey },
+                {
+                  SearchOptionTypeTextMapType: SearchOptionTypeTextMap?.[type],
+                  searchKey
+                }
               )}
             </div>
           );
@@ -125,20 +137,20 @@ const DatabaseSearchModal = ({ modalStore, userStore }: IProps) => {
       [
         SearchStatus.databaseforObject,
         SearchStatus.projectWithDatabaseforObject,
-        SearchStatus.dataSourceWithDatabaseforObject,
+        SearchStatus.dataSourceWithDatabaseforObject
       ].includes(status)
     ) {
       positionText = formatMessage(
         {
           id: 'src.page.Workspace.SideBar.ResourceTree.DatabaseSearchModal.components.FA5E6855',
-          defaultMessage: '定位到数据库 "${database?.name}"',
+          defaultMessage: '定位到数据库 "${database?.name}"'
         },
-        { databaseName: database?.name },
+        { databaseName: database?.name }
       );
       action = () => {
         positionResourceTree?.({
           type: DbObjectType.database,
-          database: database,
+          database: database
         });
         database.id && openNewSQLPage(database.id);
       };
@@ -147,14 +159,14 @@ const DatabaseSearchModal = ({ modalStore, userStore }: IProps) => {
       positionText = formatMessage(
         {
           id: 'src.page.Workspace.SideBar.ResourceTree.DatabaseSearchModal.E1E46959',
-          defaultMessage: '定位到项目{projectName}',
+          defaultMessage: '定位到项目{projectName}'
         },
-        { projectName: project?.name },
+        { projectName: project?.name }
       );
       action = () => {
         positionProjectOrDataSource?.({
           status,
-          object: project,
+          object: project
         });
       };
     }
@@ -162,14 +174,14 @@ const DatabaseSearchModal = ({ modalStore, userStore }: IProps) => {
       positionText = formatMessage(
         {
           id: 'src.page.Workspace.SideBar.ResourceTree.DatabaseSearchModal.FB02CA29',
-          defaultMessage: '定位到数据源{dataSourceName}',
+          defaultMessage: '定位到数据源{dataSourceName}'
         },
-        { dataSourceName: dataSource?.name },
+        { dataSourceName: dataSource?.name }
       );
       action = () => {
         positionProjectOrDataSource?.({
           status,
-          object: dataSource,
+          object: dataSource
         });
       };
     }
@@ -194,7 +206,7 @@ const DatabaseSearchModal = ({ modalStore, userStore }: IProps) => {
         SearchStatus.forProject,
         SearchStatus.forDatabase,
         SearchStatus.projectforObject,
-        SearchStatus.dataSourceforObject,
+        SearchStatus.dataSourceforObject
       ].includes(status);
       shouldShowSearchContent = false;
       shouldShowObjectList = false;
@@ -203,20 +215,20 @@ const DatabaseSearchModal = ({ modalStore, userStore }: IProps) => {
         SearchStatus.dataSourceforObject,
         SearchStatus.databaseforObject,
         SearchStatus.projectWithDatabaseforObject,
-        SearchStatus.dataSourceWithDatabaseforObject,
+        SearchStatus.dataSourceWithDatabaseforObject
       ].includes(status);
     } else {
       shouldShowList = [
         SearchStatus.forDataSource,
         SearchStatus.forProject,
-        SearchStatus.forDatabase,
+        SearchStatus.forDatabase
       ].includes(status);
       shouldShowObjectList = [
         SearchStatus.databaseforObject,
         SearchStatus.dataSourceforObject,
         SearchStatus.projectforObject,
         SearchStatus.dataSourceWithDatabaseforObject,
-        SearchStatus.projectWithDatabaseforObject,
+        SearchStatus.projectWithDatabaseforObject
       ].includes(status);
       shouldShowSearchContent = [SearchStatus.defalut].includes(status);
       shouldShowtPositioninContent = false;
@@ -256,7 +268,7 @@ const DatabaseSearchModal = ({ modalStore, userStore }: IProps) => {
         actions,
         loadDatabaseObject,
         fetchSyncAll,
-        syncAllLoading,
+        syncAllLoading
       }}
     >
       <Modal
@@ -269,12 +281,14 @@ const DatabaseSearchModal = ({ modalStore, userStore }: IProps) => {
         maskClosable={true}
         closable={false}
         className={classNames(styles.databaseSearchModal, {
-          [styles.withPanel]: searchKey,
+          [styles.withPanel]: searchKey
         })}
         destroyOnClose={true}
         footer={null}
       >
-        <Spin spinning={objectloading || databaseLoading}>{contentRender()}</Spin>
+        <Spin spinning={objectloading || databaseLoading}>
+          {contentRender()}
+        </Spin>
       </Modal>
     </GlobalSearchContext.Provider>
   );

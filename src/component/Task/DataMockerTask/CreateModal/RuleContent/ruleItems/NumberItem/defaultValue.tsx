@@ -29,22 +29,22 @@ export default function (ruleType: NumberRuleType, size: IColumnSizeValue) {
     case NumberRuleType.NORMAL: {
       return {
         genParams: {
-          fixNum: '0',
-        },
+          fixNum: '0'
+        }
       };
     }
     case NumberRuleType.ORDER: {
       return {
         genParams: {
-          step: '1',
+          step: '1'
         },
         lowValue: '1',
-        order: 'asc',
+        order: 'asc'
       };
     }
     case NumberRuleType.RANDOM: {
       return {
-        range: ['0', BigNumber.min(maxSize, '100000')],
+        range: ['0', BigNumber.min(maxSize, '100000')]
       };
     }
     case NumberRuleType.NULL: {

@@ -31,13 +31,16 @@ import styles from './index.less';
 
 const { Option } = Select;
 
-const getColumns = (users: IManagerUser[], handleUserDelete: (id: number) => void) => {
+const getColumns = (
+  users: IManagerUser[],
+  handleUserDelete: (id: number) => void
+) => {
   return [
     {
       dataIndex: 'name',
       title: formatMessage({
         id: 'odc.components.FormRoleModal.component.Name',
-        defaultMessage: '姓名',
+        defaultMessage: '姓名'
       }),
       // 姓名
       ellipsis: true,
@@ -45,27 +48,27 @@ const getColumns = (users: IManagerUser[], handleUserDelete: (id: number) => voi
       filters: users?.map(({ name, id }) => {
         return {
           text: name,
-          value: id,
+          value: id
         };
       }),
-      onFilter: (value, record) => value === record.id,
+      onFilter: (value, record) => value === record.id
     },
 
     {
       dataIndex: 'accountName',
       title: formatMessage({
         id: 'odc.components.FormRoleModal.component.Account',
-        defaultMessage: '账号',
+        defaultMessage: '账号'
       }),
       // 账号
-      ellipsis: true,
+      ellipsis: true
     },
 
     {
       dataIndex: 'enabled',
       title: formatMessage({
         id: 'odc.components.FormRoleModal.component.State',
-        defaultMessage: '状态',
+        defaultMessage: '状态'
       }),
       // 状态
       ellipsis: true,
@@ -74,33 +77,33 @@ const getColumns = (users: IManagerUser[], handleUserDelete: (id: number) => voi
         {
           text: formatMessage({
             id: 'odc.components.FormRoleModal.component.Enable',
-            defaultMessage: '启用',
+            defaultMessage: '启用'
           }),
           // 启用
-          value: true,
+          value: true
         },
 
         {
           text: formatMessage({
             id: 'odc.components.FormRoleModal.component.Disable',
-            defaultMessage: '停用',
+            defaultMessage: '停用'
           }),
           // 停用
-          value: false,
-        },
+          value: false
+        }
       ],
 
       onFilter: (value, record) => value === record.enabled,
       render: (enabled) => {
         return <Status enabled={enabled} showIcon={false} />;
-      },
+      }
     },
 
     {
       dataIndex: 'actions',
       title: formatMessage({
         id: 'odc.components.FormRoleModal.component.Operation',
-        defaultMessage: '操作',
+        defaultMessage: '操作'
       }),
       // 操作
       ellipsis: true,
@@ -116,14 +119,14 @@ const getColumns = (users: IManagerUser[], handleUserDelete: (id: number) => voi
             {
               formatMessage({
                 id: 'odc.components.FormRoleModal.component.Remove',
-                defaultMessage: '移除',
+                defaultMessage: '移除'
               })
               /* 移除 */
             }
           </Button>
         );
-      },
-    },
+      }
+    }
   ];
 };
 
@@ -141,7 +144,7 @@ export const RoleResource: React.FC<{
   useEffect(() => {
     (async () => {
       const data = await getUserList({
-        roleId: [editId],
+        roleId: [editId]
       });
 
       setCurrentUser(data?.contents);
@@ -171,7 +174,11 @@ export const RoleResource: React.FC<{
   };
 
   return (
-    <Space size={8} direction="vertical" style={{ display: `${isHide ? 'none' : 'block'}` }}>
+    <Space
+      size={8}
+      direction="vertical"
+      style={{ display: `${isHide ? 'none' : 'block'}` }}
+    >
       <DisplayTable
         rowKey="id"
         columns={getColumns(currentUser, handleUserDelete)}
@@ -185,7 +192,7 @@ export const RoleResource: React.FC<{
           {
             formatMessage({
               id: 'odc.components.FormRoleModal.component.AddUser',
-              defaultMessage: '添加用户',
+              defaultMessage: '添加用户'
             })
             /* 添加用户 */
           }
@@ -195,7 +202,7 @@ export const RoleResource: React.FC<{
           mode="multiple"
           placeholder={formatMessage({
             id: 'odc.components.FormRoleModal.component.SelectAUser',
-            defaultMessage: '请选择用户',
+            defaultMessage: '请选择用户'
           })}
           /* 请选择用户 */
           style={{ width: '100%' }}
@@ -228,7 +235,11 @@ export const FormContent: React.FC<{
   formRef: React.RefObject<FormInstance>;
   handleEditStatus: () => void;
   handleFieldChange: (label: string, value: any) => void;
-  handleStatusChange: (status: boolean, role: IManagerRole, callback: () => void) => void;
+  handleStatusChange: (
+    status: boolean,
+    role: IManagerRole,
+    callback: () => void
+  ) => void;
   handlePermissionTypeChange: (key: string) => void;
 }> = (props) => {
   const {
@@ -240,7 +251,7 @@ export const FormContent: React.FC<{
     formRef,
     handleEditStatus,
     handleFieldChange,
-    handlePermissionTypeChange,
+    handlePermissionTypeChange
   } = props;
 
   const handleStatusChange = (e: RadioChangeEvent) => {
@@ -274,7 +285,7 @@ export const FormContent: React.FC<{
       <Form.Item
         label={formatMessage({
           id: 'odc.components.FormRoleModal.component.RoleName',
-          defaultMessage: '角色名称',
+          defaultMessage: '角色名称'
         })}
         /* 角色名称 */
         name="name"
@@ -285,32 +296,32 @@ export const FormContent: React.FC<{
             required: true,
             message: formatMessage({
               id: 'odc.components.FormRoleModal.component.EnterARoleName',
-              defaultMessage: '请输入角色名称',
-            }),
+              defaultMessage: '请输入角色名称'
+            })
             // 请输入角色名称
           },
           {
             max: 64,
             message: formatMessage({
               id: 'odc.components.FormRoleModal.component.TheRoleNameCannotExceed.1',
-              defaultMessage: '角色名称不超过 64 个字符',
-            }), //角色名称不超过 64 个字符
+              defaultMessage: '角色名称不超过 64 个字符'
+            }) //角色名称不超过 64 个字符
           },
           {
             validator: validTrimEmptyWithWarn(
               formatMessage({
                 id: 'odc.components.FormRoleModal.component.TheRoleNameContainsSpaces',
-                defaultMessage: '角色名称首尾包含空格',
-              }), //角色名称首尾包含空格
-            ),
+                defaultMessage: '角色名称首尾包含空格'
+              }) //角色名称首尾包含空格
+            )
           },
           {
             message: formatMessage({
               id: 'odc.components.FormRoleModal.component.TheRoleNameAlreadyExists',
-              defaultMessage: '角色名称已存在',
+              defaultMessage: '角色名称已存在'
             }), // 角色名称已存在
-            validator: checkNameRepeat,
-          },
+            validator: checkNameRepeat
+          }
         ]}
       >
         <Input />
@@ -318,7 +329,7 @@ export const FormContent: React.FC<{
       <Form.Item
         label={formatMessage({
           id: 'odc.components.FormRoleModal.component.RoleStatus',
-          defaultMessage: '角色状态',
+          defaultMessage: '角色状态'
         })}
         /* 角色状态 */
         name="enabled"
@@ -327,10 +338,10 @@ export const FormContent: React.FC<{
             required: true,
             message: formatMessage({
               id: 'odc.components.FormRoleModal.component.SelectAStatus',
-              defaultMessage: '请选择状态',
-            }),
+              defaultMessage: '请选择状态'
+            })
             // 请选择状态
-          },
+          }
         ]}
       >
         <Radio.Group onChange={handleStatusChange}>
@@ -338,7 +349,7 @@ export const FormContent: React.FC<{
             {
               formatMessage({
                 id: 'odc.components.FormRoleModal.component.Enable',
-                defaultMessage: '启用',
+                defaultMessage: '启用'
               })
               /* 启用 */
             }
@@ -347,7 +358,7 @@ export const FormContent: React.FC<{
             {
               formatMessage({
                 id: 'odc.components.FormRoleModal.component.Disable',
-                defaultMessage: '停用',
+                defaultMessage: '停用'
               })
               /* 停用 */
             }
@@ -367,7 +378,7 @@ export const FormContent: React.FC<{
       <Form.Item
         label={formatMessage({
           id: 'odc.components.FormRoleModal.component.Note',
-          defaultMessage: '备注',
+          defaultMessage: '备注'
         })}
         /* 备注 */
         name="description"
@@ -376,10 +387,10 @@ export const FormContent: React.FC<{
             max: 140,
             message: formatMessage({
               id: 'odc.components.FormRoleModal.component.TheDescriptionCannotExceedCharacters',
-              defaultMessage: '备注不超过 140 个字符',
-            }),
+              defaultMessage: '备注不超过 140 个字符'
+            })
             // 备注不超过 140 个字符
-          },
+          }
         ]}
       >
         <Input.TextArea autoSize={{ minRows: 4, maxRows: 4 }} />

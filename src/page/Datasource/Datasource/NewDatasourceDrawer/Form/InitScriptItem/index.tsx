@@ -30,7 +30,7 @@ interface IProps {
 
 const tooltipText = formatMessage({
   id: 'src.page.Datasource.Datasource.NewDatasourceDrawer.Form.InitScriptItem.4FA07412',
-  defaultMessage: '复制全部 SQL',
+  defaultMessage: '复制全部 SQL'
 });
 
 const onCopy = (_, result: boolean) => {
@@ -38,15 +38,15 @@ const onCopy = (_, result: boolean) => {
     message.success(
       formatMessage({
         id: 'odc.component.Log.CopiedSuccessfully',
-        defaultMessage: '复制成功',
-      }), //复制成功
+        defaultMessage: '复制成功'
+      }) //复制成功
     );
   } else {
     message.error(
       formatMessage({
         id: 'odc.component.Log.ReplicationFailed',
-        defaultMessage: '复制失败',
-      }), //复制失败
+        defaultMessage: '复制失败'
+      }) //复制失败
     );
   }
 };
@@ -55,7 +55,7 @@ const consistencyList = [`SET SESSION ob_read_consistency='WEAK';`];
 const formatList = [
   `SET SESSION nls_date_format='YYYY-MM-DD';`,
   `SET SESSION nls_timestamp_format='YYYY-MM-DD HH:MI:SS.XFF3';`,
-  `SET SESSION nls_timestamp_tz_format='YYYY-MM-DD HH24:MI:SS.XFF3 TZH:TZM';`,
+  `SET SESSION nls_timestamp_tz_format='YYYY-MM-DD HH24:MI:SS.XFF3 TZH:TZM';`
 ];
 
 const timeoutList = ['SET SESSION ob_query_timeout = 20000000;'];
@@ -67,13 +67,13 @@ const content = () => {
         <Typography.Title level={5}>
           {formatMessage({
             id: 'src.page.Datasource.Datasource.NewDatasourceDrawer.Form.InitScriptItem.84547DA8',
-            defaultMessage: '1、备库弱读',
+            defaultMessage: '1、备库弱读'
           })}
         </Typography.Title>
         <FormItemPanel
           label={formatMessage({
             id: 'src.page.Datasource.Datasource.NewDatasourceDrawer.Form.InitScriptItem.BC905C29',
-            defaultMessage: '设置数据库读一致性级别，默认备库应启用弱读',
+            defaultMessage: '设置数据库读一致性级别，默认备库应启用弱读'
           })}
           keepExpand
           customExtra={
@@ -95,14 +95,14 @@ const content = () => {
         <Typography.Title level={5}>
           {formatMessage({
             id: 'src.page.Datasource.Datasource.NewDatasourceDrawer.Form.InitScriptItem.446BC11B',
-            defaultMessage: '2、日期字段显示格式',
+            defaultMessage: '2、日期字段显示格式'
           })}
         </Typography.Title>
         <FormItemPanel
           label={formatMessage({
             id: 'src.page.Datasource.Datasource.NewDatasourceDrawer.Form.InitScriptItem.8CB2E790',
             defaultMessage:
-              '该组变量仅适用于 OceanBase 数据库 Oracle 模式，用于控制日期类型转化为特定的字符串格式。',
+              '该组变量仅适用于 OceanBase 数据库 Oracle 模式，用于控制日期类型转化为特定的字符串格式。'
           })}
           keepExpand
           customExtra={
@@ -124,13 +124,13 @@ const content = () => {
         <Typography.Title level={5}>
           {formatMessage({
             id: 'src.page.Datasource.Datasource.NewDatasourceDrawer.Form.InitScriptItem.B6942AC5',
-            defaultMessage: '3、SQL 超时',
+            defaultMessage: '3、SQL 超时'
           })}
         </Typography.Title>
         <FormItemPanel
           label={formatMessage({
             id: 'src.page.Datasource.Datasource.NewDatasourceDrawer.Form.InitScriptItem.64E4EA49',
-            defaultMessage: '设置 SQL 最大执行时间，单位为微秒。',
+            defaultMessage: '设置 SQL 最大执行时间，单位为微秒。'
           })}
           keepExpand
           customExtra={
@@ -174,7 +174,7 @@ function Editor({ value, onChange }: IProps) {
       bordered
       editorProps={{
         value,
-        theme: context.disableTheme ? 'obwhite' : null,
+        theme: context.disableTheme ? 'obwhite' : null
       }}
       initialSQL={value}
       language={'sql'}

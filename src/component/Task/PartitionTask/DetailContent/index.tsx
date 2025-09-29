@@ -16,7 +16,11 @@ import { formatMessage } from '@/util/intl';
  */
 
 import RiskLevelLabel from '@/component/RiskLevelLabel';
-import type { IIPartitionPlanTaskDetail, IPartitionPlanParams, ITaskResult } from '@/d.ts';
+import type {
+  IIPartitionPlanTaskDetail,
+  IPartitionPlanParams,
+  ITaskResult
+} from '@/d.ts';
 import { getFormatDateTime, milliSecondsToHour } from '@/util/utils';
 import { Descriptions, Divider, Typography } from 'antd';
 import React from 'react';
@@ -41,7 +45,7 @@ const PartitionTaskContent: React.FC<IProps> = (props) => {
     droppingTrigger,
     dropTriggerNextFireTimes,
     errorStrategy,
-    timeoutMillis,
+    timeoutMillis
   } = task?.parameters ?? {};
   const executionTimeout = milliSecondsToHour(timeoutMillis);
 
@@ -52,7 +56,7 @@ const PartitionTaskContent: React.FC<IProps> = (props) => {
           label={
             formatMessage({
               id: 'odc.src.component.Task.PartitionTask.DetailContent.TaskNumber',
-              defaultMessage: '任务编号',
+              defaultMessage: '任务编号'
             }) /* 任务编号 */
           }
         >
@@ -62,14 +66,14 @@ const PartitionTaskContent: React.FC<IProps> = (props) => {
           label={
             formatMessage({
               id: 'odc.src.component.Task.PartitionTask.DetailContent.Type',
-              defaultMessage: '任务类型',
+              defaultMessage: '任务类型'
             }) /* 任务类型 */
           }
         >
           {
             formatMessage({
               id: 'odc.src.component.Task.PartitionTask.DetailContent.Partition',
-              defaultMessage: '分区计划',
+              defaultMessage: '分区计划'
             }) /* 
           分区计划
           */
@@ -79,7 +83,7 @@ const PartitionTaskContent: React.FC<IProps> = (props) => {
           label={
             formatMessage({
               id: 'src.component.Task.PartitionTask.DetailContent.F74A95F4',
-              defaultMessage: '数据库',
+              defaultMessage: '数据库'
             }) /*"数据库"*/
           }
         >
@@ -89,7 +93,7 @@ const PartitionTaskContent: React.FC<IProps> = (props) => {
           label={
             formatMessage({
               id: 'src.component.Task.PartitionTask.DetailContent.3C90D5CA',
-              defaultMessage: '所属数据源',
+              defaultMessage: '所属数据源'
             }) /*"所属数据源"*/
           }
         >
@@ -100,11 +104,14 @@ const PartitionTaskContent: React.FC<IProps> = (props) => {
             label={
               formatMessage({
                 id: 'odc.src.component.Task.PartitionTask.DetailContent.RiskLevel',
-                defaultMessage: '风险等级',
+                defaultMessage: '风险等级'
               }) /* 风险等级 */
             }
           >
-            <RiskLevelLabel level={task?.riskLevel?.level} color={task?.riskLevel?.style} />
+            <RiskLevelLabel
+              level={task?.riskLevel?.level}
+              color={task?.riskLevel?.style}
+            />
           </Descriptions.Item>
         )}
       </Descriptions>
@@ -117,7 +124,7 @@ const PartitionTaskContent: React.FC<IProps> = (props) => {
           label={
             formatMessage({
               id: 'src.component.Task.PartitionTask.DetailContent.5FC1C8E8',
-              defaultMessage: '创建策略执行周期',
+              defaultMessage: '创建策略执行周期'
             }) /*"创建策略执行周期"*/
           }
         />
@@ -130,7 +137,7 @@ const PartitionTaskContent: React.FC<IProps> = (props) => {
           label={
             formatMessage({
               id: 'src.component.Task.PartitionTask.DetailContent.380BE45E',
-              defaultMessage: '删除策略执行周期',
+              defaultMessage: '删除策略执行周期'
             }) /*"删除策略执行周期"*/
           }
         />
@@ -141,7 +148,7 @@ const PartitionTaskContent: React.FC<IProps> = (props) => {
           label={
             formatMessage({
               id: 'src.component.Task.PartitionTask.DetailContent.63D30920',
-              defaultMessage: '任务错误处理',
+              defaultMessage: '任务错误处理'
             }) /*"任务错误处理"*/
           }
         >
@@ -151,14 +158,14 @@ const PartitionTaskContent: React.FC<IProps> = (props) => {
           label={
             formatMessage({
               id: 'src.component.Task.PartitionTask.DetailContent.477F07A5',
-              defaultMessage: '执行超时时间',
+              defaultMessage: '执行超时时间'
             }) /*"执行超时时间"*/
           }
         >
           {executionTimeout || '-'}
           {formatMessage({
             id: 'src.component.Task.PartitionTask.DetailContent.B08D0E80' /*小时*/,
-            defaultMessage: '小时',
+            defaultMessage: '小时'
           })}
         </Descriptions.Item>
         <Descriptions.Item
@@ -166,7 +173,7 @@ const PartitionTaskContent: React.FC<IProps> = (props) => {
           label={
             formatMessage({
               id: 'odc.src.component.Task.PartitionTask.DetailContent.Remark',
-              defaultMessage: '备注',
+              defaultMessage: '备注'
             }) /* 备注 */
           }
         >
@@ -179,7 +186,7 @@ const PartitionTaskContent: React.FC<IProps> = (props) => {
           label={
             formatMessage({
               id: 'odc.src.component.Task.PartitionTask.DetailContent.Founder',
-              defaultMessage: '创建人',
+              defaultMessage: '创建人'
             }) /* 创建人 */
           }
         >
@@ -189,7 +196,7 @@ const PartitionTaskContent: React.FC<IProps> = (props) => {
           label={
             formatMessage({
               id: 'odc.src.component.Task.PartitionTask.DetailContent.CreationTime',
-              defaultMessage: '创建时间',
+              defaultMessage: '创建时间'
             }) /* 创建时间 */
           }
         >

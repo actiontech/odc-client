@@ -25,7 +25,10 @@ import React, { useEffect, useMemo, useState } from 'react';
 import styles from './index.less';
 
 export const EmptyLabel: React.FC<{ label?: string }> = ({
-  label = formatMessage({ id: 'odc.component.CommonFilter.Null', defaultMessage: '(空)' }), // (空)
+  label = formatMessage({
+    id: 'odc.component.CommonFilter.Null',
+    defaultMessage: '(空)'
+  }) // (空)
 }) => {
   return <span style={{ color: 'var(--text-color-primary)' }}>{label}</span>;
 };
@@ -38,7 +41,9 @@ interface IProps extends FilterDropdownProps {
 const CommonFilter: React.FC<IProps> = (props) => {
   const { filters, selectedKeys, confirm, setSelectedKeys } = props;
   const [searchValue, setSearchValue] = useState<string>('');
-  const [selectedValues, setSelectedValues] = useState<number[]>(Array.from(selectedKeys ?? []));
+  const [selectedValues, setSelectedValues] = useState<number[]>(
+    Array.from(selectedKeys ?? [])
+  );
 
   const options = useMemo(() => {
     return filters?.filter(({ label }) => {
@@ -55,12 +60,16 @@ const CommonFilter: React.FC<IProps> = (props) => {
   const optionsValue = options?.map(({ value }) => value);
 
   const handleSelectAll = () => {
-    const values = new Set([].concat(optionsValue || []).concat(selectedValues || []));
+    const values = new Set(
+      [].concat(optionsValue || []).concat(selectedValues || [])
+    );
     setSelectedValues(Array.from(values));
   };
 
   const handleDeselectAll = () => {
-    setSelectedValues(selectedValues?.filter((item) => !optionsValue?.some((v) => item === v)));
+    setSelectedValues(
+      selectedValues?.filter((item) => !optionsValue?.some((v) => item === v))
+    );
   };
 
   const handleCancel = () => {
@@ -104,7 +113,7 @@ const CommonFilter: React.FC<IProps> = (props) => {
               {
                 formatMessage({
                   id: 'odc.component.CommonFilter.SelectAll',
-                  defaultMessage: '全选',
+                  defaultMessage: '全选'
                 }) /* 全选 */
               }
             </a>
@@ -112,7 +121,7 @@ const CommonFilter: React.FC<IProps> = (props) => {
               {
                 formatMessage({
                   id: 'odc.component.CommonFilter.CancelAll',
-                  defaultMessage: '取消全选',
+                  defaultMessage: '取消全选'
                 }) /* 取消全选 */
               }
             </a>
@@ -122,7 +131,7 @@ const CommonFilter: React.FC<IProps> = (props) => {
               {
                 formatMessage({
                   id: 'odc.component.CommonFilter.Cancel',
-                  defaultMessage: '取消',
+                  defaultMessage: '取消'
                 }) /* 取消 */
               }
             </Button>
@@ -130,7 +139,7 @@ const CommonFilter: React.FC<IProps> = (props) => {
               {
                 formatMessage({
                   id: 'odc.component.CommonFilter.Determine',
-                  defaultMessage: '确定',
+                  defaultMessage: '确定'
                 }) /* 确定 */
               }
             </Button>

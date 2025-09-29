@@ -24,7 +24,7 @@ import {
   getOperationList,
   getTaskLog,
   getTaskResult,
-  getDownloadUrl,
+  getDownloadUrl
 } from '@/common/network/task';
 import type { ITableLoadOptions } from '@/component/CommonTable/interface';
 import CommonDetailModal from '@/component/Task/component/CommonDetailModal';
@@ -42,7 +42,7 @@ import type {
   ITaskResult,
   TaskDetail,
   Operation,
-  TaskRecord,
+  TaskRecord
 } from '@/d.ts';
 import {
   CommonTaskLogType,
@@ -50,7 +50,7 @@ import {
   TaskFlowNodeType,
   TaskRecordParameters,
   TaskStatus,
-  TaskType,
+  TaskType
 } from '@/d.ts';
 import React, { useEffect, useRef, useState } from 'react';
 import { getItems as getDDLAlterItems } from './AlterDdlTask';
@@ -81,39 +81,54 @@ interface IProps {
   enabledAction?: boolean;
   theme?: string;
   onReloadList?: () => void;
-  onDetailVisible: (task: TaskDetail<TaskRecordParameters>, visible: boolean) => void;
+  onDetailVisible: (
+    task: TaskDetail<TaskRecordParameters>,
+    visible: boolean
+  ) => void;
 }
 
 const taskContentMap = {
   [TaskType.DATAMOCK]: {
-    getItems: getDataMockerItems,
+    getItems: getDataMockerItems
   },
 
   [TaskType.SHADOW]: {
-    getItems: getShadowSyncItems,
+    getItems: getShadowSyncItems
   },
 
   [TaskType.ONLINE_SCHEMA_CHANGE]: {
-    getItems: getDDLAlterItems,
+    getItems: getDDLAlterItems
   },
 
   [TaskType.EXPORT_RESULT_SET]: {
-    getItems: getResultSetExportTaskContentItems,
-  },
+    getItems: getResultSetExportTaskContentItems
+  }
 };
 
 const DetailModal: React.FC<IProps> = React.memo((props) => {
-  const { type, visible, detailId, enabledAction = true, theme, taskOpenRef } = props;
+  const {
+    type,
+    visible,
+    detailId,
+    enabledAction = true,
+    theme,
+    taskOpenRef
+  } = props;
   const [task, setTask] = useState<
     | TaskDetail<TaskRecordParameters>
     | CycleTaskDetail<IDataArchiveJobParameters | IDataClearJobParameters>
   >(null);
-  const [subTasks, setSubTasks] = useState<IResponseData<ICycleSubTaskRecord>>(null);
+  const [subTasks, setSubTasks] =
+    useState<IResponseData<ICycleSubTaskRecord>>(null);
   const [opRecord, setOpRecord] = useState<Operation[]>(null);
-  const [detailType, setDetailType] = useState<TaskDetailType>(TaskDetailType.INFO);
+  const [detailType, setDetailType] = useState<TaskDetailType>(
+    TaskDetailType.INFO
+  );
   const [log, setLog] = useState<ILog>(null);
   const [result, setResult] = useState<ITaskResult>(null);
-  const [logType, setLogType] = useState<CommonTaskLogType>(CommonTaskLogType.ALL);
+  const [logType, setLogType] = useState<CommonTaskLogType>(
+    CommonTaskLogType.ALL
+  );
   const [loading, setLoading] = useState(false);
   const [disabledSubmit, setDisabledSubmit] = useState(true);
   const [approvalVisible, setApprovalVisible] = useState(false);
@@ -123,7 +138,7 @@ const DetailModal: React.FC<IProps> = React.memo((props) => {
     !!task?.nodeList?.find(
       (node) =>
         node.nodeType === TaskFlowNodeType.APPROVAL_TASK ||
-        node.taskType === IFlowTaskType.PRE_CHECK,
+        node.taskType === IFlowTaskType.PRE_CHECK
     ) || isLogicalDbChangeTask(task?.type);
 
   const hasLog = true;
@@ -139,7 +154,7 @@ const DetailModal: React.FC<IProps> = React.memo((props) => {
     TaskStatus.APPROVED,
     TaskStatus.ENABLED,
     TaskStatus.PAUSE,
-    TaskStatus.CANCELLED,
+    TaskStatus.CANCELLED
   ].includes(task?.status);
   const clockRef = useRef(null);
   let taskContent = null;
@@ -174,7 +189,7 @@ const DetailModal: React.FC<IProps> = React.memo((props) => {
         const res = await getCycleTaskLog(task?.id, flowId, logType);
         setLog({
           ...log,
-          [logType]: res,
+          [logType]: res
         });
         const url = await getDownloadUrl(task?.id, flowId);
         setDownloadUrl(url);
@@ -187,7 +202,7 @@ const DetailModal: React.FC<IProps> = React.memo((props) => {
       setLoading(false);
       setLog({
         ...log,
-        [logType]: data,
+        [logType]: data
       });
     }
   };
@@ -203,7 +218,7 @@ const DetailModal: React.FC<IProps> = React.memo((props) => {
       taskType: TaskType.ASYNC,
       status,
       page: current,
-      size: pageSize,
+      size: pageSize
     });
     setLoading(false);
     setSubTasks(data as any);
@@ -216,7 +231,10 @@ const DetailModal: React.FC<IProps> = React.memo((props) => {
     if (isLogicalDbChangeTask(task?.type)) {
       data = await getDataArchiveSubTask(task?.id);
     } else {
-      data = await getDataArchiveSubTask(task?.id, { page: current, size: pageSize });
+      data = await getDataArchiveSubTask(task?.id, {
+        page: current,
+        size: pageSize
+      });
     }
     setLoading(false);
     setSubTasks(data);
@@ -235,7 +253,7 @@ const DetailModal: React.FC<IProps> = React.memo((props) => {
         TaskType.DATA_ARCHIVE,
         TaskType.DATA_DELETE,
         TaskType.ALTER_SCHEDULE,
-        TaskType.LOGICAL_DATABASE_CHANGE,
+        TaskType.LOGICAL_DATABASE_CHANGE
       ].includes(task?.type)
     ) {
       loadDataArchiveSubTask(args);
@@ -363,14 +381,23 @@ const DetailModal: React.FC<IProps> = React.memo((props) => {
     }
   };
 
-  const handleApprovalVisible = (approvalStatus: boolean = false, visible: boolean = false) => {
+  const handleApprovalVisible = (
+    approvalStatus: boolean = false,
+    visible: boolean = false
+  ) => {
     setApprovalVisible(visible);
     setApprovalStatus(approvalStatus);
   };
   switch (task?.type) {
     case TaskType.IMPORT:
     case TaskType.EXPORT: {
-      taskContent = <DataTransferTaskContent task={task} result={result} hasFlow={hasFlow} />;
+      taskContent = (
+        <DataTransferTaskContent
+          task={task}
+          result={result}
+          hasFlow={hasFlow}
+        />
+      );
       break;
     }
     case TaskType.PARTITION_PLAN: {
@@ -415,7 +442,13 @@ const DetailModal: React.FC<IProps> = React.memo((props) => {
       break;
     }
     case TaskType.SQL_PLAN: {
-      taskContent = <SqlPlanTaskContent task={task as any} hasFlow={hasFlow} theme={theme} />;
+      taskContent = (
+        <SqlPlanTaskContent
+          task={task as any}
+          hasFlow={hasFlow}
+          theme={theme}
+        />
+      );
       break;
     }
     case TaskType.APPLY_PROJECT_PERMISSION: {
@@ -423,11 +456,18 @@ const DetailModal: React.FC<IProps> = React.memo((props) => {
       break;
     }
     case TaskType.APPLY_DATABASE_PERMISSION: {
-      taskContent = <ApplyDatabasePermissionTaskContent task={task as any} hasFlow={hasFlow} />;
+      taskContent = (
+        <ApplyDatabasePermissionTaskContent
+          task={task as any}
+          hasFlow={hasFlow}
+        />
+      );
       break;
     }
     case TaskType.APPLY_TABLE_PERMISSION: {
-      taskContent = <ApplyTablePermissionTaskContent task={task as any} hasFlow={hasFlow} />;
+      taskContent = (
+        <ApplyTablePermissionTaskContent task={task as any} hasFlow={hasFlow} />
+      );
       break;
     }
     case TaskType.STRUCTURE_COMPARISON: {
@@ -443,17 +483,28 @@ const DetailModal: React.FC<IProps> = React.memo((props) => {
       break;
     }
     case TaskType.MULTIPLE_ASYNC: {
-      taskContent = <MutipleAsyncTaskContent task={task} result={result} hasFlow={hasFlow} />;
+      taskContent = (
+        <MutipleAsyncTaskContent
+          task={task}
+          result={result}
+          hasFlow={hasFlow}
+        />
+      );
       break;
     }
     case TaskType.LOGICAL_DATABASE_CHANGE: {
       taskContent = (
-        <LogicDatabaseAsyncTaskContent task={task as any} result={result} hasFlow={hasFlow} />
+        <LogicDatabaseAsyncTaskContent
+          task={task as any}
+          result={result}
+          hasFlow={hasFlow}
+        />
       );
       break;
     }
     default: {
-      getItems = (...args) => taskContentMap[task?.type]?.getItems(...args, handleReloadData);
+      getItems = (...args) =>
+        taskContentMap[task?.type]?.getItems(...args, handleReloadData);
       break;
     }
   }
@@ -481,7 +532,7 @@ const DetailModal: React.FC<IProps> = React.memo((props) => {
         onDetailVisible={props.onDetailVisible}
         onClose={onClose}
       />
-    ) : null,
+    ) : null
   };
 
   return (
@@ -502,7 +553,9 @@ const DetailModal: React.FC<IProps> = React.memo((props) => {
       />
       <ApprovalModal
         id={
-          isCycleTask(type) || type === TaskType.ALTER_SCHEDULE ? task?.approveInstanceId : detailId
+          isCycleTask(type) || type === TaskType.ALTER_SCHEDULE
+            ? task?.approveInstanceId
+            : detailId
         }
         visible={approvalVisible}
         approvalStatus={approvalStatus}

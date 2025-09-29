@@ -22,7 +22,7 @@ import {
   IManagerResourceType,
   IManagerUser,
   IManageUserListParams,
-  IResponseData,
+  IResponseData
 } from '@/d.ts';
 import { IPageType } from '@/d.ts/_index';
 import { UserStore } from '@/store/login';
@@ -42,30 +42,36 @@ interface IProps {
 
 const Pages = {
   [IPageType.Secure_Env]: {
-    component: Env, // 环境
+    component: Env // 环境
   },
   [IPageType.Secure_Record]: {
-    component: Record, // 操作记录
+    component: Record // 操作记录
   },
   [IPageType.MaskingAlgorithm]: {
-    component: MaskingAlgorithm, // 脱敏算法
+    component: MaskingAlgorithm // 脱敏算法
   },
   // [IPageType.Secure_Approval]: {
   //   component: Approval, // 审批流程
   // },
   [IPageType.RiskLevel]: {
-    component: RiskLevel, // 风险等级
-  },
+    component: RiskLevel // 风险等级
+  }
 };
 
 const tabs = [
   {
-    tab: formatMessage({ id: 'odc.page.Secure.Environment', defaultMessage: '环境' }), //环境
-    key: IPageType.Secure_Env,
+    tab: formatMessage({
+      id: 'odc.page.Secure.Environment',
+      defaultMessage: '环境'
+    }), //环境
+    key: IPageType.Secure_Env
   },
   {
-    tab: formatMessage({ id: 'odc.page.Secure.RiskLevel', defaultMessage: '风险等级' }), //风险等级
-    key: IPageType.RiskLevel,
+    tab: formatMessage({
+      id: 'odc.page.Secure.RiskLevel',
+      defaultMessage: '风险等级'
+    }), //风险等级
+    key: IPageType.RiskLevel
   },
   // {
   //   tab: formatMessage({ id: 'odc.page.Secure.ApprovalProcess' }), //审批流程
@@ -74,15 +80,21 @@ const tabs = [
   {
     tab: formatMessage({
       id: 'odc.page.Secure.DesensitizationAlgorithm',
-      defaultMessage: '脱敏算法',
+      defaultMessage: '脱敏算法'
     }), //脱敏算法
-    key: IPageType.MaskingAlgorithm,
+    key: IPageType.MaskingAlgorithm
   },
   {
-    tab: formatMessage({ id: 'odc.page.Secure.OperationRecord', defaultMessage: '操作记录' }), //操作记录
+    tab: formatMessage({
+      id: 'odc.page.Secure.OperationRecord',
+      defaultMessage: '操作记录'
+    }), //操作记录
     key: IPageType.Secure_Record,
-    permission: createPermission(IManagerResourceType.odc_audit_event, actionTypes.read),
-  },
+    permission: createPermission(
+      IManagerResourceType.odc_audit_event,
+      actionTypes.read
+    )
+  }
 ];
 
 const Index: React.FC<IProps> = function ({ userStore }) {
@@ -101,7 +113,7 @@ const Index: React.FC<IProps> = function ({ userStore }) {
   };
 
   const displayTabs = tabs?.filter((tab) =>
-    tab.permission ? canAcess(tab.permission)?.accessible : true,
+    tab.permission ? canAcess(tab.permission)?.accessible : true
   );
 
   return (
@@ -110,13 +122,13 @@ const Index: React.FC<IProps> = function ({ userStore }) {
         type: TitleType.TEXT,
         title: formatMessage({
           id: 'odc.page.Secure.SafetySpecifications',
-          defaultMessage: '安全规范',
-        }), //安全规范
+          defaultMessage: '安全规范'
+        }) //安全规范
       }}
       containerWrapStyle={
         [IPageType.Secure_Env, IPageType.RiskLevel].includes(page)
           ? {
-              padding: '0px 12px',
+              padding: '0px 12px'
             }
           : {}
       }
@@ -127,7 +139,7 @@ const Index: React.FC<IProps> = function ({ userStore }) {
       <SecureContext.Provider
         value={{
           users,
-          getUserList: _getUserList,
+          getUserList: _getUserList
         }}
       >
         <Component id={id} key={id} />
@@ -135,4 +147,9 @@ const Index: React.FC<IProps> = function ({ userStore }) {
     </PageContainer>
   );
 };
-export default inject('userStore', 'settingStore', 'taskStore', 'modalStore')(observer(Index));
+export default inject(
+  'userStore',
+  'settingStore',
+  'taskStore',
+  'modalStore'
+)(observer(Index));

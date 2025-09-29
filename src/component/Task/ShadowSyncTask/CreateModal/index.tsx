@@ -25,7 +25,12 @@ import SelectPanel from './SelectPanel';
 import StructConfigPanel from './StructConfigPanel';
 
 import { createTask, getTaskDetail } from '@/common/network/task';
-import { TaskExecStrategy, TaskPageScope, TaskPageType, TaskType } from '@/d.ts';
+import {
+  TaskExecStrategy,
+  TaskPageScope,
+  TaskPageType,
+  TaskType
+} from '@/d.ts';
 import { openTasksPage } from '@/store/helper/page';
 import styles from './index.less';
 import dayjs from 'dayjs';
@@ -37,7 +42,7 @@ interface IProps {
 
 enum StepKeys {
   SELECT,
-  CONFIG,
+  CONFIG
 }
 
 const steps = [
@@ -45,19 +50,19 @@ const steps = [
     key: StepKeys.SELECT,
     name: formatMessage({
       id: 'odc.components.CreateShadowSyncModal.SelectObject',
-      defaultMessage: '选择对象',
+      defaultMessage: '选择对象'
     }), //选择对象
-    Component: SelectPanel,
+    Component: SelectPanel
   },
 
   {
     key: StepKeys.CONFIG,
     name: formatMessage({
       id: 'odc.components.CreateShadowSyncModal.StructuralAnalysis',
-      defaultMessage: '结构分析',
+      defaultMessage: '结构分析'
     }), //结构分析
-    Component: StructConfigPanel,
-  },
+    Component: StructConfigPanel
+  }
 ];
 
 const defaultData: IShaodwSyncData = {
@@ -68,7 +73,7 @@ const defaultData: IShaodwSyncData = {
   originTableNames: new Set(),
   executionStrategy: TaskExecStrategy.AUTO,
   executionTime: null,
-  errorStrategy: ErrorStrategy.ABORT,
+  errorStrategy: ErrorStrategy.ABORT
 };
 
 const CreateModal: React.FC<IProps> = function ({ modalStore, projectId }) {
@@ -76,7 +81,7 @@ const CreateModal: React.FC<IProps> = function ({ modalStore, projectId }) {
   const [stepIdx, setStepIdx] = useState(0);
   const [nextLoading, setNextLoading] = useState(false);
   const [data, _setData] = useState({
-    ...defaultData,
+    ...defaultData
   });
 
   const { session, database } = useDBSession(data?.databaseId);
@@ -106,7 +111,7 @@ const CreateModal: React.FC<IProps> = function ({ modalStore, projectId }) {
 
   const handleReset = () => {
     _setData({
-      ...defaultData,
+      ...defaultData
     });
     setIsChanged(false);
     setStepIdx(0);
@@ -117,13 +122,13 @@ const CreateModal: React.FC<IProps> = function ({ modalStore, projectId }) {
       Modal.confirm({
         title: formatMessage({
           id: 'odc.components.CreateShadowSyncModal.AreYouSureYouWant',
-          defaultMessage: '确认取消影子表同步吗？',
+          defaultMessage: '确认取消影子表同步吗？'
         }), //确认取消影子表同步吗？
         centered: true,
         onOk: () => {
           modalStore.changeShadowSyncVisible(false);
           handleReset();
-        },
+        }
       });
     } else {
       modalStore.changeShadowSyncVisible(false);
@@ -141,7 +146,7 @@ const CreateModal: React.FC<IProps> = function ({ modalStore, projectId }) {
         res.executionTime && res.executionTime > new Date().getTime()
           ? dayjs(res.executionTime)
           : null,
-      databaseId: modalStore?.shadowSyncData?.databaseId,
+      databaseId: modalStore?.shadowSyncData?.databaseId
     };
     setData(newData);
   }
@@ -163,7 +168,9 @@ const CreateModal: React.FC<IProps> = function ({ modalStore, projectId }) {
       databaseId: data.databaseId,
       executionStrategy: data.executionStrategy,
       executionTime:
-        data.executionStrategy === TaskExecStrategy.TIMER ? data.executionTime : undefined,
+        data.executionStrategy === TaskExecStrategy.TIMER
+          ? data.executionTime
+          : undefined,
       // databaseName: schemaName,
       // connectionId: connection?.connection?.id,
       description: data.description,
@@ -171,8 +178,8 @@ const CreateModal: React.FC<IProps> = function ({ modalStore, projectId }) {
         errorStrategy: data.errorStrategy,
         databaseId: data.databaseId,
         schemaName: data.schemaName,
-        comparingTaskId: data.shadowAnalysisData?.id,
-      },
+        comparingTaskId: data.shadowAnalysisData?.id
+      }
     });
 
     if (!isSuccess) {
@@ -190,7 +197,7 @@ const CreateModal: React.FC<IProps> = function ({ modalStore, projectId }) {
       width={720}
       title={formatMessage({
         id: 'odc.components.CreateShadowSyncModal.CreateAShadowTableSynchronization',
-        defaultMessage: '新建影子表同步',
+        defaultMessage: '新建影子表同步'
       })} /*新建影子表同步*/
       footer={
         <Space>
@@ -208,13 +215,13 @@ const CreateModal: React.FC<IProps> = function ({ modalStore, projectId }) {
                 ? formatMessage(
                     {
                       id: 'odc.components.CreateShadowSyncModal.PreviousStepPrevstepname',
-                      defaultMessage: '上一步: {prevStepName}',
+                      defaultMessage: '上一步: {prevStepName}'
                     },
-                    { prevStepName },
+                    { prevStepName }
                   ) //`上一步: ${prevStepName}`
                 : formatMessage({
                     id: 'odc.components.CreateShadowSyncModal.Cancel',
-                    defaultMessage: '取消',
+                    defaultMessage: '取消'
                   }) //取消
             }
           </Button>
@@ -245,13 +252,13 @@ const CreateModal: React.FC<IProps> = function ({ modalStore, projectId }) {
                 ? formatMessage(
                     {
                       id: 'odc.components.CreateShadowSyncModal.NextStepNextstepname',
-                      defaultMessage: '下一步: {nextStepName}',
+                      defaultMessage: '下一步: {nextStepName}'
                     },
-                    { nextStepName },
+                    { nextStepName }
                   ) //`下一步: ${nextStepName}`
                 : formatMessage({
                     id: 'odc.components.CreateShadowSyncModal.Submit',
-                    defaultMessage: '提交',
+                    defaultMessage: '提交'
                   }) //提交
             }
           </Button>

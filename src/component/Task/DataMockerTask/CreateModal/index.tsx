@@ -21,7 +21,7 @@ import {
   TaskExecStrategy,
   TaskPageScope,
   TaskPageType,
-  TaskType,
+  TaskType
 } from '@/d.ts';
 import { openTasksPage } from '@/store/helper/page';
 import { ModalStore } from '@/store/modal';
@@ -60,8 +60,14 @@ const CreateModal: React.FC<IProps> = inject('modalStore')(
       const taskDetailObj: {
         tables: IServerMockTable;
       } = JSON.parse(taskDetail);
-      const { tableName, whetherTruncate, totalCount, strategy, batchSize, columns } =
-        taskDetailObj?.tables?.[0] ?? {};
+      const {
+        tableName,
+        whetherTruncate,
+        totalCount,
+        strategy,
+        batchSize,
+        columns
+      } = taskDetailObj?.tables?.[0] ?? {};
       setRuleConfigList(
         columns?.map((item) => {
           const { typeConfig } = item;
@@ -69,9 +75,12 @@ const CreateModal: React.FC<IProps> = inject('modalStore')(
           let rule = getDefaultRuleByGenerator(
             typeConfig?.generator,
             typeConfig?.columnType,
-            task.database.dialectType,
+            task.database.dialectType
           );
-          const ruleItem = columnTypeToRuleMap[task.database.dialectType][typeConfig?.columnType];
+          const ruleItem =
+            columnTypeToRuleMap[task.database.dialectType][
+              typeConfig?.columnType
+            ];
           switch (ruleItem) {
             case RuleItem.DATE: {
               range = [dayjs(typeConfig.lowValue), dayjs(typeConfig.highValue)];
@@ -81,9 +90,9 @@ const CreateModal: React.FC<IProps> = inject('modalStore')(
           return {
             ...item,
             range,
-            rule,
+            rule
           };
-        }) || [],
+        }) || []
       );
 
       const formData = {
@@ -95,9 +104,11 @@ const CreateModal: React.FC<IProps> = inject('modalStore')(
         batchSize,
         executionStrategy,
         executionTime:
-          executionTime && executionTime > new Date().getTime() ? dayjs(executionTime) : null,
+          executionTime && executionTime > new Date().getTime()
+            ? dayjs(executionTime)
+            : null,
         description,
-        columns,
+        columns
       };
       formRef.current?.setFieldsValue(formData);
     };
@@ -110,13 +121,13 @@ const CreateModal: React.FC<IProps> = inject('modalStore')(
       Modal.confirm({
         title: formatMessage({
           id: 'odc.component.DataMockerDrawer.AreYouSureYouWant',
-          defaultMessage: '是否确定取消模拟数据？',
+          defaultMessage: '是否确定取消模拟数据？'
         }),
         // 确认取消模拟数据吗？
         centered: true,
         onOk() {
           onClose();
-        },
+        }
       });
     }, [onClose]);
 
@@ -139,7 +150,7 @@ const CreateModal: React.FC<IProps> = inject('modalStore')(
         rootClassName="o-adaptive-drawer"
         title={formatMessage({
           id: 'src.component.Task.DataMockerTask.CreateModal.2C3DF5A5',
-          defaultMessage: '新建模拟数据',
+          defaultMessage: '新建模拟数据'
         })}
         footer={
           <Space style={{ float: 'right' }}>
@@ -147,7 +158,7 @@ const CreateModal: React.FC<IProps> = inject('modalStore')(
               {
                 formatMessage({
                   id: 'odc.component.DataMockerDrawer.Cancel',
-                  defaultMessage: '取消',
+                  defaultMessage: '取消'
                 })
                 /* 取消 */
               }
@@ -167,11 +178,12 @@ const CreateModal: React.FC<IProps> = inject('modalStore')(
                       formatMessage(
                         {
                           id: 'odc.component.DataMockerDrawer.TheFieldEditingcolumncolumnnameIsBeing',
-                          defaultMessage: '字段{editingColumnColumnName}正在编辑中',
+                          defaultMessage:
+                            '字段{editingColumnColumnName}正在编辑中'
                         },
 
-                        { editingColumnColumnName: editingColumn.columnName },
-                      ),
+                        { editingColumnColumnName: editingColumn.columnName }
+                      )
                       // `字段${editingColumn.columnName}正在编辑中`
                     );
                     return;
@@ -187,19 +199,25 @@ const CreateModal: React.FC<IProps> = inject('modalStore')(
                     description,
                     ...rest
                   } = values;
-                  const serverData = converFormToServerData(rest as any, dbMode, databaseName);
+                  const serverData = converFormToServerData(
+                    rest as any,
+                    dbMode,
+                    databaseName
+                  );
 
                   const isSuccess = await createTask({
                     projectId,
                     databaseId,
                     executionStrategy,
                     executionTime:
-                      executionStrategy === TaskExecStrategy.TIMER ? executionTime : undefined,
+                      executionStrategy === TaskExecStrategy.TIMER
+                        ? executionTime
+                        : undefined,
                     taskType: TaskType.DATAMOCK,
                     parameters: {
-                      taskDetail: JSON.stringify(serverData),
+                      taskDetail: JSON.stringify(serverData)
                     },
-                    description,
+                    description
                   });
 
                   setConfirmLoading(false);
@@ -207,11 +225,14 @@ const CreateModal: React.FC<IProps> = inject('modalStore')(
                     message.success(
                       formatMessage({
                         id: 'src.component.Task.DataMockerTask.CreateModal.753EA4C0' /*'工单创建成功'*/,
-                        defaultMessage: '工单创建成功',
-                      }),
+                        defaultMessage: '工单创建成功'
+                      })
                     );
                     onClose();
-                    openTasksPage(TaskPageType.DATAMOCK, TaskPageScope.CREATED_BY_CURRENT_USER);
+                    openTasksPage(
+                      TaskPageType.DATAMOCK,
+                      TaskPageScope.CREATED_BY_CURRENT_USER
+                    );
                   }
                 } catch (e) {
                   formRef?.current?.scrollToField(e?.errorFields?.[0]?.name);
@@ -223,7 +244,7 @@ const CreateModal: React.FC<IProps> = inject('modalStore')(
               {
                 formatMessage({
                   id: 'odc.component.DataMockerDrawer.Submitted',
-                  defaultMessage: '提交',
+                  defaultMessage: '提交'
                 })
                 /* 提交 */
               }
@@ -241,7 +262,7 @@ const CreateModal: React.FC<IProps> = inject('modalStore')(
         />
       </Drawer>
     );
-  }),
+  })
 );
 
 export default CreateModal;

@@ -14,36 +14,44 @@
  * limitations under the License.
  */
 
-import { actionTypes, IManagerResourceType, IRoles, type IManagerUser } from '@/d.ts';
+import {
+  actionTypes,
+  IManagerResourceType,
+  IRoles,
+  type IManagerUser
+} from '@/d.ts';
 
 export default {
   login: {
     menu: true,
-    setFirstOraganizationToDefault: true,
+    setFirstOraganizationToDefault: true
   },
   locale: {
     menu: true,
-    getLocale: null,
+    getLocale: null
   },
   docs: {
-    url: null,
+    url: null
   },
   worker: {
-    needOrigin: true,
+    needOrigin: true
   },
   debug: {
-    enable: true,
+    enable: true
   },
   manage: {
     user: {
       create: true,
       resetPwd: true,
       delete: true,
-      canEdit: (user: Pick<IManagerUser, 'resourceManagementPermissions'>, resourceId?: string) => {
+      canEdit: (
+        user: Pick<IManagerUser, 'resourceManagementPermissions'>,
+        resourceId?: string
+      ) => {
         const permissions = user?.resourceManagementPermissions?.filter(
           (item) =>
             item.resourceType === IManagerResourceType.user &&
-            item.actions.includes(actionTypes.update),
+            item.actions.includes(actionTypes.update)
         );
         if (!permissions || permissions.length === 0) {
           return false;
@@ -54,55 +62,58 @@ export default {
           }
         });
       },
-      isODCOrganizationConfig: (user: Pick<IManagerUser, 'systemOperationPermissions'>) => {
+      isODCOrganizationConfig: (
+        user: Pick<IManagerUser, 'systemOperationPermissions'>
+      ) => {
         return user?.systemOperationPermissions?.some(
-          (item) => item?.resourceType === IManagerResourceType.odc_organization_config,
+          (item) =>
+            item?.resourceType === IManagerResourceType.odc_organization_config
         );
       },
       tabInVisible: (setting) => {
         return false;
-      },
+      }
     },
     record: {
       enable: (setting) => {
         return true;
-      },
+      }
     },
     showRAMAlert: (setting) => {
       return false;
     },
     integration: {
-      enable: true,
-    },
+      enable: true
+    }
   },
   connection: {
-    sys: true,
+    sys: true
   },
   task: {
     sys: true,
     isSupportTaksImport: false,
     isSupportTaksExport: false,
-    isSupportTaksTerminate: false,
+    isSupportTaksTerminate: false
   },
   systemConfig: {
-    default: null,
+    default: null
   },
   spaceConfig: {
-    showSecurity: true,
+    showSecurity: true
   },
   workspaceConfig: {
-    batchDownloadScripts: true,
+    batchDownloadScripts: true
   },
   spm: {
-    enable: true,
+    enable: true
   },
   workspace: {
     preMount() {},
-    unMount() {},
+    unMount() {}
   },
   network: {
     baseUrl() {
       return window.ODCApiHost || '';
-    },
-  },
+    }
+  }
 };

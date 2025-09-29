@@ -14,7 +14,11 @@
  * limitations under the License.
  */
 
-import { deleteIntegration, getIntegrationList, setIntegration } from '@/common/network/manager';
+import {
+  deleteIntegration,
+  getIntegrationList,
+  setIntegration
+} from '@/common/network/manager';
 import Action from '@/component/Action';
 import FilterIcon from '@/component/Button/FIlterIcon';
 import Reload from '@/component/Button/Reload';
@@ -40,12 +44,15 @@ export default function SSO() {
   const [editId, setEditId] = useState<number>();
 
   const { loading, run } = useRequest(getIntegrationList, {
-    manual: true,
+    manual: true
   });
 
-  const { loading: setEnabledLoading, run: runSetIntegration } = useRequest(setIntegration, {
-    manual: true,
-  });
+  const { loading: setEnabledLoading, run: runSetIntegration } = useRequest(
+    setIntegration,
+    {
+      manual: true
+    }
+  );
 
   const paramsRef = useRef<{
     current: number;
@@ -58,13 +65,13 @@ export default function SSO() {
   const loadData = async (current, pageSize) => {
     paramsRef.current = {
       current,
-      pageSize,
+      pageSize
     };
 
     const data = {
       type: IntegrationType.SSO,
       page: current,
-      size: pageSize,
+      size: pageSize
     };
     const list = await run(data);
     setList(list);
@@ -77,14 +84,14 @@ export default function SSO() {
   async function changeStatus(v: boolean, id: number) {
     const isSuccess = await runSetIntegration({
       id: id,
-      enabled: v,
+      enabled: v
     });
     if (isSuccess) {
       message.success(
         formatMessage({
           id: 'odc.ExternalIntegration.SSO.OperationSucceeded',
-          defaultMessage: '操作成功',
-        }), //操作成功
+          defaultMessage: '操作成功'
+        }) //操作成功
       );
       reload();
     }
@@ -92,11 +99,17 @@ export default function SSO() {
 
   const columns: ColumnType<IManagerIntegration>[] = [
     {
-      title: formatMessage({ id: 'odc.ExternalIntegration.SSO.Name', defaultMessage: '名称' }), //名称
-      dataIndex: 'name',
+      title: formatMessage({
+        id: 'odc.ExternalIntegration.SSO.Name',
+        defaultMessage: '名称'
+      }), //名称
+      dataIndex: 'name'
     },
     {
-      title: formatMessage({ id: 'odc.ExternalIntegration.SSO.Type', defaultMessage: '类型' }), //类型
+      title: formatMessage({
+        id: 'odc.ExternalIntegration.SSO.Type',
+        defaultMessage: '类型'
+      }), //类型
       dataIndex: 'type',
       width: 80,
       render(value, record, index) {
@@ -105,28 +118,31 @@ export default function SSO() {
         } catch (e) {
           return '-';
         }
-      },
+      }
     },
     {
       title: formatMessage({
         id: 'odc.ExternalIntegration.SSO.CreationDate',
-        defaultMessage: '创建日期',
+        defaultMessage: '创建日期'
       }), //创建日期
       dataIndex: 'createTime',
       width: 200,
       render(v) {
         return getLocalFormatDateTime(v);
-      },
+      }
     },
     {
-      title: formatMessage({ id: 'odc.ExternalIntegration.SSO.Founder', defaultMessage: '创建人' }), //创建人
+      title: formatMessage({
+        id: 'odc.ExternalIntegration.SSO.Founder',
+        defaultMessage: '创建人'
+      }), //创建人
       dataIndex: 'creatorName',
-      width: 120,
+      width: 120
     },
     {
       title: formatMessage({
         id: 'odc.ExternalIntegration.SSO.WhetherToEnable',
-        defaultMessage: '是否启用',
+        defaultMessage: '是否启用'
       }), //是否启用
       dataIndex: 'enabled',
       width: 100,
@@ -142,10 +158,13 @@ export default function SSO() {
             }}
           />
         );
-      },
+      }
     },
     {
-      title: formatMessage({ id: 'odc.ExternalIntegration.SSO.Operation', defaultMessage: '操作' }), //操作
+      title: formatMessage({
+        id: 'odc.ExternalIntegration.SSO.Operation',
+        defaultMessage: '操作'
+      }), //操作
       dataIndex: '_action',
       width: 180,
       render(_, record: IManagerIntegration) {
@@ -155,7 +174,7 @@ export default function SSO() {
               {
                 formatMessage({
                   id: 'odc.ExternalIntegration.SSO.View',
-                  defaultMessage: '查看',
+                  defaultMessage: '查看'
                 }) /*查看*/
               }
             </Action.Link>
@@ -168,14 +187,14 @@ export default function SSO() {
               {
                 formatMessage({
                   id: 'odc.ExternalIntegration.SSO.Edit',
-                  defaultMessage: '编辑',
+                  defaultMessage: '编辑'
                 }) /*编辑*/
               }
             </Action.Link>
             <Popconfirm
               title={formatMessage({
                 id: 'odc.ExternalIntegration.SSO.AreYouSureYouWant',
-                defaultMessage: '是否确认删除？',
+                defaultMessage: '是否确认删除？'
               })} /*是否确认删除？*/
               onConfirm={async () => {
                 const isSuccess = await deleteIntegration(record.id);
@@ -183,8 +202,8 @@ export default function SSO() {
                   message.success(
                     formatMessage({
                       id: 'odc.ExternalIntegration.SSO.OperationSucceeded',
-                      defaultMessage: '操作成功',
-                    }), //操作成功
+                      defaultMessage: '操作成功'
+                    }) //操作成功
                   );
                   reload();
                 }
@@ -194,15 +213,15 @@ export default function SSO() {
                 {
                   formatMessage({
                     id: 'odc.ExternalIntegration.SSO.Delete',
-                    defaultMessage: '删除',
+                    defaultMessage: '删除'
                   }) /*删除*/
                 }
               </Action.Link>
             </Popconfirm>
           </Action.Group>
         );
-      },
-    },
+      }
+    }
   ];
 
   return (
@@ -221,14 +240,18 @@ export default function SSO() {
         columns={columns}
         dataSource={list?.contents}
         pagination={{
-          total: list?.page?.totalElements,
+          total: list?.page?.totalElements
         }}
         loadData={(page) => {
           loadData(page.current, page.pageSize);
         }}
       />
 
-      <SSODetailDrawer close={() => setViewId(null)} id={viewId} visible={!!viewId} />
+      <SSODetailDrawer
+        close={() => setViewId(null)}
+        id={viewId}
+        visible={!!viewId}
+      />
       <EditSSODrawer
         visible={!!editId}
         id={editId}

@@ -20,11 +20,15 @@ import { Input, Typography, Button, Checkbox } from 'antd';
 import styles from './index.less';
 import CopyOperation from './CopyOpertaion';
 import setting from '@/store/setting';
+import { BasicButton, BasicInput } from '@actiontech/dms-kit';
 
 const { Text } = Typography;
 const INPUT_PASSWORD = 'password';
 
-const SecretKeyInput = (props: { value: string; onChange: (value: string) => Promise<void> }) => {
+const SecretKeyInput = (props: {
+  value: string;
+  onChange: (value: string) => Promise<void>;
+}) => {
   const [loading, setLoading] = useState(false);
   const [editing, setEditing] = useState(false);
   const [inputType, setInputType] = useState(INPUT_PASSWORD);
@@ -48,7 +52,7 @@ const SecretKeyInput = (props: { value: string; onChange: (value: string) => Pro
 
   const resetSecretKeyItemState = async () => {
     const storedSecurityKey = setting.getSpaceConfigByKey(
-      'odc.security.default.customDataSourceEncryptionKey',
+      'odc.security.default.customDataSourceEncryptionKey'
     );
     if (storedSecurityKey?.length > 0) {
       await updateSecretKey(storedSecurityKey);
@@ -61,10 +65,13 @@ const SecretKeyInput = (props: { value: string; onChange: (value: string) => Pro
   };
 
   const generateRandomPassword = async () => {
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const characters =
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let secretKey = '';
     for (let i = 0; i < 32; i++) {
-      secretKey += characters.charAt(Math.floor(Math.random() * characters.length));
+      secretKey += characters.charAt(
+        Math.floor(Math.random() * characters.length)
+      );
     }
     updateSecretKey(secretKey);
     setInputType('');
@@ -103,7 +110,7 @@ const SecretKeyInput = (props: { value: string; onChange: (value: string) => Pro
       >
         {formatMessage({
           id: 'src.component.ODCSetting.Item.SecretKeyItem.F9BA8783',
-          defaultMessage: '自定义数据源密钥',
+          defaultMessage: '自定义数据源密钥'
         })}
       </Checkbox>
       {showInput ? (
@@ -112,26 +119,29 @@ const SecretKeyInput = (props: { value: string; onChange: (value: string) => Pro
             <>
               {/* 初始状态：显示密码隐藏和修改按钮 */}
               <div>
-                <Input.Password value={props.value} hidden />
-                <Input prefix={<>********</>} disabled />
+                <BasicInput.Password value={props.value} hidden />
+                <BasicInput placeholder="" prefix={<>********</>} disabled />
               </div>
-              <Button type="link" style={{ padding: 0, marginTop: 8 }} onClick={handleEdit}>
+              <Typography.Link
+                style={{ padding: 0, marginTop: 12 }}
+                onClick={handleEdit}
+              >
                 {formatMessage({
                   id: 'src.component.ODCSetting.Item.SecretKeyItem.C1F93F6F',
-                  defaultMessage: '修改密钥',
+                  defaultMessage: '修改密钥'
                 })}
-              </Button>
+              </Typography.Link>
             </>
           ) : (
             <>
               {/* 编辑状态：显示输入框和操作按钮 */}
               <div style={{ display: 'flex' }}>
-                <Input
+                <BasicInput
                   key={props.value}
                   defaultValue={props.value}
                   placeholder={formatMessage({
                     id: 'src.component.ODCSetting.Item.SecretKeyItem.E0D2EBB0',
-                    defaultMessage: '输入32位英文和数字组合',
+                    defaultMessage: '输入32位英文和数字组合'
                   })}
                   className={styles.passwordInput}
                   type={inputType}
@@ -140,33 +150,37 @@ const SecretKeyInput = (props: { value: string; onChange: (value: string) => Pro
                   status={hasError ? 'error' : ''}
                 />
 
-                <Button style={{ marginLeft: 8 }} onClick={generateRandomPassword}>
+                <BasicButton
+                  style={{ marginLeft: 8 }}
+                  onClick={generateRandomPassword}
+                >
                   {formatMessage({
                     id: 'src.component.ODCSetting.Item.SecretKeyItem.F2B4A8FF',
-                    defaultMessage: '生成密钥',
+                    defaultMessage: '生成密钥'
                   })}
-                </Button>
+                </BasicButton>
               </div>
               {hasError && (
                 <Text type="danger" style={{ marginTop: 8, display: 'block' }}>
                   {formatMessage({
                     id: 'src.component.ODCSetting.Item.SecretKeyItem.70476C14',
-                    defaultMessage: '输入32位英文和数字组合',
+                    defaultMessage: '输入32位英文和数字组合'
                   })}
                 </Text>
               )}
               <div className={styles.scondOperations}>
-                <Button
-                  type="link"
+                <Typography.Link
                   style={{ padding: 0, marginRight: 8 }}
                   onClick={handleCancelEdit}
                 >
                   {formatMessage({
                     id: 'src.component.ODCSetting.Item.SecretKeyItem.723D08EC',
-                    defaultMessage: '取消修改',
+                    defaultMessage: '取消修改'
                   })}
-                </Button>
-                {props.value && inputType === '' && <CopyOperation password={props.value} />}
+                </Typography.Link>
+                {props.value && inputType === '' && (
+                  <CopyOperation password={props.value} />
+                )}
               </div>
             </>
           )}

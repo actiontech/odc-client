@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-import { fetchVariableList, updateVariable } from '@/common/network/sessionParams';
+import {
+  fetchVariableList,
+  updateVariable
+} from '@/common/network/sessionParams';
 import PropertyModal from '@/component/PropertyModal';
 import Toolbar from '@/component/Toolbar';
 import { IConnectionProperty } from '@/d.ts';
@@ -50,8 +53,14 @@ function SessionParamsTable(props: {
   sessionManagerStore?: SessionManagerStore;
   showDatasource?: boolean;
 }) {
-  const { sessionManagerStore, connectionPropertyType, sessionId, tip, bordered, showDatasource } =
-    props;
+  const {
+    sessionManagerStore,
+    connectionPropertyType,
+    sessionId,
+    tip,
+    bordered,
+    showDatasource
+  } = props;
   const [listLoading, setListLoading] = useState(false);
   const [selectedRowIndex, setSelectedRowIndex] = useState(-1);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -63,7 +72,9 @@ function SessionParamsTable(props: {
 
   const loadData = async function () {
     setListLoading(true);
-    setConnectionProperty(await fetchVariableList(connectionPropertyType, sessionId));
+    setConnectionProperty(
+      await fetchVariableList(connectionPropertyType, sessionId)
+    );
     setListLoading(false);
   };
   /**
@@ -93,7 +104,7 @@ function SessionParamsTable(props: {
     debounce((searchKey: string) => {
       setSearchKey(searchKey);
     }, 200),
-    [],
+    []
   );
 
   const columns = [
@@ -101,24 +112,28 @@ function SessionParamsTable(props: {
       key: 'key',
       name: formatMessage({
         id: 'workspace.window.session.form.key',
-        defaultMessage: '变量名',
+        defaultMessage: '变量名'
       }),
       editable: false,
-      sortable: true,
+      sortable: true
     },
     {
       key: 'value',
       name: formatMessage({
         id: 'workspace.window.session.form.value',
-        defaultMessage: '值',
+        defaultMessage: '值'
       }),
       editable: false,
-      sortable: false,
-    },
+      sortable: false
+    }
   ];
 
   const filteredRows = useMemo(() => {
-    return rows?.filter((p) => p.key?.toLowerCase().indexOf(searchKey?.toLowerCase()) > -1) || [];
+    return (
+      rows?.filter(
+        (p) => p.key?.toLowerCase().indexOf(searchKey?.toLowerCase()) > -1
+      ) || []
+    );
   }, [searchKey, rows]);
 
   const handleSaveProperty = useCallback(
@@ -130,10 +145,10 @@ function SessionParamsTable(props: {
         const isSuccess = await updateVariable(
           {
             ...filteredRows?.[selectedRowIndex],
-            value: newValue,
+            value: newValue
           },
           connectionPropertyType,
-          sessionId,
+          sessionId
         );
         if (isSuccess) {
           await loadData();
@@ -141,8 +156,8 @@ function SessionParamsTable(props: {
           message.success(
             formatMessage({
               id: 'workspace.window.session.modal.sql.execute.success',
-              defaultMessage: '编辑变量成功',
-            }),
+              defaultMessage: '编辑变量成功'
+            })
           );
           setShowEditModal(false);
         }
@@ -150,7 +165,7 @@ function SessionParamsTable(props: {
         setShowEditModal(false);
       }
     },
-    [filteredRows, selectedRowIndex],
+    [filteredRows, selectedRowIndex]
   );
 
   useEffect(() => {
@@ -170,7 +185,7 @@ function SessionParamsTable(props: {
                 isShowText
                 text={formatMessage({
                   id: 'workspace.window.session.button.edit',
-                  defaultMessage: '编辑',
+                  defaultMessage: '编辑'
                 })}
                 icon={<EditOutlined />}
                 onClick={handleOpenEditModal}
@@ -182,7 +197,7 @@ function SessionParamsTable(props: {
                 allowClear={true}
                 placeholder={formatMessage({
                   id: 'workspace.window.session.button.search',
-                  defaultMessage: '搜索',
+                  defaultMessage: '搜索'
                 })}
                 onSearch={handleSearch}
                 onChange={(e) => handleSearch(e.target.value)}
@@ -193,7 +208,7 @@ function SessionParamsTable(props: {
               <ToolbarButton
                 text={formatMessage({
                   id: 'workspace.window.session.button.refresh',
-                  defaultMessage: '刷新',
+                  defaultMessage: '刷新'
                 })}
                 icon={<SyncOutlined />}
                 onClick={handleRefresh}
@@ -238,5 +253,5 @@ export default inject(
   'sqlStore',
   'sessionManagerStore',
   'pageStore',
-  'settingStore',
+  'settingStore'
 )(observer(SessionParamsTable));

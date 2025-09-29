@@ -19,9 +19,10 @@ import { ConnectType, DbObjectType } from '@/d.ts';
 import { formatMessage } from '@/util/intl';
 import { Col, Form, Row, Select } from 'antd';
 import HelpDoc from '../helpDoc';
+import { BasicSelect } from '@actiontech/dms-kit';
 export default function ExtraOptions({
   dbType,
-  connectType,
+  connectType
 }: {
   connectType: ConnectType;
   dbType: DbObjectType;
@@ -43,26 +44,27 @@ export default function ExtraOptions({
                   title={
                     formatMessage({
                       id: 'odc.src.component.ProcedureParam.DetermineWhetherTheFunctionProduces',
-                      defaultMessage: '判断函数是否对相同的输入产生相同的结果',
+                      defaultMessage: '判断函数是否对相同的输入产生相同的结果'
                     }) /* 判断函数是否对相同的输入产生相同的结果 */
                   }
                 >
                   {formatMessage({
                     id: 'odc.src.component.ProcedureParam.Decisive',
-                    defaultMessage: '决定性',
+                    defaultMessage: '决定性'
                   })}
                 </HelpDoc> /* 决定性 */
               }
               name={['characteristic', 'deterministic']}
             >
-              <Select
+              <BasicSelect
+                placeholder={''}
                 style={{
-                  width: '100%',
+                  width: '100%'
                 }}
               >
                 <Select.Option value={true}>DETERMINISTIC</Select.Option>
                 <Select.Option value={false}>NOT DETERMINISTIC</Select.Option>
-              </Select>
+              </BasicSelect>
             </Form.Item>
           </Col>
         ) : null}
@@ -72,21 +74,26 @@ export default function ExtraOptions({
               label={
                 formatMessage({
                   id: 'odc.src.component.ProcedureParam.DataOption',
-                  defaultMessage: '数据选项',
+                  defaultMessage: '数据选项'
                 }) /* 数据选项 */
               }
               name={['characteristic', 'dataNature']}
             >
-              <Select
+              <BasicSelect
                 style={{
-                  width: '100%',
+                  width: '100%'
                 }}
+                placeholder={''}
               >
-                <Select.Option value={'CONTAINS SQL'}>CONTAINS SQL</Select.Option>
+                <Select.Option value={'CONTAINS SQL'}>
+                  CONTAINS SQL
+                </Select.Option>
                 <Select.Option value={'NO SQL'}>NO SQL</Select.Option>
                 <Select.Option value={'READS SQL'}>READS SQL</Select.Option>
-                <Select.Option value={'MODIFIES SQL'}>MODIFIES SQL</Select.Option>
-              </Select>
+                <Select.Option value={'MODIFIES SQL'}>
+                  MODIFIES SQL
+                </Select.Option>
+              </BasicSelect>
             </Form.Item>
           </Col>
         ) : null}
@@ -96,19 +103,20 @@ export default function ExtraOptions({
               label={
                 formatMessage({
                   id: 'odc.src.component.ProcedureParam.SQLSecurity',
-                  defaultMessage: 'SQL 安全性',
+                  defaultMessage: 'SQL 安全性'
                 }) /* SQL 安全性 */
               }
               name={['characteristic', 'sqlSecurity']}
             >
-              <Select
+              <BasicSelect
+                placeholder={''}
                 style={{
-                  width: '100%',
+                  width: '100%'
                 }}
               >
                 <Select.Option value={'INVOKER'}>INVOKER</Select.Option>
                 <Select.Option value={'DEFINER'}>DEFINER</Select.Option>
-              </Select>
+              </BasicSelect>
             </Form.Item>
           </Col>
         ) : null}

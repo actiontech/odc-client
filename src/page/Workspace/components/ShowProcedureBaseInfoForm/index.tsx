@@ -34,29 +34,32 @@ class ShowProcedureBaseInfoForm extends PureComponent<IProps> {
           [
             formatMessage({
               id: 'workspace.window.createProcedure.proName',
-              defaultMessage: '存储过程名称',
+              defaultMessage: '存储过程名称'
             }),
-            model.proName,
+            model.proName
           ],
           [
-            formatMessage({ id: 'workspace.window.createView.definer', defaultMessage: '创建人' }),
-            model.definer,
+            formatMessage({
+              id: 'workspace.window.createView.definer',
+              defaultMessage: '创建人'
+            }),
+            model.definer
           ],
           [
             formatMessage({
               id: 'workspace.window.database.createTime',
-              defaultMessage: '创建时间',
+              defaultMessage: '创建时间'
             }),
-            getLocalFormatDateTime(model.createTime),
+            getLocalFormatDateTime(model.createTime)
           ],
 
           [
             formatMessage({
               id: 'workspace.window.createProcedure.modifyTime',
-              defaultMessage: '最近修改时间',
+              defaultMessage: '最近修改时间'
             }),
-            getLocalFormatDateTime(model.modifyTime),
-          ],
+            getLocalFormatDateTime(model.modifyTime)
+          ]
         ].map(([label, content]) => {
           return (
             <div className={styles.line}>

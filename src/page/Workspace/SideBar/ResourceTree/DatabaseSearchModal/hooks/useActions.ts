@@ -7,7 +7,7 @@ import { useContext } from 'react';
 import { ActivityBarItemType } from '@/page/Workspace/ActivityBar/type';
 import {
   getShouldExpandedKeysByObject,
-  getGroupKey,
+  getGroupKey
 } from '@/page/Workspace/SideBar/ResourceTree/const';
 import ResourceTreeContext from '@/page/Workspace/context/ResourceTreeContext';
 import { SearchStatus } from '../constant';
@@ -19,7 +19,8 @@ const useActions = (params: { modalStore: ModalStore; project: IProject }) => {
   const { modalStore, project } = params;
   const activituContext = useContext(ActivityBarContext);
   const context = useContext(ResourceTreeContext);
-  const { groupMode, setCurrentObject, setShouldExpandedKeys, setGroupMode } = context || {};
+  const { groupMode, setCurrentObject, setShouldExpandedKeys, setGroupMode } =
+    context || {};
 
   /** 打开SQL窗口 */
   const openSql = (e, db) => {
@@ -33,7 +34,7 @@ const useActions = (params: { modalStore: ModalStore; project: IProject }) => {
     e.stopPropagation();
     modalStore.changeApplyDatabasePermissionModal(true, {
       projectId: db?.project?.id,
-      databaseId: db?.id,
+      databaseId: db?.id
     });
     modalStore.changeDatabaseSearchModalVisible(false);
   };
@@ -41,19 +42,21 @@ const useActions = (params: { modalStore: ModalStore; project: IProject }) => {
   /** 申请表/视图权限 */
   const applyTablePermission = (e, object, type) => {
     e.stopPropagation();
-    const dbObj = [DbObjectType.table, DbObjectType.external_table, DbObjectType.view]?.includes(
-      type,
-    )
+    const dbObj = [
+      DbObjectType.table,
+      DbObjectType.external_table,
+      DbObjectType.view
+    ]?.includes(type)
       ? object
       : object?.dbObject;
     const params = {
       projectId: dbObj?.database?.project?.id,
       databaseId: dbObj?.database?.id,
       tableName: dbObj?.name,
-      tableId: dbObj?.id,
+      tableId: dbObj?.id
     };
     modalStore.changeApplyTablePermissionModal(true, {
-      ...params,
+      ...params
     });
     modalStore.changeDatabaseSearchModalVisible(false);
   };
@@ -64,7 +67,7 @@ const useActions = (params: { modalStore: ModalStore; project: IProject }) => {
     const dbObj = db?.dbObject?.database || db?.database || db;
     modalStore.changeApplyDatabasePermissionModal(true, {
       projectId: dbObj?.project?.id,
-      databaseId: dbObj?.id,
+      databaseId: dbObj?.id
     });
     modalStore.changeDatabaseSearchModalVisible(false);
   };
@@ -87,7 +90,7 @@ const useActions = (params: { modalStore: ModalStore; project: IProject }) => {
       object.isExternalTable = true;
     }
     DbObjectTypeMap?.[type]?.openPage(object)(
-      ...DbObjectTypeMap?.[type]?.getOpenTab(object, databaseId),
+      ...DbObjectTypeMap?.[type]?.getOpenTab(object, databaseId)
     );
     modalStore?.changeDatabaseSearchModalVisible(false);
   };
@@ -106,11 +109,11 @@ const useActions = (params: { modalStore: ModalStore; project: IProject }) => {
       database,
       groupMode,
       name,
-      objectName,
+      objectName
     });
     setCurrentObject({
       value: keyObject.currentKey,
-      type: keyObject.currentResourceNodeType,
+      type: keyObject.currentResourceNodeType
     });
     setShouldExpandedKeys(keyObject.shouldExpandedKeys as React.Key[]);
     modalStore?.changeDatabaseSearchModalVisible(false);
@@ -128,17 +131,19 @@ const useActions = (params: { modalStore: ModalStore; project: IProject }) => {
       case SearchStatus.dataSourceforObject: {
         setCurrentObject({
           value: getGroupKey(object.id, DatabaseGroup.dataSource),
-          type: ResourceNodeType.GroupNodeDataSource,
+          type: ResourceNodeType.GroupNodeDataSource
         });
         setGroupMode(DatabaseGroup.dataSource);
-        setShouldExpandedKeys([getGroupKey(object.id, DatabaseGroup.dataSource)]);
+        setShouldExpandedKeys([
+          getGroupKey(object.id, DatabaseGroup.dataSource)
+        ]);
         break;
       }
       case SearchStatus.forProject:
       case SearchStatus.projectforObject: {
         setCurrentObject({
           value: getGroupKey(object.id, DatabaseGroup.project),
-          type: ResourceNodeType.GroupNodeProject,
+          type: ResourceNodeType.GroupNodeProject
         });
         setGroupMode(DatabaseGroup.project);
         setShouldExpandedKeys([getGroupKey(object.id, DatabaseGroup.project)]);
@@ -154,7 +159,7 @@ const useActions = (params: { modalStore: ModalStore; project: IProject }) => {
     applyDbPermission,
     openTree,
     positionResourceTree,
-    positionProjectOrDataSource,
+    positionProjectOrDataSource
   };
 };
 

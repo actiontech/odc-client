@@ -16,12 +16,17 @@
 
 import { EditorProps } from '@oceanbase-odc/ob-react-data-grid';
 import { InputRef } from 'antd';
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useRef } from 'react';
 
 import InputBigNumber from '@/component/InputBigNumber';
 import AntdEditorWrap from './AntdEditorWrap';
 
-export function InputNumberEditor<T>({ row, onRowChange, column, width }: EditorProps<T>) {
+export function InputNumberEditor<T>({
+  row,
+  onRowChange,
+  column,
+  width
+}: EditorProps<T>) {
   const { key } = column;
   const value = row[key];
   const editorRef = useRef<InputRef>(null);
@@ -30,14 +35,17 @@ export function InputNumberEditor<T>({ row, onRowChange, column, width }: Editor
     (value: string) => {
       onRowChange({ ...row, [key]: value });
     },
-    [onRowChange],
+    [onRowChange]
   );
   return (
     <AntdEditorWrap>
       <InputBigNumber
         autoFocus
         onFocus={() => {
-          editorRef.current?.setSelectionRange(Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER);
+          editorRef.current?.setSelectionRange(
+            Number.MAX_SAFE_INTEGER,
+            Number.MAX_SAFE_INTEGER
+          );
         }}
         inputRef={editorRef}
         onKeyDown={(e) => {

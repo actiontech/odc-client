@@ -22,6 +22,7 @@ import TablePageContext from '../../../TablePage/context';
 import { getDefaultCollation } from '../../helper';
 import { TableColumn } from '../../interface';
 import TableContext from '../../TableContext';
+import { BasicSelect } from '@actiontech/dms-kit';
 
 const Option = Select.Option;
 
@@ -49,17 +50,17 @@ export default function ({ column, onChange }: IProps) {
           <Form.Item
             label={formatMessage({
               id: 'odc.Columns.ColumnExtraInfo.Character.CharacterSet',
-              defaultMessage: '字符集',
+              defaultMessage: '字符集'
             })} /*字符集*/
           >
-            <Select
+            <BasicSelect
               disabled={pageContext?.editMode && !isNil(ordinalPosition)}
               value={character}
               onChange={(v) => {
                 onChange({
                   ...column,
                   character: v,
-                  collation: getDefaultCollation(v, collations),
+                  collation: getDefaultCollation(v, collations)
                 });
               }}
             >
@@ -68,29 +69,29 @@ export default function ({ column, onChange }: IProps) {
                   {c}
                 </Option>
               ))}
-            </Select>
+            </BasicSelect>
           </Form.Item>
         </Col>
         <Col span={12}>
           <Form.Item
             label={formatMessage({
               id: 'odc.Columns.ColumnExtraInfo.Character.SortingRules',
-              defaultMessage: '排序规则',
+              defaultMessage: '排序规则'
             })} /*排序规则*/
           >
-            <Select
+            <BasicSelect
               disabled={pageContext?.editMode && !isNil(ordinalPosition)}
               value={collation}
               onChange={(v) => {
                 onChange({
                   ...column,
-                  collation: v,
+                  collation: v
                 });
               }}
             >
               {collations
                 ?.filter((c) => {
-                  let _character = character || '';
+                  const _character = character || '';
                   return c.indexOf(_character) > -1;
                 })
                 .map((c) => (
@@ -98,7 +99,7 @@ export default function ({ column, onChange }: IProps) {
                     {c}
                   </Option>
                 ))}
-            </Select>
+            </BasicSelect>
           </Form.Item>
         </Col>
       </Row>

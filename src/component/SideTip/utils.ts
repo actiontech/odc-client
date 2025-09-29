@@ -18,14 +18,14 @@ export const getScrollOffsets = (dom?: HTMLElement) => {
   if (window.pageXOffset != null) {
     return {
       x: window.pageXOffset,
-      y: window.pageYOffset,
+      y: window.pageYOffset
     };
   }
 
   if (dom) {
     return {
       x: dom.scrollLeft,
-      y: dom.scrollTop,
+      y: dom.scrollTop
     };
   }
 
@@ -34,13 +34,13 @@ export const getScrollOffsets = (dom?: HTMLElement) => {
   if (document.compatMode === 'CSS1Compat') {
     return {
       x: document.documentElement.scrollLeft,
-      y: document.documentElement.scrollTop,
+      y: document.documentElement.scrollTop
     };
   }
 
   return {
     x: document.body.scrollLeft,
-    y: document.body.scrollTop,
+    y: document.body.scrollTop
   };
 };
 
@@ -48,7 +48,11 @@ export const getClientHeight = (dom?: HTMLElement) => {
   if (dom) {
     return dom.clientHeight;
   }
-  return window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+  return (
+    window.innerHeight ||
+    document.documentElement.clientHeight ||
+    document.body.clientHeight
+  );
 };
 
 export const getClientWidth = (dom?: HTMLElement) => {
@@ -63,7 +67,10 @@ export const getClientWidth = (dom?: HTMLElement) => {
 
 let cached;
 
-export const getScrollBarSize = (fresh?: boolean, dom: HTMLElement = document.body) => {
+export const getScrollBarSize = (
+  fresh?: boolean,
+  dom: HTMLElement = document.body
+) => {
   if (window.innerWidth > dom.offsetWidth) {
     if (fresh || cached === undefined) {
       const inner = document.createElement('div');

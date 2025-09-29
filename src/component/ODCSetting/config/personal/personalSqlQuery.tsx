@@ -23,16 +23,16 @@ import { validForQueryLimit, validForQueryQueryNumber } from '../../validators';
 const databaseGroup: ODCSettingGroup = {
   label: formatMessage({
     id: 'src.component.ODCSetting.config.personal.2B385A6E',
-    defaultMessage: 'SQL 查询',
+    defaultMessage: 'SQL 查询'
   }),
-  key: 'personalSqlQuery',
+  key: 'personalSqlQuery'
 };
 
 const personalSqlQuerySetting: IODCSetting[] = [
   {
     label: formatMessage({
       id: 'src.component.ODCSetting.config.personal.60D2A889',
-      defaultMessage: '查询条数上限',
+      defaultMessage: '查询条数上限'
     }),
     key: 'odc.sqlexecute.default.maxQueryLimit',
     locationKey: 'maxQueryLimit',
@@ -43,8 +43,8 @@ const personalSqlQuerySetting: IODCSetting[] = [
       {
         validator(rule, value, callback) {
           return validForQueryLimit(value);
-        },
-      },
+        }
+      }
     ],
 
     render: (value, onChange) => {
@@ -52,18 +52,21 @@ const personalSqlQuerySetting: IODCSetting[] = [
         <InputIntergerItem
           value={value}
           onChange={async (value) => {
-            sessionStorage.setItem(`maxQueryLimit-${getCurrentOrganizationId()}`, value || '');
+            sessionStorage.setItem(
+              `maxQueryLimit-${getCurrentOrganizationId()}`,
+              value || ''
+            );
             onChange(value);
           }}
           min={'1'}
         />
       );
-    },
+    }
   },
   {
     label: formatMessage({
       id: 'src.component.ODCSetting.config.personal.FC79048F',
-      defaultMessage: '查询条数默认值',
+      defaultMessage: '查询条数默认值'
     }),
     key: 'odc.sqlexecute.default.queryLimit',
     locationKey: 'queryLimit',
@@ -74,14 +77,14 @@ const personalSqlQuerySetting: IODCSetting[] = [
       {
         validator(rule, value, callback) {
           return validForQueryQueryNumber(value);
-        },
-      },
+        }
+      }
     ],
 
     render: (value, onChange) => {
       return <InputIntergerItem value={value} onChange={onChange} min={'1'} />;
-    },
-  },
+    }
+  }
 ];
 
 export default personalSqlQuerySetting;

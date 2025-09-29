@@ -26,12 +26,16 @@ import { useDeferColumn, useEnableColumn } from '../baseColumn';
 
 export function useColumns(
   columns: TableColumn[],
-  mode: ConnectionMode,
+  mode: ConnectionMode
 ): Column<TablePrimaryConstraint, TablePrimaryConstraint>[] {
   const enableColumn = useEnableColumn(mode);
   const deferColumn = useDeferColumn(mode);
   const validColumns = useMemo(() => {
-    return uniq(columns?.filter((column) => !!column.name?.trim()).map((column) => column.name));
+    return uniq(
+      columns
+        ?.filter((column) => !!column.name?.trim())
+        .map((column) => column.name)
+    );
   }, [columns]);
   const ColumnsMultipleSelect = useMemo(() => {
     return WrapSelectEditor(validColumns);
@@ -41,18 +45,18 @@ export function useColumns(
       key: 'name',
       name: formatMessage({
         id: 'odc.CreateTable.Columns.columns.Name',
-        defaultMessage: '名称',
+        defaultMessage: '名称'
       }), //名称
       resizable: true,
       editable: true,
-      editor: TextEditor,
+      editor: TextEditor
     },
 
     {
       key: 'columns',
       name: formatMessage({
         id: 'odc.TableConstraint.Primary.columns.Column',
-        defaultMessage: '列',
+        defaultMessage: '列'
       }), //列
       resizable: true,
       editable: true,
@@ -60,10 +64,10 @@ export function useColumns(
       editor: ColumnsMultipleSelect,
       formatter: ({ row }) => {
         return <span>{row.columns?.join?.(',')}</span>;
-      },
+      }
     },
 
     enableColumn,
-    deferColumn,
+    deferColumn
   ].filter(Boolean);
 }

@@ -17,19 +17,26 @@
 import { isSupportAutoIncrement } from '@/util/utils';
 import { Checkbox } from 'antd';
 
-export default function WrapCheckboxFormatetr(editable: boolean, enablePrimaryKeyEditor: boolean) {
+export default function WrapCheckboxFormatetr(
+  editable: boolean,
+  enablePrimaryKeyEditor: boolean
+) {
   return (props) => {
     const { row, onRowChange } = props;
     const { initialValue, allowNull, primaryKey } = row;
     return (
       <Checkbox
-        disabled={!editable || (primaryKey && enablePrimaryKeyEditor) || initialValue?.allowNull}
+        disabled={
+          !editable ||
+          (primaryKey && enablePrimaryKeyEditor) ||
+          initialValue?.allowNull
+        }
         checked={!allowNull}
         tabIndex={-1}
         onChange={() => {
           onRowChange({
             ...row,
-            allowNull: !allowNull,
+            allowNull: !allowNull
           });
         }}
       />
@@ -49,7 +56,7 @@ export function WrapOracleCheckboxFormatetr(editable: boolean) {
         onChange={() => {
           onRowChange({
             ...row,
-            autoIncreament: !autoIncreament,
+            autoIncreament: !autoIncreament
           });
         }}
       />

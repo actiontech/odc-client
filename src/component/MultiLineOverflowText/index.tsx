@@ -19,10 +19,11 @@ import { formatMessage } from '@/util/intl';
  * 多行溢出文本 通用组件
  * 说明：若使用纯CSS的方式实现有兼容性问题
  */
-import { Button, Tooltip } from 'antd';
 import classNames from 'classnames';
 import React, { useEffect, useRef, useState } from 'react';
 import styles from './index.less';
+import { BasicToolTip } from '@actiontech/dms-kit';
+import { Button } from 'antd';
 
 interface IProps {
   content: React.ReactNode;
@@ -35,7 +36,7 @@ const MultiLineOverflowText: React.FC<IProps> = ({
   content,
   className,
   isShowMore = false,
-  maxHeight = 20,
+  maxHeight = 20
 }) => {
   const wrapperRef = useRef(null);
   const contentRef = useRef(null);
@@ -44,12 +45,14 @@ const MultiLineOverflowText: React.FC<IProps> = ({
 
   const style = !openStatus
     ? {
-        maxHeight: `${maxHeight}px`,
+        maxHeight: `${maxHeight}px`
       }
     : null;
 
   useEffect(() => {
-    setOverflow(contentRef?.current?.offsetHeight > wrapperRef?.current?.offsetHeight);
+    setOverflow(
+      contentRef?.current?.offsetHeight > wrapperRef?.current?.offsetHeight
+    );
   }, []);
 
   return (
@@ -57,7 +60,7 @@ const MultiLineOverflowText: React.FC<IProps> = ({
       ref={wrapperRef}
       className={classNames(styles.overflowText, className, {
         [styles.overflow]: overflow && !openStatus,
-        [styles.showMore]: isShowMore,
+        [styles.showMore]: isShowMore
       })}
       style={style}
     >
@@ -66,11 +69,11 @@ const MultiLineOverflowText: React.FC<IProps> = ({
           {content}
         </div>
       ) : (
-        <Tooltip title={content}>
+        <BasicToolTip title={content}>
           <div ref={contentRef} className={styles.content}>
             {content}
           </div>
-        </Tooltip>
+        </BasicToolTip>
       )}
 
       {isShowMore && overflow && (
@@ -85,11 +88,11 @@ const MultiLineOverflowText: React.FC<IProps> = ({
             openStatus
               ? formatMessage({
                   id: 'odc.component.MultiLineOverflowText.Fold',
-                  defaultMessage: '收起',
+                  defaultMessage: '收起'
                 }) //收起
               : formatMessage({
                   id: 'odc.component.MultiLineOverflowText.More',
-                  defaultMessage: '更多',
+                  defaultMessage: '更多'
                 }) //更多
           }
         </Button>

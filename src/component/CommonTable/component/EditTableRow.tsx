@@ -77,16 +77,20 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
             max: 100,
             message: formatMessage({
               id: 'src.component.CommonTable.component.2343D924',
-              defaultMessage: '备注字符不允许超过100',
-            }),
-          },
+              defaultMessage: '备注字符不允许超过100'
+            })
+          }
         ]}
       >
         <Input ref={inputRef} onPressEnter={save} onBlur={save} size="small" />
       </Form.Item>
     ) : (
       <Tooltip title={children} placement="topLeft">
-        <div className={styles.editbaleCellValueWarp} style={{ width }} onClick={toggleEdit}>
+        <div
+          className={styles.editbaleCellValueWarp}
+          style={{ width }}
+          onClick={toggleEdit}
+        >
           {children}
         </div>
       </Tooltip>

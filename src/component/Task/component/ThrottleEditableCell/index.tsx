@@ -28,7 +28,14 @@ interface IProps {
   readlOnly?: boolean;
 }
 const ThrottleEditableCell: React.FC<IProps> = (props) => {
-  const { defaultValue = 10, min, max, suffix, onOk, readlOnly = false } = props;
+  const {
+    defaultValue = 10,
+    min,
+    max,
+    suffix,
+    onOk,
+    readlOnly = false
+  } = props;
   const [isLmitRowEdit, setIsLmitRowEdit] = useState(false);
   const [lmitValue, setLmitValue] = useState(Number(defaultValue));
   const [status, setStatus] = useState(null);
@@ -46,8 +53,8 @@ const ThrottleEditableCell: React.FC<IProps> = (props) => {
       message.error(
         formatMessage({
           id: 'odc.src.component.Task.component.ThrottleEditableCell.CanNotBeEmpty',
-          defaultMessage: '不能为空!',
-        }), //'不能为空!'
+          defaultMessage: '不能为空!'
+        }) //'不能为空!'
       );
     }
   };
@@ -69,14 +76,14 @@ const ThrottleEditableCell: React.FC<IProps> = (props) => {
           <Action.Link onClick={handleOk}>
             <CheckOutlined
               style={{
-                color: 'var(--icon-green-color)',
+                color: 'var(--icon-green-color)'
               }}
             />
           </Action.Link>
           <Action.Link onClick={handleCancel}>
             <CloseOutlined
               style={{
-                color: 'var(--function-red6-color)',
+                color: 'var(--function-red6-color)'
               }}
             />
           </Action.Link>

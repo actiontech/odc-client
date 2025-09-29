@@ -32,13 +32,13 @@ const TraceList: React.FC<{
   if (innerTreeData.length === 1 && interator.done) {
     filters.push({
       text: interator.value,
-      value: interator.value,
+      value: interator.value
     });
   }
   while (!interator.done) {
     filters.push({
       text: interator.value,
-      value: interator.value,
+      value: interator.value
     });
     interator = setIter.next();
   }
@@ -50,19 +50,19 @@ const TraceList: React.FC<{
         dataIndex: 'spanId',
         key: 'spanId',
         ellipsis: {
-          showTitle: false,
+          showTitle: false
         },
         render: (text) => (
           <Tooltip title={text}>
             <span
               style={{
-                cursor: 'pointer',
+                cursor: 'pointer'
               }}
             >
               {text}
             </span>
           </Tooltip>
-        ),
+        )
       },
       {
         title: 'Span',
@@ -70,7 +70,7 @@ const TraceList: React.FC<{
         key: 'span',
         width: 200,
         ellipsis: {
-          showTitle: false,
+          showTitle: false
         },
         render: (text, record) => {
           const dataSource = [];
@@ -78,7 +78,7 @@ const TraceList: React.FC<{
             Object.keys(obj).forEach((key) => {
               dataSource.push({
                 label: key,
-                value: obj?.[key] || '-',
+                value: obj?.[key] || '-'
               });
             });
           });
@@ -88,7 +88,7 @@ const TraceList: React.FC<{
               content={
                 <div
                   style={{
-                    width: '400px',
+                    width: '400px'
                   }}
                 >
                   <InfoRender
@@ -96,21 +96,21 @@ const TraceList: React.FC<{
                       {
                         title: formatMessage({
                           id: 'odc.src.page.Workspace.components.Trace.Node',
-                          defaultMessage: '节点',
+                          defaultMessage: '节点'
                         }), //'节点'
                         render: () => (
                           <div className={styles.nodeTitle}>
                             <div
                               style={{
                                 width: '14px',
-                                height: '14px',
+                                height: '14px'
                               }}
                             >
                               {getIconByNodeType(record?.node)}
                             </div>
                             {record?.node} {record?.host}
                           </div>
-                        ),
+                        )
                       },
                       {
                         title: 'Span ID',
@@ -121,43 +121,46 @@ const TraceList: React.FC<{
                               key="copy"
                               text={record?.spanId}
                               style={{
-                                marginLeft: '8px',
+                                marginLeft: '8px'
                               }}
                               onCopy={() => {
                                 message.success(
                                   formatMessage({
                                     id: 'odc.src.page.Workspace.components.Trace.Replication.1',
-                                    defaultMessage: '复制成功',
-                                  }), //'复制成功'
+                                    defaultMessage: '复制成功'
+                                  }) //'复制成功'
                                 );
                               }}
                             >
                               <CopyOutlined />
                             </CopyToClipboard>
                           </>
-                        ),
+                        )
                       },
                       {
                         title: formatMessage({
                           id: 'odc.src.page.Workspace.components.Trace.StartingTime.1',
-                          defaultMessage: '开始时间',
+                          defaultMessage: '开始时间'
                         }), //'开始时间'
-                        render: () => record?.originStartTimestamp,
+                        render: () => record?.originStartTimestamp
                       },
                       {
                         title: formatMessage({
                           id: 'odc.src.page.Workspace.components.Trace.EndTime',
-                          defaultMessage: '结束时间',
+                          defaultMessage: '结束时间'
                         }), //'结束时间'
-                        render: () => record?.originEndTimestamp,
+                        render: () => record?.originEndTimestamp
                       },
                       {
                         title: formatMessage({
                           id: 'odc.src.page.Workspace.components.Trace.TimeConsuming',
-                          defaultMessage: '耗时',
+                          defaultMessage: '耗时'
                         }), //'耗时'
-                        render: () => formatTimeTemplatMicroSeconds(record?.elapseMicroSeconds),
-                      },
+                        render: () =>
+                          formatTimeTemplatMicroSeconds(
+                            record?.elapseMicroSeconds
+                          )
+                      }
                     ]}
                   />
 
@@ -165,7 +168,7 @@ const TraceList: React.FC<{
                     <>
                       <div
                         style={{
-                          margin: '8px 0px',
+                          margin: '8px 0px'
                         }}
                       >
                         Tags
@@ -173,7 +176,7 @@ const TraceList: React.FC<{
                       <DisplayTable
                         bordered={true}
                         expandable={{
-                          defaultExpandAllRows: true,
+                          defaultExpandAllRows: true
                         }}
                         disablePagination={true}
                         showHeader={false}
@@ -181,7 +184,7 @@ const TraceList: React.FC<{
                           {
                             title: 'label',
                             dataIndex: 'label',
-                            key: 'label',
+                            key: 'label'
                           },
                           {
                             title: 'value',
@@ -189,10 +192,12 @@ const TraceList: React.FC<{
                             key: 'value',
                             render: (text) => (
                               <Tooltip title={text}>
-                                <div className={styles.valueElliscape}>{text}</div>
+                                <div className={styles.valueElliscape}>
+                                  {text}
+                                </div>
                               </Tooltip>
-                            ),
-                          },
+                            )
+                          }
                         ]}
                         dataSource={dataSource}
                       />
@@ -205,12 +210,12 @@ const TraceList: React.FC<{
               <div className={styles.hover}>{text}</div>
             </Popover>
           );
-        },
+        }
       },
       {
         title: formatMessage({
           id: 'odc.src.page.Workspace.components.Trace.Node.1',
-          defaultMessage: '节点',
+          defaultMessage: '节点'
         }), //'节点'
         dataIndex: 'node',
         key: 'node',
@@ -223,38 +228,38 @@ const TraceList: React.FC<{
             <div
               style={{
                 width: '16px',
-                height: '16px',
+                height: '16px'
               }}
             >
               {getIconByNodeType(record?.node)}
             </div>
             {record?.node}
           </div>
-        ),
+        )
       },
       {
         title: formatMessage({
           id: 'odc.src.page.Workspace.components.Trace.StartingTime.2',
-          defaultMessage: '开始时间',
+          defaultMessage: '开始时间'
         }), //'开始时间'
         dataIndex: 'originStartTimestamp',
         key: 'originStartTimestamp',
         width: 200,
         ellipsis: true,
         sorter: (a, b) => a?.startTimestamp - b?.startTimestamp,
-        sortDirections: ['ascend', 'descend'],
+        sortDirections: ['ascend', 'descend']
       },
       {
         title: formatMessage({
           id: 'odc.src.page.Workspace.components.Trace.TimeConsuming.1',
-          defaultMessage: '耗时',
+          defaultMessage: '耗时'
         }), //'耗时'
         dataIndex: 'elapseMicroSeconds',
         key: 'elapseMicroSeconds',
         width: 100,
         sorter: (a, b) => a?.elapseMicroSeconds - b?.elapseMicroSeconds,
-        render: (text) => formatTimeTemplatMicroSeconds(text),
-      },
+        render: (text) => formatTimeTemplatMicroSeconds(text)
+      }
     ];
   };
   const columns = getColumns();
@@ -263,7 +268,7 @@ const TraceList: React.FC<{
       <DisplayTable
         bordered={true}
         expandable={{
-          defaultExpandAllRows: true,
+          defaultExpandAllRows: true
         }}
         disablePagination={true}
         columns={columns}

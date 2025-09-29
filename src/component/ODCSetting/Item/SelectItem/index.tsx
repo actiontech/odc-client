@@ -15,20 +15,10 @@ import { formatMessage } from '@/util/intl';
  * limitations under the License.
  */
 
-import {
-  Badge,
-  Checkbox,
-  Radio,
-  RadioGroupProps,
-  Select,
-  SelectProps,
-  Space,
-  Tag,
-  Typography,
-} from 'antd';
+import { Checkbox, SelectProps, Space, Tag, Typography } from 'antd';
 import { useState } from 'react';
-import React from 'react';
 import styles from './index.less';
+import { BasicSelect } from '@actiontech/dms-kit';
 
 export default function SelectItem(props: {
   options: SelectProps['options'];
@@ -52,7 +42,7 @@ export default function SelectItem(props: {
               <Typography.Text type="secondary">
                 {formatMessage({
                   id: 'src.component.ODCSetting.Item.SelectItem.C99AE9F7',
-                  defaultMessage: '默认',
+                  defaultMessage: '默认'
                 })}
               </Typography.Text>
             </Tag>
@@ -67,7 +57,7 @@ export default function SelectItem(props: {
           >
             {formatMessage({
               id: 'src.component.ODCSetting.Item.SelectItem.56CA55CD',
-              defaultMessage: '设为默认值',
+              defaultMessage: '设为默认值'
             })}
           </span>
         </Space>
@@ -76,7 +66,7 @@ export default function SelectItem(props: {
   };
 
   return props?.config?.showDefault ? (
-    <Select
+    <BasicSelect
       style={{ width: props.config?.width || 140 }}
       tagRender={(tag) => {
         return (
@@ -85,7 +75,7 @@ export default function SelectItem(props: {
             {selectedValue === tag.value
               ? formatMessage({
                   id: 'src.component.ODCSetting.Item.SelectItem.4A6D93E1',
-                  defaultMessage: '-默认',
+                  defaultMessage: '-默认'
                 })
               : ''}
           </Tag>
@@ -110,7 +100,7 @@ export default function SelectItem(props: {
       }}
     />
   ) : (
-    <Select
+    <BasicSelect
       style={{ width: props.config?.width || 140 }}
       options={props.options}
       key={props.value}

@@ -25,7 +25,7 @@ interface IODCErrorHandle {
     url: string,
     params,
     data,
-    requestId?: string | number,
+    requestId?: string | number
   ): boolean;
 }
 
@@ -49,11 +49,31 @@ export class ODC {
   public ODCErrorHandle: Set<IODCErrorHandle> = new Set();
 
   public ODCRequest: {
-    get(url: string, data?: Record<string, any>, params?: Record<string, any>): Promise<any>;
-    post(url: string, data?: Record<string, any>, params?: Record<string, any>): Promise<any>;
-    put(url: string, data?: Record<string, any>, params?: Record<string, any>): Promise<any>;
-    patch(url: string, data?: Record<string, any>, params?: Record<string, any>): Promise<any>;
-    delete(url: string, data?: Record<string, any>, params?: Record<string, any>): Promise<any>;
+    get(
+      url: string,
+      data?: Record<string, any>,
+      params?: Record<string, any>
+    ): Promise<any>;
+    post(
+      url: string,
+      data?: Record<string, any>,
+      params?: Record<string, any>
+    ): Promise<any>;
+    put(
+      url: string,
+      data?: Record<string, any>,
+      params?: Record<string, any>
+    ): Promise<any>;
+    patch(
+      url: string,
+      data?: Record<string, any>,
+      params?: Record<string, any>
+    ): Promise<any>;
+    delete(
+      url: string,
+      data?: Record<string, any>,
+      params?: Record<string, any>
+    ): Promise<any>;
   } = null;
 
   public requestParamsResolver: IRequestParamsResolver;

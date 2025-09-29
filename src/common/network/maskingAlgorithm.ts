@@ -15,20 +15,23 @@
  */
 
 import { IResponseData } from '@/d.ts';
-import { IMaskingAlgorithm, MaskingAlgorithmType } from '@/d.ts/maskingAlgorithm';
+import {
+  IMaskingAlgorithm,
+  MaskingAlgorithmType
+} from '@/d.ts/maskingAlgorithm';
 import request from '@/util/request';
 
 export async function testMaskingAlgorithm(
   maskingAlgorithmId: number,
-  sample: string,
+  sample: string
 ): Promise<IMaskingAlgorithm> {
   const ret = await request.post(
     `/api/v2/datasecurity/maskingAlgorithms/${maskingAlgorithmId}/test`,
     {
       params: {
-        sample,
-      },
-    },
+        sample
+      }
+    }
   );
   return ret?.data;
 }
@@ -40,13 +43,17 @@ export async function listMaskingAlgorithm(
     sort: string;
     page: number;
     size: number;
-  }>,
+  }>
 ): Promise<IResponseData<IMaskingAlgorithm>> {
-  const ret = await request.get(`/api/v2/datasecurity/maskingAlgorithms/`, { params });
+  const ret = await request.get(`/api/v2/datasecurity/maskingAlgorithms/`, {
+    params
+  });
   return ret?.data;
 }
 
-export async function detailMaskingAlgorithm(id: number): Promise<IMaskingAlgorithm> {
+export async function detailMaskingAlgorithm(
+  id: number
+): Promise<IMaskingAlgorithm> {
   const ret = await request.get(`/api/v2/datasecurity/maskingAlgorithms/${id}`);
   return ret?.data;
 }

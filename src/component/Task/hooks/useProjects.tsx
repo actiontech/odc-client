@@ -23,7 +23,7 @@ export const useProjects = () => {
   const [projectMap, setProjectMap] = useState<Record<number, string>>({});
   const projectOptions = projects?.map(({ name, id }) => ({
     label: name,
-    value: id,
+    value: id
   }));
 
   const loadProjects = async () => {
@@ -40,6 +40,6 @@ export const useProjects = () => {
     projects,
     projectMap,
     projectOptions,
-    loadProjects,
+    loadProjects
   };
 };

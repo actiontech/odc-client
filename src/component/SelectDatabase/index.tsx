@@ -18,8 +18,9 @@ import { getConnectionList } from '@/common/network/connection';
 import SessionSelect from '@/page/Workspace/components/SessionContextWrap/SessionSelect/SelectItem';
 import { ModalStore } from '@/store/modal';
 import { formatMessage } from '@/util/intl';
+import { BasicButton, BasicModal } from '@actiontech/dms-kit';
 import { useRequest } from 'ahooks';
-import { Form, Modal } from 'antd';
+import { Form, Space } from 'antd';
 import { inject, observer } from 'mobx-react';
 
 interface IProps {
@@ -36,37 +37,48 @@ function SelectModal({ modalStore }: IProps) {
       {
         page: 1,
         size: 9999,
-        minPrivilege: 'update',
-      },
-    ],
+        minPrivilege: 'update'
+      }
+    ]
   });
   const [form] = Form.useForm<{ dataSourceId: number }>();
 
+  const handleOk = async () => {
+    const data = await form.validateFields();
+    if (!data?.dataSourceId) {
+      return;
+    }
+    await modalStore.selectDatabaseModalData?.onOk(data?.dataSourceId);
+    modalStore.changeSelectDatabaseVisible(false);
+    form.resetFields();
+  };
+
   return (
-    <Modal
+    <BasicModal
       title={formatMessage({
         id: 'odc.component.SelectDatabase.component.SelectADataSource',
-        defaultMessage: '选择数据源',
+        defaultMessage: '选择数据源'
       })} /*选择数据源*/
       open={modalStore.selectDatabaseVisible}
       onCancel={onClose}
-      onOk={async () => {
-        const data = await form.validateFields();
-        if (!data?.dataSourceId) {
-          return;
-        }
-        await modalStore.selectDatabaseModalData?.onOk(data?.dataSourceId);
-        modalStore.changeSelectDatabaseVisible(false);
-        form.resetFields();
-      }}
+      footer={
+        <Space>
+          <BasicButton onClick={onClose}>
+            {formatMessage({ id: 'app.button.cancel', defaultMessage: '取消' })}
+          </BasicButton>
+          <BasicButton type="primary" onClick={handleOk}>
+            {formatMessage({ id: 'app.button.ok', defaultMessage: '确定' })}
+          </BasicButton>
+        </Space>
+      }
     >
-      <Form form={form} layout="vertical">
+      <Form form={form}>
         <Form.Item
           name={'dataSourceId'}
           rules={[{ required: true }]}
           label={formatMessage({
             id: 'odc.component.SelectDatabase.component.DataSource',
-            defaultMessage: '数据源',
+            defaultMessage: '数据源'
           })} /*数据源*/
         >
           <SessionSelect
@@ -79,7 +91,7 @@ function SelectModal({ modalStore }: IProps) {
           />
         </Form.Item>
       </Form>
-    </Modal>
+    </BasicModal>
   );
 }
 

@@ -46,7 +46,10 @@ const FlowModal: React.FC<IProps> = function (props) {
       getTask(id);
     }
   }, [id]);
-  const handleApprovalVisible = (approvalStatus: boolean = false, visible: boolean = false) => {
+  const handleApprovalVisible = (
+    approvalStatus: boolean = false,
+    visible: boolean = false
+  ) => {
     setApprovalVisible(visible);
     setApprovalStatus(approvalStatus);
   };
@@ -57,7 +60,7 @@ const FlowModal: React.FC<IProps> = function (props) {
       onClose={onClose}
       title={formatMessage({
         id: 'odc.component.CommonTaskDetailModal.FlowModal.ApprovalRecord',
-        defaultMessage: '审批记录',
+        defaultMessage: '审批记录'
       })}
       /*审批记录*/ destroyOnClose
       rootClassName={styles.flowDrawer}
@@ -73,7 +76,7 @@ const FlowModal: React.FC<IProps> = function (props) {
               {
                 formatMessage({
                   id: 'odc.src.component.Task.component.CommonDetailModal.Pass',
-                  defaultMessage: '通过',
+                  defaultMessage: '通过'
                 }) /* 
           通过
           */
@@ -87,7 +90,7 @@ const FlowModal: React.FC<IProps> = function (props) {
               {
                 formatMessage({
                   id: 'odc.src.component.Task.component.CommonDetailModal.Reject',
-                  defaultMessage: '拒绝',
+                  defaultMessage: '拒绝'
                 }) /* 
           拒绝
           */
@@ -103,7 +106,7 @@ const FlowModal: React.FC<IProps> = function (props) {
           {
             formatMessage({
               id: 'odc.component.CommonTaskDetailModal.FlowModal.ActionEvents',
-              defaultMessage: '操作事件：',
+              defaultMessage: '操作事件：'
             }) /*操作事件：*/
           }
         </span>

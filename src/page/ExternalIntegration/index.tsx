@@ -26,35 +26,38 @@ interface IProps {}
 
 const Pages = {
   [IPageType.ExternalIntegration_Approval]: {
-    component: SqlInterceptor,
+    component: SqlInterceptor
   },
   [IPageType.ExternalIntegration_Sql]: {
-    component: SqlInterceptor,
+    component: SqlInterceptor
   },
   [IPageType.ExternalIntegration_SSO]: {
-    component: SSO,
-  },
+    component: SSO
+  }
 };
 
 const tabs = [
   {
     tab: formatMessage({
       id: 'odc.page.ExternalIntegration.ApprovalIntegration',
-      defaultMessage: '审批集成',
+      defaultMessage: '审批集成'
     }), //审批集成
-    key: IPageType.ExternalIntegration_Approval,
+    key: IPageType.ExternalIntegration_Approval
   },
   {
     tab: formatMessage({
       id: 'odc.page.ExternalIntegration.SqlAuditIntegration',
-      defaultMessage: 'SQL 审核集成',
+      defaultMessage: 'SQL 审核集成'
     }), //SQL 审核集成
-    key: IPageType.ExternalIntegration_Sql,
+    key: IPageType.ExternalIntegration_Sql
   },
   {
-    tab: formatMessage({ id: 'src.page.ExternalIntegration.B29CC4F4', defaultMessage: '登录集成' }), //'登录集成'
-    key: IPageType.ExternalIntegration_SSO,
-  },
+    tab: formatMessage({
+      id: 'src.page.ExternalIntegration.B29CC4F4',
+      defaultMessage: '登录集成'
+    }), //'登录集成'
+    key: IPageType.ExternalIntegration_SSO
+  }
 ];
 
 const Index: React.FC<IProps> = function () {
@@ -72,8 +75,8 @@ const Index: React.FC<IProps> = function () {
         type: TitleType.TEXT,
         title: formatMessage({
           id: 'odc.page.ExternalIntegration.ExternalIntegration',
-          defaultMessage: '外部集成',
-        }), //外部集成
+          defaultMessage: '外部集成'
+        }) //外部集成
       }}
       tabList={tabs}
       tabActiveKey={page}

@@ -18,7 +18,7 @@ import React, { useContext, useRef, useState } from 'react';
 // compatible
 import { formatMessage } from '@/util/intl';
 import { EditOutlined, SyncOutlined } from '@ant-design/icons';
-import { Button, Space } from 'antd';
+import { Button, Space, Typography } from 'antd';
 // @ts-ignore
 import { generateUpdateTableDDL } from '@/common/network/table';
 import HelpDoc from '@/component/helpDoc';
@@ -37,8 +37,10 @@ import { DBType } from '@/d.ts/database';
 import LogicTableBaseInfo from './LogicTableBaseInfo';
 import {
   PropsTab as TablePropsTab,
-  TopTab as TableTopTab,
+  TopTab as TableTopTab
 } from '@/page/Workspace/components/TablePage';
+import { TableBaseInfoFormStyleWrapper } from './style';
+import { BasicButton } from '@actiontech/dms-kit';
 
 interface IProps {
   pageKey?: string;
@@ -46,292 +48,297 @@ interface IProps {
   isExternalTable?: boolean;
 }
 
-const ShowTableBaseInfoForm: React.FC<IProps> = ({ pageKey, dbType, isExternalTable }) => {
+const ShowTableBaseInfoForm: React.FC<IProps> = ({
+  pageKey,
+  dbType,
+  isExternalTable
+}) => {
   const tableContext = useContext(TablePageContext);
   const session = tableContext.session;
   const table = tableContext?.table;
   const [isEditing, setIsEditing] = useState(false);
   const formRef = useRef<FormInstance<any>>();
 
-  return dbType === DBType.LOGICAL ? (
-    <LogicTableBaseInfo table={table} />
-  ) : (
-    <div>
-      {isEditing ? (
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            lineHeight: '38px',
-            height: 38,
-            borderBottom: '1px solid var(--divider-color)',
-            padding: '0px 12px',
-          }}
-        >
-          <span>
-            {
-              formatMessage({
-                id: 'odc.components.ShowTableBaseInfoForm.Editing',
-                defaultMessage: '编辑',
-              })
-              /* 编辑 */
-            }
-          </span>
-          <Space>
-            <Button onClick={() => setIsEditing(false)}>
-              {
-                formatMessage({
-                  id: 'odc.components.ShowTableBaseInfoForm.Cancel',
-                  defaultMessage: '取消',
-                })
-                /* 取消 */
-              }
-            </Button>
-            <Button
-              type="primary"
-              onClick={async () => {
-                const data = await formRef.current.validateFields();
-                if (data) {
-                  // 字符集和排序不允许修改
-                  const { collation, character, ...rest } = data;
-                  const newData = cloneDeep(table);
-                  Object.assign(newData.info, rest);
-                  const { sql: updateTableDML, tip } = await generateUpdateTableDDL(
-                    newData,
-                    table,
-                    session.sessionId,
-                    session.database.dbName,
-                  );
-                  if (!updateTableDML) {
-                    return;
-                  }
-                  await tableContext.showExecuteModal?.(
-                    updateTableDML,
-                    tableContext?.table?.info?.tableName,
-                    async () => {
-                      if (newData.info.tableName !== table.info?.tableName) {
-                        const newTableName = newData.info.tableName;
-                        await session.database.getTableList();
-                        const params = page.pages.find((p) => p.key === pageKey)
-                          ?.params as TablePage['pageParams'];
-                        const tablePage = new TablePage(
-                          params?.databaseId,
-                          newTableName,
-                          TableTopTab.PROPS,
-                          TablePropsTab.INFO,
-                          params?.tableId,
-                        );
-                        await page.updatePage(
-                          pageKey,
-                          {
-                            title: newTableName,
-                            updateKey: tablePage?.pageKey,
-                          },
-
-                          {
-                            tableName: newTableName,
-                          },
-                        );
-                      } else {
-                        /**
-                         * 名字改的时候不需要手动调用，外面的effect会自动刷新
-                         */
-                        await tableContext.onRefresh();
-                      }
-                      setIsEditing(false);
-                    },
-                    tip,
-                    () => setIsEditing(false),
-                  );
-                }
-              }}
-            >
-              {
-                formatMessage({
-                  id: 'odc.components.ShowTableBaseInfoForm.Determine',
-                  defaultMessage: '确定',
-                })
-                /* 确定 */
-              }
-            </Button>
-          </Space>
-        </div>
+  return (
+    <TableBaseInfoFormStyleWrapper>
+      {dbType === DBType.LOGICAL ? (
+        <LogicTableBaseInfo table={table} />
       ) : (
-        <Toolbar>
-          {/* 外表不支持编辑 */}
-          {isExternalTable ? null : (
-            <Toolbar.Button
-              icon={<EditOutlined />}
-              text={formatMessage({
-                id: 'odc.components.ShowTableBaseInfoForm.Editing',
-                defaultMessage: '编辑',
-              })}
-              /* 编辑 */ onClick={() => setIsEditing(true)}
-            />
+        <>
+          {isEditing ? (
+            <div className="editing-header">
+              <Typography.Title level={5}>
+                {
+                  formatMessage({
+                    id: 'odc.components.ShowTableBaseInfoForm.Editing',
+                    defaultMessage: '编辑'
+                  })
+                  /* 编辑 */
+                }
+              </Typography.Title>
+              <Space>
+                <BasicButton onClick={() => setIsEditing(false)}>
+                  {
+                    formatMessage({
+                      id: 'odc.components.ShowTableBaseInfoForm.Cancel',
+                      defaultMessage: '取消'
+                    })
+                    /* 取消 */
+                  }
+                </BasicButton>
+                <BasicButton
+                  type="primary"
+                  onClick={async () => {
+                    const data = await formRef.current.validateFields();
+                    if (data) {
+                      // 字符集和排序不允许修改
+                      const { collation, character, ...rest } = data;
+                      const newData = cloneDeep(table);
+                      Object.assign(newData.info, rest);
+                      const { sql: updateTableDML, tip } =
+                        await generateUpdateTableDDL(
+                          newData,
+                          table,
+                          session.sessionId,
+                          session.database.dbName
+                        );
+                      if (!updateTableDML) {
+                        return;
+                      }
+                      await tableContext.showExecuteModal?.(
+                        updateTableDML,
+                        tableContext?.table?.info?.tableName,
+                        async () => {
+                          if (
+                            newData.info.tableName !== table.info?.tableName
+                          ) {
+                            const newTableName = newData.info.tableName;
+                            await session.database.getTableList();
+                            const params = page.pages.find(
+                              (p) => p.key === pageKey
+                            )?.params as TablePage['pageParams'];
+                            const tablePage = new TablePage(
+                              params?.databaseId,
+                              newTableName,
+                              TableTopTab.PROPS,
+                              TablePropsTab.INFO,
+                              params?.tableId
+                            );
+                            await page.updatePage(
+                              pageKey,
+                              {
+                                title: newTableName,
+                                updateKey: tablePage?.pageKey
+                              },
+
+                              {
+                                tableName: newTableName
+                              }
+                            );
+                          } else {
+                            /**
+                             * 名字改的时候不需要手动调用，外面的effect会自动刷新
+                             */
+                            await tableContext.onRefresh();
+                          }
+                          setIsEditing(false);
+                        },
+                        tip,
+                        () => setIsEditing(false)
+                      );
+                    }
+                  }}
+                >
+                  {
+                    formatMessage({
+                      id: 'odc.components.ShowTableBaseInfoForm.Determine',
+                      defaultMessage: '确定'
+                    })
+                    /* 确定 */
+                  }
+                </BasicButton>
+              </Space>
+            </div>
+          ) : (
+            <Toolbar>
+              {/* 外表不支持编辑 */}
+              {isExternalTable ? null : (
+                <Toolbar.Button
+                  icon={<EditOutlined />}
+                  text={formatMessage({
+                    id: 'odc.components.ShowTableBaseInfoForm.Editing',
+                    defaultMessage: '编辑'
+                  })}
+                  /* 编辑 */ onClick={() => setIsEditing(true)}
+                />
+              )}
+
+              <Toolbar.Button
+                icon={<SyncOutlined />}
+                text={formatMessage({
+                  id: 'odc.components.ShowTableBaseInfoForm.Refresh',
+                  defaultMessage: '刷新'
+                })}
+                /* 刷新 */ onClick={tableContext.onRefresh}
+              />
+            </Toolbar>
           )}
 
-          <Toolbar.Button
-            icon={<SyncOutlined />}
-            text={formatMessage({
-              id: 'odc.components.ShowTableBaseInfoForm.Refresh',
-              defaultMessage: '刷新',
-            })}
-            /* 刷新 */ onClick={tableContext.onRefresh}
-          />
-        </Toolbar>
-      )}
-
-      {isEditing ? (
-        <div style={{ padding: 12 }}>
-          <TableContext.Provider
-            value={{
-              info: table?.info,
-              session,
-            }}
-          >
-            <CreateTableBaseInfoForm formRef={formRef} isEdit={true} />
-          </TableContext.Provider>
-        </div>
-      ) : (
-        <ObjectInfoView
-          data={[
-            {
-              label: formatMessage({
-                id: 'workspace.window.createTable.baseInfo.tableName',
-                defaultMessage: '表名称',
-              }),
-
-              content: table?.info?.tableName,
-            },
-            {
-              label: formatMessage({
-                id: 'src.page.Workspace.components.TablePage.ShowTableBaseInfoForm.52095769',
-                defaultMessage: '表类型',
-              }),
-              content: isExternalTable
-                ? formatMessage({
-                    id: 'src.page.Workspace.components.TablePage.ShowTableBaseInfoForm.3C463D88',
-                    defaultMessage: '外表',
-                  })
-                : formatMessage({
-                    id: 'src.page.Workspace.components.TablePage.ShowTableBaseInfoForm.B7A406C8',
-                    defaultMessage: '表',
+          {isEditing ? (
+            <div className="editing-content">
+              <TableContext.Provider
+                value={{
+                  info: table?.info,
+                  session
+                }}
+              >
+                <CreateTableBaseInfoForm formRef={formRef} isEdit={true} />
+              </TableContext.Provider>
+            </div>
+          ) : (
+            <ObjectInfoView
+              data={[
+                {
+                  label: formatMessage({
+                    id: 'workspace.window.createTable.baseInfo.tableName',
+                    defaultMessage: '表名称'
                   }),
-            },
 
-            {
-              label: formatMessage({
-                id: 'workspace.window.createTable.baseInfo.character',
-                defaultMessage: '默认字符集',
-              }),
+                  content: table?.info?.tableName
+                },
+                {
+                  label: formatMessage({
+                    id: 'src.page.Workspace.components.TablePage.ShowTableBaseInfoForm.52095769',
+                    defaultMessage: '表类型'
+                  }),
+                  content: isExternalTable
+                    ? formatMessage({
+                        id: 'src.page.Workspace.components.TablePage.ShowTableBaseInfoForm.3C463D88',
+                        defaultMessage: '外表'
+                      })
+                    : formatMessage({
+                        id: 'src.page.Workspace.components.TablePage.ShowTableBaseInfoForm.B7A406C8',
+                        defaultMessage: '表'
+                      })
+                },
 
-              content: table?.info?.character || 'utf8mb4',
-            },
+                {
+                  label: formatMessage({
+                    id: 'workspace.window.createTable.baseInfo.character',
+                    defaultMessage: '默认字符集'
+                  }),
 
-            {
-              label: formatMessage({
-                id: 'workspace.window.createTable.baseInfo.collation',
-                defaultMessage: '默认排序规则',
-              }),
+                  content: table?.info?.character || 'utf8mb4'
+                },
 
-              content: table?.info?.collation || 'utf8mb4',
-            },
+                {
+                  label: formatMessage({
+                    id: 'workspace.window.createTable.baseInfo.collation',
+                    defaultMessage: '默认排序规则'
+                  }),
 
-            {
-              label: formatMessage({
-                id: 'workspace.window.createTable.baseInfo.comment',
-                defaultMessage: '描述',
-              }),
+                  content: table?.info?.collation || 'utf8mb4'
+                },
 
-              content:
-                table?.info?.comment ||
-                formatMessage({
-                  id: 'odc.components.ShowTableBaseInfoForm.Empty',
-                  defaultMessage: '空',
-                }),
-              // 空
-            },
-            {
-              label: formatMessage({
-                id: 'odc.TablePage.ShowTableBaseInfoForm.Owner',
-                defaultMessage: '所有者',
-              }), //所有者
-              content:
-                table?.info?.owner ||
-                formatMessage({
-                  id: 'odc.components.ShowTableBaseInfoForm.Empty',
-                  defaultMessage: '空',
-                }),
-              // 空
-            },
-            {
-              label: formatMessage({
-                id: 'odc.TablePage.ShowTableBaseInfoForm.LastModifiedDate',
-                defaultMessage: '最近修改日期',
-              }), //最近修改日期
-              content:
-                getLocalFormatDateTime(table?.info?.updateTime) ||
-                formatMessage({
-                  id: 'odc.components.ShowTableBaseInfoForm.Empty',
-                  defaultMessage: '空',
-                }),
-              // 空
-            },
-            {
-              label: formatMessage({
-                id: 'odc.TablePage.ShowTableBaseInfoForm.RowDataVolume',
-                defaultMessage: '行数据量',
-              }), //行数据量 //行数据量
-              content: (
-                <HelpDoc
-                  {...{
-                    doc: 'tableRowcountToolTip',
-                    leftText: true,
-                    isTip: true,
-                  }}
-                >
-                  {table?.info?.rowCount ||
+                {
+                  label: formatMessage({
+                    id: 'workspace.window.createTable.baseInfo.comment',
+                    defaultMessage: '描述'
+                  }),
+
+                  content:
+                    table?.info?.comment ||
                     formatMessage({
                       id: 'odc.components.ShowTableBaseInfoForm.Empty',
-                      defaultMessage: '空',
-                    })}
-                </HelpDoc>
-              ),
-
-              // 空
-            },
-            {
-              label: formatMessage({
-                id: 'odc.TablePage.ShowTableBaseInfoForm.Size',
-                defaultMessage: '大小',
-              }), //大小 //大小
-              content: (
-                <HelpDoc
-                  {...{
-                    doc: 'tableSizeToolTip',
-                    leftText: true,
-                    isTip: true,
-                  }}
-                >
-                  {table?.info?.tableSize ||
+                      defaultMessage: '空'
+                    })
+                  // 空
+                },
+                {
+                  label: formatMessage({
+                    id: 'odc.TablePage.ShowTableBaseInfoForm.Owner',
+                    defaultMessage: '所有者'
+                  }), //所有者
+                  content:
+                    table?.info?.owner ||
                     formatMessage({
                       id: 'odc.components.ShowTableBaseInfoForm.Empty',
-                      defaultMessage: '空',
-                    })}
-                </HelpDoc>
-              ),
-            },
-            !!table?.info?.columnGroups?.length && {
-              label: formatMessage({
-                id: 'src.page.Workspace.components.TablePage.ShowTableBaseInfoForm.FC24F422',
-                defaultMessage: '存储模式',
-              }),
-              content: table?.info?.columnGroups?.map((c) => columnGroupsText[c]).join(', '),
-            },
-          ].filter(Boolean)}
-        />
+                      defaultMessage: '空'
+                    })
+                  // 空
+                },
+                {
+                  label: formatMessage({
+                    id: 'odc.TablePage.ShowTableBaseInfoForm.LastModifiedDate',
+                    defaultMessage: '最近修改日期'
+                  }), //最近修改日期
+                  content:
+                    getLocalFormatDateTime(table?.info?.updateTime) ||
+                    formatMessage({
+                      id: 'odc.components.ShowTableBaseInfoForm.Empty',
+                      defaultMessage: '空'
+                    })
+                  // 空
+                },
+                {
+                  label: formatMessage({
+                    id: 'odc.TablePage.ShowTableBaseInfoForm.RowDataVolume',
+                    defaultMessage: '行数据量'
+                  }), //行数据量 //行数据量
+                  content: (
+                    <HelpDoc
+                      {...{
+                        doc: 'tableRowcountToolTip',
+                        leftText: true,
+                        isTip: true
+                      }}
+                    >
+                      {table?.info?.rowCount ||
+                        formatMessage({
+                          id: 'odc.components.ShowTableBaseInfoForm.Empty',
+                          defaultMessage: '空'
+                        })}
+                    </HelpDoc>
+                  )
+
+                  // 空
+                },
+                {
+                  label: formatMessage({
+                    id: 'odc.TablePage.ShowTableBaseInfoForm.Size',
+                    defaultMessage: '大小'
+                  }), //大小 //大小
+                  content: (
+                    <HelpDoc
+                      {...{
+                        doc: 'tableSizeToolTip',
+                        leftText: true,
+                        isTip: true
+                      }}
+                    >
+                      {table?.info?.tableSize ||
+                        formatMessage({
+                          id: 'odc.components.ShowTableBaseInfoForm.Empty',
+                          defaultMessage: '空'
+                        })}
+                    </HelpDoc>
+                  )
+                },
+                !!table?.info?.columnGroups?.length && {
+                  label: formatMessage({
+                    id: 'src.page.Workspace.components.TablePage.ShowTableBaseInfoForm.FC24F422',
+                    defaultMessage: '存储模式'
+                  }),
+                  content: table?.info?.columnGroups
+                    ?.map((c) => columnGroupsText[c])
+                    .join(', ')
+                }
+              ].filter(Boolean)}
+            />
+          )}
+        </>
       )}
-    </div>
+    </TableBaseInfoFormStyleWrapper>
   );
 };
 

@@ -17,7 +17,7 @@
 import {
   getScanningResults,
   ScannResultType,
-  startScanning,
+  startScanning
 } from '@/common/network/sensitiveColumn';
 import { ESensitiveColumnType, ISensitiveColumn } from '@/d.ts/sensitiveColumn';
 import ProjectContext from '@/page/Project/ProjectContext';
@@ -25,7 +25,11 @@ import { maskRuleTypeMap } from '@/page/Secure/MaskingAlgorithm';
 import { ReactComponent as TableOutlined } from '@/svgr/menuTable.svg';
 import { ReactComponent as ViewSvg } from '@/svgr/menuView.svg';
 import { formatMessage } from '@/util/intl';
-import Icon, { CheckCircleFilled, DeleteOutlined, SyncOutlined } from '@ant-design/icons';
+import Icon, {
+  CheckCircleFilled,
+  DeleteOutlined,
+  SyncOutlined
+} from '@ant-design/icons';
 import {
   Button,
   Collapse,
@@ -38,7 +42,7 @@ import {
   Select,
   Space,
   Table,
-  Tooltip,
+  Tooltip
 } from 'antd';
 import classnames from 'classnames';
 import React, {
@@ -47,7 +51,7 @@ import React, {
   useEffect,
   useImperativeHandle,
   useRef,
-  useState,
+  useState
 } from 'react';
 import { PopoverContainer } from '..';
 import { ScanTableData, ScanTableDataItem } from '../../../interface';
@@ -60,11 +64,18 @@ interface IScanFormProps {
   _formRef: FormInstance<any>;
   setSensitiveColumns: React.Dispatch<React.SetStateAction<ISensitiveColumn[]>>;
   setFormData: React.Dispatch<React.SetStateAction<Object>>;
-  setManageSensitiveRuleDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setManageSensitiveRuleDrawerOpen: React.Dispatch<
+    React.SetStateAction<boolean>
+  >;
 }
 const ScanForm = (props: IScanFormProps, ref) => {
-  const { formRef, _formRef, setFormData, setSensitiveColumns, setManageSensitiveRuleDrawerOpen } =
-    props;
+  const {
+    formRef,
+    _formRef,
+    setFormData,
+    setSensitiveColumns,
+    setManageSensitiveRuleDrawerOpen
+  } = props;
   const projectContext = useContext(ProjectContext);
   const sensitiveContext = useContext(SensitiveContext);
   const timer = useRef(null);
@@ -76,9 +87,13 @@ const ScanForm = (props: IScanFormProps, ref) => {
   const [successful, setSuccessful] = useState<boolean>(false);
   const [searchText, setSearchText] = useState<string>('');
   const [scanTableData, setScanTableData] = useState<ScanTableData[]>([]);
-  const [originScanTableData, setOriginScanTableData] = useState<ScanTableData[]>([]);
+  const [originScanTableData, setOriginScanTableData] = useState<
+    ScanTableData[]
+  >([]);
   const [activeKeys, setActiveKeys] = useState<string | string[]>(['0']);
-  const [sensitiveColumnMap, setSensitiveColumnMap] = useState<Map<string, any>>(new Map());
+  const [sensitiveColumnMap, setSensitiveColumnMap] = useState<
+    Map<string, any>
+  >(new Map());
   const reset = () => {
     setTaskId(null);
     setScanStatus(null);
@@ -104,12 +119,14 @@ const ScanForm = (props: IScanFormProps, ref) => {
     const resData = [];
     sensitiveColumnMap.forEach((sc, key) => {
       const filterColumn = sc?.dataSource?.filter((item) =>
-        item?.columnName?.toLowerCase()?.includes(searchText?.toLocaleLowerCase()),
+        item?.columnName
+          ?.toLowerCase()
+          ?.includes(searchText?.toLocaleLowerCase())
       );
       if (filterColumn?.length > 0) {
         resData.push({
           header: sc?.header,
-          dataSource: filterColumn,
+          dataSource: filterColumn
         });
       }
     });
@@ -144,7 +161,8 @@ const ScanForm = (props: IScanFormProps, ref) => {
   };
   const handleScanning = async (taskId: string) => {
     const rawData = await getScanningResults(projectContext.projectId, taskId);
-    const { status, sensitiveColumns, allTableCount, finishedTableCount } = rawData;
+    const { status, sensitiveColumns, allTableCount, finishedTableCount } =
+      rawData;
     if ([ScannResultType.FAILED, ScannResultType.SUCCESS].includes(status)) {
       const dataSourceMap = new Map();
       setSensitiveColumns(sensitiveColumns);
@@ -154,7 +172,7 @@ const ScanForm = (props: IScanFormProps, ref) => {
           dataSourceMap.get(key)?.dataSource?.push({
             columnName: d.columnName,
             sensitiveRuleId: d.sensitiveRuleId,
-            maskingAlgorithmId: d.maskingAlgorithmId,
+            maskingAlgorithmId: d.maskingAlgorithmId
           });
         } else {
           dataSourceMap.set(key, {
@@ -162,21 +180,21 @@ const ScanForm = (props: IScanFormProps, ref) => {
               database: d.database.name,
               databaseId: d.database.databaseId,
               tableName: d.tableName,
-              type: d.type,
+              type: d.type
             },
             dataSource: [
               {
                 columnName: d.columnName,
                 sensitiveRuleId: d.sensitiveRuleId,
-                maskingAlgorithmId: d.maskingAlgorithmId,
-              },
-            ],
+                maskingAlgorithmId: d.maskingAlgorithmId
+              }
+            ]
           });
         }
       });
       dataSourceMap.forEach((value, key) => {
         value.dataSource = value.dataSource.sort((a, b) =>
-          a?.columnName?.localeCompare(b?.columnName),
+          a?.columnName?.localeCompare(b?.columnName)
         );
         dataSourceMap.set(key, value);
       });
@@ -191,8 +209,8 @@ const ScanForm = (props: IScanFormProps, ref) => {
           ? ['0']
           : rawFormData?.map(
               ({ header: { database, tableName, type }, dataSource }, index) =>
-                `${database}_${type}_${tableName}`,
-            ),
+                `${database}_${type}_${tableName}`
+            )
       );
       setScanTableData(rawFormData);
       setOriginScanTableData(rawFormData);
@@ -202,19 +220,21 @@ const ScanForm = (props: IScanFormProps, ref) => {
         const { database = '', tableName, type, databaseId } = header;
         scanTableData[database] = scanTableData?.[database] || {
           [ESensitiveColumnType.TABLE_COLUMN]: {},
-          [ESensitiveColumnType.VIEW_COLUMN]: {},
+          [ESensitiveColumnType.VIEW_COLUMN]: {}
         };
         scanTableData[database][type][tableName] = {};
         dataSource?.forEach(({ columnName, maskingAlgorithmId }) => {
-          scanTableData[database][type][tableName][columnName] = maskingAlgorithmId;
-          newScanTableDataMap[`${database}_${type}_${tableName}_${columnName}`] =
-            sensitiveColumns?.find(
-              (item) =>
-                item?.database?.databaseId === databaseId &&
-                item.type === type &&
-                item.tableName === tableName &&
-                item.columnName === columnName,
-            );
+          scanTableData[database][type][tableName][columnName] =
+            maskingAlgorithmId;
+          newScanTableDataMap[
+            `${database}_${type}_${tableName}_${columnName}`
+          ] = sensitiveColumns?.find(
+            (item) =>
+              item?.database?.databaseId === databaseId &&
+              item.type === type &&
+              item.tableName === tableName &&
+              item.columnName === columnName
+          );
         });
       });
       setFormData(scanTableData);
@@ -222,7 +242,7 @@ const ScanForm = (props: IScanFormProps, ref) => {
       setScanStatus(ScannResultType.SUCCESS);
       setPercent(Math.floor((finishedTableCount * 100) / allTableCount));
       await _formRef.setFieldsValue({
-        scanTableData,
+        scanTableData
       });
       setScanLoading(false);
     } else {
@@ -242,11 +262,13 @@ const ScanForm = (props: IScanFormProps, ref) => {
     database: string,
     type: string,
     tableName: string,
-    columnName: string,
+    columnName: string
   ) => {
     const key = `${database}_${type}_${tableName}`;
     const filterDataSource =
-      sensitiveColumnMap.get(key).dataSource.filter((ds) => ds?.columnName !== columnName) || [];
+      sensitiveColumnMap
+        .get(key)
+        .dataSource.filter((ds) => ds?.columnName !== columnName) || [];
     sensitiveColumnMap.get(key).dataSource = filterDataSource;
     if (filterDataSource?.length === 0) {
       sensitiveColumnMap.delete(key);
@@ -255,12 +277,14 @@ const ScanForm = (props: IScanFormProps, ref) => {
     if (!!searchText) {
       sensitiveColumnMap?.forEach((dsItem) => {
         const newDataSource = dsItem?.dataSource?.filter((ds) =>
-          ds?.columnName?.toLocaleLowerCase().includes(searchText.toLocaleLowerCase()),
+          ds?.columnName
+            ?.toLocaleLowerCase()
+            .includes(searchText.toLocaleLowerCase())
         );
         if (newDataSource?.length > 0) {
           resData.push({
             header: dsItem?.header,
-            dataSource: newDataSource,
+            dataSource: newDataSource
           });
         }
       });
@@ -279,7 +303,7 @@ const ScanForm = (props: IScanFormProps, ref) => {
   const handleScanTableDataDeleteByTableName = (
     database: string,
     type: string,
-    tableName: string,
+    tableName: string
   ) => {
     const key = `${database}_${type}_${tableName}`;
     const resData = [];
@@ -287,7 +311,8 @@ const ScanForm = (props: IScanFormProps, ref) => {
       sensitiveColumnMap.get(key).dataSource = sensitiveColumnMap
         .get(key)
         .dataSource?.filter(
-          (item) => !item.columnName?.toLowerCase()?.includes(searchText?.toLowerCase()),
+          (item) =>
+            !item.columnName?.toLowerCase()?.includes(searchText?.toLowerCase())
         );
       const originResData = [];
       sensitiveColumnMap?.forEach((dsItem) => {
@@ -322,11 +347,14 @@ const ScanForm = (props: IScanFormProps, ref) => {
       getColumnMap: () => {
         return sensitiveColumnMap;
       },
-      reset,
+      reset
     };
   });
   useEffect(() => {
-    if (taskId && [ScannResultType.CREATED, ScannResultType.RUNNING].includes(scanStatus)) {
+    if (
+      taskId &&
+      [ScannResultType.CREATED, ScannResultType.RUNNING].includes(scanStatus)
+    ) {
       handleScanning(taskId);
     }
     return () => {
@@ -370,14 +398,14 @@ const ScanForm = (props: IScanFormProps, ref) => {
       <div
         style={{
           height: 'calc(100% - 150px)',
-          overflowY: 'scroll',
+          overflowY: 'scroll'
         }}
       >
         <Form
           form={_formRef}
           layout="vertical"
           initialValues={{
-            scanTableData: {},
+            scanTableData: {}
           }}
         >
           {originScanTableData?.length === 0 ? (
@@ -394,7 +422,9 @@ const ScanForm = (props: IScanFormProps, ref) => {
               scanTableData={scanTableData}
               sensitiveContext={sensitiveContext}
               handleScanTableDataDelete={handleScanTableDataDelete}
-              handleScanTableDataDeleteByTableName={handleScanTableDataDeleteByTableName}
+              handleScanTableDataDeleteByTableName={
+                handleScanTableDataDeleteByTableName
+              }
               setActiveKeys={setActiveKeys}
             />
           )}
@@ -410,29 +440,36 @@ const EmptyOrSpin: React.FC<{
   percent: number;
   successful: boolean;
   scanLoading: boolean;
-}> = ({ empty = false, isSearch = false, scanLoading, hasScan, percent, successful }) => {
+}> = ({
+  empty = false,
+  isSearch = false,
+  scanLoading,
+  hasScan,
+  percent,
+  successful
+}) => {
   const gentDescription = () => {
     if (hasScan && isSearch && isSearch) {
       return formatMessage({
         id: 'odc.src.page.Project.Sensitive.components.SensitiveColumn.components.TheSensitiveColumnsInThe',
-        defaultMessage: '扫描结果中的敏感列不包含搜索内容',
+        defaultMessage: '扫描结果中的敏感列不包含搜索内容'
       }); //'扫描结果中的敏感列不包含搜索内容'
     }
     if (hasScan && successful && empty) {
       return formatMessage({
         id: 'odc.src.page.Project.Sensitive.components.SensitiveColumn.components.SelectingTheDatabaseIsCurrently',
-        defaultMessage: '选中数据库目前暂无可选敏感列',
+        defaultMessage: '选中数据库目前暂无可选敏感列'
       }); //'选中数据库目前暂无可选敏感列'
     }
     if (hasScan && !successful) {
       return formatMessage({
         id: 'odc.src.page.Project.Sensitive.components.SensitiveColumn.components.ScanFailure',
-        defaultMessage: '扫描失败',
+        defaultMessage: '扫描失败'
       }); //'扫描失败'
     }
     return formatMessage({
       id: 'odc.src.page.Project.Sensitive.components.SensitiveColumn.components.NoData',
-      defaultMessage: '暂无数据',
+      defaultMessage: '暂无数据'
     }); //'暂无数据'
   };
   return (
@@ -441,20 +478,20 @@ const EmptyOrSpin: React.FC<{
         height: '300px',
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'center',
+        justifyContent: 'center'
       }}
     >
       {scanLoading ? (
         <div>
           <div
             style={{
-              marginLeft: '16px',
+              marginLeft: '16px'
             }}
           >
             {
               formatMessage({
                 id: 'odc.SensitiveColumn.components.ScanForm.ScanningTheScanningTimeMay',
-                defaultMessage: '正在扫描中。扫描时间可能较长请耐心等待…',
+                defaultMessage: '正在扫描中。扫描时间可能较长请耐心等待…'
               }) /*正在扫描中。扫描时间可能较长请耐心等待…*/
             }
           </div>
@@ -462,12 +499,15 @@ const EmptyOrSpin: React.FC<{
             percent={percent}
             style={{
               maxWidth: '628px',
-              margin: '0px 16px',
+              margin: '0px 16px'
             }}
           />
         </div>
       ) : (
-        <Empty description={gentDescription()} image={Empty.PRESENTED_IMAGE_SIMPLE} />
+        <Empty
+          description={gentDescription()}
+          image={Empty.PRESENTED_IMAGE_SIMPLE}
+        />
       )}
     </div>
   );
@@ -488,11 +528,11 @@ const ScanButton: React.FC<{
           scanLoading
             ? formatMessage({
                 id: 'odc.SensitiveColumn.components.ScanForm.Scanning',
-                defaultMessage: '正在扫描',
+                defaultMessage: '正在扫描'
               }) //正在扫描
             : formatMessage({
                 id: 'odc.SensitiveColumn.components.ScanForm.StartScanning',
-                defaultMessage: '开始扫描',
+                defaultMessage: '开始扫描'
               }) //开始扫描
         }
       </Button>
@@ -500,7 +540,7 @@ const ScanButton: React.FC<{
         <Space>
           <CheckCircleFilled
             style={{
-              color: '#52c41a',
+              color: '#52c41a'
             }}
           />
 
@@ -508,7 +548,7 @@ const ScanButton: React.FC<{
             {
               formatMessage({
                 id: 'odc.SensitiveColumn.components.ScanForm.ScanCompleted',
-                defaultMessage: '扫描完成',
+                defaultMessage: '扫描完成'
               }) /*扫描完成*/
             }
           </div>
@@ -526,35 +566,35 @@ const getColumns = (
     database: string,
     type: string,
     tableName: string,
-    columnName: string,
-  ) => void,
+    columnName: string
+  ) => void
 ) => {
   return [
     {
       title: formatMessage({
         id: 'odc.SensitiveColumn.components.ScanForm.Column',
-        defaultMessage: '列',
+        defaultMessage: '列'
       }),
       //列
       width: 146,
       dataIndex: 'columnName',
-      key: 'columnName',
+      key: 'columnName'
     },
     {
       title: formatMessage({
         id: 'odc.SensitiveColumn.components.ScanForm.IdentificationRules',
-        defaultMessage: '识别规则',
+        defaultMessage: '识别规则'
       }),
       //识别规则
       width: 126,
       dataIndex: 'sensitiveRuleId',
       key: 'sensitiveRuleId',
-      render: (text) => sensitiveContext?.sensitiveRuleIdMap?.[text],
+      render: (text) => sensitiveContext?.sensitiveRuleIdMap?.[text]
     },
     {
       title: formatMessage({
         id: 'odc.SensitiveColumn.components.ScanForm.DesensitizationAlgorithm',
-        defaultMessage: '脱敏算法',
+        defaultMessage: '脱敏算法'
       }),
       //脱敏算法
       width: 180,
@@ -563,67 +603,88 @@ const getColumns = (
       render: (text, record, _index) => {
         return (
           <Form.Item
-            name={['scanTableData', database, type, tableName, record.columnName]}
-            key={['scanTableData', database, type, tableName, record.columnName].join('')}
+            name={[
+              'scanTableData',
+              database,
+              type,
+              tableName,
+              record.columnName
+            ]}
+            key={[
+              'scanTableData',
+              database,
+              type,
+              tableName,
+              record.columnName
+            ].join('')}
           >
             <Select
               key={_index}
               style={{
-                width: '144px',
+                width: '144px'
               }}
               defaultValue={record?.maskingAlgorithmId}
               showSearch
               filterOption={(input, option) =>
-                (option?.label ?? '')?.toString()?.toLowerCase().includes(input.toLowerCase())
+                (option?.label ?? '')
+                  ?.toString()
+                  ?.toLowerCase()
+                  .includes(input.toLowerCase())
               }
               optionLabelProp="label"
             >
-              {sensitiveContext?.maskingAlgorithmOptions?.map((option, index) => {
-                const target = sensitiveContext?.maskingAlgorithms?.find(
-                  (maskingAlgorithm) => maskingAlgorithm?.id === option?.value,
-                );
-                return (
-                  <Select.Option value={option?.value} key={index} label={option?.label}>
-                    <PopoverContainer
+              {sensitiveContext?.maskingAlgorithmOptions?.map(
+                (option, index) => {
+                  const target = sensitiveContext?.maskingAlgorithms?.find(
+                    (maskingAlgorithm) => maskingAlgorithm?.id === option?.value
+                  );
+                  return (
+                    <Select.Option
+                      value={option?.value}
                       key={index}
-                      title={option?.label}
-                      descriptionsData={[
-                        {
-                          label: formatMessage({
-                            id: 'odc.src.page.Project.Sensitive.components.SensitiveColumn.components.DesensitizationMethod.1',
-                            defaultMessage: '脱敏方式',
-                          }) /* 脱敏方式 */,
-                          value: maskRuleTypeMap?.[target?.type],
-                        },
-                        {
-                          label: formatMessage({
-                            id: 'odc.src.page.Project.Sensitive.components.SensitiveColumn.components.TestData.1',
-                            defaultMessage: '测试数据',
-                          }) /* 测试数据 */,
-                          value: target?.sampleContent,
-                        },
-                        {
-                          label: formatMessage({
-                            id: 'odc.src.page.Project.Sensitive.components.SensitiveColumn.components.Preview.1',
-                            defaultMessage: '结果预览',
-                          }) /* 结果预览 */,
-                          value: target?.maskedContent,
-                        },
-                      ]}
-                      children={() => <div>{option?.label}</div>}
-                    />
-                  </Select.Option>
-                );
-              })}
+                      label={option?.label}
+                    >
+                      <PopoverContainer
+                        key={index}
+                        title={option?.label}
+                        descriptionsData={[
+                          {
+                            label: formatMessage({
+                              id: 'odc.src.page.Project.Sensitive.components.SensitiveColumn.components.DesensitizationMethod.1',
+                              defaultMessage: '脱敏方式'
+                            }) /* 脱敏方式 */,
+                            value: maskRuleTypeMap?.[target?.type]
+                          },
+                          {
+                            label: formatMessage({
+                              id: 'odc.src.page.Project.Sensitive.components.SensitiveColumn.components.TestData.1',
+                              defaultMessage: '测试数据'
+                            }) /* 测试数据 */,
+                            value: target?.sampleContent
+                          },
+                          {
+                            label: formatMessage({
+                              id: 'odc.src.page.Project.Sensitive.components.SensitiveColumn.components.Preview.1',
+                              defaultMessage: '结果预览'
+                            }) /* 结果预览 */,
+                            value: target?.maskedContent
+                          }
+                        ]}
+                        children={() => <div>{option?.label}</div>}
+                      />
+                    </Select.Option>
+                  );
+                }
+              )}
             </Select>
           </Form.Item>
         );
-      },
+      }
     },
     {
       title: formatMessage({
         id: 'odc.SensitiveColumn.components.ScanForm.Operation',
-        defaultMessage: '操作',
+        defaultMessage: '操作'
       }),
       //操作
       width: 88,
@@ -636,20 +697,20 @@ const getColumns = (
                 database,
                 type,
                 tableName,
-                (record as ScanTableDataItem)?.columnName,
+                (record as ScanTableDataItem)?.columnName
               )
             }
           >
             {
               formatMessage({
                 id: 'odc.SensitiveColumn.components.ScanForm.Delete',
-                defaultMessage: '删除',
+                defaultMessage: '删除'
               }) /*删除*/
             }
           </a>
         </Space>
-      ),
-    },
+      )
+    }
   ];
 };
 const PreviewHeader: React.FC<{
@@ -665,19 +726,19 @@ const PreviewHeader: React.FC<{
   originScanTableData,
   onSearch,
   resetSearch,
-  handleSearchChange,
+  handleSearchChange
 }) => (
   <div className={styles.scanResultPreview}>
     <div
       style={{
         height: '30px',
-        lineHeight: '30px',
+        lineHeight: '30px'
       }}
     >
       {
         formatMessage({
           id: 'odc.SensitiveColumn.components.ScanForm.PreviewOfScanResults',
-          defaultMessage: '扫描结果预览',
+          defaultMessage: '扫描结果预览'
         }) /*扫描结果预览*/
       }
     </div>
@@ -687,11 +748,11 @@ const PreviewHeader: React.FC<{
           value={searchText}
           placeholder={formatMessage({
             id: 'odc.SensitiveColumn.components.ScanForm.EnterAColumnName',
-            defaultMessage: '请输入列名',
+            defaultMessage: '请输入列名'
           })}
           /*请输入列名*/ width={240}
           style={{
-            width: '240px',
+            width: '240px'
           }}
           onChange={handleSearchChange}
           onSearch={onSearch}
@@ -701,7 +762,7 @@ const PreviewHeader: React.FC<{
           {
             formatMessage({
               id: 'odc.src.page.Project.Sensitive.components.SensitiveColumn.components.Repossess',
-              defaultMessage: '重置',
+              defaultMessage: '重置'
             }) /* 重置 */
           }
         </Button>
@@ -712,11 +773,11 @@ const PreviewHeader: React.FC<{
           value={searchText}
           placeholder={formatMessage({
             id: 'odc.SensitiveColumn.components.ScanForm.EnterAColumnName',
-            defaultMessage: '请输入列名',
+            defaultMessage: '请输入列名'
           })}
           /*请输入列名*/ width={240}
           style={{
-            width: '240px',
+            width: '240px'
           }}
           onChange={handleSearchChange}
           onSearch={onSearch}
@@ -730,14 +791,18 @@ const CollapseHeader: React.FC<{
   database: string;
   type: ESensitiveColumnType;
   tableName: string;
-  handleScanTableDataDeleteByTableName: (database: string, type: string, tableName: string) => void;
+  handleScanTableDataDeleteByTableName: (
+    database: string,
+    type: string,
+    tableName: string
+  ) => void;
 }> = ({ database, type, tableName, handleScanTableDataDeleteByTableName }) => (
   <Descriptions column={2} layout="horizontal" className={styles.descriptions}>
     <Descriptions.Item
       label={
         formatMessage({
           id: 'odc.SensitiveColumn.components.ScanForm.Database',
-          defaultMessage: '数据库',
+          defaultMessage: '数据库'
         }) //数据库
       }
     >
@@ -747,7 +812,7 @@ const CollapseHeader: React.FC<{
       label={
         formatMessage({
           id: 'odc.src.page.Project.Sensitive.components.SensitiveColumn.components.TableView.1',
-          defaultMessage: '表/视图',
+          defaultMessage: '表/视图'
         }) //'表/视图'
       }
     >
@@ -756,14 +821,14 @@ const CollapseHeader: React.FC<{
           display: 'flex',
           width: '100%',
           justifyContent: 'space-between',
-          alignItems: 'center',
+          alignItems: 'center'
         }}
       >
         <div
           style={{
             display: 'flex',
             gap: '8px',
-            alignItems: 'center',
+            alignItems: 'center'
           }}
         >
           <span
@@ -771,11 +836,15 @@ const CollapseHeader: React.FC<{
               display: 'flex',
               lineHeight: 1,
               fontSize: 14,
-              color: 'var(--icon-color-disable)',
+              color: 'var(--icon-color-disable)'
             }}
           >
             <Icon
-              component={type === ESensitiveColumnType.TABLE_COLUMN ? TableOutlined : ViewSvg}
+              component={
+                type === ESensitiveColumnType.TABLE_COLUMN
+                  ? TableOutlined
+                  : ViewSvg
+              }
             />
           </span>
           <Tooltip title={tableName}>
@@ -786,7 +855,7 @@ const CollapseHeader: React.FC<{
           title={
             formatMessage({
               id: 'odc.SensitiveColumn.components.ScanForm.Delete',
-              defaultMessage: '删除',
+              defaultMessage: '删除'
             }) //删除
           }
         >
@@ -811,18 +880,29 @@ const EmptyCollapse: React.FC<{
   hasScan?: boolean;
   scanLoading?: boolean;
   successful?: boolean;
-}> = ({ empty = false, isSearch = false, percent, hasScan, scanLoading, successful }) => {
+}> = ({
+  empty = false,
+  isSearch = false,
+  percent,
+  hasScan,
+  scanLoading,
+  successful
+}) => {
   return (
     <Collapse defaultActiveKey={['0']} className={styles.collapse}>
       <Collapse.Panel
         key={'0'}
         header={
-          <Descriptions column={2} layout="horizontal" className={styles.descriptions}>
+          <Descriptions
+            column={2}
+            layout="horizontal"
+            className={styles.descriptions}
+          >
             <Descriptions.Item
               label={
                 formatMessage({
                   id: 'odc.SensitiveColumn.components.ScanForm.Database',
-                  defaultMessage: '数据库',
+                  defaultMessage: '数据库'
                 }) //数据库
               }
             >
@@ -832,7 +912,7 @@ const EmptyCollapse: React.FC<{
               label={
                 formatMessage({
                   id: 'odc.src.page.Project.Sensitive.components.SensitiveColumn.components.TableView',
-                  defaultMessage: '表/视图',
+                  defaultMessage: '表/视图'
                 }) //'表/视图'
               }
             >
@@ -862,19 +942,28 @@ const CollapseItemContent: React.FC<{
     database: string,
     type: string,
     tableName: string,
-    columnName: string,
+    columnName: string
   ) => void;
-  handleScanTableDataDeleteByTableName: (database: string, type: string, tableName: string) => void;
+  handleScanTableDataDeleteByTableName: (
+    database: string,
+    type: string,
+    tableName: string
+  ) => void;
 }> = ({
   activeKeys,
   scanTableData,
   sensitiveContext,
   setActiveKeys,
   handleScanTableDataDelete,
-  handleScanTableDataDeleteByTableName,
+  handleScanTableDataDeleteByTableName
 }) => {
   return scanTableData?.length === 0 ? (
-    <EmptyCollapse empty={true} hasScan={true} successful={true} isSearch={true} />
+    <EmptyCollapse
+      empty={true}
+      hasScan={true}
+      successful={true}
+      isSearch={true}
+    />
   ) : (
     <Collapse
       defaultActiveKey={activeKeys}
@@ -882,43 +971,47 @@ const CollapseItemContent: React.FC<{
         setActiveKeys(
           Array.isArray(keys)
             ? keys?.filter((key) => key !== '0')
-            : [keys]?.filter((key) => key !== '0'),
+            : [keys]?.filter((key) => key !== '0')
         );
       }}
       className={classnames(styles.collapse, styles.collapses)}
     >
-      {scanTableData?.map(({ header: { database, tableName, type }, dataSource }, index) => {
-        return (
-          <Collapse.Panel
-            header={
-              <CollapseHeader
-                database={database}
-                type={type}
-                tableName={tableName}
-                handleScanTableDataDeleteByTableName={handleScanTableDataDeleteByTableName}
+      {scanTableData?.map(
+        ({ header: { database, tableName, type }, dataSource }, index) => {
+          return (
+            <Collapse.Panel
+              header={
+                <CollapseHeader
+                  database={database}
+                  type={type}
+                  tableName={tableName}
+                  handleScanTableDataDeleteByTableName={
+                    handleScanTableDataDeleteByTableName
+                  }
+                />
+              }
+              key={`${database}_${type}_${tableName}`}
+            >
+              <Table
+                className={styles.bigTable}
+                columns={getColumns(
+                  database,
+                  type,
+                  tableName,
+                  sensitiveContext,
+                  handleScanTableDataDelete
+                )}
+                dataSource={dataSource}
+                pagination={{
+                  showSizeChanger: false,
+                  pageSize: 10,
+                  hideOnSinglePage: dataSource?.length > 10 ? false : true
+                }}
               />
-            }
-            key={`${database}_${type}_${tableName}`}
-          >
-            <Table
-              className={styles.bigTable}
-              columns={getColumns(
-                database,
-                type,
-                tableName,
-                sensitiveContext,
-                handleScanTableDataDelete,
-              )}
-              dataSource={dataSource}
-              pagination={{
-                showSizeChanger: false,
-                pageSize: 10,
-                hideOnSinglePage: dataSource?.length > 10 ? false : true,
-              }}
-            />
-          </Collapse.Panel>
-        );
-      })}
+            </Collapse.Panel>
+          );
+        }
+      )}
     </Collapse>
   );
 };

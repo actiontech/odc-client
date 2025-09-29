@@ -16,14 +16,17 @@ import { formatMessage } from '@/util/intl';
  */
 
 import { getCycleTaskDetail, getTaskDetail } from '@/common/network/task';
-import type { ITableInstance, ITableLoadOptions } from '@/component/CommonTable/interface';
+import type {
+  ITableInstance,
+  ITableLoadOptions
+} from '@/component/CommonTable/interface';
 import type {
   IAlterScheduleTaskParams,
   IDataArchiveJobParameters,
   IResponseData,
   ISqlPlayJobParameters,
   TaskRecordParameters,
-  TaskStatus,
+  TaskStatus
 } from '@/d.ts';
 import {
   IConnectionType,
@@ -31,7 +34,7 @@ import {
   TaskExecStrategy,
   TaskPageType,
   TaskRecord,
-  TaskType,
+  TaskType
 } from '@/d.ts';
 import { ModalStore } from '@/store/modal';
 import type { TaskStore } from '@/store/task';
@@ -50,6 +53,8 @@ import styles from './index.less';
 import { UserStore } from '@/store/login';
 import { TaskDetailContext } from './TaskDetailContext';
 import useURLParams from '@/util/hooks/useUrlParams';
+import ExecuteTask from './DMSTask/Execute';
+import ExportTask from './DMSTask/Export';
 
 interface IProps {
   taskStore?: TaskStore;
@@ -69,7 +74,9 @@ export interface IState {
   detailVisible: boolean;
   status: TaskStatus;
   tasks: IResponseData<TaskRecord<TaskRecordParameters>>;
-  cycleTasks: IResponseData<ICycleTaskRecord<ISqlPlayJobParameters | IDataArchiveJobParameters>>;
+  cycleTasks: IResponseData<
+    ICycleTaskRecord<ISqlPlayJobParameters | IDataArchiveJobParameters>
+  >;
 }
 const TaskManaerContent: React.FC<IProps> = (props) => {
   const {
@@ -79,7 +86,7 @@ const TaskManaerContent: React.FC<IProps> = (props) => {
     isMultiPage = false,
     inProject,
     projectId,
-    userStore,
+    userStore
   } = props;
   const taskTabType = pageKey || taskStore?.taskPageType;
   const taskOpenRef = useRef<boolean>(null);
@@ -89,10 +96,10 @@ const TaskManaerContent: React.FC<IProps> = (props) => {
     detailVisible: !!props.taskStore?.defaultOpenTaskId,
     tasks: null,
     cycleTasks: null,
-    status: null,
+    status: null
   });
   const location = useLocation();
-  const isSqlworkspace = location?.pathname?.includes('/sqlworkspace');
+  const isSqlworkspace = true;
   const { detailId, detailType, detailVisible, cycleTasks, tasks } = state;
   const taskList = isCycleTaskPage(taskTabType) ? cycleTasks : tasks;
   const theme = isSqlworkspace ? null : 'vs';
@@ -106,29 +113,39 @@ const TaskManaerContent: React.FC<IProps> = (props) => {
     [TaskPageType.DATAMOCK]: () => modalStore.changeDataMockerModal(true),
     [TaskPageType.ASYNC]: () => modalStore.changeCreateAsyncTaskModal(true),
     [TaskPageType.PARTITION_PLAN]: () => modalStore.changePartitionModal(true),
-    [TaskPageType.SQL_PLAN]: () => modalStore.changeCreateSQLPlanTaskModal(true),
+    [TaskPageType.SQL_PLAN]: () =>
+      modalStore.changeCreateSQLPlanTaskModal(true),
     [TaskPageType.SHADOW]: () => modalStore.changeShadowSyncVisible(true),
     [TaskPageType.DATA_ARCHIVE]: () => modalStore.changeDataArchiveModal(true),
-    [TaskPageType.STRUCTURE_COMPARISON]: () => modalStore.changeStructureComparisonModal(true),
+    [TaskPageType.STRUCTURE_COMPARISON]: () =>
+      modalStore.changeStructureComparisonModal(true),
     [TaskPageType.DATA_DELETE]: () => modalStore.changeDataClearModal(true),
-    [TaskPageType.ONLINE_SCHEMA_CHANGE]: () => modalStore.changeCreateDDLAlterTaskModal(true),
-    [TaskPageType.EXPORT_RESULT_SET]: () => modalStore.changeCreateResultSetExportTaskModal(true),
-    [TaskPageType.APPLY_PROJECT_PERMISSION]: () => modalStore.changeApplyPermissionModal(true),
+    [TaskPageType.ONLINE_SCHEMA_CHANGE]: () =>
+      modalStore.changeCreateDDLAlterTaskModal(true),
+    [TaskPageType.EXPORT_RESULT_SET]: () =>
+      modalStore.changeCreateResultSetExportTaskModal(true),
+    [TaskPageType.APPLY_PROJECT_PERMISSION]: () =>
+      modalStore.changeApplyPermissionModal(true),
     [TaskPageType.APPLY_DATABASE_PERMISSION]: () =>
       modalStore.changeApplyDatabasePermissionModal(true),
-    [TaskPageType.APPLY_TABLE_PERMISSION]: () => modalStore.changeApplyTablePermissionModal(true),
+    [TaskPageType.APPLY_TABLE_PERMISSION]: () =>
+      modalStore.changeApplyTablePermissionModal(true),
     [TaskPageType.MULTIPLE_ASYNC]: () =>
       modalStore.changeMultiDatabaseChangeModal(
         true,
         inProject
           ? {
-              projectId,
+              projectId
             }
-          : null,
+          : null
       ),
-    [TaskPageType.LOGICAL_DATABASE_CHANGE]: () => modalStore.changeLogicialDatabaseModal(true),
+    [TaskPageType.LOGICAL_DATABASE_CHANGE]: () =>
+      modalStore.changeLogicialDatabaseModal(true)
   };
-  const loadList = async (args: ITableLoadOptions, executeDate: [Dayjs, Dayjs]) => {
+  const loadList = async (
+    args: ITableLoadOptions,
+    executeDate: [Dayjs, Dayjs]
+  ) => {
     const { pageKey, taskStore } = props;
     const taskTabType = pageKey || taskStore?.taskPageType;
     if (isCycleTaskPage(taskTabType)) {
@@ -140,20 +157,28 @@ const TaskManaerContent: React.FC<IProps> = (props) => {
   const loadTaskList = async (
     taskTabType,
     args: ITableLoadOptions,
-    executeDate: [Dayjs, Dayjs],
+    executeDate: [Dayjs, Dayjs]
   ) => {
     const { projectId } = props;
     const { filters, sorter, pagination, pageSize } = args ?? {};
-    const { status, executeTime, candidateApprovers, creator, connection, id, projectIdList } =
-      filters ?? {};
+    const {
+      status,
+      executeTime,
+      candidateApprovers,
+      creator,
+      connection,
+      id,
+      projectIdList
+    } = filters ?? {};
     const { column, order } = sorter ?? {};
     const { current = 1 } = pagination ?? {};
     const connectionId = connection?.filter(
-      (key) => ![IConnectionType.PRIVATE, IConnectionType.ORGANIZATION].includes(key),
+      (key) =>
+        ![IConnectionType.PRIVATE, IConnectionType.ORGANIZATION].includes(key)
     );
     const isAllScope = ![
       TaskPageType.CREATED_BY_CURRENT_USER,
-      TaskPageType.APPROVE_BY_CURRENT_USER,
+      TaskPageType.APPROVE_BY_CURRENT_USER
     ].includes(taskTabType);
     const isAll = taskTabType === TaskPageType.ALL;
     if (!pageSize) {
@@ -164,8 +189,14 @@ const TaskManaerContent: React.FC<IProps> = (props) => {
       taskType: isAllScope ? (isAll ? undefined : taskTabType) : undefined,
       projectId: projectId || projectIdList || undefined,
       status,
-      startTime: executeDate?.length > 0 ? executeDate?.[0]?.valueOf() ?? getPreTime(7) : undefined,
-      endTime: executeDate?.length > 0 ? executeDate?.[1]?.valueOf() ?? getPreTime(0) : undefined,
+      startTime:
+        executeDate?.length > 0
+          ? executeDate?.[0]?.valueOf() ?? getPreTime(7)
+          : undefined,
+      endTime:
+        executeDate?.length > 0
+          ? executeDate?.[1]?.valueOf() ?? getPreTime(0)
+          : undefined,
       connectionId,
       candidateApprovers,
       creator,
@@ -178,32 +209,41 @@ const TaskManaerContent: React.FC<IProps> = (props) => {
       approveByCurrentUser: isAllScope
         ? true
         : taskTabType === TaskPageType.APPROVE_BY_CURRENT_USER,
-      containsAll: isAll || isAllScope,
+      containsAll: isAll || isAllScope
     };
     if (executeTime !== 'custom' && typeof executeTime === 'number') {
       params.startTime = getPreTime(executeTime);
       params.endTime = getPreTime(0);
     }
     // sorter
-    params.sort = column ? `${column.dataIndex},${order === 'ascend' ? 'asc' : 'desc'}` : undefined;
+    params.sort = column
+      ? `${column.dataIndex},${order === 'ascend' ? 'asc' : 'desc'}`
+      : undefined;
     const tasks = await props.taskStore.getTaskList(params);
     setState({
-      tasks,
+      tasks
     });
   };
   const loadCycleTaskList = async (
     taskTabType,
     args: ITableLoadOptions,
-    executeDate: [Dayjs, Dayjs],
+    executeDate: [Dayjs, Dayjs]
   ) => {
     const { projectId } = props;
     const { filters, sorter, pagination, pageSize } = args ?? {};
-    const { status, executeTime, candidateApprovers, creator, id, projectIdList } = filters ?? {};
+    const {
+      status,
+      executeTime,
+      candidateApprovers,
+      creator,
+      id,
+      projectIdList
+    } = filters ?? {};
     const { column, order } = sorter ?? {};
     const { current = 1 } = pagination ?? {};
     const isAllScope = ![
       TaskPageType.CREATED_BY_CURRENT_USER,
-      TaskPageType.APPROVE_BY_CURRENT_USER,
+      TaskPageType.APPROVE_BY_CURRENT_USER
     ].includes(taskTabType);
     const isAll = taskTabType === TaskPageType.ALL;
     if (!pageSize) {
@@ -216,30 +256,42 @@ const TaskManaerContent: React.FC<IProps> = (props) => {
       status,
       candidateApprovers,
       creator,
-      startTime: executeDate?.length > 0 ? executeDate?.[0]?.valueOf() ?? getPreTime(7) : undefined,
-      endTime: executeDate?.length > 0 ? executeDate?.[1]?.valueOf() ?? getPreTime(0) : undefined,
-      createdByCurrentUser: taskTabType === TaskPageType.CREATED_BY_CURRENT_USER,
-      approveByCurrentUser: taskTabType === TaskPageType.APPROVE_BY_CURRENT_USER,
+      startTime:
+        executeDate?.length > 0
+          ? executeDate?.[0]?.valueOf() ?? getPreTime(7)
+          : undefined,
+      endTime:
+        executeDate?.length > 0
+          ? executeDate?.[1]?.valueOf() ?? getPreTime(0)
+          : undefined,
+      createdByCurrentUser:
+        taskTabType === TaskPageType.CREATED_BY_CURRENT_USER,
+      approveByCurrentUser:
+        taskTabType === TaskPageType.APPROVE_BY_CURRENT_USER,
       sort: column?.dataIndex,
       page: urlTriggerValue ? undefined : current,
       size: urlTriggerValue ? undefined : pageSize,
-      containsAll: isAll || isAllScope,
+      containsAll: isAll || isAllScope
     };
     if (executeTime !== 'custom' && typeof executeTime === 'number') {
       params.startTime = getPreTime(executeTime);
       params.endTime = getPreTime(0);
     }
     // sorter
-    params.sort = column ? `${column.dataIndex},${order === 'ascend' ? 'asc' : 'desc'}` : undefined;
+    params.sort = column
+      ? `${column.dataIndex},${order === 'ascend' ? 'asc' : 'desc'}`
+      : undefined;
     const cycleTasks = await props.taskStore.getCycleTaskList(params);
     const filteredContents = cycleTasks?.contents?.filter(
       (item) =>
         ![TaskExecStrategy.START_NOW, TaskExecStrategy.START_AT].includes(
-          item?.triggerConfig?.triggerStrategy,
-        ),
+          item?.triggerConfig?.triggerStrategy
+        )
     );
     setState({
-      cycleTasks: urlTriggerValue ? { ...cycleTasks, contents: filteredContents } : cycleTasks,
+      cycleTasks: urlTriggerValue
+        ? { ...cycleTasks, contents: filteredContents }
+        : cycleTasks
     });
   };
 
@@ -248,7 +300,7 @@ const TaskManaerContent: React.FC<IProps> = (props) => {
   };
   const handleDetailVisible = (
     task: TaskRecord<TaskRecordParameters> | ICycleTaskRecord<any>,
-    visible: boolean = false,
+    visible: boolean = false
   ) => {
     const { id, type } = task ?? {};
     const detailId =
@@ -261,13 +313,13 @@ const TaskManaerContent: React.FC<IProps> = (props) => {
         (task as TaskRecord<TaskRecordParameters>)?.type ||
         (task as ICycleTaskRecord<any>)?.type ||
         TaskType.ASYNC,
-      detailVisible: visible,
+      detailVisible: visible
     });
     taskOpenRef.current = visible;
   };
   const handleMenuClick = (type: TaskPageType) => {
     tracert.click('a3112.b64006.c330917.d367464', {
-      type,
+      type
     });
     TaskEventMap?.[type]?.();
   };
@@ -282,15 +334,15 @@ const TaskManaerContent: React.FC<IProps> = (props) => {
         message.error(
           formatMessage({
             id: 'odc.src.component.Task.NoCurrentWorkOrderView',
-            defaultMessage: '无当前工单查看权限',
-          }), //'无当前工单查看权限'
+            defaultMessage: '无当前工单查看权限'
+          }) //'无当前工单查看权限'
         );
         return;
       }
       setState({
         detailId: defaultTaskId,
         detailType: defaultTaskType || TaskType.ASYNC,
-        detailVisible: true,
+        detailVisible: true
       });
       taskOpenRef.current = true;
     }
@@ -320,10 +372,10 @@ const TaskManaerContent: React.FC<IProps> = (props) => {
     <TaskDetailContext.Provider
       value={{
         handleDetailVisible,
-        setState,
+        setState
       }}
     >
-      <div className={styles.content}>
+      {/* <div className={styles.content}>
         <TaskTable
           disableProjectCol={disableProjectCol}
           tableRef={tableRef}
@@ -335,8 +387,11 @@ const TaskManaerContent: React.FC<IProps> = (props) => {
           onReloadList={reloadList}
           onMenuClick={handleMenuClick}
         />
-      </div>
-      <DetailModal
+      </div> */}
+      {taskTabType === TaskPageType.CREATED_BY_CURRENT_USER && <ExecuteTask />}
+      {/* TODO 先隐藏，等后续后端接口 */}
+      {/* {taskTabType === TaskPageType.EXPORT && <ExportTask />} */}
+      {/* <DetailModal
         theme={theme}
         taskOpenRef={taskOpenRef}
         type={detailType}
@@ -344,8 +399,12 @@ const TaskManaerContent: React.FC<IProps> = (props) => {
         visible={detailVisible}
         onDetailVisible={handleDetailVisible}
         onReloadList={reloadList}
-      />
+      /> */}
     </TaskDetailContext.Provider>
   );
 };
-export default inject('userStore', 'taskStore', 'modalStore')(observer(TaskManaerContent));
+export default inject(
+  'userStore',
+  'taskStore',
+  'modalStore'
+)(observer(TaskManaerContent));

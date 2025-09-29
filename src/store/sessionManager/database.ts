@@ -19,7 +19,7 @@ import {
   generateDatabaseSid,
   generateDatabaseSidByDataBaseId,
   generatePackageSid,
-  generateViewSid,
+  generateViewSid
 } from '@/common/network/pathUtil';
 import { getSynonymList } from '@/common/network/synonym';
 import { getTableInfo, getLogicTableInfo } from '@/common/network/table';
@@ -36,10 +36,13 @@ import {
   IType,
   IView,
   SynonymType,
-  IMaterializedView,
+  IMaterializedView
 } from '@/d.ts';
 import { getMaterializedView } from '@/common/network/materializedView/index';
-import { ITableModel, TableInfo } from '@/page/Workspace/components/CreateTable/interface';
+import {
+  ITableModel,
+  TableInfo
+} from '@/page/Workspace/components/CreateTable/interface';
 import { formatMessage } from '@/util/intl';
 import request from '@/util/request';
 import { action, observable, runInAction } from 'mobx';
@@ -124,7 +127,12 @@ class DatabaseStore {
 
   public readonly databaseId: number = null;
 
-  static async createInstance(sessionId: string, dbName: string, databaseId: number, type: DBType) {
+  static async createInstance(
+    sessionId: string,
+    dbName: string,
+    databaseId: number,
+    type: DBType
+  ) {
     const db = new DatabaseStore(sessionId, dbName, databaseId, type);
     return db;
   }
@@ -142,11 +150,18 @@ class DatabaseStore {
    *
    */
   public async getTableList(isExternalTable?: boolean) {
-    const sid = generateDatabaseSidByDataBaseId(this.databaseId, this.sessionId);
+    const sid = generateDatabaseSidByDataBaseId(
+      this.databaseId,
+      this.sessionId
+    );
 
-    const params: { databaseId: number; includePermittedAction: boolean; type?: string } = {
+    const params: {
+      databaseId: number;
+      includePermittedAction: boolean;
+      type?: string;
+    } = {
       databaseId: this.databaseId,
-      includePermittedAction: true,
+      includePermittedAction: true
     };
     let refreshKey = `${this.databaseId}-${this.dbName}-table`;
     if (isExternalTable) {
@@ -155,7 +170,7 @@ class DatabaseStore {
     }
     DatabaseStore.setRefreshKey(refreshKey);
     const data = await request.get(`/api/v2/databaseSchema/tables`, {
-      params,
+      params
     });
     DatabaseStore.resetRefreshKey();
     runInAction(() => {
@@ -171,17 +186,19 @@ class DatabaseStore {
             createTime: table.gmtCreated,
             tableSize: table.tableSize,
             authorizedPermissionTypes: table.authorizedPermissionTypes || [],
-            tableId: table.id,
-          },
+            tableId: table.id
+          }
         })) || [];
-      isExternalTable ? (this.externalTableTables = tablesValue) : (this.tables = tablesValue);
+      isExternalTable
+        ? (this.externalTableTables = tablesValue)
+        : (this.tables = tablesValue);
     });
   }
 
   @action
   public async getLogicTableList() {
     const data = await request.get(
-      `/api/v2/connect/logicaldatabase/logicalDatabases/${this.databaseId}`,
+      `/api/v2/connect/logicaldatabase/logicalDatabases/${this.databaseId}`
     );
     runInAction(() => {
       this.tables =
@@ -198,20 +215,31 @@ class DatabaseStore {
             authorizedPermissionTypes: table?.authorizedPermissionTypes || [],
             isLogicalTable: true,
             tableId: table?.id,
-            databaseId: this?.databaseId,
-          },
+            databaseId: this?.databaseId
+          }
         })) || [];
     });
   }
 
   @action
   public async loadTable(tableInfo: TableInfo, isExternalTable?: boolean) {
-    const { tableName, authorizedPermissionTypes, isLogicalTable, tableId, databaseId } = tableInfo;
+    const {
+      tableName,
+      authorizedPermissionTypes,
+      isLogicalTable,
+      tableId,
+      databaseId
+    } = tableInfo;
     let table;
     if (isLogicalTable) {
       table = await getLogicTableInfo(databaseId, tableId);
     } else {
-      table = await getTableInfo(tableName, this.dbName, this.sessionId, isExternalTable);
+      table = await getTableInfo(
+        tableName,
+        this.dbName,
+        this.sessionId,
+        isExternalTable
+      );
     }
     if (!table) {
       return;
@@ -225,7 +253,7 @@ class DatabaseStore {
 
     // 外表数据
     const externalTableIdx = this.externalTableTables.findIndex(
-      (t) => t.info.tableName === tableName,
+      (t) => t.info.tableName === tableName
     );
 
     if (externalTableIdx > -1 && isExternalTable) {
@@ -246,14 +274,18 @@ class DatabaseStore {
 
   @action
   public async getViewList() {
-    const params: { databaseId: number; includePermittedAction: boolean; type?: string } = {
+    const params: {
+      databaseId: number;
+      includePermittedAction: boolean;
+      type?: string;
+    } = {
       databaseId: this.databaseId,
       includePermittedAction: true,
-      type: DbObjectType.view,
+      type: DbObjectType.view
     };
     DatabaseStore.setRefreshKey(`${this.databaseId}-${this.dbName}-view`);
     const res = await request.get(`/api/v2/databaseSchema/tables`, {
-      params,
+      params
     });
     DatabaseStore.resetRefreshKey();
     runInAction(() => {
@@ -264,8 +296,8 @@ class DatabaseStore {
             viewName: t.name,
             schemaName: t?.database?.name,
             info: {
-              authorizedPermissionTypes: t.authorizedPermissionTypes,
-            },
+              authorizedPermissionTypes: t.authorizedPermissionTypes
+            }
           };
         }) || [];
     });
@@ -292,12 +324,15 @@ class DatabaseStore {
     const newMvView = await getMaterializedView({
       materializedViewName,
       sessionId: this.sessionId,
-      dbName: this.dbName,
+      dbName: this.dbName
     });
     if (newMvView.info) {
-      newMvView.info.authorizedPermissionTypes = materializedViewInfo.authorizedPermissionTypes;
+      newMvView.info.authorizedPermissionTypes =
+        materializedViewInfo.authorizedPermissionTypes;
     }
-    const idx = this.materializedView.findIndex((t) => t?.info?.name === materializedViewName);
+    const idx = this.materializedView.findIndex(
+      (t) => t?.info?.name === materializedViewName
+    );
     if (idx > -1) {
       const newMvViews = [...this.materializedView];
       newMvViews[idx] = newMvView;
@@ -309,15 +344,17 @@ class DatabaseStore {
 
   @action
   public async getMaterializedViewList() {
-    DatabaseStore.setRefreshKey(`${this.databaseId}-${this.dbName}-materializedView`);
+    DatabaseStore.setRefreshKey(
+      `${this.databaseId}-${this.dbName}-materializedView`
+    );
     const res = await request.get(
       `/api/v2/connect/sessions/${this.sessionId}/databases/${this.databaseId}/materializedViews`,
       {
         params: {
           materializedViews: true,
-          includePermittedAction: true,
-        },
-      },
+          includePermittedAction: true
+        }
+      }
     );
     DatabaseStore.resetRefreshKey();
     runInAction(() => {
@@ -325,8 +362,8 @@ class DatabaseStore {
         res?.data?.contents?.map((t) => {
           return {
             info: {
-              ...t,
-            },
+              ...t
+            }
           };
         }) || [];
     });
@@ -335,11 +372,13 @@ class DatabaseStore {
   @action
   public async getFunctionList(ignoreError?: boolean) {
     const sid = generateDatabaseSid(this.dbName, this.sessionId);
-    DatabaseStore.setRefreshKey(`${this.databaseId}-${this.dbName}-function-pkg`);
+    DatabaseStore.setRefreshKey(
+      `${this.databaseId}-${this.dbName}-function-pkg`
+    );
     const ret = await request.get(`/api/v1/function/list/${sid}`, {
       params: {
-        ignoreError,
-      },
+        ignoreError
+      }
     });
     DatabaseStore.resetRefreshKey();
     runInAction(() => {
@@ -349,7 +388,12 @@ class DatabaseStore {
 
   @action
   public async loadFunction(funName: string) {
-    const func = await getFunctionByFuncName(funName, false, this.sessionId, this.dbName);
+    const func = await getFunctionByFuncName(
+      funName,
+      false,
+      this.sessionId,
+      this.dbName
+    );
     const idx = this.functions.findIndex((t) => t.funName === funName);
     if (!func) {
       return;
@@ -358,7 +402,7 @@ class DatabaseStore {
       this.functions[idx] = {
         ...func,
         // 漠高：status 只能在列表里查到
-        status: this.functions[idx].status,
+        status: this.functions[idx].status
       };
     }
 
@@ -378,7 +422,12 @@ class DatabaseStore {
 
   @action
   public async loadProcedure(procName: string) {
-    const func = await getProcedureByProName(procName, false, this.sessionId, this.dbName);
+    const func = await getProcedureByProName(
+      procName,
+      false,
+      this.sessionId,
+      this.dbName
+    );
     const idx = this.procedures.findIndex((t) => t.proName === procName);
     if (!func) {
       return;
@@ -387,7 +436,7 @@ class DatabaseStore {
       this.procedures[idx] = {
         ...func,
         // 漠高：status 只能在列表里查到
-        status: this.procedures[idx].status,
+        status: this.procedures[idx].status
       };
     }
 
@@ -431,7 +480,7 @@ class DatabaseStore {
     if (idx !== -1) {
       this.types[idx] = {
         ...type,
-        status: this.types[idx].status,
+        status: this.types[idx].status
       };
     }
     return type;
@@ -451,8 +500,8 @@ class DatabaseStore {
     const sid = generatePackageSid(pkgName, this.sessionId, this.dbName);
     const res = await request.get(`/api/v1/package/${sid}`, {
       params: {
-        ignoreError,
-      },
+        ignoreError
+      }
     });
     const data = res?.data;
     const packageName = data?.packageName;
@@ -472,10 +521,11 @@ class DatabaseStore {
                   })
                   ?.join('$@p@$') +
                   '$@' +
-                  returnType,
-              ),
+                  returnType
+              )
             );
-            const uniqKey = `id:${dbId}-` + packageName + '.' + name + '*' + key;
+            const uniqKey =
+              `id:${dbId}-` + packageName + '.' + name + '*' + key;
             if (keyMap[uniqKey]) {
               /**
                * 去除完全一致的子程序
@@ -487,10 +537,10 @@ class DatabaseStore {
               ...obj,
               params: params?.map((param) =>
                 Object.assign({}, param, {
-                  originDefaultValue: param.defaultValue,
-                }),
+                  originDefaultValue: param.defaultValue
+                })
               ),
-              key: uniqKey,
+              key: uniqKey
             };
           })
           .filter(Boolean);
@@ -514,8 +564,8 @@ class DatabaseStore {
       throw new Error(
         formatMessage({
           id: 'odc.src.store.schema.TheHeaderOfTheObtained',
-          defaultMessage: '获取包体包头为空',
-        }),
+          defaultMessage: '获取包体包头为空'
+        })
       ); //获取包体包头为空
     }
     const idx = this.packages.findIndex((t) => t.packageName === packageName);
@@ -527,14 +577,22 @@ class DatabaseStore {
 
   @action
   public async getSynonymList() {
-    const synonym = await getSynonymList(SynonymType.COMMON, this.dbName, this.sessionId);
+    const synonym = await getSynonymList(
+      SynonymType.COMMON,
+      this.dbName,
+      this.sessionId
+    );
 
     this.synonyms = synonym || [];
   }
 
   @action
   public async getPublicSynonymList() {
-    const synonym = await getSynonymList(SynonymType.PUBLIC, this.dbName, this.sessionId);
+    const synonym = await getSynonymList(
+      SynonymType.PUBLIC,
+      this.dbName,
+      this.sessionId
+    );
 
     this.publicSynonyms = synonym || [];
   }

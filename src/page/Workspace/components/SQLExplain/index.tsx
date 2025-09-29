@@ -28,20 +28,23 @@ import styles from './index.less';
 import { SQLExplainProps, SQLExplainState } from './interface';
 @inject('sqlStore', 'userStore', 'pageStore')
 @observer
-export default class SQLExplain extends Component<SQLExplainProps, SQLExplainState> {
+export default class SQLExplain extends Component<
+  SQLExplainProps,
+  SQLExplainState
+> {
   constructor(props: SQLExplainProps) {
     super(props);
     this.state = {
       onlyText: false,
       tableHeight: this.props.tableHeight || 0,
-      showExplainText: !!props.haveText,
+      showExplainText: !!props.haveText
     };
   }
   public componentDidMount() {
     if (!this.state.tableHeight) {
       const tableHeight = window.innerHeight - 170;
       this.setState({
-        tableHeight,
+        tableHeight
       });
     }
   }
@@ -68,7 +71,7 @@ export default class SQLExplain extends Component<SQLExplainProps, SQLExplainSta
     }
     const { onlyText, tableHeight, showExplainText } = this.state;
     const columns = getSqlExplainColumns({
-      handleShowOutputFilter: handleShowOutputFilter,
+      handleShowOutputFilter: handleShowOutputFilter
     });
     return (
       <>
@@ -80,14 +83,14 @@ export default class SQLExplain extends Component<SQLExplainProps, SQLExplainSta
             // 切换显示方式
             <span
               style={{
-                fontSize: 14,
+                fontSize: 14
               }}
             >
               {showExplainText ? (
                 <ViewFormattingInformation
                   onClick={() => {
                     this.setState({
-                      showExplainText: false,
+                      showExplainText: false
                     });
                   }}
                 />
@@ -95,7 +98,7 @@ export default class SQLExplain extends Component<SQLExplainProps, SQLExplainSta
                 <ViewPlanText
                   onClick={() => {
                     this.setState({
-                      showExplainText: true,
+                      showExplainText: true
                     });
                   }}
                 />
@@ -114,7 +117,7 @@ export default class SQLExplain extends Component<SQLExplainProps, SQLExplainSta
                 backgroundColor: 'var(--background-tertraiy-color)',
                 color: 'var(--text-color-primary)',
                 overflow: 'auto',
-                marginBottom: 0,
+                marginBottom: 0
               }}
             >
               {(explain as ISQLExplain)?.originalText}
@@ -125,14 +128,14 @@ export default class SQLExplain extends Component<SQLExplainProps, SQLExplainSta
                 style={{
                   display: 'flex',
                   justifyContent: 'space-between',
-                  marginBottom: '8px',
+                  marginBottom: '8px'
                 }}
               >
                 <div className={styles.subTitle}>
                   {
                     formatMessage({
                       id: 'odc.src.page.Workspace.components.SQLExplain.PlanStatistics',
-                      defaultMessage: '计划统计',
+                      defaultMessage: '计划统计'
                     }) /* 计划统计 */
                   }
                 </div>
@@ -141,21 +144,23 @@ export default class SQLExplain extends Component<SQLExplainProps, SQLExplainSta
                     checked={onlyText}
                     onChange={(e: CheckboxChangeEvent) => {
                       this.setState({
-                        onlyText: e.target.checked,
+                        onlyText: e.target.checked
                       });
                     }}
                   >
                     {
                       formatMessage({
                         id: 'odc.components.SQLExplain.ViewOnlyTextFormats',
-                        defaultMessage: '仅查看文本格式',
+                        defaultMessage: '仅查看文本格式'
                       }) /*仅查看文本格式*/
                     }
                   </Checkbox>
                 </div>
               </div>
               {onlyText ? (
-                <div className={styles.outline}>{explain && (explain as ISQLExplain).outline}</div>
+                <div className={styles.outline}>
+                  {explain && (explain as ISQLExplain).outline}
+                </div>
               ) : (
                 <>
                   {typeof explain === 'string' ? (
@@ -169,14 +174,18 @@ export default class SQLExplain extends Component<SQLExplainProps, SQLExplainSta
                         rowKey="key"
                         bordered={true}
                         expandable={{
-                          defaultExpandAllRows: true,
+                          defaultExpandAllRows: true
                         }}
                         scroll={{
                           x: 1400,
-                          y: tableHeight,
+                          y: tableHeight
                         }}
                         columns={columns}
-                        dataSource={explain && explain.tree ? injectKey2TreeData(explain.tree) : []}
+                        dataSource={
+                          explain && explain.tree
+                            ? injectKey2TreeData(explain.tree)
+                            : []
+                        }
                         disablePagination={true}
                       />
                     )
@@ -199,7 +208,7 @@ const ViewPlanText: React.FC<{
       {
         formatMessage({
           id: 'odc.components.SQLExplain.ViewPlanText',
-          defaultMessage: '查看计划文本',
+          defaultMessage: '查看计划文本'
         }) /*查看计划文本*/
       }
     </a>
@@ -214,7 +223,7 @@ const ViewFormattingInformation: React.FC<{
       {
         formatMessage({
           id: 'odc.components.SQLExplain.ViewFormattingInformation',
-          defaultMessage: '查看格式化信息',
+          defaultMessage: '查看格式化信息'
         }) /*查看格式化信息*/
       }
     </a>
@@ -227,13 +236,13 @@ export const handleShowOutputFilter = (filterContent: string) => {
     zIndex: 2000,
     title: formatMessage({
       id: 'workspace.window.sql.explain.tab.summary.columns.output',
-      defaultMessage: '输出过滤',
+      defaultMessage: '输出过滤'
     }),
     content: (
       <div
         style={{
           maxHeight: 'calc(100vh - 300px)',
-          overflowY: 'auto',
+          overflowY: 'auto'
         }}
       >
         {filterContent}
@@ -243,7 +252,7 @@ export const handleShowOutputFilter = (filterContent: string) => {
     maskClosable: true,
     okText: formatMessage({
       id: 'app.button.ok',
-      defaultMessage: '确定',
-    }),
+      defaultMessage: '确定'
+    })
   });
 };

@@ -17,7 +17,10 @@
 import { isSupportAutoIncrement } from '@/util/utils';
 import { Checkbox } from 'antd';
 
-export default function WrapCheckboxFormatetr(key: string, isDisabled?: (row) => boolean) {
+export default function WrapCheckboxFormatetr(
+  key: string,
+  isDisabled?: (row) => boolean
+) {
   return (props) => {
     const { row, onRowChange } = props;
     const value = row[key];
@@ -30,7 +33,7 @@ export default function WrapCheckboxFormatetr(key: string, isDisabled?: (row) =>
         onChange={() => {
           onRowChange({
             ...row,
-            [key]: !value,
+            [key]: !value
           });
         }}
       />
@@ -38,7 +41,10 @@ export default function WrapCheckboxFormatetr(key: string, isDisabled?: (row) =>
   };
 }
 
-export function WrapReverseCheckboxFormatetr(key: string, isDisabled?: (row) => boolean) {
+export function WrapReverseCheckboxFormatetr(
+  key: string,
+  isDisabled?: (row) => boolean
+) {
   return (props) => {
     const { row, onRowChange } = props;
     const value = row[key];
@@ -51,7 +57,7 @@ export function WrapReverseCheckboxFormatetr(key: string, isDisabled?: (row) => 
         onChange={() => {
           onRowChange({
             ...row,
-            [key]: !value,
+            [key]: !value
           });
         }}
       />
@@ -71,7 +77,7 @@ export function WrapOracleCheckboxFormatetr(editable: boolean) {
         onChange={() => {
           onRowChange({
             ...row,
-            autoIncreament: !autoIncreament,
+            autoIncreament: !autoIncreament
           });
         }}
       />
@@ -89,7 +95,7 @@ export const ReadonlyCheckBoxFormatter = (props) => {
       onChange={() => {
         onRowChange({
           ...row,
-          enable: !enable,
+          enable: !enable
         });
       }}
     />
@@ -106,7 +112,7 @@ export const CheckBoxFormatter = (props) => {
       onChange={() => {
         onRowChange({
           ...row,
-          enable: !enable,
+          enable: !enable
         });
       }}
     />

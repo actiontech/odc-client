@@ -26,13 +26,19 @@ export { TaskTypeMap } from '@/component/Task/component/TaskTable';
 // 423 屏蔽 SysFormItem 配置
 export const ENABLED_SYS_FROM_ITEM = false;
 
-export const hasPermission = (taskType: TaskType, permissions: DatabasePermissionType[]) => {
+export const hasPermission = (
+  taskType: TaskType,
+  permissions: DatabasePermissionType[]
+) => {
   let _permissions = [];
   switch (taskType) {
     case TaskType.EXPORT:
       return permissions?.length > 0; // 考虑有表没有库权限的情况
     case TaskType.EXPORT_RESULT_SET:
-      _permissions = [DatabasePermissionType.EXPORT, DatabasePermissionType.QUERY];
+      _permissions = [
+        DatabasePermissionType.EXPORT,
+        DatabasePermissionType.QUERY
+      ];
       break;
     default:
       _permissions = [DatabasePermissionType.CHANGE];
@@ -45,24 +51,25 @@ export const isCycleTask = (type: TaskType) => {
     TaskType.LOGICAL_DATABASE_CHANGE,
     TaskType.SQL_PLAN,
     TaskType.DATA_ARCHIVE,
-    TaskType.DATA_DELETE,
+    TaskType.DATA_DELETE
   ].includes(type);
 };
-export const isLogicalDbChangeTask = (type: TaskType) => TaskType.LOGICAL_DATABASE_CHANGE === type;
+export const isLogicalDbChangeTask = (type: TaskType) =>
+  TaskType.LOGICAL_DATABASE_CHANGE === type;
 export const isCycleTriggerStrategy = (execStrategy: TaskExecStrategy) => {
   return [
     TaskExecStrategy.CRON,
     TaskExecStrategy.DAY,
     TaskExecStrategy.WEEK,
     TaskExecStrategy.MONTH,
-    TaskExecStrategy.TIMER,
+    TaskExecStrategy.TIMER
   ].includes(execStrategy);
 };
 export const isSubCycleTask = (type: SubTaskType) => {
   return [
     SubTaskType.DATA_ARCHIVE,
     SubTaskType.DATA_ARCHIVE_ROLLBACK,
-    SubTaskType.DATA_DELETE,
+    SubTaskType.DATA_DELETE
   ].includes(type);
 };
 export const isCycleTaskPage = (type: TaskPageType) => {
@@ -70,7 +77,7 @@ export const isCycleTaskPage = (type: TaskPageType) => {
     TaskPageType.SQL_PLAN,
     TaskPageType.DATA_ARCHIVE,
     TaskPageType.DATA_DELETE,
-    TaskPageType.LOGICAL_DATABASE_CHANGE,
+    TaskPageType.LOGICAL_DATABASE_CHANGE
   ].includes(type);
 };
 
@@ -83,6 +90,39 @@ interface ITaskGroupLabel {
     enabled: boolean;
   }[];
 }
+
+export const getDMSTaskGroupLabels: () => ITaskGroupLabel[] = () => {
+  return [
+    {
+      groupName: '',
+      group: [
+        {
+          label: formatMessage({
+            id: 'osc.src.component.TASK.SQLOrders',
+            defaultMessage: 'SQL 工单'
+          }),
+          value: TaskPageType.CREATED_BY_CURRENT_USER,
+          enabled: true
+        }
+      ]
+    }
+    // {
+    //   groupName: '',
+    //   group: [
+    //     {
+    //       value: TaskPageType.EXPORT,
+    //       label: formatMessage({
+    //         id: 'odc.component.Task.helper.DataExport',
+    //         defaultMessage: '数据导出'
+    //       }),
+    //       // 导出
+    //       enabled: true
+    //     }
+    //   ]
+    // }
+  ];
+};
+
 export const getTaskGroupLabels: () => ITaskGroupLabel[] = () => {
   const isPersonal = login?.isPrivateSpace();
   return [
@@ -92,33 +132,33 @@ export const getTaskGroupLabels: () => ITaskGroupLabel[] = () => {
         {
           label: formatMessage({
             id: 'odc.src.component.Task.AllWorkOrders',
-            defaultMessage: '所有工单',
+            defaultMessage: '所有工单'
           }), //'所有工单'
           value: TaskPageType.ALL,
-          enabled: !isClient(),
+          enabled: !isClient()
         },
         {
           label: formatMessage({
             id: 'odc.component.TaskPopover.IInitiated',
-            defaultMessage: '我发起的',
+            defaultMessage: '我发起的'
           }),
           value: TaskPageType.CREATED_BY_CURRENT_USER,
-          enabled: !isClient(),
+          enabled: !isClient()
         },
         {
           label: formatMessage({
             id: 'odc.component.TaskPopover.PendingMyApproval',
-            defaultMessage: '待我审批',
+            defaultMessage: '待我审批'
           }),
           value: TaskPageType.APPROVE_BY_CURRENT_USER,
-          enabled: !isClient() && !isPersonal,
-        },
-      ],
+          enabled: !isClient() && !isPersonal
+        }
+      ]
     },
     {
       groupName: formatMessage({
         id: 'odc.component.Task.helper.DataExport',
-        defaultMessage: '数据导出',
+        defaultMessage: '数据导出'
       }),
       //数据导出
       group: [
@@ -126,26 +166,26 @@ export const getTaskGroupLabels: () => ITaskGroupLabel[] = () => {
           value: TaskPageType.EXPORT,
           label: formatMessage({
             id: 'odc.components.TaskManagePage.Export',
-            defaultMessage: '导出',
+            defaultMessage: '导出'
           }),
           // 导出
-          enabled: settingStore.enableDBExport,
+          enabled: settingStore.enableDBExport
         },
         {
           value: TaskPageType.EXPORT_RESULT_SET,
           label: formatMessage({
             id: 'odc.src.component.Task.ExportResultSet',
-            defaultMessage: '导出结果集',
+            defaultMessage: '导出结果集'
           }),
           //'导出结果集'
-          enabled: settingStore.enableDBExport,
-        },
-      ],
+          enabled: settingStore.enableDBExport
+        }
+      ]
     },
     {
       groupName: formatMessage({
         id: 'odc.component.Task.helper.DataChanges',
-        defaultMessage: '数据变更',
+        defaultMessage: '数据变更'
       }),
       //数据变更
       group: [
@@ -153,70 +193,80 @@ export const getTaskGroupLabels: () => ITaskGroupLabel[] = () => {
           value: TaskPageType.IMPORT,
           label: formatMessage({
             id: 'odc.components.TaskManagePage.Import',
-            defaultMessage: '导入',
+            defaultMessage: '导入'
           }),
           // 导入
-          enabled: settingStore.enableDBImport,
+          enabled: settingStore.enableDBImport
         },
         {
           value: TaskPageType.DATAMOCK,
           label: formatMessage({
             id: 'odc.components.TaskManagePage.AnalogData',
-            defaultMessage: '模拟数据',
+            defaultMessage: '模拟数据'
           }),
           // 模拟数据
-          enabled: settingStore.enableMockdata,
+          enabled: settingStore.enableMockdata
         },
         {
           value: TaskPageType.ASYNC,
           label: formatMessage({
             id: 'odc.components.TaskManagePage.DatabaseChanges',
-            defaultMessage: '数据库变更',
+            defaultMessage: '数据库变更'
           }),
-          enabled: settingStore.enableAsyncTask,
+          enabled: settingStore.enableAsyncTask
           // 数据库变更
         },
         {
           value: TaskPageType.MULTIPLE_ASYNC,
-          label: formatMessage({ id: 'src.component.Task.1EDC83CC', defaultMessage: '多库变更' }),
-          enabled: settingStore.enableMultipleAsyncTask,
+          label: formatMessage({
+            id: 'src.component.Task.1EDC83CC',
+            defaultMessage: '多库变更'
+          }),
+          enabled: settingStore.enableMultipleAsyncTask
           // 数据库变更
         },
         {
           value: TaskPageType.LOGICAL_DATABASE_CHANGE,
-          label: formatMessage({ id: 'src.component.Task.A7954C70', defaultMessage: '逻辑库变更' }),
-          enabled: !login.isPrivateSpace() && settingStore?.enableLogicaldatabase,
+          label: formatMessage({
+            id: 'src.component.Task.A7954C70',
+            defaultMessage: '逻辑库变更'
+          }),
+          enabled:
+            !login.isPrivateSpace() && settingStore?.enableLogicaldatabase
         },
         {
           value: TaskPageType.SHADOW,
           label: formatMessage({
             id: 'odc.TaskManagePage.component.TaskTable.ShadowTableSynchronization',
-            defaultMessage: '影子表同步',
+            defaultMessage: '影子表同步'
           }),
           //影子表同步
-          enabled: settingStore.enableShadowTableSync,
+          enabled: settingStore.enableShadowTableSync
         },
         {
           value: TaskPageType.STRUCTURE_COMPARISON,
-          label: formatMessage({ id: 'src.component.Task.223677D8', defaultMessage: '结构比对' }), //'结构比对'
+          label: formatMessage({
+            id: 'src.component.Task.223677D8',
+            defaultMessage: '结构比对'
+          }), //'结构比对'
 
-          enabled: settingStore.enableStructureCompare,
+          enabled: settingStore.enableStructureCompare
         },
         {
           value: TaskPageType.ONLINE_SCHEMA_CHANGE,
           label: formatMessage({
             id: 'odc.component.Task.helper.LockFreeStructureChange',
-            defaultMessage: '无锁结构变更',
+            defaultMessage: '无锁结构变更'
           }),
           //无锁结构变更
-          enabled: settingStore.enableOSC,
-        },
-      ],
+          enabled: settingStore.enableOSC
+        }
+      ]
     },
     {
       groupName: formatMessage({
         id: 'odc.component.Task.helper.ScheduledTasks',
-        defaultMessage: '定时任务',
+        defaultMessage: '定时任务'
       }),
       //定时任务
       group: [
@@ -224,73 +274,76 @@ export const getTaskGroupLabels: () => ITaskGroupLabel[] = () => {
           value: TaskPageType.SQL_PLAN,
           label: formatMessage({
             id: 'odc.TaskManagePage.component.helper.SqlPlan',
-            defaultMessage: 'SQL 计划',
+            defaultMessage: 'SQL 计划'
           }),
           //SQL 计划
-          enabled: settingStore.enableSQLPlan,
+          enabled: settingStore.enableSQLPlan
         },
         {
           value: TaskPageType.PARTITION_PLAN,
           label: formatMessage({
             id: 'odc.TaskManagePage.component.TaskTable.PartitionPlan',
-            defaultMessage: '分区计划',
+            defaultMessage: '分区计划'
           }),
-          enabled: settingStore.enablePartitionPlan,
+          enabled: settingStore.enablePartitionPlan
         },
         {
           value: TaskPageType.DATA_ARCHIVE,
           label: formatMessage({
             id: 'odc.component.Task.helper.DataArchiving',
-            defaultMessage: '数据归档',
+            defaultMessage: '数据归档'
           }),
           //数据归档
-          enabled: settingStore.enableDataArchive,
+          enabled: settingStore.enableDataArchive
         },
         {
           value: TaskPageType.DATA_DELETE,
           label: formatMessage({
             id: 'odc.component.Task.helper.DataCleansing',
-            defaultMessage: '数据清理',
+            defaultMessage: '数据清理'
           }),
           //数据清理
-          enabled: settingStore.enableDataClear,
-        },
-      ],
+          enabled: settingStore.enableDataClear
+        }
+      ]
     },
     {
       groupName: formatMessage({
         id: 'odc.src.component.Task.AccessRequest',
-        defaultMessage: '权限申请',
+        defaultMessage: '权限申请'
       }), //'权限申请'
       group: [
         {
           value: TaskPageType.APPLY_DATABASE_PERMISSION,
-          label: formatMessage({ id: 'src.component.Task.F2EE6904', defaultMessage: '申请库权限' }), //'申请库权限'
-          enabled: settingStore.enableApplyDBAuth,
+          label: formatMessage({
+            id: 'src.component.Task.F2EE6904',
+            defaultMessage: '申请库权限'
+          }), //'申请库权限'
+          enabled: settingStore.enableApplyDBAuth
         },
         {
           value: TaskPageType.APPLY_PROJECT_PERMISSION,
           label: formatMessage({
             id: 'odc.src.component.Task.ApplicationProjectPermissions',
-            defaultMessage: '申请项目权限',
+            defaultMessage: '申请项目权限'
           }), //'申请项目权限'
-          enabled: settingStore.enableApplyProjectAuth,
+          enabled: settingStore.enableApplyProjectAuth
         },
         {
           value: TaskPageType.APPLY_TABLE_PERMISSION,
           label: formatMessage({
             id: 'src.component.Task.7FE73181',
-            defaultMessage: '申请表/视图权限',
+            defaultMessage: '申请表/视图权限'
           }),
-          enabled: settingStore.enableApplyTableAuth,
-        },
-      ],
-    },
+          enabled: settingStore.enableApplyTableAuth
+        }
+      ]
+    }
   ];
 };
 
 export function getTaskLabels() {
-  return flatten(getTaskGroupLabels()?.map((item) => item?.group));
+  return flatten(getDMSTaskGroupLabels()?.map((item) => item?.group));
 }
 export function getFirstEnabledTask() {
   return getTaskLabels()?.find((item) => item?.enabled);
@@ -303,18 +356,28 @@ export const conditionExpressionColumns = [
   {
     dataIndex: 'tableName',
     key: 'tableName',
-    title: formatMessage({ id: 'src.component.Task.2BADF17E', defaultMessage: '关联表' }),
-    ellipsis: true,
+    title: formatMessage({
+      id: 'src.component.Task.2BADF17E',
+      defaultMessage: '关联表'
+    }),
+    ellipsis: true
   },
   {
     dataIndex: 'joinCondition',
     key: 'joinCondition',
-    title: formatMessage({ id: 'src.component.Task.96BD5290', defaultMessage: '关联条件' }),
+    title: formatMessage({
+      id: 'src.component.Task.96BD5290',
+      defaultMessage: '关联条件'
+    }),
     ellipsis: false,
     render: (value) => {
       return (
-        <span style={{ textWrap: 'wrap', wordBreak: 'break-all', maxWidth: 300 }}>{value}</span>
+        <span
+          style={{ textWrap: 'wrap', wordBreak: 'break-all', maxWidth: 300 }}
+        >
+          {value}
+        </span>
       );
-    },
-  },
+    }
+  }
 ];

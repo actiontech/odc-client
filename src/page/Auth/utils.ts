@@ -24,7 +24,7 @@ export enum ResourceManagementAction {
   can_create = 'can_create',
   sencrity_administrator = 'SECURITY_ADMINISTRATOR',
   owner = 'OWNER',
-  dba = 'DBA',
+  dba = 'DBA'
 }
 
 export const resourceManagementActionMap = {
@@ -33,22 +33,22 @@ export const resourceManagementActionMap = {
   [ResourceManagementAction.can_read]: ['read'],
   [ResourceManagementAction.sencrity_administrator]: ['SECURITY_ADMINISTRATOR'],
   [ResourceManagementAction.owner]: ['OWNER'],
-  [ResourceManagementAction.dba]: ['DBA'],
+  [ResourceManagementAction.dba]: ['DBA']
 };
 
 export const resourceAuthMap = {
   [ResourceManagementAction.can_create]: {
-    hasAuth: hasCreateAuth,
+    hasAuth: hasCreateAuth
   },
   [ResourceManagementAction.can_read]: {
-    hasAuth: hasReadAuth,
+    hasAuth: hasReadAuth
   },
   [ResourceManagementAction.can_update]: {
-    hasAuth: hasEditAuth,
+    hasAuth: hasEditAuth
   },
   [ResourceManagementAction.can_manage]: {
-    hasAuth: hasManageAuth,
-  },
+    hasAuth: hasManageAuth
+  }
 };
 
 // 新建权限
@@ -65,12 +65,16 @@ export function hasCreateAuth(auths: string[] = []) {
 
 // 仅查看权限
 export function hasReadAuth(auths: string[] = []) {
-  return auths?.length === 1 && hasAuth(auths, ResourceManagementAction.can_read);
+  return (
+    auths?.length === 1 && hasAuth(auths, ResourceManagementAction.can_read)
+  );
 }
 
 // 可编辑权限
 export function hasEditAuth(auths: string[] = []) {
-  return hasAuth(auths, ResourceManagementAction.can_update) && !hasManageAuth(auths);
+  return (
+    hasAuth(auths, ResourceManagementAction.can_update) && !hasManageAuth(auths)
+  );
 }
 
 // 可管理权限
@@ -81,7 +85,10 @@ export function hasManageAuth(auths: string[] = []) {
 export const getAuthLabelString = (auths: string[] = []) => {
   const labels = auths.includes('create')
     ? [
-        formatMessage({ id: 'odc.page.Auth.utils.CanBeCreated', defaultMessage: '可新建' }), //可新建
+        formatMessage({
+          id: 'odc.page.Auth.utils.CanBeCreated',
+          defaultMessage: '可新建'
+        }) //可新建
       ]
     : [];
   const otherLabel = resourceManagementActionOptions?.find((item) => {

@@ -19,7 +19,7 @@ import { TaskFlowNodeType, TaskNodeStatus } from '@/d.ts';
 
 export function getStatusDisplayInfo(
   nodeType: TaskFlowNodeType,
-  status: TaskNodeStatus,
+  status: TaskNodeStatus
 ): {
   text: string;
   status?: string;

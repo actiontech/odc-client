@@ -3,15 +3,29 @@ import {
   detailTemplate,
   editTemplate,
   existsTemplateName,
-  Template,
+  Template
 } from '@/common/network/databaseChange';
 import { DatabasePermissionType, IDatabase } from '@/d.ts/database';
 import datasourceStatus from '@/store/datasourceStatus';
 import login from '@/store/login';
 import { formatMessage } from '@/util/intl';
-import { DeleteOutlined, DownOutlined, PlusOutlined, UpOutlined } from '@ant-design/icons';
+import {
+  DeleteOutlined,
+  DownOutlined,
+  PlusOutlined,
+  UpOutlined
+} from '@ant-design/icons';
 import { useRequest } from 'ahooks';
-import { Button, Divider, Drawer, Form, Input, message, Space, Timeline } from 'antd';
+import {
+  Button,
+  Divider,
+  Drawer,
+  Form,
+  Input,
+  message,
+  Space,
+  Timeline
+} from 'antd';
 import { observer } from 'mobx-react';
 import { useEffect, useMemo, useState } from 'react';
 import { DndProvider } from 'react-dnd';
@@ -38,9 +52,9 @@ const EditTemplate: React.FC<{
   const {
     data,
     run,
-    loading: fetchLoading,
+    loading: fetchLoading
   } = useRequest(listDatabases, {
-    manual: true,
+    manual: true
   });
   const loadDatabaseList = async (projectId: number) => {
     const databaseList = await run(
@@ -52,15 +66,15 @@ const EditTemplate: React.FC<{
       null,
       login.isPrivateSpace(),
       true,
-      true,
+      true
     );
     if (databaseList?.contents?.length) {
       datasourceStatus.asyncUpdateStatus([
         ...new Set(
           databaseList?.contents
             ?.filter((item) => item.type !== 'LOGICAL' && !!item.dataSource?.id)
-            ?.map((item) => item?.dataSource?.id),
-        ),
+            ?.map((item) => item?.dataSource?.id)
+        )
       ]);
       setDatabaseOptions(
         databaseList?.contents
@@ -69,7 +83,9 @@ const EditTemplate: React.FC<{
             return config?.features?.task?.includes(TaskType.MULTIPLE_ASYNC);
           })
           ?.map((item) => {
-            const statusInfo = datasourceStatus.statusMap.get(item?.dataSource?.id);
+            const statusInfo = datasourceStatus.statusMap.get(
+              item?.dataSource?.id
+            );
             return {
               label: item?.name,
               value: item?.id,
@@ -77,12 +93,12 @@ const EditTemplate: React.FC<{
               dataSource: item?.dataSource,
               existed: item?.existed,
               unauthorized: !item?.authorizedPermissionTypes?.includes(
-                DatabasePermissionType.CHANGE,
+                DatabasePermissionType.CHANGE
               ),
               expired: checkDbExpiredByDataSourceStatus(statusInfo?.status),
-              connectType: item?.connectType,
+              connectType: item?.connectType
             };
-          }),
+          })
       );
     }
   };
@@ -91,34 +107,38 @@ const EditTemplate: React.FC<{
     return _databaseOptions?.map((item) => {
       return {
         ...item,
-        expired: checkDbExpiredByDataSourceStatus(statusMap.get(item?.dataSource?.id)?.status),
+        expired: checkDbExpiredByDataSourceStatus(
+          statusMap.get(item?.dataSource?.id)?.status
+        )
       };
     });
   }, [statusMap, _databaseOptions]);
 
   const initTemplate = async (templateId: number) => {
-    const response = await detailTemplate(templateId, login?.organizationId?.toString());
-    setCurrentTemplate(response);
-    const rawData = ((response as any)?.databaseSequenceList as IDatabase[][])?.reduce(
-      (pre: number[][], cur) => {
-        pre?.push(
-          cur?.map((db) => {
-            return db?.id;
-          }),
-        );
-        return pre;
-      },
-      [],
+    const response = await detailTemplate(
+      templateId,
+      login?.organizationId?.toString()
     );
+    setCurrentTemplate(response);
+    const rawData = (
+      (response as any)?.databaseSequenceList as IDatabase[][]
+    )?.reduce((pre: number[][], cur) => {
+      pre?.push(
+        cur?.map((db) => {
+          return db?.id;
+        })
+      );
+      return pre;
+    }, []);
     form.setFields([
       {
         name: ['orders'],
-        value: rawData,
+        value: rawData
       },
       {
         name: ['name'],
-        value: response?.name,
-      },
+        value: response?.name
+      }
     ]);
   };
   const changeTemplateName = async () => {
@@ -130,38 +150,38 @@ const EditTemplate: React.FC<{
           errors: [
             formatMessage({
               id: 'src.component.Task.MutipleAsyncTask.components.Template.BA8536D1',
-              defaultMessage: '至少共需要2个数据库',
-            }),
-          ],
-        },
+              defaultMessage: '至少共需要2个数据库'
+            })
+          ]
+        }
       ]);
     } else {
       await form.setFields([
         {
           name: ['orders'],
-          errors: [],
-        },
+          errors: []
+        }
       ]);
     }
     const template = await form.validateFields().catch();
     const response = await editTemplate(templateId, {
       ...template,
-      projectId,
+      projectId
     });
     if (response) {
       message.success(
         formatMessage({
           id: 'src.component.Task.MutipleAsyncTask.components.Template.DC7A4698',
-          defaultMessage: '模板更新成功',
-        }),
+          defaultMessage: '模板更新成功'
+        })
       );
       await onSuccess?.();
     } else {
       message.error(
         formatMessage({
           id: 'src.component.Task.MutipleAsyncTask.components.Template.6BC97AE1',
-          defaultMessage: '模板更新失败',
-        }),
+          defaultMessage: '模板更新失败'
+        })
       );
     }
   };
@@ -170,13 +190,17 @@ const EditTemplate: React.FC<{
     if (!name) {
       return;
     }
-    const isRepeat = await existsTemplateName(name, projectId, login.organizationId?.toString());
+    const isRepeat = await existsTemplateName(
+      name,
+      projectId,
+      login.organizationId?.toString()
+    );
     if (isRepeat && name !== currentTemplate?.name) {
       throw new Error(
         formatMessage({
           id: 'src.component.Task.MutipleAsyncTask.components.Template.A6EB2822',
-          defaultMessage: '模版名称已存在',
-        }),
+          defaultMessage: '模版名称已存在'
+        })
       );
     }
   };
@@ -195,7 +219,7 @@ const EditTemplate: React.FC<{
       open={open}
       title={formatMessage({
         id: 'src.component.Task.MutipleAsyncTask.components.Template.7F26EEEC',
-        defaultMessage: '编辑模版',
+        defaultMessage: '编辑模版'
       })}
       closable
       destroyOnClose
@@ -204,20 +228,20 @@ const EditTemplate: React.FC<{
         <div
           style={{
             display: 'flex',
-            justifyContent: 'flex-end',
+            justifyContent: 'flex-end'
           }}
         >
           <Space size={8}>
             <Button onClick={() => setOpen(false)}>
               {formatMessage({
                 id: 'src.component.Task.MutipleAsyncTask.components.Template.8817713A',
-                defaultMessage: '取消',
+                defaultMessage: '取消'
               })}
             </Button>
             <Button type="primary" onClick={changeTemplateName}>
               {formatMessage({
                 id: 'src.component.Task.MutipleAsyncTask.components.Template.0058B243',
-                defaultMessage: '提交',
+                defaultMessage: '提交'
               })}
             </Button>
           </Space>
@@ -228,7 +252,7 @@ const EditTemplate: React.FC<{
         <Form.Item
           label={formatMessage({
             id: 'src.component.Task.MutipleAsyncTask.components.Template.70133595',
-            defaultMessage: '模版名称',
+            defaultMessage: '模版名称'
           })}
           name="name"
           rules={[
@@ -236,18 +260,18 @@ const EditTemplate: React.FC<{
               required: true,
               message: formatMessage({
                 id: 'src.component.Task.MutipleAsyncTask.components.Template.F3DD7E9F',
-                defaultMessage: '请输入',
-              }),
+                defaultMessage: '请输入'
+              })
             },
             {
-              validator: checkNameRepeat,
-            },
+              validator: checkNameRepeat
+            }
           ]}
         >
           <Input
             placeholder={formatMessage({
               id: 'src.component.Task.MutipleAsyncTask.components.Template.6AAE51DF',
-              defaultMessage: '请输入',
+              defaultMessage: '请输入'
             })}
           />
         </Form.Item>
@@ -255,7 +279,7 @@ const EditTemplate: React.FC<{
         <Form.Item
           label={formatMessage({
             id: 'src.component.Task.MutipleAsyncTask.components.Template.EC8FF04A',
-            defaultMessage: '数据库',
+            defaultMessage: '数据库'
           })}
           required={true}
           shouldUpdate={true}
@@ -265,7 +289,7 @@ const EditTemplate: React.FC<{
               {formatMessage({
                 id: 'src.component.Task.MutipleAsyncTask.components.Template.21EB3930',
                 defaultMessage:
-                  '选择库并设置执行顺序；不同节点将依次执行变更，同一节点内的库将同时变更',
+                  '选择库并设置执行顺序；不同节点将依次执行变更，同一节点内的库将同时变更'
               })}
             </div>
           </div>
@@ -280,11 +304,17 @@ const EditTemplate: React.FC<{
                         key={['databaseIds', key, index]?.join(',')}
                       >
                         <Form.List name={[name]}>
-                          {(innerFields, { add: innerAdd, remove: innerRemove }) => (
+                          {(
+                            innerFields,
+                            { add: innerAdd, remove: innerRemove }
+                          ) => (
                             <DndProvider backend={HTML5Backend} key={index}>
                               <div
                                 key={[key, index, 'inner']?.join(',')}
-                                style={{ display: 'flex', flexDirection: 'column' }}
+                                style={{
+                                  display: 'flex',
+                                  flexDirection: 'column'
+                                }}
                               >
                                 <div
                                   style={{
@@ -293,19 +323,23 @@ const EditTemplate: React.FC<{
                                     height: '20px',
                                     lineHeight: '20px',
                                     justifyContent: 'space-between',
-                                    alignItems: 'center',
+                                    alignItems: 'center'
                                   }}
                                 >
                                   <div
                                     className={styles.title}
-                                    style={{ flexShrink: 0, alignSelf: 'center' }}
+                                    style={{
+                                      flexShrink: 0,
+                                      alignSelf: 'center'
+                                    }}
                                   >
                                     {formatMessage(
                                       {
                                         id: 'src.component.Task.MutipleAsyncTask.components.Template.0A55C56F',
-                                        defaultMessage: '执行节点{ BinaryExpression0 }',
+                                        defaultMessage:
+                                          '执行节点{ BinaryExpression0 }'
                                       },
-                                      { BinaryExpression0: index + 1 },
+                                      { BinaryExpression0: index + 1 }
                                     )}
                                   </div>
                                   <Divider
@@ -317,7 +351,7 @@ const EditTemplate: React.FC<{
                                       height: 1,
                                       width: 284,
                                       minWidth: 0,
-                                      maxWidth: 284,
+                                      maxWidth: 284
                                     }}
                                   />
 
@@ -325,28 +359,45 @@ const EditTemplate: React.FC<{
                                     style={{
                                       display: 'flex',
                                       justifyContent: 'space-between',
-                                      columnGap: '8px',
+                                      columnGap: '8px'
                                     }}
                                   >
-                                    <PlusOutlined onClick={() => innerAdd(undefined)} />
+                                    <PlusOutlined
+                                      onClick={() => innerAdd(undefined)}
+                                    />
                                     <UpOutlined
                                       style={{
-                                        color: index === 0 ? 'var(--icon-color-disable)' : null,
-                                        cursor: index === 0 ? 'not-allowed' : null,
+                                        color:
+                                          index === 0
+                                            ? 'var(--icon-color-disable)'
+                                            : null,
+                                        cursor:
+                                          index === 0 ? 'not-allowed' : null
                                       }}
                                       onClick={async () => {
                                         if (index === 0) {
                                           return;
                                         }
-                                        const data = await form.getFieldsValue();
+                                        const data =
+                                          await form.getFieldsValue();
                                         const orderedDatabaseIds =
-                                          data?.parameters?.orderedDatabaseIds ?? [];
-                                        const [pre, next] = orderedDatabaseIds?.slice(
+                                          data?.parameters
+                                            ?.orderedDatabaseIds ?? [];
+                                        const [pre, next] =
+                                          orderedDatabaseIds?.slice(
+                                            index - 1,
+                                            index + 1
+                                          );
+                                        orderedDatabaseIds?.splice(
                                           index - 1,
-                                          index + 1,
+                                          2,
+                                          next,
+                                          pre
                                         );
-                                        orderedDatabaseIds?.splice(index - 1, 2, next, pre);
-                                        form.setFieldValue(['orders'], orderedDatabaseIds);
+                                        form.setFieldValue(
+                                          ['orders'],
+                                          orderedDatabaseIds
+                                        );
                                       }}
                                     />
 
@@ -356,25 +407,41 @@ const EditTemplate: React.FC<{
                                           index === fields?.length - 1
                                             ? 'var(--icon-color-disable)'
                                             : null,
-                                        cursor: index === fields?.length - 1 ? 'not-allowed' : null,
+                                        cursor:
+                                          index === fields?.length - 1
+                                            ? 'not-allowed'
+                                            : null
                                       }}
                                       onClick={async () => {
                                         if (index === fields?.length - 1) {
                                           return;
                                         }
-                                        const data = await form.getFieldsValue();
+                                        const data =
+                                          await form.getFieldsValue();
                                         const orderedDatabaseIds =
-                                          data?.parameters?.orderedDatabaseIds ?? [];
-                                        const [pre, next] = orderedDatabaseIds?.slice(
+                                          data?.parameters
+                                            ?.orderedDatabaseIds ?? [];
+                                        const [pre, next] =
+                                          orderedDatabaseIds?.slice(
+                                            index,
+                                            index + 2
+                                          );
+                                        orderedDatabaseIds?.splice(
                                           index,
-                                          index + 2,
+                                          2,
+                                          next,
+                                          pre
                                         );
-                                        orderedDatabaseIds?.splice(index, 2, next, pre);
-                                        form.setFieldValue(['orders'], orderedDatabaseIds);
+                                        form.setFieldValue(
+                                          ['orders'],
+                                          orderedDatabaseIds
+                                        );
                                       }}
                                     />
 
-                                    <DeleteOutlined onClick={() => remove(name)} />
+                                    <DeleteOutlined
+                                      onClick={() => remove(name)}
+                                    />
                                   </div>
                                 </div>
                                 <InnerSelecter
@@ -399,14 +466,14 @@ const EditTemplate: React.FC<{
                           padding: 0,
                           margin: 0,
                           lineHeight: '20px',
-                          height: '20px',
+                          height: '20px'
                         }}
                         onClick={() => add([undefined])}
                         icon={<PlusOutlined />}
                       >
                         {formatMessage({
                           id: 'src.component.Task.MutipleAsyncTask.components.Template.60FB68A1',
-                          defaultMessage: '添加执行节点',
+                          defaultMessage: '添加执行节点'
                         })}
                       </Button>
                     </Timeline.Item>

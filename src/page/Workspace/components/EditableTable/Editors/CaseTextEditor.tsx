@@ -17,13 +17,14 @@
 import { formatMessage } from '@/util/intl';
 import { EditOutlined } from '@ant-design/icons';
 import type { EditorProps } from '@oceanbase-odc/ob-react-data-grid';
-import { Modal } from 'antd';
 import type { ChangeEvent } from 'react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 
 import { CaseTextArea } from '@/component/Input/Case';
 import type { TextAreaRef } from 'antd/lib/input/TextArea';
 import AntdEditorWrap from './AntdEditorWrap';
+import { BasicButton, BasicModal } from '@actiontech/dms-kit';
+import { Space } from 'antd';
 
 interface CaseOptions {
   caseSensitive: boolean;
@@ -36,7 +37,7 @@ export function CaseTextEditor<T>({
   column,
   width,
   caseSensitive,
-  escapes,
+  escapes
 }: EditorProps<T> & CaseOptions) {
   const { key, name } = column;
   const value = row[key];
@@ -48,8 +49,17 @@ export function CaseTextEditor<T>({
     (e: ChangeEvent<HTMLTextAreaElement>) => {
       onRowChange({ ...row, [key]: e.target.value });
     },
-    [onRowChange],
+    [onRowChange]
   );
+
+  const handleCancel = () => {
+    setIsShowTextModal(false);
+    setModalTextValue(null);
+  };
+
+  const handleOk = () => {
+    onRowChange({ ...row, [key]: modalTextValue }, true);
+  };
 
   return (
     <AntdEditorWrap>
@@ -60,7 +70,7 @@ export function CaseTextEditor<T>({
             setTimeout(() => {
               editorRef.current?.resizableTextArea.textArea.setSelectionRange(
                 Number.MAX_SAFE_INTEGER,
-                Number.MAX_SAFE_INTEGER,
+                Number.MAX_SAFE_INTEGER
               );
             }, 100);
           }}
@@ -90,21 +100,28 @@ export function CaseTextEditor<T>({
         </a>
       </div>
       {isShowTextModal ? (
-        <Modal
+        <BasicModal
           open={true}
           title={name}
           zIndex={1031}
-          okText={formatMessage({
-            id: 'odc.EditableTable.Editors.TextEditor.Submitted',
-            defaultMessage: '提交',
-          })} /* 提交 */
-          onCancel={() => {
-            setIsShowTextModal(false);
-            setModalTextValue(null);
-          }}
-          onOk={() => {
-            onRowChange({ ...row, [key]: modalTextValue }, true);
-          }}
+          onCancel={handleCancel}
+          onOk={handleOk}
+          footer={
+            <Space>
+              <BasicButton onClick={handleCancel}>
+                {formatMessage({
+                  id: 'app.button.cancel',
+                  defaultMessage: '取消'
+                })}
+              </BasicButton>
+              <BasicButton type="primary" onClick={handleOk}>
+                {formatMessage({
+                  id: 'odc.EditableTable.Editors.TextEditor.Submitted',
+                  defaultMessage: '提交'
+                })}
+              </BasicButton>
+            </Space>
+          }
         >
           <CaseTextArea
             caseSensitive={caseSensitive}
@@ -120,7 +137,7 @@ export function CaseTextEditor<T>({
               setModalTextValue(e.target.value);
             }}
           />
-        </Modal>
+        </BasicModal>
       ) : null}
     </AntdEditorWrap>
   );

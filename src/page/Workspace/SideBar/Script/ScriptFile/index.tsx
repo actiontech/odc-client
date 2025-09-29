@@ -23,15 +23,16 @@ import { UserStore } from '@/store/login';
 import { formatMessage } from '@/util/intl';
 import { batchDownloadScript } from '@/common/network';
 import tracert from '@/util/tracert';
-import { Input, Spin, Dropdown } from 'antd';
+import { Spin, Dropdown } from 'antd';
 import { UploadFile } from 'antd/es/upload/interface';
 import { inject, observer } from 'mobx-react';
-import { useEffect, useMemo, useState, useContext } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import styles from './index.less';
 import Item from './Item';
 import { IScriptMeta } from '@/d.ts';
 import useKeyBoardSensor from './hooks/useKeyBoardSensor';
 import odc from '@/plugins/odc';
+import { SearchInput } from '@actiontech/dms-kit';
 
 interface IProps {
   userStore?: UserStore;
@@ -40,9 +41,13 @@ interface IProps {
 }
 
 export default inject('userStore')(
-  observer(function ScriptFile({ userStore, uploadFiles, setUploadFiles }: IProps) {
+  observer(function ScriptFile({
+    userStore,
+    uploadFiles,
+    setUploadFiles
+  }: IProps) {
     const [loading, setLoading] = useState(false);
-    const [searchVaue, setSearchVaue] = useState('');
+    const [searchValue, setSearchValue] = useState('');
     const [editingScriptId, setEditingScriptId] = useState(null);
     const [activeFileList, setActiveFileList] = useState<React.Key[]>([]);
     const [interval, setInterval] = useState<React.Key[]>([]);
@@ -61,15 +66,21 @@ export default inject('userStore')(
 
     const filteredUploadFiles = useMemo(() => {
       return uploadFiles.filter((file) => {
-        return !searchVaue || file.name?.toUpperCase()?.includes(searchVaue?.toUpperCase());
+        return (
+          !searchValue ||
+          file.name?.toUpperCase()?.includes(searchValue?.toUpperCase())
+        );
       });
-    }, [searchVaue, uploadFiles]);
+    }, [searchValue, uploadFiles]);
 
     const filteredScripts = useMemo(() => {
       return userStore?.scriptStore?.scripts.filter((script) => {
-        return !searchVaue || script.objectName?.toUpperCase()?.includes(searchVaue?.toUpperCase());
+        return (
+          !searchValue ||
+          script.objectName?.toUpperCase()?.includes(searchValue?.toUpperCase())
+        );
       });
-    }, [searchVaue, userStore?.scriptStore?.scripts]);
+    }, [searchValue, userStore?.scriptStore?.scripts]);
 
     const onFileSelect = (script: IScriptMeta) => {
       if (!odc.appConfig?.workspaceConfig?.batchDownloadScripts) {
@@ -102,8 +113,12 @@ export default inject('userStore')(
 
     const selectByShiftPressed = (script) => {
       const preScriptId = activeFileList?.[activeFileList?.length - 1];
-      const preScriptIndex = filteredScripts.findIndex((item) => item.id === preScriptId);
-      const targetScriptIndex = filteredScripts.findIndex((item) => item.id === script.id);
+      const preScriptIndex = filteredScripts.findIndex(
+        (item) => item.id === preScriptId
+      );
+      const targetScriptIndex = filteredScripts.findIndex(
+        (item) => item.id === script.id
+      );
       let intervalTemp;
       let preActiveFileList = [...(activeFileList || [])];
       if (preScriptIndex < targetScriptIndex) {
@@ -123,7 +138,9 @@ export default inject('userStore')(
       }
       setInterval(intervalTemp);
       setActiveFileList(
-        Array.from(new Set([...(intervalTemp || []), ...(preActiveFileList || [])])),
+        Array.from(
+          new Set([...(intervalTemp || []), ...(preActiveFileList || [])])
+        )
       );
       return;
     };
@@ -131,12 +148,16 @@ export default inject('userStore')(
     const selectByCrtlorCommand = (script) => {
       if (activeFileList?.includes(script.id)) {
         // command + 单击已选中脚本：取消选择当前
-        const newActiveFileList = activeFileList.filter((item) => item !== script.id);
+        const newActiveFileList = activeFileList.filter(
+          (item) => item !== script.id
+        );
         setInterval([]);
         setActiveFileList(newActiveFileList);
       } else {
         // command + 单击未选中脚本：选中多个
-        setActiveFileList(Array.from(new Set([...(activeFileList || []), script.id])));
+        setActiveFileList(
+          Array.from(new Set([...(activeFileList || []), script.id]))
+        );
         setInterval([]);
       }
     };
@@ -147,25 +168,26 @@ export default inject('userStore')(
         {
           label: formatMessage({
             id: 'src.page.Workspace.SideBar.Script.ScriptFile.4903D296',
-            defaultMessage: '批量下载',
+            defaultMessage: '批量下载'
           }),
           key: 'bacthDownload',
           onClick: () => {
             batchDownloadScript(activeFileList);
-          },
-        },
+          }
+        }
       ];
     }, [activeFileList]);
 
     return (
       <div className={styles.script}>
         <div className={styles.search}>
-          <Input.Search
-            onSearch={(v) => setSearchVaue(v)}
-            onBlur={(e) => setSearchVaue(e.target.value)}
+          <SearchInput
+            value={searchValue}
+            onChange={(v) => setSearchValue(v)}
+            onBlur={(e) => setSearchValue(e.target.value)}
             placeholder={formatMessage({
               id: 'odc.Script.ScriptFile.SearchScript',
-              defaultMessage: '搜索脚本',
+              defaultMessage: '搜索脚本'
             })}
           />
         </div>
@@ -182,11 +204,13 @@ export default inject('userStore')(
                       file?.response?.errMsg ||
                       formatMessage({
                         id: 'odc.component.OSSDragger2.FileListItem.UploadFailed',
-                        defaultMessage: '上传失败',
+                        defaultMessage: '上传失败'
                       })
                     }
                     removeUploadFile={() => {
-                      setUploadFiles(uploadFiles.filter((file) => file !== file));
+                      setUploadFiles(
+                        uploadFiles.filter((file) => file !== file)
+                      );
                     }}
                   />
                 );
@@ -210,7 +234,7 @@ export default inject('userStore')(
               })}
               {filteredScripts?.length === 0 &&
                 filteredUploadFiles?.length === 0 &&
-                (searchVaue ? (
+                (searchValue ? (
                   <SQLConsoleEmpty />
                 ) : (
                   <SQLConsoleEmpty type={SQLConsoleResourceType.Script} />
@@ -231,5 +255,5 @@ export default inject('userStore')(
         />
       </div>
     );
-  }),
+  })
 );

@@ -15,14 +15,23 @@
  */
 
 import Toolbar from '@/component/Toolbar';
-import EditableTable, { RowType } from '@/page/Workspace/components/EditableTable';
+import EditableTable, {
+  RowType
+} from '@/page/Workspace/components/EditableTable';
 import { TextEditor } from '@/page/Workspace/components/EditableTable/Editors/TextEditor';
 import { formatMessage } from '@/util/intl';
 import { generateUniqKey } from '@/util/utils';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { DataGridRef } from '@oceanbase-odc/ob-react-data-grid';
 import { Form, Space } from 'antd';
-import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
 import DatasourceFormContext from '../context';
 type IValue = Record<string, string>;
 interface IProps {
@@ -54,7 +63,7 @@ const JDBCParams: React.FC<IProps> = function ({ value, onChange }) {
           return {
             name,
             value,
-            key: generateUniqKey(),
+            key: generateUniqKey()
           };
         }) || [];
       gridRef.current?.setRows?.(rows);
@@ -66,7 +75,7 @@ const JDBCParams: React.FC<IProps> = function ({ value, onChange }) {
     const data = {
       name: '',
       value: '',
-      key: generateUniqKey(),
+      key: generateUniqKey()
     };
     gridRef.current?.addRows([data]);
   }, [gridRef]);
@@ -80,21 +89,21 @@ const JDBCParams: React.FC<IProps> = function ({ value, onChange }) {
       {
         name: formatMessage({
           id: 'odc.src.page.Datasource.Datasource.NewDatasourceDrawer.Form.JDBCParamsItem.ConfigurationItem',
-          defaultMessage: '配置项',
+          defaultMessage: '配置项'
         }), //'配置项'
         key: 'name',
         editor: TextEditor,
-        editable: true,
+        editable: true
       },
       {
         name: formatMessage({
           id: 'odc.src.page.Datasource.Datasource.NewDatasourceDrawer.Form.JDBCParamsItem.ConfigurationInformation',
-          defaultMessage: '配置信息',
+          defaultMessage: '配置信息'
         }), //'配置信息'
         key: 'value',
         editor: TextEditor,
-        editable: true,
-      },
+        editable: true
+      }
     ];
   }, []);
   const onRowsChange = useCallback(
@@ -105,7 +114,7 @@ const JDBCParams: React.FC<IProps> = function ({ value, onChange }) {
       });
       onChange(result);
     },
-    [onChange],
+    [onChange]
   );
   return (
     <>
@@ -113,7 +122,7 @@ const JDBCParams: React.FC<IProps> = function ({ value, onChange }) {
         {
           formatMessage({
             id: 'odc.src.page.Datasource.Datasource.NewDatasourceDrawer.Form.JDBCParamsItem.AttributeConfiguration',
-            defaultMessage: '\n        属性配置',
+            defaultMessage: '\n        属性配置'
           }) /* 
         属性配置 */
         }{' '}
@@ -127,7 +136,7 @@ const JDBCParams: React.FC<IProps> = function ({ value, onChange }) {
           {
             formatMessage({
               id: 'odc.src.page.Datasource.Datasource.NewDatasourceDrawer.Form.JDBCParamsItem.ExplanationDocument',
-              defaultMessage: '\n          说明文档\n        ',
+              defaultMessage: '\n          说明文档\n        '
             }) /* 
           说明文档
           */
@@ -138,7 +147,7 @@ const JDBCParams: React.FC<IProps> = function ({ value, onChange }) {
         style={{
           width: '100%',
           marginTop: 5,
-          border: '1px solid var(--odc-border-color)',
+          border: '1px solid var(--odc-border-color)'
         }}
         direction="vertical"
       >
@@ -147,7 +156,7 @@ const JDBCParams: React.FC<IProps> = function ({ value, onChange }) {
             icon={<PlusOutlined />}
             text={formatMessage({
               id: 'odc.component.ProcedureParam.AddParameters',
-              defaultMessage: '添加参数',
+              defaultMessage: '添加参数'
             })}
             /* 添加参数 */ onClick={addParam}
           />
@@ -156,7 +165,7 @@ const JDBCParams: React.FC<IProps> = function ({ value, onChange }) {
             icon={<DeleteOutlined />}
             text={formatMessage({
               id: 'odc.component.ProcedureParam.DeleteParameters',
-              defaultMessage: '删除参数',
+              defaultMessage: '删除参数'
             })}
             /* 删除参数 */ onClick={deleteParam}
           />

@@ -26,7 +26,13 @@ import { DataNode, EventDataNode, TreeProps } from 'antd/lib/tree';
 import classnames from 'classnames';
 import { isConnectTypeBeFileSystemGroup } from '@/util/connection';
 import { isNumber, toNumber } from 'lodash';
-import React, { useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useState
+} from 'react';
 import styles from './index.less';
 import DataBaseStatusIcon from '@/component/StatusIcon/DatabaseIcon';
 import datasourceStatus from '@/store/datasourceStatus';
@@ -40,7 +46,7 @@ import {
   TableItem,
   TableItemInDB,
   TableSelecterRef,
-  tableTreeEventDataNode,
+  tableTreeEventDataNode
 } from './interface';
 import { DbObjectTypeTextMap } from '@/constant/label';
 import { ApplyDatabaseAuthEmpty } from '@/component/Empty/ApplyDatabaseAuthEmpty';
@@ -57,7 +63,11 @@ const KEY_SPLIT_CHAR = '@--@';
 /**
  *  使用dataBaseId和tableName生成key 用于树节点的Key
  */
-const generateKeyByDataBaseIdAndTableName = ({ databaseId, tableName, tableId }: TableItem) => {
+const generateKeyByDataBaseIdAndTableName = ({
+  databaseId,
+  tableName,
+  tableId
+}: TableItem) => {
   return `${databaseId}${KEY_SPLIT_CHAR}${tableName}${KEY_SPLIT_CHAR}${tableId}`;
 };
 /**
@@ -67,7 +77,11 @@ const generateKeyByDataBaseIdAndTableName = ({ databaseId, tableName, tableId }:
 const parseDataBaseIdAndTableNamebByKey = (key: string): TableItem => {
   const [databaseId, tableName, tableId] = key.split(KEY_SPLIT_CHAR);
 
-  return { databaseId: Number(databaseId), tableName, tableId: Number(tableId) };
+  return {
+    databaseId: Number(databaseId),
+    tableName,
+    tableId: Number(tableId)
+  };
 };
 
 function envRender(environment) {
@@ -87,7 +101,10 @@ function envRender(environment) {
  * @param validTableList
  * @returns
  */
-const getTreeData = (validTableList: IDataBaseWithTable[], isSourceTree = false) => {
+const getTreeData = (
+  validTableList: IDataBaseWithTable[],
+  isSourceTree = false
+) => {
   const allTreeData = validTableList?.map((database) => {
     const {
       id,
@@ -98,7 +115,7 @@ const getTreeData = (validTableList: IDataBaseWithTable[], isSourceTree = false)
       viewList,
       hasGetTableList,
       materializedViewList,
-      environment,
+      environment
     } = database;
 
     let children = [];
@@ -106,12 +123,12 @@ const getTreeData = (validTableList: IDataBaseWithTable[], isSourceTree = false)
     const childrenForTable = treeChildrenHelper(tableList, DbObjectType.table);
     const childrenForExternalTable = treeChildrenHelper(
       externalTablesList,
-      DbObjectType.external_table,
+      DbObjectType.external_table
     );
     const childrenForView = treeChildrenHelper(viewList, DbObjectType.view);
     const childrenForMaterializedView = treeChildrenHelper(
       materializedViewList,
-      DbObjectType.materialized_view,
+      DbObjectType.materialized_view
     );
 
     children = !hasGetTableList
@@ -120,10 +137,15 @@ const getTreeData = (validTableList: IDataBaseWithTable[], isSourceTree = false)
           childrenForTable,
           childrenForExternalTable,
           childrenForView,
-          childrenForMaterializedView,
+          childrenForMaterializedView
         ]?.filter(Boolean);
 
-    const getTotalCount = (tableList, externalTablesList, viewList, materializedViewList) => {
+    const getTotalCount = (
+      tableList,
+      externalTablesList,
+      viewList,
+      materializedViewList
+    ) => {
       return (
         (tableList?.length || 0) +
         (externalTablesList?.length || 0) +
@@ -142,12 +164,22 @@ const getTreeData = (validTableList: IDataBaseWithTable[], isSourceTree = false)
           >
             {name}
           </Text>
-          <Text type="secondary" ellipsis style={{ maxWidth: 80 }} title={dataSource?.name}>
+          <Text
+            type="secondary"
+            ellipsis
+            style={{ maxWidth: 80 }}
+            title={dataSource?.name}
+          >
             {dataSource?.name}
           </Text>
           <Text type="secondary" ellipsis>
             {hasGetTableList && isSourceTree
-              ? `(${getTotalCount(tableList, externalTablesList, viewList, materializedViewList)})`
+              ? `(${getTotalCount(
+                  tableList,
+                  externalTablesList,
+                  viewList,
+                  materializedViewList
+                )})`
               : ''}
           </Text>
           {isSourceTree ? envRender(environment) : null}
@@ -161,10 +193,13 @@ const getTreeData = (validTableList: IDataBaseWithTable[], isSourceTree = false)
       expandable: true,
       children: children,
       isLeaf: false,
-      isLogicalDatabase: isLogicalDatabase(database),
+      isLogicalDatabase: isLogicalDatabase(database)
     };
 
-    function treeChildrenHelper(objectList: TableItemInDB[], objectType: DbObjectType) {
+    function treeChildrenHelper(
+      objectList: TableItemInDB[],
+      objectType: DbObjectType
+    ) {
       return {
         title: DbObjectTypeTextMap(objectType),
         key: `${id}-${objectType}`,
@@ -180,12 +215,12 @@ const getTreeData = (validTableList: IDataBaseWithTable[], isSourceTree = false)
           key: generateKeyByDataBaseIdAndTableName({
             databaseId: id,
             tableName: tableItem.name,
-            tableId: tableItem.id,
+            tableId: tableItem.id
           }),
           icon: <Icon component={TableSvg} />,
           checkable: true,
-          isLeaf: true,
-        })),
+          isLeaf: true
+        }))
       };
     }
   });
@@ -207,16 +242,22 @@ const getObjectTypeFromPosition = (position: string): DbObjectType => {
   }
 };
 
-const TableSelecter: React.ForwardRefRenderFunction<TableSelecterRef, IProps> = (
-  { projectId, value = [], onChange },
-  ref,
-) => {
+const TableSelecter: React.ForwardRefRenderFunction<
+  TableSelecterRef,
+  IProps
+> = ({ projectId, value = [], onChange }, ref) => {
   const [isLoading, setIsLoading] = useState(false);
   const [sourceSearchValue, setSourceSearchValue] = useState(null);
   const [targetSearchValue, setTargetSearchValue] = useState(null);
-  const [databaseWithTableList, setDataBaseWithTableList] = useState<IDataBaseWithTable[]>([]);
-  const [sourceTreeExpandKeys, setSourceTreeExpandKeys] = useState<number[]>([]);
-  const [selectedExpandKeys, setSelectedExpandKeys] = useState<(number | string)[]>([]);
+  const [databaseWithTableList, setDataBaseWithTableList] = useState<
+    IDataBaseWithTable[]
+  >([]);
+  const [sourceTreeExpandKeys, setSourceTreeExpandKeys] = useState<number[]>(
+    []
+  );
+  const [selectedExpandKeys, setSelectedExpandKeys] = useState<
+    (number | string)[]
+  >([]);
   const [selecting, setSelecting] = useState(false);
   /**
    * 需要的参数格式转换成树的Key
@@ -232,17 +273,30 @@ const TableSelecter: React.ForwardRefRenderFunction<TableSelecterRef, IProps> = 
     if (!projectId) return;
     setIsLoading(true);
     try {
-      const res = await listDatabases(projectId, null, null, null, null, null, null, true, true);
+      const res = await listDatabases(
+        projectId,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        true,
+        true
+      );
       if (res?.contents) {
         datasourceStatus.asyncUpdateStatus(
           res?.contents
             ?.filter((item) => item.type !== 'LOGICAL' && !!item.dataSource?.id)
-            ?.map((item) => item?.dataSource?.id),
+            ?.map((item) => item?.dataSource?.id)
         );
         // 过滤掉对象存储的数据源
         const list: IDataBaseWithTable[] = res.contents
           .filter((item) => {
-            return !isConnectTypeBeFileSystemGroup(item.connectType) && !isLogicalDatabase(item);
+            return (
+              !isConnectTypeBeFileSystemGroup(item.connectType) &&
+              !isLogicalDatabase(item)
+            );
           })
           .map((db) => {
             return {
@@ -252,7 +306,7 @@ const TableSelecter: React.ForwardRefRenderFunction<TableSelecterRef, IProps> = 
               viewList: [],
               materializedViewList: [],
               isExternalTable: false,
-              showTable: true,
+              showTable: true
             };
           });
         setDataBaseWithTableList(list || []);
@@ -279,17 +333,27 @@ const TableSelecter: React.ForwardRefRenderFunction<TableSelecterRef, IProps> = 
     }
     const filtedDataSource = [];
     for (const datasource of databaseWithTableList) {
-      let { tableList, name, externalTablesList, viewList, materializedViewList } = datasource;
+      let {
+        tableList,
+        name,
+        externalTablesList,
+        viewList,
+        materializedViewList
+      } = datasource;
       if (name?.toLowerCase().includes(sourceSearchValue?.toLowerCase())) {
         filtedDataSource.push(datasource);
       } else {
-        const targetTableList = tableList.filter((item) => item?.name?.includes(sourceSearchValue));
-        const targetExternalTableList = externalTablesList?.filter((item) =>
-          item?.name?.includes(sourceSearchValue),
+        const targetTableList = tableList.filter((item) =>
+          item?.name?.includes(sourceSearchValue)
         );
-        const targetViewList = viewList?.filter((item) => item?.name?.includes(sourceSearchValue));
-        const targetmaterializedViewList = materializedViewList?.filter((item) =>
-          item?.name?.includes(sourceSearchValue),
+        const targetExternalTableList = externalTablesList?.filter((item) =>
+          item?.name?.includes(sourceSearchValue)
+        );
+        const targetViewList = viewList?.filter((item) =>
+          item?.name?.includes(sourceSearchValue)
+        );
+        const targetmaterializedViewList = materializedViewList?.filter(
+          (item) => item?.name?.includes(sourceSearchValue)
         );
         if (targetTableList.length > 0) {
           filtedDataSource.push({
@@ -297,7 +361,7 @@ const TableSelecter: React.ForwardRefRenderFunction<TableSelecterRef, IProps> = 
             tableList: targetTableList,
             externalTablesList: targetExternalTableList,
             viewList: targetViewList,
-            materializedViewList: targetmaterializedViewList,
+            materializedViewList: targetmaterializedViewList
           });
         }
       }
@@ -319,7 +383,7 @@ const TableSelecter: React.ForwardRefRenderFunction<TableSelecterRef, IProps> = 
           name: databaseName,
           externalTablesList,
           viewList,
-          materializedViewList,
+          materializedViewList
         } = datasource;
 
         function checkedTableNamesHelper(list: TableItemInDB[]) {
@@ -328,16 +392,18 @@ const TableSelecter: React.ForwardRefRenderFunction<TableSelecterRef, IProps> = 
               generateKeyByDataBaseIdAndTableName({
                 databaseId,
                 tableName: item.name,
-                tableId: item.id,
-              }),
-            ),
+                tableId: item.id
+              })
+            )
           );
         }
 
         const checkedTableNames = checkedTableNamesHelper(tableList);
-        const externalTableTableNames = checkedTableNamesHelper(externalTablesList);
+        const externalTableTableNames =
+          checkedTableNamesHelper(externalTablesList);
         const viewNames = checkedTableNamesHelper(viewList);
-        const materializedViewNames = checkedTableNamesHelper(materializedViewList);
+        const materializedViewNames =
+          checkedTableNamesHelper(materializedViewList);
 
         if (
           !checkedTableNames?.length &&
@@ -354,16 +420,22 @@ const TableSelecter: React.ForwardRefRenderFunction<TableSelecterRef, IProps> = 
             tableList: checkedTableNames,
             externalTablesList: externalTableTableNames,
             viewList: viewNames,
-            materializedViewList: materializedViewNames,
+            materializedViewList: materializedViewNames
           });
         } else {
           const searchedTableListHelper = (nameList: TableItemInDB[]) => {
-            return nameList.filter((item) => item?.name.includes(targetSearchValue));
+            return nameList.filter((item) =>
+              item?.name.includes(targetSearchValue)
+            );
           };
           const searchedTableList = searchedTableListHelper(checkedTableNames);
-          const searchedExternalTableTableList = searchedTableListHelper(externalTableTableNames);
+          const searchedExternalTableTableList = searchedTableListHelper(
+            externalTableTableNames
+          );
           const searchedViewList = searchedTableListHelper(viewNames);
-          const searchedMaterializedViewList = searchedTableListHelper(materializedViewNames);
+          const searchedMaterializedViewList = searchedTableListHelper(
+            materializedViewNames
+          );
 
           if (
             searchedTableList.length > 0 ||
@@ -376,7 +448,7 @@ const TableSelecter: React.ForwardRefRenderFunction<TableSelecterRef, IProps> = 
               tableList: searchedTableList,
               externalTablesList: searchedExternalTableTableList,
               viewList: searchedViewList,
-              materializedViewList: searchedMaterializedViewList,
+              materializedViewList: searchedMaterializedViewList
             });
           }
         }
@@ -404,14 +476,17 @@ const TableSelecter: React.ForwardRefRenderFunction<TableSelecterRef, IProps> = 
           .concat(db.externalTablesList || [])
           ?.map((t) => t.id);
         remainKeys = checkedKeys.filter(
-          (key) => !tableIds.includes(parseDataBaseIdAndTableNamebByKey(key)?.tableId),
+          (key) =>
+            !tableIds.includes(parseDataBaseIdAndTableNamebByKey(key)?.tableId)
         );
       } else if (!isLeaf) {
         /**
          * delete table group
          */
         const [databaseId, type] = key.split('-');
-        const db = databaseWithTableList?.find((_db) => _db.id === Number(databaseId));
+        const db = databaseWithTableList?.find(
+          (_db) => _db.id === Number(databaseId)
+        );
         if (!db) {
           return;
         }
@@ -442,14 +517,14 @@ const TableSelecter: React.ForwardRefRenderFunction<TableSelecterRef, IProps> = 
         return Array.from(prevKeysSet);
       });
     },
-    [checkedKeys, onChange, databaseWithTableList],
+    [checkedKeys, onChange, databaseWithTableList]
   );
 
   /**
    * 获取库下的表list
    */
   const getTableList = async (
-    databaseId,
+    databaseId
   ): Promise<{
     tables: LoadTableItems[];
     externalTables: LoadTableItems[];
@@ -467,14 +542,14 @@ const TableSelecter: React.ForwardRefRenderFunction<TableSelecterRef, IProps> = 
       tables = res?.data?.logicalTables?.map((table) => ({
         name: table.name,
         id: table.id,
-        databaseId,
+        databaseId
       }));
     } else {
       const params: DbObjectType[] = [
         DbObjectType.table,
         DbObjectType.external_table,
         DbObjectType.view,
-        DbObjectType.materialized_view,
+        DbObjectType.materialized_view
       ];
 
       const res = await getTableListWithoutSession(db?.id, params.join(','));
@@ -484,7 +559,7 @@ const TableSelecter: React.ForwardRefRenderFunction<TableSelecterRef, IProps> = 
           ?.map((table) => ({
             name: table.name,
             id: table.id,
-            databaseId: table.database.id,
+            databaseId: table.database.id
           }));
       };
       tables = listHelper(DbObjectType.table);
@@ -496,7 +571,7 @@ const TableSelecter: React.ForwardRefRenderFunction<TableSelecterRef, IProps> = 
       tables,
       externalTables,
       views,
-      materializedViews,
+      materializedViews
     };
   };
 
@@ -525,10 +600,10 @@ const TableSelecter: React.ForwardRefRenderFunction<TableSelecterRef, IProps> = 
         tables,
         externalTables,
         views,
-        materializedViews,
+        materializedViews
       };
     },
-    [databaseWithTableList],
+    [databaseWithTableList]
   );
   /**
    * 所有选中的节点的Key
@@ -561,36 +636,37 @@ const TableSelecter: React.ForwardRefRenderFunction<TableSelecterRef, IProps> = 
         if (checked) {
           setSelecting(true);
           try {
-            const { tables, externalTables, views, materializedViews } = await handleLoadTables(
-              curNodeKey,
-            );
-            const tableList = [...checkedKeys.map(parseDataBaseIdAndTableNamebByKey)];
+            const { tables, externalTables, views, materializedViews } =
+              await handleLoadTables(curNodeKey);
+            const tableList = [
+              ...checkedKeys.map(parseDataBaseIdAndTableNamebByKey)
+            ];
             tables?.forEach((table) => {
               tableList.push({
                 databaseId: table?.databaseId,
                 tableName: table?.name,
-                tableId: table?.id,
+                tableId: table?.id
               });
             });
             externalTables?.forEach((table) => {
               tableList.push({
                 databaseId: table?.databaseId,
                 tableName: table?.name,
-                tableId: table?.id,
+                tableId: table?.id
               });
             });
             views?.forEach((table) => {
               tableList.push({
                 databaseId: table?.databaseId,
                 tableName: table?.name,
-                tableId: table?.id,
+                tableId: table?.id
               });
             });
             materializedViews?.forEach((table) => {
               tableList.push({
                 databaseId: table?.databaseId,
                 tableName: table?.name,
-                tableId: table?.id,
+                tableId: table?.id
               });
             });
             onChange(tableList);
@@ -599,7 +675,9 @@ const TableSelecter: React.ForwardRefRenderFunction<TableSelecterRef, IProps> = 
             setSelecting(false);
           }
         } else {
-          const db = databaseWithTableList?.find((_db) => _db.id === curNodeKey);
+          const db = databaseWithTableList?.find(
+            (_db) => _db.id === curNodeKey
+          );
           if (!db) {
             return;
           }
@@ -609,7 +687,9 @@ const TableSelecter: React.ForwardRefRenderFunction<TableSelecterRef, IProps> = 
             .concat(db.viewList || [])
             .concat(db.materializedViewList || [])
             ?.map((t) => t.id);
-          const tableList = [...checkedKeys.map(parseDataBaseIdAndTableNamebByKey)].filter((i) => {
+          const tableList = [
+            ...checkedKeys.map(parseDataBaseIdAndTableNamebByKey)
+          ].filter((i) => {
             return !targetDBTablesId.includes(i.tableId);
           });
           onChange(tableList);
@@ -620,7 +700,9 @@ const TableSelecter: React.ForwardRefRenderFunction<TableSelecterRef, IProps> = 
          * 选中外表或者表的group
          */
         const [databaseId, type] = curNodeKey.split('-');
-        const db = databaseWithTableList?.find((_db) => _db.id === Number(databaseId));
+        const db = databaseWithTableList?.find(
+          (_db) => _db.id === Number(databaseId)
+        );
         if (!db) {
           return;
         }
@@ -648,7 +730,7 @@ const TableSelecter: React.ForwardRefRenderFunction<TableSelecterRef, IProps> = 
             tableList.push({
               databaseId: toNumber(databaseId),
               tableName: table?.name,
-              tableId: table?.id,
+              tableId: table?.id
             });
           });
           setSelectedExpandKeys([databaseId, curNodeKey]);
@@ -663,18 +745,25 @@ const TableSelecter: React.ForwardRefRenderFunction<TableSelecterRef, IProps> = 
         const preCheckKeys = checked
           ? checkedKeys
           : checkedKeys.filter((key) => key !== curNodeKey);
-        const newValue: TableItem[] = preCheckKeys.map(parseDataBaseIdAndTableNamebByKey);
-        const tableItem = parseDataBaseIdAndTableNamebByKey(curNodeKey as string);
+        const newValue: TableItem[] = preCheckKeys.map(
+          parseDataBaseIdAndTableNamebByKey
+        );
+        const tableItem = parseDataBaseIdAndTableNamebByKey(
+          curNodeKey as string
+        );
         const objectType = getObjectTypeFromPosition(node.pos.split('-')[2]);
         if (checked) {
           newValue.push(tableItem);
         }
         // 无论是选中还是取消选中，都保持当前层级展开
-        setSelectedExpandKeys([tableItem.databaseId, `${tableItem.databaseId}-${objectType}`]);
+        setSelectedExpandKeys([
+          tableItem.databaseId,
+          `${tableItem.databaseId}-${objectType}`
+        ]);
         onChange(newValue);
       }
     },
-    [checkedKeys, onChange, handleLoadTables, databaseWithTableList],
+    [checkedKeys, onChange, handleLoadTables, databaseWithTableList]
   );
 
   useImperativeHandle(
@@ -701,9 +790,9 @@ const TableSelecter: React.ForwardRefRenderFunction<TableSelecterRef, IProps> = 
         setSelectedExpandKeys((prevExpandKeys) => {
           return Array.from(new Set([...prevExpandKeys, databaseId]));
         });
-      },
+      }
     }),
-    [handleLoadTables],
+    [handleLoadTables]
   );
 
   useEffect(() => {
@@ -716,16 +805,20 @@ const TableSelecter: React.ForwardRefRenderFunction<TableSelecterRef, IProps> = 
     }
   }, [loadDatabases, projectId]);
 
-  const { checkAll, allTreeDataCount, selectedTreeDataCount, indeterminate } = useMemo(() => {
-    const allTreeDataCount = allTreeDataKeys?.length;
-    const selectedTreeDataCount = [...new Set(checkedKeys)]?.length;
-    return {
-      allTreeDataCount,
-      selectedTreeDataCount,
-      checkAll: allTreeDataKeys?.length && allTreeDataKeys.length === checkedKeys.length,
-      indeterminate: selectedTreeDataCount && selectedTreeDataCount < allTreeDataCount,
-    };
-  }, [allTreeDataKeys.length, checkedKeys.length]);
+  const { checkAll, allTreeDataCount, selectedTreeDataCount, indeterminate } =
+    useMemo(() => {
+      const allTreeDataCount = allTreeDataKeys?.length;
+      const selectedTreeDataCount = [...new Set(checkedKeys)]?.length;
+      return {
+        allTreeDataCount,
+        selectedTreeDataCount,
+        checkAll:
+          allTreeDataKeys?.length &&
+          allTreeDataKeys.length === checkedKeys.length,
+        indeterminate:
+          selectedTreeDataCount && selectedTreeDataCount < allTreeDataCount
+      };
+    }, [allTreeDataKeys.length, checkedKeys.length]);
 
   return (
     <div className={styles.selecter}>
@@ -737,7 +830,7 @@ const TableSelecter: React.ForwardRefRenderFunction<TableSelecterRef, IProps> = 
                 <span>
                   {formatMessage({
                     id: 'src.component.Task.component.TableSelecter.DA18FE81',
-                    defaultMessage: '选择表/视图',
+                    defaultMessage: '选择表/视图'
                   })}
                 </span>
               </Space>
@@ -758,7 +851,9 @@ const TableSelecter: React.ForwardRefRenderFunction<TableSelecterRef, IProps> = 
                 onExpand={(keys, a) => {
                   setSourceTreeExpandKeys(keys as number[]);
                 }}
-                loadData={({ key }: EventDataNode<DataNode>) => handleLoadTables(key as number)}
+                loadData={({ key }: EventDataNode<DataNode>) =>
+                  handleLoadTables(key as number)
+                }
               />
             ) : (
               <ApplyDatabaseAuthEmpty
@@ -767,7 +862,7 @@ const TableSelecter: React.ForwardRefRenderFunction<TableSelecterRef, IProps> = 
                     ? undefined
                     : formatMessage({
                         id: 'src.component.Task.component.TableSelecter.6D5646CD',
-                        defaultMessage: '暂无数据',
+                        defaultMessage: '暂无数据'
                       })
                 }
               />
@@ -780,9 +875,9 @@ const TableSelecter: React.ForwardRefRenderFunction<TableSelecterRef, IProps> = 
           title={formatMessage(
             {
               id: 'src.component.Task.component.TableSelecter.9995622C',
-              defaultMessage: '已选 {selectedTreeDataCount} 项',
+              defaultMessage: '已选 {selectedTreeDataCount} 项'
             },
-            { selectedTreeDataCount },
+            { selectedTreeDataCount }
           )}
           onSearch={(v) => setTargetSearchValue(v)}
           extra={
@@ -793,13 +888,13 @@ const TableSelecter: React.ForwardRefRenderFunction<TableSelecterRef, IProps> = 
               placement="left"
               title={formatMessage({
                 id: 'src.component.Task.component.TableSelecter.A56A8B2D',
-                defaultMessage: '确定要清空已选对象吗？',
+                defaultMessage: '确定要清空已选对象吗？'
               })}
             >
               <a>
                 {formatMessage({
                   id: 'src.component.Task.component.TableSelecter.C6AF0504',
-                  defaultMessage: '清空',
+                  defaultMessage: '清空'
                 })}
               </a>
             </Popconfirm>
@@ -836,7 +931,7 @@ const TableSelecter: React.ForwardRefRenderFunction<TableSelecterRef, IProps> = 
                         style={{
                           color: node?.disabled
                             ? 'var(--icon-color-disable)'
-                            : 'var(--icon-color-normal)',
+                            : 'var(--icon-color-normal)'
                         }}
                       />
                     </a>
@@ -848,7 +943,7 @@ const TableSelecter: React.ForwardRefRenderFunction<TableSelecterRef, IProps> = 
             <ApplyDatabaseAuthEmpty
               description={formatMessage({
                 id: 'src.component.Task.component.TableSelecter.22E6453E',
-                defaultMessage: '暂无数据',
+                defaultMessage: '暂无数据'
               })}
             />
           )}

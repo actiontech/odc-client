@@ -19,7 +19,11 @@ import { formatMessage } from '@/util/intl';
 import Icon from '@ant-design/icons';
 import { Form, Radio, Space } from 'antd';
 
-import { getDataSourceStyle, getDefaultConnectType, getDsByConnectType } from '@/common/datasource';
+import {
+  getDataSourceStyle,
+  getDefaultConnectType,
+  getDsByConnectType
+} from '@/common/datasource';
 import { IDataSourceType } from '@/d.ts/datasource';
 import styles from './index.less';
 
@@ -30,7 +34,7 @@ export default function DBTypeItem() {
       required={false}
       label={formatMessage({
         id: 'odc.Form.DBTypeItem.DataSourceType',
-        defaultMessage: '数据源类型',
+        defaultMessage: '数据源类型'
       })} /*数据源类型*/
     >
       {({ getFieldValue, setFieldsValue }) => {
@@ -41,10 +45,12 @@ export default function DBTypeItem() {
             className={styles.select}
             value={ds}
             onChange={(e) => {
-              const defaultType: ConnectType = getDefaultConnectType(e.target.value);
+              const defaultType: ConnectType = getDefaultConnectType(
+                e.target.value
+              );
               if (defaultType) {
                 setFieldsValue({
-                  type: defaultType,
+                  type: defaultType
                 });
               }
             }}
@@ -56,9 +62,13 @@ export default function DBTypeItem() {
                     <Icon
                       style={{
                         fontSize: 24,
-                        color: getDataSourceStyle(IDataSourceType.OceanBase)?.icon?.color,
+                        color: getDataSourceStyle(IDataSourceType.OceanBase)
+                          ?.icon?.color
                       }}
-                      component={getDataSourceStyle(IDataSourceType.OceanBase)?.icon?.component}
+                      component={
+                        getDataSourceStyle(IDataSourceType.OceanBase)?.icon
+                          ?.component
+                      }
                     />
                   </div>
                   OceanBase
@@ -70,9 +80,13 @@ export default function DBTypeItem() {
                     <Icon
                       style={{
                         fontSize: 24,
-                        color: getDataSourceStyle(IDataSourceType.MySQL)?.icon?.color,
+                        color: getDataSourceStyle(IDataSourceType.MySQL)?.icon
+                          ?.color
                       }}
-                      component={getDataSourceStyle(IDataSourceType.MySQL)?.icon?.component}
+                      component={
+                        getDataSourceStyle(IDataSourceType.MySQL)?.icon
+                          ?.component
+                      }
                     />
                   </div>
                   MySQL

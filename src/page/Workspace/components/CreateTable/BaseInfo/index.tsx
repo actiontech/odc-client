@@ -18,7 +18,7 @@ import { CaseInput } from '@/component/Input/Case';
 import { columnGroupsText } from '@/constant/label';
 import { ColumnStoreType, DBDefaultStoreType } from '@/d.ts/table';
 import { formatMessage } from '@/util/intl';
-import { Col, Form, Input, Row, Select } from 'antd';
+import { Col, Form, Row } from 'antd';
 import { FormInstance } from 'antd/es/form/Form';
 import React, { useContext, useEffect, useImperativeHandle } from 'react';
 import { useDataSourceConfig, useTableConfig } from '../config';
@@ -27,14 +27,13 @@ import TableContext from '../TableContext';
 import styles from './index.less';
 import { DBType } from '@/d.ts/database';
 import LogicTableBaseInfo from './LogicTableBaseInfo';
+import { BasicInput, BasicSelect } from '@actiontech/dms-kit';
 
 interface IProps {
   isEdit?: boolean;
   formRef?: React.Ref<FormInstance<any>>;
   dbType?: DBType;
 }
-
-const { Option } = Select;
 
 const CreateTableBaseInfoForm: React.FC<IProps> = (props) => {
   const { isEdit, formRef, dbType } = props;
@@ -74,7 +73,7 @@ const CreateTableBaseInfoForm: React.FC<IProps> = (props) => {
       }
     }
     form.setFieldsValue({
-      columnGroups: cg,
+      columnGroups: cg
     });
   }, [session?.params?.defaultTableStoreFormat]);
 
@@ -83,7 +82,7 @@ const CreateTableBaseInfoForm: React.FC<IProps> = (props) => {
     () => {
       return form;
     },
-    [form],
+    [form]
   );
   return dbType === DBType.LOGICAL ? (
     <LogicTableBaseInfo
@@ -104,7 +103,7 @@ const CreateTableBaseInfoForm: React.FC<IProps> = (props) => {
       onValuesChange={(cValue, values) => {
         if ('character' in cValue) {
           form.setFieldsValue({
-            collation: getDefaultCollation(cValue.character, collations),
+            collation: getDefaultCollation(cValue.character, collations)
           });
         }
         tableContext.setInfo?.(form.getFieldsValue());
@@ -116,16 +115,16 @@ const CreateTableBaseInfoForm: React.FC<IProps> = (props) => {
             name="tableName"
             label={formatMessage({
               id: 'workspace.window.createTable.baseInfo.tableName',
-              defaultMessage: '表名称',
+              defaultMessage: '表名称'
             })}
             rules={[
               {
                 required: true,
                 message: formatMessage({
                   id: 'workspace.window.createTable.baseInfo.tableName.validation',
-                  defaultMessage: '请填写表名称',
-                }),
-              },
+                  defaultMessage: '请填写表名称'
+                })
+              }
             ]}
           >
             <CaseInput
@@ -134,7 +133,7 @@ const CreateTableBaseInfoForm: React.FC<IProps> = (props) => {
               autoFocus
               placeholder={formatMessage({
                 id: 'workspace.window.createTable.baseInfo.tableName.placeholder',
-                defaultMessage: '请填写表名称',
+                defaultMessage: '请填写表名称'
               })}
             />
           </Form.Item>
@@ -146,29 +145,24 @@ const CreateTableBaseInfoForm: React.FC<IProps> = (props) => {
                 name="character"
                 label={formatMessage({
                   id: 'workspace.window.createTable.baseInfo.character',
-                  defaultMessage: '默认字符集',
+                  defaultMessage: '默认字符集'
                 })}
                 rules={[
                   {
-                    required: true,
-                  },
+                    required: true
+                  }
                 ]}
               >
-                <Select
+                <BasicSelect
                   disabled={isEdit}
                   showSearch
                   onSelect={(v) => {
                     form.setFieldsValue({
-                      collation: getDefaultCollation(v.toString(), collations),
+                      collation: getDefaultCollation(v.toString(), collations)
                     });
                   }}
-                >
-                  {charsets?.map((c) => (
-                    <Option key={c} value={c}>
-                      {c}
-                    </Option>
-                  ))}
-                </Select>
+                  options={charsets?.map((c) => ({ label: c, value: c }))}
+                />
               </Form.Item>
             </Col>
             <Col span={layout.pop()}>
@@ -179,31 +173,30 @@ const CreateTableBaseInfoForm: React.FC<IProps> = (props) => {
                       name="collation"
                       label={formatMessage({
                         id: 'workspace.window.createTable.baseInfo.collation',
-                        defaultMessage: '默认排序规则',
+                        defaultMessage: '默认排序规则'
                       })}
                       rules={[
                         {
                           required: true,
                           message: formatMessage({
                             id: 'workspace.window.createTable.baseInfo.tableName.validation',
-                            defaultMessage: '请填写表名称',
-                          }),
-                        },
+                            defaultMessage: '请填写表名称'
+                          })
+                        }
                       ]}
                       shouldUpdate
                     >
-                      <Select disabled={isEdit} showSearch>
-                        {collations
+                      <BasicSelect
+                        disabled={isEdit}
+                        showSearch
+                        options={collations
                           ?.filter((c) => {
-                            const character = getFieldValue('character') || 'utf8mb4';
+                            const character =
+                              getFieldValue('character') || 'utf8mb4';
                             return c.indexOf(character) > -1;
                           })
-                          .map((c) => (
-                            <Option key={c} value={c}>
-                              {c}
-                            </Option>
-                          ))}
-                      </Select>
+                          .map((c) => ({ label: c, value: c }))}
+                      />
                     </Form.Item>
                   );
                 }}
@@ -218,19 +211,22 @@ const CreateTableBaseInfoForm: React.FC<IProps> = (props) => {
               name="columnGroups"
               label={formatMessage({
                 id: 'src.page.Workspace.components.CreateTable.BaseInfo.3907128F',
-                defaultMessage: '存储模式',
+                defaultMessage: '存储模式'
               })}
             >
-              <Select
+              <BasicSelect
                 mode="multiple"
                 showSearch
                 allowClear
                 options={[
                   {
                     value: ColumnStoreType.COLUMN,
-                    label: columnGroupsText[ColumnStoreType.COLUMN],
+                    label: columnGroupsText[ColumnStoreType.COLUMN]
                   },
-                  { value: ColumnStoreType.ROW, label: columnGroupsText[ColumnStoreType.ROW] },
+                  {
+                    value: ColumnStoreType.ROW,
+                    label: columnGroupsText[ColumnStoreType.ROW]
+                  }
                 ]}
               />
             </Form.Item>
@@ -242,17 +238,17 @@ const CreateTableBaseInfoForm: React.FC<IProps> = (props) => {
           name="comment"
           label={formatMessage({
             id: 'workspace.window.createTable.baseInfo.comment',
-            defaultMessage: '描述',
+            defaultMessage: '描述'
           })}
           style={{ width: '100%' }}
           required={false}
         >
-          <Input.TextArea
+          <BasicInput.TextArea
             style={{ width: '100%' }}
             autoSize={{ maxRows: 3, minRows: 3 }}
             placeholder={formatMessage({
               id: 'workspace.window.createTable.baseInfo.comment.placeholder',
-              defaultMessage: '请填写描述',
+              defaultMessage: '请填写描述'
             })}
           />
         </Form.Item>

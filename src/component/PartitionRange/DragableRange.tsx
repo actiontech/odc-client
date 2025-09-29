@@ -39,13 +39,13 @@ export interface IDragableParamProps extends IDragable {
 }
 
 const Types = {
-  CARD: 'range',
+  CARD: 'range'
 };
 
 class DragableRule extends React.PureComponent<{ props: IDragableParamProps }> {
   state = {
     rangeColums: {},
-    listColumValues: [],
+    listColumValues: []
   };
 
   handleRangeColumnValueChange = (params) => {
@@ -55,13 +55,15 @@ class DragableRule extends React.PureComponent<{ props: IDragableParamProps }> {
       {
         rangeColums: {
           ...this.state.rangeColums,
-          [columnName]: value,
-        },
+          [columnName]: value
+        }
       },
       () => {
-        const value = selectColums.map((col) => this.state.rangeColums[col.columnName]).join(',');
+        const value = selectColums
+          .map((col) => this.state.rangeColums[col.columnName])
+          .join(',');
         handleEdit(index, { value });
-      },
+      }
     );
   };
 
@@ -81,7 +83,7 @@ class DragableRule extends React.PureComponent<{ props: IDragableParamProps }> {
                 this.handleRangeColumnValueChange({
                   rangeIndex: index,
                   columnName: columnName,
-                  value: e.target.value,
+                  value: e.target.value
                 });
               }}
               addonBefore={columnName}
@@ -106,18 +108,23 @@ class DragableRule extends React.PureComponent<{ props: IDragableParamProps }> {
       isDragging,
       connectDragSource,
       partitionType,
-      selectColums,
+      selectColums
     } = this.props.props;
 
     return connectDragSource(
       <div>
-        <Row className={classNames(styles.row, isDragging ? styles.dragging : null)}>
+        <Row
+          className={classNames(
+            styles.row,
+            isDragging ? styles.dragging : null
+          )}
+        >
           <Col
             style={{
               display: 'flex',
               alignItems: 'center',
               flex: 1,
-              fontSize: 12,
+              fontSize: 12
             }}
           >
             <span style={{ marginRight: 8 }}>
@@ -126,7 +133,7 @@ class DragableRule extends React.PureComponent<{ props: IDragableParamProps }> {
             <span className="ant-form-item-required">
               {formatMessage({
                 id: 'workspace.window.createTable.partition.name',
-                defaultMessage: '分区名称',
+                defaultMessage: '分区名称'
               })}
               ：
             </span>
@@ -156,10 +163,13 @@ class DragableRule extends React.PureComponent<{ props: IDragableParamProps }> {
             />
           </Col>
           {deletable && (
-            <DeleteOutlined className={styles.close} onClick={() => handleDelete(index)} />
+            <DeleteOutlined
+              className={styles.close}
+              onClick={() => handleDelete(index)}
+            />
           )}
         </Row>
-      </div>,
+      </div>
     );
   }
 }

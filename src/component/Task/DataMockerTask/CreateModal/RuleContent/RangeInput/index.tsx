@@ -35,14 +35,17 @@ const RangeInput: React.FC<IRangeInput> = (props) => {
   return (
     <Input.Group
       style={{
-        display: 'flex',
+        display: 'flex'
       }}
       compact
     >
       <div className={styles.title}>
         {
           addonBefore ||
-            formatMessage({ id: 'odc.RuleContent.RangeInput.Interval', defaultMessage: '区间' }) // 区间
+            formatMessage({
+              id: 'odc.RuleContent.RangeInput.Interval',
+              defaultMessage: '区间'
+            }) // 区间
         }
       </div>
       <InputBigNumber
@@ -55,7 +58,7 @@ const RangeInput: React.FC<IRangeInput> = (props) => {
         }}
         style={{
           flexGrow: 1,
-          flexShrink: 1,
+          flexShrink: 1
         }}
         className={styles.startInput}
       />

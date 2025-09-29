@@ -19,17 +19,17 @@ import React, { useCallback, useContext, useRef, useState } from 'react';
 import { debounce } from 'lodash';
 import SplitPane from 'react-split-pane';
 import ActivityBarContext from '../context/ActivityBarContext';
-import styles from './index.less';
-
-interface IProps {
-  activityBar: React.ReactNode;
-  sideBar: React.ReactNode;
-  editorGroup: React.ReactNode;
-}
+import ActivityBar from '../ActivityBar';
+import SideBar from '../SideBar';
+import { WorkspaceLayoutStyleWrapper } from './style';
 
 const MinWidth = 180;
 
-const WorkBenchLayout: React.FC<IProps> = function ({ activityBar, sideBar, editorGroup }) {
+type IProps = {
+  editorGroup: React.ReactNode;
+};
+
+const WorkBenchLayout: React.FC<IProps> = function ({ editorGroup }) {
   const [sideWidth, setSideWidth] = useState(MinWidth + 100);
   const minSizeEventCountRef = useRef(0);
   const splitRef = useRef<SplitPane>();
@@ -39,7 +39,7 @@ const WorkBenchLayout: React.FC<IProps> = function ({ activityBar, sideBar, edit
     debounce(() => {
       window.dispatchEvent(new Event('resize'));
     }, 500),
-    [],
+    []
   );
   const handleChangeSiderWidth = (width: number) => {
     setSideWidth(width);
@@ -53,13 +53,13 @@ const WorkBenchLayout: React.FC<IProps> = function ({ activityBar, sideBar, edit
          */
         splitRef.current?.setState(
           {
-            active: false,
+            active: false
           },
           () => {
             setTimeout(() => {
               context.setActiveKey(null);
             });
-          },
+          }
         );
       }
     } else {
@@ -67,10 +67,10 @@ const WorkBenchLayout: React.FC<IProps> = function ({ activityBar, sideBar, edit
     }
   };
   return (
-    <div className={styles.workbench}>
-      <div className={styles.activityBar}>{activityBar}</div>
+    <WorkspaceLayoutStyleWrapper className="workbench">
+      <ActivityBar />
 
-      <div className={styles.splitPane}>
+      <div className="splitPane">
         <SplitPane
           ref={splitRef}
           split="vertical"
@@ -80,27 +80,30 @@ const WorkBenchLayout: React.FC<IProps> = function ({ activityBar, sideBar, edit
           maxSize={480}
           defaultSize={sideWidth}
           pane2Style={{
-            minWidth: '1px',
+            minWidth: '1px'
           }}
           pane1Style={{
-            minWidth: '1px',
+            minWidth: '1px'
           }}
           resizerStyle={{
             background: 'transparent',
-            pointerEvents: haveActiveKey ? 'unset' : 'none',
+            pointerEvents: haveActiveKey ? 'unset' : 'none'
           }}
           onChange={handleChangeSiderWidth}
         >
           <div
-            style={{ minWidth: sideWidth, zIndex: !haveActiveKey ? -9999 : 'unset' }}
-            className={styles.sideBar}
+            style={{
+              minWidth: sideWidth,
+              zIndex: !haveActiveKey ? -9999 : 'unset'
+            }}
+            className="sideBar"
           >
-            {sideBar}
+            <SideBar />
           </div>
-          <div className={styles.editorGroup}>{editorGroup}</div>
+          <div className="editorGroup">{editorGroup}</div>
         </SplitPane>
       </div>
-    </div>
+    </WorkspaceLayoutStyleWrapper>
   );
 };
 

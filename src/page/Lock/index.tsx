@@ -42,13 +42,19 @@ const LockPage: React.FC<ILockProps> = function (props) {
       } else {
         setErrCount(errCount + 1);
         message.error(
-          formatMessage({ id: 'odc.page.Lock.ThePasswordIsInvalid', defaultMessage: '密码错误！' }), // 密码错误！
+          formatMessage({
+            id: 'odc.page.Lock.ThePasswordIsInvalid',
+            defaultMessage: '密码错误！'
+          }) // 密码错误！
         );
       }
     } catch (e) {
       console.error(e);
       message.error(
-        formatMessage({ id: 'odc.page.Lock.SystemException', defaultMessage: '系统异常' }), // 系统异常
+        formatMessage({
+          id: 'odc.page.Lock.SystemException',
+          defaultMessage: '系统异常'
+        }) // 系统异常
       );
     }
     setLoading(false);
@@ -57,16 +63,16 @@ const LockPage: React.FC<ILockProps> = function (props) {
     Modal.confirm({
       title: formatMessage({
         id: 'odc.page.Lock.AreYouSureYouWant',
-        defaultMessage: '是否确定重置所有数据？',
+        defaultMessage: '是否确定重置所有数据？'
       }), // 确定要重置所有数据吗？
       content: formatMessage({
         id: 'odc.page.Lock.WillAllConnectionsAndPasswords',
-        defaultMessage: '重置后将删除所有连接，并且删除密码？',
+        defaultMessage: '重置后将删除所有连接，并且删除密码？'
       }),
       // 重置后将删除所有连接，并且删除密码？
       onOk() {
         ipcInvoke('resetSystem');
-      },
+      }
     });
   }
   return (
@@ -85,7 +91,7 @@ const LockPage: React.FC<ILockProps> = function (props) {
         }}
         placeholder={formatMessage({
           id: 'odc.page.Lock.EnterTheUnlockPassword',
-          defaultMessage: '请输入解锁密码',
+          defaultMessage: '请输入解锁密码'
         })}
         /* 请输入解锁密码 */
         onPressEnter={unLock}
@@ -93,7 +99,10 @@ const LockPage: React.FC<ILockProps> = function (props) {
           loading ? (
             <a
               title={
-                formatMessage({ id: 'odc.page.Lock.Unlocking', defaultMessage: '解锁中' }) // 解锁中
+                formatMessage({
+                  id: 'odc.page.Lock.Unlocking',
+                  defaultMessage: '解锁中'
+                }) // 解锁中
               }
             >
               <LoadingOutlined />
@@ -101,7 +110,10 @@ const LockPage: React.FC<ILockProps> = function (props) {
           ) : (
             <a
               title={
-                formatMessage({ id: 'odc.page.Lock.Unlock', defaultMessage: '解锁' }) // 解锁
+                formatMessage({
+                  id: 'odc.page.Lock.Unlock',
+                  defaultMessage: '解锁'
+                }) // 解锁
               }
               style={{ color: 'rgba(0,0,0,0.65)' }}
               onClick={unLock}
@@ -117,7 +129,7 @@ const LockPage: React.FC<ILockProps> = function (props) {
           {
             formatMessage({
               id: 'odc.page.Lock.ForgotThePasswordTry',
-              defaultMessage: '忘记密码？尝试',
+              defaultMessage: '忘记密码？尝试'
             })
             /* 忘记密码？尝试 */
           }
@@ -126,7 +138,7 @@ const LockPage: React.FC<ILockProps> = function (props) {
             {
               formatMessage({
                 id: 'odc.page.Lock.ResetData',
-                defaultMessage: '重置数据',
+                defaultMessage: '重置数据'
               }) /* 重置数据 */
             }
           </a>

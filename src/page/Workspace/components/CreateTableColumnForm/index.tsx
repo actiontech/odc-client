@@ -51,7 +51,7 @@ export const defaultColumn = {
   allowNull: true,
   increment: false,
   defaultValue: '',
-  comment: '',
+  comment: ''
 };
 
 export default class CreateTableColumnForm extends Component<
@@ -63,7 +63,7 @@ export default class CreateTableColumnForm extends Component<
 > {
   public readonly state = {
     selectedRowIndex: -1,
-    showEditModal: false,
+    showEditModal: false
   };
 
   public columnKeys: string[] = [];
@@ -72,7 +72,7 @@ export default class CreateTableColumnForm extends Component<
 
   private WrapSelectEditorMemo = memoizeOne((dataTypes) => {
     return WrapAutoCompleteEditor(
-      dataTypes?.map((d: IDataType) => d.databaseType).filter(Boolean) || [],
+      dataTypes?.map((d: IDataType) => d.databaseType).filter(Boolean) || []
     );
   });
 
@@ -85,7 +85,11 @@ export default class CreateTableColumnForm extends Component<
   /**
    * 判断是否可编辑
    */
-  public handleCheckCellIsEditable = (columnKey, row, defaultEditable = false) => {
+  public handleCheckCellIsEditable = (
+    columnKey,
+    row,
+    defaultEditable = false
+  ) => {
     if (row?.primaryKey && enablePrimaryKeyEditor) {
       /**
        * 主键不能编辑
@@ -108,15 +112,21 @@ export default class CreateTableColumnForm extends Component<
   }
 
   public render() {
-    const { hideBorder, fixedFooter, columns, allowRefresh, tableHeight, enableRowRecord } =
-      this.props;
+    const {
+      hideBorder,
+      fixedFooter,
+      columns,
+      allowRefresh,
+      tableHeight,
+      enableRowRecord
+    } = this.props;
 
     const tableColumns = [
       {
         key: 'columnName',
         name: formatMessage({
           id: 'workspace.window.createTable.column.name',
-          defaultMessage: '字段名称',
+          defaultMessage: '字段名称'
         }),
         resizable: true,
         required: true,
@@ -127,39 +137,40 @@ export default class CreateTableColumnForm extends Component<
             return formatMessage(
               {
                 id: 'odc.components.CreateTableColumnForm.PrimaryKeyRowcolumnname',
-                defaultMessage: '<主键>{rowColumnName}',
+                defaultMessage: '<主键>{rowColumnName}'
               },
-              { rowColumnName: row.columnName },
+              { rowColumnName: row.columnName }
             );
           }
           return row.columnName || '';
-        },
+        }
       },
 
       {
         key: 'dataType',
         name: formatMessage({
           id: 'workspace.window.createTable.column.dataType',
-          defaultMessage: '数据类型',
+          defaultMessage: '数据类型'
         }),
         resizable: true,
-        editable: (row) => this.handleCheckCellIsEditable('dataType', row, true),
+        editable: (row) =>
+          this.handleCheckCellIsEditable('dataType', row, true),
         filterable: false,
         required: true,
-        editor: this.WrapSelectEditorMemo([]),
+        editor: this.WrapSelectEditorMemo([])
       },
 
       {
         key: 'comment',
         name: formatMessage({
           id: 'workspace.window.createTable.column.comment',
-          defaultMessage: '字段注释',
+          defaultMessage: '字段注释'
         }),
         resizable: true,
         editable: (row) => this.handleCheckCellIsEditable('comment', row, true),
         filterable: false,
-        editor: TextEditor,
-      },
+        editor: TextEditor
+      }
     ].filter(Boolean);
 
     this.columnKeys = tableColumns.map((t) => t.key);
@@ -169,7 +180,7 @@ export default class CreateTableColumnForm extends Component<
           className={styles.container}
           style={{
             height: fixedFooter ? 'calc(100% - 40px)' : 'initial',
-            border: hideBorder ? 'none' : '1px solid var(--odc-border-color)',
+            border: hideBorder ? 'none' : '1px solid var(--odc-border-color)'
           }}
         >
           <Toolbar>
@@ -177,7 +188,7 @@ export default class CreateTableColumnForm extends Component<
               <ToolbarButton
                 text={formatMessage({
                   id: 'workspace.window.session.button.refresh',
-                  defaultMessage: '刷新',
+                  defaultMessage: '刷新'
                 })}
                 icon={<SyncOutlined />}
                 onClick={this.handleRefreshColumn}

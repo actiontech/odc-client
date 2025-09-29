@@ -34,7 +34,7 @@ const defaultPrimaryConstraint: TablePrimaryConstraint = {
   name: null,
   columns: [],
   defer: TableConstraintDefer.NOT,
-  enable: true,
+  enable: true
 };
 
 interface IProps {
@@ -47,14 +47,14 @@ const PrimaryConstaint: React.FC<IProps> = function ({ modified }) {
   const [selectedRowsIdx, setSelectedRowIdx] = useState<number[]>([]);
   const gridColumns: any[] = useColumns(
     tableContext.columns,
-    tableContext?.session?.connection?.dialectType,
+    tableContext?.session?.connection?.dialectType
   );
   const gridRef = useRef<DataGridRef>();
   const rows = useMemo(() => {
     return tableContext.primaryConstraints.map((index, idx) => {
       return {
         ...index,
-        key: `${index.name || ''}@@${idx}`,
+        key: `${index.name || ''}@@${idx}`
       };
     });
   }, [tableContext.primaryConstraints]);
@@ -74,11 +74,16 @@ const PrimaryConstaint: React.FC<IProps> = function ({ modified }) {
           <Toolbar>
             <Toolbar.Button
               disabled={pageContext?.editMode}
-              text={formatMessage({ id: 'workspace.header.create', defaultMessage: '新建' })}
+              text={formatMessage({
+                id: 'workspace.header.create',
+                defaultMessage: '新建'
+              })}
               icon={PlusOutlined}
               onClick={() => {
                 tableContext.setPrimaryConstraints(
-                  tableContext.primaryConstraints.concat(defaultPrimaryConstraint),
+                  tableContext.primaryConstraints.concat(
+                    defaultPrimaryConstraint
+                  )
                 );
               }}
             />
@@ -86,7 +91,10 @@ const PrimaryConstaint: React.FC<IProps> = function ({ modified }) {
             <Toolbar.Button
               disabled={pageContext?.editMode}
               text={
-                formatMessage({ id: 'odc.TableConstraint.Primary.Delete', defaultMessage: '删除' }) //删除
+                formatMessage({
+                  id: 'odc.TableConstraint.Primary.Delete',
+                  defaultMessage: '删除'
+                }) //删除
               }
               icon={DeleteOutlined}
               onClick={() => {
@@ -116,7 +124,7 @@ const PrimaryConstaint: React.FC<IProps> = function ({ modified }) {
           setSelectedRowIdx(
             keys.map((key) => {
               return rows.findIndex((row) => row.key === key);
-            }),
+            })
           );
         }}
         gridRef={gridRef}

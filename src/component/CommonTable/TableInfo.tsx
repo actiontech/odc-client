@@ -27,7 +27,13 @@ interface IProps<T> extends IRowSelecter<T> {
 }
 
 export const TableInfo: React.FC<IProps<unknown>> = (props) => {
-  const { options, selectedRowKeys, hideSelectAll, onCancelSelect, onSelectAllRows } = props;
+  const {
+    options,
+    selectedRowKeys,
+    hideSelectAll,
+    onCancelSelect,
+    onSelectAllRows
+  } = props;
   return (
     <div className={styles.infoWrap}>
       <Alert
@@ -38,10 +44,10 @@ export const TableInfo: React.FC<IProps<unknown>> = (props) => {
                 formatMessage(
                   {
                     id: 'odc.component.CommonTable.TableInfo.SelectedrowkeyslengthIsSelected',
-                    defaultMessage: '已选择{selectedRowKeysLength}项',
+                    defaultMessage: '已选择{selectedRowKeysLength}项'
                   },
 
-                  { selectedRowKeysLength: selectedRowKeys.length },
+                  { selectedRowKeysLength: selectedRowKeys.length }
                 )
                 /*已选择{selectedRowKeysLength}项*/
               }
@@ -51,7 +57,7 @@ export const TableInfo: React.FC<IProps<unknown>> = (props) => {
                 {
                   formatMessage({
                     id: 'odc.component.CommonTable.TableInfo.SelectAll',
-                    defaultMessage: '全选所有',
+                    defaultMessage: '全选所有'
                   }) /*全选所有*/
                 }
               </span>
@@ -61,7 +67,7 @@ export const TableInfo: React.FC<IProps<unknown>> = (props) => {
               {
                 formatMessage({
                   id: 'odc.component.CommonTable.TableInfo.Deselect',
-                  defaultMessage: '取消选择',
+                  defaultMessage: '取消选择'
                 })
                 /*取消选择*/
               }

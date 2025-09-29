@@ -18,7 +18,7 @@ import { PLType } from '@/constant/plType';
 
 export enum ODCEventType {
   PLPageCreated = 'PLPageCreated',
-  PLPageAction = 'PLPageAction',
+  PLPageAction = 'PLPageAction'
 }
 
 export interface IPLPageCreatedEventData {

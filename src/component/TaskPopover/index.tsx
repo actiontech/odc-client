@@ -33,7 +33,7 @@ const TaskPopover: React.FC<{
     const count = taskStore.pendingApprovalInstanceIds?.length ?? 0;
     const badgeProps = {
       showZero: !isClient(),
-      count: !isClient() ? count : 0,
+      count: !isClient() ? count : 0
     };
     useEffect(() => {
       taskStore.getTaskMetaInfo();
@@ -56,14 +56,14 @@ const TaskPopover: React.FC<{
             {
               formatMessage({
                 id: 'odc.component.TaskPopover.TaskCenter',
-                defaultMessage: '任务中心',
+                defaultMessage: '任务中心'
               }) /*任务中心*/
             }
           </HeaderBtn>
         </Badge>
       </>
     );
-  }),
+  })
 );
 
 export default TaskPopover;

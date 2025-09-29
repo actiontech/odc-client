@@ -30,7 +30,7 @@ const Generation: React.FC<IProps> = function ({ column, onChange }) {
       <Form.Item
         label={formatMessage({
           id: 'odc.Columns.ColumnExtraInfo.Generation.VirtualColumnSettings',
-          defaultMessage: '虚拟列设置',
+          defaultMessage: '虚拟列设置'
         })} /*虚拟列设置*/
       >
         <Radio.Group
@@ -39,7 +39,7 @@ const Generation: React.FC<IProps> = function ({ column, onChange }) {
             const v = e.target.value;
             onChange({
               ...column,
-              stored: v,
+              stored: v
             });
           }}
         >
@@ -47,7 +47,7 @@ const Generation: React.FC<IProps> = function ({ column, onChange }) {
             {
               formatMessage({
                 id: 'odc.Columns.ColumnExtraInfo.Generation.NoStorage',
-                defaultMessage: '不存储',
+                defaultMessage: '不存储'
               }) /*不存储*/
             }
           </Radio>
@@ -55,7 +55,7 @@ const Generation: React.FC<IProps> = function ({ column, onChange }) {
             {
               formatMessage({
                 id: 'odc.Columns.ColumnExtraInfo.Generation.Storage',
-                defaultMessage: '存储',
+                defaultMessage: '存储'
               }) /*存储*/
             }
           </Radio>

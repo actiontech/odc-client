@@ -14,7 +14,12 @@
  * limitations under the License.
  */
 
-import { ITable, ITableColumn, ITriggerAdancedInfoForm, ITriggerBaseInfoForm } from '@/d.ts';
+import {
+  ITable,
+  ITableColumn,
+  ITriggerAdancedInfoForm,
+  ITriggerBaseInfoForm
+} from '@/d.ts';
 import { IDatabase } from '@/d.ts/database';
 import { CreateTriggerPage } from '@/store/helper/page/pages/create';
 import { PageStore } from '@/store/page';
@@ -24,14 +29,14 @@ import React from 'react';
 
 export enum Step {
   BASEINFO = 'BASEINFO',
-  ADVANCED = 'ADVANCED',
+  ADVANCED = 'ADVANCED'
 }
 
 export enum StepStatus {
   UNSAVED = 'UNSAVED',
   SAVED = 'SAVED',
   EDITING = 'EDITING',
-  ERROR = 'ERROR',
+  ERROR = 'ERROR'
 }
 
 export interface ICollapseHeader {

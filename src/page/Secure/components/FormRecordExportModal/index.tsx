@@ -14,13 +14,26 @@
  * limitations under the License.
  */
 
-import { exportAudit, getConnectionOptionList, getUserOptionList } from '@/common/network/manager';
+import {
+  exportAudit,
+  getConnectionOptionList,
+  getUserOptionList
+} from '@/common/network/manager';
 import ConnectionPopover from '@/component/ConnectionPopover';
 import { AuditEventActionMap } from '@/constant/record';
 import type { IManagerPublicConnection, IManagerUser } from '@/d.ts';
 import { formatMessage } from '@/util/intl';
 import { downloadFile, getPreTime } from '@/util/utils';
-import { Button, DatePicker, Drawer, Form, Popover, Select, Space, TreeSelect } from 'antd';
+import {
+  Button,
+  DatePicker,
+  Drawer,
+  Form,
+  Popover,
+  Select,
+  Space,
+  TreeSelect
+} from 'antd';
 import type { FormInstance } from 'antd/lib/form';
 import type { DataNode } from 'antd/lib/tree';
 import dayjs from 'dayjs';
@@ -48,7 +61,8 @@ interface IEventTreeNode {
 const FormResourceGroupModal: React.FC<IProps> = (props) => {
   const { visible, event, eventOptions, onClose } = props;
   const [users, setUsers] = useState<IManagerUser[]>();
-  const [publicConnections, setPublicConnections] = useState<IManagerPublicConnection[]>();
+  const [publicConnections, setPublicConnections] =
+    useState<IManagerPublicConnection[]>();
   const formRef = useRef<FormInstance>(null);
 
   const authorOptions: {
@@ -58,7 +72,7 @@ const FormResourceGroupModal: React.FC<IProps> = (props) => {
     users?.map((item) => {
       return {
         label: `${item.name} (${item.accountName})`,
-        value: item.id,
+        value: item.id
       };
     }) ?? [];
 
@@ -89,9 +103,10 @@ const FormResourceGroupModal: React.FC<IProps> = (props) => {
     formRef.current
       .validateFields()
       .then((values) => {
-        const { userIds, connectionIds, format, results, event, dateRange } = values;
+        const { userIds, connectionIds, format, results, event, dateRange } =
+          values;
         const eventActions = event?.filter((item) =>
-          Object.keys(AuditEventActionMap).includes(item),
+          Object.keys(AuditEventActionMap).includes(item)
         );
 
         const data = {
@@ -101,7 +116,7 @@ const FormResourceGroupModal: React.FC<IProps> = (props) => {
           results,
           eventActions,
           startTime: dateRange?.[0]?.valueOf(),
-          endTime: dateRange?.[1]?.valueOf(),
+          endTime: dateRange?.[1]?.valueOf()
         };
 
         handleExport(data);
@@ -122,7 +137,7 @@ const FormResourceGroupModal: React.FC<IProps> = (props) => {
         width={520}
         title={formatMessage({
           id: 'odc.components.FormRecordExportModal.ExportOperationRecords',
-          defaultMessage: '导出操作记录',
+          defaultMessage: '导出操作记录'
         })}
         /*导出操作记录*/
         rootClassName={styles.exportModal}
@@ -132,7 +147,7 @@ const FormResourceGroupModal: React.FC<IProps> = (props) => {
               {
                 formatMessage({
                   id: 'odc.components.FormRecordExportModal.Cancel',
-                  defaultMessage: '取消',
+                  defaultMessage: '取消'
                 })
 
                 /*取消*/
@@ -142,7 +157,7 @@ const FormResourceGroupModal: React.FC<IProps> = (props) => {
               {
                 formatMessage({
                   id: 'odc.components.FormRecordExportModal.Export',
-                  defaultMessage: '导出',
+                  defaultMessage: '导出'
                 })
 
                 /*导出*/
@@ -161,24 +176,27 @@ const FormResourceGroupModal: React.FC<IProps> = (props) => {
           initialValues={{
             event,
             format: 'CSV',
-            dateRange: [dayjs(getPreTime(7)), dayjs()],
+            dateRange: [dayjs(getPreTime(7)), dayjs()]
           }}
         >
           <Form.Item
             label={formatMessage({
               id: 'odc.components.FormRecordExportModal.ExecutionTimeRange',
-              defaultMessage: '执行时间范围',
+              defaultMessage: '执行时间范围'
             })}
             /*执行时间范围*/ name="dateRange"
             required
             style={{ width: '360px' }}
           >
-            <RangePicker showTime={{ format: 'HH:mm:ss' }} format="YYYY-MM-DD HH:mm:ss" />
+            <RangePicker
+              showTime={{ format: 'HH:mm:ss' }}
+              format="YYYY-MM-DD HH:mm:ss"
+            />
           </Form.Item>
           <Form.Item
             label={formatMessage({
               id: 'odc.components.FormRecordExportModal.EventAction',
-              defaultMessage: '事件操作',
+              defaultMessage: '事件操作'
             })}
             /*事件操作*/ name="event"
           >
@@ -186,7 +204,7 @@ const FormResourceGroupModal: React.FC<IProps> = (props) => {
               treeCheckable
               placeholder={formatMessage({
                 id: 'odc.components.FormRecordExportModal.SelectAllByDefault',
-                defaultMessage: '默认选择全部',
+                defaultMessage: '默认选择全部'
               })}
               /*默认选择全部*/ treeData={eventOptions}
             />
@@ -194,19 +212,22 @@ const FormResourceGroupModal: React.FC<IProps> = (props) => {
           <Form.Item
             label={formatMessage({
               id: 'src.page.Secure.components.FormRecordExportModal.2906C216',
-              defaultMessage: '所属公共数据源',
+              defaultMessage: '所属公共数据源'
             })}
             name="connectionIds"
           >
             <Select
               placeholder={formatMessage({
                 id: 'odc.components.FormRecordExportModal.SelectAllByDefault',
-                defaultMessage: '默认选择全部',
+                defaultMessage: '默认选择全部'
               })}
               /*默认选择全部*/
               mode="multiple"
               filterOption={(value, option) => {
-                return option?.title?.toLowerCase()?.indexOf(value?.toLowerCase()) >= 0;
+                return (
+                  option?.title?.toLowerCase()?.indexOf(value?.toLowerCase()) >=
+                  0
+                );
               }}
             >
               {publicConnections?.map((item: IManagerPublicConnection) => {
@@ -228,27 +249,31 @@ const FormResourceGroupModal: React.FC<IProps> = (props) => {
           <Form.Item
             label={formatMessage({
               id: 'odc.components.FormRecordExportModal.Executor',
-              defaultMessage: '执行人',
+              defaultMessage: '执行人'
             })}
             /*执行人*/ name="userIds"
           >
             <Select
               placeholder={formatMessage({
                 id: 'odc.components.FormRecordExportModal.SelectAllByDefault',
-                defaultMessage: '默认选择全部',
+                defaultMessage: '默认选择全部'
               })}
               /*默认选择全部*/
               mode="multiple"
               options={authorOptions}
               filterOption={(value, option) => {
-                return (option?.label as string)?.toLowerCase()?.indexOf(value?.toLowerCase()) >= 0;
+                return (
+                  (option?.label as string)
+                    ?.toLowerCase()
+                    ?.indexOf(value?.toLowerCase()) >= 0
+                );
               }}
             />
           </Form.Item>
           <Form.Item
             label={formatMessage({
               id: 'odc.components.FormRecordExportModal.ExecutionResult',
-              defaultMessage: '执行结果',
+              defaultMessage: '执行结果'
             })}
             /*执行结果*/ name="results"
             style={{ width: '340px' }}
@@ -256,7 +281,7 @@ const FormResourceGroupModal: React.FC<IProps> = (props) => {
             <Select
               placeholder={formatMessage({
                 id: 'odc.components.FormRecordExportModal.SelectAllByDefault',
-                defaultMessage: '默认选择全部',
+                defaultMessage: '默认选择全部'
               })}
               /*默认选择全部*/
               mode="multiple"
@@ -264,29 +289,29 @@ const FormResourceGroupModal: React.FC<IProps> = (props) => {
                 {
                   label: formatMessage({
                     id: 'odc.components.FormRecordExportModal.Successful',
-                    defaultMessage: '成功',
+                    defaultMessage: '成功'
                   }),
 
                   //成功
-                  value: 'SUCCESS',
+                  value: 'SUCCESS'
                 },
 
                 {
                   label: formatMessage({
                     id: 'odc.components.FormRecordExportModal.Failed',
-                    defaultMessage: '失败',
+                    defaultMessage: '失败'
                   }),
 
                   //失败
-                  value: 'FAILED',
-                },
+                  value: 'FAILED'
+                }
               ]}
             />
           </Form.Item>
           <Form.Item
             label={formatMessage({
               id: 'odc.components.FormRecordExportModal.ExportFormat',
-              defaultMessage: '导出格式',
+              defaultMessage: '导出格式'
             })}
             /*导出格式*/ name="format"
             style={{ width: '160px' }}
@@ -297,22 +322,22 @@ const FormResourceGroupModal: React.FC<IProps> = (props) => {
                 {
                   label: formatMessage({
                     id: 'odc.components.FormRecordExportModal.ExcelFormat',
-                    defaultMessage: 'Excel 格式',
+                    defaultMessage: 'Excel 格式'
                   }),
 
                   //Excel 格式
-                  value: 'EXCEL',
+                  value: 'EXCEL'
                 },
 
                 {
                   label: formatMessage({
                     id: 'odc.components.FormRecordExportModal.CsvFormat',
-                    defaultMessage: 'CSV 格式',
+                    defaultMessage: 'CSV 格式'
                   }),
 
                   //CSV 格式
-                  value: 'CSV',
-                },
+                  value: 'CSV'
+                }
               ]}
             />
           </Form.Item>

@@ -17,14 +17,17 @@ import { formatMessage } from '@/util/intl';
 import { IODCSetting, ODCSettingGroup } from '../../config';
 import RadioItem from '../../Item/RadioItem';
 import TextAreaItem from '../../Item/TextItem';
-import { getExecutionStrategyConfig, getDatabaseChangeResultSetsConfig } from '../common';
+import {
+  getExecutionStrategyConfig,
+  getDatabaseChangeResultSetsConfig
+} from '../common';
 
 const taskGroup: ODCSettingGroup = {
   label: formatMessage({
     id: 'src.component.ODCSetting.config.group.5AF13B23',
-    defaultMessage: '工单任务',
+    defaultMessage: '工单任务'
   }),
-  key: 'groupTask',
+  key: 'groupTask'
 };
 
 const taskSetting: IODCSetting[] = [
@@ -93,7 +96,7 @@ const taskSetting: IODCSetting[] = [
   {
     label: formatMessage({
       id: 'src.component.ODCSetting.config.group.81FAF01E',
-      defaultMessage: '导入工单允许结构替换',
+      defaultMessage: '导入工单允许结构替换'
     }),
     key: 'odc.task.default.importTaskStructureReplacementEnabled',
     locationKey: 'importTaskStructureReplacementEnabled',
@@ -106,28 +109,28 @@ const taskSetting: IODCSetting[] = [
             {
               label: formatMessage({
                 id: 'src.component.ODCSetting.config.group.B9594124',
-                defaultMessage: '是',
+                defaultMessage: '是'
               }),
-              value: 'true',
+              value: 'true'
             },
             {
               label: formatMessage({
                 id: 'src.component.ODCSetting.config.group.B89D1A86',
-                defaultMessage: '否',
+                defaultMessage: '否'
               }),
-              value: 'false',
-            },
+              value: 'false'
+            }
           ]}
           value={value}
           onChange={onChange}
         />
       );
-    },
+    }
   },
   {
     label: formatMessage({
       id: 'src.component.ODCSetting.config.group.B3BD15DD',
-      defaultMessage: '数据库变更默认生成备份回滚方案',
+      defaultMessage: '数据库变更默认生成备份回滚方案'
     }),
     key: 'odc.task.default.rollbackPlanEnabled',
     locationKey: 'rollbackPlanEnabled',
@@ -140,30 +143,30 @@ const taskSetting: IODCSetting[] = [
             {
               label: formatMessage({
                 id: 'src.component.ODCSetting.config.group.75980064',
-                defaultMessage: '是',
+                defaultMessage: '是'
               }),
-              value: 'true',
+              value: 'true'
             },
             {
               label: formatMessage({
                 id: 'src.component.ODCSetting.config.group.228F4926',
-                defaultMessage: '否',
+                defaultMessage: '否'
               }),
-              value: 'false',
-            },
+              value: 'false'
+            }
           ]}
           value={value}
           onChange={onChange}
         />
       );
-    },
+    }
   },
   ...getDatabaseChangeResultSetsConfig(taskGroup),
   ...getExecutionStrategyConfig(taskGroup),
   {
     label: formatMessage({
       id: 'src.component.ODCSetting.config.group.0ACF68C5',
-      defaultMessage: '任务描述提示文案',
+      defaultMessage: '任务描述提示文案'
     }),
     key: 'odc.task.default.taskDescriptionPrompt',
     locationKey: 'taskDescriptionPrompt',
@@ -176,12 +179,12 @@ const taskSetting: IODCSetting[] = [
           onChange={onChange}
           config={{
             showCount: true,
-            maxLength: 200,
+            maxLength: 200
           }}
         />
       );
-    },
-  },
+    }
+  }
 ];
 
 export default taskSetting;

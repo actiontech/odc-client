@@ -15,7 +15,10 @@
  */
 
 import HelpDoc from '@/component/helpDoc';
-import { IResourceOption, ResourceSelector } from '@/component/Manage/ResourceSelector';
+import {
+  IResourceOption,
+  ResourceSelector
+} from '@/component/Manage/ResourceSelector';
 import { EnableRoleSystemPermission } from '@/constant';
 import { IManagerResourceType, IManagerRolePermissionType } from '@/d.ts';
 import odc from '@/plugins/odc';
@@ -31,7 +34,7 @@ import {
   resourceManagementActionOptions,
   resourceManagementTypeOptions,
   systemActionOptions,
-  systemTypeOptions,
+  systemTypeOptions
 } from './const';
 import styles from './index.less';
 
@@ -41,7 +44,7 @@ const getOptions = (
     name: string;
     id: number;
     [key: string]: any;
-  }[],
+  }[]
 ) => {
   return (
     data?.map((item) => {
@@ -49,7 +52,7 @@ const getOptions = (
         ...item,
         resourceType: type,
         resourceId: item?.id?.toString?.(),
-        name: item?.name,
+        name: item?.name
       };
     }) ?? []
   );
@@ -71,19 +74,23 @@ const FormResourceSelector: React.FC<{
     permissionActiveKey,
     formRef,
     handleFieldChange,
-    handlePermissionTypeChange,
+    handlePermissionTypeChange
   } = props;
   const { permissionType: initPermissionType = [] } = initialValue ?? {};
   const [permissionType, setPermissionType] = useState([]);
   const { resource, roles, users } = useContext(ResourceContext);
 
-  const [resourceManagementOptionsMap, setResourceManagementOptionsMap] = useState<{
-    [key: string]: IResourceOption[];
-  }>({
-    [IManagerResourceType.resource]: getOptions(IManagerResourceType.resource, resource),
-    [IManagerResourceType.user]: getOptions(IManagerResourceType.user, users),
-    [IManagerResourceType.role]: getOptions(IManagerResourceType.role, roles),
-  });
+  const [resourceManagementOptionsMap, setResourceManagementOptionsMap] =
+    useState<{
+      [key: string]: IResourceOption[];
+    }>({
+      [IManagerResourceType.resource]: getOptions(
+        IManagerResourceType.resource,
+        resource
+      ),
+      [IManagerResourceType.user]: getOptions(IManagerResourceType.user, users),
+      [IManagerResourceType.role]: getOptions(IManagerResourceType.role, roles)
+    });
 
   useEffect(() => {
     if (initialValue) {
@@ -96,7 +103,7 @@ const FormResourceSelector: React.FC<{
   };
 
   const iconStyle = {
-    color: 'var(--text-color-hint)',
+    color: 'var(--text-color-hint)'
   };
 
   return (
@@ -104,7 +111,7 @@ const FormResourceSelector: React.FC<{
       <Form.Item
         label={formatMessage({
           id: 'odc.components.FormRoleModal.component.PermissionType',
-          defaultMessage: '权限类型',
+          defaultMessage: '权限类型'
         })}
         /* 权限类型 */
         name="permissionType"
@@ -113,11 +120,11 @@ const FormResourceSelector: React.FC<{
             required: true,
             message: formatMessage({
               id: 'odc.components.FormRoleModal.component.SelectAPermissionType',
-              defaultMessage: '请选择权限类型',
-            }),
+              defaultMessage: '请选择权限类型'
+            })
 
             // 请选择权限类型
-          },
+          }
         ]}
       >
         <Checkbox.Group
@@ -127,33 +134,38 @@ const FormResourceSelector: React.FC<{
             handlePermissionTypeChange(value[0]);
           }}
         >
-          <Checkbox value={IManagerRolePermissionType.resourceManagementPermissions}>
+          <Checkbox
+            value={IManagerRolePermissionType.resourceManagementPermissions}
+          >
             <Space size={5}>
               <span>
                 {
                   formatMessage({
                     id: 'odc.components.FormResourceSelector.ResourceManagementPermissions',
-                    defaultMessage: '资源管理权限',
+                    defaultMessage: '资源管理权限'
                   }) /*资源管理权限*/
                 }
               </span>
               <Tooltip
                 title={formatMessage({
                   id: 'odc.component.ResourceSelector.IncludingDataSourcesProjectsRoles',
-                  defaultMessage: '包括数据源、项目、角色、用户的管理权限（新建/管理/编辑/查看）',
+                  defaultMessage:
+                    '包括数据源、项目、角色、用户的管理权限（新建/管理/编辑/查看）'
                 })} /*包括数据源、项目、角色、用户的管理权限（新建/管理/编辑/查看）*/
               >
                 <QuestionCircleOutlined style={iconStyle} />
               </Tooltip>
             </Space>
           </Checkbox>
-          <Checkbox value={IManagerRolePermissionType.systemOperationPermissions}>
+          <Checkbox
+            value={IManagerRolePermissionType.systemOperationPermissions}
+          >
             <Space size={5}>
               <span>
                 {
                   formatMessage({
                     id: 'odc.components.FormResourceSelector.SystemOperatingPermissions',
-                    defaultMessage: '系统操作权限',
+                    defaultMessage: '系统操作权限'
                   }) /*系统操作权限*/
                 }
               </span>
@@ -161,7 +173,7 @@ const FormResourceSelector: React.FC<{
                 title={formatMessage({
                   id: 'odc.component.ResourceSelector.IncludingOperationRecordsSystemConfiguration',
                   defaultMessage:
-                    '包括操作记录、系统配置、自动授权、审批流程、审批流程、风险识别规则、开发规范、系统集成的操作权限（查看/操作）',
+                    '包括操作记录、系统配置、自动授权、审批流程、审批流程、风险识别规则、开发规范、系统集成的操作权限（查看/操作）'
                 })} /*包括操作记录、系统配置、自动授权、审批流程、审批流程、风险识别规则、开发规范、系统集成的操作权限（查看/操作）*/
               >
                 <QuestionCircleOutlined style={iconStyle} />
@@ -173,7 +185,7 @@ const FormResourceSelector: React.FC<{
       <Form.Item
         label={formatMessage({
           id: 'odc.components.FormRoleModal.component.PermissionSettings',
-          defaultMessage: '权限设置',
+          defaultMessage: '权限设置'
         })}
         /* 权限设置 */ className={styles.noOptional}
       >
@@ -188,7 +200,7 @@ const FormResourceSelector: React.FC<{
                   key: 'resourceManagementPermissions',
                   label: formatMessage({
                     id: 'odc.components.FormResourceSelector.ResourceManagementPermissions',
-                    defaultMessage: '资源管理权限',
+                    defaultMessage: '资源管理权限'
                   }),
                   forceRender: true,
                   children: (
@@ -196,7 +208,7 @@ const FormResourceSelector: React.FC<{
                       <Form.Item
                         label={formatMessage({
                           id: 'odc.components.FormResourceSelector.ObjectsThatCanBeCreated',
-                          defaultMessage: '可新建的对象',
+                          defaultMessage: '可新建的对象'
                         })} /*可新建的对象*/
                         name="createAbleResource"
                         style={{ padding: '0 12px' }}
@@ -205,7 +217,7 @@ const FormResourceSelector: React.FC<{
                           options={createAbleResourceOptions?.filter((item) =>
                             odc.appConfig.manage.user.create
                               ? true
-                              : item.value !== IManagerResourceType.user,
+                              : item.value !== IManagerResourceType.user
                           )}
                         />
                       </Form.Item>
@@ -214,16 +226,19 @@ const FormResourceSelector: React.FC<{
                           {
                             formatMessage({
                               id: 'odc.components.FormResourceSelector.ManageableObjects',
-                              defaultMessage: '可管理的对象',
+                              defaultMessage: '可管理的对象'
                             }) /*可管理的对象*/
                           }
                         </div>
                         <div style={{ width: '108px' }}>
-                          <HelpDoc doc="resourceManagementPermissionsAction" leftText>
+                          <HelpDoc
+                            doc="resourceManagementPermissionsAction"
+                            leftText
+                          >
                             {
                               formatMessage({
                                 id: 'odc.components.FormResourceSelector.ManagePermissions',
-                                defaultMessage: '管理权限',
+                                defaultMessage: '管理权限'
                               }) /*管理权限*/
                             }
                           </HelpDoc>
@@ -234,7 +249,8 @@ const FormResourceSelector: React.FC<{
                           name="resourceManagementPermissions"
                           optionsMap={resourceManagementOptionsMap}
                           typeOptions={resourceManagementTypeOptions?.filter(
-                            (item) => item.value !== IManagerResourceType.project,
+                            (item) =>
+                              item.value !== IManagerResourceType.project
                           )}
                           actionOptions={resourceManagementActionOptions}
                           initialValue={initialValue}
@@ -243,17 +259,19 @@ const FormResourceSelector: React.FC<{
                           formRef={formRef}
                           required={false}
                           onFieldChange={handleFieldChange}
-                          onOptionsChange={handleResourceManagementOptionsChange}
+                          onOptionsChange={
+                            handleResourceManagementOptionsChange
+                          }
                         />
                       </Form.Item>
                     </>
-                  ),
+                  )
                 },
               permissionType.includes('systemOperationPermissions') && {
                 key: 'systemOperationPermissions',
                 label: formatMessage({
                   id: 'odc.components.FormResourceSelector.SystemOperatingPermissions',
-                  defaultMessage: '系统操作权限',
+                  defaultMessage: '系统操作权限'
                 }),
                 forceRender: true,
                 children: (
@@ -263,16 +281,19 @@ const FormResourceSelector: React.FC<{
                         {
                           formatMessage({
                             id: 'odc.components.FormResourceSelector.OperationalType',
-                            defaultMessage: '可操作的类型',
+                            defaultMessage: '可操作的类型'
                           }) /*可操作的类型*/
                         }
                       </div>
                       <div style={{ width: '108px' }}>
-                        <HelpDoc doc="systemOperationPermissionsAction" leftText>
+                        <HelpDoc
+                          doc="systemOperationPermissionsAction"
+                          leftText
+                        >
                           {
                             formatMessage({
                               id: 'odc.components.FormResourceSelector.OperationPermission',
-                              defaultMessage: '操作权限',
+                              defaultMessage: '操作权限'
                             }) /*操作权限*/
                           }
                         </HelpDoc>
@@ -285,17 +306,17 @@ const FormResourceSelector: React.FC<{
                           required: true,
                           message: formatMessage({
                             id: 'odc.components.FormRoleModal.component.SelectPermissions',
-                            defaultMessage: '请选择权限',
-                          }),
+                            defaultMessage: '请选择权限'
+                          })
                           // 请选择权限
-                        },
+                        }
                       ]}
                     >
                       <ResourceSelector
                         name="systemOperationPermissions"
                         showField={false}
                         typeOptions={systemTypeOptions?.filter((item) =>
-                          !isUndefined(item.visible) ? item.visible : true,
+                          !isUndefined(item.visible) ? item.visible : true
                         )}
                         actionOptions={systemActionOptions}
                         initialValue={initialValue}
@@ -306,8 +327,8 @@ const FormResourceSelector: React.FC<{
                       />
                     </Form.Item>
                   </>
-                ),
-              },
+                )
+              }
             ].filter(Boolean)}
           />
         ) : (
@@ -315,7 +336,7 @@ const FormResourceSelector: React.FC<{
             {
               formatMessage({
                 id: 'odc.components.FormResourceSelector.NoPermissionTypeSelected',
-                defaultMessage: '未选择权限类型',
+                defaultMessage: '未选择权限类型'
               }) /*未选择权限类型*/
             }
           </Typography.Text>

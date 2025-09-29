@@ -29,7 +29,15 @@ import { SettingStore } from '@/store/setting';
 import { SQLStore } from '@/store/sql';
 import { haveLockPwd, initClientService, isLock } from '@/util/client';
 import { isClient } from '@/util/env';
-import { Helmet, history, Outlet, useAppData, useLocation, useRouteData } from '@umijs/max';
+import {
+  getLocale,
+  Helmet,
+  history,
+  Outlet,
+  useAppData,
+  useLocation,
+  useRouteData
+} from '@umijs/max';
 import classNames from 'classnames';
 import { inject, observer } from 'mobx-react';
 import React, { useContext, useEffect, useState } from 'react';
@@ -37,35 +45,47 @@ import { ContainerQuery } from 'react-container-query';
 import Context from './MenuContext';
 import { PageLoadingContext } from './PageLoadingWrapper';
 import StoreProvider from './StoreProvider';
-import { ConfigProvider } from 'antd';
+import { ConfigProvider, Spin } from 'antd';
+import {
+  ConfigProvider as DmsKitConfigProvider,
+  LocalStorageWrapper,
+  SpinIndicator,
+  StorageKey,
+  SupportLanguage
+} from '@actiontech/dms-kit';
+import antd_zh_CN from 'antd/locale/zh_CN';
+import antd_en_US from 'antd/locale/en_US';
 import { theme } from './antdTheme';
+import useNotificationContext from '../hooks/useNotificationContext';
+import Watermark from '../component/Watermark';
+import { compressToBase64, decompressFromBase64 } from 'lz-string';
 
 // // TODO：支持英文版
 // setLocale('zh-CN');
 
 const query = {
   'screen-xs': {
-    maxWidth: 575,
+    maxWidth: 575
   },
   'screen-sm': {
     minWidth: 576,
-    maxWidth: 767,
+    maxWidth: 767
   },
   'screen-md': {
     minWidth: 768,
-    maxWidth: 991,
+    maxWidth: 991
   },
   'screen-lg': {
     minWidth: 992,
-    maxWidth: 1199,
+    maxWidth: 1199
   },
   'screen-xl': {
     minWidth: 1200,
-    maxWidth: 1599,
+    maxWidth: 1599
   },
   'screen-xxl': {
-    minWidth: 1600,
-  },
+    minWidth: 1600
+  }
 };
 interface IBasicLayoutProps {
   settingStore: SettingStore;
@@ -80,7 +100,11 @@ interface IBasicLayoutProps {
   children?: any;
 }
 let timer = null;
-const AppContainer: React.FC<IBasicLayoutProps> = (props: IBasicLayoutProps) => {
+const AppContainer: React.FC<IBasicLayoutProps> = (
+  props: IBasicLayoutProps
+) => {
+  const { notificationContextHolder } = useNotificationContext();
+  const [edition, setEdition] = useState();
   const [isServerReady, setIsServerReady] = useState<boolean>(false);
   const [waitNumber, setWaitNumber] = useState<number>(-1);
   const { route } = useRouteData();
@@ -119,13 +143,21 @@ const AppContainer: React.FC<IBasicLayoutProps> = (props: IBasicLayoutProps) => 
   };
   const getContext = () => {
     return {
-      location,
+      location
     };
   };
   const getPageTitle = (pathname: any) => {
     return 'OceanBase Developer Center';
   };
   useEffect(() => {
+    // LocalStorageWrapper.set(
+    //   StorageKey.Token,
+    //   'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTkwNDY1NTgsImlhdCI6MTc1OTAzOTM1OCwiaXNzIjoiYWN0aW9udGVjaCBkbXMiLCJ0eXAiOiJkbXMtdG9rZW4iLCJ1aWQiOiI3MDAyMDAifQ.9AiOmIEv1eJycibhtpbCQs2BNWvJD_OXZMj1VGNu26E'
+    // );
+    // LocalStorageWrapper.set(
+    //   StorageKey.DMS_CB_CHANNEL,
+    //   compressToBase64(JSON.stringify({ type: 'sqle_edition', data: 'ee' }))
+    // );
     async function asyncEffect() {
       const { userStore, settingStore } = props;
       const authority = undefined;
@@ -153,6 +185,21 @@ const AppContainer: React.FC<IBasicLayoutProps> = (props: IBasicLayoutProps) => 
     };
   }, []);
   const pageLoadingContext = useContext(PageLoadingContext);
+
+  useEffect(() => {
+    const channel = LocalStorageWrapper.get(StorageKey.DMS_CB_CHANNEL);
+    if (channel) {
+      try {
+        const json = JSON.parse(decompressFromBase64(channel));
+        if (json.type === 'sqle_edition') {
+          setEdition(json.data);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }, []);
+
   useEffect(() => {
     if (isReady) {
       pageLoadingContext?.removeTask();
@@ -161,28 +208,28 @@ const AppContainer: React.FC<IBasicLayoutProps> = (props: IBasicLayoutProps) => 
         tip: isServerReady
           ? formatMessage({
               id: 'odc.src.layout.ObtainConfigurationInformation',
-              defaultMessage: '正在获取配置信息',
+              defaultMessage: '正在获取配置信息'
             }) //'正在获取配置信息'
           : formatMessage({
               id: 'odc.src.layout.InspectionServiceStatus',
-              defaultMessage: '正在检查服务状态',
+              defaultMessage: '正在检查服务状态'
             }), //'正在检查服务状态'
         showError: settingStore.settingLoadStatus === 'failed',
         queue:
           waitNumber > -1
             ? {
-                waitNumber,
+                waitNumber
               }
-            : null,
+            : null
       });
     }
   }, [isReady, isServerReady, waitNumber, settingStore.settingLoadStatus]);
   return (
     <React.Fragment>
-      {
+      {/* {
         // 只在客户端开启用户信息采集窗口
         isClient() && <AskeventTrackingPermissionModal />
-      }
+      } */}
 
       <Helmet>
         <title>{getPageTitle(pathname)}</title>
@@ -193,10 +240,14 @@ const AppContainer: React.FC<IBasicLayoutProps> = (props: IBasicLayoutProps) => 
             {isReady ? (
               <div
                 style={{
-                  height: '100%',
+                  height: '100%'
                 }}
                 className={classNames(params)}
               >
+                {notificationContextHolder}
+                {userStore?.user?.name && edition === 'ee' && (
+                  <Watermark text={userStore?.user?.name} />
+                )}
                 <Outlet />
               </div>
             ) : (
@@ -212,19 +263,40 @@ const App = inject(
   'settingStore',
   'authStore',
   'userStore',
-  'clusterStore',
+  'clusterStore'
 )(observer(AppContainer));
-export default (props: any) => (
-  // <Media query="(max-width: 599px)">
-  <ErrorBoundary>
-    <ConfigProvider theme={theme}>
-      <StoreProvider>
-        <AuthStoreContext.Provider value={authStore}>
-          <App {...props} />
-        </AuthStoreContext.Provider>
-      </StoreProvider>
-    </ConfigProvider>
-  </ErrorBoundary>
-);
+
+Spin.setDefaultIndicator(<SpinIndicator />);
+
+// eslint-disable-next-line import/no-anonymous-default-export
+export default (props: any) => {
+  const locale = getLocale();
+  const currentLanguage =
+    locale === SupportLanguage.enUS
+      ? SupportLanguage.enUS
+      : SupportLanguage.zhCN;
+  const antdLanguage =
+    currentLanguage === SupportLanguage.enUS ? antd_en_US : antd_zh_CN;
+
+  return (
+    <ErrorBoundary>
+      <DmsKitConfigProvider
+        language={
+          locale === SupportLanguage.enUS
+            ? SupportLanguage.enUS
+            : SupportLanguage.zhCN
+        }
+      >
+        <ConfigProvider locale={antdLanguage} theme={theme}>
+          <StoreProvider>
+            <AuthStoreContext.Provider value={authStore}>
+              <App {...props} />
+            </AuthStoreContext.Provider>
+          </StoreProvider>
+        </ConfigProvider>
+      </DmsKitConfigProvider>
+    </ErrorBoundary>
+  );
+};
 
 // </Media>;

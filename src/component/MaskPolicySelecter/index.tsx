@@ -44,7 +44,7 @@ export const RuleContent: React.FC<IContentProps> = (props) => {
       style={{
         lineHeight: '20px',
         maxHeight: '320px',
-        overflowY: 'auto',
+        overflowY: 'auto'
       }}
     >
       <div style={{ fontWeight: 'bold' }}>{label}</div>
@@ -58,9 +58,9 @@ export const RuleContent: React.FC<IContentProps> = (props) => {
                   formatMessage(
                     {
                       id: 'odc.component.MaskPolicySelecter.DesensitizationRuleShownumber',
-                      defaultMessage: '脱敏规则{showNumber}:',
+                      defaultMessage: '脱敏规则{showNumber}:'
                     },
-                    { showNumber },
+                    { showNumber }
                   ) //`脱敏规则${showNumber}: `
                 }
               </span>
@@ -70,17 +70,19 @@ export const RuleContent: React.FC<IContentProps> = (props) => {
                   formatMessage(
                     {
                       id: 'odc.component.MaskPolicySelecter.Masktypesmapitemtype',
-                      defaultMessage: '（{maskTypesMapItemType}）',
+                      defaultMessage: '（{maskTypesMapItemType}）'
                     },
 
-                    { maskTypesMapItemType: maskTypesMap[item.type] },
+                    { maskTypesMapItemType: maskTypesMap[item.type] }
                   )
 
                   //`（${maskTypesMap[item.type]}）`
                 }
               </span>
               {!item.enabled && (
-                <ExclamationCircleFilled style={{ color: 'var(--icon-orange-color)' }} />
+                <ExclamationCircleFilled
+                  style={{ color: 'var(--icon-orange-color)' }}
+                />
               )}
             </Typography.Text>
           );

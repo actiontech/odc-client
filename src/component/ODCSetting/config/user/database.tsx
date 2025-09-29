@@ -24,45 +24,51 @@ import SelectItem from '../../Item/SelectItem';
 const databaseGroup: ODCSettingGroup = {
   label: formatMessage({
     id: 'src.component.ODCSetting.config.9EC92943',
-    defaultMessage: '数据库',
+    defaultMessage: '数据库'
   }), //'数据库'
-  key: 'database',
+  key: 'database'
 };
 const databaseSessionGroup: ODCSettingGroup = {
-  label: formatMessage({ id: 'src.component.ODCSetting.config.EFD575F1', defaultMessage: '会话' }), //'会话'
-  key: 'databaseSession',
+  label: formatMessage({
+    id: 'src.component.ODCSetting.config.EFD575F1',
+    defaultMessage: '会话'
+  }), //'会话'
+  key: 'databaseSession'
 };
 const databaseResultsetGroup: ODCSettingGroup = {
   label: formatMessage({
     id: 'src.component.ODCSetting.config.C54009C6',
-    defaultMessage: '结果集',
+    defaultMessage: '结果集'
   }), //'结果集'
-  key: 'databaseResultset',
+  key: 'databaseResultset'
 };
 const sqlQueryGroup: ODCSettingGroup = {
   label: formatMessage({
     id: 'src.component.ODCSetting.config.user.ACD1CDE0',
-    defaultMessage: 'SQL 查询',
+    defaultMessage: 'SQL 查询'
   }),
-  key: 'sqlQuery',
+  key: 'sqlQuery'
 };
 const databaseSQLExecuteGroup: ODCSettingGroup = {
   label: formatMessage({
     id: 'src.component.ODCSetting.config.EBC355E0',
-    defaultMessage: 'SQL执行',
+    defaultMessage: 'SQL执行'
   }), //'SQL执行'
-  key: 'databaseSQLExecute',
+  key: 'databaseSQLExecute'
 };
 const databaseObjectGroup: ODCSettingGroup = {
-  label: formatMessage({ id: 'src.component.ODCSetting.config.A427BB81', defaultMessage: '对象' }), //'对象'
-  key: 'databaseObject',
+  label: formatMessage({
+    id: 'src.component.ODCSetting.config.A427BB81',
+    defaultMessage: '对象'
+  }), //'对象'
+  key: 'databaseObject'
 };
 
 const databaseSettings: IODCSetting[] = [
   {
     label: formatMessage({
       id: 'src.component.ODCSetting.config.515B1C11',
-      defaultMessage: 'MySQL 提交模式',
+      defaultMessage: 'MySQL 提交模式'
     }), //'MYSQL 提交模式'
     key: 'odc.sqlexecute.default.mysqlAutoCommitMode',
     locationKey: 'mysqlAutoCommitMode',
@@ -72,32 +78,32 @@ const databaseSettings: IODCSetting[] = [
     render: (value, onChange) => {
       return (
         <RadioItem
+          value={value}
+          onChange={onChange}
           options={[
             {
               label: formatMessage({
                 id: 'odc.component.LoginMenus.UserConfig.Automatic',
-                defaultMessage: '自动',
+                defaultMessage: '自动'
               }),
-              value: AutoCommitMode.ON,
+              value: AutoCommitMode.ON
             },
             {
               label: formatMessage({
                 id: 'odc.component.LoginMenus.UserConfig.Manual',
-                defaultMessage: '手动',
+                defaultMessage: '手动'
               }),
-              value: AutoCommitMode.OFF,
-            },
+              value: AutoCommitMode.OFF
+            }
           ]}
-          value={value}
-          onChange={onChange}
         />
       );
-    },
+    }
   },
   {
     label: formatMessage({
       id: 'src.component.ODCSetting.config.11D89046',
-      defaultMessage: 'Oracle 提交模式',
+      defaultMessage: 'Oracle 提交模式'
     }), //'Oracle 提交模式'
     key: 'odc.sqlexecute.default.oracleAutoCommitMode',
     locationKey: 'oracleAutoCommitMode',
@@ -111,28 +117,28 @@ const databaseSettings: IODCSetting[] = [
             {
               label: formatMessage({
                 id: 'odc.component.LoginMenus.UserConfig.Automatic',
-                defaultMessage: '自动',
+                defaultMessage: '自动'
               }),
-              value: AutoCommitMode.ON,
+              value: AutoCommitMode.ON
             },
             {
               label: formatMessage({
                 id: 'odc.component.LoginMenus.UserConfig.Manual',
-                defaultMessage: '手动',
+                defaultMessage: '手动'
               }),
-              value: AutoCommitMode.OFF,
-            },
+              value: AutoCommitMode.OFF
+            }
           ]}
           value={value}
           onChange={onChange}
         />
       );
-    },
+    }
   },
   {
     label: formatMessage({
       id: 'src.component.ODCSetting.config.F785B55E',
-      defaultMessage: '获取结果集列信息',
+      defaultMessage: '获取结果集列信息'
     }), //'获取结果集列信息'
     key: 'odc.sqlexecute.default.fetchColumnInfo',
     locationKey: 'fetchColumnInfo',
@@ -146,28 +152,28 @@ const databaseSettings: IODCSetting[] = [
             {
               label: formatMessage({
                 id: 'src.component.ODCSetting.config.C5306019',
-                defaultMessage: '是',
+                defaultMessage: '是'
               }), //'是'
-              value: 'true',
+              value: 'true'
             },
             {
               label: formatMessage({
                 id: 'src.component.ODCSetting.config.DE21D1E7',
-                defaultMessage: '否',
+                defaultMessage: '否'
               }), //'否'
-              value: 'false',
-            },
+              value: 'false'
+            }
           ]}
           value={value}
           onChange={onChange}
         />
       );
-    },
+    }
   },
   {
     label: formatMessage({
       id: 'src.component.ODCSetting.config.9881D833',
-      defaultMessage: '获取 Row ID',
+      defaultMessage: '获取 Row ID'
     }), //'获取 RowId'
     key: 'odc.sqlexecute.default.addInternalRowId',
     locationKey: 'addInternalRowId',
@@ -181,28 +187,28 @@ const databaseSettings: IODCSetting[] = [
             {
               label: formatMessage({
                 id: 'src.component.ODCSetting.config.C5306019',
-                defaultMessage: '是',
+                defaultMessage: '是'
               }), //'是'
-              value: 'true',
+              value: 'true'
             },
             {
               label: formatMessage({
                 id: 'src.component.ODCSetting.config.DE21D1E7',
-                defaultMessage: '否',
+                defaultMessage: '否'
               }), //'否'
-              value: 'false',
-            },
+              value: 'false'
+            }
           ]}
           value={value}
           onChange={onChange}
         />
       );
-    },
+    }
   },
   {
     label: formatMessage({
       id: 'src.component.ODCSetting.config.90CA6EA7',
-      defaultMessage: '开启全链路诊断',
+      defaultMessage: '开启全链路诊断'
     }), //'开启全链路诊断'
     key: 'odc.sqlexecute.default.fullLinkTraceEnabled',
     locationKey: 'fullLinkTraceEnabled',
@@ -216,28 +222,28 @@ const databaseSettings: IODCSetting[] = [
             {
               label: formatMessage({
                 id: 'src.component.ODCSetting.config.92F1D86D',
-                defaultMessage: '是',
+                defaultMessage: '是'
               }), //'是'
-              value: 'true',
+              value: 'true'
             },
             {
               label: formatMessage({
                 id: 'src.component.ODCSetting.config.517C6CA7',
-                defaultMessage: '否',
+                defaultMessage: '否'
               }), //'否'
-              value: 'false',
-            },
+              value: 'false'
+            }
           ]}
           value={value}
           onChange={onChange}
         />
       );
-    },
+    }
   },
   {
     label: formatMessage({
       id: 'src.component.ODCSetting.config.E78B48B0',
-      defaultMessage: '报错继续执行',
+      defaultMessage: '报错继续执行'
     }), //'报错继续执行'
     key: 'odc.sqlexecute.default.continueExecutionOnError',
     locationKey: 'continueExecutionOnError',
@@ -251,28 +257,28 @@ const databaseSettings: IODCSetting[] = [
             {
               label: formatMessage({
                 id: 'src.component.ODCSetting.config.DB70BE72',
-                defaultMessage: '是',
+                defaultMessage: '是'
               }), //'是'
-              value: 'true',
+              value: 'true'
             },
             {
               label: formatMessage({
                 id: 'src.component.ODCSetting.config.B0184654',
-                defaultMessage: '否',
+                defaultMessage: '否'
               }), //'否'
-              value: 'false',
-            },
+              value: 'false'
+            }
           ]}
           value={value}
           onChange={onChange}
         />
       );
-    },
+    }
   },
   {
     label: formatMessage({
       id: 'src.component.ODCSetting.config.56F5CB81',
-      defaultMessage: 'Delimiter 设置',
+      defaultMessage: 'Delimiter 设置'
     }), //'Delimiter 设置'
     key: 'odc.sqlexecute.default.delimiter',
     locationKey: 'delimiter',
@@ -285,35 +291,35 @@ const databaseSettings: IODCSetting[] = [
           options={[
             {
               label: ';',
-              value: ';',
+              value: ';'
             },
             {
               label: '/',
-              value: '/',
+              value: '/'
             },
             {
               label: '//',
-              value: '//',
+              value: '//'
             },
             {
               label: '$',
-              value: '$',
+              value: '$'
             },
             {
               label: '$$',
-              value: '$$',
-            },
+              value: '$$'
+            }
           ]}
           value={value}
           onChange={onChange}
         />
       );
-    },
+    }
   },
   {
     label: formatMessage({
       id: 'src.component.ODCSetting.config.2761E32D',
-      defaultMessage: '对象拖放生成语句类型',
+      defaultMessage: '对象拖放生成语句类型'
     }), //'对象拖放生成语句类型'
     key: 'odc.sqlexecute.default.objectDraggingOption',
     locationKey: 'objectDraggingOption',
@@ -328,19 +334,19 @@ const databaseSettings: IODCSetting[] = [
             DragInsertType.SELECT,
             DragInsertType.INSERT,
             DragInsertType.UPDATE,
-            DragInsertType.DELETE,
+            DragInsertType.DELETE
           ].map((item) => {
             return {
               label: DragInsertTypeText()[item],
-              value: item,
+              value: item
             };
           })}
           value={value}
           onChange={onChange}
         />
       );
-    },
-  },
+    }
+  }
 ];
 
 export default databaseSettings;

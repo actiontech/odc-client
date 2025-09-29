@@ -15,11 +15,12 @@
  */
 
 import { formatMessage } from '@/util/intl';
-import { Checkbox, Form, Input, Space } from 'antd';
+import { Checkbox, Form, Space } from 'antd';
 import { isNil } from 'lodash';
 import React, { useContext, useMemo } from 'react';
 import TablePageContext from '../../../TablePage/context';
 import { TableColumn } from '../../interface';
+import { BasicInput } from '@actiontech/dms-kit';
 
 interface IProps {
   column: TableColumn;
@@ -27,10 +28,14 @@ interface IProps {
   onChange: (newColumn: TableColumn) => void;
 }
 
-const DefaultValue: React.FC<IProps> = function ({ column, originColumns, onChange }) {
+const DefaultValue: React.FC<IProps> = function ({
+  column,
+  originColumns,
+  onChange
+}) {
   const { defaultValueOrExpr } = column;
   const pageContext = useContext(TablePageContext);
-  let enable = useMemo(() => {
+  const enable = useMemo(() => {
     if (!pageContext.editMode || isNil(column.ordinalPosition)) {
       /**
        * 与自增列互斥
@@ -40,7 +45,9 @@ const DefaultValue: React.FC<IProps> = function ({ column, originColumns, onChan
       }
       return true;
     }
-    const originData = originColumns?.find((c) => c.ordinalPosition === column.ordinalPosition);
+    const originData = originColumns?.find(
+      (c) => c.ordinalPosition === column.ordinalPosition
+    );
     /**
      * 编辑状态下，非自增，非虚拟列才可以编辑
      */
@@ -54,18 +61,19 @@ const DefaultValue: React.FC<IProps> = function ({ column, originColumns, onChan
       <Form.Item
         label={formatMessage({
           id: 'odc.CreateTable.Columns.columns.DefaultValueExpression',
-          defaultMessage: '缺省值/表达式',
+          defaultMessage: '缺省值/表达式'
         })}
       >
         <Space>
-          <Input
+          <BasicInput
+            placeholder=""
             disabled={!enable || isNullValue}
             style={{ width: 175 }}
             value={defaultValueOrExpr}
             onChange={(v) => {
               onChange({
                 ...column,
-                defaultValueOrExpr: v.target.value,
+                defaultValueOrExpr: v.target.value
               });
             }}
           />
@@ -75,7 +83,7 @@ const DefaultValue: React.FC<IProps> = function ({ column, originColumns, onChan
             onChange={(e) => {
               onChange({
                 ...column,
-                defaultValueOrExpr: e.target.checked ? null : '',
+                defaultValueOrExpr: e.target.checked ? null : ''
               });
             }}
             checked={isNullValue}

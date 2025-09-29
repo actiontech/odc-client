@@ -1,10 +1,15 @@
 import SessionStore from '@/store/sessionManager/session';
 import React from 'react';
-import { MaterializedViewInfo, MaterializedViewTabType, MvColumns, MviewUnits } from '../interface';
+import {
+  MaterializedViewInfo,
+  MaterializedViewTabType,
+  MvColumns,
+  MviewUnits
+} from '../interface';
 import {
   TableColumn,
   TablePrimaryConstraint,
-  TablePartition,
+  TablePartition
 } from '@/page/Workspace/components/CreateTable/interface';
 
 interface IMViewContext {
@@ -14,7 +19,9 @@ interface IMViewContext {
   columns?: MvColumns[];
   setColumns?: React.Dispatch<React.SetStateAction<MvColumns[]>>;
   primaryConstraints?: TablePrimaryConstraint[];
-  setPrimaryConstraints?: React.Dispatch<React.SetStateAction<TablePrimaryConstraint[]>>;
+  setPrimaryConstraints?: React.Dispatch<
+    React.SetStateAction<TablePrimaryConstraint[]>
+  >;
   operations?: string[];
   setOperations?: React.Dispatch<React.SetStateAction<string[]>>;
   viewUnits?: MviewUnits[];
@@ -55,7 +62,7 @@ const MViewContext = React.createContext<IMViewContext>({
   partitions: null,
   setPartitions: voidFunc,
   warningColumns: {},
-  setWarningColumns: voidFunc,
+  setWarningColumns: voidFunc
 });
 
 export default MViewContext;

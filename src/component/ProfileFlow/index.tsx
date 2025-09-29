@@ -4,7 +4,7 @@ import ReactFlow, {
   ReactFlowProvider,
   useEdgesState,
   useNodesState,
-  useReactFlow,
+  useReactFlow
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { CPU_TIME, IO_WAIT_TIME, REACT_FLOW_ID } from './constant';
@@ -13,7 +13,11 @@ import CustomDetailBox from './customComponents/DetailBox';
 import CustomEdge from './customComponents/Edge';
 import CustomNode from './customComponents/Node';
 import styles from './index.less';
-import { handleSelectNode, initCenter, transformDataForReactFlow } from './utils';
+import {
+  handleSelectNode,
+  initCenter,
+  transformDataForReactFlow
+} from './utils';
 
 const edgeTypes = { CustomEdge: CustomEdge };
 const nodeTypes = { customNode: CustomNode };
@@ -33,13 +37,13 @@ function Flow(props: Iprops) {
   const {
     nodes: initialNodes,
     edges: initialEdges,
-    nodeDurationSum,
+    nodeDurationSum
   } = transformDataForReactFlow(
     dataSource?.vertexes,
     dataSource?.duration,
     setNodes,
     setSelectedNode,
-    setViewport,
+    setViewport
   );
 
   const reactFlowInstance = useRef(null);
@@ -77,7 +81,7 @@ function Flow(props: Iprops) {
                 (Number(dataSource?.overview?.[CPU_TIME]) +
                   Number(dataSource?.overview?.[IO_WAIT_TIME]))) *
               100
-            : 100,
+            : 100
         }}
       />
       <ReactFlow

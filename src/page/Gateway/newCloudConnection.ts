@@ -19,7 +19,7 @@ import {
   getConnectionDetail,
   getConnectionList,
   testExsitConnection,
-  updateConnectionFromConnection,
+  updateConnectionFromConnection
 } from '@/common/network/connection';
 import { listDatabases } from '@/common/network/database';
 import { listEnvironments } from '@/common/network/env';
@@ -49,10 +49,13 @@ interface IRemoteNewCloudConnectionData {
   mode: 'Oracle' | 'MySQL';
 }
 
-function resolveRemoteData(inputData: IRemoteNewCloudConnectionData): Partial<IDatasource> {
+function resolveRemoteData(
+  inputData: IRemoteNewCloudConnectionData
+): Partial<IDatasource> {
   let data: Partial<IDatasource> = {
     username: inputData.username,
-    type: inputData.mode == 'Oracle' ? ConnectType.OB_ORACLE : ConnectType.OB_MYSQL,
+    type:
+      inputData.mode == 'Oracle' ? ConnectType.OB_ORACLE : ConnectType.OB_MYSQL
   };
 
   if (inputData.instanceType === 'tenant') {
@@ -72,8 +75,12 @@ function resolveRemoteData(inputData: IRemoteNewCloudConnectionData): Partial<ID
 async function getDefaultSchema(dsId: number, userName: string) {
   const res = await listDatabases(null, dsId, 1, 999);
   const databases = res?.contents;
-  const informationSchema = databases.find((d) => d.name === 'information_schema');
-  const sameName = databases.find((d) => d.name?.toLowerCase() === userName?.toLowerCase());
+  const informationSchema = databases.find(
+    (d) => d.name === 'information_schema'
+  );
+  const sameName = databases.find(
+    (d) => d.name?.toLowerCase() === userName?.toLowerCase()
+  );
   return informationSchema?.id || sameName?.id || databases?.[0]?.id;
 }
 async function newConnection(params: Partial<IConnection>, password: string) {
@@ -86,7 +93,7 @@ async function newConnection(params: Partial<IConnection>, password: string) {
      */
     name: params.name + '_' + params.tenantName,
     environmentId: envs?.[0]?.id,
-    password,
+    password
   });
   return targetConnection;
 }
@@ -99,8 +106,8 @@ export const action = async (config: INewCloudConnection) => {
       message.error(
         formatMessage({
           id: 'odc.page.Gateway.customConnect.EncryptOrDataParameterError',
-          defaultMessage: 'encrypt 或 data 参数错误',
-        }), //encrypt 或 data 参数错误
+          defaultMessage: 'encrypt 或 data 参数错误'
+        }) //encrypt 或 data 参数错误
       );
       return;
     }
@@ -111,8 +118,8 @@ export const action = async (config: INewCloudConnection) => {
       message.error(
         formatMessage({
           id: 'odc.page.Gateway.customConnect.DecryptionFailed',
-          defaultMessage: '解密失败！',
-        }), //解密失败！
+          defaultMessage: '解密失败！'
+        }) //解密失败！
       );
       return;
     }
@@ -122,7 +129,7 @@ export const action = async (config: INewCloudConnection) => {
     } catch (e) {
       const msg = formatMessage({
         id: 'odc.page.Gateway.customConnect.JsonParsingFailedCheckWhether',
-        defaultMessage: 'JSON 解析失败，请确认参数是否正确',
+        defaultMessage: 'JSON 解析失败，请确认参数是否正确'
       }); //JSON 解析失败，请确认参数是否正确
       console.error(msg);
       message.error(msg, 0);
@@ -133,14 +140,18 @@ export const action = async (config: INewCloudConnection) => {
   if (!login.organizations?.length) {
     return 'Get User Failed';
   }
-  const personalOrganization = login.organizations?.find((item) => item.type === SpaceType.PRIVATE);
+  const personalOrganization = login.organizations?.find(
+    (item) => item.type === SpaceType.PRIVATE
+  );
   if (!personalOrganization) {
     return formatMessage({
       id: 'odc.page.Gateway.newCloudConnection.PersonalSpaceDoesNotExist',
-      defaultMessage: '个人空间不存在！',
+      defaultMessage: '个人空间不存在！'
     }); //个人空间不存在！
   }
-  const isSuccess = await login.switchCurrentOrganization(personalOrganization?.id);
+  const isSuccess = await login.switchCurrentOrganization(
+    personalOrganization?.id
+  );
   if (!isSuccess) {
     return 'Switch Organization Failed';
   }
@@ -148,7 +159,7 @@ export const action = async (config: INewCloudConnection) => {
   const params = resolveRemoteData(data);
   const connectionList = await getConnectionList({
     fuzzySearchKeyword: params.name,
-    tenantName: [params.tenantName],
+    tenantName: [params.tenantName]
   });
   if (!connectionList) {
     return 'Get Conneciton List Failed';
@@ -156,7 +167,7 @@ export const action = async (config: INewCloudConnection) => {
   let targetConnection = connectionList?.contents?.find(
     (c) =>
       c.tenantName === params.tenantName &&
-      c.username?.toLowerCase() === params.username?.toLowerCase(),
+      c.username?.toLowerCase() === params.username?.toLowerCase()
   );
   let isExist = true;
   if (!targetConnection) {
@@ -209,9 +220,11 @@ export const action = async (config: INewCloudConnection) => {
         scope.setExtras({
           fetchList: JSON.stringify(connectionList),
           data,
-          params,
+          params
         });
-        getSentry()?.captureException(new Error('Create Cloud Connection Failed'));
+        getSentry()?.captureException(
+          new Error('Create Cloud Connection Failed')
+        );
       });
       message.error('Create Connection Failed');
       return;
@@ -252,7 +265,7 @@ export const action = async (config: INewCloudConnection) => {
       await updateConnectionFromConnection({
         ...connectionDetail,
         passwordSaved: true,
-        password: password,
+        password: password
       });
     } else {
       return 'Update Connection Failed';
@@ -262,6 +275,6 @@ export const action = async (config: INewCloudConnection) => {
     null,
     targetConnection?.id,
     await getDefaultSchema(targetConnection?.id, targetConnection?.username),
-    true,
+    true
   );
 };

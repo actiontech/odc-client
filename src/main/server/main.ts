@@ -26,7 +26,7 @@ import {
   getJavaLogPath,
   getJavaPath,
   getRendererPath,
-  getSetting,
+  getSetting
 } from '../utils';
 import log from '../utils/log';
 
@@ -59,7 +59,12 @@ class MainServer {
     } else {
       // @see https://electronjs.org/docs/all#processresourcespath
       log.info('resourcesPath: ', process.resourcesPath);
-      odcJarPath = path.join(process.resourcesPath || '', 'libraries', 'java', 'odc.jar');
+      odcJarPath = path.join(
+        process.resourcesPath || '',
+        'libraries',
+        'java',
+        'odc.jar'
+      );
     }
     this.jarPath = odcJarPath;
     return odcJarPath;
@@ -75,7 +80,12 @@ class MainServer {
     } else {
       // @see https://electronjs.org/docs/all#processresourcespath
       log.info('resourcesPath: ', process.resourcesPath);
-      pluginPath = path.join(process.resourcesPath || '', 'libraries', 'java', 'plugins');
+      pluginPath = path.join(
+        process.resourcesPath || '',
+        'libraries',
+        'java',
+        'plugins'
+      );
     }
     this.pluginPath = pluginPath;
     return pluginPath;
@@ -91,7 +101,12 @@ class MainServer {
     } else {
       // @see https://electronjs.org/docs/all#processresourcespath
       log.info('resourcesPath: ', process.resourcesPath);
-      _path = path.join(process.resourcesPath || '', 'libraries', 'java', 'starters');
+      _path = path.join(
+        process.resourcesPath || '',
+        'libraries',
+        'java',
+        'starters'
+      );
     }
     this.starterPath = _path;
     return _path;
@@ -233,7 +248,7 @@ class MainServer {
       log.error('元数据库路径获取失败！');
       dialog.showErrorBox(
         `元数据库路径获取失败！`,
-        `请以管理员模式启动（日志目录：${app.getPath('userData')}/logs）`,
+        `请以管理员模式启动（日志目录：${app.getPath('userData')}/logs）`
       );
       app.quit();
       return;
@@ -275,7 +290,7 @@ class MainServer {
       // 任务文件上传参数，后续任务会统一到这个目录下
       'file.storage.dir': path.join(app.getPath('userData'), 'data'),
       'obclient.file.path': this.getOBClientPath(),
-      'libraries.others.file.path': this.getOthersPath(),
+      'libraries.others.file.path': this.getOthersPath()
     };
     if (JAVA_HOME) {
       env['JAVA_HOME'] = JAVA_HOME;
@@ -293,7 +308,11 @@ class MainServer {
             .split('\n')
             .filter((item) => Boolean(item.trim()))
             .map((item) => '--' + item);
-          log.info('odc system propeties ', odcOptions, setting['client.start.params']);
+          log.info(
+            'odc system propeties ',
+            odcOptions,
+            setting['client.start.params']
+          );
         }
       }
       log.info('jvmOptions:', jvmOptions.join(' '));
@@ -306,14 +325,14 @@ class MainServer {
           ...jvmOptions,
           '-jar',
           this.jarPath,
-          ...odcOptions,
+          ...odcOptions
         ],
         {
           // 一定要设置，默认值为 '/'，会影响到后端日志文件的存放路径
           // https://electronjs.org/docs/all#appgetpathname
           cwd: app.getPath('userData'),
-          env,
-        },
+          env
+        }
       );
     } catch (e) {
       log.error('spawn java process error: ', e);
@@ -321,7 +340,10 @@ class MainServer {
        * 非自身kill，需要报错，并且退出
        */
       log.error('Java 进程启动失败!');
-      dialog.showErrorBox(e.toString(), `请尝试重新启动（日志目录：${javaLogDir})`);
+      dialog.showErrorBox(
+        e.toString(),
+        `请尝试重新启动（日志目录：${javaLogDir})`
+      );
       this.isKilled = true;
       app.quit();
       return;
@@ -354,7 +376,10 @@ class MainServer {
          * 非自身kill，需要报错，并且退出
          */
         log.error('Java 进程异常退出!');
-        dialog.showErrorBox(`Java 进程异常退出`, `请尝试重新启动（日志目录：${javaLogDir})`);
+        dialog.showErrorBox(
+          `Java 进程异常退出`,
+          `请尝试重新启动（日志目录：${javaLogDir})`
+        );
         this.isKilled = true;
         app.quit();
       }
@@ -368,11 +393,16 @@ class MainServer {
       // 启动失败
       log.error('Run Server Failed: ', e);
       this.isKilled = true;
-      dialog.showErrorBox(`Java 进程启动失败`, `请尝试重新启动（日志目录：${javaLogDir})`);
+      dialog.showErrorBox(
+        `Java 进程启动失败`,
+        `请尝试重新启动（日志目录：${javaLogDir})`
+      );
       app.quit();
       return;
     }
-    log.info(`Main Server Start Success(port=${this.port}, path=${this.jarPath})!!!!!`);
+    log.info(
+      `Main Server Start Success(port=${this.port}, path=${this.jarPath})!!!!!`
+    );
     this.status = 'ready';
   }
 

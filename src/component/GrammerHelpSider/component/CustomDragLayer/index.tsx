@@ -25,21 +25,21 @@ export default (props) => {
     return {
       itemType: monitor.getItemType(),
       clientOffset: monitor.getClientOffset(),
-      isDragging: monitor.isDragging(),
+      isDragging: monitor.isDragging()
     };
   });
 
   function getDragBoxStyle(clientOffset) {
     if (!clientOffset) {
       return {
-        display: 'none',
+        display: 'none'
       };
     }
     let { x, y } = clientOffset;
     const transform = `translate(${x + 11}px, ${y + 16}px)`;
     return {
       transform,
-      WebkitTransform: transform,
+      WebkitTransform: transform
     };
   }
 

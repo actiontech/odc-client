@@ -1,6 +1,6 @@
 import { IDatabasesTitleProps } from '../index';
-import { hasPermission, TaskTypeMap } from '@/component/Task/helper';
-import { Badge, Popover, Spin, Tooltip, Tree, Button, Radio } from 'antd';
+import { TaskTypeMap } from '@/component/Task/helper';
+import { Badge, Popover, Tooltip } from 'antd';
 import { formatMessage } from '@/util/intl';
 import styles from '../index.less';
 import { EnvColorMap } from '@/constant';
@@ -30,9 +30,9 @@ const DatabasesTitle: React.FC<IDatabasesTitleProps> = (props) => {
             formatMessage(
               {
                 id: 'src.page.Workspace.components.SessionContextWrap.SessionSelect.SessionDropdown.DC4CF38C',
-                defaultMessage: '暂无{task}权限，请先申请库权限',
+                defaultMessage: '暂无{task}权限，请先申请库权限'
               },
-              { task },
+              { task }
             ) /*`暂无${task}权限，请先申请库权限`*/
           }
         >
@@ -42,16 +42,23 @@ const DatabasesTitle: React.FC<IDatabasesTitleProps> = (props) => {
         <Popover
           showArrow={false}
           placement={'right'}
-          content={<ConnectionPopover connection={db?.dataSource} database={db} showRemark />}
+          content={
+            <ConnectionPopover
+              connection={db?.dataSource}
+              database={db}
+              showRemark
+            />
+          }
         >
           <div className={styles.databaseItem}>
             <span className={styles.textoverflow}>{db.name}</span>
-            <span className={styles.dataSourceInfo}>{db?.dataSource?.name}</span>
           </div>
         </Popover>
       )}
 
-      <Badge color={EnvColorMap[db?.environment?.style?.toUpperCase()]?.tipColor} />
+      <Badge
+        color={EnvColorMap[db?.environment?.style?.toUpperCase()]?.tipColor}
+      />
     </>
   );
 };

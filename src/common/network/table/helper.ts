@@ -19,13 +19,13 @@ import { ColumnStoreType, IServerTable } from '@/d.ts/table';
 import {
   ITableModel,
   TableIndexScope,
-  TableIndexType,
+  TableIndexType
 } from '@/page/Workspace/components/CreateTable/interface';
 import { getQuoteTableName } from '@/util/utils';
 
 export function convertTableToServerTable(
   data: Partial<ITableModel>,
-  dbMode: ConnectionMode,
+  dbMode: ConnectionMode
 ): Partial<IServerTable> {
   if (!data) {
     return null;
@@ -38,7 +38,7 @@ export function convertTableToServerTable(
     primaryConstraints,
     uniqueConstraints,
     checkConstraints,
-    foreignConstraints,
+    foreignConstraints
   } = data;
   const serverTable: Partial<IServerTable> = {};
   // info
@@ -46,13 +46,13 @@ export function convertTableToServerTable(
   serverTable.tableOptions = {
     charsetName: info.character,
     collationName: info.collation,
-    comment: info.comment,
+    comment: info.comment
   };
   serverTable.columnGroups =
     info?.columnGroups?.map((item) => {
       return {
         allColumns: item === ColumnStoreType.ROW,
-        eachColumn: item === ColumnStoreType.COLUMN,
+        eachColumn: item === ColumnStoreType.COLUMN
       };
     }) || [];
   // column
@@ -79,7 +79,7 @@ export function convertTableToServerTable(
       ordinalPosition: column.ordinalPosition,
       secondPrecision: column.secondPrecision,
       dayPrecision: column.dayPrecision,
-      yearPrecision: column.yearPrecision,
+      yearPrecision: column.yearPrecision
     };
   });
   // index
@@ -96,9 +96,9 @@ export function convertTableToServerTable(
         index.columnGroups?.map((item) => {
           return {
             allColumns: item === ColumnStoreType.ROW,
-            eachColumn: item === ColumnStoreType.COLUMN,
+            eachColumn: item === ColumnStoreType.COLUMN
           };
-        }) || [],
+        }) || []
     };
   });
   // constraint
@@ -110,7 +110,7 @@ export function convertTableToServerTable(
       columnNames: constraint.columns,
       ordinalPosition: constraint.ordinalPosition,
       enabled: constraint.enable,
-      deferability: constraint.defer,
+      deferability: constraint.defer
     });
   });
   uniqueConstraints?.forEach((constraint) => {
@@ -120,7 +120,7 @@ export function convertTableToServerTable(
       columnNames: constraint.columns,
       deferability: constraint.defer,
       ordinalPosition: constraint.ordinalPosition,
-      enabled: constraint.enable,
+      enabled: constraint.enable
     });
   });
   checkConstraints?.forEach((constraint) => {
@@ -130,7 +130,7 @@ export function convertTableToServerTable(
       deferability: constraint.defer,
       checkClause: constraint.check,
       ordinalPosition: constraint.ordinalPosition,
-      enabled: constraint.enable,
+      enabled: constraint.enable
     });
   });
   foreignConstraints?.forEach((constraint) => {
@@ -145,7 +145,7 @@ export function convertTableToServerTable(
       onDeleteRule: constraint.onDelete,
       onUpdateRule: constraint.onUpdate,
       ordinalPosition: constraint.ordinalPosition,
-      enabled: constraint.enable,
+      enabled: constraint.enable
     });
   });
   // partitions
@@ -156,9 +156,11 @@ export function convertTableToServerTable(
         serverTable.partition = {
           partitionOption: {
             type: partType,
-            expression: partitions.expression || getQuoteTableName(partitions.columnName, dbMode),
-            partitionsNum: partitions.partNumber,
-          },
+            expression:
+              partitions.expression ||
+              getQuoteTableName(partitions.columnName, dbMode),
+            partitionsNum: partitions.partNumber
+          }
         };
         break;
       }
@@ -167,8 +169,8 @@ export function convertTableToServerTable(
           partitionOption: {
             type: partType,
             partitionsNum: partitions.partNumber,
-            columnNames: partitions.columns?.map((item) => item.columnName),
-          },
+            columnNames: partitions.columns?.map((item) => item.columnName)
+          }
         };
         break;
       }
@@ -176,15 +178,17 @@ export function convertTableToServerTable(
         serverTable.partition = {
           partitionOption: {
             type: partType,
-            expression: partitions.expression || getQuoteTableName(partitions.columnName, dbMode),
+            expression:
+              partitions.expression ||
+              getQuoteTableName(partitions.columnName, dbMode)
           },
           partitionDefinitions: partitions.partitions?.map((p) => {
             return {
               name: p.name,
               maxValues: [p.value],
-              ordinalPosition: p.ordinalPosition,
+              ordinalPosition: p.ordinalPosition
             };
-          }),
+          })
         };
         break;
       }
@@ -192,47 +196,59 @@ export function convertTableToServerTable(
         serverTable.partition = {};
         serverTable.partition.partitionOption = {
           type: partType,
-          columnNames: partitions.columns?.map((item) => item.columnName),
+          columnNames: partitions.columns?.map((item) => item.columnName)
         };
-        serverTable.partition.partitionDefinitions = partitions.partitions?.map((p) => {
-          return {
-            name: p.name,
-            maxValues: partitions.columns?.map((item) => p.value[item.columnName]),
-            ordinalPosition: p.ordinalPosition,
-          };
-        });
+        serverTable.partition.partitionDefinitions = partitions.partitions?.map(
+          (p) => {
+            return {
+              name: p.name,
+              maxValues: partitions.columns?.map(
+                (item) => p.value[item.columnName]
+              ),
+              ordinalPosition: p.ordinalPosition
+            };
+          }
+        );
         break;
       }
       case IPartitionType.LIST: {
         serverTable.partition = {};
         serverTable.partition.partitionOption = {
           type: partType,
-          expression: partitions.expression || getQuoteTableName(partitions.columnName, dbMode),
+          expression:
+            partitions.expression ||
+            getQuoteTableName(partitions.columnName, dbMode)
         };
-        serverTable.partition.partitionDefinitions = partitions.partitions?.map((p) => {
-          return {
-            name: p.name,
-            valuesList: p.value?.split?.(',').map((item) => [item]),
-            ordinalPosition: p.ordinalPosition,
-          };
-        });
+        serverTable.partition.partitionDefinitions = partitions.partitions?.map(
+          (p) => {
+            return {
+              name: p.name,
+              valuesList: p.value?.split?.(',').map((item) => [item]),
+              ordinalPosition: p.ordinalPosition
+            };
+          }
+        );
         break;
       }
       case IPartitionType.LIST_COLUMNS: {
         serverTable.partition = {};
         serverTable.partition.partitionOption = {
           type: partType,
-          columnNames: partitions.columns?.map((item) => item.columnName),
+          columnNames: partitions.columns?.map((item) => item.columnName)
         };
-        serverTable.partition.partitionDefinitions = partitions.partitions?.map((p) => {
-          return {
-            name: p.name,
-            valuesList: p.value?.map((valueItem) => {
-              return partitions.columns?.map((item) => valueItem[item.columnName]);
-            }),
-            ordinalPosition: p.ordinalPosition,
-          };
-        });
+        serverTable.partition.partitionDefinitions = partitions.partitions?.map(
+          (p) => {
+            return {
+              name: p.name,
+              valuesList: p.value?.map((valueItem) => {
+                return partitions.columns?.map(
+                  (item) => valueItem[item.columnName]
+                );
+              }),
+              ordinalPosition: p.ordinalPosition
+            };
+          }
+        );
         break;
       }
     }
@@ -247,7 +263,7 @@ export function convertServerTableToTable(
     tableId: number;
     databaseId: number;
   },
-  dbMode?: ConnectionMode,
+  dbMode?: ConnectionMode
 ): Partial<ITableModel> {
   if (!data) {
     return null;
@@ -271,7 +287,7 @@ export function convertServerTableToTable(
       }) || [],
     isLogicalTable: logicalDbTableParams?.isLogicalTable,
     tableId: logicalDbTableParams?.tableId,
-    databaseId: logicalDbTableParams?.databaseId,
+    databaseId: logicalDbTableParams?.databaseId
   };
   // column
   table.columns = data.columns.map((column) => {
@@ -284,7 +300,9 @@ export function convertServerTableToTable(
        */
       width: column.precision,
       notNull: !column.nullable,
-      defaultValueOrExpr: column.virtual ? column.genExpression : column.defaultValue,
+      defaultValueOrExpr: column.virtual
+        ? column.genExpression
+        : column.defaultValue,
       generated: column.virtual,
       comment: column.comment,
       character: column.charsetName,
@@ -299,7 +317,7 @@ export function convertServerTableToTable(
       secondPrecision: column.secondPrecision,
       dayPrecision: column.dayPrecision,
       yearPrecision: column.yearPrecision,
-      tableName: column.tableName,
+      tableName: column.tableName
     };
   });
   // index
@@ -316,7 +334,7 @@ export function convertServerTableToTable(
       columnGroups:
         index.columnGroups?.map((item) => {
           return item.allColumns ? ColumnStoreType.ROW : ColumnStoreType.COLUMN;
-        }) || [],
+        }) || []
     };
   });
   // constraint
@@ -338,7 +356,7 @@ export function convertServerTableToTable(
           onDelete: constraint.onDeleteRule,
           onUpdate: constraint.onUpdateRule,
           ordinalPosition: constraint.ordinalPosition,
-          enable: constraint.enabled,
+          enable: constraint.enabled
         });
         break;
       }
@@ -348,7 +366,7 @@ export function convertServerTableToTable(
           columns: constraint.columnNames,
           ordinalPosition: constraint.ordinalPosition,
           enable: constraint.enabled,
-          defer: constraint.deferability,
+          defer: constraint.deferability
         });
         break;
       }
@@ -358,7 +376,7 @@ export function convertServerTableToTable(
           columns: constraint.columnNames,
           defer: constraint.deferability,
           ordinalPosition: constraint.ordinalPosition,
-          enable: constraint.enabled,
+          enable: constraint.enabled
         });
         break;
       }
@@ -368,7 +386,7 @@ export function convertServerTableToTable(
           defer: constraint.deferability,
           check: constraint.checkClause,
           ordinalPosition: constraint.ordinalPosition,
-          enable: constraint.enabled,
+          enable: constraint.enabled
         });
         break;
       }
@@ -383,7 +401,7 @@ export function convertServerTableToTable(
     partType,
     partition,
     partition?.subpartitionTemplated,
-    PartitionLevelEnum.partitions,
+    PartitionLevelEnum.partitions
   );
   if (partition?.subpartition) {
     convertServerTablePartitionToTablePartition(
@@ -392,7 +410,7 @@ export function convertServerTableToTable(
       partition?.subpartition?.partitionOption?.type,
       data?.partition?.subpartition,
       data?.partition?.subpartitionTemplated,
-      PartitionLevelEnum.subpartitions,
+      PartitionLevelEnum.subpartitions
     );
   }
   return table;
@@ -400,7 +418,7 @@ export function convertServerTableToTable(
 
 export const enum PartitionLevelEnum {
   partitions = 'partitions',
-  subpartitions = 'subpartitions',
+  subpartitions = 'subpartitions'
 }
 
 export function convertServerTablePartitionToTablePartition(
@@ -410,7 +428,7 @@ export function convertServerTablePartitionToTablePartition(
   partition,
   subpartitionTemplated,
   /* 一级分区/ 二级分区 */
-  keyName: PartitionLevelEnum,
+  keyName: PartitionLevelEnum
 ) {
   const handlePartitions = (partType, dbMode, partition) => {
     switch (partType) {
@@ -420,19 +438,20 @@ export function convertServerTablePartitionToTablePartition(
           return Object.assign(
             {
               name: item.name,
-              ordinalPosition: item.ordinalPosition,
+              ordinalPosition: item.ordinalPosition
             },
             keyName === PartitionLevelEnum.subpartitions
               ? {
-                  parentName: item?.parentPartitionDefinition?.name,
+                  parentName: item?.parentPartitionDefinition?.name
                 }
-              : {},
+              : {}
           );
         });
       }
       /* RANGE / RANGE_COLUMNS, LIST / LIST_COLUMNS 要在ob_mysql和ob_oracle之间做区分, 因为ob_mysql内LIST/RANGE只会有一个分区键, 而ob_oracle的LIST/RANGE支持多分区键, 因此需要[键:值]成对展示 */
       case IPartitionType.RANGE: {
-        const getSinglePartitionKeyValue = (item) => item.maxValues?.join?.(', ');
+        const getSinglePartitionKeyValue = (item) =>
+          item.maxValues?.join?.(', ');
         const getMultiPartitionKeyValue = (columns, item) =>
           columns.reduce((prev, current, index) => {
             prev[current] = item.maxValues[index];
@@ -448,13 +467,13 @@ export function convertServerTablePartitionToTablePartition(
                   ? getMultiPartitionKeyValue(columns, item)
                   : getSinglePartitionKeyValue(item),
               value: item.maxValues?.join?.(', '),
-              ordinalPosition: item.ordinalPosition,
+              ordinalPosition: item.ordinalPosition
             },
             keyName === PartitionLevelEnum.subpartitions
               ? {
-                  parentName: item?.parentPartitionDefinition?.name,
+                  parentName: item?.parentPartitionDefinition?.name
                 }
-              : {},
+              : {}
           );
         });
       }
@@ -468,13 +487,13 @@ export function convertServerTablePartitionToTablePartition(
                 prev[current] = item.maxValues[index];
                 return prev;
               }, {}),
-              ordinalPosition: item.ordinalPosition,
+              ordinalPosition: item.ordinalPosition
             },
             keyName === PartitionLevelEnum.subpartitions
               ? {
-                  parentName: item?.parentPartitionDefinition?.name,
+                  parentName: item?.parentPartitionDefinition?.name
                 }
-              : {},
+              : {}
           );
         });
       }
@@ -498,13 +517,13 @@ export function convertServerTablePartitionToTablePartition(
                   ? getMultiPartitionKeyValue(columns, item)
                   : getSinglePartitionKeyValue(item),
               value: item.valuesList?.map((item) => item.join(',')).join(','),
-              ordinalPosition: item.ordinalPosition,
+              ordinalPosition: item.ordinalPosition
             },
             keyName === PartitionLevelEnum.subpartitions
               ? {
-                  parentName: item?.parentPartitionDefinition?.name,
+                  parentName: item?.parentPartitionDefinition?.name
                 }
-              : {},
+              : {}
           );
         });
       }
@@ -524,13 +543,13 @@ export function convertServerTablePartitionToTablePartition(
                   return prev;
                 }, {});
               }),
-              ordinalPosition: item.ordinalPosition,
+              ordinalPosition: item.ordinalPosition
             },
             keyName === PartitionLevelEnum.subpartitions
               ? {
-                  parentName: item?.parentPartitionDefinition?.name,
+                  parentName: item?.parentPartitionDefinition?.name
                 }
-              : {},
+              : {}
           );
         });
       }
@@ -540,7 +559,7 @@ export function convertServerTablePartitionToTablePartition(
   const handleColumns = (partition) =>
     partition?.partitionOption?.columnNames?.map((item) => {
       return {
-        columnName: item,
+        columnName: item
       };
     });
 
@@ -552,7 +571,7 @@ export function convertServerTablePartitionToTablePartition(
         expression: partition?.partitionOption?.expression,
         columns: handleColumns(partition),
         partitions: handlePartitions(partType, dbMode, partition),
-        subpartitionTemplated: subpartitionTemplated,
+        subpartitionTemplated: subpartitionTemplated
       };
       break;
     }
@@ -563,7 +582,7 @@ export function convertServerTablePartitionToTablePartition(
         columns: handleColumns(partition),
         expression: partition?.partitionOption?.expression,
         partitions: handlePartitions(partType, dbMode, partition),
-        subpartitionTemplated: subpartitionTemplated,
+        subpartitionTemplated: subpartitionTemplated
       };
       break;
     }
@@ -573,7 +592,7 @@ export function convertServerTablePartitionToTablePartition(
         expression: partition?.partitionOption?.expression,
         columns: handleColumns(partition),
         partitions: handlePartitions(partType, dbMode, partition),
-        subpartitionTemplated: subpartitionTemplated,
+        subpartitionTemplated: subpartitionTemplated
       };
       break;
     }
@@ -583,7 +602,7 @@ export function convertServerTablePartitionToTablePartition(
         columns: handleColumns(partition),
         expression: partition?.partitionOption?.expression,
         partitions: handlePartitions(partType, dbMode, partition),
-        subpartitionTemplated: subpartitionTemplated,
+        subpartitionTemplated: subpartitionTemplated
       };
       break;
     }
@@ -593,7 +612,7 @@ export function convertServerTablePartitionToTablePartition(
         expression: partition?.partitionOption?.expression,
         columns: handleColumns(partition),
         partitions: handlePartitions(partType, dbMode, partition),
-        subpartitionTemplated: subpartitionTemplated,
+        subpartitionTemplated: subpartitionTemplated
       };
       break;
     }
@@ -603,7 +622,7 @@ export function convertServerTablePartitionToTablePartition(
         columns: handleColumns(partition),
         expression: partition?.partitionOption?.expression,
         partitions: handlePartitions(partType, dbMode, partition),
-        subpartitionTemplated: subpartitionTemplated,
+        subpartitionTemplated: subpartitionTemplated
       };
       break;
     }

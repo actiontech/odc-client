@@ -24,19 +24,22 @@ import { IDatabase } from '@/d.ts/database';
 import { openSequenceViewPage } from '@/store/helper/page';
 import { ReactComponent as SequenceSvg } from '@/svgr/menuSequence.svg';
 
-export function SequenceTreeData(dbSession: SessionStore, database: IDatabase): TreeDataNode {
+export function SequenceTreeData(
+  dbSession: SessionStore,
+  database: IDatabase
+): TreeDataNode {
   const dbName = database.name;
   const sequences = dbSession?.database?.sequences;
   const treeData: TreeDataNode = {
     title: formatMessage({
       id: 'odc.ResourceTree.Nodes.sequence.Sequence',
-      defaultMessage: '序列',
+      defaultMessage: '序列'
     }), //序列
     key: `${database.id}-${dbName}-sequence`,
     type: ResourceNodeType.SequenceRoot,
     data: database,
     sessionId: dbSession?.sessionId,
-    isLeaf: false,
+    isLeaf: false
   };
   if (sequences) {
     treeData.children = sequences.map((sequence) => {
@@ -51,16 +54,20 @@ export function SequenceTreeData(dbSession: SessionStore, database: IDatabase): 
           <Icon
             component={SequenceSvg}
             style={{
-              color: 'var(--icon-color-5)',
+              color: 'var(--icon-color-5)'
             }}
           />
         ),
 
         doubleClick(session, node) {
-          openSequenceViewPage(sequence.name, undefined, session?.database?.databaseId);
+          openSequenceViewPage(
+            sequence.name,
+            undefined,
+            session?.database?.databaseId
+          );
         },
         sessionId: dbSession?.sessionId,
-        isLeaf: true,
+        isLeaf: true
       };
     });
   }

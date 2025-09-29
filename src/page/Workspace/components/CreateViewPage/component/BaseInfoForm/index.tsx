@@ -16,6 +16,7 @@
 
 import { ConnectionMode } from '@/d.ts';
 import { formatMessage } from '@/util/intl';
+import { BasicButton, BasicInput, BasicSelect } from '@actiontech/dms-kit';
 import { Button, Col, Form, Input, Row, Select } from 'antd';
 import React from 'react';
 const { Option } = Select;
@@ -35,15 +36,21 @@ const BaseInfoForm: React.FC<IProps> = React.memo((props) => {
     const isOracle = connectionMode === ConnectionMode.OB_ORACLE;
     const r = [
       {
-        name: formatMessage({ id: 'odc.component.BaseInfoForm.No', defaultMessage: '无' }),
-        value: 'NONE',
-      },
+        name: formatMessage({
+          id: 'odc.component.BaseInfoForm.No',
+          defaultMessage: '无'
+        }),
+        value: 'NONE'
+      }
     ];
 
     if (isOracle) {
       r.push({
-        name: formatMessage({ id: 'odc.component.BaseInfoForm.ReadOnly', defaultMessage: '只读' }),
-        value: 'READ_ONLY',
+        name: formatMessage({
+          id: 'odc.component.BaseInfoForm.ReadOnly',
+          defaultMessage: '只读'
+        }),
+        value: 'READ_ONLY'
       });
     }
     return r;
@@ -54,7 +61,7 @@ const BaseInfoForm: React.FC<IProps> = React.memo((props) => {
     <Form
       layout="vertical"
       initialValues={{
-        checkOption: checkOptions[0].value,
+        checkOption: checkOptions[0].value
       }}
       onFinish={handleSubmit}
     >
@@ -63,7 +70,7 @@ const BaseInfoForm: React.FC<IProps> = React.memo((props) => {
           <Form.Item
             label={formatMessage({
               id: 'odc.component.BaseInfoForm.ViewName',
-              defaultMessage: '视图名称',
+              defaultMessage: '视图名称'
             })} /* 视图名称 */
             name="viewName"
             rules={[
@@ -71,16 +78,16 @@ const BaseInfoForm: React.FC<IProps> = React.memo((props) => {
                 required: true,
                 message: formatMessage({
                   id: 'odc.component.BaseInfoForm.EnterAViewName',
-                  defaultMessage: '请输入视图名称',
-                }), // 请输入视图名称
-              },
+                  defaultMessage: '请输入视图名称'
+                }) // 请输入视图名称
+              }
             ]}
           >
-            <Input
+            <BasicInput
               autoFocus
               placeholder={formatMessage({
                 id: 'odc.component.BaseInfoForm.EnterAViewName',
-                defaultMessage: '请输入视图名称',
+                defaultMessage: '请输入视图名称'
               })} /* 请输入视图名称 */
             />
           </Form.Item>
@@ -89,28 +96,32 @@ const BaseInfoForm: React.FC<IProps> = React.memo((props) => {
           <Form.Item
             label={formatMessage({
               id: 'odc.component.BaseInfoForm.CheckItem',
-              defaultMessage: '检查项',
+              defaultMessage: '检查项'
             })}
             /* 检查项 */ name="checkOption"
           >
-            <Select style={{ width: 120 }}>
+            <BasicSelect style={{ width: 120 }}>
               {checkOptions.map((item) => (
                 <Option key={item.value} value={item.value}>
                   {item.name}
                 </Option>
               ))}
-            </Select>
+            </BasicSelect>
           </Form.Item>
         </Col>
       </Row>
-      <Button type="primary" htmlType="submit" style={{ marginTop: '4px' }}>
+      <BasicButton
+        type="primary"
+        htmlType="submit"
+        style={{ marginTop: '4px' }}
+      >
         {
           formatMessage({
             id: 'odc.component.BaseInfoForm.Determine',
-            defaultMessage: '确定',
+            defaultMessage: '确定'
           }) /* 确定 */
         }
-      </Button>
+      </BasicButton>
     </Form>
   );
 });

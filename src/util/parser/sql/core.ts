@@ -29,20 +29,22 @@ export async function getSQLTokens(sql, isMysql: boolean) {
    */
   sql = sql + '\n';
   const Lexer = isMysql
-    ? await import('@oceanbase-odc/ob-parser-js/esm/parser/obmysql/PLLexer').then(
-        (module) => module.PLLexer,
-      )
-    : await import('@oceanbase-odc/ob-parser-js/esm/parser/oracle/PlSqlLexer').then(
-        (module) => module.PlSqlLexer,
-      );
+    ? await import(
+        '@oceanbase-odc/ob-parser-js/esm/parser/obmysql/PLLexer'
+      ).then((module) => module.PLLexer)
+    : await import(
+        '@oceanbase-odc/ob-parser-js/esm/parser/oracle/PlSqlLexer'
+      ).then((module) => module.PlSqlLexer);
   const now = performance.now();
   const chars = new CaseInsensitiveStream(sql);
   const lexer = new Lexer(chars);
   const tokens = new CommonTokenStream(lexer);
   tokens.fill();
-  console.log(
-    `${isMysql ? 'mysql' : 'oracle'} sql parser token time(${performance.now() - now}): ${sql}`,
-  );
+  // console.log(
+  //   `${isMysql ? 'mysql' : 'oracle'} sql parser token time(${
+  //     performance.now() - now
+  //   }): ${sql}`
+  // );
   return tokens.tokens.filter((token) => {
     return token.channel !== Token.HIDDEN_CHANNEL && token.type != Token.EOF;
   });
@@ -53,10 +55,10 @@ export async function getSQLEntryName(sql: string) {
   if (!tokens?.length) {
     return '';
   }
-  const OracleLexer = await import('@oceanbase-odc/ob-parser-js/esm/parser/oracle/PlSqlLexer').then(
-    (module) => module.PlSqlLexer,
-  );
-  let name = [];
+  const OracleLexer = await import(
+    '@oceanbase-odc/ob-parser-js/esm/parser/oracle/PlSqlLexer'
+  ).then((module) => module.PlSqlLexer);
+  const name = [];
   for (let i = 0; i < tokens.length; i++) {
     const token = tokens[i];
     const tokenType = token.type;

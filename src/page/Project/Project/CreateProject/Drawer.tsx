@@ -33,16 +33,18 @@ interface IProps {
 
 export default function CreateProjectDrawer(props: IProps) {
   const [open, setOpen] = useState(false);
-  const createProject = useRef<{ form: FormInstance<ICreateProjectFormData> }>();
+  const createProject = useRef<{
+    form: FormInstance<ICreateProjectFormData>;
+  }>();
   const { run, loading, cancel } = useRequest(createProjectService, {
-    manual: true,
+    manual: true
   });
   const { runAction } = useUrlAction();
 
   useEffect(() => {
     runAction({
       actionType: URL_ACTION.newProject,
-      callback: () => (props.disabled ? null : setOpen(true)),
+      callback: () => (props.disabled ? null : setOpen(true))
     });
   }, []);
   async function onSubmit() {
@@ -54,37 +56,40 @@ export default function CreateProjectDrawer(props: IProps) {
         members: data?.owner
           ?.map((item) => ({
             id: item,
-            role: ProjectRole.OWNER,
+            role: ProjectRole.OWNER
           }))
           .concat(
             data?.dba?.map((item) => ({
               id: item,
-              role: ProjectRole.DBA,
-            })),
+              role: ProjectRole.DBA
+            }))
           )
           .concat(
             data?.developer?.map((item) => ({
               id: item,
-              role: ProjectRole.DEVELOPER,
-            })),
+              role: ProjectRole.DEVELOPER
+            }))
           )
           .concat(
             data?.securityAdministrator?.map((item) => ({
               id: item,
-              role: ProjectRole.SECURITY_ADMINISTRATOR,
-            })),
+              role: ProjectRole.SECURITY_ADMINISTRATOR
+            }))
           )
           .concat(
             data?.participant?.map((item) => ({
               id: item,
-              role: ProjectRole.PARTICIPANT,
-            })),
+              role: ProjectRole.PARTICIPANT
+            }))
           )
-          .filter(Boolean),
+          .filter(Boolean)
       });
       if (isSuccess) {
         message.success(
-          formatMessage({ id: 'odc.Project.CreateProject.Drawer.New', defaultMessage: '新建成功' }), //新建成功
+          formatMessage({
+            id: 'odc.Project.CreateProject.Drawer.New',
+            defaultMessage: '新建成功'
+          }) //新建成功
         );
         setOpen(false);
         props?.onCreate?.();
@@ -108,7 +113,7 @@ export default function CreateProjectDrawer(props: IProps) {
           props?.buttonChildren ||
             formatMessage({
               id: 'odc.Project.CreateProject.Drawer.CreateAProject',
-              defaultMessage: '新建项目',
+              defaultMessage: '新建项目'
             }) /*新建项目*/
         }
       </Button>
@@ -118,7 +123,7 @@ export default function CreateProjectDrawer(props: IProps) {
         open={open}
         title={formatMessage({
           id: 'odc.Project.CreateProject.Drawer.CreateAProject.1',
-          defaultMessage: '创建项目',
+          defaultMessage: '创建项目'
         })} /*创建项目*/
         footer={
           <Space style={{ float: 'right' }}>
@@ -126,7 +131,7 @@ export default function CreateProjectDrawer(props: IProps) {
               {
                 formatMessage({
                   id: 'odc.Project.CreateProject.Drawer.Cancel',
-                  defaultMessage: '取消',
+                  defaultMessage: '取消'
                 }) /*取消*/
               }
             </Button>
@@ -134,7 +139,7 @@ export default function CreateProjectDrawer(props: IProps) {
               {
                 formatMessage({
                   id: 'odc.Project.CreateProject.Drawer.Ok',
-                  defaultMessage: '确定',
+                  defaultMessage: '确定'
                 }) /*确定*/
               }
             </Button>

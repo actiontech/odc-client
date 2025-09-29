@@ -118,7 +118,11 @@
       }
 
       &::after {
-        background: linear-gradient(to right, transparent, var(--background-primary-color) 50%);
+        background: linear-gradient(
+          to right,
+          transparent,
+          var(--background-primary-color) 50%
+        );
       }
     }
 
@@ -149,7 +153,10 @@
 
   &:global(.ant-steps-vertical.ant-steps-dot) {
     :global {
-      .ant-steps-item-process .ant-steps-item-container .ant-steps-item-icon .ant-steps-icon-dot {
+      .ant-steps-item-process
+        .ant-steps-item-container
+        .ant-steps-item-icon
+        .ant-steps-icon-dot {
         left: 0;
       }
     }

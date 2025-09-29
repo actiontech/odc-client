@@ -31,7 +31,7 @@ import {
   ArrowDownOutlined,
   ArrowUpOutlined,
   DeleteOutlined,
-  PlusOutlined,
+  PlusOutlined
 } from '@ant-design/icons';
 import type { Column, DataGridRef } from '@oceanbase-odc/ob-react-data-grid';
 import { useUpdate } from 'ahooks';
@@ -42,7 +42,7 @@ import React, {
   useImperativeHandle,
   useMemo,
   useRef,
-  useState,
+  useState
 } from 'react';
 import Toolbar from '../Toolbar';
 
@@ -58,7 +58,7 @@ const defaultRowData = {
   dataType: 'VARCHAR',
   dataLength: null,
   defaultValue: null,
-  key: null,
+  key: null
 };
 
 interface RowData extends RowType, Partial<IPLParam> {
@@ -74,7 +74,8 @@ const FunctionOrProcedureParams: React.FC<IProps> = (props) => {
   const update = useUpdate();
   const gridRef = useRef<DataGridRef>();
 
-  const config = mode === DbObjectType.function ? modeConfig?.func : modeConfig?.proc;
+  const config =
+    mode === DbObjectType.function ? modeConfig?.func : modeConfig?.proc;
 
   useImperativeHandle(
     props.paramsRef,
@@ -85,54 +86,69 @@ const FunctionOrProcedureParams: React.FC<IProps> = (props) => {
             const { dataType, dataLength } = row;
             return {
               ...row,
-              dataType: mergeDataType(dbMode, dataType, dataLength, null),
+              dataType: mergeDataType(dbMode, dataType, dataLength, null)
             };
           });
-        },
+        }
       };
     },
-    [rows],
+    [rows]
   );
 
   const columns = useMemo<Column<RowData>[]>(() => {
     return [
       config?.params?.includes('paramName') && {
         key: 'paramName',
-        name: formatMessage({ id: 'odc.component.ProcedureParam.Name', defaultMessage: '名称' }), // 名称
-        editor: TextEditor,
+        name: formatMessage({
+          id: 'odc.component.ProcedureParam.Name',
+          defaultMessage: '名称'
+        }), // 名称
+        editor: TextEditor
       },
 
       config?.params?.includes('paramMode') && {
         key: 'paramMode',
-        name: formatMessage({ id: 'odc.component.ProcedureParam.Mode', defaultMessage: '模式' }), // 模式
+        name: formatMessage({
+          id: 'odc.component.ProcedureParam.Mode',
+          defaultMessage: '模式'
+        }), // 模式
         width: 60,
-        editor: WrapSelectEditor([ParamMode.IN, ParamMode.OUT, ParamMode.INOUT], false),
+        editor: WrapSelectEditor(
+          [ParamMode.IN, ParamMode.OUT, ParamMode.INOUT],
+          false
+        )
       },
 
       config?.params?.includes('dataType') && {
         key: 'dataType',
-        name: formatMessage({ id: 'odc.component.ProcedureParam.Type', defaultMessage: '类型' }), // 类型
+        name: formatMessage({
+          id: 'odc.component.ProcedureParam.Type',
+          defaultMessage: '类型'
+        }), // 类型
         width: 100,
         editor: WrapAutoCompleteEditor(
-          session?.dataTypes.map((d) => d.databaseType.replace('()', '')),
-        ),
+          session?.dataTypes.map((d) => d.databaseType.replace('()', ''))
+        )
       },
       config?.params?.includes('dataLength') && {
         key: 'dataLength',
-        name: formatMessage({ id: 'odc.component.ProcedureParam.Length', defaultMessage: '长度' }), // 长度
+        name: formatMessage({
+          id: 'odc.component.ProcedureParam.Length',
+          defaultMessage: '长度'
+        }), // 长度
         width: 60,
-        editor: InputNumberEditor,
+        editor: InputNumberEditor
       },
       config?.params?.includes('defaultValue') && {
         key: 'defaultValue',
         name: formatMessage({
           id: 'odc.component.ProcedureParam.DefaultValue',
-          defaultMessage: '默认值',
+          defaultMessage: '默认值'
         }), // 默认值
         width: 150,
         editor: TextEditor,
-        editable: (row) => row.paramMode === 'IN',
-      },
+        editable: (row) => row.paramMode === 'IN'
+      }
     ].filter(Boolean);
   }, [session, defaultParamMode, config]);
 
@@ -140,11 +156,11 @@ const FunctionOrProcedureParams: React.FC<IProps> = (props) => {
     if (config?.defaultValue) {
       return {
         ...defaultRowData,
-        ...config.defaultValue,
+        ...config.defaultValue
       };
     } else {
       return {
-        ...defaultRowData,
+        ...defaultRowData
       };
     }
   }, [config]);
@@ -154,11 +170,11 @@ const FunctionOrProcedureParams: React.FC<IProps> = (props) => {
       const newData = {
         ...getDefaultRowData(),
         paramMode: defaultParamMode,
-        key: generateUniqKey(),
+        key: generateUniqKey()
       };
       gridRef.current?.addRows([newData]);
     },
-    [gridRef, getDefaultRowData],
+    [gridRef, getDefaultRowData]
   );
 
   const deleteParam = useCallback(() => {
@@ -196,7 +212,7 @@ const FunctionOrProcedureParams: React.FC<IProps> = (props) => {
     <div>
       <Row
         style={{
-          border: '1px solid var(--odc-border-color)',
+          border: '1px solid var(--odc-border-color)'
         }}
       >
         <Toolbar>
@@ -204,7 +220,7 @@ const FunctionOrProcedureParams: React.FC<IProps> = (props) => {
             icon={<PlusOutlined />}
             text={formatMessage({
               id: 'odc.component.ProcedureParam.AddParameters',
-              defaultMessage: '添加参数',
+              defaultMessage: '添加参数'
             })}
             /* 添加参数 */ onClick={addParam}
           />
@@ -213,7 +229,7 @@ const FunctionOrProcedureParams: React.FC<IProps> = (props) => {
             icon={<DeleteOutlined />}
             text={formatMessage({
               id: 'odc.component.ProcedureParam.DeleteParameters',
-              defaultMessage: '删除参数',
+              defaultMessage: '删除参数'
             })} /* 删除参数 */
             onClick={deleteParam}
             disabled={
@@ -226,7 +242,7 @@ const FunctionOrProcedureParams: React.FC<IProps> = (props) => {
             icon={<ArrowUpOutlined />}
             text={formatMessage({
               id: 'odc.component.ProcedureParam.MoveUp',
-              defaultMessage: '向上移动',
+              defaultMessage: '向上移动'
             })} /* 向上移动 */
             onClick={moveUpParam}
             disabled={gridRef.current?.selectedRows.size !== 1}
@@ -236,7 +252,7 @@ const FunctionOrProcedureParams: React.FC<IProps> = (props) => {
             icon={<ArrowDownOutlined />}
             text={formatMessage({
               id: 'odc.component.ProcedureParam.MoveDown',
-              defaultMessage: '向下移动',
+              defaultMessage: '向下移动'
             })} /* 向下移动 */
             onClick={moveDownParam}
             disabled={gridRef.current?.selectedRows.size !== 1}

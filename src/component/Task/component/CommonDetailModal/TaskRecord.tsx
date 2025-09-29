@@ -29,7 +29,7 @@ import styles from './index.less';
 const statusFilters = Object.keys(status).map((key) => {
   return {
     text: status?.[key].text,
-    value: key,
+    value: key
   };
 });
 
@@ -40,11 +40,13 @@ function getDatabaseFilters(databases: { databaseName: string }[]) {
   }[] = [];
 
   databases?.forEach((item) => {
-    const isInclude = databaseFilters.some((filter) => filter.value === item.databaseName);
+    const isInclude = databaseFilters.some(
+      (filter) => filter.value === item.databaseName
+    );
     if (!isInclude) {
       databaseFilters.push({
         text: item.databaseName,
-        value: item.databaseName,
+        value: item.databaseName
       });
     }
   });
@@ -57,7 +59,10 @@ const getConnectionColumns = (params: {
     value: string;
   }[];
 
-  onOpenDetail: (task: TaskRecord<TaskRecordParameters>, visible: boolean) => void;
+  onOpenDetail: (
+    task: TaskRecord<TaskRecordParameters>,
+    visible: boolean
+  ) => void;
 }) => {
   const { databaseFilters } = params;
   return [
@@ -65,17 +70,17 @@ const getConnectionColumns = (params: {
       dataIndex: 'id',
       title: formatMessage({
         id: 'odc.component.CommonTaskDetailModal.TaskRecord.TaskNumber',
-        defaultMessage: '任务编号',
+        defaultMessage: '任务编号'
       }), //任务编号
       ellipsis: true,
-      width: 80,
+      width: 80
     },
 
     {
       dataIndex: 'databaseName',
       title: formatMessage({
         id: 'odc.component.CommonTaskDetailModal.TaskRecord.Library',
-        defaultMessage: '所属库',
+        defaultMessage: '所属库'
       }), //所属库
       ellipsis: true,
       width: 200,
@@ -83,25 +88,25 @@ const getConnectionColumns = (params: {
       filters: databaseFilters,
       onFilter: (value: string, record) => {
         return value === record.databaseName;
-      },
+      }
     },
 
     {
       dataIndex: 'createTime',
       title: formatMessage({
         id: 'odc.component.CommonTaskDetailModal.TaskRecord.CreationTime',
-        defaultMessage: '创建时间',
+        defaultMessage: '创建时间'
       }), //创建时间
       ellipsis: true,
       width: 180,
-      render: (createTime) => getFormatDateTime(createTime),
+      render: (createTime) => getFormatDateTime(createTime)
     },
 
     {
       dataIndex: 'status',
       title: formatMessage({
         id: 'odc.component.CommonTaskDetailModal.TaskRecord.TaskStatus',
-        defaultMessage: '任务状态',
+        defaultMessage: '任务状态'
       }), //任务状态
       ellipsis: true,
       width: 140,
@@ -111,15 +116,20 @@ const getConnectionColumns = (params: {
         return value === record.status;
       },
       render: (status, record) => {
-        return <StatusLabel status={status} progress={Math.floor(record.progressPercentage)} />;
-      },
+        return (
+          <StatusLabel
+            status={status}
+            progress={Math.floor(record.progressPercentage)}
+          />
+        );
+      }
     },
 
     {
       dataIndex: 'action',
       title: formatMessage({
         id: 'odc.component.CommonTaskDetailModal.TaskRecord.Operation',
-        defaultMessage: '操作',
+        defaultMessage: '操作'
       }), //操作
       ellipsis: true,
       width: 92,
@@ -133,13 +143,13 @@ const getConnectionColumns = (params: {
             {
               formatMessage({
                 id: 'odc.component.CommonTaskDetailModal.TaskRecord.View',
-                defaultMessage: '查看',
+                defaultMessage: '查看'
               }) /*查看*/
             }
           </Action.Link>
         );
-      },
-    },
+      }
+    }
   ];
 };
 
@@ -158,20 +168,20 @@ const SubTaskRecord: React.FC<IProps> = (props) => {
     const res = await getTaskList({
       createdByCurrentUser: false,
       approveByCurrentUser: false,
-      parentInstanceId: task.id,
+      parentInstanceId: task.id
     });
 
     setSubTasks(
       res?.contents?.map((item) => ({
         ...item,
-        databaseName: item?.database?.name,
-      })) ?? [],
+        databaseName: item?.database?.name
+      })) ?? []
     );
   };
 
   const handleDetailVisible = (
     task: TaskRecord<TaskRecordParameters>,
-    visible: boolean = false,
+    visible: boolean = false
   ) => {
     setDetailId(task?.id);
     setDetailVisible(visible);
@@ -192,7 +202,7 @@ const SubTaskRecord: React.FC<IProps> = (props) => {
         rowKey="id"
         columns={getConnectionColumns({
           onOpenDetail: handleDetailVisible,
-          databaseFilters,
+          databaseFilters
         })}
         dataSource={subTasks}
         disablePagination

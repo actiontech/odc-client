@@ -20,7 +20,11 @@ import { getTaskExecStrategyMap } from '@/component/Task';
 import { SimpleTextItem } from '@/component/Task/component/SimpleTextItem';
 import VariableConfigTable from '@/component/Task/component/VariableConfigTable';
 import { isCycleTriggerStrategy } from '@/component/Task/helper';
-import type { CycleTaskDetail, IDataClearJobParameters, TaskOperationType } from '@/d.ts';
+import type {
+  CycleTaskDetail,
+  IDataClearJobParameters,
+  TaskOperationType
+} from '@/d.ts';
 import { TaskExecStrategy } from '@/d.ts';
 import setting from '@/store/setting';
 import { formatMessage } from '@/util/intl';
@@ -29,10 +33,17 @@ import {
   getLocalFormatDateTime,
   kbToMb,
   mbToKb,
-  milliSecondsToHour,
+  milliSecondsToHour
 } from '@/util/utils';
 import { DownOutlined, UpOutlined } from '@ant-design/icons';
-import { Collapse, Descriptions, Divider, message, Space, Typography } from 'antd';
+import {
+  Collapse,
+  Descriptions,
+  Divider,
+  message,
+  Space,
+  Typography
+} from 'antd';
 import React from 'react';
 import ThrottleEditableCell from '../../component/ThrottleEditableCell';
 import styles from '../../index.less';
@@ -40,7 +51,7 @@ import ArchiveRange from './ArchiveRange';
 import { shardingStrategyOptions } from '../../component/ShardingStrategyItem';
 import {
   DirtyRowActionEnum,
-  DirtyRowActionLabelMap,
+  DirtyRowActionLabelMap
 } from '@/component/ExecuteSqlDetailModal/constant';
 
 const { Panel } = Collapse;
@@ -57,14 +68,14 @@ const DataClearTaskContent: React.FC<IProps> = (props) => {
   const taskExecStrategyMap = getTaskExecStrategyMap(task?.type);
   const handleRowLimit = async (rowLimit, handleClose) => {
     const res = await updateLimiterConfig(id, {
-      rowLimit,
+      rowLimit
     });
     if (res) {
       message.success(
         formatMessage({
           id: 'odc.src.component.Task.DataClearTask.DetailContent.SuccessfullyModified',
-          defaultMessage: '修改成功！',
-        }), //'修改成功！'
+          defaultMessage: '修改成功！'
+        }) //'修改成功！'
       );
       handleClose();
       onReload();
@@ -72,14 +83,14 @@ const DataClearTaskContent: React.FC<IProps> = (props) => {
   };
   const handleDataSizeLimit = async (dataSizeLimit, handleClose) => {
     const res = await updateLimiterConfig(id, {
-      dataSizeLimit: mbToKb(dataSizeLimit),
+      dataSizeLimit: mbToKb(dataSizeLimit)
     });
     if (res) {
       message.success(
         formatMessage({
           id: 'odc.src.component.Task.DataClearTask.DetailContent.SuccessfullyModified.1',
-          defaultMessage: '修改成功！',
-        }), //'修改成功！'
+          defaultMessage: '修改成功！'
+        }) //'修改成功！'
       );
       handleClose();
       onReload();
@@ -92,7 +103,7 @@ const DataClearTaskContent: React.FC<IProps> = (props) => {
           span={2}
           label={formatMessage({
             id: 'odc.DataClearTask.DetailContent.TaskNumber',
-            defaultMessage: '任务编号',
+            defaultMessage: '任务编号'
           })} /*任务编号*/
         >
           {task?.id}
@@ -101,13 +112,13 @@ const DataClearTaskContent: React.FC<IProps> = (props) => {
           span={2}
           label={formatMessage({
             id: 'odc.DataClearTask.DetailContent.TaskType',
-            defaultMessage: '任务类型',
+            defaultMessage: '任务类型'
           })} /*任务类型*/
         >
           {
             formatMessage({
               id: 'odc.DataClearTask.DetailContent.DataCleansing',
-              defaultMessage: '数据清理',
+              defaultMessage: '数据清理'
             }) /*数据清理*/
           }
         </Descriptions.Item>
@@ -116,12 +127,14 @@ const DataClearTaskContent: React.FC<IProps> = (props) => {
             span={2}
             label={formatMessage({
               id: 'odc.DataArchiveTask.DetailContent.SourceDatabase',
-              defaultMessage: '源数据库',
+              defaultMessage: '源数据库'
             })} /*源数据库*/
           >
             <Space size={2}>
               <span>{jobParameters?.database?.name}</span>
-              <Text type="secondary">{jobParameters?.database?.dataSource?.name}</Text>
+              <Text type="secondary">
+                {jobParameters?.database?.dataSource?.name}
+              </Text>
             </Space>
           </Descriptions.Item>
         ) : (
@@ -129,12 +142,14 @@ const DataClearTaskContent: React.FC<IProps> = (props) => {
             span={2}
             label={formatMessage({
               id: 'odc.DataClearTask.DetailContent.Database',
-              defaultMessage: '数据库',
+              defaultMessage: '数据库'
             })} /*数据库*/
           >
             <Space size={2}>
               <span>{jobParameters?.database?.name}</span>
-              <Text type="secondary">{jobParameters?.database?.dataSource?.name}</Text>
+              <Text type="secondary">
+                {jobParameters?.database?.dataSource?.name}
+              </Text>
             </Space>
           </Descriptions.Item>
         )}
@@ -144,12 +159,14 @@ const DataClearTaskContent: React.FC<IProps> = (props) => {
             span={2}
             label={formatMessage({
               id: 'odc.DataArchiveTask.DetailContent.TargetDatabase',
-              defaultMessage: '目标数据库',
+              defaultMessage: '目标数据库'
             })} /*目标数据库*/
           >
             <Space size={2}>
               <span>{jobParameters?.targetDatabase?.name}</span>
-              <Text type="secondary">{jobParameters?.targetDatabase?.dataSource?.name}</Text>
+              <Text type="secondary">
+                {jobParameters?.targetDatabase?.dataSource?.name}
+              </Text>
             </Space>
           </Descriptions.Item>
         )}
@@ -158,26 +175,29 @@ const DataClearTaskContent: React.FC<IProps> = (props) => {
           <Descriptions.Item
             label={formatMessage({
               id: 'odc.DataClearTask.DetailContent.RiskLevel',
-              defaultMessage: '风险等级',
+              defaultMessage: '风险等级'
             })} /*风险等级*/
           >
-            <RiskLevelLabel level={task?.riskLevel?.level} color={task?.riskLevel?.style} />
+            <RiskLevelLabel
+              level={task?.riskLevel?.level}
+              color={task?.riskLevel?.style}
+            />
           </Descriptions.Item>
         )}
       </Descriptions>
 
       <SimpleTextItem
         style={{
-          marginTop: 12,
+          marginTop: 12
         }}
         label={formatMessage({
           id: 'odc.DataClearTask.DetailContent.VariableConfiguration',
-          defaultMessage: '变量配置',
+          defaultMessage: '变量配置'
         })}
         /*变量配置*/ content={
           <div
             style={{
-              margin: '8px 0 12px',
+              margin: '8px 0 12px'
             }}
           >
             <VariableConfigTable variables={jobParameters?.variables} />
@@ -189,12 +209,12 @@ const DataClearTaskContent: React.FC<IProps> = (props) => {
       <SimpleTextItem
         label={formatMessage({
           id: 'odc.DataClearTask.DetailContent.CleaningRange',
-          defaultMessage: '清理范围',
+          defaultMessage: '清理范围'
         })}
         /*清理范围*/ content={
           <div
             style={{
-              margin: '8px 0 12px',
+              margin: '8px 0 12px'
             }}
           >
             <ArchiveRange
@@ -210,7 +230,7 @@ const DataClearTaskContent: React.FC<IProps> = (props) => {
         <Descriptions.Item
           label={formatMessage({
             id: 'odc.DataClearTask.DetailContent.ExecutionMethod',
-            defaultMessage: '执行方式',
+            defaultMessage: '执行方式'
           })} /*执行方式*/
         >
           {taskExecStrategyMap[triggerConfig.triggerStrategy]}
@@ -220,7 +240,7 @@ const DataClearTaskContent: React.FC<IProps> = (props) => {
             label={
               formatMessage({
                 id: 'src.component.Task.DataArchiveTask.DetailContent.074676BE',
-                defaultMessage: '执行时间',
+                defaultMessage: '执行时间'
               }) /*"执行时间"*/
             }
           >
@@ -238,7 +258,7 @@ const DataClearTaskContent: React.FC<IProps> = (props) => {
                 <SimpleTextItem
                   label={formatMessage({
                     id: 'odc.DataClearTask.DetailContent.NextExecutionTime',
-                    defaultMessage: '下一次执行时间',
+                    defaultMessage: '下一次执行时间'
                   })}
                   /*下一次执行时间*/ content={
                     <Space>
@@ -263,7 +283,7 @@ const DataClearTaskContent: React.FC<IProps> = (props) => {
           <Descriptions.Item
             label={formatMessage({
               id: 'src.component.Task.DataClearTask.DetailContent.C6968CAA',
-              defaultMessage: '源端目标端数据不一致处理',
+              defaultMessage: '源端目标端数据不一致处理'
             })}
           >
             {DirtyRowActionLabelMap[jobParameters?.dirtyRowAction]}
@@ -273,33 +293,36 @@ const DataClearTaskContent: React.FC<IProps> = (props) => {
           <Descriptions.Item
             label={formatMessage({
               id: 'src.component.Task.DataClearTask.DetailContent.D89667B8',
-              defaultMessage: '跳过不清理数据',
+              defaultMessage: '跳过不清理数据'
             })}
           >
             {formatMessage(
               {
                 id: 'src.component.Task.DataClearTask.DetailContent.66E3D51C',
-                defaultMessage: '{LogicalExpression0} 行',
+                defaultMessage: '{LogicalExpression0} 行'
               },
-              { LogicalExpression0: jobParameters?.maxAllowedDirtyRowCount || 0 },
+              {
+                LogicalExpression0: jobParameters?.maxAllowedDirtyRowCount || 0
+              }
             )}
           </Descriptions.Item>
         ) : null}
         <Descriptions.Item
           label={formatMessage({
             id: 'src.component.Task.DataClearTask.DetailContent.E977DA21',
-            defaultMessage: '搜索策略',
+            defaultMessage: '搜索策略'
           })}
           span={isCycleTriggerStrategy(triggerConfig?.triggerStrategy) ? 2 : 1}
         >
-          {shardingStrategyOptions.find((item) => item.value === jobParameters?.shardingStrategy)
-            ?.label || '-'}
+          {shardingStrategyOptions.find(
+            (item) => item.value === jobParameters?.shardingStrategy
+          )?.label || '-'}
         </Descriptions.Item>
         <Descriptions.Item
           label={
             formatMessage({
               id: 'odc.src.component.Task.DataClearTask.DetailContent.RestrictedFlow',
-              defaultMessage: '行限流',
+              defaultMessage: '行限流'
             }) /* 行限流 */
           }
         >
@@ -315,7 +338,7 @@ const DataClearTaskContent: React.FC<IProps> = (props) => {
           label={
             formatMessage({
               id: 'odc.src.component.Task.DataClearTask.DetailContent.DataSizeLimit',
-              defaultMessage: '数据大小限流',
+              defaultMessage: '数据大小限流'
             }) //'数据大小限流'
           }
         >
@@ -331,24 +354,24 @@ const DataClearTaskContent: React.FC<IProps> = (props) => {
           label={
             formatMessage({
               id: 'src.component.Task.DataClearTask.DetailContent.2D1A14AB',
-              defaultMessage: '使用主键清理',
+              defaultMessage: '使用主键清理'
             }) /*"使用主键清理"*/
           }
         >
           {jobParameters?.deleteByUniqueKey
             ? formatMessage({
                 id: 'src.component.Task.DataClearTask.DetailContent.D2882643',
-                defaultMessage: '是',
+                defaultMessage: '是'
               })
             : formatMessage({
                 id: 'src.component.Task.DataClearTask.DetailContent.834E7D89',
-                defaultMessage: '否',
+                defaultMessage: '否'
               })}
         </Descriptions.Item>
         <Descriptions.Item
           label={formatMessage({
             id: 'src.component.Task.DataClearTask.DetailContent.D4D1227C',
-            defaultMessage: '指定任务时长',
+            defaultMessage: '指定任务时长'
           })}
           span={1}
         >
@@ -359,7 +382,7 @@ const DataClearTaskContent: React.FC<IProps> = (props) => {
         <Descriptions.Item
           label={formatMessage({
             id: 'odc.DataClearTask.DetailContent.Description',
-            defaultMessage: '描述',
+            defaultMessage: '描述'
           })}
           /*描述*/ span={2}
         >
@@ -368,7 +391,7 @@ const DataClearTaskContent: React.FC<IProps> = (props) => {
       </Descriptions>
       <Divider
         style={{
-          marginTop: 4,
+          marginTop: 4
         }}
       />
 
@@ -376,7 +399,7 @@ const DataClearTaskContent: React.FC<IProps> = (props) => {
         <Descriptions.Item
           label={formatMessage({
             id: 'odc.DataClearTask.DetailContent.Founder',
-            defaultMessage: '创建人',
+            defaultMessage: '创建人'
           })} /*创建人*/
         >
           {task?.creator?.name || '-'}
@@ -384,7 +407,7 @@ const DataClearTaskContent: React.FC<IProps> = (props) => {
         <Descriptions.Item
           label={formatMessage({
             id: 'odc.DataClearTask.DetailContent.CreationTime',
-            defaultMessage: '创建时间',
+            defaultMessage: '创建时间'
           })} /*创建时间*/
         >
           {getFormatDateTime(task.createTime)}

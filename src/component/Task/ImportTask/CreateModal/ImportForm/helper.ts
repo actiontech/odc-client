@@ -40,28 +40,32 @@ export function getSizeLimitTip() {
   return formatMessage(
     {
       id: 'odc.ImportDrawer.ImportForm.helper.TheFileSizeCannotExceed.1',
-      defaultMessage: '文件大小不能超过 {size}',
+      defaultMessage: '文件大小不能超过 {size}'
     },
-    { size },
+    { size }
   );
 }
 
-export function getFileTypeWithImportType(importType: IMPORT_TYPE | EXPORT_TYPE) {
+export function getFileTypeWithImportType(
+  importType: IMPORT_TYPE | EXPORT_TYPE
+) {
   const _m = {
     [IMPORT_TYPE.ZIP]: '.zip',
     [IMPORT_TYPE.SQL]: '.sql',
-    [IMPORT_TYPE.CSV]: '.csv, .txt',
+    [IMPORT_TYPE.CSV]: '.csv, .txt'
   };
 
   return _m[importType];
 }
 
-export function getFileMIMETypeWithImportType(importType: IMPORT_TYPE | EXPORT_TYPE) {
+export function getFileMIMETypeWithImportType(
+  importType: IMPORT_TYPE | EXPORT_TYPE
+) {
   const _m = {
     // 使用MIME判断时, 不同浏览器的支持不一样, 如sql文件就无法被识别成application/sql, 因此采用文件名后缀的形式判断
     [IMPORT_TYPE.ZIP]: ['zip'],
     [IMPORT_TYPE.SQL]: ['sql'],
-    [IMPORT_TYPE.CSV]: ['csv', 'txt'],
+    [IMPORT_TYPE.CSV]: ['csv', 'txt']
   };
 
   return _m[importType];
@@ -87,8 +91,8 @@ export function getImportTypeLabel(importType: IMPORT_TYPE) {
     [IMPORT_TYPE.CSV]: 'CSV',
     [IMPORT_TYPE.DIR]: formatMessage({
       id: 'src.component.Task.ImportTask.CreateModal.ImportForm.198F258B',
-      defaultMessage: '目录文件',
-    }),
+      defaultMessage: '目录文件'
+    })
   };
   return map[importType];
 }

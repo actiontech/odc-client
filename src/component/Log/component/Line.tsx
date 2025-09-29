@@ -26,7 +26,7 @@ const Line: React.FC<LineProps> = ({
   style,
   searchData,
   enableHighLight,
-  language,
+  language
 }) => {
   let content: React.ReactNode = data?.content;
   const prefixCls = getPrefixCls('log');
@@ -46,14 +46,14 @@ const Line: React.FC<LineProps> = ({
         <>
           <span
             dangerouslySetInnerHTML={{
-              __html: renderContent(item),
+              __html: renderContent(item)
             }}
           />
           {index < splitContent.length - 1 && (
             /** 当前行 此关键词索引与current在searchData索引相同 */
             <mark
               className={classNames(`${prefixCls}-mark`, {
-                [`${prefixCls}-active-mark`]: index === keyIndex,
+                [`${prefixCls}-active-mark`]: index === keyIndex
               })}
             >
               {data.keywords?.[index]}
@@ -76,7 +76,9 @@ const Line: React.FC<LineProps> = ({
           ) : (
             <span
               className={`${prefixCls}-line-content`}
-              dangerouslySetInnerHTML={{ __html: renderContent(content as string) }}
+              dangerouslySetInnerHTML={{
+                __html: renderContent(content as string)
+              }}
             />
           )}
         </div>

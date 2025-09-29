@@ -38,7 +38,7 @@ const SecureSider: React.FC<ISecureSiderProps> = ({
   extra = null,
   siderItemList,
   selectedItem,
-  handleItemClick,
+  handleItemClick
 }) => {
   const handleSelected = (v) => {
     return selectedItem === v;
@@ -56,9 +56,9 @@ const SecureSider: React.FC<ISecureSiderProps> = ({
               <div
                 className={classNames(
                   {
-                    [styles.selected]: handleSelected(item?.value),
+                    [styles.selected]: handleSelected(item?.value)
                   },
-                  styles.item,
+                  styles.item
                 )}
                 key={item?.value}
                 onClick={() => {

@@ -36,7 +36,7 @@ const Datasource: React.FC<IProps> = function ({ modalStore }) {
   const _searchValue = useMemo(() => {
     return {
       value: searchValue,
-      type: searchType,
+      type: searchType
     };
   }, [searchValue, searchType]);
   return (
@@ -58,7 +58,7 @@ const Datasource: React.FC<IProps> = function ({ modalStore }) {
           editDatasource(id: number) {
             setEditDatasourceId(id);
           },
-          setCopyDatasourceId,
+          setCopyDatasourceId
         }}
       >
         <div style={{ height: '100%' }}>

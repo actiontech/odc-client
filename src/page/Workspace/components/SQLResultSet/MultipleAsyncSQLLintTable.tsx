@@ -12,16 +12,16 @@ import styles from './index.less';
 const LintResultTip = {
   default: formatMessage({
     id: 'odc.src.page.Workspace.components.SQLResultSet.CurrentSQLCanBeExecuted',
-    defaultMessage: '当前 SQL 可直接执行',
+    defaultMessage: '当前 SQL 可直接执行'
   }), //'当前 SQL 可直接执行'
   suggest: formatMessage({
     id: 'odc.src.page.Workspace.components.SQLResultSet.TheCurrentSQLNeedsApproval',
-    defaultMessage: '当前 SQL 存在需要审批项，请发起审批或修改后再执行',
+    defaultMessage: '当前 SQL 存在需要审批项，请发起审批或修改后再执行'
   }), //'当前 SQL 存在需要审批项，请发起审批或修改后再执行'
   must: formatMessage({
     id: 'odc.src.page.Workspace.components.SQLResultSet.TheCurrentSQLExistenceMust',
-    defaultMessage: '当前 SQL 存在必须改进项，请修改后再执行',
-  }), //'当前 SQL 存在必须改进项，请修改后再执行'
+    defaultMessage: '当前 SQL 存在必须改进项，请修改后再执行'
+  }) //'当前 SQL 存在必须改进项，请修改后再执行'
 };
 export interface ILintResultTableProps {
   ctx?: any;
@@ -48,13 +48,18 @@ const MultipleLintResultTable: React.FC<ILintResultTableProps> = ({
   lintResultSet,
   baseOffset = 0,
   sqlChanged,
-  modalStore,
+  modalStore
 }) => {
   const [disabled, setDisabled] = useState<boolean>(false);
   const [tip, setTip] = useState<string>('');
   const [dataSource, setDataSource] = useState<any>([]);
   const CallbackTable = useCallback(() => {
-    const columns = getMultipleAsyncColumns(showLocate, sqlChanged, ctx, baseOffset);
+    const columns = getMultipleAsyncColumns(
+      showLocate,
+      sqlChanged,
+      ctx,
+      baseOffset
+    );
     return (
       <Table
         rowKey="row"
@@ -68,19 +73,22 @@ const MultipleLintResultTable: React.FC<ILintResultTableProps> = ({
                 position: ['bottomRight'],
                 pageSize,
                 hideOnSinglePage: true,
-                showSizeChanger: false,
+                showSizeChanger: false
               }
             : resultHeight
             ? {
                 position: ['bottomRight'],
-                pageSize: resultHeight - 150 > 24 ? Math.floor((resultHeight - 150) / 24) : 5,
+                pageSize:
+                  resultHeight - 150 > 24
+                    ? Math.floor((resultHeight - 150) / 24)
+                    : 5,
                 hideOnSinglePage: true,
-                showSizeChanger: false,
+                showSizeChanger: false
               }
             : {
                 position: ['bottomRight'],
                 hideOnSinglePage: true,
-                showSizeChanger: false,
+                showSizeChanger: false
               }
         }
       />
@@ -93,7 +101,10 @@ const MultipleLintResultTable: React.FC<ILintResultTableProps> = ({
           database: resultSet?.database,
           row: index + 1,
           sql: resultSet?.checkResult?.sql,
-          rules: groupByPropertyName(resultSet?.checkResult?.violations, 'level'),
+          rules: groupByPropertyName(
+            resultSet?.checkResult?.violations,
+            'level'
+          )
         };
       });
       setDataSource(newDataSource);
@@ -123,20 +134,20 @@ const MultipleLintResultTable: React.FC<ILintResultTableProps> = ({
         height: resultHeight || '100%',
         overflow: 'auto',
         overflowX: 'hidden',
-        maxHeight: resultHeight || '100%',
+        maxHeight: resultHeight || '100%'
       }}
     >
       <div
         style={{
           display: 'flex',
-          flexDirection: 'column',
+          flexDirection: 'column'
         }}
       >
         <div
           className={styles.table}
           style={{
             flexGrow: 1,
-            paddingBottom: 8,
+            paddingBottom: 8
           }}
         >
           <CallbackTable />

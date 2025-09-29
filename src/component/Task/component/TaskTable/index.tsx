@@ -19,12 +19,18 @@ import type {
   ITableFilter,
   ITableInstance,
   ITableLoadOptions,
-  ITableSorter,
+  ITableSorter
 } from '@/component/CommonTable/interface';
-import { CommonTableMode, IOperationOptionType } from '@/component/CommonTable/interface';
+import {
+  CommonTableMode,
+  IOperationOptionType
+} from '@/component/CommonTable/interface';
 import { getCronExecuteCycleByObject, translator } from '@/component/Crontab';
 import SearchFilter from '@/component/SearchFilter';
-import StatusLabel, { cycleStatus, status } from '@/component/Task/component/Status';
+import StatusLabel, {
+  cycleStatus,
+  status
+} from '@/component/Task/component/Status';
 import { TIME_OPTION_ALL_TASK, TimeOptions } from '@/component/TimeSelect';
 import UserPopover from '@/component/UserPopover';
 import type {
@@ -34,7 +40,7 @@ import type {
   IResponseData,
   ISqlPlayJobParameters,
   TaskRecord,
-  TaskRecordParameters,
+  TaskRecordParameters
 } from '@/d.ts';
 import { TaskExecStrategy, TaskPageType, TaskStatus, TaskType } from '@/d.ts';
 import type { PageStore } from '@/store/page';
@@ -50,7 +56,11 @@ import { inject, observer } from 'mobx-react';
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
 import React, { useEffect, useRef, useState, useContext } from 'react';
-import { getTaskGroupLabels, getTaskLabelByType, isCycleTaskPage } from '../../helper';
+import {
+  getTaskGroupLabels,
+  getTaskLabelByType,
+  isCycleTaskPage
+} from '../../helper';
 import styles from '../../index.less';
 import TaskTools from '../ActionBar';
 import { listProjects } from '@/common/network/project';
@@ -63,7 +73,7 @@ import { AsyncTaskOperationButton } from '../AsyncTaskOperationButton';
 import {
   getExportConfig,
   getTerminateConfig,
-  isScheduleMigrateTask,
+  isScheduleMigrateTask
 } from '../AsyncTaskOperationButton/helper';
 const { RangePicker } = DatePicker;
 const { Text, Link } = Typography;
@@ -80,98 +90,98 @@ export const getCronCycle = (triggerConfig: ICycleTaskTriggerConfig) => {
     ? getCronExecuteCycleByObject(triggerStrategy as any, {
         hour: hours,
         dayOfWeek: days,
-        dayOfMonth: days,
+        dayOfMonth: days
       })
     : translator.parse(cronExpression).toLocaleString();
 };
 export const TaskTypeMap = {
   [TaskType.IMPORT]: formatMessage({
     id: 'odc.TaskManagePage.component.TaskTable.Import',
-    defaultMessage: '导入',
+    defaultMessage: '导入'
   }),
   //导入
   [TaskType.EXPORT]: formatMessage({
     id: 'odc.TaskManagePage.component.TaskTable.Export',
-    defaultMessage: '导出',
+    defaultMessage: '导出'
   }),
   //导出
   [TaskType.DATAMOCK]: formatMessage({
     id: 'odc.TaskManagePage.component.TaskTable.AnalogData',
-    defaultMessage: '模拟数据',
+    defaultMessage: '模拟数据'
   }),
   //模拟数据
   [TaskType.ASYNC]: formatMessage({
     id: 'odc.TaskManagePage.component.TaskTable.DatabaseChanges',
-    defaultMessage: '数据库变更',
+    defaultMessage: '数据库变更'
   }),
   // 数据库变更
 
   [TaskType.PARTITION_PLAN]: formatMessage({
     id: 'odc.TaskManagePage.component.TaskTable.PartitionPlan',
-    defaultMessage: '分区计划',
+    defaultMessage: '分区计划'
   }),
   //分区计划
 
   [TaskType.SHADOW]: formatMessage({
     id: 'odc.TaskManagePage.component.TaskTable.ShadowTableSynchronization',
-    defaultMessage: '影子表同步',
+    defaultMessage: '影子表同步'
   }),
   //影子表同步
 
   [TaskType.ALTER_SCHEDULE]: formatMessage({
     id: 'odc.TaskManagePage.component.TaskTable.PlannedChange',
-    defaultMessage: '计划变更',
+    defaultMessage: '计划变更'
   }),
   //计划变更
   [TaskType.EXPORT_RESULT_SET]: formatMessage({
     id: 'odc.src.component.Task.component.TaskTable.ExportResultSet',
-    defaultMessage: '导出结果集',
+    defaultMessage: '导出结果集'
   }),
   //'导出结果集'
   [TaskType.SQL_PLAN]: formatMessage({
     id: 'odc.component.TaskTable.SqlPlan',
-    defaultMessage: 'SQL 计划',
+    defaultMessage: 'SQL 计划'
   }),
   //SQL 计划
   [TaskType.DATA_ARCHIVE]: formatMessage({
     id: 'odc.component.TaskTable.DataArchiving',
-    defaultMessage: '数据归档',
+    defaultMessage: '数据归档'
   }),
   //数据归档
   [TaskType.ONLINE_SCHEMA_CHANGE]: formatMessage({
     id: 'odc.component.TaskTable.LockFreeStructureChange',
-    defaultMessage: '无锁结构变更',
+    defaultMessage: '无锁结构变更'
   }),
   //无锁结构变更
   [TaskType.DATA_DELETE]: formatMessage({
     id: 'odc.component.TaskTable.DataCleansing',
-    defaultMessage: '数据清理',
+    defaultMessage: '数据清理'
   }),
   //数据清理
   [TaskType.APPLY_PROJECT_PERMISSION]: formatMessage({
     id: 'odc.src.component.Task.component.TaskTable.ApplicationProjectPermissions',
-    defaultMessage: '申请项目权限',
+    defaultMessage: '申请项目权限'
   }), //'申请项目权限'
   [TaskType.APPLY_DATABASE_PERMISSION]: formatMessage({
     id: 'src.component.Task.component.TaskTable.E1E161BA',
-    defaultMessage: '申请库权限',
+    defaultMessage: '申请库权限'
   }), //'申请库权限'
   [TaskType.APPLY_TABLE_PERMISSION]: formatMessage({
     id: 'src.component.Task.component.TaskTable.573E2A28',
-    defaultMessage: '申请表/视图权限',
+    defaultMessage: '申请表/视图权限'
   }),
   [TaskType.STRUCTURE_COMPARISON]: formatMessage({
     id: 'src.component.Task.component.TaskTable.80E1D16A',
-    defaultMessage: '结构比对',
+    defaultMessage: '结构比对'
   }), //'结构比对'
   [TaskType.MULTIPLE_ASYNC]: formatMessage({
     id: 'src.component.Task.component.TaskTable.A3CA13D5',
-    defaultMessage: '多库变更',
+    defaultMessage: '多库变更'
   }),
   [TaskType.LOGICAL_DATABASE_CHANGE]: formatMessage({
     id: 'src.component.Task.component.TaskTable.4203E912',
-    defaultMessage: '逻辑库变更',
-  }),
+    defaultMessage: '逻辑库变更'
+  })
 };
 export const getStatusFilters = (status: {
   [key: string]: {
@@ -183,16 +193,17 @@ export const getStatusFilters = (status: {
     .map((key) => {
       return {
         text: status?.[key].text,
-        value: key,
+        value: key
       };
     });
 };
 export const TASK_EXECUTE_TIME_KEY = 'task:executeTime';
 export const TASK_EXECUTE_DATE_KEY = 'task:executeDate';
 
-const isSupportTaksImport = odc?.appConfig?.task?.isSupportTaksImport;
-const isSupportTaksExport = odc?.appConfig?.task?.isSupportTaksExport;
-const isSupportTaksTerminate = odc?.appConfig?.task?.isSupportTaksTerminate;
+export const isSupportTaksImport = odc?.appConfig?.task?.isSupportTaksImport;
+export const isSupportTaksExport = odc?.appConfig?.task?.isSupportTaksExport;
+export const isSupportTaksTerminate =
+  odc?.appConfig?.task?.isSupportTaksTerminate;
 
 interface IProps {
   tableRef: React.RefObject<ITableInstance>;
@@ -205,9 +216,15 @@ interface IProps {
   >;
 
   isMultiPage?: boolean;
-  getTaskList: (args: ITableLoadOptions, executeDate: [Dayjs, Dayjs] | []) => Promise<any>;
+  getTaskList: (
+    args: ITableLoadOptions,
+    executeDate: [Dayjs, Dayjs] | []
+  ) => Promise<any>;
   onReloadList: () => void;
-  onDetailVisible: (task: TaskRecord<TaskRecordParameters>, visible: boolean) => void;
+  onDetailVisible: (
+    task: TaskRecord<TaskRecordParameters>,
+    visible: boolean
+  ) => void;
   onChange?: (args: ITableLoadOptions) => void;
   onMenuClick?: (type: TaskPageType) => void;
   disableProjectCol?: boolean;
@@ -215,7 +232,7 @@ interface IProps {
 
 const TaskTable: React.FC<IProps> = inject(
   'taskStore',
-  'pageStore',
+  'pageStore'
 )(
   observer((props) => {
     const {
@@ -225,17 +242,19 @@ const TaskTable: React.FC<IProps> = inject(
       tableRef,
       taskList,
       isMultiPage,
-      disableProjectCol,
+      disableProjectCol
     } = props;
     const { taskPageScope } = taskStore;
-    const taskStatusFilters = getStatusFilters(isCycleTaskPage(taskTabType) ? cycleStatus : status);
+    const taskStatusFilters = getStatusFilters(
+      isCycleTaskPage(taskTabType) ? cycleStatus : status
+    );
 
     const { data: projects } = useRequest(listProjects, {
-      defaultParams: [null, 1, 40],
+      defaultParams: [null, 1, 40]
     });
     const projectOptions = projects?.contents?.map(({ name, id }) => ({
       text: name,
-      value: id?.toString(),
+      value: id?.toString()
     }));
     const { getParam } = useURLParams();
     const urlStatusValue = getParam('status');
@@ -246,7 +265,9 @@ const TaskTable: React.FC<IProps> = inject(
       return JSON.parse(localStorage?.getItem(TASK_EXECUTE_TIME_KEY)) ?? 7;
     });
     const [executeDate, setExecuteDate] = useState<[Dayjs, Dayjs] | []>(() => {
-      const [start, end] = JSON.parse(localStorage?.getItem(TASK_EXECUTE_DATE_KEY)) ?? [null, null];
+      const [start, end] = JSON.parse(
+        localStorage?.getItem(TASK_EXECUTE_DATE_KEY)
+      ) ?? [null, null];
       return !start || !end ? null : [dayjs(start), dayjs(end)];
     });
     const [loading, setLoading] = useState(false);
@@ -254,7 +275,8 @@ const TaskTable: React.FC<IProps> = inject(
     const [hoverInNewTaskMenu, setHoverInNewTaskMenu] = useState(false);
     const [listParams, setListParams] = useState(null);
     const [delTaskList, setDelTaskList] = useState<number[]>([]);
-    const [importModalVisible, setImportModalVisible] = useState<boolean>(false);
+    const [importModalVisible, setImportModalVisible] =
+      useState<boolean>(false);
     const [importProjectId, setImportProjectId] = useState<string>();
     const { project } = useContext(ProjectContext) || {};
     const projectArchived = isProjectArchived(project);
@@ -262,13 +284,16 @@ const TaskTable: React.FC<IProps> = inject(
     const { activePageKey } = pageStore;
     const columns = initColumns(listParams);
     const { runAction } = useUrlAction();
-    const { isSubmitImport, debounceSubmit } = useImport(props.onReloadList, importProjectId);
+    const { isSubmitImport, debounceSubmit } = useImport(
+      props.onReloadList,
+      importProjectId
+    );
 
     const { selectedRow, rowSelection, clearSelection } = useTaskSelection({
       taskStore,
       taskTabType,
       taskList,
-      tableRef,
+      tableRef
     });
 
     const { loop: loadData, destory } = useLoop((count) => {
@@ -282,35 +307,44 @@ const TaskTable: React.FC<IProps> = inject(
         setExecuteTime(_executeTime);
         const filters = {
           ...args?.filters,
-          status: (args?.filters?.status || []).concat(urlStatusValue ? [urlStatusValue] : []),
-          executeTime: urlStatusValue ? TIME_OPTION_ALL_TASK : _executeTime,
+          status: (args?.filters?.status || []).concat(
+            urlStatusValue ? [urlStatusValue] : []
+          ),
+          executeTime: urlStatusValue ? TIME_OPTION_ALL_TASK : _executeTime
         };
 
         setListParams({
           ...args,
-          filters,
+          filters
         });
 
         // 只有在执行时间不为"全部"时才传递 executeDate
-        const shouldUseExecuteDate = filters.executeTime !== TIME_OPTION_ALL_TASK;
+        const shouldUseExecuteDate =
+          filters.executeTime !== TIME_OPTION_ALL_TASK;
         await props.getTaskList(
           {
             ...args,
-            filters,
+            filters
           },
-          shouldUseExecuteDate ? executeDate : [],
+          shouldUseExecuteDate ? executeDate : []
         );
         setLoading(false);
       };
     }, 6000);
 
     useEffect(() => {
-      runAction({ actionType: URL_ACTION.newTask, callback: () => setHoverInNewTaskMenu(true) });
+      runAction({
+        actionType: URL_ACTION.newTask,
+        callback: () => setHoverInNewTaskMenu(true)
+      });
     }, []);
 
     useEffect(() => {
       if (executeTime) {
-        localStorage.setItem(TASK_EXECUTE_TIME_KEY, JSON.stringify(executeTime));
+        localStorage.setItem(
+          TASK_EXECUTE_TIME_KEY,
+          JSON.stringify(executeTime)
+        );
       }
     }, [executeTime]);
 
@@ -326,19 +360,25 @@ const TaskTable: React.FC<IProps> = inject(
           filters: null,
           sorter: null,
           pagination: {
-            current: 1,
-          },
+            current: 1
+          }
         });
       }
     }, [taskPageScope, taskTabType, activePageKey, urlStatusValue]);
 
     useEffect(() => {
       if (executeTime) {
-        localStorage.setItem(TASK_EXECUTE_TIME_KEY, JSON.stringify(executeTime));
+        localStorage.setItem(
+          TASK_EXECUTE_TIME_KEY,
+          JSON.stringify(executeTime)
+        );
       }
     }, [executeTime]);
 
-    function initColumns(listParams: { filters: ITableFilter; sorter: ITableSorter }) {
+    function initColumns(listParams: {
+      filters: ITableFilter;
+      sorter: ITableSorter;
+    }) {
       const { filters, sorter } = listParams ?? {};
       const columns = [
         {
@@ -346,7 +386,7 @@ const TaskTable: React.FC<IProps> = inject(
           key: 'id',
           title: formatMessage({
             id: 'odc.component.TaskTable.No',
-            defaultMessage: '编号',
+            defaultMessage: '编号'
           }),
           //编号
           filterDropdown: (props) => {
@@ -356,7 +396,7 @@ const TaskTable: React.FC<IProps> = inject(
                 selectedKeys={filters?.id}
                 placeholder={formatMessage({
                   id: 'odc.TaskManagePage.component.TaskTable.PleaseEnterTheNumber',
-                  defaultMessage: '请输入编号',
+                  defaultMessage: '请输入编号'
                 })}
 
                 /*请输入编号*/
@@ -366,7 +406,7 @@ const TaskTable: React.FC<IProps> = inject(
           filterIcon: (filtered) => (
             <SearchOutlined
               style={{
-                color: filtered ? 'var(--icon-color-focus)' : undefined,
+                color: filtered ? 'var(--icon-color-focus)' : undefined
               }}
             />
           ),
@@ -374,21 +414,23 @@ const TaskTable: React.FC<IProps> = inject(
           filteredValue: filters?.id || null,
           filters: [],
           ellipsis: true,
-          width: 80,
+          width: 80
         },
         {
           dataIndex: 'type',
           key: 'type',
           title: formatMessage({
             id: 'odc.component.TaskTable.Type',
-            defaultMessage: '类型',
+            defaultMessage: '类型'
           }),
           //类型
           ellipsis: true,
           width: 100,
           render: (type, record) => {
-            return TaskTypeMap[type === TaskType.ALTER_SCHEDULE ? record?.parameters?.type : type];
-          },
+            return TaskTypeMap[
+              type === TaskType.ALTER_SCHEDULE ? record?.parameters?.type : type
+            ];
+          }
         },
         disableProjectCol
           ? null
@@ -397,7 +439,7 @@ const TaskTable: React.FC<IProps> = inject(
               key: 'projectIdList',
               title: formatMessage({
                 id: 'src.component.Task.component.TaskTable.CDB513DC',
-                defaultMessage: '项目',
+                defaultMessage: '项目'
               }),
               filters: projectOptions,
               filteredValue: filters?.projectIdList || null,
@@ -405,46 +447,48 @@ const TaskTable: React.FC<IProps> = inject(
               width: 80,
               render(project) {
                 return project?.name || '-';
-              },
+              }
             },
         {
           dataIndex: 'description',
           key: 'description',
           title: formatMessage({
             id: 'odc.component.TaskTable.TicketDescription',
-            defaultMessage: '工单描述',
+            defaultMessage: '工单描述'
           }),
           width: 100,
           //工单描述
           ellipsis: {
-            showTitle: false,
+            showTitle: false
           },
-          render: (description) => <Tooltip title={description}>{description || '-'}</Tooltip>,
+          render: (description) => (
+            <Tooltip title={description}>{description || '-'}</Tooltip>
+          )
         },
         {
           dataIndex: 'candidateApprovers',
           key: 'candidateApprovers',
           title: formatMessage({
             id: 'odc.component.TaskTable.CurrentHandler',
-            defaultMessage: '当前处理人',
+            defaultMessage: '当前处理人'
           }),
           //当前处理人
           ellipsis: true,
           width: 115,
           render: (candidateApprovers) =>
-            candidateApprovers?.map((item) => item.name)?.join(', ') || '-',
+            candidateApprovers?.map((item) => item.name)?.join(', ') || '-'
         },
         {
           dataIndex: 'creator',
           key: 'creator',
           title: formatMessage({
             id: 'odc.TaskManagePage.component.TaskTable.Created',
-            defaultMessage: '创建人',
+            defaultMessage: '创建人'
           }),
           //创建人
           width: 80,
           ellipsis: {
-            showTitle: false,
+            showTitle: false
           },
           filterDropdown: (props) => {
             return (
@@ -453,7 +497,7 @@ const TaskTable: React.FC<IProps> = inject(
                 selectedKeys={filters?.creator}
                 placeholder={formatMessage({
                   id: 'odc.TaskManagePage.component.TaskTable.EnterTheCreator',
-                  defaultMessage: '请输入创建人',
+                  defaultMessage: '请输入创建人'
                 })}
 
                 /*请输入创建人*/
@@ -464,7 +508,7 @@ const TaskTable: React.FC<IProps> = inject(
           filterIcon: (filtered) => (
             <SearchOutlined
               style={{
-                color: filtered ? 'var(--icon-color-focus)' : undefined,
+                color: filtered ? 'var(--icon-color-focus)' : undefined
               }}
             />
           ),
@@ -479,26 +523,26 @@ const TaskTable: React.FC<IProps> = inject(
                 roles={creator?.roleNames}
               />
             );
-          },
+          }
         },
         {
           dataIndex: 'createTime',
           key: 'createTime',
           title: formatMessage({
             id: 'odc.components.TaskManagePage.CreationTime',
-            defaultMessage: '创建时间',
+            defaultMessage: '创建时间'
           }),
           render: (time: number) => getLocalFormatDateTime(time),
           sorter: true,
           sortOrder: sorter?.columnKey === 'createTime' && sorter?.order,
-          width: 180,
+          width: 180
         },
         {
           dataIndex: 'status',
           key: 'status',
           title: formatMessage({
             id: 'odc.component.TaskTable.Status',
-            defaultMessage: '状态',
+            defaultMessage: '状态'
           }),
           //状态
           width: 120,
@@ -514,7 +558,7 @@ const TaskTable: React.FC<IProps> = inject(
               type={record?.type}
               progress={Math.floor(record.progressPercentage)}
             />
-          ),
+          )
         },
         {
           dataIndex: 'deal',
@@ -522,7 +566,7 @@ const TaskTable: React.FC<IProps> = inject(
           key: 'deal',
           title: formatMessage({
             id: 'odc.components.TaskManagePage.Operation',
-            defaultMessage: '操作',
+            defaultMessage: '操作'
           }),
           width: 150,
           render: (_, record) => (
@@ -533,11 +577,13 @@ const TaskTable: React.FC<IProps> = inject(
               onReloadList={props.onReloadList}
               onDetailVisible={props.onDetailVisible}
             />
-          ),
-        },
+          )
+        }
       ].filter(Boolean);
 
-      return !isClient() ? columns : columns.filter((item) => item.dataIndex !== 'creator');
+      return !isClient()
+        ? columns
+        : columns.filter((item) => item.dataIndex !== 'creator');
     }
     const handleChange = (params: ITableLoadOptions) => {
       loadData(params);
@@ -548,7 +594,7 @@ const TaskTable: React.FC<IProps> = inject(
     const isAll = [
       TaskPageType.ALL,
       TaskPageType.APPROVE_BY_CURRENT_USER,
-      TaskPageType.CREATED_BY_CURRENT_USER,
+      TaskPageType.CREATED_BY_CURRENT_USER
     ].includes(taskTabType);
     const menus = getTaskGroupLabels()?.filter((item) => !!item.groupName);
     const activeTaskLabel = getTaskLabelByType(taskTabType);
@@ -567,13 +613,13 @@ const TaskTable: React.FC<IProps> = inject(
               children: tasks?.map((item) => {
                 return {
                   key: item.value,
-                  label: item.label,
+                  label: item.label
                 };
               }),
-              type: 'group',
+              type: 'group'
             };
           })
-          .filter(Boolean),
+          .filter(Boolean)
       );
       return (
         <Space
@@ -585,7 +631,11 @@ const TaskTable: React.FC<IProps> = inject(
           {items?.map((i) => {
             return (
               <Space direction="vertical">
-                <Text type="secondary" style={{ color: 'var(--text-color-hint)' }} key={i.key}>
+                <Text
+                  type="secondary"
+                  style={{ color: 'var(--text-color-hint)' }}
+                  key={i.key}
+                >
                   {i?.label}
                 </Text>
                 <Space size={0} direction="vertical">
@@ -634,15 +684,15 @@ const TaskTable: React.FC<IProps> = inject(
                   {
                     formatMessage({
                       id: 'odc.component.TaskTable.NewWorkOrder',
-                      defaultMessage: '新建工单',
+                      defaultMessage: '新建工单'
                     }) /*新建工单*/
                   }
 
                   <DownOutlined style={{ color: '#fff' }} />
                 </Button>
               </Popover>
-            ),
-          },
+            )
+          }
         ];
       }
       return [
@@ -654,21 +704,21 @@ const TaskTable: React.FC<IProps> = inject(
               content: [
                 TaskPageType.APPLY_PROJECT_PERMISSION,
                 TaskPageType.APPLY_DATABASE_PERMISSION,
-                TaskPageType.APPLY_TABLE_PERMISSION,
+                TaskPageType.APPLY_TABLE_PERMISSION
               ].includes(taskTabType)
                 ? activeTaskLabel
                 : formatMessage(
                     {
                       id: 'odc.src.component.Task.component.TaskTable.NewActiveTasklabel',
-                      defaultMessage: '新建{activeTaskLabel}',
+                      defaultMessage: '新建{activeTaskLabel}'
                     },
-                    { activeTaskLabel },
+                    { activeTaskLabel }
                   ),
               //`新建${activeTaskLabel}`
               isPrimary: true,
               onClick: () => {
                 props.onMenuClick(taskTabType);
-              },
+              }
             }
           : {
               type: IOperationOptionType.dropdown,
@@ -680,9 +730,9 @@ const TaskTable: React.FC<IProps> = inject(
                       {formatMessage(
                         {
                           id: 'odc.src.component.Task.component.TaskTable.NewActiveTasklabel',
-                          defaultMessage: '新建{activeTaskLabel}',
+                          defaultMessage: '新建{activeTaskLabel}'
                         },
-                        { activeTaskLabel },
+                        { activeTaskLabel }
                       )}
 
                       <DownOutlined style={{ color: '#fff' }} />
@@ -698,9 +748,9 @@ const TaskTable: React.FC<IProps> = inject(
                     label: formatMessage(
                       {
                         id: 'src.component.Task.component.TaskTable.D4FAED98',
-                        defaultMessage: '导入{activeTaskLabel}',
+                        defaultMessage: '导入{activeTaskLabel}'
                       },
-                      { activeTaskLabel },
+                      { activeTaskLabel }
                     ),
                     onClick: () => {
                       setImportModalVisible(true);
@@ -709,15 +759,15 @@ const TaskTable: React.FC<IProps> = inject(
                     tooltip: isSubmitImport
                       ? formatMessage({
                           id: 'src.component.Task.component.TaskTable.55FC08BB',
-                          defaultMessage: '正在导入中',
+                          defaultMessage: '正在导入中'
                         })
-                      : '',
-                  },
-                ],
+                      : ''
+                  }
+                ]
               },
               onClick: () => {
                 props.onMenuClick(taskTabType);
-              },
+              }
             },
         isScheduleMigrateTask(taskTabType as any)
           ? {
@@ -732,13 +782,13 @@ const TaskTable: React.FC<IProps> = inject(
                   {...getExportConfig(selectedRow)}
                   dataSource={selectedRow}
                 />
-              ),
+              )
             }
           : null,
         [
           TaskPageType.ALL,
           TaskPageType.STRUCTURE_COMPARISON,
-          TaskPageType.MULTIPLE_ASYNC,
+          TaskPageType.MULTIPLE_ASYNC
         ]?.includes(taskTabType)
           ? null
           : {
@@ -753,8 +803,8 @@ const TaskTable: React.FC<IProps> = inject(
                   {...getTerminateConfig(selectedRow)}
                   dataSource={selectedRow}
                 />
-              ),
-            },
+              )
+            }
       ]?.filter(Boolean);
     };
 
@@ -767,16 +817,18 @@ const TaskTable: React.FC<IProps> = inject(
           enableResize
           operationContent={{
             options: getOperationContentOption(),
-            isNeedOccupyElement: projectArchived,
+            isNeedOccupyElement: projectArchived
           }}
           filterContent={{
             enabledSearch: false,
             filters: [
               {
                 name: 'executeTime',
-                defaultValue: urlStatusValue ? TIME_OPTION_ALL_TASK : executeTime,
+                defaultValue: urlStatusValue
+                  ? TIME_OPTION_ALL_TASK
+                  : executeTime,
                 dropdownWidth: 160,
-                options: TimeOptions,
+                options: TimeOptions
               },
               {
                 render: (params: ITableLoadOptions) => {
@@ -784,14 +836,14 @@ const TaskTable: React.FC<IProps> = inject(
                     <RangePicker
                       className={styles.rangePicker}
                       style={{
-                        width: '250px',
+                        width: '250px'
                       }}
                       size="small"
                       bordered={false}
                       suffixIcon={null}
                       defaultValue={executeDate as [Dayjs, Dayjs]}
                       showTime={{
-                        format: 'HH:mm:ss',
+                        format: 'HH:mm:ss'
                       }}
                       disabledDate={(current) => {
                         return current > dayjs();
@@ -799,14 +851,17 @@ const TaskTable: React.FC<IProps> = inject(
                       format="YYYY-MM-DD HH:mm:ss"
                       onChange={(value) => {
                         setExecuteDate(value);
-                        localStorage.setItem(TASK_EXECUTE_DATE_KEY, JSON.stringify(value));
+                        localStorage.setItem(
+                          TASK_EXECUTE_DATE_KEY,
+                          JSON.stringify(value)
+                        );
                       }}
                     />
                   );
                   return content;
-                },
-              },
-            ],
+                }
+              }
+            ]
           }}
           onLoad={loadData}
           onChange={handleChange}
@@ -821,14 +876,14 @@ const TaskTable: React.FC<IProps> = inject(
               ? false
               : {
                   current: currentTask?.page?.number,
-                  total: currentTask?.page?.totalElements,
-                },
+                  total: currentTask?.page?.totalElements
+                }
           }}
           rowSelecter={
             [
               TaskPageType.ALL,
               TaskPageType.STRUCTURE_COMPARISON,
-              TaskPageType.MULTIPLE_ASYNC,
+              TaskPageType.MULTIPLE_ASYNC
             ]?.includes(taskTabType)
               ? null
               : rowSelection
@@ -836,7 +891,7 @@ const TaskTable: React.FC<IProps> = inject(
           showSelectedInfoBar={false}
         />
 
-        <ImportModal
+        {/* <ImportModal
           taskType={taskTabType as any}
           open={importModalVisible}
           onCancel={() => setImportModalVisible(false)}
@@ -845,9 +900,9 @@ const TaskTable: React.FC<IProps> = inject(
             setImportProjectId(projectId);
             debounceSubmit(scheduleTaskImportRequest, previewData);
           }}
-        />
+        /> */}
       </>
     );
-  }),
+  })
 );
 export default TaskTable;

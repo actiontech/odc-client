@@ -19,13 +19,13 @@ import {
   getCycleTaskList,
   getTaskFlowList,
   getTaskList,
-  getTaskMetaInfo,
+  getTaskMetaInfo
 } from '@/common/network/task';
 import type {
   IDataArchiveJobParameters,
   IMaskPolicy,
   IResponseData,
-  ISqlPlayJobParameters,
+  ISqlPlayJobParameters
 } from '@/d.ts';
 import {
   ICycleTaskRecord,
@@ -34,7 +34,7 @@ import {
   TaskRecord,
   TaskRecordParameters,
   TaskStatus,
-  TaskType,
+  TaskType
 } from '@/d.ts';
 import tracert from '@/util/tracert';
 import { isUndefined } from 'lodash';
@@ -122,7 +122,7 @@ export class TaskStore {
     taskPageType?: TaskPageType,
     taskPageScope?: TaskPageScope,
     taskId?: number,
-    taskType?: TaskType,
+    taskType?: TaskType
   ) {
     if (!isUndefined(taskPageType)) {
       this.changeTaskPageType(taskPageType);
@@ -193,7 +193,9 @@ export class TaskStore {
     page?: number;
     size?: number;
   }) => {
-    const res = await getCycleTaskList<ISqlPlayJobParameters | IDataArchiveJobParameters>(params);
+    const res = await getCycleTaskList<
+      ISqlPlayJobParameters | IDataArchiveJobParameters
+    >(params);
     return res;
   };
 

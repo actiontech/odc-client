@@ -19,7 +19,7 @@ import { Level } from './sensitiveColumn';
 export enum SensitiveRuleType {
   PATH = 'PATH',
   REGEX = 'REGEX',
-  GROOVY = 'GROOVY',
+  GROOVY = 'GROOVY'
 }
 export interface ISensitiveRule {
   id?: number;

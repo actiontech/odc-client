@@ -51,10 +51,10 @@ class SelectPackagePLModal extends Component<IProps> {
     const { visible, onCancel, plList } = this.props;
     const formItemLayout = {
       labelCol: { span: 6 },
-      wrapperCol: { span: 14 },
+      wrapperCol: { span: 14 }
     };
     const initialValues = {
-      plKey: plList?.[0]?.key,
+      plKey: plList?.[0]?.key
     };
 
     if (!plList || !plList.length) {
@@ -68,27 +68,32 @@ class SelectPackagePLModal extends Component<IProps> {
         destroyOnClose
         title={formatMessage({
           id: 'odc.component.SelectPackagePLModal.SelectPlObject',
-          defaultMessage: '选择 PL 对象',
+          defaultMessage: '选择 PL 对象'
         })}
         open={visible}
         onOk={this.save}
         onCancel={onCancel}
       >
-        <Form {...formItemLayout} hideRequiredMark initialValues={initialValues} ref={this.formRef}>
+        <Form
+          {...formItemLayout}
+          hideRequiredMark
+          initialValues={initialValues}
+          ref={this.formRef}
+        >
           <Form.Item
             name="plKey"
             label={formatMessage({
               id: 'odc.component.SelectPackagePLModal.PlObject',
-              defaultMessage: 'PL 对象',
+              defaultMessage: 'PL 对象'
             })}
             rules={[
               {
                 required: true,
                 message: formatMessage({
                   id: 'workspace.window.createPackage.packageName.required',
-                  defaultMessage: '程序包不能为空',
-                }),
-              },
+                  defaultMessage: '程序包不能为空'
+                })
+              }
             ]}
           >
             <Select>

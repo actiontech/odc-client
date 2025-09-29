@@ -34,7 +34,14 @@ interface IProps {
   onClick?: () => void;
 }
 
-export default function ListItem({ title, actionSize, desc, icon, actions, onClick }: IProps) {
+export default function ListItem({
+  title,
+  actionSize,
+  desc,
+  icon,
+  actions,
+  onClick
+}: IProps) {
   actionSize = actionSize || 1;
 
   return (
@@ -53,7 +60,11 @@ export default function ListItem({ title, actionSize, desc, icon, actions, onCli
           <Action.Group ellipsisIcon="vertical" size={actionSize || 1}>
             {actions?.map((action, i) => {
               return (
-                <Action.Link tooltip={action.title} key={i} onClick={action.onClick}>
+                <Action.Link
+                  // tooltip={action.title}
+                  key={i}
+                  onClick={action.onClick}
+                >
                   {actionSize < i + 1 ? (
                     action.title
                   ) : (

@@ -43,7 +43,7 @@ const ApplyTablePermissionButton: React.FC<IProps> = inject('modalStore')(
         <ApplyTablePermissionCreateModal projectId={projectId} />
       </>
     );
-  }),
+  })
 );
 
 export default ApplyTablePermissionButton;

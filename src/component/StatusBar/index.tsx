@@ -22,7 +22,14 @@ import styles from './index.less';
 
 export interface IStatusBar {
   type?: 'COMPILE' | 'RUN' | 'DEBUG';
-  status: 'SUCCESS' | 'FAIL' | 'RUNNING' | 'WARNING' | 'COMPLETED' | 'TERMINATED' | '';
+  status:
+    | 'SUCCESS'
+    | 'FAIL'
+    | 'RUNNING'
+    | 'WARNING'
+    | 'COMPLETED'
+    | 'TERMINATED'
+    | '';
   startTime?: number;
   endTime?: number;
 }
@@ -32,29 +39,47 @@ interface IProps {
 }
 
 const typeTextMap = {
-  COMPILE: formatMessage({ id: 'odc.components.PLPage.statusBar.Compile', defaultMessage: '编译' }),
-  DEBUG: formatMessage({ id: 'odc.components.PLPage.statusBar.Run', defaultMessage: '运行' }),
-  RUN: formatMessage({ id: 'odc.components.PLPage.statusBar.Run', defaultMessage: '运行' }),
+  COMPILE: formatMessage({
+    id: 'odc.components.PLPage.statusBar.Compile',
+    defaultMessage: '编译'
+  }),
+  DEBUG: formatMessage({
+    id: 'odc.components.PLPage.statusBar.Run',
+    defaultMessage: '运行'
+  }),
+  RUN: formatMessage({
+    id: 'odc.components.PLPage.statusBar.Run',
+    defaultMessage: '运行'
+  })
 };
 
 const statusTextMap = {
   FAIL: formatMessage({
     id: 'odc.components.PLPage.statusBar.AbnormalTermination',
-    defaultMessage: '异常终止',
+    defaultMessage: '异常终止'
   }),
 
   SUCCESS: formatMessage({
     id: 'odc.components.PLPage.statusBar.Complete',
-    defaultMessage: '完成',
+    defaultMessage: '完成'
   }),
-  RUNNING: formatMessage({ id: 'odc.components.PLPage.statusBar.Medium', defaultMessage: '中' }),
+  RUNNING: formatMessage({
+    id: 'odc.components.PLPage.statusBar.Medium',
+    defaultMessage: '中'
+  }),
   WARNING: formatMessage({
     id: 'odc.components.PLPage.statusBar.ManualTermination',
-    defaultMessage: '手动终止',
+    defaultMessage: '手动终止'
   }),
 
-  COMPLETED: formatMessage({ id: 'odc.component.StatusBar.Complete', defaultMessage: '完成' }), //完成
-  TERMINATED: formatMessage({ id: 'odc.component.StatusBar.Termination', defaultMessage: '终止' }), //终止
+  COMPLETED: formatMessage({
+    id: 'odc.component.StatusBar.Complete',
+    defaultMessage: '完成'
+  }), //完成
+  TERMINATED: formatMessage({
+    id: 'odc.component.StatusBar.Termination',
+    defaultMessage: '终止'
+  }) //终止
 };
 
 const antdTypeMap: any = {
@@ -63,7 +88,7 @@ const antdTypeMap: any = {
   RUNNING: 'processing',
   WARNING: 'warning',
   COMPLETED: 'success',
-  TERMINATED: 'warning',
+  TERMINATED: 'warning'
 };
 
 const StatusBar: React.FC<IProps> = function (props) {
@@ -76,18 +101,28 @@ const StatusBar: React.FC<IProps> = function (props) {
   return (
     <div className={styles.footer}>
       <span>
-        {formatMessage({ id: 'odc.components.PLPage.statusBar.Status', defaultMessage: '状态：' })}
+        {formatMessage({
+          id: 'odc.components.PLPage.statusBar.Status',
+          defaultMessage: '状态：'
+        })}
 
         <Badge
           style={{ fontSize: 12 }}
           status={antdTypeMap[status]}
-          text={<span style={{ fontSize: 12 }}>{typeTextMap[type] + statusTextMap[status]}</span>}
+          text={
+            <span style={{ fontSize: 12 }}>
+              {typeTextMap[type] + statusTextMap[status]}
+            </span>
+          }
         />
       </span>
       <Divider type="vertical" />
       <span>
         {typeTextMap[type]}
-        {formatMessage({ id: 'odc.components.PLPage.statusBar.Time', defaultMessage: '时间：' })}
+        {formatMessage({
+          id: 'odc.components.PLPage.statusBar.Time',
+          defaultMessage: '时间：'
+        })}
         <TimeText beginTime={startTime} endTime={endTime} />
       </span>
     </div>

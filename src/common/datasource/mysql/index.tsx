@@ -30,41 +30,41 @@ const tableConfig = {
     id: 'int',
     name: 'varchar',
     date: 'datetime',
-    time: 'timestamp',
-  },
+    time: 'timestamp'
+  }
 };
 
 const functionConfig: IDataSourceModeConfig['schema']['func'] = {
   params: ['paramName', 'dataType', 'dataLength'],
   defaultValue: {
-    dataLength: 45,
+    dataLength: 45
   },
   dataNature: true,
   sqlSecurity: true,
-  deterministic: true,
+  deterministic: true
 };
 
 const procedureConfig: IDataSourceModeConfig['schema']['proc'] = {
   params: ['paramName', 'paramMode', 'dataType', 'dataLength'],
   defaultValue: {
-    dataLength: 45,
+    dataLength: 45
   },
   dataNature: true,
   sqlSecurity: true,
-  deterministic: true,
+  deterministic: true
 };
 
 const items: Record<ConnectType.MYSQL, IDataSourceModeConfig> = {
   [ConnectType.MYSQL]: {
     connection: {
       address: {
-        items: ['ip', 'port'],
+        items: ['ip', 'port']
       },
       account: true,
       sys: false,
       ssl: false,
       jdbcDoc:
-        'https://dev.mysql.com/doc/connector-j/en/connector-j-reference-configuration-properties.html',
+        'https://dev.mysql.com/doc/connector-j/en/connector-j-reference-configuration-properties.html'
     },
     features: {
       task: [
@@ -78,7 +78,7 @@ const items: Record<ConnectType.MYSQL, IDataSourceModeConfig> = {
         TaskType.EXPORT_RESULT_SET,
         TaskType.STRUCTURE_COMPARISON,
         TaskType.MULTIPLE_ASYNC,
-        TaskType.LOGICAL_DATABASE_CHANGE,
+        TaskType.LOGICAL_DATABASE_CHANGE
       ],
       obclient: true,
       recycleBin: false,
@@ -90,21 +90,21 @@ const items: Record<ConnectType.MYSQL, IDataSourceModeConfig> = {
       sqlconsole: true,
       export: {
         fileLimit: false,
-        snapshot: false,
-      },
+        snapshot: false
+      }
     },
     schema: {
       table: tableConfig,
       func: functionConfig,
       proc: procedureConfig,
-      innerSchema: ['information_schema', 'test', 'mysql'],
+      innerSchema: ['information_schema', 'test', 'mysql']
     },
     sql: {
       language: 'mysql',
       escapeChar: '`',
-      caseSensitivity: true,
-    },
-  },
+      caseSensitivity: true
+    }
+  }
 };
 
 if (haveOCP()) {

@@ -18,7 +18,14 @@ import Toolbar from '@/component/Toolbar';
 import { formatMessage } from '@/util/intl';
 import { DeleteOutlined, PlusOutlined, SyncOutlined } from '@ant-design/icons';
 import { DataGridRef } from '@oceanbase-odc/ob-react-data-grid';
-import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
 import EditableTable from '../../EditableTable';
 import TableContext from '../TableContext';
 import { useColumns } from './columns';
@@ -32,7 +39,7 @@ import EditToolbar from '../EditToolbar';
 import { removeGridParams } from '../helper';
 import { TableColumn } from '../interface';
 import TableCardLayout from '../TableCardLayout';
-import styles from './index.less';
+import { ColumnsContentStyleWrapper } from './style';
 interface IProps {
   isExternalTable?: boolean;
 }
@@ -51,7 +58,7 @@ export const defaultColumn: TableColumn = {
   unsigned: null,
   zerofill: null,
   currentTime: false,
-  enumMembers: [],
+  enumMembers: []
 };
 
 const Columns: React.FC<IProps> = function ({ isExternalTable }) {
@@ -74,7 +81,7 @@ const Columns: React.FC<IProps> = function ({ isExternalTable }) {
         ...column,
         key: isNil(column.ordinalPosition)
           ? `${column.name || ''}@@${idx}`
-          : column.ordinalPosition,
+          : column.ordinalPosition
       };
     });
   }, [displayColumns]);
@@ -95,14 +102,14 @@ const Columns: React.FC<IProps> = function ({ isExternalTable }) {
       setSelectedRowIdx(
         keys.map((key) => {
           return rows.findIndex((row) => row.key === key);
-        }),
+        })
       );
     },
-    [rows],
+    [rows]
   );
 
   const onRowsChange = useCallback((rows) => {
-    let newRows: any[] = cloneDeep(rows);
+    const newRows: any[] = cloneDeep(rows);
     newRows.forEach((row) => {
       /**
        * 自增列去除表达式和默认值
@@ -119,10 +126,10 @@ const Columns: React.FC<IProps> = function ({ isExternalTable }) {
   }, []);
   const haveColumnExtra = !!ColumnExtraComponent;
   return (
-    <div className={styles.main}>
+    <ColumnsContentStyleWrapper className="main">
       <div
-        className={classnames(styles.content, {
-          [styles.contentWithExtraColumn]: haveColumnExtra,
+        className={classnames('content', {
+          contentWithExtraColumn: haveColumnExtra
         })}
       >
         <TableCardLayout
@@ -134,15 +141,16 @@ const Columns: React.FC<IProps> = function ({ isExternalTable }) {
               }}
               onOk={async () => {
                 const newColumns = cloneDeep(editColumns);
-                const { sql: updateTableDML, tip } = await generateUpdateTableDDL(
-                  {
-                    ...pageContext.table,
-                    columns: newColumns,
-                  },
-                  pageContext.table,
-                  session?.sessionId,
-                  session?.database?.dbName,
-                );
+                const { sql: updateTableDML, tip } =
+                  await generateUpdateTableDDL(
+                    {
+                      ...pageContext.table,
+                      columns: newColumns
+                    },
+                    pageContext.table,
+                    session?.sessionId,
+                    session?.database?.dbName
+                  );
 
                 if (!updateTableDML) {
                   return;
@@ -155,7 +163,7 @@ const Columns: React.FC<IProps> = function ({ isExternalTable }) {
                     setEditColumns(null);
                   },
                   tip,
-                  () => setEditColumns(null),
+                  () => setEditColumns(null)
                 );
               }}
             >
@@ -165,14 +173,16 @@ const Columns: React.FC<IProps> = function ({ isExternalTable }) {
                     <Toolbar.Button
                       text={formatMessage({
                         id: 'workspace.header.create',
-                        defaultMessage: '新建',
+                        defaultMessage: '新建'
                       })}
                       icon={PlusOutlined}
                       onClick={() => {
                         if (editMode) {
                           setEditColumns(displayColumns.concat(defaultColumn));
                         } else {
-                          tableContext.setColumns(tableContext.columns.concat(defaultColumn));
+                          tableContext.setColumns(
+                            tableContext.columns.concat(defaultColumn)
+                          );
                         }
                       }}
                     />
@@ -181,13 +191,13 @@ const Columns: React.FC<IProps> = function ({ isExternalTable }) {
                       text={
                         formatMessage({
                           id: 'odc.CreateTable.Columns.Delete',
-                          defaultMessage: '删除',
+                          defaultMessage: '删除'
                         }) //删除
                       }
                       icon={DeleteOutlined}
                       disabled={!selectedRowsIdx?.length}
                       onClick={() => {
-                        let newRows = [...rows]?.filter((row, index) => {
+                        const newRows = [...rows]?.filter((row, index) => {
                           return !selectedRowsIdx?.includes(index);
                         });
                         if (editMode) {
@@ -205,7 +215,7 @@ const Columns: React.FC<IProps> = function ({ isExternalTable }) {
                     icon={<SyncOutlined />}
                     text={formatMessage({
                       id: 'odc.components.ShowTableBaseInfoForm.Refresh',
-                      defaultMessage: '刷新',
+                      defaultMessage: '刷新'
                     })}
                     /* 刷新 */ onClick={pageContext.onRefresh}
                   />
@@ -236,7 +246,7 @@ const Columns: React.FC<IProps> = function ({ isExternalTable }) {
         </TableCardLayout>
       </div>
       {haveColumnExtra && (
-        <div className={styles.bottom}>
+        <div className="bottom">
           <ColumnExtraComponent
             originColumns={columns}
             column={rows[focusRowIdx]}
@@ -253,7 +263,7 @@ const Columns: React.FC<IProps> = function ({ isExternalTable }) {
           />
         </div>
       )}
-    </div>
+    </ColumnsContentStyleWrapper>
   );
 };
 

@@ -29,8 +29,11 @@ import React, { useEffect, useState } from 'react';
 import SessionContext from '../context';
 import { DEFALT_WIDTH } from './const';
 import { IDatabase } from '@/d.ts/database';
-import styles from './index.less';
-import SessionDropdown, { ISessionDropdownFiltersProps } from './SessionDropdown';
+import SessionDropdown, {
+  ISessionDropdownFiltersProps
+} from './SessionDropdown';
+import { EllipsisStyleWrapper } from './style';
+import { BasicSelect } from '@actiontech/dms-kit';
 
 interface IProps {
   value?: number;
@@ -56,25 +59,31 @@ const SelectItem: React.FC<IProps> = ({
   width,
   placeholder = formatMessage({
     id: 'src.page.Workspace.components.SessionContextWrap.SessionSelect.66A17FFD',
-    defaultMessage: '请选择',
+    defaultMessage: '请选择'
   }),
   disabled = false,
   onChange,
   isLogicalDatabase = false,
   datasourceMode = false,
-  projectMode = isLogicalDatabase,
+  projectMode = isLogicalDatabase
 }) => {
   const { data: database, run: runDatabase } = useRequest(getDatabase, {
-    manual: true,
+    manual: true
   });
 
-  const { data: dataSource, run: runDataSource } = useRequest(getConnectionDetail, {
-    manual: true,
-  });
+  const { data: dataSource, run: runDataSource } = useRequest(
+    getConnectionDetail,
+    {
+      manual: true
+    }
+  );
 
-  const { data: logicalDatabase, run: runLogicalDatabase } = useRequest(logicalDatabaseDetail, {
-    manual: true,
-  });
+  const { data: logicalDatabase, run: runLogicalDatabase } = useRequest(
+    logicalDatabaseDetail,
+    {
+      manual: true
+    }
+  );
   useEffect(() => {
     if (value) {
       if (datasourceMode) {
@@ -89,17 +98,28 @@ const SelectItem: React.FC<IProps> = ({
     }
   }, [value]);
 
-  const dbIcon = getDataSourceStyleByConnectType(database?.data?.dataSource?.type)?.dbIcon;
-  const dataSourceIcon = getDataSourceStyleByConnectType(dataSource?.type)?.icon;
+  const dbIcon = getDataSourceStyleByConnectType(
+    database?.data?.dataSource?.type
+  )?.dbIcon;
+  const dataSourceIcon = getDataSourceStyleByConnectType(
+    dataSource?.type
+  )?.icon;
 
   const getPlaceholder = () => {
     if (!value) return placeholder;
     if (datasourceMode && dataSource) {
       return (
-        <Space size={1} style={{ color: 'var(--text-color-primary)', width: '100%' }}>
+        <Space
+          size={1}
+          style={{ color: 'var(--text-color-primary)', width: '100%' }}
+        >
           <Icon
             component={dataSourceIcon?.component}
-            style={{ fontSize: 16, marginRight: 4, verticalAlign: 'textBottom' }}
+            style={{
+              fontSize: 16,
+              marginRight: 4,
+              verticalAlign: 'textBottom'
+            }}
           />
           {dataSource?.name}
         </Space>
@@ -110,7 +130,7 @@ const SelectItem: React.FC<IProps> = ({
         return <LoadingOutlined />;
       }
       const dbIcon = getDataSourceStyleByConnectType(
-        logicalDatabase?.data?.dialectType as any,
+        logicalDatabase?.data?.dialectType as any
       )?.dbIcon;
       return (
         <div
@@ -118,7 +138,7 @@ const SelectItem: React.FC<IProps> = ({
             color: 'var(--text-color-primary)',
             width: '100%',
             display: 'flex',
-            flexDirection: 'row',
+            flexDirection: 'row'
           }}
         >
           <>
@@ -128,18 +148,25 @@ const SelectItem: React.FC<IProps> = ({
             />
             <Icon
               component={dbIcon?.component}
-              style={{ fontSize: 16, marginRight: 4, verticalAlign: 'textBottom' }}
+              style={{
+                fontSize: 16,
+                marginRight: 4,
+                verticalAlign: 'textBottom'
+              }}
             />
-            <span className={styles.ellipsis} title={logicalDatabase?.data?.name}>
+            <EllipsisStyleWrapper title={logicalDatabase?.data?.name}>
               {logicalDatabase?.data?.name}
-            </span>
+            </EllipsisStyleWrapper>
           </>
         </div>
       );
     }
     if (!datasourceMode && database?.data) {
       return (
-        <Space size={1} style={{ color: 'var(--text-color-primary)', width: '100%' }}>
+        <Space
+          size={1}
+          style={{ color: 'var(--text-color-primary)', width: '100%' }}
+        >
           <>
             <RiskLevelLabel
               content={database?.data?.environment?.name}
@@ -148,7 +175,11 @@ const SelectItem: React.FC<IProps> = ({
 
             <Icon
               component={dbIcon?.component}
-              style={{ fontSize: 16, marginRight: 4, verticalAlign: 'textBottom' }}
+              style={{
+                fontSize: 16,
+                marginRight: 4,
+                verticalAlign: 'textBottom'
+              }}
             />
           </>
           {database?.data?.name}
@@ -165,9 +196,13 @@ const SelectItem: React.FC<IProps> = ({
         datasourceMode,
         projectMode,
         isLogicalDatabase,
-        selectSession(databaseId: number, datasourceId: number, database?: IDatabase) {
+        selectSession(
+          databaseId: number,
+          datasourceId: number,
+          database?: IDatabase
+        ) {
           onChange(datasourceMode ? datasourceId : databaseId, database);
-        },
+        }
       }}
     >
       <Space style={{ width: '100%' }} direction="vertical">
@@ -179,12 +214,11 @@ const SelectItem: React.FC<IProps> = ({
           taskType={taskType}
           disabled={disabled}
         >
-          <Select
+          <BasicSelect
             disabled={disabled}
             placeholder={getPlaceholder()}
             style={{ width: width || DEFALT_WIDTH }}
             open={false}
-            className={styles.select}
           />
         </SessionDropdown>
         {value && database?.data ? (
@@ -197,7 +231,7 @@ const SelectItem: React.FC<IProps> = ({
               <span>
                 {formatMessage({
                   id: 'src.page.Workspace.components.SessionContextWrap.SessionSelect.5AC43B24' /*项目：*/,
-                  defaultMessage: '项目：',
+                  defaultMessage: '项目：'
                 })}
                 {database?.data?.project?.name}
               </span>
@@ -206,7 +240,7 @@ const SelectItem: React.FC<IProps> = ({
             <span>
               {formatMessage({
                 id: 'src.page.Workspace.components.SessionContextWrap.SessionSelect.7780C356' /*数据源：*/,
-                defaultMessage: '数据源：',
+                defaultMessage: '数据源：'
               })}
               {database?.data?.dataSource?.name}
             </span>

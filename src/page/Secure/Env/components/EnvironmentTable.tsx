@@ -21,7 +21,7 @@ import {
   ITableFilter,
   ITableInstance,
   ITableLoadOptions,
-  ITablePagination,
+  ITablePagination
 } from '@/component/CommonTable/interface';
 import { IManagerIntegration } from '@/d.ts';
 import { IEnvironment } from '@/d.ts/environment';
@@ -44,7 +44,7 @@ const EnvironmentTable: React.FC<IEnvironmentProps> = ({
   currentEnvironment,
   integrations,
   integrationsIdMap,
-  ruleType,
+  ruleType
 }) => {
   const tableRef = useRef<ITableInstance>();
   const argsRef = useRef<ITableFilter>();
@@ -55,12 +55,14 @@ const EnvironmentTable: React.FC<IEnvironmentProps> = ({
       value: string;
     }[]
   >([]);
-  const [supportedDialectTypeFilters, setSupportedDialectTypeFilters] = useState([]);
+  const [supportedDialectTypeFilters, setSupportedDialectTypeFilters] =
+    useState([]);
   const [rules, setRules] = useState<IRule[]>([]);
   const [selectedRule, setSelectedRule] = useState<IRule>();
   const [pagination, setPagination] = useState<ITablePagination>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [editRuleDrawerVisible, setEditRuleDrawerVisible] = useState<boolean>(false);
+  const [editRuleDrawerVisible, setEditRuleDrawerVisible] =
+    useState<boolean>(false);
   /**
    * 获取不同规范规则类型以及支持的数据源类型，用于筛选。
    */
@@ -69,14 +71,14 @@ const EnvironmentTable: React.FC<IEnvironmentProps> = ({
     setSubTypeFilters(
       rawData?.subTypes?.distinct?.map((d) => ({
         text: d,
-        value: d,
-      })),
+        value: d
+      }))
     );
     setSupportedDialectTypeFilters(
       rawData?.supportedDialectTypes?.distinct?.map((d) => ({
         text: d,
-        value: d,
-      })),
+        value: d
+      }))
     );
   };
   const getRules = async (args?: ITableLoadOptions) => {
@@ -88,29 +90,31 @@ const EnvironmentTable: React.FC<IEnvironmentProps> = ({
     const { subTypes, supportedDialectTypes, level, name } = filters ?? {};
     handleStatsRule();
     const rulesets = await listRules(currentEnvironment?.rulesetId, {
-      types: ruleType,
+      types: ruleType
     });
     let filteredRules: IRule[] = rulesets?.contents;
     originRules.current = rulesets?.contents;
     if (name && name?.length === 1) {
       filteredRules = filteredRules?.filter((item) =>
-        item?.metadata?.name?.toLowerCase()?.includes(name?.[0]?.toLowerCase()),
+        item?.metadata?.name?.toLowerCase()?.includes(name?.[0]?.toLowerCase())
       );
     }
     if (subTypes) {
       filteredRules = filteredRules?.filter((item) =>
-        item?.metadata?.subTypes?.some((subType) => subTypes?.includes(subType)),
+        item?.metadata?.subTypes?.some((subType) => subTypes?.includes(subType))
       );
     }
     if (supportedDialectTypes) {
       filteredRules = filteredRules?.filter((item) =>
         item?.appliedDialectTypes?.some((supportedDialectType) =>
-          supportedDialectTypes?.includes(supportedDialectType),
-        ),
+          supportedDialectTypes?.includes(supportedDialectType)
+        )
       );
     }
     if (level) {
-      filteredRules = filteredRules?.filter((item) => level?.includes(item?.level));
+      filteredRules = filteredRules?.filter((item) =>
+        level?.includes(item?.level)
+      );
     }
     setRules(filteredRules);
     if (pagination) {
@@ -124,27 +128,29 @@ const EnvironmentTable: React.FC<IEnvironmentProps> = ({
     const { subTypes, supportedDialectTypes, level, name } = filters ?? {};
     let filteredRules: IRule[] = originRules.current;
     argsRef.current = {
-      filters,
+      filters
     };
     if (name && name?.length === 1) {
       filteredRules = filteredRules?.filter((item) =>
-        item?.metadata?.name?.toLowerCase()?.includes(name?.[0]?.toLowerCase()),
+        item?.metadata?.name?.toLowerCase()?.includes(name?.[0]?.toLowerCase())
       );
     }
     if (subTypes) {
       filteredRules = filteredRules?.filter((item) =>
-        item?.metadata?.subTypes?.some((subType) => subTypes?.includes(subType)),
+        item?.metadata?.subTypes?.some((subType) => subTypes?.includes(subType))
       );
     }
     if (supportedDialectTypes) {
       filteredRules = filteredRules?.filter((item) =>
         item?.appliedDialectTypes?.some((supportedDialectType) =>
-          supportedDialectTypes?.includes(supportedDialectType),
-        ),
+          supportedDialectTypes?.includes(supportedDialectType)
+        )
       );
     }
     if (level) {
-      filteredRules = filteredRules?.filter((item) => level?.includes(item?.level));
+      filteredRules = filteredRules?.filter((item) =>
+        level?.includes(item?.level)
+      );
     }
     setRules(filteredRules);
     if (pagination) {
@@ -160,13 +166,17 @@ const EnvironmentTable: React.FC<IEnvironmentProps> = ({
     setEditRuleDrawerVisible(false);
   };
   const handleUpdateEnvironment = async (rule: IRule, fn?: () => void) => {
-    const flag = await updateRule(currentEnvironment?.rulesetId, selectedRule?.id, rule);
+    const flag = await updateRule(
+      currentEnvironment?.rulesetId,
+      selectedRule?.id,
+      rule
+    );
     if (flag) {
       message.success(
         formatMessage({
           id: 'odc.src.page.Secure.Env.components.SubmittedSuccessfully',
-          defaultMessage: '提交成功',
-        }), //'提交成功'
+          defaultMessage: '提交成功'
+        }) //'提交成功'
       );
       setEditRuleDrawerVisible(false);
       tableRef.current?.reload?.(argsRef.current || {});
@@ -174,34 +184,41 @@ const EnvironmentTable: React.FC<IEnvironmentProps> = ({
       message.error(
         formatMessage({
           id: 'odc.src.page.Secure.Env.components.SubmissionFailed',
-          defaultMessage: '提交失败',
-        }), //'提交失败'
+          defaultMessage: '提交失败'
+        }) //'提交失败'
       );
     }
   };
   const handleSwtichRuleStatus = async (rulesetId: number, rule: IRule) => {
-    tracert.click(!rule.enabled ? 'a3112.b64008.c330923.d367476' : 'a3112.b64008.c330923.d367477', {
-      ruleId: rule.id,
-    });
+    tracert.click(
+      !rule.enabled
+        ? 'a3112.b64008.c330923.d367476'
+        : 'a3112.b64008.c330923.d367477',
+      {
+        ruleId: rule.id
+      }
+    );
     const isCloseDisabledPLDebug =
-      rule?.metadata?.type === RuleType.SQL_CONSOLE && rule?.metadata?.id === 6 && rule?.enabled;
+      rule?.metadata?.type === RuleType.SQL_CONSOLE &&
+      rule?.metadata?.id === 6 &&
+      rule?.enabled;
     const switchRuleStatus = async () => {
       const successful =
         (await updateRule(rulesetId, rule.id, {
           ...rule,
-          enabled: !rule.enabled,
+          enabled: !rule.enabled
         })) || false;
       if (successful) {
         message.success(
           rule.enabled
             ? formatMessage({
                 id: 'src.page.Secure.Env.components.B398D211',
-                defaultMessage: '禁用成功',
+                defaultMessage: '禁用成功'
               })
             : formatMessage({
                 id: 'src.page.Secure.Env.components.666A8F25',
-                defaultMessage: '启用成功',
-              }),
+                defaultMessage: '启用成功'
+              })
         );
         tableRef.current?.reload(argsRef.current || {});
       } else {
@@ -209,12 +226,12 @@ const EnvironmentTable: React.FC<IEnvironmentProps> = ({
           rule.enabled
             ? formatMessage({
                 id: 'src.page.Secure.Env.components.8DBF10C0',
-                defaultMessage: '禁用失败',
+                defaultMessage: '禁用失败'
               })
             : formatMessage({
                 id: 'src.page.Secure.Env.components.C55A45B1',
-                defaultMessage: '启用失败',
-              }),
+                defaultMessage: '启用失败'
+              })
         );
       }
     };
@@ -222,20 +239,20 @@ const EnvironmentTable: React.FC<IEnvironmentProps> = ({
       return modal.confirm({
         title: formatMessage({
           id: 'src.page.Secure.Env.components.C11B3607',
-          defaultMessage: '确认禁用？',
+          defaultMessage: '确认禁用？'
         }), //'确认禁用？'
         centered: true,
         content: rule?.metadata?.description,
         cancelText: formatMessage({
           id: 'src.page.Secure.Env.components.3CCC8328',
-          defaultMessage: '取消',
+          defaultMessage: '取消'
         }), //'取消'
         okText: formatMessage({
           id: 'src.page.Secure.Env.components.8D575F5C',
-          defaultMessage: '确认',
+          defaultMessage: '确认'
         }), //'确认'
         onCancel: () => {},
-        onOk: switchRuleStatus,
+        onOk: switchRuleStatus
       });
     }
     switchRuleStatus();
@@ -245,7 +262,7 @@ const EnvironmentTable: React.FC<IEnvironmentProps> = ({
     supportedDialectTypeFilters,
     integrationsIdMap: integrationsIdMap,
     handleSwtichRuleStatus,
-    handleOpenEditModal,
+    handleOpenEditModal
   });
   const columns =
     ruleType === RuleType.SQL_CHECK
@@ -266,7 +283,7 @@ const EnvironmentTable: React.FC<IEnvironmentProps> = ({
               columns: columns,
               dataSource: rules,
               rowKey: 'id',
-              pagination: pagination || false,
+              pagination: pagination || false
             }}
           />
         </Spin>

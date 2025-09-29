@@ -18,16 +18,17 @@ import { TaskExecStrategy } from '@/d.ts';
 import { isClient } from '@/util/env';
 import { formatMessage } from '@/util/intl';
 import { FieldTimeOutlined } from '@ant-design/icons';
-import { DatePicker, Form, Radio } from 'antd';
+import { Form, Radio } from 'antd';
 import React from 'react';
 import { disabledDate, disabledTime } from '@/util/utils';
+import { BasicDatePicker } from '@actiontech/dms-kit';
 
 interface IProps {}
 
 const TimerSelect: React.FC<IProps> = (props) => {
   const label = formatMessage({
     id: 'odc.components.TaskTimer.ExecutionMethodAfterTheApproval',
-    defaultMessage: '执行方式：审批完成后',
+    defaultMessage: '执行方式：审批完成后'
   });
   return (
     <>
@@ -37,7 +38,7 @@ const TimerSelect: React.FC<IProps> = (props) => {
             {
               formatMessage({
                 id: 'odc.components.TaskTimer.ExecuteNow',
-                defaultMessage: '立即执行',
+                defaultMessage: '立即执行'
               }) /*立即执行*/
             }
           </Radio>
@@ -46,7 +47,7 @@ const TimerSelect: React.FC<IProps> = (props) => {
               {
                 formatMessage({
                   id: 'odc.components.TaskTimer.ScheduledExecution',
-                  defaultMessage: '定时执行',
+                  defaultMessage: '定时执行'
                 }) /*定时执行*/
               }
             </Radio>
@@ -55,7 +56,7 @@ const TimerSelect: React.FC<IProps> = (props) => {
             {
               formatMessage({
                 id: 'odc.components.TaskTimer.ManualExecution',
-                defaultMessage: '手动执行',
+                defaultMessage: '手动执行'
               }) /*手动执行*/
             }
           </Radio>
@@ -70,25 +71,25 @@ const TimerSelect: React.FC<IProps> = (props) => {
                 name="executionTime"
                 label={formatMessage({
                   id: 'odc.components.TaskTimer.ExecutionTime',
-                  defaultMessage: '执行时间',
+                  defaultMessage: '执行时间'
                 })} /*执行时间*/
                 rules={[
                   {
                     required: true,
                     message: formatMessage({
                       id: 'odc.components.TaskTimer.SelectAnExecutionTime',
-                      defaultMessage: '请选择执行时间',
-                    }), //请选择执行时间
-                  },
+                      defaultMessage: '请选择执行时间'
+                    }) //请选择执行时间
+                  }
                 ]}
                 extra={
                   formatMessage({
                     id: 'odc.components.TaskTimer.IfTheApprovalIsNot',
-                    defaultMessage: '若执行时间前未完成审批，则任务将终止不执行',
+                    defaultMessage: '若执行时间前未完成审批，则任务将终止不执行'
                   }) //若执行时间前未完成审批，则任务将终止不执行
                 }
               >
-                <DatePicker
+                <BasicDatePicker
                   disabledDate={disabledDate}
                   disabledTime={disabledTime}
                   showTime

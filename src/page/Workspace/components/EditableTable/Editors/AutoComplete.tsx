@@ -15,19 +15,23 @@
  */
 
 import { EditorProps } from '@oceanbase-odc/ob-react-data-grid';
-import { AutoComplete, Select } from 'antd';
+import { AutoComplete } from 'antd';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import AntdEditorWrap from './AntdEditorWrap';
-
-const Option = Select.Option;
 
 interface IProps<T> extends EditorProps<T> {
   options: string[];
   multiple: boolean;
 }
 
-function AutoCompleteEditor<T>({ row, onRowChange, column, width, options }: IProps<T>) {
+function AutoCompleteEditor<T>({
+  row,
+  onRowChange,
+  column,
+  width,
+  options
+}: IProps<T>) {
   const [open, setOpen] = useState(false);
   const { key } = column;
   const editorRef = useRef<any>(null);
@@ -40,10 +44,10 @@ function AutoCompleteEditor<T>({ row, onRowChange, column, width, options }: IPr
   }, [editorRef]);
   const innerOnChange = useCallback(
     (value: string | string[]) => {
-      let realValue = value;
+      const realValue = value;
       onRowChange({ ...row, [key]: realValue });
     },
-    [onRowChange],
+    [onRowChange]
   );
   return (
     <AntdEditorWrap>
@@ -60,9 +64,9 @@ function AutoCompleteEditor<T>({ row, onRowChange, column, width, options }: IPr
           onRowChange(
             {
               ...row,
-              [key]: v,
+              [key]: v
             },
-            true,
+            true
           );
         }}
         options={options
@@ -74,7 +78,7 @@ function AutoCompleteEditor<T>({ row, onRowChange, column, width, options }: IPr
           })
           .map((value) => {
             return {
-              value,
+              value
             };
           })}
         onChange={innerOnChange}

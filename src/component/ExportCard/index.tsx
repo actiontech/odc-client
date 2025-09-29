@@ -44,7 +44,7 @@ const ExportCard: React.FC<IProps> = function ({
   indeterminate,
   checkAll,
   selectAllPlacement = 'search',
-  onSelectAll,
+  onSelectAll
 }) {
   const [searchValue, _setSearchValue] = useState('');
   function setSearchValue(v) {
@@ -52,7 +52,9 @@ const ExportCard: React.FC<IProps> = function ({
   }
 
   return (
-    <div className={classnames(styles.card, { [styles.cardDisabled]: disabled })}>
+    <div
+      className={classnames(styles.card, { [styles.cardDisabled]: disabled })}
+    >
       <div className={styles.header}>
         <div>
           {hasSelectAll && selectAllPlacement !== 'search' && (
@@ -80,7 +82,7 @@ const ExportCard: React.FC<IProps> = function ({
         <Input.Search
           placeholder={formatMessage({
             id: 'odc.ExportSelecter.ExportCard.SearchKeywords',
-            defaultMessage: '搜索关键字',
+            defaultMessage: '搜索关键字'
           })} /*搜索关键字*/
           style={{ width: '100%' }}
           onSearch={(v) => {

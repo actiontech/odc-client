@@ -1,5 +1,8 @@
 import { formatMessage } from '@/util/intl';
-import { getDataSourceModeConfig, getDataSourceStyleByConnectType } from '@/common/datasource';
+import {
+  getDataSourceModeConfig,
+  getDataSourceStyleByConnectType
+} from '@/common/datasource';
 import { listDatabases } from '@/common/network/database';
 import { createLogicalDatabase } from '@/common/network/logicalDatabase';
 import HelpDoc from '@/component/helpDoc';
@@ -24,7 +27,7 @@ import {
   SelectProps,
   Space,
   Tooltip,
-  Typography,
+  Typography
 } from 'antd';
 import { useForm, useWatch } from 'antd/lib/form/Form';
 import { DefaultOptionType } from 'antd/lib/select';
@@ -36,7 +39,7 @@ const ProjectDatabaseSelector: React.FC<{
 }> = ({ width = 320, databaseOptions }) => {
   const defaultPlaceholder = formatMessage({
     id: 'src.page.Project.Database.components.LogicDatabase.FEB42CBB',
-    defaultMessage: '请选择',
+    defaultMessage: '请选择'
   });
   const [projectName, setProjectName] = useState<string>();
   const [datasourceName, setDatasourceName] = useState<string>();
@@ -50,12 +53,12 @@ const ProjectDatabaseSelector: React.FC<{
           title={formatMessage({
             id: 'src.page.Project.Database.components.LogicDatabase.F204B3C1',
             defaultMessage:
-              '基准库是逻辑库中包含的一个数据库，用于指定环境和类型；系统可根据基准库的名称、环境、类型等信息，默认选中逻辑库可能包含的数据库。',
+              '基准库是逻辑库中包含的一个数据库，用于指定环境和类型；系统可根据基准库的名称、环境、类型等信息，默认选中逻辑库可能包含的数据库。'
           })}
         >
           {formatMessage({
             id: 'src.page.Project.Database.components.LogicDatabase.8BBF2F3D',
-            defaultMessage: '基准库',
+            defaultMessage: '基准库'
           })}
         </HelpDoc>
       }
@@ -70,21 +73,26 @@ const ProjectDatabaseSelector: React.FC<{
           }}
           showSearch
           filterOption={(value, option) => {
-            return option?.name?.toLowerCase()?.indexOf(value?.toLowerCase()) >= 0;
+            return (
+              option?.name?.toLowerCase()?.indexOf(value?.toLowerCase()) >= 0
+            );
           }}
           style={{
-            width,
+            width
           }}
           options={databaseOptions}
         />
       </Form.Item>
       {(projectName || datasourceName) && (
         <div style={{ marginTop: '4px' }}>
-          <Space split={<Divider type="vertical" />} style={{ color: 'var(--text-color-hint)' }}>
+          <Space
+            split={<Divider type="vertical" />}
+            style={{ color: 'var(--text-color-hint)' }}
+          >
             <Typography.Text type="secondary">
               {formatMessage({
                 id: 'src.page.Project.Database.components.LogicDatabase.AA2C327B',
-                defaultMessage: '项目:',
+                defaultMessage: '项目:'
               })}
               {projectName ?? '-'}
             </Typography.Text>
@@ -92,7 +100,7 @@ const ProjectDatabaseSelector: React.FC<{
             <Typography.Text type="secondary">
               {formatMessage({
                 id: 'src.page.Project.Database.components.LogicDatabase.81E0ABD4',
-                defaultMessage: '数据源:',
+                defaultMessage: '数据源:'
               })}
               {datasourceName ?? '-'}
             </Typography.Text>
@@ -114,7 +122,7 @@ const CreateLogicialDatabase: React.FC<{
   openLogicialDatabase,
   reload,
   setOpenLogicialDatabase,
-  openLogicDatabaseManageModal,
+  openLogicDatabaseManageModal
 }) => {
   const [form] = useForm<{
     baseDatabase: number;
@@ -126,7 +134,7 @@ const CreateLogicialDatabase: React.FC<{
   const alias = useWatch('alias', form);
   const name = useWatch('name', {
     form,
-    preserve: true,
+    preserve: true
   });
   const physicalDatabaseIds = useWatch('physicalDatabaseIds', form);
   const [allDatabaseList, setAllDatabaseList] = useState<IDatabase[]>([]);
@@ -137,9 +145,9 @@ const CreateLogicialDatabase: React.FC<{
   const {
     data,
     run,
-    loading: fetchLoading,
+    loading: fetchLoading
   } = useRequest(listDatabases, {
-    manual: true,
+    manual: true
   });
   const loadDatabaseList = async (projectId: number) => {
     const databaseList = await run(
@@ -151,7 +159,7 @@ const CreateLogicialDatabase: React.FC<{
       null,
       login.isPrivateSpace(),
       true,
-      true,
+      true
     );
     if (databaseList?.contents?.length) {
       setAllDatabaseList(databaseList?.contents);
@@ -161,7 +169,9 @@ const CreateLogicialDatabase: React.FC<{
             return pre;
           }
           const config = getDataSourceModeConfig(cur?.dataSource?.type);
-          if (!config?.features?.task?.includes(TaskType.LOGICAL_DATABASE_CHANGE)) {
+          if (
+            !config?.features?.task?.includes(TaskType.LOGICAL_DATABASE_CHANGE)
+          ) {
             return pre;
           }
           const icon = getDataSourceStyleByConnectType(cur?.dataSource?.type);
@@ -173,12 +183,14 @@ const CreateLogicialDatabase: React.FC<{
                     display: 'flex',
                     position: 'relative',
                     justifyContent: 'space-between',
-                    alignItems: 'center',
+                    alignItems: 'center'
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center' }}>
                     <DataBaseStatusIcon item={cur} />
-                    <div style={{ maxWidth: '210px', marginLeft: 4 }}>{cur.name}</div>
+                    <div style={{ maxWidth: '210px', marginLeft: 4 }}>
+                      {cur.name}
+                    </div>
                     <div
                       style={{
                         color: 'rgba(0,0,0,0.25)',
@@ -189,7 +201,7 @@ const CreateLogicialDatabase: React.FC<{
                         overflow: 'hidden',
                         wordBreak: 'break-all',
                         whiteSpace: 'nowrap',
-                        width: '94px',
+                        width: '94px'
                       }}
                     >
                       {cur?.dataSource?.name}
@@ -201,9 +213,11 @@ const CreateLogicialDatabase: React.FC<{
                       width: '6px',
                       height: '6px',
                       borderRadius: '1px',
-                      background: EnvColorMap[cur?.environment?.style?.toUpperCase()]?.tipColor,
+                      background:
+                        EnvColorMap[cur?.environment?.style?.toUpperCase()]
+                          ?.tipColor,
                       position: 'absolute',
-                      right: '0px',
+                      right: '0px'
                     }}
                   />
                 </div>
@@ -216,17 +230,20 @@ const CreateLogicialDatabase: React.FC<{
                 style={{
                   display: 'flex',
                   position: 'relative',
-                  alignItems: 'center',
+                  alignItems: 'center'
                 }}
               >
-                <RiskLevelLabel content={cur?.environment?.name} color={cur?.environment?.style} />
+                <RiskLevelLabel
+                  content={cur?.environment?.name}
+                  color={cur?.environment?.style}
+                />
                 <div style={{ display: 'flex' }}>
                   <Icon
                     component={icon?.icon?.component}
                     style={{
                       color: icon?.icon?.color,
                       fontSize: 16,
-                      marginRight: 4,
+                      marginRight: 4
                     }}
                   />
 
@@ -237,10 +254,10 @@ const CreateLogicialDatabase: React.FC<{
 
             projectName: cur?.project?.name,
             datasourceName: cur?.dataSource?.name,
-            name: cur?.name,
+            name: cur?.name
           });
           return pre;
-        }, []),
+        }, [])
       );
     }
   };
@@ -258,7 +275,7 @@ const CreateLogicialDatabase: React.FC<{
       alias: values?.alias,
       physicalDatabaseIds: values?.physicalDatabaseIds,
       projectId,
-      name,
+      name
     });
     if (res?.id) {
       reload?.();
@@ -267,18 +284,20 @@ const CreateLogicialDatabase: React.FC<{
           <div>
             {formatMessage({
               id: 'src.page.Project.Database.components.LogicDatabase.7DCDBB6A',
-              defaultMessage: '逻辑库配置成功，后台正在提取逻辑表，可前往',
+              defaultMessage: '逻辑库配置成功，后台正在提取逻辑表，可前往'
             })}
           </div>
           <div>
-            <Typography.Link onClick={() => openLogicDatabaseManageModal(res?.id)}>
+            <Typography.Link
+              onClick={() => openLogicDatabaseManageModal(res?.id)}
+            >
               {formatMessage({
                 id: 'src.page.Project.Database.components.LogicDatabase.6DD07C1A',
-                defaultMessage: '逻辑表管理',
+                defaultMessage: '逻辑表管理'
               })}
             </Typography.Link>
           </div>
-        </Space>,
+        </Space>
       );
       setOpenLogicialDatabase(false);
       form.resetFields();
@@ -287,8 +306,8 @@ const CreateLogicialDatabase: React.FC<{
     message.error(
       formatMessage({
         id: 'src.page.Project.Database.components.LogicDatabase.979812F8',
-        defaultMessage: '逻辑库配置失败',
-      }),
+        defaultMessage: '逻辑库配置失败'
+      })
     );
   };
   useEffect(() => {
@@ -301,12 +320,14 @@ const CreateLogicialDatabase: React.FC<{
   }, [openLogicialDatabase]);
   useEffect(() => {
     if (baseDatabase) {
-      const selectedOne = allDatabaseList.find((item) => item.id === baseDatabase);
+      const selectedOne = allDatabaseList.find(
+        (item) => item.id === baseDatabase
+      );
       const filterDatabseList = allDatabaseList?.filter(
         (item) =>
           item.project.id === projectId &&
           item.dataSource?.id === selectedOne.dataSource?.id &&
-          item.environment?.id === selectedOne.environment?.id,
+          item.environment?.id === selectedOne.environment?.id
       );
       setDatabaseList(filterDatabseList);
       setCheckedDatabaseList([baseDatabase]);
@@ -317,10 +338,14 @@ const CreateLogicialDatabase: React.FC<{
   const databaseFilter = (list: IDatabase[]) => {
     if (!baseDatabase) return list;
     // 仅支持配置同一项目内、相同数据源类型、相同环境的数据库
-    const datasourceType = list?.find((i) => i.id === baseDatabase)?.dataSource?.dialectType;
-    const environment = list?.find((i) => i.id === baseDatabase)?.environment?.name;
+    const datasourceType = list?.find((i) => i.id === baseDatabase)?.dataSource
+      ?.dialectType;
+    const environment = list?.find((i) => i.id === baseDatabase)?.environment
+      ?.name;
     return list?.filter(
-      (i) => i?.dataSource?.dialectType === datasourceType && i?.environment?.name === environment,
+      (i) =>
+        i?.dataSource?.dialectType === datasourceType &&
+        i?.environment?.name === environment
     );
   };
 
@@ -329,7 +354,7 @@ const CreateLogicialDatabase: React.FC<{
       <Drawer
         title={formatMessage({
           id: 'src.page.Project.Database.components.LogicDatabase.D4E65243',
-          defaultMessage: '配置逻辑库',
+          defaultMessage: '配置逻辑库'
         })}
         open={openLogicialDatabase}
         maskClosable
@@ -341,19 +366,19 @@ const CreateLogicialDatabase: React.FC<{
             style={{
               display: 'flex',
               justifyContent: 'flex-end',
-              gap: '8px',
+              gap: '8px'
             }}
           >
             <Button onClick={handleCancel}>
               {formatMessage({
                 id: 'src.page.Project.Database.components.LogicDatabase.98C1AC25',
-                defaultMessage: '取消',
+                defaultMessage: '取消'
               })}
             </Button>
             <Button type="primary" onClick={handleSubmit}>
               {formatMessage({
                 id: 'src.page.Project.Database.components.LogicDatabase.0BA322BF',
-                defaultMessage: '提交',
+                defaultMessage: '提交'
               })}
             </Button>
           </div>
@@ -365,12 +390,15 @@ const CreateLogicialDatabase: React.FC<{
           message={formatMessage({
             id: 'src.page.Project.Database.components.LogicDatabase.951BE615',
             defaultMessage:
-              '逻辑库仅支持配置同一项目内、相同数据源类型、相同环境的数据库，配置成功后不可修改。',
+              '逻辑库仅支持配置同一项目内、相同数据源类型、相同环境的数据库，配置成功后不可修改。'
           })}
         />
 
         <Form form={form} layout="vertical">
-          <ProjectDatabaseSelector databaseOptions={databaseOptions} width={'400px'} />
+          <ProjectDatabaseSelector
+            databaseOptions={databaseOptions}
+            width={'400px'}
+          />
           <Form.Item
             label={
               <HelpDoc
@@ -379,12 +407,12 @@ const CreateLogicialDatabase: React.FC<{
                 title={formatMessage({
                   id: 'src.page.Project.Database.components.LogicDatabase.B6800AA7',
                   defaultMessage:
-                    '逻辑数据库名，即物理库名共同前缀，例如foo00～foo99所对应的逻辑库为foo',
+                    '逻辑数据库名，即物理库名共同前缀，例如foo00～foo99所对应的逻辑库为foo'
                 })}
               >
                 {formatMessage({
                   id: 'src.page.Project.Database.components.LogicDatabase.F73602E5',
-                  defaultMessage: '逻辑库名',
+                  defaultMessage: '逻辑库名'
                 })}
               </HelpDoc>
             }
@@ -397,8 +425,8 @@ const CreateLogicialDatabase: React.FC<{
                   required: true,
                   message: formatMessage({
                     id: 'src.page.Project.Database.components.LogicDatabase.86E65A05',
-                    defaultMessage: '请输入',
-                  }),
+                    defaultMessage: '请输入'
+                  })
                 },
                 {
                   validator: async (ruler, value) => {
@@ -406,22 +434,22 @@ const CreateLogicialDatabase: React.FC<{
                     if (!name) {
                       return;
                     }
-                  },
+                  }
                 },
                 {
                   pattern: SPACE_REGEX,
                   message: formatMessage({
                     id: 'src.page.Project.Database.components.LogicDatabase.307E771A',
-                    defaultMessage: '不能包含空格',
-                  }),
-                },
+                    defaultMessage: '不能包含空格'
+                  })
+                }
               ]}
             >
               <Input
                 style={{ width: '400px' }}
                 placeholder={formatMessage({
                   id: 'src.page.Project.Database.components.LogicDatabase.6E01B796',
-                  defaultMessage: '请输入',
+                  defaultMessage: '请输入'
                 })}
                 onChange={async (e) => {}}
                 showCount
@@ -436,12 +464,12 @@ const CreateLogicialDatabase: React.FC<{
                 leftText
                 title={formatMessage({
                   id: 'src.page.Project.Database.components.LogicDatabase.E5201469',
-                  defaultMessage: '别名可用于区分同名的逻辑库',
+                  defaultMessage: '别名可用于区分同名的逻辑库'
                 })}
               >
                 {formatMessage({
                   id: 'src.page.Project.Database.components.LogicDatabase.DB5047B1',
-                  defaultMessage: '逻辑库别名',
+                  defaultMessage: '逻辑库别名'
                 })}
               </HelpDoc>
             }
@@ -454,8 +482,8 @@ const CreateLogicialDatabase: React.FC<{
                   required: true,
                   message: formatMessage({
                     id: 'src.page.Project.Database.components.LogicDatabase.00F7D782',
-                    defaultMessage: '请输入',
-                  }),
+                    defaultMessage: '请输入'
+                  })
                 },
                 {
                   validator: async (ruler, value) => {
@@ -463,22 +491,22 @@ const CreateLogicialDatabase: React.FC<{
                     if (!name) {
                       return;
                     }
-                  },
+                  }
                 },
                 {
                   pattern: SPACE_REGEX,
                   message: formatMessage({
                     id: 'src.page.Project.Database.components.LogicDatabase.97EB8F25',
-                    defaultMessage: '不能包含空格',
-                  }),
-                },
+                    defaultMessage: '不能包含空格'
+                  })
+                }
               ]}
             >
               <Input
                 style={{ width: '400px' }}
                 placeholder={formatMessage({
                   id: 'src.page.Project.Database.components.LogicDatabase.8A1B335F',
-                  defaultMessage: '请输入',
+                  defaultMessage: '请输入'
                 })}
                 showCount
                 maxLength={64}
@@ -488,7 +516,7 @@ const CreateLogicialDatabase: React.FC<{
           <Form.Item
             label={formatMessage({
               id: 'src.page.Project.Database.components.LogicDatabase.AB61210C',
-              defaultMessage: '数据库',
+              defaultMessage: '数据库'
             })}
             name="physicalDatabaseIds"
             shouldUpdate
@@ -500,7 +528,7 @@ const CreateLogicialDatabase: React.FC<{
               showEnv
               infoText={formatMessage({
                 id: 'src.page.Project.Database.components.LogicDatabase.C11F31FC',
-                defaultMessage: '仅支持选择与基准库相同数据源类型和环境的数据库',
+                defaultMessage: '仅支持选择与基准库相同数据源类型和环境的数据库'
               })}
             />
           </Form.Item>

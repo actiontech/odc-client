@@ -34,13 +34,18 @@ const ODCDragger: React.FC<IProps> = function (props) {
     delete props.action;
     // @ts-ignore
     props.customRequest = async ({ file, onSuccess, onError, onProgress }) => {
-      const fileName = await uploadFileToOSS(file, props.uploadFileOpenAPIName, null, onProgress);
+      const fileName = await uploadFileToOSS(
+        file,
+        props.uploadFileOpenAPIName,
+        null,
+        onProgress
+      );
       setTimeout(() => {
         onSuccess(
           {
-            data: fileName,
+            data: fileName
           },
-          file as any,
+          file as any
         );
       }, 0);
     };
@@ -54,9 +59,9 @@ const ODCDragger: React.FC<IProps> = function (props) {
       setTimeout(() => {
         onSuccess(
           {
-            data: data,
+            data: data
           },
-          file as any,
+          file as any
         );
       }, 0);
     };

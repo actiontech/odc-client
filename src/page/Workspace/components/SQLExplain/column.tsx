@@ -23,14 +23,14 @@ export const getSqlExplainColumns = ({ handleShowOutputFilter }) => {
       dataIndex: 'operator',
       title: formatMessage({
         id: 'workspace.window.sql.explain.tab.summary.columns.operator',
-        defaultMessage: '算子',
-      }), // width: 530,
+        defaultMessage: '算子'
+      }) // width: 530,
     },
     {
       dataIndex: 'name',
       title: formatMessage({
         id: 'workspace.window.sql.explain.tab.summary.columns.name',
-        defaultMessage: '名称',
+        defaultMessage: '名称'
       }),
       width: 126,
       fixed: 'right',
@@ -40,7 +40,7 @@ export const getSqlExplainColumns = ({ handleShowOutputFilter }) => {
             style={{
               maxWidth: 110,
               display: 'flex',
-              alignItems: 'center',
+              alignItems: 'center'
             }}
             title={v}
           >
@@ -50,38 +50,38 @@ export const getSqlExplainColumns = ({ handleShowOutputFilter }) => {
                 display: 'inline-block',
                 textOverflow: 'ellipsis',
                 overflow: 'hidden',
-                whiteSpace: 'nowrap',
+                whiteSpace: 'nowrap'
               }}
             >
               {v}
             </span>
           </div>
         );
-      },
+      }
     },
     {
       dataIndex: 'rowCount',
       title: formatMessage({
         id: 'workspace.window.sql.explain.tab.summary.columns.rows',
-        defaultMessage: '预估行',
+        defaultMessage: '预估行'
       }),
       width: 86,
-      fixed: 'right',
+      fixed: 'right'
     },
     {
       dataIndex: 'cost',
       title: formatMessage({
         id: 'workspace.window.sql.explain.tab.summary.columns.cost',
-        defaultMessage: '代价',
+        defaultMessage: '代价'
       }),
       width: 86,
-      fixed: 'right',
+      fixed: 'right'
     },
     {
       dataIndex: 'outputFilter',
       title: formatMessage({
         id: 'workspace.window.sql.explain.tab.summary.columns.output',
-        defaultMessage: '输出过滤',
+        defaultMessage: '输出过滤'
       }),
       width: 366,
       fixed: 'right',
@@ -91,7 +91,7 @@ export const getSqlExplainColumns = ({ handleShowOutputFilter }) => {
             style={{
               display: 'flex',
               alignItems: 'center',
-              maxWidth: 350,
+              maxWidth: 350
             }}
           >
             <span
@@ -100,14 +100,14 @@ export const getSqlExplainColumns = ({ handleShowOutputFilter }) => {
                 display: 'inline-block',
                 textOverflow: 'ellipsis',
                 overflow: 'hidden',
-                whiteSpace: 'nowrap',
+                whiteSpace: 'nowrap'
               }}
             >
               {v}
             </span>
             <Button
               style={{
-                fontSize: 12,
+                fontSize: 12
               }}
               type="link"
               size="small"
@@ -115,13 +115,13 @@ export const getSqlExplainColumns = ({ handleShowOutputFilter }) => {
             >
               {formatMessage({
                 id: 'workspace.window.sql.explain.button.showOutputFilter',
-                defaultMessage: '查看',
+                defaultMessage: '查看'
               })}
             </Button>
           </div>
         </>
-      ),
-    },
+      )
+    }
   ];
 };
 
@@ -131,14 +131,14 @@ export const getSqlProfileColumns = () => {
       dataIndex: 'operator',
       title: formatMessage({
         id: 'workspace.window.sql.explain.tab.summary.columns.operator',
-        defaultMessage: '算子',
-      }),
+        defaultMessage: '算子'
+      })
     },
     {
       dataIndex: 'name',
       title: formatMessage({
         id: 'workspace.window.sql.explain.tab.summary.columns.name',
-        defaultMessage: '名称',
+        defaultMessage: '名称'
       }),
       width: 126,
       fixed: 'right',
@@ -148,7 +148,7 @@ export const getSqlProfileColumns = () => {
             style={{
               maxWidth: 110,
               display: 'flex',
-              alignItems: 'center',
+              alignItems: 'center'
             }}
             title={v}
           >
@@ -158,50 +158,50 @@ export const getSqlProfileColumns = () => {
                 display: 'inline-block',
                 textOverflow: 'ellipsis',
                 overflow: 'hidden',
-                whiteSpace: 'nowrap',
+                whiteSpace: 'nowrap'
               }}
             >
               {v}
             </span>
           </div>
         );
-      },
+      }
     },
     {
       dataIndex: 'rowCount',
       title: formatMessage({
         id: 'workspace.window.sql.explain.tab.summary.columns.rows',
-        defaultMessage: '预估行',
+        defaultMessage: '预估行'
       }),
       width: 86,
-      fixed: 'right',
+      fixed: 'right'
     },
     {
       dataIndex: 'cost',
       title: formatMessage({
         id: 'src.page.Workspace.components.SQLExplain.F472322D',
-        defaultMessage: '预估代价',
+        defaultMessage: '预估代价'
       }),
       width: 86,
-      fixed: 'right',
+      fixed: 'right'
     },
     {
       dataIndex: 'realRowCount',
       title: formatMessage({
         id: 'src.page.Workspace.components.SQLExplain.E0965DAC',
-        defaultMessage: '实际行',
+        defaultMessage: '实际行'
       }),
       width: 86,
-      fixed: 'right',
+      fixed: 'right'
     },
     {
       dataIndex: 'realCost',
       title: formatMessage({
         id: 'src.page.Workspace.components.SQLExplain.E0AB0E4C',
-        defaultMessage: '实际代价',
+        defaultMessage: '实际代价'
       }),
       width: 86,
-      fixed: 'right',
-    },
+      fixed: 'right'
+    }
   ];
 };

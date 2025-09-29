@@ -14,7 +14,11 @@
  * limitations under the License.
  */
 
-import { openRecycleBin, openSessionManagePage, openSessionParamsPage } from '@/store/helper/page';
+import {
+  openRecycleBin,
+  openSessionManagePage,
+  openSessionParamsPage
+} from '@/store/helper/page';
 import { formatMessage } from '@/util/intl';
 import Icon from '@ant-design/icons';
 import React, { useEffect } from 'react';
@@ -43,36 +47,45 @@ const Manager: React.FC<{}> = function () {
         {
           title: formatMessage({
             id: 'odc.SideBar.Manager.DatabaseOM',
-            defaultMessage: '数据库运维',
+            defaultMessage: '数据库运维'
           }), //数据库运维
           key: 'manager',
           actions: [],
           render() {
             return (
               <div className={styles.manager}>
-                <Space style={{ width: '100%' }} direction="vertical" key="manager">
+                <Space
+                  style={{ width: '100%' }}
+                  direction="vertical"
+                  key="manager"
+                >
                   <ListItem
                     key="sessionManager"
                     title={formatMessage({
                       id: 'odc.SideBar.Manager.SessionManagement',
-                      defaultMessage: '会话管理',
+                      defaultMessage: '会话管理'
                     })} /*会话管理*/
                     desc={formatMessage({
                       id: 'odc.SideBar.Manager.ManageAllSessionInformationIn',
-                      defaultMessage: '管理数据源下所有会话信息',
+                      defaultMessage: '管理数据源下所有会话信息'
                     })} /*管理数据源下所有会话信息*/
                     icon={
                       <Icon
                         component={SettingOutlined}
-                        style={{ fontSize: 18, color: 'var(--icon-green-color)' }}
+                        style={{
+                          fontSize: 18,
+                          color: 'var(--icon-green-color)'
+                        }}
                       />
                     }
                     actions={[]}
                     onClick={() => {
                       tracert.click('a3112.b41896.c330995.d367632', {
-                        manageType: 'sessionManager',
+                        manageType: 'sessionManager'
                       });
-                      openSessionManagePage(datasourceId ? toInteger(datasourceId) : null);
+                      openSessionManagePage(
+                        datasourceId ? toInteger(datasourceId) : null
+                      );
                     }}
                   />
 
@@ -80,19 +93,23 @@ const Manager: React.FC<{}> = function () {
                     key="sessionParams"
                     title={formatMessage({
                       id: 'odc.SideBar.Manager.GlobalVariables',
-                      defaultMessage: '全局变量',
+                      defaultMessage: '全局变量'
                     })} /*全局变量*/
                     desc={formatMessage({
                       id: 'odc.SideBar.Manager.ManageAllSessionVariablesIn',
-                      defaultMessage: '管理数据源下所有会话变量',
+                      defaultMessage: '管理数据源下所有会话变量'
                     })} /*管理数据源下所有会话变量*/
-                    icon={<Icon component={VariableSvg} style={{ fontSize: 18 }} />}
+                    icon={
+                      <Icon component={VariableSvg} style={{ fontSize: 18 }} />
+                    }
                     actions={[]}
                     onClick={() => {
                       tracert.click('a3112.b41896.c330995.d367632', {
-                        manageType: 'sessionParams',
+                        manageType: 'sessionParams'
                       });
-                      openSessionParamsPage(datasourceId ? toInteger(datasourceId) : null);
+                      openSessionParamsPage(
+                        datasourceId ? toInteger(datasourceId) : null
+                      );
                     }}
                   />
 
@@ -100,24 +117,33 @@ const Manager: React.FC<{}> = function () {
                     key="recyleBin"
                     title={formatMessage({
                       id: 'odc.SideBar.Manager.RecycleBin',
-                      defaultMessage: '回收站',
+                      defaultMessage: '回收站'
                     })} /*回收站*/
                     desc={formatMessage({
                       id: 'odc.SideBar.Manager.QueryAndRestoreDeletedDatabase',
-                      defaultMessage: '查询和还原被删除的数据库对象',
+                      defaultMessage: '查询和还原被删除的数据库对象'
                     })} /*查询和还原被删除的数据库对象*/
-                    icon={<Icon component={TabRecycleSvg} style={{ fontSize: 18 }} />}
+                    icon={
+                      <Icon
+                        component={TabRecycleSvg}
+                        style={{ fontSize: 18 }}
+                      />
+                    }
                     actions={[]}
                     onClick={() => {
-                      tracert.click('a3112.b41896.c330995.d367632', { manageType: 'recyleBin' });
-                      openRecycleBin(datasourceId ? toInteger(datasourceId) : null);
+                      tracert.click('a3112.b41896.c330995.d367632', {
+                        manageType: 'recyleBin'
+                      });
+                      openRecycleBin(
+                        datasourceId ? toInteger(datasourceId) : null
+                      );
                     }}
                   />
                 </Space>
               </div>
             );
-          },
-        },
+          }
+        }
       ]}
     />
   );

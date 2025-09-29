@@ -31,6 +31,12 @@ import { FormInstance } from 'antd/lib/form';
 import { inject, observer } from 'mobx-react';
 import React, { Component } from 'react';
 import styles from './index.less';
+import {
+  BasicButton,
+  BasicInput,
+  BasicModal,
+  BasicSelect
+} from '@actiontech/dms-kit';
 
 interface IProps {
   sessionManagerStore?: SessionManagerStore;
@@ -49,17 +55,20 @@ interface IState {
 }
 
 export enum CheckOption {
-  NONE = 'NONE',
+  NONE = 'NONE'
 }
 
 enum ObjectType {
   TABLE = 'TABLE',
-  VIEW = 'VIEW',
+  VIEW = 'VIEW'
 }
 
 const { Option } = Select;
 
-class CreateSynonymModal extends Component<IProps & { session: SessionStore }, IState> {
+class CreateSynonymModal extends Component<
+  IProps & { session: SessionStore },
+  IState
+> {
   public readonly state = {
     objectList: [],
     tableOwner: null,
@@ -67,8 +76,8 @@ class CreateSynonymModal extends Component<IProps & { session: SessionStore }, I
     databases: [],
     synonyms: {
       COMMON: [],
-      PUBLIC: [],
-    },
+      PUBLIC: []
+    }
   };
 
   private formRef = React.createRef<FormInstance>();
@@ -86,11 +95,13 @@ class CreateSynonymModal extends Component<IProps & { session: SessionStore }, I
   componentDidUpdate(
     prevProps: Readonly<IProps & { session: SessionStore }>,
     prevState: Readonly<IState>,
-    snapshot?: any,
+    snapshot?: any
   ): void {
     if (prevProps.session !== this.props.session && this.props.session) {
       this.loadSynoymList();
-      this.handleChangeTableOwner(this.props.modalStore?.createSynonymModalData?.dbName);
+      this.handleChangeTableOwner(
+        this.props.modalStore?.createSynonymModalData?.dbName
+      );
       this.loadDatabases();
     }
   }
@@ -104,10 +115,10 @@ class CreateSynonymModal extends Component<IProps & { session: SessionStore }, I
       null,
       null,
       null,
-      true,
+      true
     );
     this.setState({
-      databases: res?.contents || [],
+      databases: res?.contents || []
     });
   }
 
@@ -116,18 +127,18 @@ class CreateSynonymModal extends Component<IProps & { session: SessionStore }, I
     const commonList = await getSynonymList(
       SynonymType.COMMON,
       session.database.dbName,
-      session.sessionId,
+      session.sessionId
     );
     const publicList = await getSynonymList(
       SynonymType.PUBLIC,
       session.database.dbName,
-      session.sessionId,
+      session.sessionId
     );
     this.setState({
       synonyms: {
         COMMON: commonList,
-        PUBLIC: publicList,
-      },
+        PUBLIC: publicList
+      }
     });
   };
 
@@ -141,14 +152,14 @@ class CreateSynonymModal extends Component<IProps & { session: SessionStore }, I
           values.synonymName,
           values,
           this.props.session?.sessionId,
-          dbName,
+          dbName
         );
         if (sql) {
           openCreateSynonymPage(
             sql,
             values.synonymType,
             this.props.session?.odcDatabase?.id,
-            dbName,
+            dbName
           );
           this.close();
         }
@@ -161,11 +172,14 @@ class CreateSynonymModal extends Component<IProps & { session: SessionStore }, I
   private getSynonymNameRepeaStatus = (type: SynonymType, value: string) => {
     const { synonyms } = this.state;
     const synonym = synonyms[type];
-    return synonym?.length && synonym.find((item) => item.synonymName === value);
+    return (
+      synonym?.length && synonym.find((item) => item.synonymName === value)
+    );
   };
 
   private checkSynonymNameRepeat = async (ruler, value) => {
-    const type = this.formRef.current.getFieldValue('synonymType') || SynonymType.COMMON;
+    const type =
+      this.formRef.current.getFieldValue('synonymType') || SynonymType.COMMON;
     if (this.getSynonymNameRepeaStatus(type, value)) {
       throw new Error();
     }
@@ -175,12 +189,12 @@ class CreateSynonymModal extends Component<IProps & { session: SessionStore }, I
     const { objectType } = this.state;
     const objectList = await this.getObjectList(value, objectType);
     this.formRef.current?.setFieldsValue({
-      tableName: null,
+      tableName: null
     });
 
     this.setState({
       objectList,
-      tableOwner: value,
+      tableOwner: value
     });
   };
 
@@ -188,12 +202,12 @@ class CreateSynonymModal extends Component<IProps & { session: SessionStore }, I
     const { tableOwner } = this.state;
     const objectList = await this.getObjectList(tableOwner, value);
     this.formRef.current?.setFieldsValue({
-      tableName: null,
+      tableName: null
     });
 
     this.setState({
       objectList,
-      objectType: value,
+      objectType: value
     });
   };
 
@@ -216,15 +230,17 @@ class CreateSynonymModal extends Component<IProps & { session: SessionStore }, I
     const nameValue = this.formRef.current.getFieldValue('synonymName');
     const nameRepeatMessage = formatMessage({
       id: 'odc.component.CreateSynonymModal.TheSynonymNameAlreadyExists',
-      defaultMessage: '同义词名称已存在',
+      defaultMessage: '同义词名称已存在'
     });
     if (nameValue && nameValue.length < 128) {
-      const errors = this.getSynonymNameRepeaStatus(type, nameValue) ? [nameRepeatMessage] : [];
+      const errors = this.getSynonymNameRepeaStatus(type, nameValue)
+        ? [nameRepeatMessage]
+        : [];
       this.formRef.current.setFields([
         {
           name: 'synonymName',
-          errors,
-        },
+          errors
+        }
       ]);
     }
   };
@@ -238,11 +254,11 @@ class CreateSynonymModal extends Component<IProps & { session: SessionStore }, I
     const { objectList, tableOwner, objectType, databases } = this.state;
     const formItemStyle = { width: '328px' };
     return (
-      <Modal
+      <BasicModal
         width={480}
         title={formatMessage({
           id: 'odc.component.CreateSynonymModal.CreateSynonym',
-          defaultMessage: '新建同义词',
+          defaultMessage: '新建同义词'
         })}
         open={modalStore.createSynonymModalVisible}
         onCancel={this.close}
@@ -250,25 +266,25 @@ class CreateSynonymModal extends Component<IProps & { session: SessionStore }, I
         centered
         footer={
           <Space>
-            <Button onClick={this.close}>
+            <BasicButton onClick={this.close}>
               {
                 formatMessage({
                   id: 'odc.component.CreateSynonymModal.Cancel',
-                  defaultMessage: '取消',
+                  defaultMessage: '取消'
                 })
                 /* 取消 */
               }
-            </Button>
-            <Button type="primary" onClick={this.handleConfirm}>
+            </BasicButton>
+            <BasicButton type="primary" onClick={this.handleConfirm}>
               {
                 formatMessage({
                   id: 'odc.component.CreateSynonymModal.NextConfirmTheSqlStatement',
-                  defaultMessage: '下一步：确认 SQL',
+                  defaultMessage: '下一步：确认 SQL'
                 })
 
                 /* 下一步：确认SQL */
               }
-            </Button>
+            </BasicButton>
           </Space>
         }
         className={styles.synonymModal}
@@ -278,7 +294,7 @@ class CreateSynonymModal extends Component<IProps & { session: SessionStore }, I
             name="synonymName"
             label={formatMessage({
               id: 'odc.component.CreateSynonymModal.Synonym',
-              defaultMessage: '同义词名称',
+              defaultMessage: '同义词名称'
             })}
             /* 同义词名称 */
             rules={[
@@ -286,32 +302,32 @@ class CreateSynonymModal extends Component<IProps & { session: SessionStore }, I
                 required: true,
                 message: formatMessage({
                   id: 'odc.component.CreateSynonymModal.EnterASynonymName',
-                  defaultMessage: '请输入同义词名称',
-                }),
+                  defaultMessage: '请输入同义词名称'
+                })
                 // 请输入同义词名称
               },
               {
                 max: 128,
                 message: formatMessage({
                   id: 'odc.component.CreateSynonymModal.TheLengthCannotExceedCharacters',
-                  defaultMessage: '长度不超过 128 个字符',
-                }),
+                  defaultMessage: '长度不超过 128 个字符'
+                })
 
                 // 长度不超过 128 个字符
               },
               {
                 message: formatMessage({
                   id: 'odc.component.CreateSynonymModal.TheSynonymNameAlreadyExists',
-                  defaultMessage: '同义词名称已存在',
+                  defaultMessage: '同义词名称已存在'
                 }), // 同义词名称已存在
-                validator: this.checkSynonymNameRepeat,
-              },
+                validator: this.checkSynonymNameRepeat
+              }
             ]}
           >
-            <Input
+            <BasicInput
               placeholder={formatMessage({
                 id: 'odc.component.CreateSynonymModal.EnterASynonymName',
-                defaultMessage: '请输入同义词名称',
+                defaultMessage: '请输入同义词名称'
               })}
 
               /* 请输入同义词名称 */
@@ -322,7 +338,7 @@ class CreateSynonymModal extends Component<IProps & { session: SessionStore }, I
             name="tableOwner"
             label={formatMessage({
               id: 'odc.component.CreateSynonymModal.ObjectOwner',
-              defaultMessage: '对象所有者',
+              defaultMessage: '对象所有者'
             })}
             /* 对象所有者 */
             rules={[
@@ -330,18 +346,18 @@ class CreateSynonymModal extends Component<IProps & { session: SessionStore }, I
                 required: true,
                 message: formatMessage({
                   id: 'odc.component.CreateSynonymModal.EnterAnObjectOwner',
-                  defaultMessage: '请输入对象所有者',
-                }),
+                  defaultMessage: '请输入对象所有者'
+                })
 
                 // 请输入对象所有者
-              },
+              }
             ]}
             initialValue={tableOwner}
           >
-            <Select
+            <BasicSelect
               placeholder={formatMessage({
                 id: 'odc.component.CreateSynonymModal.EnterAnObjectOwner',
-                defaultMessage: '请输入对象所有者',
+                defaultMessage: '请输入对象所有者'
               })}
               onChange={this.handleChangeTableOwner}
               showSearch
@@ -355,14 +371,14 @@ class CreateSynonymModal extends Component<IProps & { session: SessionStore }, I
                     </Option>
                   );
                 })}
-            </Select>
+            </BasicSelect>
           </Form.Item>
           <Form.Item
             style={formItemStyle}
             name="objectType"
             label={formatMessage({
               id: 'odc.component.CreateSynonymModal.ObjectType',
-              defaultMessage: '对象类型',
+              defaultMessage: '对象类型'
             })}
             /* 对象类型 */
             rules={[
@@ -370,17 +386,17 @@ class CreateSynonymModal extends Component<IProps & { session: SessionStore }, I
                 required: true,
                 message: formatMessage({
                   id: 'odc.component.CreateSynonymModal.SelectAnObjectType',
-                  defaultMessage: '请选择对象类型',
-                }),
+                  defaultMessage: '请选择对象类型'
+                })
                 // 请选择对象类型
-              },
+              }
             ]}
             initialValue={objectType}
           >
-            <Select
+            <BasicSelect
               placeholder={formatMessage({
                 id: 'odc.component.CreateSynonymModal.SelectAnObjectType',
-                defaultMessage: '请选择对象类型',
+                defaultMessage: '请选择对象类型'
               })}
               /* 请选择对象类型 */ onChange={this.handleChangeObjectType}
             >
@@ -390,14 +406,14 @@ class CreateSynonymModal extends Component<IProps & { session: SessionStore }, I
               <Option key={ObjectType.VIEW} value={ObjectType.VIEW}>
                 {ObjectType.VIEW}
               </Option>
-            </Select>
+            </BasicSelect>
           </Form.Item>
           <Form.Item
             style={formItemStyle}
             name="tableName"
             label={formatMessage({
               id: 'odc.component.CreateSynonymModal.ObjectName',
-              defaultMessage: '对象名称',
+              defaultMessage: '对象名称'
             })}
             /* 对象名称 */
             rules={[
@@ -405,17 +421,17 @@ class CreateSynonymModal extends Component<IProps & { session: SessionStore }, I
                 required: true,
                 message: formatMessage({
                   id: 'odc.component.CreateSynonymModal.TheObjectNameMustBe',
-                  defaultMessage: '对象名称不能为空',
-                }),
+                  defaultMessage: '对象名称不能为空'
+                })
 
                 // 对象名称不能为空
-              },
+              }
             ]}
           >
-            <Select
+            <BasicSelect
               placeholder={formatMessage({
                 id: 'odc.component.CreateSynonymModal.EnterAnObjectName',
-                defaultMessage: '请选择对象',
+                defaultMessage: '请选择对象'
               })}
               showSearch
               filterOption={this.handleSearch}
@@ -423,21 +439,23 @@ class CreateSynonymModal extends Component<IProps & { session: SessionStore }, I
               {objectList.length &&
                 objectList.map((item) => {
                   const objectName =
-                    objectType === ObjectType.VIEW ? item.viewName : item.tableName;
+                    objectType === ObjectType.VIEW
+                      ? item.viewName
+                      : item.tableName;
                   return (
                     <Option key={objectName} value={objectName}>
                       {objectName}
                     </Option>
                   );
                 })}
-            </Select>
+            </BasicSelect>
           </Form.Item>
           <Form.Item
             style={{ width: '105px' }}
             name="synonymType"
             label={formatMessage({
               id: 'odc.component.CreateSynonymModal.SynonymType',
-              defaultMessage: '同义词类型',
+              defaultMessage: '同义词类型'
             })}
             /* 同义词类型 */
             initialValue={SynonymType.COMMON}
@@ -446,19 +464,19 @@ class CreateSynonymModal extends Component<IProps & { session: SessionStore }, I
                 required: true,
                 message: formatMessage({
                   id: 'odc.component.CreateSynonymModal.EnterASynonymType',
-                  defaultMessage: '请输入同义词类型',
-                }),
+                  defaultMessage: '请输入同义词类型'
+                })
 
                 // 请输入同义词类型
-              },
+              }
             ]}
           >
-            <Select onChange={this.handleTypeChange}>
+            <BasicSelect onChange={this.handleTypeChange}>
               <Option value={SynonymType.COMMON}>
                 {
                   formatMessage({
                     id: 'odc.component.CreateSynonymModal.CommonSynonym',
-                    defaultMessage: '普通同义词',
+                    defaultMessage: '普通同义词'
                   })
 
                   /* 普通同义词 */
@@ -468,30 +486,34 @@ class CreateSynonymModal extends Component<IProps & { session: SessionStore }, I
                 {
                   formatMessage({
                     id: 'odc.component.CreateSynonymModal.CommonSynonyms',
-                    defaultMessage: '公用同义词',
+                    defaultMessage: '公用同义词'
                   })
 
                   /* 公用同义词 */
                 }
               </Option>
-            </Select>
+            </BasicSelect>
           </Form.Item>
         </Form>
-      </Modal>
+      </BasicModal>
     );
   }
 }
 export default inject(
   'sessionManagerStore',
-  'modalStore',
+  'modalStore'
 )(
   observer(function (props: IProps) {
     return (
-      <SessionContextWrap defaultDatabaseId={props?.modalStore?.createSynonymModalData?.databaseId}>
+      <SessionContextWrap
+        defaultDatabaseId={
+          props?.modalStore?.createSynonymModalData?.databaseId
+        }
+      >
         {({ session }) => {
           return <CreateSynonymModal {...props} session={session} />;
         }}
       </SessionContextWrap>
     );
-  }),
+  })
 );

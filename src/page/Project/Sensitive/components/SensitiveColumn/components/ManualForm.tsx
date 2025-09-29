@@ -15,7 +15,10 @@
  */
 
 import { listDatabases } from '@/common/network/database';
-import { batchCreateSensitiveColumns, listColumns } from '@/common/network/sensitiveColumn';
+import {
+  batchCreateSensitiveColumns,
+  listColumns
+} from '@/common/network/sensitiveColumn';
 import ExportCard from '@/component/ExportCard';
 import RiskLevelLabel from '@/component/RiskLevelLabel';
 import { fieldIconMap } from '@/constant';
@@ -46,7 +49,7 @@ import {
   Spin,
   Tooltip,
   Tree,
-  Typography,
+  Typography
 } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
 import { cloneDeep, debounce, merge } from 'lodash';
@@ -57,7 +60,7 @@ import React, {
   useEffect,
   useImperativeHandle,
   useRef,
-  useState,
+  useState
 } from 'react';
 import { PopoverContainer } from '..';
 import { SelectItemProps } from '../../../interface';
@@ -68,17 +71,22 @@ import {
   ManualFormProps,
   SelectNode,
   SelectNodeChild,
-  TreeNode,
+  TreeNode
 } from './interface';
 
 const { Text } = Typography;
-const ManualForm: React.FC<ManualFormProps> = ({ modalOpen, setModalOpen, callback }) => {
+const ManualForm: React.FC<ManualFormProps> = ({
+  modalOpen,
+  setModalOpen,
+  callback
+}) => {
   const [formRef] = useForm();
   const _formRef = useRef<any>(null);
   const sensitiveContext = useContext(SensitiveContext);
   const projectContext = useContext(ProjectContext);
   const { project } = projectContext;
-  const { maskingAlgorithms, maskingAlgorithmOptions, projectId } = sensitiveContext;
+  const { maskingAlgorithms, maskingAlgorithmOptions, projectId } =
+    sensitiveContext;
   const [databaseIds, setDatabaseIds] = useState<number[]>([]);
   const [checkedKeys, setCheckedKeys] = useState<string[]>([]);
 
@@ -88,7 +96,7 @@ const ManualForm: React.FC<ManualFormProps> = ({ modalOpen, setModalOpen, callba
 
   const handleDatabaseSelect = async (Ids) => {
     await formRef.setFieldsValue({
-      database: Ids,
+      database: Ids
     });
     setDatabaseIds(Ids);
   };
@@ -104,7 +112,7 @@ const ManualForm: React.FC<ManualFormProps> = ({ modalOpen, setModalOpen, callba
     return Modal.confirm({
       title: formatMessage({
         id: 'odc.src.page.Project.Sensitive.components.SensitiveColumn.components.DoYouConfirmThatYou',
-        defaultMessage: '是否确定取消手动添加敏感列？',
+        defaultMessage: '是否确定取消手动添加敏感列？'
       }),
       //'确认要取消手动添加敏感列吗？'
       onOk: async () => {
@@ -113,13 +121,13 @@ const ManualForm: React.FC<ManualFormProps> = ({ modalOpen, setModalOpen, callba
       onCancel: () => {},
       okText: formatMessage({
         id: 'odc.src.page.Project.Sensitive.components.SensitiveColumn.components.Sure',
-        defaultMessage: '确定',
+        defaultMessage: '确定'
       }),
       //'确定'
       cancelText: formatMessage({
         id: 'odc.src.page.Project.Sensitive.components.SensitiveColumn.components.Cancel',
-        defaultMessage: '取消',
-      }), //'取消'
+        defaultMessage: '取消'
+      }) //'取消'
     });
   };
 
@@ -129,7 +137,7 @@ const ManualForm: React.FC<ManualFormProps> = ({ modalOpen, setModalOpen, callba
       title={
         formatMessage({
           id: 'odc.src.page.Project.Sensitive.components.SensitiveColumn.components.ManuallyAddSensitiveColumns',
-          defaultMessage: '手动添加敏感列',
+          defaultMessage: '手动添加敏感列'
         }) /* 手动添加敏感列 */
       }
       open={modalOpen}
@@ -139,7 +147,7 @@ const ManualForm: React.FC<ManualFormProps> = ({ modalOpen, setModalOpen, callba
         <div
           style={{
             display: 'flex',
-            justifyContent: 'flex-end',
+            justifyContent: 'flex-end'
           }}
         >
           <Space>
@@ -147,15 +155,19 @@ const ManualForm: React.FC<ManualFormProps> = ({ modalOpen, setModalOpen, callba
               {
                 formatMessage({
                   id: 'odc.src.page.Project.Sensitive.components.SensitiveColumn.components.Cancel.1',
-                  defaultMessage: '取消',
+                  defaultMessage: '取消'
                 }) /* 取消 */
               }
             </Button>
-            <Button disabled={checkedKeys?.length === 0} type="primary" onClick={submit}>
+            <Button
+              disabled={checkedKeys?.length === 0}
+              type="primary"
+              onClick={submit}
+            >
               {
                 formatMessage({
                   id: 'odc.src.page.Project.Sensitive.components.SensitiveColumn.components.Submit',
-                  defaultMessage: '\n              提交\n            ',
+                  defaultMessage: '\n              提交\n            '
                 }) /* 
             提交
             */
@@ -173,7 +185,7 @@ const ManualForm: React.FC<ManualFormProps> = ({ modalOpen, setModalOpen, callba
             label={
               formatMessage({
                 id: 'odc.SensitiveColumn.components.SacnRule.Database',
-                defaultMessage: '数据库',
+                defaultMessage: '数据库'
               }) //数据库
             }
             projectId={projectId}
@@ -186,7 +198,7 @@ const ManualForm: React.FC<ManualFormProps> = ({ modalOpen, setModalOpen, callba
             {
               formatMessage({
                 id: 'odc.src.page.Project.Sensitive.components.SensitiveColumn.components.CurrentProject',
-                defaultMessage: '当前项目：',
+                defaultMessage: '当前项目：'
               }) /* 当前项目： */
             }
 
@@ -214,7 +226,7 @@ const SelectedSensitiveColumn = forwardRef<any, any>(function (
     maskingAlgorithms,
     maskingAlgorithmOptions,
     checkedKeys,
-    setCheckedKeys,
+    setCheckedKeys
   }: {
     projectId: number;
     databaseIds: number[];
@@ -223,7 +235,7 @@ const SelectedSensitiveColumn = forwardRef<any, any>(function (
     checkedKeys: string[];
     setCheckedKeys: React.Dispatch<React.SetStateAction<string[]>>;
   },
-  ref,
+  ref
 ) {
   const [_formRef] = useForm();
   const [loading, setLoading] = useState<boolean>(false);
@@ -246,7 +258,7 @@ const SelectedSensitiveColumn = forwardRef<any, any>(function (
     return {
       submit: async (
         setModalOpen: React.Dispatch<React.SetStateAction<boolean>>,
-        callback: () => void,
+        callback: () => void
       ) => {
         await _formRef.validateFields().catch();
         const rawData = await _formRef.getFieldsValue();
@@ -254,18 +266,21 @@ const SelectedSensitiveColumn = forwardRef<any, any>(function (
         Object.keys(rawData).forEach((databaseId) => {
           Object.keys(rawData[databaseId]).forEach((type) => {
             Object.keys(rawData[databaseId][type]).forEach((tableName) => {
-              Object.keys(rawData[databaseId][type][tableName]).forEach((columnName) => {
-                _data.push({
-                  enabled: true,
-                  columnName,
-                  tableName,
-                  database: {
-                    id: databaseId && parseInt(databaseId),
-                  },
-                  type,
-                  maskingAlgorithmId: rawData[databaseId][type][tableName][columnName],
-                });
-              });
+              Object.keys(rawData[databaseId][type][tableName]).forEach(
+                (columnName) => {
+                  _data.push({
+                    enabled: true,
+                    columnName,
+                    tableName,
+                    database: {
+                      id: databaseId && parseInt(databaseId)
+                    },
+                    type,
+                    maskingAlgorithmId:
+                      rawData[databaseId][type][tableName][columnName]
+                  });
+                }
+              );
             });
           });
         });
@@ -274,8 +289,8 @@ const SelectedSensitiveColumn = forwardRef<any, any>(function (
           message.success(
             formatMessage({
               id: 'odc.src.page.Project.Sensitive.components.SensitiveColumn.components.SubmittedSuccessfully',
-              defaultMessage: '提交成功',
-            }), //'提交成功'
+              defaultMessage: '提交成功'
+            }) //'提交成功'
           );
 
           setModalOpen(false);
@@ -284,17 +299,20 @@ const SelectedSensitiveColumn = forwardRef<any, any>(function (
           message.error(
             formatMessage({
               id: 'odc.src.page.Project.Sensitive.components.SensitiveColumn.components.SubmissionFailed',
-              defaultMessage: '提交失败',
-            }), //'提交失败'
+              defaultMessage: '提交失败'
+            }) //'提交失败'
           );
         }
-      },
+      }
     };
   });
 
   const getColumns = async () => {
     setLoading(true);
-    const { contents: databaseColumns } = await listColumns(projectId, databaseIds);
+    const { contents: databaseColumns } = await listColumns(
+      projectId,
+      databaseIds
+    );
     setDatabaseColumns(databaseColumns);
     const treeData = [];
     let allColumns = 0;
@@ -303,26 +321,28 @@ const SelectedSensitiveColumn = forwardRef<any, any>(function (
       const views = [];
       let tableViewIndex = 0;
       for (const key in databaseColumn?.table2Columns) {
-        const leaves = databaseColumn?.table2Columns?.[key].map((tableColumn, _index) => ({
-          title: tableColumn?.name,
-          key: `0-${index}-${tableViewIndex}-${_index}`,
-          icon: (
-            <span className={styles.icon}>
-              <Icon
-                component={
-                  fieldIconMap[
-                    convertDataTypeToDataShowType(
-                      tableColumn?.typeName,
-                      databaseColumn?.dataTypeUnits,
-                    )
-                  ]
-                }
-              />
-            </span>
-          ),
+        const leaves = databaseColumn?.table2Columns?.[key].map(
+          (tableColumn, _index) => ({
+            title: tableColumn?.name,
+            key: `0-${index}-${tableViewIndex}-${_index}`,
+            icon: (
+              <span className={styles.icon}>
+                <Icon
+                  component={
+                    fieldIconMap[
+                      convertDataTypeToDataShowType(
+                        tableColumn?.typeName,
+                        databaseColumn?.dataTypeUnits
+                      )
+                    ]
+                  }
+                />
+              </span>
+            ),
 
-          type: ESensitiveColumnType.TABLE_COLUMN,
-        }));
+            type: ESensitiveColumnType.TABLE_COLUMN
+          })
+        );
         allColumns = allColumns + leaves?.length;
         tables.push({
           title: key,
@@ -334,31 +354,33 @@ const SelectedSensitiveColumn = forwardRef<any, any>(function (
           ),
 
           children: leaves,
-          type: ESensitiveColumnType.TABLE_COLUMN,
+          type: ESensitiveColumnType.TABLE_COLUMN
         });
         tableViewIndex++;
       }
       for (const key in databaseColumn?.view2Columns) {
-        const leaves = databaseColumn?.view2Columns?.[key].map((viewColumn, _index) => ({
-          title: viewColumn?.name,
-          key: `0-${index}-${tableViewIndex}-${_index}`,
-          icon: (
-            <span className={styles.icon}>
-              <Icon
-                component={
-                  fieldIconMap[
-                    convertDataTypeToDataShowType(
-                      viewColumn?.typeName,
-                      databaseColumn?.dataTypeUnits,
-                    )
-                  ]
-                }
-              />
-            </span>
-          ),
+        const leaves = databaseColumn?.view2Columns?.[key].map(
+          (viewColumn, _index) => ({
+            title: viewColumn?.name,
+            key: `0-${index}-${tableViewIndex}-${_index}`,
+            icon: (
+              <span className={styles.icon}>
+                <Icon
+                  component={
+                    fieldIconMap[
+                      convertDataTypeToDataShowType(
+                        viewColumn?.typeName,
+                        databaseColumn?.dataTypeUnits
+                      )
+                    ]
+                  }
+                />
+              </span>
+            ),
 
-          type: ESensitiveColumnType.VIEW_COLUMN,
-        }));
+            type: ESensitiveColumnType.VIEW_COLUMN
+          })
+        );
         allColumns = allColumns + leaves?.length;
         views.push({
           title: key,
@@ -370,7 +392,7 @@ const SelectedSensitiveColumn = forwardRef<any, any>(function (
           ),
 
           children: leaves,
-          type: ESensitiveColumnType.VIEW_COLUMN,
+          type: ESensitiveColumnType.VIEW_COLUMN
         });
         tableViewIndex++;
       }
@@ -386,7 +408,7 @@ const SelectedSensitiveColumn = forwardRef<any, any>(function (
                     fieldIconMap[
                       convertDataTypeToDataShowType(
                         externalTableColumn?.typeName,
-                        databaseColumn?.dataTypeUnits,
+                        databaseColumn?.dataTypeUnits
                       )
                     ]
                   }
@@ -394,8 +416,8 @@ const SelectedSensitiveColumn = forwardRef<any, any>(function (
               </span>
             ),
 
-            type: ESensitiveColumnType.TABLE_COLUMN,
-          }),
+            type: ESensitiveColumnType.TABLE_COLUMN
+          })
         );
         allColumns = allColumns + leaves?.length;
         tables.push({
@@ -408,7 +430,7 @@ const SelectedSensitiveColumn = forwardRef<any, any>(function (
           ),
 
           children: leaves,
-          type: ESensitiveColumnType.TABLE_COLUMN,
+          type: ESensitiveColumnType.TABLE_COLUMN
         });
         tableViewIndex++;
       }
@@ -424,15 +446,15 @@ const SelectedSensitiveColumn = forwardRef<any, any>(function (
                     fieldIconMap[
                       convertDataTypeToDataShowType(
                         materializedViewColumn?.typeName,
-                        databaseColumn?.dataTypeUnits,
+                        databaseColumn?.dataTypeUnits
                       )
                     ]
                   }
                 />
               </span>
             ),
-            type: ESensitiveColumnType.VIEW_COLUMN,
-          }),
+            type: ESensitiveColumnType.VIEW_COLUMN
+          })
         );
         views.push({
           title: key,
@@ -444,7 +466,7 @@ const SelectedSensitiveColumn = forwardRef<any, any>(function (
           ),
 
           children: leaves,
-          type: ESensitiveColumnType.VIEW_COLUMN,
+          type: ESensitiveColumnType.VIEW_COLUMN
         });
         tableViewIndex++;
       }
@@ -458,7 +480,7 @@ const SelectedSensitiveColumn = forwardRef<any, any>(function (
           </span>
         ),
 
-        children: [...tables, ...views],
+        children: [...tables, ...views]
       });
     });
     setLoading(false);
@@ -477,7 +499,7 @@ const SelectedSensitiveColumn = forwardRef<any, any>(function (
         tableKey: child?.key,
         tableTitle: child.title,
         type: child?.type,
-        children: child?.children,
+        children: child?.children
       }));
       result = result?.concat(data);
     });
@@ -493,8 +515,8 @@ const SelectedSensitiveColumn = forwardRef<any, any>(function (
             ...result[d.databaseId]?.[d.type],
             [d.tableTitle]: {
               ...result[d.databaseId]?.[d.type]?.[d.tableTitle],
-              [child.title]: maskingAlgorithmOptions?.[0]?.value || null,
-            },
+              [child.title]: maskingAlgorithmOptions?.[0]?.value || null
+            }
           };
         } else {
           result[d.databaseId] = {
@@ -503,9 +525,9 @@ const SelectedSensitiveColumn = forwardRef<any, any>(function (
             [d.type]: {
               ...result?.[d.databaseId]?.[d.type],
               [d.tableTitle]: {
-                [child.title]: maskingAlgorithmOptions?.[0]?.value || null,
-              },
-            },
+                [child.title]: maskingAlgorithmOptions?.[0]?.value || null
+              }
+            }
           };
         }
       });
@@ -527,7 +549,7 @@ const SelectedSensitiveColumn = forwardRef<any, any>(function (
             key: `0-${index}-${tableViewIndex}-${_index}`,
             type: ESensitiveColumnType.TABLE_COLUMN,
             columnType: tableColumn?.typeName,
-            dataTypeUnits: databaseColumn?.dataTypeUnits,
+            dataTypeUnits: databaseColumn?.dataTypeUnits
           }))
           ?.filter((leaf) => checkedKeys?.includes(leaf?.key));
         checkedColumns = checkedColumns + leaves?.length;
@@ -536,7 +558,7 @@ const SelectedSensitiveColumn = forwardRef<any, any>(function (
             title: key,
             key: `0-${index}-${tableViewIndex}`,
             children: leaves,
-            type: ESensitiveColumnType.TABLE_COLUMN,
+            type: ESensitiveColumnType.TABLE_COLUMN
           });
         }
         tableViewIndex++;
@@ -548,7 +570,7 @@ const SelectedSensitiveColumn = forwardRef<any, any>(function (
             key: `0-${index}-${tableViewIndex}-${_index}`,
             type: ESensitiveColumnType.VIEW_COLUMN,
             columnType: viewColumn?.typeName,
-            dataTypeUnits: databaseColumn?.dataTypeUnits,
+            dataTypeUnits: databaseColumn?.dataTypeUnits
           }))
           ?.filter((view) => checkedKeys?.includes(view?.key));
         checkedColumns = checkedColumns + leaves?.length;
@@ -557,7 +579,7 @@ const SelectedSensitiveColumn = forwardRef<any, any>(function (
             title: key,
             key: `0-${index}-${tableViewIndex}`,
             children: leaves,
-            type: ESensitiveColumnType.VIEW_COLUMN,
+            type: ESensitiveColumnType.VIEW_COLUMN
           });
         }
         tableViewIndex++;
@@ -569,7 +591,7 @@ const SelectedSensitiveColumn = forwardRef<any, any>(function (
             key: `0-${index}-${tableViewIndex}-${_index}`,
             type: ESensitiveColumnType.TABLE_COLUMN,
             columnType: externalTableColumn?.typeName,
-            dataTypeUnits: databaseColumn?.dataTypeUnits,
+            dataTypeUnits: databaseColumn?.dataTypeUnits
           }))
           ?.filter((leaf) => checkedKeys?.includes(leaf?.key));
         checkedColumns = checkedColumns + leaves?.length;
@@ -578,7 +600,7 @@ const SelectedSensitiveColumn = forwardRef<any, any>(function (
             title: key,
             key: `0-${index}-${tableViewIndex}`,
             children: leaves,
-            type: ESensitiveColumnType.TABLE_COLUMN,
+            type: ESensitiveColumnType.TABLE_COLUMN
           });
         }
         tableViewIndex++;
@@ -590,7 +612,7 @@ const SelectedSensitiveColumn = forwardRef<any, any>(function (
             key: `0-${index}-${tableViewIndex}-${_index}`,
             type: ESensitiveColumnType.TABLE_COLUMN,
             columnType: materializedViewColumn?.typeName,
-            dataTypeUnits: databaseColumn?.dataTypeUnits,
+            dataTypeUnits: databaseColumn?.dataTypeUnits
           }))
           ?.filter((leaf) => checkedKeys?.includes(leaf?.key));
         checkedColumns = checkedColumns + leaves?.length;
@@ -599,7 +621,7 @@ const SelectedSensitiveColumn = forwardRef<any, any>(function (
             title: key,
             key: `0-${index}-${tableViewIndex}`,
             children: leaves,
-            type: ESensitiveColumnType.TABLE_COLUMN,
+            type: ESensitiveColumnType.TABLE_COLUMN
           });
         }
         tableViewIndex++;
@@ -609,24 +631,30 @@ const SelectedSensitiveColumn = forwardRef<any, any>(function (
           title: databaseColumn?.databaseName,
           key: `0-${index}`,
           databaseId: databaseColumn?.databaseId,
-          children: [...tables, ...views],
+          children: [...tables, ...views]
         });
       }
     });
     setCheckedColumns(checkedColumns);
     const rawData = parseTreeData(treeData);
     setData(rawData);
-    setDefaultActiveKey(rawData?.map((d) => `${d?.databaseId}/${d?.tableTitle}`));
+    setDefaultActiveKey(
+      rawData?.map((d) => `${d?.databaseId}/${d?.tableTitle}`)
+    );
     setOriginData(rawData);
     // 避免删除时丢失已选择的项的值
     setFormData(merge(merge(parseDataToFields(rawData), formData), values));
-    await _formRef.setFieldsValue(merge(merge(parseDataToFields(rawData), formData), values));
+    await _formRef.setFieldsValue(
+      merge(merge(parseDataToFields(rawData), formData), values)
+    );
   };
   const collapseSearch = async function (searchValue: string) {
     const values = await _formRef.getFieldsValue();
     if (!searchValue) {
       setData(originData);
-      setDefaultActiveKey(originData?.map((d) => `${d?.databaseId}/${d?.tableTitle}`));
+      setDefaultActiveKey(
+        originData?.map((d) => `${d?.databaseId}/${d?.tableTitle}`)
+      );
       await _formRef.setFieldsValue(formData);
       return;
     }
@@ -640,7 +668,7 @@ const SelectedSensitiveColumn = forwardRef<any, any>(function (
         newData.push(d);
       } else {
         d.children = d?.children?.filter((child) =>
-          child?.title?.toLowerCase()?.includes(searchValue?.toLowerCase()),
+          child?.title?.toLowerCase()?.includes(searchValue?.toLowerCase())
         );
         if (d?.children?.length > 0) {
           newData.push(d);
@@ -649,7 +677,9 @@ const SelectedSensitiveColumn = forwardRef<any, any>(function (
     });
     await _formRef.setFieldsValue(merge(formData, values));
     setData(newData);
-    setDefaultActiveKey(newData?.map((d) => `${d?.databaseId}/${d?.tableTitle}`));
+    setDefaultActiveKey(
+      newData?.map((d) => `${d?.databaseId}/${d?.tableTitle}`)
+    );
   };
   const treeSearch = async function (searchValue: string) {
     if (!searchValue) {
@@ -663,11 +693,13 @@ const SelectedSensitiveColumn = forwardRef<any, any>(function (
         newTreeData.push(td);
       } else {
         td.children = td?.children?.filter((table) => {
-          if (table?.title?.toLowerCase()?.includes(searchValue?.toLowerCase())) {
+          if (
+            table?.title?.toLowerCase()?.includes(searchValue?.toLowerCase())
+          ) {
             return true;
           }
           table.children = table?.children?.filter((column) =>
-            column?.title?.toLowerCase()?.includes(searchValue?.toLowerCase()),
+            column?.title?.toLowerCase()?.includes(searchValue?.toLowerCase())
           );
           if (table?.children?.length > 0) {
             return true;
@@ -689,7 +721,7 @@ const SelectedSensitiveColumn = forwardRef<any, any>(function (
             description={
               formatMessage({
                 id: 'odc.src.page.Project.Sensitive.components.SensitiveColumn.components.ThereIsNoOptionalSensitive',
-                defaultMessage: '所选数据库中没有可选的敏感列',
+                defaultMessage: '所选数据库中没有可选的敏感列'
               }) //'所选数据库中没有可选的敏感列'
             }
             image={Empty.PRESENTED_IMAGE_SIMPLE}
@@ -701,7 +733,7 @@ const SelectedSensitiveColumn = forwardRef<any, any>(function (
             description={
               formatMessage({
                 id: 'odc.src.page.Project.Sensitive.components.SensitiveColumn.components.OptionalSensitiveColumnsDoNot',
-                defaultMessage: '可选的敏感列中不包含搜索关键字',
+                defaultMessage: '可选的敏感列中不包含搜索关键字'
               }) //'可选的敏感列中不包含搜索关键字'
             }
             image={Empty.PRESENTED_IMAGE_SIMPLE}
@@ -716,7 +748,7 @@ const SelectedSensitiveColumn = forwardRef<any, any>(function (
             description={
               formatMessage({
                 id: 'odc.src.page.Project.Sensitive.components.SensitiveColumn.components.NoChoiceDatabase',
-                defaultMessage: '尚未选择数据库',
+                defaultMessage: '尚未选择数据库'
               }) //'尚未选择数据库'
             }
             image={Empty.PRESENTED_IMAGE_SIMPLE}
@@ -739,30 +771,39 @@ const SelectedSensitiveColumn = forwardRef<any, any>(function (
       />
     );
   };
-  const colleageValueFromEvent = (e: string | number, root: SelectNode, leaf: SelectNodeChild) => {
+  const colleageValueFromEvent = (
+    e: string | number,
+    root: SelectNode,
+    leaf: SelectNodeChild
+  ) => {
     setFormData(
       merge(parseDataToFields(originData), {
         [root?.databaseId]: {
           [root?.type]: {
             [root?.tableTitle]: {
-              [leaf?.title]: e,
-            },
-          },
-        },
-      }),
+              [leaf?.title]: e
+            }
+          }
+        }
+      })
     );
     return e;
   };
   const handleCollapseDelete = (root: SelectNode, leaf: SelectNodeChild) => {
     const newCheckedKeys = checkedKeys.filter(
-      (checkedKey) => ![root.databaseKey, root.tableKey, leaf.key]?.includes(checkedKey),
+      (checkedKey) =>
+        ![root.databaseKey, root.tableKey, leaf.key]?.includes(checkedKey)
     );
     setCheckedKeys(newCheckedKeys);
   };
   // 需要及时更新data以及defaultActiveKey，确保新增勾选项时Collapse能正常展开。
   const WrapCollapse = useCallback(() => {
     return (
-      <Collapse defaultActiveKey={defaultActiveKey} ghost className={styles.wrapCollapse}>
+      <Collapse
+        defaultActiveKey={defaultActiveKey}
+        ghost
+        className={styles.wrapCollapse}
+      >
         {data?.map((root) => {
           return (
             <Collapse.Panel
@@ -771,7 +812,9 @@ const SelectedSensitiveColumn = forwardRef<any, any>(function (
                   <span className={styles.headerIcon}>
                     <Icon
                       component={
-                        root?.type === ESensitiveColumnType.TABLE_COLUMN ? TableOutlined : ViewSvg
+                        root?.type === ESensitiveColumnType.TABLE_COLUMN
+                          ? TableOutlined
+                          : ViewSvg
                       }
                     />
                   </span>
@@ -792,39 +835,49 @@ const SelectedSensitiveColumn = forwardRef<any, any>(function (
                               fieldIconMap[
                                 convertDataTypeToDataShowType(
                                   child?.columnType,
-                                  child?.dataTypeUnits,
+                                  child?.dataTypeUnits
                                 )
                               ]
                             }
                           />
                         </span>
                         <Tooltip title={child?.title} placement="left">
-                          <div className={styles.checkedTableColumnTooltip}>{child?.title}</div>
+                          <div className={styles.checkedTableColumnTooltip}>
+                            {child?.title}
+                          </div>
                         </Tooltip>
                       </div>
                       <Space align="baseline">
                         <Form.Item
-                          name={[root?.databaseId, root?.type, root?.tableTitle, child?.title]}
+                          name={[
+                            root?.databaseId,
+                            root?.type,
+                            root?.tableTitle,
+                            child?.title
+                          ]}
                           rules={[
                             {
                               required: true,
                               message: formatMessage({
                                 id: 'odc.src.page.Project.Sensitive.components.SensitiveColumn.components.PleaseChoose',
-                                defaultMessage: '请选择',
-                              }), //'请选择'
-                            },
+                                defaultMessage: '请选择'
+                              }) //'请选择'
+                            }
                           ]}
-                          getValueFromEvent={(e) => colleageValueFromEvent(e, root, child)}
+                          getValueFromEvent={(e) =>
+                            colleageValueFromEvent(e, root, child)
+                          }
                         >
                           <Select
                             style={{
-                              width: '165px',
+                              width: '165px'
                             }}
                             optionLabelProp="label"
                           >
                             {maskingAlgorithmOptions?.map((option, index) => {
                               const target = maskingAlgorithms?.find(
-                                (maskingAlgorithm) => maskingAlgorithm?.id === option?.value,
+                                (maskingAlgorithm) =>
+                                  maskingAlgorithm?.id === option?.value
                               );
                               return (
                                 <Select.Option
@@ -839,24 +892,24 @@ const SelectedSensitiveColumn = forwardRef<any, any>(function (
                                       {
                                         label: formatMessage({
                                           id: 'odc.src.page.Project.Sensitive.components.SensitiveColumn.components.DesensitizationMethod',
-                                          defaultMessage: '脱敏方式',
+                                          defaultMessage: '脱敏方式'
                                         }) /* 脱敏方式 */,
-                                        value: maskRuleTypeMap?.[target?.type],
+                                        value: maskRuleTypeMap?.[target?.type]
                                       },
                                       {
                                         label: formatMessage({
                                           id: 'odc.src.page.Project.Sensitive.components.SensitiveColumn.components.TestData',
-                                          defaultMessage: '测试数据',
+                                          defaultMessage: '测试数据'
                                         }) /* 测试数据 */,
-                                        value: target?.sampleContent,
+                                        value: target?.sampleContent
                                       },
                                       {
                                         label: formatMessage({
                                           id: 'odc.src.page.Project.Sensitive.components.SensitiveColumn.components.Preview',
-                                          defaultMessage: '结果预览',
+                                          defaultMessage: '结果预览'
                                         }) /* 结果预览 */,
-                                        value: target?.maskedContent,
-                                      },
+                                        value: target?.maskedContent
+                                      }
                                     ]}
                                     children={() => <div>{option?.label}</div>}
                                   />
@@ -865,7 +918,9 @@ const SelectedSensitiveColumn = forwardRef<any, any>(function (
                             })}
                           </Select>
                         </Form.Item>
-                        <DeleteOutlined onClick={() => handleCollapseDelete(root, child)} />
+                        <DeleteOutlined
+                          onClick={() => handleCollapseDelete(root, child)}
+                        />
                       </Space>
                     </div>
                   </div>
@@ -909,7 +964,7 @@ const SelectedSensitiveColumn = forwardRef<any, any>(function (
         {
           formatMessage({
             id: 'odc.src.page.Project.Sensitive.components.SensitiveColumn.components.ChooseSensitiveLandscape',
-            defaultMessage: '选择敏感列',
+            defaultMessage: '选择敏感列'
           }) /* 选择敏感列 */
         }
       </div>
@@ -920,9 +975,9 @@ const SelectedSensitiveColumn = forwardRef<any, any>(function (
               formatMessage(
                 {
                   id: 'odc.src.page.Project.Sensitive.components.SensitiveColumn.components.SelectColumnCheckColumns',
-                  defaultMessage: '选择列 ({checkedColumns}/{allColumns})',
+                  defaultMessage: '选择列 ({checkedColumns}/{allColumns})'
                 },
-                { checkedColumns, allColumns },
+                { checkedColumns, allColumns }
               ) //`选择列 (${checkedColumns}/${allColumns})`
             }
             onSearch={treeSearch}
@@ -942,9 +997,9 @@ const SelectedSensitiveColumn = forwardRef<any, any>(function (
               formatMessage(
                 {
                   id: 'odc.src.page.Project.Sensitive.components.SensitiveColumn.components.SelectedCheckColumnsItem',
-                  defaultMessage: '已选 {checkedColumns} 项',
+                  defaultMessage: '已选 {checkedColumns} 项'
                 },
-                { checkedColumns },
+                { checkedColumns }
               ) //`已选 ${checkedColumns} 项`
             }
             onSearch={collapseSearch}
@@ -957,7 +1012,7 @@ const SelectedSensitiveColumn = forwardRef<any, any>(function (
                 title={
                   formatMessage({
                     id: 'odc.src.page.Project.Sensitive.components.SensitiveColumn.components.AreYouSureYouWant',
-                    defaultMessage: '是否确定清空已选对象？',
+                    defaultMessage: '是否确定清空已选对象？'
                   }) //'确定要清空已选对象吗？'
                 }
               >
@@ -965,7 +1020,7 @@ const SelectedSensitiveColumn = forwardRef<any, any>(function (
                   {
                     formatMessage({
                       id: 'odc.src.page.Project.Sensitive.components.SensitiveColumn.components.Empty',
-                      defaultMessage: '清空',
+                      defaultMessage: '清空'
                     }) /* 清空 */
                   }
                 </a>
@@ -983,7 +1038,7 @@ const SelectedSensitiveColumn = forwardRef<any, any>(function (
                   description={
                     formatMessage({
                       id: 'odc.src.page.Project.Sensitive.components.SensitiveColumn.components.HaveNotCheckedTheSensitive',
-                      defaultMessage: '尚未勾选敏感列',
+                      defaultMessage: '尚未勾选敏感列'
                     }) //'尚未勾选敏感列'
                   }
                   image={Empty.PRESENTED_IMAGE_SIMPLE}
@@ -995,7 +1050,7 @@ const SelectedSensitiveColumn = forwardRef<any, any>(function (
                   description={
                     formatMessage({
                       id: 'odc.src.page.Project.Sensitive.components.SensitiveColumn.components.TheSelectedSensitiveColumnsDo',
-                      defaultMessage: '已勾选的敏感列中不包含搜索关键字',
+                      defaultMessage: '已勾选的敏感列中不包含搜索关键字'
                     }) //'已勾选的敏感列中不包含搜索关键字'
                   }
                   image={Empty.PRESENTED_IMAGE_SIMPLE}

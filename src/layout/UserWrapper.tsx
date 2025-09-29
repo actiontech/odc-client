@@ -23,7 +23,10 @@ import { message } from 'antd';
 import { inject, observer } from 'mobx-react';
 import React, { useContext, useEffect, useState } from 'react';
 import { PageLoadingContext } from './PageLoadingWrapper';
-import { getDefaultProjectPage, toDefaultProjectPage } from '@/service/projectHistory';
+import {
+  getDefaultProjectPage,
+  toDefaultProjectPage
+} from '@/service/projectHistory';
 import OrganizationSelectModal from '@/component/OrganizationSelectModal';
 import odc from '@/plugins/odc';
 interface IProps {
@@ -34,9 +37,13 @@ enum STATUS_TYPE {
   INIT,
   LOADING,
   DONE,
-  ERROR,
+  ERROR
 }
-const UserWrapper: React.FC<IProps> = function ({ children, userStore, settingStore }) {
+const UserWrapper: React.FC<IProps> = function ({
+  children,
+  userStore,
+  settingStore
+}) {
   const [status, setStatus] = useState<STATUS_TYPE>(STATUS_TYPE.INIT);
   const [defaultOrganizationHanlde, setDefaultOrganizationHanlde] =
     useState<(id: number) => void>(null);
@@ -55,7 +62,7 @@ const UserWrapper: React.FC<IProps> = function ({ children, userStore, settingSt
       setStatus(STATUS_TYPE.DONE);
       history.replace({
         pathname: '/login',
-        search: location.search,
+        search: location.search
       });
       return false;
     }
@@ -69,8 +76,8 @@ const UserWrapper: React.FC<IProps> = function ({ children, userStore, settingSt
       message.error(
         formatMessage({
           id: 'odc.src.layout.UserWrapper.GetcurrentuserInitializationInformationFailed',
-          defaultMessage: '[getCurrentUser]初始化信息失败',
-        }), //[getCurrentUser]初始化信息失败
+          defaultMessage: '[getCurrentUser]初始化信息失败'
+        }) //[getCurrentUser]初始化信息失败
       );
 
       setStatus(STATUS_TYPE.ERROR);
@@ -102,7 +109,10 @@ const UserWrapper: React.FC<IProps> = function ({ children, userStore, settingSt
         });
       };
     }
-    const isSuccess = await userStore.switchCurrentOrganization(null, getDefaultOrganization);
+    const isSuccess = await userStore.switchCurrentOrganization(
+      null,
+      getDefaultOrganization
+    );
     const isLoginPage = location.pathname.indexOf('login') > -1;
     if (!userStore.organizations?.length || !isSuccess) {
       organizationErrorResolve();
@@ -138,16 +148,16 @@ const UserWrapper: React.FC<IProps> = function ({ children, userStore, settingSt
         pageContext?.setTask({
           tip: formatMessage({
             id: 'odc.src.layout.GetUserInformation',
-            defaultMessage: '正在获取用户信息',
+            defaultMessage: '正在获取用户信息'
           }), //'正在获取用户信息'
-          showError: false,
+          showError: false
         });
         break;
       }
       case STATUS_TYPE.ERROR: {
         pageContext?.setTask({
           tip: null,
-          showError: true,
+          showError: true
         });
         break;
       }
@@ -155,9 +165,9 @@ const UserWrapper: React.FC<IProps> = function ({ children, userStore, settingSt
         pageContext?.setTask({
           tip: formatMessage({
             id: 'odc.src.layout.UserStatusIsBeingChecked',
-            defaultMessage: '正在检查用户状态',
+            defaultMessage: '正在检查用户状态'
           }), //'正在检查用户状态'
-          showError: false,
+          showError: false
         });
         break;
       }

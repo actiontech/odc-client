@@ -14,27 +14,25 @@
  * limitations under the License.
  */
 
-import React, { useContext, useRef } from 'react';
+import React, { FunctionComponent, useContext, useRef } from 'react';
 
 import classNames from 'classnames';
 import { ActivityBarItemType } from '../ActivityBar/type';
 import ActivityBarContext from '../context/ActivityBarContext';
-import styles from './index.less';
-import Manager from './Manager';
 import ResourceTree from './ResourceTree/Container';
 import Script from './Script';
 import Task from './Task';
-
-interface IProps {}
+import { SideBarStyleWrapper } from './style';
+import Manager from './Manager';
 
 const items = {
   [ActivityBarItemType.Database]: ResourceTree,
   [ActivityBarItemType.Script]: Script,
   [ActivityBarItemType.Task]: Task,
-  [ActivityBarItemType.Manager]: Manager,
+  [ActivityBarItemType.Manager]: Manager
 };
 
-const SideBar: React.FC<IProps> = function () {
+const SideBar: React.FC = function () {
   const activityBarContext = useContext(ActivityBarContext);
 
   const loadedKeys = useRef<Set<ActivityBarItemType>>(new Set());
@@ -42,23 +40,28 @@ const SideBar: React.FC<IProps> = function () {
   loadedKeys.current.add(activityBarContext?.activeKey);
 
   return (
-    <div className={styles.sideBar}>
-      {Object.entries(items).map(([key, Component]: [ActivityBarItemType, any]) => {
-        if (loadedKeys.current.has(key) || key === activityBarContext?.activeKey) {
-          return (
-            <div
-              key={key}
-              className={classNames(styles.content, {
-                [styles?.active]: key === activityBarContext?.activeKey,
-              })}
-            >
-              <Component />
-            </div>
-          );
+    <SideBarStyleWrapper>
+      {Object.entries(items).map(
+        ([key, Component]: [ActivityBarItemType, FunctionComponent]) => {
+          if (
+            loadedKeys.current.has(key) ||
+            key === activityBarContext?.activeKey
+          ) {
+            return (
+              <div
+                key={key}
+                className={classNames('content', {
+                  active: key === activityBarContext?.activeKey
+                })}
+              >
+                <Component />
+              </div>
+            );
+          }
+          return null;
         }
-        return null;
-      })}
-    </div>
+      )}
+    </SideBarStyleWrapper>
   );
 };
 

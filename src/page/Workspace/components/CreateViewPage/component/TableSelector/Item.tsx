@@ -25,6 +25,7 @@ import { ReactComponent as DragSvg } from '@/svgr/DragItem.svg';
 import EditableText from '../EditableText';
 import { formatMessage } from '@/util/intl';
 import { CaseEditableText } from '@/component/Input/Case';
+import { BasicSelect } from '@actiontech/dms-kit';
 const { Option } = Select;
 
 interface IProps {
@@ -52,7 +53,7 @@ const JOIN_KEYWORDS = [
   'minus',
   'left outer join',
   'right outer join',
-  'full outer join',
+  'full outer join'
 ];
 const Item: React.FC<IProps> = React.memo((props) => {
   const {
@@ -63,7 +64,7 @@ const Item: React.FC<IProps> = React.memo((props) => {
     useCaseInput = false,
     caseSensitive,
     escapes,
-    joinKeywords: propJoinKeywords,
+    joinKeywords: propJoinKeywords
   } = props;
   const joinKeywords = propJoinKeywords || JOIN_KEYWORDS;
   const params = parse(dataKey);
@@ -93,7 +94,7 @@ const Item: React.FC<IProps> = React.memo((props) => {
                 escapes={escapes}
                 placeholder={formatMessage({
                   id: 'odc.component.ColumnSelector.Item.Alias',
-                  defaultMessage: '别名',
+                  defaultMessage: '别名'
                 })} /* 别名 */
               />
             ) : (
@@ -101,13 +102,13 @@ const Item: React.FC<IProps> = React.memo((props) => {
                 onChange={handleChangeAliasName}
                 placeholder={formatMessage({
                   id: 'odc.component.TableSelector.Item.Alias',
-                  defaultMessage: '别名',
+                  defaultMessage: '别名'
                 })} /* 别名 */
               />
             )}
 
             {!isLast && (
-              <Select
+              <BasicSelect
                 defaultValue={joinKeywords[0]}
                 dropdownStyle={{ minWidth: '150px' }}
                 onChange={handleChangeOperation}
@@ -119,7 +120,7 @@ const Item: React.FC<IProps> = React.memo((props) => {
                     {keyword.toUpperCase()}
                   </Option>
                 ))}
-              </Select>
+              </BasicSelect>
             )}
           </Space>
           <DeleteOutlined

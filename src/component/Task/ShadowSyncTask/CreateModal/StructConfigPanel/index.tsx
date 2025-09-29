@@ -30,12 +30,12 @@ type IProps = IContentProps;
 enum TabKeys {
   SYNC = 'sync',
   UNSYNC = 'unsync',
-  SQL = 'sql',
+  SQL = 'sql'
 }
 
 const StructConfigPanel = forwardRef<any, IProps>(function (
   { data, setData, connectionMode },
-  ref,
+  ref
 ) {
   const [form] = Form.useForm();
   useImperativeHandle(ref, () => {
@@ -47,14 +47,18 @@ const StructConfigPanel = forwardRef<any, IProps>(function (
         } catch (errorInfo) {
           form.scrollToField(errorInfo?.errorFields?.[0]?.name);
         }
-      },
+      }
     };
   });
   /**
    * 跳过表
    */
   async function skip(keys: number[]) {
-    const isSuccess = await setShadowSyncRecordStatus(data?.shadowAnalysisData?.id, keys, true);
+    const isSuccess = await setShadowSyncRecordStatus(
+      data?.shadowAnalysisData?.id,
+      keys,
+      true
+    );
     if (isSuccess) {
       setData({
         ...data,
@@ -64,12 +68,12 @@ const StructConfigPanel = forwardRef<any, IProps>(function (
             if (keys.includes(table.id)) {
               return {
                 ...table,
-                comparingResult: SchemaComparingResult.SKIP,
+                comparingResult: SchemaComparingResult.SKIP
               };
             }
             return table;
-          }),
-        },
+          })
+        }
       });
 
       return true;
@@ -80,7 +84,11 @@ const StructConfigPanel = forwardRef<any, IProps>(function (
    * 取消跳过表
    */
   async function cancelSkip(keys: number[]) {
-    const newTables = await setShadowSyncRecordStatus(data?.shadowAnalysisData?.id, keys, false);
+    const newTables = await setShadowSyncRecordStatus(
+      data?.shadowAnalysisData?.id,
+      keys,
+      false
+    );
     if (newTables?.length) {
       const newStatusMap = {};
       newTables.forEach((table) => {
@@ -94,12 +102,12 @@ const StructConfigPanel = forwardRef<any, IProps>(function (
             if (keys.includes(table.id)) {
               return {
                 ...table,
-                comparingResult: newStatusMap[table.id],
+                comparingResult: newStatusMap[table.id]
               };
             }
             return table;
-          }),
-        },
+          })
+        }
       });
 
       return true;
@@ -117,7 +125,7 @@ const StructConfigPanel = forwardRef<any, IProps>(function (
         onValuesChange={(_, values) => {
           setData({
             ...data,
-            ...values,
+            ...values
           });
         }}
       >
@@ -125,7 +133,7 @@ const StructConfigPanel = forwardRef<any, IProps>(function (
           shouldUpdate
           label={formatMessage({
             id: 'odc.CreateShadowSyncModal.StructConfigPanel.StructuralAnalysis',
-            defaultMessage: '结构分析',
+            defaultMessage: '结构分析'
           })} /*结构分析*/
         >
           <StructAnalysisResult
@@ -139,14 +147,14 @@ const StructConfigPanel = forwardRef<any, IProps>(function (
           keepExpand
           label={formatMessage({
             id: 'odc.CreateShadowSyncModal.StructConfigPanel.TaskSettings',
-            defaultMessage: '任务设置',
+            defaultMessage: '任务设置'
           })} /*任务设置*/
         >
           <TaskTimer />
           <Form.Item
             label={formatMessage({
               id: 'odc.components.CreateAsyncTaskModal.TaskErrorHandling',
-              defaultMessage: '任务错误处理',
+              defaultMessage: '任务错误处理'
             })}
             /* 任务错误处理 */
             name="errorStrategy"
@@ -155,11 +163,11 @@ const StructConfigPanel = forwardRef<any, IProps>(function (
                 required: true,
                 message: formatMessage({
                   id: 'odc.components.CreateAsyncTaskModal.SelectTaskErrorHandling',
-                  defaultMessage: '请选择任务错误处理',
-                }),
+                  defaultMessage: '请选择任务错误处理'
+                })
 
                 // 请选择任务错误处理
-              },
+              }
             ]}
           >
             <Radio.Group>
@@ -167,7 +175,7 @@ const StructConfigPanel = forwardRef<any, IProps>(function (
                 {
                   formatMessage({
                     id: 'odc.components.CreateAsyncTaskModal.StopATask',
-                    defaultMessage: '停止任务',
+                    defaultMessage: '停止任务'
                   })
 
                   /* 停止任务 */
@@ -177,7 +185,7 @@ const StructConfigPanel = forwardRef<any, IProps>(function (
                 {
                   formatMessage({
                     id: 'odc.components.CreateAsyncTaskModal.IgnoreErrorsContinueTasks',
-                    defaultMessage: '忽略错误继续任务',
+                    defaultMessage: '忽略错误继续任务'
                   })
 
                   /* 忽略错误继续任务 */

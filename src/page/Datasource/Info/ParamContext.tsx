@@ -14,7 +14,7 @@ interface IParamContext {
 }
 
 const ParamContext: React.Context<IParamContext> = React.createContext({
-  searchValue: null,
+  searchValue: null
 });
 
 export default ParamContext;

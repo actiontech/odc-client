@@ -37,7 +37,7 @@ interface IExceptionProps {
 class Exception extends React.Component<IExceptionProps, {}> {
   public static defaultProps = {
     backText: 'back to home',
-    redirect: '/',
+    redirect: '/'
   };
 
   constructor(props) {
@@ -78,9 +78,9 @@ class Exception extends React.Component<IExceptionProps, {}> {
                 {
                   // @ts-ignore
                   to: redirect,
-                  href: redirect,
+                  href: redirect
                 },
-                <Button type="primary">{backText}</Button>,
+                <Button type="primary">{backText}</Button>
               )}
           </div>
         </div>

@@ -21,13 +21,13 @@ import request from '@/util/request';
 export async function updateSensitiveRule(
   projectId: number,
   id: number,
-  sensitiveRule: ISensitiveRule,
+  sensitiveRule: ISensitiveRule
 ): Promise<boolean> {
   const ret = await request.put(
     `/api/v2/collaboration/projects/${projectId}/sensitiveRules/${id}`,
     {
-      data: sensitiveRule,
-    },
+      data: sensitiveRule
+    }
   );
   return ret?.successful;
 }
@@ -35,13 +35,13 @@ export async function updateSensitiveRule(
 export async function setEnabled(
   projectId: number,
   id: number,
-  enabled: boolean,
+  enabled: boolean
 ): Promise<boolean> {
   const ret = await request.post(
     `/api/v2/collaboration/projects/${projectId}/sensitiveRules/${id}/setEnabled`,
     {
-      data: { enabled },
-    },
+      data: { enabled }
+    }
   );
   return ret?.successful;
 }
@@ -53,32 +53,46 @@ export async function listSensitiveRules(
     type: SensitiveRuleType;
     maskingAlgorith: number[];
     enabled: boolean[];
-  }>,
+  }>
 ): Promise<IResponseData<ISensitiveRule>> {
-  const ret = await request.get(`/api/v2/collaboration/projects/${projectId}/sensitiveRules/`, {
-    params,
-  });
+  const ret = await request.get(
+    `/api/v2/collaboration/projects/${projectId}/sensitiveRules/`,
+    {
+      params
+    }
+  );
   return ret?.data;
 }
 
-export async function detailSensitiveRule(projectId: number, id: number): Promise<ISensitiveRule> {
-  const ret = await request.get(`/api/v2/collaboration/projects/${projectId}/sensitiveRules/${id}`);
+export async function detailSensitiveRule(
+  projectId: number,
+  id: number
+): Promise<ISensitiveRule> {
+  const ret = await request.get(
+    `/api/v2/collaboration/projects/${projectId}/sensitiveRules/${id}`
+  );
   return ret?.data;
 }
 
-export async function deleteSensitiveRule(projectId: number, id: number): Promise<boolean> {
+export async function deleteSensitiveRule(
+  projectId: number,
+  id: number
+): Promise<boolean> {
   const ret = await request.delete(
-    `/api/v2/collaboration/projects/${projectId}/sensitiveRules/${id}`,
+    `/api/v2/collaboration/projects/${projectId}/sensitiveRules/${id}`
   );
   return ret?.successful;
 }
 
 export async function createSensitiveRule(
   projectId: number,
-  sensitiveRule: Partial<ISensitiveRule>,
+  sensitiveRule: Partial<ISensitiveRule>
 ): Promise<boolean> {
-  const ret = await request.post(`/api/v2/collaboration/projects/${projectId}/sensitiveRules/`, {
-    data: sensitiveRule,
-  });
+  const ret = await request.post(
+    `/api/v2/collaboration/projects/${projectId}/sensitiveRules/`,
+    {
+      data: sensitiveRule
+    }
+  );
   return ret?.successful;
 }

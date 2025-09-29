@@ -24,9 +24,12 @@ const ChangeDetail: React.FC<ChangeDetailProps> = (props) => {
     }
   }, [scheduleId, scheduleChangeLogId]);
 
-  const { run: fetchOperationDetail, loading } = useRequest(getOperationDetail, {
-    manual: true,
-  });
+  const { run: fetchOperationDetail, loading } = useRequest(
+    getOperationDetail,
+    {
+      manual: true
+    }
+  );
 
   const loadData = async () => {
     setData(null);
@@ -41,7 +44,7 @@ const ChangeDetail: React.FC<ChangeDetailProps> = (props) => {
       onCancel={onClose}
       title={formatMessage({
         id: 'src.component.Task.component.CommonDetailModal.58B347B9',
-        defaultMessage: '变更详情',
+        defaultMessage: '变更详情'
       })}
       width={900}
       destroyOnClose
@@ -52,13 +55,13 @@ const ChangeDetail: React.FC<ChangeDetailProps> = (props) => {
             <Descriptions.Item span={1}>
               {formatMessage({
                 id: 'src.component.Task.component.CommonDetailModal.AF00DE0E',
-                defaultMessage: '变更前：',
+                defaultMessage: '变更前：'
               })}
             </Descriptions.Item>
             <Descriptions.Item span={1}>
               {formatMessage({
                 id: 'src.component.Task.component.CommonDetailModal.1CF173E7',
-                defaultMessage: '变更后：',
+                defaultMessage: '变更后：'
               })}
             </Descriptions.Item>
           </Descriptions>
@@ -71,7 +74,11 @@ const ChangeDetail: React.FC<ChangeDetailProps> = (props) => {
               <DiffEditor
                 source={
                   data?.previousParameters
-                    ? JSON.stringify(JSON.parse(data?.previousParameters), null, '\t')
+                    ? JSON.stringify(
+                        JSON.parse(data?.previousParameters),
+                        null,
+                        '\t'
+                      )
                     : ''
                 }
                 modifie={

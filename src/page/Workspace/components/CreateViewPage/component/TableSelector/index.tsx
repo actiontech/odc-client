@@ -16,14 +16,18 @@
 
 import SessionStore from '@/store/sessionManager/session';
 import { formatMessage } from '@/util/intl';
-import { Button, Empty, Spin, Transfer, Tree } from 'antd';
+import { Empty, Spin, Tree } from 'antd';
 import { uniqueId } from 'lodash';
 import { parse } from 'query-string';
 import styles from './index.less';
 import React, { useEffect, useMemo, useState } from 'react';
 import TableItem from './Item';
 import { ICON_DATABASE, ICON_TABLE, ICON_VIEW } from '../ObjectName';
-import SortableContainer, { DraggableItem } from '@/component/SortableContainer';
+import SortableContainer, {
+  DraggableItem
+} from '@/component/SortableContainer';
+import { BasicButton, BasicEmpty } from '@actiontech/dms-kit';
+import { TransferStyleWrapper } from './style';
 
 const { TreeNode, DirectoryTree } = Tree;
 
@@ -51,7 +55,7 @@ const TreeSelector: React.FC<IProps> = React.memo((props) => {
     autoExpandParent: true,
     selectMap: {},
     keywords: '',
-    loading: true,
+    loading: true
   });
   useEffect(() => {
     loadTreeData(true);
@@ -61,44 +65,46 @@ const TreeSelector: React.FC<IProps> = React.memo((props) => {
     const { session } = props;
     setState({ ...state, loading: true });
     await session.queryTablesAndViews('', true);
-    const treeData = Object.entries(session.allTableAndView)?.map(([dbName, obj]) => {
-      const { tables, views } = obj;
-      return {
-        title: dbName,
-        key: `d=${dbName}`,
-        type: 'DB',
-        children: tables
-          .map((tableName) => {
-            return {
-              type: 'TABLE',
-              key: `d=${dbName}&t=${encodeURIComponent(tableName)}`,
-              title: tableName,
-            };
-          })
-          .concat(
-            views.map((viewName) => {
+    const treeData = Object.entries(session.allTableAndView)?.map(
+      ([dbName, obj]) => {
+        const { tables, views } = obj;
+        return {
+          title: dbName,
+          key: `d=${dbName}`,
+          type: 'DB',
+          children: tables
+            .map((tableName) => {
               return {
-                type: 'VIEW',
-                key: `d=${dbName}&v=${encodeURIComponent(viewName)}`,
-                title: viewName,
+                type: 'TABLE',
+                key: `d=${dbName}&t=${encodeURIComponent(tableName)}`,
+                title: tableName
               };
-            }),
-          ),
-      };
-    });
+            })
+            .concat(
+              views.map((viewName) => {
+                return {
+                  type: 'VIEW',
+                  key: `d=${dbName}&v=${encodeURIComponent(viewName)}`,
+                  title: viewName
+                };
+              })
+            )
+        };
+      }
+    );
     setState({
       ...state,
       treeData,
       // 默认展开第 0 项
-      expandedKeys: isInit && treeData.length ? [treeData[0].key] : state.expandedKeys,
-      loading: false,
+      expandedKeys:
+        isInit && treeData.length ? [treeData[0].key] : state.expandedKeys,
+      loading: false
     });
   };
 
   const handleTreeNodeSelect = (item, selectedKeys, onItemSelect) => {
     const { eventKey } = item.node.props;
     const isChecked = selectedKeys.indexOf(eventKey) !== -1;
-    console.log(!isChecked, eventKey);
     onItemSelect(eventKey, !isChecked);
   };
 
@@ -111,7 +117,10 @@ const TreeSelector: React.FC<IProps> = React.memo((props) => {
         const isMatch = children.find((item) => {
           const upperKeywords = keywords.toUpperCase();
           const upperItemKey = item.key.toUpperCase();
-          return upperItemKey.indexOf(upperKeywords) > -1 || selectedKeys.includes(item.key);
+          return (
+            upperItemKey.indexOf(upperKeywords) > -1 ||
+            selectedKeys.includes(item.key)
+          );
         });
         if (isMatch) {
           expandedKeys.push(node.key);
@@ -133,7 +142,7 @@ const TreeSelector: React.FC<IProps> = React.memo((props) => {
     }
     // 存在同表多选情况，需要 uid 做唯一标识
     newKeys = newKeys.map((key) =>
-      key.indexOf('uid') !== -1 ? key : `${key}&uid=${uniqueId('t_')}`,
+      key.indexOf('uid') !== -1 ? key : `${key}&uid=${uniqueId('t_')}`
     );
     setState({ ...state, targetKeys: [...newKeys] });
   };
@@ -158,7 +167,7 @@ const TreeSelector: React.FC<IProps> = React.memo((props) => {
         dbName: params.d,
         tableName: params.t,
         viewName: params.v,
-        aliasName,
+        aliasName
       };
 
       if (!isLast) {
@@ -186,7 +195,12 @@ const TreeSelector: React.FC<IProps> = React.memo((props) => {
       const { children, title, key, type } = data;
       const isChecked = selectedKeys.indexOf(key) !== -1;
       const isLeaf = /TABLE|VIEW/.test(type);
-      const icon = type === 'DB' ? ICON_DATABASE : type === 'TABLE' ? ICON_TABLE : ICON_VIEW;
+      const icon =
+        type === 'DB'
+          ? ICON_DATABASE
+          : type === 'TABLE'
+          ? ICON_TABLE
+          : ICON_VIEW;
       // 如果有搜索词的过滤
       if (keywords) {
         const upperCaseTitle = title.toUpperCase();
@@ -212,9 +226,9 @@ const TreeSelector: React.FC<IProps> = React.memo((props) => {
   };
 
   const renderSourcePanel = (onItemSelect, selectedKeys) => {
-    const { targetKeys, treeData, expandedKeys, loading, autoExpandParent } = state;
+    const { treeData, expandedKeys, loading, autoExpandParent } = state;
     if (loading) {
-      return <Spin className={styles.spin} />;
+      return <Spin />;
     }
     return (
       <DirectoryTree
@@ -230,7 +244,7 @@ const TreeSelector: React.FC<IProps> = React.memo((props) => {
           setState({
             ...state,
             expandedKeys,
-            autoExpandParent: false,
+            autoExpandParent: false
           });
         }}
         onCheck={(_, item) => {
@@ -248,7 +262,12 @@ const TreeSelector: React.FC<IProps> = React.memo((props) => {
   const renderTargetPanel = () => {
     const { targetKeys } = state;
     if (!targetKeys.length) {
-      return <Empty style={{ marginTop: '80px' }} image={Empty.PRESENTED_IMAGE_SIMPLE} />;
+      return (
+        <BasicEmpty
+          style={{ marginTop: '80px' }}
+          image={Empty.PRESENTED_IMAGE_SIMPLE}
+        />
+      );
     }
 
     return (
@@ -295,8 +314,9 @@ const TreeSelector: React.FC<IProps> = React.memo((props) => {
     return result;
   }, [state.treeData]);
   return (
-    <div>
-      <Transfer
+    <>
+      <TransferStyleWrapper
+        hideHeader={true}
         showSearch={!state.loading}
         targetKeys={state.targetKeys}
         dataSource={dataSource}
@@ -305,8 +325,8 @@ const TreeSelector: React.FC<IProps> = React.memo((props) => {
         locale={{
           searchPlaceholder: formatMessage({
             id: 'odc.component.TableSelector.EnterATableOrView',
-            defaultMessage: '请输入表/视图名称',
-          }), // 请输入表/视图名称
+            defaultMessage: '请输入表/视图名称'
+          }) // 请输入表/视图名称
         }}
         onChange={handleTransfer}
         onSearch={handleTreeSearch}
@@ -317,7 +337,6 @@ const TreeSelector: React.FC<IProps> = React.memo((props) => {
           if (direction === 'left') {
             selectedKeys = selectedKeys;
             return renderSourcePanel((key: any, check: boolean) => {
-              console.log(key, check);
               onItemSelect(key, check);
             }, selectedKeys);
           }
@@ -326,16 +345,20 @@ const TreeSelector: React.FC<IProps> = React.memo((props) => {
             return renderTargetPanel();
           }
         }}
-      </Transfer>
-      <Button type="primary" onClick={handleSubmit} style={{ marginTop: '20px' }}>
+      </TransferStyleWrapper>
+      <BasicButton
+        type="primary"
+        onClick={handleSubmit}
+        style={{ marginTop: '20px' }}
+      >
         {
           formatMessage({
             id: 'odc.component.TableSelector.Determine',
-            defaultMessage: '确定',
+            defaultMessage: '确定'
           }) /* 确定 */
         }
-      </Button>
-    </div>
+      </BasicButton>
+    </>
   );
 });
 

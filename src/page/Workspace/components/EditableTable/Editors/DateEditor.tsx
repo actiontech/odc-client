@@ -27,6 +27,7 @@ import { isNil } from 'lodash';
 import { PickerMode } from 'rc-picker/es/interface';
 import ResultContext from '../../DDLResultSet/ResultContext';
 import AntdEditorWrap from './AntdEditorWrap';
+import { BasicDatePicker } from '@actiontech/dms-kit';
 
 interface IProps<T> extends EditorProps<T> {
   picker: PickerMode;
@@ -51,7 +52,11 @@ function getmomentValue(v: number, picker: PickerMode) {
   }
 }
 
-function getValueByMoment(v: dayjs.Dayjs, picker: PickerMode, showTime: boolean) {
+function getValueByMoment(
+  v: dayjs.Dayjs,
+  picker: PickerMode,
+  showTime: boolean
+) {
   switch (picker) {
     case 'year': {
       return v?.format('YYYY');
@@ -75,7 +80,7 @@ export function CommonDateEditor<T>({
   column,
   width,
   picker,
-  showTime,
+  showTime
 }: IProps<T>) {
   const { key } = column;
   const originValue = row[key];
@@ -104,15 +109,17 @@ export function CommonDateEditor<T>({
         pointRef.current?.focus?.();
       }
     },
-    [onRowChange, showTime, picker],
+    [onRowChange, showTime, picker]
   );
   const innerOnPointChange = useCallback(
     (value: dayjs.Dayjs) => {
       const targetValue =
-        getValueByMoment(value, picker, showTime) + '.' + (pointRef.current?.input?.value || 0);
+        getValueByMoment(value, picker, showTime) +
+        '.' +
+        (pointRef.current?.input?.value || 0);
       onRowChange({ ...row, [key]: targetValue }, false);
     },
-    [onRowChange, showTime, picker],
+    [onRowChange, showTime, picker]
   );
   return (
     <AntdEditorWrap>
@@ -130,7 +137,7 @@ export function CommonDateEditor<T>({
         />
       ) : (
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          <DatePicker
+          <BasicDatePicker
             ref={editorRef}
             /**
              * 不要开启这个配置，交互行为会不顺畅
@@ -209,7 +216,7 @@ export function NlsEditor<T>({ row, onRowChange, column, width }: IProps<T>) {
           timestamp: value.valueOf(),
           timeZoneId,
           nano: pointRef.current?.input?.value || 0,
-          formattedContent: null,
+          formattedContent: null
         };
         const str = await getFormatNlsDateString(
           {
@@ -218,16 +225,20 @@ export function NlsEditor<T>({ row, onRowChange, column, width }: IProps<T>) {
             nano: newNlsObject.nano,
             dataType: context?.originColumns
               ?.find((column) => column.key === key)
-              ?.columnType?.replace(/_/g, ' '),
+              ?.columnType?.replace(/_/g, ' ')
           },
-          sessionId,
+          sessionId
         );
         if (!str) {
           return;
         }
         onRowChange(
-          { ...row, [key]: str, [getNlsValueKey(key)]: { ...newNlsObject, formattedContent: str } },
-          !havePoint,
+          {
+            ...row,
+            [key]: str,
+            [getNlsValueKey(key)]: { ...newNlsObject, formattedContent: str }
+          },
+          !havePoint
         );
         if (havePoint) {
           pointRef.current?.focus?.();
@@ -235,18 +246,19 @@ export function NlsEditor<T>({ row, onRowChange, column, width }: IProps<T>) {
       }
       updateValue();
     },
-    [onRowChange, sessionId],
+    [onRowChange, sessionId]
   );
   const innerOnPointChange = useCallback(
     (value: dayjs.Dayjs) => {
-      let stringValue = value?.format('YYYY-MM-DD HH:mm:ss');
-      const targetValue = stringValue + '.' + (pointRef.current?.input?.value || 0);
+      const stringValue = value?.format('YYYY-MM-DD HH:mm:ss');
+      const targetValue =
+        stringValue + '.' + (pointRef.current?.input?.value || 0);
       async function updateValue() {
         const newNlsObject: INlsObject = {
           timestamp: value.valueOf(),
           timeZoneId,
           nano: pointRef.current?.input?.value || 0,
-          formattedContent: null,
+          formattedContent: null
         };
         const str = await getFormatNlsDateString(
           {
@@ -255,21 +267,25 @@ export function NlsEditor<T>({ row, onRowChange, column, width }: IProps<T>) {
             nano: newNlsObject.nano,
             dataType: context?.originColumns
               ?.find((column) => column.key === key)
-              ?.columnType?.replace(/_/g, ' '),
+              ?.columnType?.replace(/_/g, ' ')
           },
-          sessionId,
+          sessionId
         );
         if (!str) {
           return;
         }
         onRowChange(
-          { ...row, [key]: str, [getNlsValueKey(key)]: { ...newNlsObject, formattedContent: str } },
-          false,
+          {
+            ...row,
+            [key]: str,
+            [getNlsValueKey(key)]: { ...newNlsObject, formattedContent: str }
+          },
+          false
         );
       }
       updateValue();
     },
-    [onRowChange, sessionId],
+    [onRowChange, sessionId]
   );
   return (
     <AntdEditorWrap>

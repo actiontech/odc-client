@@ -16,7 +16,13 @@
 
 import { formatMessage } from '@/util/intl';
 import { Modal } from 'antd';
-import { forwardRef, useContext, useImperativeHandle, useRef, useState } from 'react';
+import {
+  forwardRef,
+  useContext,
+  useImperativeHandle,
+  useRef,
+  useState
+} from 'react';
 import { TablePartition } from '../../../CreateTable/interface';
 import CreateTablePartitionRuleForm from '../../../CreateTable/Partition/CreateTablePartitionRuleForm';
 import TablePageContext from '../../context';
@@ -45,10 +51,10 @@ const AddPartitionModal = forwardRef<IRef, IProps>(function ({}, ref) {
           setVisible(true);
           setNewPartitions(null);
         });
-      },
+      }
     }),
 
-    [],
+    []
   );
 
   function close() {
@@ -62,7 +68,7 @@ const AddPartitionModal = forwardRef<IRef, IProps>(function ({}, ref) {
       destroyOnClose
       title={formatMessage({
         id: 'odc.Partitions.AddPartitionModal.CreatePartition',
-        defaultMessage: '新建分区',
+        defaultMessage: '新建分区'
       })} /*新建分区*/
       onCancel={() => {
         callbackRef.current?.(null);

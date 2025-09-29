@@ -4,7 +4,8 @@ import { ActivityBarItemType } from '@/page/Workspace/ActivityBar/type';
 
 const useKeyBoardSensor = () => {
   const activityContext = useContext(ActivityBarContext);
-  const [crtlorCommandPressed, setCrtlorCommandPressed] = useState<boolean>(false);
+  const [crtlorCommandPressed, setCrtlorCommandPressed] =
+    useState<boolean>(false);
   const [shiftPressed, setShiftPressed] = useState<boolean>(false);
 
   const handleKeyDown = (event: KeyboardEvent) => {
@@ -38,7 +39,7 @@ const useKeyBoardSensor = () => {
 
   return {
     crtlorCommandPressed,
-    shiftPressed,
+    shiftPressed
   };
 };
 

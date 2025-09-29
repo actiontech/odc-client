@@ -18,20 +18,23 @@ import { formatMessage } from '@/util/intl';
 import Icon, { CaretDownOutlined } from '@ant-design/icons';
 import {
   Badge,
-  Button,
   Divider,
   Dropdown,
   MenuProps,
   message,
   Popconfirm,
-  Popover,
-  Tooltip,
+  Popover
 } from 'antd';
 import { PopconfirmProps } from 'antd/lib/popconfirm';
-import classNames from 'classnames'; // @ts-ignore
 import { ComponentType } from 'react';
-import styles from './index.less';
+import {
+  ToolbarStyleWrapper,
+  ButtonStyleWrapper,
+  ButtonTextStyleWrapper,
+  DividerStyleWrapper
+} from './style';
 import statefulIcon, { IConStatus } from './statefulIcon';
+import { BasicButton, BasicToolTip } from '@actiontech/dms-kit';
 
 const noop = () => {
   // TODO
@@ -49,12 +52,14 @@ function TButton({
   tip = null,
   tipStyle = { width: 296 },
   renderToParentElement = false,
+  compact = false,
   ...rest
 }: {
   [key: string]: any;
   confirmConfig?: PopconfirmProps | (() => PopconfirmProps);
   status?: IConStatus;
   type?: string;
+  compact?: boolean;
   /**
    * 是否为下拉菜单主icon
    */ isMenuIcon?: boolean;
@@ -84,25 +89,24 @@ function TButton({
     }
   }
 
-  const clzName = classNames(
-    styles.button,
-    isRunning ? styles.isRunning : disabled ? styles.disabled : null,
-    isActive ? styles.isActive : null,
-  );
+  // Note: clzName 将被 styled-component props 替代
   if (typeof confirmConfig === 'function') {
     confirmConfig = confirmConfig();
   }
   let content = (
-    <span
+    <ButtonStyleWrapper
       {...rest}
-      className={clzName}
+      disabled={disabled}
+      isRunning={isRunning}
+      isActive={isActive}
+      compact={compact}
       onClick={() => {
         if (isRunning) {
           message.success(
             formatMessage({
               id: 'odc.component.Toolbar.DoNotClickAgainWhile',
-              defaultMessage: '执行中请勿重复点击',
-            }), //执行中请勿重复点击
+              defaultMessage: '执行中请勿重复点击'
+            }) //执行中请勿重复点击
           );
         } else if (disabled || confirmConfig) {
           return;
@@ -112,21 +116,26 @@ function TButton({
       }}
     >
       {icon} {isShowText && <span style={{ lineHeight: 1 }}>{text}</span>}
-    </span>
+    </ButtonStyleWrapper>
   );
 
   switch (type) {
     case 'BUTTON':
       content = (
-        <Button {...rest} icon={icon} disabled={disabled} onClick={!disabled ? onClick : null}>
+        <BasicButton
+          {...rest}
+          icon={icon}
+          disabled={disabled}
+          onClick={!disabled ? onClick : null}
+        >
           {text}
-        </Button>
+        </BasicButton>
       );
 
       break;
     case 'BUTTON_PRIMARY':
       content = (
-        <Button
+        <BasicButton
           {...rest}
           icon={icon}
           type="primary"
@@ -135,19 +144,25 @@ function TButton({
           loading={isRunning}
         >
           {text}
-        </Button>
+        </BasicButton>
       );
 
       break;
     default:
       content = (
-        <span
+        <ButtonStyleWrapper
           {...rest}
-          className={clzName}
+          disabled={disabled}
+          isRunning={isRunning}
+          isActive={isActive}
+          compact={compact}
           onClick={!disabled && !confirmConfig && !isRunning ? onClick : null}
         >
-          {icon} {isShowText && <span className={styles.buttonText}>{text}</span>}
-        </span>
+          {icon}{' '}
+          {isShowText && (
+            <ButtonTextStyleWrapper>{text}</ButtonTextStyleWrapper>
+          )}
+        </ButtonStyleWrapper>
       );
 
       break;
@@ -155,7 +170,7 @@ function TButton({
 
   if (tip) {
     return (
-      <Tooltip
+      <BasicToolTip
         placement={'topLeft'}
         title={tip}
         overlayInnerStyle={tipStyle}
@@ -164,7 +179,7 @@ function TButton({
         <Badge dot={true} color="blue" style={{ top: 12, right: 6 }}>
           {content}
         </Badge>
-      </Tooltip>
+      </BasicToolTip>
     );
   }
 
@@ -178,28 +193,32 @@ function TButton({
 
   if (renderToParentElement) {
     return (
-      <Tooltip
+      <BasicToolTip
         getPopupContainer={(triggerNode) => triggerNode.parentElement}
         placement="left"
         title={text}
       >
         {content}
-      </Tooltip>
+      </BasicToolTip>
     );
   }
 
   if (!isShowText) {
     return (
-      <Tooltip placement={isMenuIcon ? 'top' : 'bottom'} title={text}>
+      <BasicToolTip placement={isMenuIcon ? 'top' : 'bottom'} title={text}>
         {content}
-      </Tooltip>
+      </BasicToolTip>
     );
   }
   return content;
 }
 
-function TDivider() {
-  return <Divider type="vertical" className={styles.divider} />;
+function TDivider({ compact = false }: { compact?: boolean } = {}) {
+  return (
+    <DividerStyleWrapper compact={compact}>
+      <Divider type="vertical" />
+    </DividerStyleWrapper>
+  );
 }
 
 function ButtonMenu(props: {
@@ -210,7 +229,11 @@ function ButtonMenu(props: {
 }) {
   const { icon, menu, text, status = IConStatus.INIT } = props;
   return (
-    <Dropdown menu={menu} trigger={['click']} disabled={status === IConStatus.DISABLE}>
+    <Dropdown
+      menu={menu}
+      trigger={['click']}
+      disabled={status === IConStatus.DISABLE}
+    >
       <TButton text={text} icon={icon} isMenuIcon={true} />
     </Dropdown>
   );
@@ -227,9 +250,9 @@ function ButtonPopover(props: { icon: string | ComponentType; content: any }) {
 
 export default function Toolbar({ style = {}, children, compact = false }) {
   return (
-    <div className={classNames([styles.toolbar, compact ? styles.compact : null])} style={style}>
+    <ToolbarStyleWrapper compact={compact} style={style}>
       {children}
-    </div>
+    </ToolbarStyleWrapper>
   );
 }
 

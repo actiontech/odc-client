@@ -29,19 +29,20 @@ export interface IViewRef {
   open: (record: IShadowSyncAnalysisResult['tables'][number]) => void;
 }
 
-const RecordSQLView = forwardRef<any, { taskId: string; connectionMode: ConnectionMode }>(function (
-  { taskId, connectionMode },
-  ref,
-) {
+const RecordSQLView = forwardRef<
+  any,
+  { taskId: string; connectionMode: ConnectionMode }
+>(function ({ taskId, connectionMode }, ref) {
   const [visiable, setVisiable] = useState(false);
   const { loading, run: runGetShadowSyncAnalysisRecordResult } = useRequest(
     getShadowSyncAnalysisRecordResult,
     {
-      manual: true,
-    },
+      manual: true
+    }
   );
 
-  const [record, setRecord] = useState<IShadowSyncAnalysisResult['tables'][number]>(null);
+  const [record, setRecord] =
+    useState<IShadowSyncAnalysisResult['tables'][number]>(null);
   async function getDDL(recordId: number) {
     if (!recordId || !taskId) {
       return;
@@ -59,10 +60,10 @@ const RecordSQLView = forwardRef<any, { taskId: string; connectionMode: Connecti
         open(record) {
           getDDL(record?.id);
           setVisiable(true);
-        },
+        }
       };
     },
-    [taskId],
+    [taskId]
   );
   const config = getDataSourceModeConfigByConnectionMode(connectionMode);
   return (
@@ -70,7 +71,7 @@ const RecordSQLView = forwardRef<any, { taskId: string; connectionMode: Connecti
       width={520}
       title={formatMessage({
         id: 'odc.StructConfigPanel.RecordSQLView.StructuralAnalysisDetails',
-        defaultMessage: '结构分析详情',
+        defaultMessage: '结构分析详情'
       })} /*结构分析详情*/
       open={visiable}
       onClose={() => {
@@ -85,7 +86,7 @@ const RecordSQLView = forwardRef<any, { taskId: string; connectionMode: Connecti
               <SimpleTextItem
                 label={formatMessage({
                   id: 'odc.StructConfigPanel.RecordSQLView.SourceTableStructure',
-                  defaultMessage: '源表结构',
+                  defaultMessage: '源表结构'
                 })}
                 /*源表结构*/ content={record?.originTableName}
               />
@@ -94,7 +95,7 @@ const RecordSQLView = forwardRef<any, { taskId: string; connectionMode: Connecti
               style={{
                 height: 280,
                 border: '1px solid var(--odc-border-color)',
-                position: 'relative',
+                position: 'relative'
               }}
             >
               <MonacoEditor
@@ -109,7 +110,7 @@ const RecordSQLView = forwardRef<any, { taskId: string; connectionMode: Connecti
               <SimpleTextItem
                 label={formatMessage({
                   id: 'odc.StructConfigPanel.RecordSQLView.ShadowTableStructure',
-                  defaultMessage: '影子表结构',
+                  defaultMessage: '影子表结构'
                 })}
                 /*影子表结构*/ content={record?.destTableName}
               />
@@ -118,7 +119,7 @@ const RecordSQLView = forwardRef<any, { taskId: string; connectionMode: Connecti
               style={{
                 height: 280,
                 border: '1px solid var(--odc-border-color)',
-                position: 'relative',
+                position: 'relative'
               }}
             >
               <MonacoEditor
@@ -133,7 +134,7 @@ const RecordSQLView = forwardRef<any, { taskId: string; connectionMode: Connecti
               {
                 formatMessage({
                   id: 'odc.StructConfigPanel.RecordSQLView.StructureChangeSql',
-                  defaultMessage: '结构变更SQL',
+                  defaultMessage: '结构变更SQL'
                 }) /*结构变更SQL*/
               }
             </Row>
@@ -141,7 +142,7 @@ const RecordSQLView = forwardRef<any, { taskId: string; connectionMode: Connecti
               style={{
                 height: 280,
                 border: '1px solid var(--odc-border-color)',
-                position: 'relative',
+                position: 'relative'
               }}
             >
               <MonacoEditor

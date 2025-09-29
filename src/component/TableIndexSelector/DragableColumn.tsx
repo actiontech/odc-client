@@ -33,15 +33,26 @@ export interface IDragableColumnProps extends IDragable {
 }
 
 const Types = {
-  CARD: 'indexColumn',
+  CARD: 'indexColumn'
 };
 
 const DragableParam = ({ props }: { props: IDragableColumnProps }) => {
-  const { index, column, dataShowType, handleDelete, isDragging, connectDragSource } = props;
+  const {
+    index,
+    column,
+    dataShowType,
+    handleDelete,
+    isDragging,
+    connectDragSource
+  } = props;
   return connectDragSource(
     <div>
       <Row
-        className={classNames(styles.column, styles.dragable, isDragging ? styles.dragging : null)}
+        className={classNames(
+          styles.column,
+          styles.dragable,
+          isDragging ? styles.dragging : null
+        )}
       >
         <Col
           span={24}
@@ -49,7 +60,7 @@ const DragableParam = ({ props }: { props: IDragableColumnProps }) => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            flex: 1,
+            flex: 1
           }}
         >
           <span>
@@ -59,14 +70,17 @@ const DragableParam = ({ props }: { props: IDragableColumnProps }) => {
             <ColumnIcon dataShowType={dataShowType} />
             {column.columnName}
           </span>
-          <DeleteOutlined className={styles.close} onClick={() => handleDelete(index)} />
+          <DeleteOutlined
+            className={styles.close}
+            onClick={() => handleDelete(index)}
+          />
         </Col>
       </Row>
-    </div>,
+    </div>
   );
 };
 
 export default Dragable<IDragableColumnProps>(
   DragableParam,
-  Types.CARD,
+  Types.CARD
 ) as React.ComponentType<any>;

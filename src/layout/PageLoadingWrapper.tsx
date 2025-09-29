@@ -56,11 +56,17 @@ const PageLoadingWrapper: React.FC<IProps> = function ({ children }) {
         },
         removeTask() {
           setTask(null);
-        },
+        }
       }}
     >
       <Outlet />
-      {showTask && <PageLoading showError={task?.showError} tip={task?.tip} queue={task?.queue} />}
+      {showTask && (
+        <PageLoading
+          showError={task?.showError}
+          tip={task?.tip}
+          queue={task?.queue}
+        />
+      )}
     </PageLoadingContext.Provider>
   );
 };

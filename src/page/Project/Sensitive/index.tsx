@@ -37,10 +37,14 @@ const Sensitive: React.FC<{ id: number }> = ({ id }) => {
   const [maskingAlgorithmIdMap, setMaskingAlgorithmIdMap] = useState<{
     [key in string | number]: string;
   }>({});
-  const [maskingAlgorithms, setMaskingAlgorithms] = useState<IMaskingAlgorithm[]>([]);
+  const [maskingAlgorithms, setMaskingAlgorithms] = useState<
+    IMaskingAlgorithm[]
+  >([]);
   const [dataSources, setDataSources] = useState<IDatasource[]>([]);
-  const [maskingAlgorithmOptions, setMaskingAlgorithmOptions] = useState<SelectItemProps[]>();
-  const [maskingAlgorithmFilters, setMaskingAlgorithmFilters] = useState<FilterItemProps[]>();
+  const [maskingAlgorithmOptions, setMaskingAlgorithmOptions] =
+    useState<SelectItemProps[]>();
+  const [maskingAlgorithmFilters, setMaskingAlgorithmFilters] =
+    useState<FilterItemProps[]>();
   const [cascaderOptions, setCascaderOptions] = useState<any>([]);
   useEffect(() => {
     tracert.expo('a3112.b64002.c330861');
@@ -57,7 +61,7 @@ const Sensitive: React.FC<{ id: number }> = ({ id }) => {
     rawData: any,
     maskingAlgorithmIdMap: {
       [key in string | number]: string;
-    },
+    }
   ) => {
     const { databases = [], maskingAlgorithms = [] } = rawData;
     const map = {};
@@ -66,7 +70,7 @@ const Sensitive: React.FC<{ id: number }> = ({ id }) => {
       if (map?.[dataSourceName]) {
         map?.[dataSourceName].children.push({
           label: database?.name,
-          value: database?.id,
+          value: database?.id
         });
       } else {
         map[dataSourceName] = {
@@ -74,9 +78,9 @@ const Sensitive: React.FC<{ id: number }> = ({ id }) => {
           children: [
             {
               label: database?.name,
-              value: database?.id,
-            },
-          ],
+              value: database?.id
+            }
+          ]
         };
       }
     });
@@ -84,14 +88,14 @@ const Sensitive: React.FC<{ id: number }> = ({ id }) => {
       Object.keys(map)?.map((key) => ({
         label: key,
         value: map?.[key]?.id,
-        children: map?.[key]?.children,
-      })),
+        children: map?.[key]?.children
+      }))
     );
     setMaskingAlgorithmFilters(
       maskingAlgorithms?.map((ma) => ({
         text: maskingAlgorithmIdMap[ma?.id],
-        value: ma?.id,
-      })),
+        value: ma?.id
+      }))
     );
   };
 
@@ -109,7 +113,7 @@ const Sensitive: React.FC<{ id: number }> = ({ id }) => {
 
     const options = rawData?.contents?.map((data) => ({
       label: data.name,
-      value: data.id,
+      value: data.id
     }));
     setMaskingAlgorithmOptions(options);
     return map;
@@ -151,7 +155,7 @@ const Sensitive: React.FC<{ id: number }> = ({ id }) => {
         maskingAlgorithmIdMap,
         maskingAlgorithmOptions,
         sensitiveRuleIdMap,
-        setSensitiveRuleIdMap,
+        setSensitiveRuleIdMap
       }}
     >
       <div className={styles.sensitive}>

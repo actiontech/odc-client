@@ -23,7 +23,10 @@ import { isNil } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
 
-import { getSequenceCreateSQL, getSequenceUpdateSQL } from '@/common/network/sequence';
+import {
+  getSequenceCreateSQL,
+  getSequenceUpdateSQL
+} from '@/common/network/sequence';
 import SQLExecuteModal from '@/component/SQLExecuteModal';
 import type { ISequence } from '@/d.ts';
 import { openCreateSequencePage } from '@/store/helper/page';
@@ -68,8 +71,8 @@ const CreateSequenceModal: React.FC<IProps> = function (props) {
         return Promise.reject(
           formatMessage({
             id: 'workspace.window.createSequence.params.minValue.validation',
-            defaultMessage: '最小值必须小于最大值',
-          }),
+            defaultMessage: '最小值必须小于最大值'
+          })
         );
       }
 
@@ -77,8 +80,8 @@ const CreateSequenceModal: React.FC<IProps> = function (props) {
         return Promise.reject(
           formatMessage({
             id: 'workspace.window.createSequence.params.minValue.validation2',
-            defaultMessage: '最小值必须小于等于起始值',
-          }),
+            defaultMessage: '最小值必须小于等于起始值'
+          })
         );
       }
     }
@@ -101,8 +104,8 @@ const CreateSequenceModal: React.FC<IProps> = function (props) {
         return Promise.reject(
           formatMessage({
             id: 'workspace.window.createSequence.params.maxValue.validation',
-            defaultMessage: '最大值必须大于最小值',
-          }),
+            defaultMessage: '最大值必须大于最小值'
+          })
         );
       }
 
@@ -110,8 +113,8 @@ const CreateSequenceModal: React.FC<IProps> = function (props) {
         return Promise.reject(
           formatMessage({
             id: 'workspace.window.createSequence.params.maxValue.validation2',
-            defaultMessage: '最大值必须大于等于起始值',
-          }),
+            defaultMessage: '最大值必须大于等于起始值'
+          })
         );
       }
     }
@@ -120,7 +123,12 @@ const CreateSequenceModal: React.FC<IProps> = function (props) {
   }
 
   async function hanldleCreateSql(sequence: ISequence) {
-    const sql = await getSequenceCreateSQL(sequence.name, sequence, sessionId, dbName);
+    const sql = await getSequenceCreateSQL(
+      sequence.name,
+      sequence,
+      sessionId,
+      dbName
+    );
     if (sql) {
       openCreateSequencePage(sql, session?.odcDatabase?.id, dbName);
       modalStore.changeCreateSequenceModalVisible(false);
@@ -128,7 +136,12 @@ const CreateSequenceModal: React.FC<IProps> = function (props) {
   }
 
   async function hanldleUpdateSql(sequence: ISequence) {
-    const sql = await getSequenceUpdateSQL(sequence.name, sequence, sessionId, dbName);
+    const sql = await getSequenceUpdateSQL(
+      sequence.name,
+      sequence,
+      sessionId,
+      dbName
+    );
     if (sql) {
       setExecuteModalVisible(true);
       setExecuteSQL(sql);
@@ -149,28 +162,30 @@ const CreateSequenceModal: React.FC<IProps> = function (props) {
           isEditMode
             ? formatMessage({
                 id: 'odc.components.CreateSequenceModal.EditSequence',
-                defaultMessage: '编辑序列',
+                defaultMessage: '编辑序列'
               }) + createSequenceModalData?.data?.name
             : formatMessage({
                 id: 'odc.components.CreateSequenceModal.CreateASequence',
-                defaultMessage: '新建序列',
+                defaultMessage: '新建序列'
               }) // 新建序列
         }
         open={modalStore.createSequenceModalVisible}
         okText={formatMessage({
           id: 'odc.components.CreateSequenceModal.NextConfirmTheSqlStatement',
-          defaultMessage: '下一步：确认 SQL',
+          defaultMessage: '下一步：确认 SQL'
         })} /* 下一步：确认 SQL */
         onCancel={() => {
           modalStore.changeCreateSequenceModalVisible(false);
         }}
         okButtonProps={{
-          disabled: (isEditMode && !haveChanged) || loading,
+          disabled: (isEditMode && !haveChanged) || loading
         }}
         onOk={async () => {
           try {
             const sequence = await form.validateFields();
-            isEditMode ? await hanldleUpdateSql(sequence) : await hanldleCreateSql(sequence);
+            isEditMode
+              ? await hanldleUpdateSql(sequence)
+              : await hanldleCreateSql(sequence);
           } catch (e) {
             console.error(e);
           }
@@ -183,8 +198,16 @@ const CreateSequenceModal: React.FC<IProps> = function (props) {
               setHaveChanged(true);
             }
             const keys = Object.keys(changedValues);
-            const observerKeys = ['startValue', 'increament', 'minValue', 'maxValue'];
-            if (new Set(observerKeys.concat(keys)).size != observerKeys.length + keys.length) {
+            const observerKeys = [
+              'startValue',
+              'increament',
+              'minValue',
+              'maxValue'
+            ];
+            if (
+              new Set(observerKeys.concat(keys)).size !=
+              observerKeys.length + keys.length
+            ) {
               /**
                * 有变动，需要重新校验
                */
@@ -200,7 +223,7 @@ const CreateSequenceModal: React.FC<IProps> = function (props) {
             cycled: false,
             cached: true,
             cacheSize: 20,
-            ...createSequenceModalData?.data,
+            ...createSequenceModalData?.data
           }}
           requiredMark="optional"
         >
@@ -210,16 +233,16 @@ const CreateSequenceModal: React.FC<IProps> = function (props) {
                 name="name"
                 label={formatMessage({
                   id: 'workspace.window.createSequence.baseInfo.name',
-                  defaultMessage: '序列名称',
+                  defaultMessage: '序列名称'
                 })}
                 rules={[
                   {
                     required: true,
                     message: formatMessage({
                       id: 'workspace.window.createSequence.baseInfo.name.validation',
-                      defaultMessage: '请输入序列名称',
-                    }),
-                  },
+                      defaultMessage: '请输入序列名称'
+                    })
+                  }
                 ]}
               >
                 <Input
@@ -227,7 +250,7 @@ const CreateSequenceModal: React.FC<IProps> = function (props) {
                   disabled={isEditMode}
                   placeholder={formatMessage({
                     id: 'workspace.window.createSequence.baseInfo.name.placeholder',
-                    defaultMessage: '请输入序列名称',
+                    defaultMessage: '请输入序列名称'
                   })}
                 />
               </Form.Item>
@@ -239,7 +262,7 @@ const CreateSequenceModal: React.FC<IProps> = function (props) {
                 name="user"
                 label={formatMessage({
                   id: 'workspace.window.createSequence.baseInfo.user',
-                  defaultMessage: '用户',
+                  defaultMessage: '用户'
                 })}
               >
                 <Input
@@ -248,7 +271,7 @@ const CreateSequenceModal: React.FC<IProps> = function (props) {
                   size="small"
                   placeholder={formatMessage({
                     id: 'workspace.window.createSequence.baseInfo.user.placeholder',
-                    defaultMessage: '请输入用户',
+                    defaultMessage: '请输入用户'
                   })}
                 />
               </Form.Item>
@@ -261,15 +284,18 @@ const CreateSequenceModal: React.FC<IProps> = function (props) {
                   name="startValue"
                   label={formatMessage({
                     id: 'workspace.window.createSequence.params.startValue',
-                    defaultMessage: '起始于',
+                    defaultMessage: '起始于'
                   })}
                 >
                   <InputBigNumber
-                    style={{ width: '100%', borderColor: 'var(--odc-border-color)' }}
+                    style={{
+                      width: '100%',
+                      borderColor: 'var(--odc-border-color)'
+                    }}
                     size="small"
                     placeholder={formatMessage({
                       id: 'workspace.window.createSequence.params.startValue.placeholder',
-                      defaultMessage: '请输入起始值',
+                      defaultMessage: '请输入起始值'
                     })}
                   />
                 </Form.Item>
@@ -281,24 +307,27 @@ const CreateSequenceModal: React.FC<IProps> = function (props) {
                 name="increament"
                 label={formatMessage({
                   id: 'workspace.window.createSequence.params.increament',
-                  defaultMessage: '增量',
+                  defaultMessage: '增量'
                 })}
                 rules={[
                   {
                     type: 'integer',
                     message: formatMessage({
                       id: 'workspace.window.createSequence.params.validation.integer',
-                      defaultMessage: '请输入整数',
-                    }),
-                  },
+                      defaultMessage: '请输入整数'
+                    })
+                  }
                 ]}
               >
                 <InputNumber
-                  style={{ width: '100%', borderColor: 'var(--odc-border-color)' }}
+                  style={{
+                    width: '100%',
+                    borderColor: 'var(--odc-border-color)'
+                  }}
                   size="small"
                   placeholder={formatMessage({
                     id: 'workspace.window.createSequence.params.increament.placeholder',
-                    defaultMessage: '请输入增量',
+                    defaultMessage: '请输入增量'
                   })}
                 />
               </Form.Item>
@@ -309,14 +338,15 @@ const CreateSequenceModal: React.FC<IProps> = function (props) {
                 label={
                   formatMessage({
                     id: 'odc.components.CreateSequenceModal.ValidValues',
-                    defaultMessage: '取值范围',
+                    defaultMessage: '取值范围'
                   }) // 取值范围
                 }
               >
                 {({ getFieldValue }) => {
                   const minValue = getFieldValue('minValue');
                   const maxValue = getFieldValue('maxValue');
-                  const maxAndMinValueRequired = !isNil(minValue) || !isNil(maxValue);
+                  const maxAndMinValueRequired =
+                    !isNil(minValue) || !isNil(maxValue);
 
                   return (
                     <Input.Group compact>
@@ -330,20 +360,20 @@ const CreateSequenceModal: React.FC<IProps> = function (props) {
                                 required: true,
                                 message: formatMessage({
                                   id: 'workspace.window.createSequence.params.minValue.validation.required',
-                                  defaultMessage: '最小值必须填写',
-                                }),
+                                  defaultMessage: '最小值必须填写'
+                                })
                               }
                             : null,
                           {
-                            validator: handleValidateMinValue,
-                          },
+                            validator: handleValidateMinValue
+                          }
                         ].filter(Boolean)}
                       >
                         <InputBigNumber
                           style={{ width: 95, borderRight: 'none' }}
                           placeholder={formatMessage({
                             id: 'odc.components.CreateSequenceModal.MinimumValue',
-                            defaultMessage: '最小值',
+                            defaultMessage: '最小值'
                           })} /* 最小值 */
                         />
                       </Form.Item>
@@ -354,7 +384,7 @@ const CreateSequenceModal: React.FC<IProps> = function (props) {
                           borderLeft: 0,
                           borderRight: 0,
                           pointerEvents: 'none',
-                          background: 'transparent',
+                          background: 'transparent'
                         }}
                         placeholder="~"
                         disabled
@@ -370,20 +400,20 @@ const CreateSequenceModal: React.FC<IProps> = function (props) {
                                 required: true,
                                 message: formatMessage({
                                   id: 'workspace.window.createSequence.params.maxValue.validation.required',
-                                  defaultMessage: '最大值必须填写',
-                                }),
+                                  defaultMessage: '最大值必须填写'
+                                })
                               }
                             : null,
                           {
-                            validator: handleValidateMaxValue,
-                          },
+                            validator: handleValidateMaxValue
+                          }
                         ].filter(Boolean)}
                       >
                         <InputBigNumber
                           style={{ width: 95, borderLeft: 'none' }}
                           placeholder={formatMessage({
                             id: 'odc.components.CreateSequenceModal.MaximumValue',
-                            defaultMessage: '最大值',
+                            defaultMessage: '最大值'
                           })} /* 最大值 */
                         />
                       </Form.Item>
@@ -399,7 +429,7 @@ const CreateSequenceModal: React.FC<IProps> = function (props) {
                 shouldUpdate
                 label={formatMessage({
                   id: 'workspace.window.createSequence.params.cached',
-                  defaultMessage: '缓存设置',
+                  defaultMessage: '缓存设置'
                 })}
               >
                 {({ getFieldValue }) => {
@@ -412,20 +442,20 @@ const CreateSequenceModal: React.FC<IProps> = function (props) {
                             {
                               label: formatMessage({
                                 id: 'workspace.window.createSequence.params.cached.no',
-                                defaultMessage: '无缓存',
+                                defaultMessage: '无缓存'
                               }),
 
-                              value: false,
+                              value: false
                             },
 
                             {
                               label: formatMessage({
                                 id: 'workspace.window.createSequence.params.cached.yes',
-                                defaultMessage: '缓存',
+                                defaultMessage: '缓存'
                               }),
 
-                              value: true,
-                            },
+                              value: true
+                            }
                           ]}
                         />
                       </Form.Item>
@@ -436,7 +466,7 @@ const CreateSequenceModal: React.FC<IProps> = function (props) {
                             style={{ width: 70 }}
                             placeholder={formatMessage({
                               id: 'workspace.window.createSequence.params.cacheSize.placeholder',
-                              defaultMessage: '请输入缓存大小',
+                              defaultMessage: '请输入缓存大小'
                             })}
                           />
                         </Form.Item>
@@ -453,7 +483,7 @@ const CreateSequenceModal: React.FC<IProps> = function (props) {
                   label={
                     formatMessage({
                       id: 'odc.components.CreateSequenceModal.Sort',
-                      defaultMessage: '排序',
+                      defaultMessage: '排序'
                     }) // 排序
                   }
                 >
@@ -462,20 +492,20 @@ const CreateSequenceModal: React.FC<IProps> = function (props) {
                       {
                         label: formatMessage({
                           id: 'workspace.window.createSequence.params.ordered.yes',
-                          defaultMessage: '是',
+                          defaultMessage: '是'
                         }),
 
-                        value: true,
+                        value: true
                       },
 
                       {
                         label: formatMessage({
                           id: 'workspace.window.createSequence.params.ordered.no',
-                          defaultMessage: '否',
+                          defaultMessage: '否'
                         }),
 
-                        value: false,
-                      },
+                        value: false
+                      }
                     ]}
                   />
                 </Form.Item>
@@ -484,7 +514,7 @@ const CreateSequenceModal: React.FC<IProps> = function (props) {
                   label={
                     formatMessage({
                       id: 'odc.components.CreateSequenceModal.Circulating',
-                      defaultMessage: '循环',
+                      defaultMessage: '循环'
                     }) // 循环
                   }
                 >
@@ -493,20 +523,20 @@ const CreateSequenceModal: React.FC<IProps> = function (props) {
                       {
                         label: formatMessage({
                           id: 'workspace.window.createSequence.params.cycled.yes',
-                          defaultMessage: '是',
+                          defaultMessage: '是'
                         }),
 
-                        value: true,
+                        value: true
                       },
 
                       {
                         label: formatMessage({
                           id: 'workspace.window.createSequence.params.cycled.no',
-                          defaultMessage: '否',
+                          defaultMessage: '否'
                         }),
 
-                        value: false,
-                      },
+                        value: false
+                      }
                     ]}
                   />
                 </Form.Item>
@@ -534,4 +564,7 @@ const CreateSequenceModal: React.FC<IProps> = function (props) {
   );
 };
 
-export default inject('modalStore', 'sessionManagerStore')(observer(CreateSequenceModal));
+export default inject(
+  'modalStore',
+  'sessionManagerStore'
+)(observer(CreateSequenceModal));

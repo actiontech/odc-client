@@ -30,7 +30,14 @@ interface IProps {
   flowId: number;
 }
 const SQLCheckNode: React.FC<IProps> = function ({ node, flowId }) {
-  const { status, nodeType, issueCount, unauthorizedDBResources, id, preCheckOverLimit } = node;
+  const {
+    status,
+    nodeType,
+    issueCount,
+    unauthorizedDBResources,
+    id,
+    preCheckOverLimit
+  } = node;
   const [isLoading, setIsLoading] = useState(false);
   const [visible, setVisible] = useState(false);
   const [permissionResultVisible, setPermissionResultVisible] = useState(false);
@@ -64,7 +71,7 @@ const SQLCheckNode: React.FC<IProps> = function ({ node, flowId }) {
         <Descriptions.Item
           label={formatMessage({
             id: 'odc.component.CommonTaskDetailModal.TaskFlow.ProcessingStatus',
-            defaultMessage: '处理状态',
+            defaultMessage: '处理状态'
           })}
         >
           <NodeStatus node={node} />
@@ -78,7 +85,7 @@ const SQLCheckNode: React.FC<IProps> = function ({ node, flowId }) {
                   label={
                     formatMessage({
                       id: 'odc.src.component.Task.component.CommonDetailModal.Nodes.SQLExaminationResults',
-                      defaultMessage: 'SQL 检查结果',
+                      defaultMessage: 'SQL 检查结果'
                     }) /* SQL 检查结果 */
                   }
                 >
@@ -88,23 +95,23 @@ const SQLCheckNode: React.FC<IProps> = function ({ node, flowId }) {
                         formatMessage(
                           {
                             id: 'src.component.Task.component.CommonDetailModal.Nodes.67EAA454',
-                            defaultMessage: '存在{issueCount}个问题',
+                            defaultMessage: '存在{issueCount}个问题'
                           },
-                          { issueCount },
+                          { issueCount }
                         ) /*`存在${issueCount}个问题`*/
                       }
 
                       {issueCount > 0 && (
                         <a
                           style={{
-                            marginLeft: 5,
+                            marginLeft: 5
                           }}
                           onClick={viewLintResult}
                         >
                           {
                             formatMessage({
                               id: 'odc.CommonTaskDetailModal.Nodes.SQLCheckNode.View',
-                              defaultMessage: '查看',
+                              defaultMessage: '查看'
                             }) /*查看*/
                           }
                         </a>
@@ -117,7 +124,8 @@ const SQLCheckNode: React.FC<IProps> = function ({ node, flowId }) {
                       {
                         formatMessage({
                           id: 'odc.src.component.Task.component.CommonDetailModal.Nodes.TheNumberOf',
-                          defaultMessage: '，预检查处理 SQL 条数超过最大限制，当前任务流程将按',
+                          defaultMessage:
+                            '，预检查处理 SQL 条数超过最大限制，当前任务流程将按'
                         }) /* 
                 ，预检查处理 SQL 条数超过最大限制，当前任务流程将按
                 */
@@ -125,14 +133,14 @@ const SQLCheckNode: React.FC<IProps> = function ({ node, flowId }) {
 
                       <Tag
                         style={{
-                          marginLeft: '8px',
+                          marginLeft: '8px'
                         }}
                         color="error"
                       >
                         {
                           formatMessage({
                             id: 'odc.src.component.Task.component.CommonDetailModal.Nodes.HighRisk',
-                            defaultMessage: '高风险',
+                            defaultMessage: '高风险'
                           }) /* 
                   高风险
                   */
@@ -141,7 +149,7 @@ const SQLCheckNode: React.FC<IProps> = function ({ node, flowId }) {
                       {
                         formatMessage({
                           id: 'odc.src.component.Task.component.CommonDetailModal.Nodes.GradeContinuesToAdvance',
-                          defaultMessage: '等级继续推进',
+                          defaultMessage: '等级继续推进'
                         }) /* 
                 等级继续推进
                 */
@@ -155,7 +163,7 @@ const SQLCheckNode: React.FC<IProps> = function ({ node, flowId }) {
                   label={
                     formatMessage({
                       id: 'odc.src.component.Task.component.CommonDetailModal.Nodes.PermissionsInspectionResults',
-                      defaultMessage: '权限检查结果',
+                      defaultMessage: '权限检查结果'
                     }) /* 权限检查结果 */
                   }
                 >
@@ -163,22 +171,26 @@ const SQLCheckNode: React.FC<IProps> = function ({ node, flowId }) {
                     formatMessage(
                       {
                         id: 'src.component.Task.component.CommonDetailModal.Nodes.90FF76EB',
-                        defaultMessage: '存在{unauthorizedDatabasesLength}个问题',
+                        defaultMessage:
+                          '存在{unauthorizedDatabasesLength}个问题'
                       },
-                      { unauthorizedDatabasesLength: unauthorizedDBResources?.length },
+                      {
+                        unauthorizedDatabasesLength:
+                          unauthorizedDBResources?.length
+                      }
                     ) /*`存在${unauthorizedDatabases?.length}个问题`*/
                   }
 
                   <a
                     style={{
-                      marginLeft: 5,
+                      marginLeft: 5
                     }}
                     onClick={viewPermissionResult}
                   >
                     {
                       formatMessage({
                         id: 'src.component.Task.component.CommonDetailModal.Nodes.3D1ABD2F' /*查看*/,
-                        defaultMessage: '查看',
+                        defaultMessage: '查看'
                       }) /* 查看 */
                     }
                   </a>
@@ -191,13 +203,17 @@ const SQLCheckNode: React.FC<IProps> = function ({ node, flowId }) {
         <Descriptions.Item
           label={formatMessage({
             id: 'odc.component.CommonTaskDetailModal.TaskFlow.ProcessingTime',
-            defaultMessage: '处理时间',
+            defaultMessage: '处理时间'
           })}
         >
           <NodeCompleteTime node={node} />
         </Descriptions.Item>
       </Descriptions>
-      <LintDrawer visible={visible} closePage={() => setVisible(false)} data={data} />
+      <LintDrawer
+        visible={visible}
+        closePage={() => setVisible(false)}
+        data={data}
+      />
       <DBPermissionTableDrawer
         visible={permissionResultVisible}
         dataSource={unauthorizedDBResources}

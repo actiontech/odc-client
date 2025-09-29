@@ -40,7 +40,7 @@ const SCLayout: React.FC<SCLayoutProps> = ({ sider, content }) => {
     selectedKey,
     siderStyle = {},
     contentStyle = {},
-    handleItemOnClick,
+    handleItemOnClick
   } = sider;
   function renderList() {
     if (items?.length === 0) {
@@ -53,7 +53,7 @@ const SCLayout: React.FC<SCLayoutProps> = ({ sider, content }) => {
       <Spin spinning={loading}>
         <Menu
           style={{
-            marginTop: '12px',
+            marginTop: '12px'
           }}
           selectedKeys={selectedKey}
           defaultSelectedKeys={[items?.[0]?.key as string]}
@@ -69,7 +69,10 @@ const SCLayout: React.FC<SCLayoutProps> = ({ sider, content }) => {
       <div className={styles.sider} style={siderStyle}>
         {renderList()}
       </div>
-      <div className={classNames(styles.content, styles.envDrawer)} style={contentStyle}>
+      <div
+        className={classNames(styles.content, styles.envDrawer)}
+        style={contentStyle}
+      >
         {content}
       </div>
     </div>

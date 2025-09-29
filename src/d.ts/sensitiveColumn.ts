@@ -21,11 +21,11 @@ export enum Level {
   LOW,
   MEDIUM,
   HIGH,
-  EXTREME_HIGH,
+  EXTREME_HIGH
 }
 export enum ESensitiveColumnType {
   TABLE_COLUMN = 'TABLE_COLUMN',
-  VIEW_COLUMN = 'VIEW_COLUMN',
+  VIEW_COLUMN = 'VIEW_COLUMN'
 }
 export interface ISensitiveColumn {
   id?: number;

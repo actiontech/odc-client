@@ -18,12 +18,18 @@ import { formatMessage } from '@/util/intl';
 import { IDatabase, DatabaseGroup } from '@/d.ts/database';
 import { UserStore } from '@/store/login';
 import { SessionManagerStore } from '@/store/sessionManager';
-import { Space, Tree, Spin, Button } from 'antd';
+import { Space, Tree, Spin } from 'antd';
 import { EventDataNode } from 'antd/lib/tree';
 import { throttle } from 'lodash';
 import { useUpdate } from 'ahooks';
 import { inject, observer } from 'mobx-react';
-import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState
+} from 'react';
 import { loadNode } from './helper';
 import styles from './index.less';
 import { DataBaseTreeData } from './Nodes/database';
@@ -31,7 +37,6 @@ import TreeNodeMenu from './TreeNodeMenu';
 import { ResourceNodeType, TreeDataNode } from './type';
 import tracert from '@/util/tracert';
 import Reload from '@/component/Button/Reload';
-import datasourceStatus from '@/store/datasourceStatus';
 import DatasourceFilter from './DatasourceFilter';
 import { ConnectType } from '@/d.ts';
 import useTreeState from './hooks/useTreeState';
@@ -46,13 +51,12 @@ import NewDatasourceButton from '@/page/Datasource/Datasource/NewDatasourceDrawe
 import StatusIcon from '@/component/StatusIcon/DataSourceIcon';
 import NewDatasourceDrawer from '@/page/Datasource/Datasource/NewDatasourceDrawer';
 import { GroupNodeToResourceNodeType } from '@/page/Workspace/SideBar/ResourceTree/const';
-import { isConnectTypeBeFileSystemGroup } from '@/util/connection';
 import {
   getGroupKey,
   getSecondGroupKey,
   getShouldExpandedGroupKeys,
   TreeDataSecondGroupKey,
-  TreeDataGroupKey,
+  TreeDataGroupKey
 } from './const';
 import useDataSourceDrawer from './hooks/useDataSourceDrawer';
 import DataSourceNodeMenu from '@/page/Workspace/SideBar/ResourceTree/TreeNodeMenu/dataSource';
@@ -87,10 +91,17 @@ const ResourceTree: React.FC<IProps> = function ({
   allDatabasesMap,
   DatabaseDataNodeMap,
   userStore,
-  defaultExpandedKeys,
+  defaultExpandedKeys
 }) {
-  const { expandedKeys, loadedKeys, sessionIds, setSessionId, onExpand, onLoad, setExpandedKeys } =
-    useTreeState(stateId);
+  const {
+    expandedKeys,
+    loadedKeys,
+    sessionIds,
+    setSessionId,
+    onExpand,
+    onLoad,
+    setExpandedKeys
+  } = useTreeState(stateId);
   const {
     addDSVisiable,
     setAddDSVisiable,
@@ -98,7 +109,7 @@ const ResourceTree: React.FC<IProps> = function ({
     setEditDatasourceId,
     copyDatasourceId,
     setCopyDatasourceId,
-    deleteDataSource,
+    deleteDataSource
   } = useDataSourceDrawer();
   const treeContext = useContext(ResourceTreeContext);
   const {
@@ -112,7 +123,7 @@ const ResourceTree: React.FC<IProps> = function ({
     currentObject,
     databaseList,
     reloadDatasourceList,
-    reloadDatabaseList,
+    reloadDatabaseList
   } = treeContext;
   const [wrapperHeight, setWrapperHeight] = useState(0);
   const clockRef = useRef(null);
@@ -152,18 +163,24 @@ const ResourceTree: React.FC<IProps> = function ({
   useEffect(() => {
     selectProjectId &&
       setExpandedKeys(
-        Array.from(new Set([...expandedKeys, getGroupKey(selectProjectId, groupMode)])),
+        Array.from(
+          new Set([...expandedKeys, getGroupKey(selectProjectId, groupMode)])
+        )
       );
     selectDatasourceId &&
       setExpandedKeys(
-        Array.from(new Set([...expandedKeys, getGroupKey(selectDatasourceId, groupMode)])),
+        Array.from(
+          new Set([...expandedKeys, getGroupKey(selectDatasourceId, groupMode)])
+        )
       );
   }, [selectProjectId, selectDatasourceId]);
 
   useEffect(() => {
     if (defaultExpandedKeys?.length && !currentObject) {
       // 如果没有选中的对象，则默认展开第一项
-      setExpandedKeys(Array.from(new Set([...expandedKeys, ...defaultExpandedKeys])));
+      setExpandedKeys(
+        Array.from(new Set([...expandedKeys, ...defaultExpandedKeys]))
+      );
     }
   }, [defaultExpandedKeys]);
 
@@ -190,10 +207,12 @@ const ResourceTree: React.FC<IProps> = function ({
           key,
           type,
           groupMode,
-          databaseList,
+          databaseList
         });
         setTimeout(() => {
-          setExpandedKeys(Array.from(new Set([...expandedKeys, ...shouldExpandedGroupKeys])));
+          setExpandedKeys(
+            Array.from(new Set([...expandedKeys, ...shouldExpandedGroupKeys]))
+          );
         });
       }
       positionResourceByKey(key, 500);
@@ -232,7 +251,9 @@ const ResourceTree: React.FC<IProps> = function ({
   useEffect(() => {
     if (shouldExpandedKeys?.length && currentObject.value) {
       setTimeout(() => {
-        setExpandedKeys(Array.from(new Set([...expandedKeys, ...shouldExpandedKeys])));
+        setExpandedKeys(
+          Array.from(new Set([...expandedKeys, ...shouldExpandedKeys]))
+        );
         setLoading(true);
         startPosition(0);
       });
@@ -246,7 +267,10 @@ const ResourceTree: React.FC<IProps> = function ({
           ?.filter((db: IDatabase) => {
             return (
               !(envs?.length && !envs.includes(db.environment?.id)) &&
-              !(connectTypes?.length && !connectTypes.includes(db.dataSource?.type))
+              !(
+                connectTypes?.length &&
+                !connectTypes.includes(db.dataSource?.type)
+              )
             );
           })
           ?.map((database: IDatabase) => {
@@ -256,7 +280,7 @@ const ResourceTree: React.FC<IProps> = function ({
               const dbSession = sessionManagerStore.sessionMap.get(dbSessionId);
               DatabaseDataNodeMap.set(
                 database.id,
-                DataBaseTreeData(dbSession, database, database?.id, true),
+                DataBaseTreeData(dbSession, database, database?.id, true)
               );
             }
             return DatabaseDataNodeMap.get(database.id);
@@ -286,21 +310,25 @@ const ResourceTree: React.FC<IProps> = function ({
               ?.filter((db: IDatabase) => {
                 return (
                   !(envs?.length && !envs.includes(db.environment?.id)) &&
-                  !(connectTypes?.length && !connectTypes.includes(db.dataSource?.type))
+                  !(
+                    connectTypes?.length &&
+                    !connectTypes.includes(db.dataSource?.type)
+                  )
                 );
               })
               ?.map((database: IDatabase) => {
                 if (loadedKeys.includes(database.id)) {
                   const dbId = database.id;
                   const dbSessionId = sessionIds[dbId];
-                  const dbSession = sessionManagerStore.sessionMap.get(dbSessionId);
+                  const dbSession =
+                    sessionManagerStore.sessionMap.get(dbSessionId);
                   DatabaseDataNodeMap.set(
                     database.id,
-                    DataBaseTreeData(dbSession, database, database?.id, true),
+                    DataBaseTreeData(dbSession, database, database?.id, true)
                   );
                 }
                 return DatabaseDataNodeMap.get(database.id);
-              }),
+              })
           };
         });
       }
@@ -314,7 +342,11 @@ const ResourceTree: React.FC<IProps> = function ({
             key: groupKey,
             type: GroupNodeToResourceNodeType[groupMode],
             children: [...groupItem.secondGroup.values()]?.map((sItem) => {
-              const sencondGroupKey = getSecondGroupKey(groupItem.mapId, sItem.mapId, groupMode);
+              const sencondGroupKey = getSecondGroupKey(
+                groupItem.mapId,
+                sItem.mapId,
+                groupMode
+              );
               const data = datasourceList.find((d) => d.id === sItem.mapId);
               const icon = data && <StatusIcon item={data} />;
               return {
@@ -328,23 +360,32 @@ const ResourceTree: React.FC<IProps> = function ({
                   ?.filter((db: IDatabase) => {
                     return (
                       !(envs?.length && !envs.includes(db.environment?.id)) &&
-                      !(connectTypes?.length && !connectTypes.includes(db.dataSource?.type))
+                      !(
+                        connectTypes?.length &&
+                        !connectTypes.includes(db.dataSource?.type)
+                      )
                     );
                   })
                   ?.map((database: IDatabase) => {
                     if (loadedKeys.includes(database.id)) {
                       const dbId = database.id;
                       const dbSessionId = sessionIds[dbId];
-                      const dbSession = sessionManagerStore.sessionMap.get(dbSessionId);
+                      const dbSession =
+                        sessionManagerStore.sessionMap.get(dbSessionId);
                       DatabaseDataNodeMap.set(
                         database.id,
-                        DataBaseTreeData(dbSession, database, database?.id, true),
+                        DataBaseTreeData(
+                          dbSession,
+                          database,
+                          database?.id,
+                          true
+                        )
                       );
                     }
                     return DatabaseDataNodeMap.get(database.id);
-                  }),
+                  })
               };
-            }),
+            })
           };
         });
       }
@@ -359,13 +400,17 @@ const ResourceTree: React.FC<IProps> = function ({
           const dbId = (data as IDatabase).id;
           const dbSession =
             sessionManagerStore.sessionMap.get(sessionIds[dbId]) ||
-            (await sessionManagerStore.createSession(null, data?.id, true, true));
+            (await sessionManagerStore.createSession(
+              null,
+              data?.id,
+              true,
+              true
+            ));
           if (dbSession && dbSession !== 'NotFound') {
             setSessionId(dbId, dbSession?.sessionId);
             update();
           } else {
             throw new Error("load database's session failed");
-            return;
           }
           break;
         }
@@ -374,7 +419,7 @@ const ResourceTree: React.FC<IProps> = function ({
         }
       }
     },
-    [sessionIds],
+    [sessionIds]
   );
 
   const renderNode = useCallback(
@@ -382,9 +427,10 @@ const ResourceTree: React.FC<IProps> = function ({
       const { type, sessionId } = node;
       const dbSession = sessionManagerStore.sessionMap.get(sessionId);
       if (
-        [ResourceNodeType.GroupNodeDataSource, ResourceNodeType.SecondGroupNodeDataSource].includes(
-          type,
-        )
+        [
+          ResourceNodeType.GroupNodeDataSource,
+          ResourceNodeType.SecondGroupNodeDataSource
+        ].includes(type)
       ) {
         return (
           <DataSourceNodeMenu
@@ -407,7 +453,7 @@ const ResourceTree: React.FC<IProps> = function ({
         />
       );
     },
-    [sessionIds],
+    [sessionIds]
   );
 
   return (
@@ -417,7 +463,7 @@ const ResourceTree: React.FC<IProps> = function ({
           <span className={styles.titleText}>
             {formatMessage({
               id: 'src.page.Workspace.SideBar.ResourceTree.87784E3D',
-              defaultMessage: '数据库',
+              defaultMessage: '数据库'
             })}
           </span>
           <span className={styles.titleAction}>
@@ -439,31 +485,36 @@ const ResourceTree: React.FC<IProps> = function ({
                   }}
                 />
               ) : null}
-              <Group setGroupMode={setGroupMode} groupMode={groupMode} />
+              {/* <Group setGroupMode={setGroupMode} groupMode={groupMode} />
 
-              <SyncMetadata reload={reload} databaseList={[...allDatabasesMap.values()]} />
+              <SyncMetadata
+                reload={reload}
+                databaseList={[...allDatabasesMap.values()]}
+              /> */}
               <Reload
                 key="ResourceTreeReload"
                 onClick={() => {
                   reload();
                 }}
-                style={{ display: 'flex' }}
               />
             </Space>
           </span>
         </div>
         <div className={styles.search}>
-          <DatabaseSearch searchValue={searchValue} setSearchValue={setSearchValue} />
-          {userStore.isPrivateSpace() ? (
+          <DatabaseSearch
+            searchValue={searchValue}
+            setSearchValue={setSearchValue}
+          />
+          {/* {userStore.isPrivateSpace() ? (
             <NewDatasourceButton onSuccess={dataSourceChangeReload}>
-              <Button
+              <BasicButton
                 size="small"
                 type="primary"
                 className={styles.newDataSourceButton}
                 icon={<PlusOutlined />}
               />
             </NewDatasourceButton>
-          ) : null}
+          ) : null} */}
         </div>
         <div ref={treeWrapperRef} className={styles.tree}>
           <Spin spinning={loading}>
@@ -474,8 +525,10 @@ const ResourceTree: React.FC<IProps> = function ({
                 showIcon
                 onExpand={(_, info) => {
                   onExpand(_, info);
-                  //@ts-ignore
-                  tracert.click('a3112.b41896.c330992.d367628', { resourceType: info?.node?.type });
+                  tracert.click('a3112.b41896.c330992.d367628', {
+                    //@ts-ignore
+                    resourceType: info?.node?.type
+                  });
                 }}
                 treeData={treeData}
                 titleRender={renderNode}
@@ -494,7 +547,7 @@ const ResourceTree: React.FC<IProps> = function ({
           </Spin>
         </div>
       </div>
-      <NewDatasourceDrawer
+      {/* <NewDatasourceDrawer
         isEdit={!!editDatasourceId}
         visible={addDSVisiable}
         id={editDatasourceId}
@@ -514,7 +567,7 @@ const ResourceTree: React.FC<IProps> = function ({
           setCopyDatasourceId(null);
         }}
         onSuccess={dataSourceChangeReload}
-      />
+      /> */}
     </>
   );
 };
@@ -523,5 +576,5 @@ export default inject(
   'sessionManagerStore',
   'userStore',
   'modalStore',
-  'settingStore',
+  'settingStore'
 )(observer(ResourceTree));

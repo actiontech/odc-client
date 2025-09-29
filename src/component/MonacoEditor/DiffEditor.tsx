@@ -15,7 +15,14 @@
  */
 
 import * as monaco from 'monaco-editor';
-import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
 import styles from './index.less';
 import { SettingStore } from '@/store/setting';
 import { inject, observer } from 'mobx-react';
@@ -43,17 +50,19 @@ const DiffEditor = inject('settingStore')(
         modifie = null,
         language = 'sql',
         defaultSplit = true,
-        theme,
+        theme
       } = props;
       const domRef = useRef<HTMLDivElement | null>(null);
       const editorRef = useRef<monaco.editor.IStandaloneDiffEditor>();
       const settingTheme =
-        settingStore.theme.editorTheme?.[settingStore.configurations['odc.editor.style.theme']];
+        settingStore.theme.editorTheme?.[
+          settingStore.configurations['odc.editor.style.theme']
+        ];
       const [split, setSplit] = useState<boolean>(defaultSplit);
       useImperativeHandle(ref, () => ({
         switchSplit: (v: boolean) => {
           setSplit(v);
-        },
+        }
       }));
       const themeValue = useMemo(() => {
         if (!theme) {
@@ -63,10 +72,11 @@ const DiffEditor = inject('settingStore')(
       }, [theme, settingTheme]);
 
       useEffect(() => {
-        const fontSize = settingStore.configurations['odc.editor.style.fontSize'];
+        const fontSize =
+          settingStore.configurations['odc.editor.style.fontSize'];
         if (fontSize && editorRef.current) {
           editorRef.current.updateOptions({
-            fontSize: getFontSize(fontSize),
+            fontSize: getFontSize(fontSize)
           });
         }
       }, [settingStore.configurations?.['odc.editor.style.fontSize']]);
@@ -82,23 +92,23 @@ const DiffEditor = inject('settingStore')(
           // useInlineViewWhenSpaceIsLimited: false,
           unicodeHighlight: {
             invisibleCharacters: false,
-            ambiguousCharacters: false,
+            ambiguousCharacters: false
           },
           lineNumbersMinChars: 4,
           lineNumbers: 'on',
           readOnly: true,
           renderSideBySide: true,
-          originalEditable: false,
+          originalEditable: false
         });
         editorRef.current?.setModel({
           original: originalModel,
-          modified: modifiedModel,
+          modified: modifiedModel
         });
       };
       useEffect(() => {
         if (editorRef.current) {
           editorRef.current.updateOptions({
-            renderSideBySide: split,
+            renderSideBySide: split
           });
         } else {
           initEditor();
@@ -115,7 +125,7 @@ const DiffEditor = inject('settingStore')(
           <div ref={domRef} className={styles.editor}></div>
         </div>
       );
-    }),
-  ),
+    })
+  )
 );
 export default DiffEditor;

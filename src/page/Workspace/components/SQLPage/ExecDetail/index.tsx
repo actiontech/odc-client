@@ -17,20 +17,33 @@
 import { formatMessage } from '@/util/intl';
 import { Col, Drawer, message, Row, Spin } from 'antd';
 import { BarChart } from 'echarts/charts';
-import { GridComponent, LegendComponent, TooltipComponent } from 'echarts/components';
+import {
+  GridComponent,
+  LegendComponent,
+  TooltipComponent
+} from 'echarts/components';
 import * as echarts from 'echarts/core';
 import { CanvasRenderer } from 'echarts/renderers';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
-echarts.use([TooltipComponent, GridComponent, LegendComponent, BarChart, CanvasRenderer]);
+echarts.use([
+  TooltipComponent,
+  GridComponent,
+  LegendComponent,
+  BarChart,
+  CanvasRenderer
+]);
 
-import { getSQLExecuteDetail, getSQLExecuteExplain } from '@/common/network/sql';
+import {
+  getSQLExecuteDetail,
+  getSQLExecuteExplain
+} from '@/common/network/sql';
 import { ISQLExecuteDetail, ISQLExplain } from '@/d.ts';
 import SessionStore from '@/store/sessionManager/session';
 import setting from '@/store/setting';
 import SQLExplain from '../../SQLExplain';
 import BasicInfo from './BasicInfo';
-import styles from './index.less';
+import { ExplainDrawerStyleWrapper } from './style';
 import IOStatistics from './IOStatistics';
 import TimeStatistics from './TimeStatistics';
 
@@ -45,10 +58,11 @@ interface IProps {
 const ExecDetail: React.FC<IProps> = function (props) {
   const { visible, sql, traceId, session, onClose } = props;
   const [loadingExplain, setLoadingExplain] = useState(false);
-  const [sqlExecuteExplainToShow, setSqlExecuteExplainToShow] = useState<ISQLExplain | string>(
-    null,
-  );
-  const [sqlExecuteDetailToShow, setSqlExecuteDetailToShow] = useState<ISQLExecuteDetail>(null);
+  const [sqlExecuteExplainToShow, setSqlExecuteExplainToShow] = useState<
+    ISQLExplain | string
+  >(null);
+  const [sqlExecuteDetailToShow, setSqlExecuteDetailToShow] =
+    useState<ISQLExecuteDetail>(null);
   const stackBarPlot = useRef<echarts.ECharts>(null);
   const stackBarBox = useRef<HTMLDivElement>(null);
 
@@ -58,8 +72,9 @@ const ExecDetail: React.FC<IProps> = function (props) {
         message.error(
           formatMessage({
             id: 'odc.components.SQLPage.TheTraceIdIsEmpty',
-            defaultMessage: 'TRACE ID 为空，请确保该语句运行时 ob_enable_trace_log 变量已设置为 ON',
-          }), // TRACE ID 为空，请确保该语句运行时 ob_enable_trace_log 变量已设置为 ON
+            defaultMessage:
+              'TRACE ID 为空，请确保该语句运行时 ob_enable_trace_log 变量已设置为 ON'
+          }) // TRACE ID 为空，请确保该语句运行时 ob_enable_trace_log 变量已设置为 ON
         );
         return;
       }
@@ -71,14 +86,14 @@ const ExecDetail: React.FC<IProps> = function (props) {
         sql,
         traceId,
         session?.sessionId,
-        session?.database?.dbName,
+        session?.database?.dbName
       );
       const sqlId = detail?.sqlId;
       const explain = await getSQLExecuteExplain(
         sql,
         sqlId,
         session?.sessionId,
-        session?.database?.dbName,
+        session?.database?.dbName
       );
       setLoadingExplain(false);
 
@@ -89,28 +104,28 @@ const ExecDetail: React.FC<IProps> = function (props) {
         const {
           queueTime = 0,
           execTime = 0,
-          totalTime = 0,
+          totalTime = 0
         } = detail || {
           queueTime: 0,
           waitTime: 0,
           execTime: 0,
           totalTime: 0,
-          sql: '',
+          sql: ''
         };
 
         const queueTimeLabel = formatMessage({
           id: 'workspace.window.sql.explain.tab.detail.card.time.label.queueTime',
-          defaultMessage: '排队时间',
+          defaultMessage: '排队时间'
         });
 
         const execTimeLabel = formatMessage({
           id: 'workspace.window.sql.explain.tab.detail.card.time.label.execTime',
-          defaultMessage: '执行耗时',
+          defaultMessage: '执行耗时'
         });
 
         const otherTimeLabel = formatMessage({
           id: 'workspace.window.sql.explain.tab.detail.card.time.label.otherTime',
-          defaultMessage: '其他',
+          defaultMessage: '其他'
         });
 
         const values = [execTime, queueTime, totalTime - queueTime - execTime];
@@ -127,36 +142,39 @@ const ExecDetail: React.FC<IProps> = function (props) {
               show: true,
               formatter() {
                 return values[index];
-              },
+              }
             },
             emphasis: {
-              focus: 'series',
+              focus: 'series'
             },
             barWidth: '30px',
             data: [newValue],
             tooltip: {
               valueFormatter() {
                 return values[index];
-              },
-            },
+              }
+            }
           };
         });
         if (!stackBarPlot.current) {
-          stackBarPlot.current = echarts.init(stackBarBox.current, setting.theme?.chartsTheme);
+          stackBarPlot.current = echarts.init(
+            stackBarBox.current,
+            setting.theme?.chartsTheme
+          );
         }
         stackBarPlot.current.setOption({
           tooltip: {
             trigger: 'axis',
             axisPointer: {
-              type: 'shadow',
+              type: 'shadow'
             },
             textStyle: {
-              fontSize: 12,
-            },
+              fontSize: 12
+            }
           },
           legend: {
             bottom: 0,
-            itemWidth: 14,
+            itemWidth: 14
           },
           grid: {
             // containLabel: true,
@@ -164,10 +182,10 @@ const ExecDetail: React.FC<IProps> = function (props) {
             bottom: 40,
             left: 0,
             right: 0,
-            backgroundColor: 'transparent',
+            backgroundColor: 'transparent'
           },
           xAxis: {
-            show: false,
+            show: false
           },
           yAxis: {
             show: false,
@@ -175,23 +193,23 @@ const ExecDetail: React.FC<IProps> = function (props) {
             data: [
               formatMessage({
                 id: 'odc.components.SQLPage.TimeConsumptionStatisticsUs',
-                defaultMessage: '耗时统计（us）',
-              }),
-            ],
+                defaultMessage: '耗时统计（us）'
+              })
+            ]
           },
           series: data,
-          backgroundColor: 'transparent',
+          backgroundColor: 'transparent'
         });
       } else {
         message.error(
           formatMessage({
             id: 'workspace.window.sql.explain.detail.failed',
-            defaultMessage: '查看 SQL 执行详情失败',
-          }),
+            defaultMessage: '查看 SQL 执行详情失败'
+          })
         );
       }
     },
-    [traceId, sql, stackBarBox, stackBarPlot],
+    [traceId, sql, stackBarBox, stackBarPlot]
   );
 
   useEffect(() => {
@@ -219,65 +237,66 @@ const ExecDetail: React.FC<IProps> = function (props) {
   }, []);
 
   return (
-    <Drawer
-      title={formatMessage({
-        id: 'workspace.window.sql.explain.tab.detail.title',
-        defaultMessage: '执行详情',
-      })}
-      placement="right"
-      closable
-      onClose={() => {
-        onClose();
-      }}
-      destroyOnClose={true}
-      width="96vw"
-      open={visible}
-      rootClassName={styles.explainDrawer}
-      bodyStyle={{
-        position: 'absolute',
-        top: 55,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        overflow: 'auto',
-      }}
-    >
-      <div
-        style={{
-          width: '100%',
-          minWidth: 1280,
+    <ExplainDrawerStyleWrapper>
+      <Drawer
+        title={formatMessage({
+          id: 'workspace.window.sql.explain.tab.detail.title',
+          defaultMessage: '执行详情'
+        })}
+        placement="right"
+        closable
+        onClose={() => {
+          onClose();
+        }}
+        destroyOnClose={true}
+        width="96vw"
+        open={visible}
+        bodyStyle={{
+          position: 'absolute',
+          top: 55,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          overflow: 'auto'
         }}
       >
-        <Spin spinning={loadingExplain}>
-          <Row
-            gutter={16}
-            justify="space-between"
-            style={{
-              marginBottom: 16,
-            }}
-          >
-            <Col span={8}>
-              <BasicInfo sqlExecuteDetailToShow={sqlExecuteDetailToShow} />
-            </Col>
-            <Col span={8}>
-              <TimeStatistics stackBarBox={stackBarBox} />
-            </Col>
-            <Col span={8}>
-              <IOStatistics sqlExecuteDetailToShow={sqlExecuteDetailToShow} />
-            </Col>
-          </Row>
-        </Spin>
-        <Spin spinning={loadingExplain}>
-          <SQLExplain
-            tableHeight={300}
-            sql={sqlExecuteDetailToShow?.sql ?? sql}
-            explain={sqlExecuteExplainToShow}
-            session={session}
-            traceId={traceId}
-          />
-        </Spin>
-      </div>
-    </Drawer>
+        <div
+          style={{
+            width: '100%',
+            minWidth: 1280
+          }}
+        >
+          <Spin spinning={loadingExplain}>
+            <Row
+              gutter={16}
+              justify="space-between"
+              style={{
+                marginBottom: 16
+              }}
+            >
+              <Col span={8}>
+                <BasicInfo sqlExecuteDetailToShow={sqlExecuteDetailToShow} />
+              </Col>
+              <Col span={8}>
+                <TimeStatistics stackBarBox={stackBarBox} />
+              </Col>
+              <Col span={8}>
+                <IOStatistics sqlExecuteDetailToShow={sqlExecuteDetailToShow} />
+              </Col>
+            </Row>
+          </Spin>
+          <Spin spinning={loadingExplain}>
+            <SQLExplain
+              tableHeight={300}
+              sql={sqlExecuteDetailToShow?.sql ?? sql}
+              explain={sqlExecuteExplainToShow}
+              session={session}
+              traceId={traceId}
+            />
+          </Spin>
+        </div>
+      </Drawer>
+    </ExplainDrawerStyleWrapper>
   );
 };
 

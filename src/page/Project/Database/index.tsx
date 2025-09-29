@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-import { getDataSourceModeConfig, getDataSourceStyleByConnectType } from '@/common/datasource';
+import {
+  getDataSourceModeConfig,
+  getDataSourceStyleByConnectType
+} from '@/common/datasource';
 import { getDatabase, batchUpdateRemarks } from '@/common/network/database';
 import Action from '@/component/Action';
 import HelpDoc from '@/component/helpDoc';
@@ -45,7 +48,10 @@ import React, { useContext } from 'react';
 import ProjectContext from '../ProjectContext';
 import AddDataBaseButton from './components/AddDataBaseButton';
 import ChangeOwnerModal from './components/ChangeOwnerModal';
-import { CreateLogicialDatabase, ManageLogicDatabase } from './components/LogicDatabase';
+import {
+  CreateLogicialDatabase,
+  ManageLogicDatabase
+} from './components/LogicDatabase';
 import { isConnectTypeBeFileSystemGroup } from '@/util/connection';
 import AddObjectStorage from './components/AddObjectStorage';
 import Header from './Header';
@@ -98,22 +104,32 @@ const Database: React.FC<IProps> = ({ id, modalStore }) => {
     disabledMultiDBChanges,
     isOwner,
     clearSelectedRowKeys,
-    haveOperationPermission,
+    haveOperationPermission
   } = useData(id);
 
   const getCheckbox = (record: IDatabase) => {
-    const hasChangeAuth = record.authorizedPermissionTypes?.includes(DatabasePermissionType.CHANGE);
-    const hasQueryAuth = record.authorizedPermissionTypes?.includes(DatabasePermissionType.QUERY);
-    const disabled = !hasChangeAuth && !hasQueryAuth && !record?.authorizedPermissionTypes?.length;
-    const status = statusMap.get(record?.dataSource?.id) || record?.dataSource?.status;
+    const hasChangeAuth = record.authorizedPermissionTypes?.includes(
+      DatabasePermissionType.CHANGE
+    );
+    const hasQueryAuth = record.authorizedPermissionTypes?.includes(
+      DatabasePermissionType.QUERY
+    );
+    const disabled =
+      !hasChangeAuth &&
+      !hasQueryAuth &&
+      !record?.authorizedPermissionTypes?.length;
+    const status =
+      statusMap.get(record?.dataSource?.id) || record?.dataSource?.status;
     const config = getDataSourceModeConfig(record?.dataSource?.type);
     return {
       disabled:
         disabled ||
         !record.existed ||
-        ![IConnectionStatus.ACTIVE, IConnectionStatus.TESTING]?.includes(status?.status) ||
+        ![IConnectionStatus.ACTIVE, IConnectionStatus.TESTING]?.includes(
+          status?.status
+        ) ||
         !config?.features?.task?.includes(TaskType.MULTIPLE_ASYNC),
-      name: record.name,
+      name: record.name
     };
   };
 
@@ -122,7 +138,10 @@ const Database: React.FC<IProps> = ({ id, modalStore }) => {
     selectedRowKeys: selectedTempRowKeys,
     preserveSelectedRowKeys: true,
     checkStrictly: false,
-    onChange: (selectedRowKeys: React.Key[] | string[], selectedRows: IDatabase[]) => {
+    onChange: (
+      selectedRowKeys: React.Key[] | string[],
+      selectedRows: IDatabase[]
+    ) => {
       if (selectedRowKeys.length === 0) {
         setSelectedTempRowKeys([]);
       } else {
@@ -131,18 +150,20 @@ const Database: React.FC<IProps> = ({ id, modalStore }) => {
     },
     getCheckboxProps: (record: IDatabase & { children?: IDatabase[] }) => {
       if (isGroupColumn(record.id)) {
-        const canSelect = record.children.some((db) => !getCheckbox(db).disabled);
+        const canSelect = record.children.some(
+          (db) => !getCheckbox(db).disabled
+        );
         return { disabled: !canSelect };
       }
       return getCheckbox(record);
-    },
+    }
   };
 
   const renderNoPermissionDBWithTip = (
     name: React.ReactNode,
     showTip = true,
     databaseStyle,
-    type: DBType,
+    type: DBType
   ) => {
     return (
       <span className={styles.disable}>
@@ -151,7 +172,8 @@ const Database: React.FC<IProps> = ({ id, modalStore }) => {
             showTip
               ? formatMessage({
                   id: 'src.page.Project.Database.B4A5A6AC',
-                  defaultMessage: '当前账号的项目成员角色没有该库的操作权限，请先申请库权限',
+                  defaultMessage:
+                    '当前账号的项目成员角色没有该库的操作权限，请先申请库权限'
                 })
               : ''
           }
@@ -164,7 +186,7 @@ const Database: React.FC<IProps> = ({ id, modalStore }) => {
               style={{
                 color: databaseStyle?.icon?.color,
                 fontSize: 16,
-                marginRight: 4,
+                marginRight: 4
               }}
             />
           )}
@@ -176,7 +198,9 @@ const Database: React.FC<IProps> = ({ id, modalStore }) => {
 
   const tablrCardTitle = (
     <AddDataBaseButton
-      orderedDatabaseIds={selectedRowKeys?.length ? [selectedRowKeys as number[]] : [[undefined]]}
+      orderedDatabaseIds={
+        selectedRowKeys?.length ? [selectedRowKeys as number[]] : [[undefined]]
+      }
       disabledMultiDBChanges={disabledMultiDBChanges}
       clearSelectedRowKeys={clearSelectedRowKeys}
       modalStore={modalStore}
@@ -208,7 +232,7 @@ const Database: React.FC<IProps> = ({ id, modalStore }) => {
             reload: () => {
               reload();
             },
-            envList,
+            envList
           }}
         >
           <Space>
@@ -230,7 +254,7 @@ const Database: React.FC<IProps> = ({ id, modalStore }) => {
             `${GroupKey}_${DatabaseGroup.dataSource}_0`,
             `${GroupKey}_${DatabaseGroup.connectType}_0`,
             `${GroupKey}_${DatabaseGroup.tenant}_0`,
-            `${GroupKey}_${DatabaseGroup.environment}_0`,
+            `${GroupKey}_${DatabaseGroup.environment}_0`
           ],
 
           fixed: true,
@@ -239,11 +263,17 @@ const Database: React.FC<IProps> = ({ id, modalStore }) => {
               return undefined;
             }
             return expanded ? (
-              <CaretDownOutlined className={styles.mr6} onClick={(e) => onExpand(record, e)} />
+              <CaretDownOutlined
+                className={styles.mr6}
+                onClick={(e) => onExpand(record, e)}
+              />
             ) : (
-              <CaretRightOutlined className={styles.mr6} onClick={(e) => onExpand(record, e)} />
+              <CaretRightOutlined
+                className={styles.mr6}
+                onClick={(e) => onExpand(record, e)}
+              />
             );
-          },
+          }
         }}
         rowClassName={(record) => {
           if (isGroupColumn(record.id)) {
@@ -255,7 +285,7 @@ const Database: React.FC<IProps> = ({ id, modalStore }) => {
           {
             title: formatMessage({
               id: 'odc.Project.Database.DatabaseName',
-              defaultMessage: '数据库名称',
+              defaultMessage: '数据库名称'
             }),
             //数据库名称
             className: styles.databaseName,
@@ -274,15 +304,19 @@ const Database: React.FC<IProps> = ({ id, modalStore }) => {
                 );
               }
               const hasChangeAuth = record.authorizedPermissionTypes?.includes(
-                DatabasePermissionType.CHANGE,
+                DatabasePermissionType.CHANGE
               );
               const hasQueryAuth = record.authorizedPermissionTypes?.includes(
-                DatabasePermissionType.QUERY,
+                DatabasePermissionType.QUERY
               );
               const disabled =
-                (!hasChangeAuth && !hasQueryAuth && !record?.authorizedPermissionTypes?.length) ||
+                (!hasChangeAuth &&
+                  !hasQueryAuth &&
+                  !record?.authorizedPermissionTypes?.length) ||
                 projectArchived;
-              const databaseStyle = getDataSourceStyleByConnectType(record?.dataSource?.type);
+              const databaseStyle = getDataSourceStyleByConnectType(
+                record?.dataSource?.type
+              );
               if (!record.existed) {
                 return disabled ? (
                   <>
@@ -291,7 +325,7 @@ const Database: React.FC<IProps> = ({ id, modalStore }) => {
                       style={{
                         color: databaseStyle?.icon?.color,
                         fontSize: 16,
-                        marginRight: 4,
+                        marginRight: 4
                       }}
                     />
 
@@ -300,14 +334,14 @@ const Database: React.FC<IProps> = ({ id, modalStore }) => {
                       isTip={false}
                       title={formatMessage({
                         id: 'odc.Datasource.Info.TheCurrentDatabaseDoesNot',
-                        defaultMessage: '当前数据库不存在',
+                        defaultMessage: '当前数据库不存在'
                       })} /*当前数据库不存在*/
                     >
                       {renderNoPermissionDBWithTip(
                         name,
                         !projectArchived,
                         databaseStyle,
-                        record?.type,
+                        record?.type
                       )}
                     </HelpDoc>
                   </>
@@ -318,7 +352,7 @@ const Database: React.FC<IProps> = ({ id, modalStore }) => {
                       style={{
                         color: databaseStyle?.icon?.color,
                         fontSize: 16,
-                        marginRight: 4,
+                        marginRight: 4
                       }}
                     />
 
@@ -327,7 +361,7 @@ const Database: React.FC<IProps> = ({ id, modalStore }) => {
                       isTip={false}
                       title={formatMessage({
                         id: 'odc.Datasource.Info.TheCurrentDatabaseDoesNot',
-                        defaultMessage: '当前数据库不存在',
+                        defaultMessage: '当前数据库不存在'
                       })} /*当前数据库不存在*/
                     >
                       {name}
@@ -337,7 +371,12 @@ const Database: React.FC<IProps> = ({ id, modalStore }) => {
               }
 
               return disabled ? (
-                renderNoPermissionDBWithTip(name, !projectArchived, databaseStyle, record?.type)
+                renderNoPermissionDBWithTip(
+                  name,
+                  !projectArchived,
+                  databaseStyle,
+                  record?.type
+                )
               ) : (
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   {record?.type === 'LOGICAL' ? (
@@ -348,7 +387,7 @@ const Database: React.FC<IProps> = ({ id, modalStore }) => {
                       style={{
                         color: databaseStyle?.icon?.color,
                         fontSize: 16,
-                        marginRight: 4,
+                        marginRight: 4
                       }}
                     />
                   )}
@@ -363,7 +402,7 @@ const Database: React.FC<IProps> = ({ id, modalStore }) => {
                           record.id,
                           null,
                           '',
-                          isLogicalDatabase(record),
+                          isLogicalDatabase(record)
                         );
                       }}
                     />
@@ -374,12 +413,12 @@ const Database: React.FC<IProps> = ({ id, modalStore }) => {
                   </Space>
                 </div>
               );
-            },
+            }
           },
           {
             title: formatMessage({
               id: 'odc.Project.Database.DataSource',
-              defaultMessage: '所属数据源',
+              defaultMessage: '所属数据源'
             }),
             //所属数据源
             dataIndex: ['dataSource', 'name'],
@@ -387,7 +426,7 @@ const Database: React.FC<IProps> = ({ id, modalStore }) => {
             width: 160,
             hide: groupMode === DatabaseGroup.dataSource,
             ellipsis: {
-              showTitle: false,
+              showTitle: false
             },
             render(value, record, index) {
               if (isGroupColumn(record.id)) {
@@ -396,7 +435,9 @@ const Database: React.FC<IProps> = ({ id, modalStore }) => {
               /**
                * return datasource icon + label
                */
-              const style = getDataSourceStyleByConnectType(record.dataSource?.type);
+              const style = getDataSourceStyleByConnectType(
+                record.dataSource?.type
+              );
               if (!value) {
                 return '-';
               }
@@ -407,19 +448,19 @@ const Database: React.FC<IProps> = ({ id, modalStore }) => {
                     style={{
                       color: style?.icon?.color,
                       fontSize: 16,
-                      marginRight: 4,
+                      marginRight: 4
                     }}
                   />
 
                   <Tooltip title={value}>{value}</Tooltip>
                 </>
               );
-            },
+            }
           },
           {
             title: formatMessage({
               id: 'odc.Project.Database.Environment',
-              defaultMessage: '环境',
+              defaultMessage: '环境'
             }),
             //环境
             dataIndex: 'environmentId',
@@ -435,12 +476,12 @@ const Database: React.FC<IProps> = ({ id, modalStore }) => {
                   content={record?.environment?.name}
                 />
               );
-            },
+            }
           },
           {
             title: formatMessage({
               id: 'src.page.Project.Database.A31E6BDF',
-              defaultMessage: '管理员',
+              defaultMessage: '管理员'
             }),
             //项目角色
             dataIndex: 'owners',
@@ -457,20 +498,20 @@ const Database: React.FC<IProps> = ({ id, modalStore }) => {
                 <span style={{ color: 'var(--text-color-hint)' }}>
                   {formatMessage({
                     id: 'odc.Project.Database.OwnerEmptyText',
-                    defaultMessage: '未设置',
+                    defaultMessage: '未设置'
                   })}
                 </span>
               );
-            },
+            }
           },
           {
             title: formatMessage({
               id: 'src.page.Project.Database.10D6FEA0',
-              defaultMessage: '备注',
+              defaultMessage: '备注'
             }),
             dataIndex: 'remark',
             ellipsis: {
-              showTitle: true,
+              showTitle: true
             },
             width: 160,
             render(value, record) {
@@ -486,34 +527,34 @@ const Database: React.FC<IProps> = ({ id, modalStore }) => {
                   dataIndex: 'remark',
                   title: formatMessage({
                     id: 'src.page.Project.Database.AD165F33',
-                    defaultMessage: '备注',
+                    defaultMessage: '备注'
                   }),
                   width: '160',
                   handleSave: async (value, callback) => {
                     if (value?.remark?.trim() !== record?.remark) {
                       const isSuccess = await batchUpdateRemarks(
                         [record?.id],
-                        value?.remark?.trim(),
+                        value?.remark?.trim()
                       );
                       if (isSuccess) {
                         message.success(
                           formatMessage({
                             id: 'src.component.ODCSetting.E6DD81BF' /*'保存成功'*/,
-                            defaultMessage: '保存成功',
-                          }),
+                            defaultMessage: '保存成功'
+                          })
                         );
                         reload?.();
                       }
                       callback?.();
                     }
-                  },
+                  }
                 })
-              : undefined,
+              : undefined
           },
           {
             title: formatMessage({
               id: 'odc.Project.Database.CharacterEncoding',
-              defaultMessage: '字符编码',
+              defaultMessage: '字符编码'
             }),
             //字符编码
             dataIndex: 'charsetName',
@@ -524,12 +565,12 @@ const Database: React.FC<IProps> = ({ id, modalStore }) => {
                 return undefined;
               }
               return value || '-';
-            },
+            }
           },
           {
             title: formatMessage({
               id: 'odc.Project.Database.SortingRules',
-              defaultMessage: '排序规则',
+              defaultMessage: '排序规则'
             }),
             //排序规则
             dataIndex: 'collationName',
@@ -541,12 +582,12 @@ const Database: React.FC<IProps> = ({ id, modalStore }) => {
                 return undefined;
               }
               return collationName || '-';
-            },
+            }
           },
           {
             title: formatMessage({
               id: 'odc.Project.Database.LastSynchronizationTime',
-              defaultMessage: '上一次同步时间',
+              defaultMessage: '上一次同步时间'
             }),
             //上一次同步时间
             dataIndex: 'objectLastSyncTime',
@@ -558,12 +599,12 @@ const Database: React.FC<IProps> = ({ id, modalStore }) => {
               }
               const time = record?.objectLastSyncTime || record?.lastSyncTime;
               return getLocalFormatDateTime(time);
-            },
+            }
           },
           {
             title: formatMessage({
               id: 'odc.Project.Database.Operation',
-              defaultMessage: '操作',
+              defaultMessage: '操作'
             }),
             //操作
             dataIndex: 'actions',
@@ -582,7 +623,7 @@ const Database: React.FC<IProps> = ({ id, modalStore }) => {
                 setChangeOwnerModalVisible,
                 setVisible,
                 setOpenManageLogicDatabase,
-                reload,
+                reload
               });
               return (
                 <Action.Group size={3}>
@@ -591,8 +632,8 @@ const Database: React.FC<IProps> = ({ id, modalStore }) => {
                   })}
                 </Action.Group>
               );
-            },
-          },
+            }
+          }
         ]}
         scroll={{ x: 1400 }}
         dataSource={treeData}
@@ -611,7 +652,9 @@ const Database: React.FC<IProps> = ({ id, modalStore }) => {
       <ChangeOwnerModal
         visible={changeOwnerModalVisible}
         database={database}
-        databaseList={selectedRowKeys?.length ? (selectedRowKeys as number[]) : null}
+        databaseList={
+          selectedRowKeys?.length ? (selectedRowKeys as number[]) : null
+        }
         close={() => setChangeOwnerModalVisible(false)}
         onSuccess={() => {
           reload();

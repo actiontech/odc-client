@@ -59,7 +59,7 @@ const DelimiterSelect: React.FC<IProps> = function (props) {
       disabled={delimiterLoadingStatus}
       options={[';', '/', '//', '$', '$$'].map((value) => {
         return {
-          value,
+          value
         };
       })}
     />

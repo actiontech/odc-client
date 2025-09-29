@@ -16,36 +16,37 @@
 
 import { formatMessage } from '@/util/intl';
 import { Card } from 'antd';
-import styles from './index.less';
+import { TimeStatisticsCardStyleWrapper } from './style';
 const TimeStatistics: React.FC<{
   stackBarBox: React.MutableRefObject<HTMLDivElement>;
 }> = ({ stackBarBox }) => {
   return (
-    <Card
-      title={formatMessage({
-        id: 'workspace.window.sql.explain.tab.detail.card.time.title',
-        defaultMessage: '耗时统计 (us)',
-      })}
-      headStyle={{
-        padding: '0 16px',
-        fontSize: 14,
-        border: 'none',
-      }}
-      bodyStyle={{
-        height: 158,
-        padding: 16,
-      }}
-      className={styles.card}
-    >
-      <div
-        ref={stackBarBox}
-        style={{
-          marginTop: -30,
-          width: '100%',
-          height: '100%',
+    <TimeStatisticsCardStyleWrapper>
+      <Card
+        title={formatMessage({
+          id: 'workspace.window.sql.explain.tab.detail.card.time.title',
+          defaultMessage: '耗时统计 (us)'
+        })}
+        headStyle={{
+          padding: '0 16px',
+          fontSize: 14,
+          border: 'none'
         }}
-      />
-    </Card>
+        bodyStyle={{
+          height: 158,
+          padding: 16
+        }}
+      >
+        <div
+          ref={stackBarBox}
+          style={{
+            marginTop: -30,
+            width: '100%',
+            height: '100%'
+          }}
+        />
+      </Card>
+    </TimeStatisticsCardStyleWrapper>
   );
 };
 export default TimeStatistics;

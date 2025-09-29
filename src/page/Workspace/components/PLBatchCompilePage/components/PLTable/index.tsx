@@ -20,7 +20,10 @@ import { formatMessage } from '@/util/intl';
 import React from 'react';
 import { Status } from '../Status';
 
-const getPageColumns = (params: { label: string; openViewPage: (title: string) => void }) => {
+const getPageColumns = (params: {
+  label: string;
+  openViewPage: (title: string) => void;
+}) => {
   const { label, openViewPage } = params;
   return [
     {
@@ -29,48 +32,68 @@ const getPageColumns = (params: { label: string; openViewPage: (title: string) =
       dataIndex: 'status',
       render: (text, _, index) => {
         return index + 1;
-      },
+      }
     },
 
     {
-      title: formatMessage({ id: 'odc.components.PLTable.Status', defaultMessage: '状态' }), //状态
+      title: formatMessage({
+        id: 'odc.components.PLTable.Status',
+        defaultMessage: '状态'
+      }), //状态
       width: 64,
       key: 'status',
       dataIndex: 'status',
       filters: [
         {
           value: 'VALID',
-          text: formatMessage({ id: 'odc.components.PLTable.Effective', defaultMessage: '有效' }), //有效
+          text: formatMessage({
+            id: 'odc.components.PLTable.Effective',
+            defaultMessage: '有效'
+          }) //有效
         },
         {
           value: 'INVALID',
-          text: formatMessage({ id: 'odc.components.PLTable.Invalid', defaultMessage: '无效' }), //无效
-        },
+          text: formatMessage({
+            id: 'odc.components.PLTable.Invalid',
+            defaultMessage: '无效'
+          }) //无效
+        }
       ],
 
       onFilter: (value: string, record) => {
         return value === record.status;
       },
-      render: (status, record) => <Status status={status} errorMessage={record.errorMessage} />,
+      render: (status, record) => (
+        <Status status={status} errorMessage={record.errorMessage} />
+      )
     },
 
     {
-      title: formatMessage({ id: 'odc.components.PLTable.ObjectName', defaultMessage: '对象名称' }), //对象名称
+      title: formatMessage({
+        id: 'odc.components.PLTable.ObjectName',
+        defaultMessage: '对象名称'
+      }), //对象名称
       ellipsis: true,
       key: 'name',
-      dataIndex: 'name',
+      dataIndex: 'name'
     },
 
     {
-      title: formatMessage({ id: 'odc.components.PLTable.ObjectType', defaultMessage: '对象类型' }), //对象类型
+      title: formatMessage({
+        id: 'odc.components.PLTable.ObjectType',
+        defaultMessage: '对象类型'
+      }), //对象类型
       width: 120,
       key: 'type',
       dataIndex: 'type',
-      render: () => <span>{label}</span>,
+      render: () => <span>{label}</span>
     },
 
     {
-      title: formatMessage({ id: 'odc.components.PLTable.Operation', defaultMessage: '操作' }), //操作
+      title: formatMessage({
+        id: 'odc.components.PLTable.Operation',
+        defaultMessage: '操作'
+      }), //操作
       width: 120,
       key: 'action',
       dataIndex: 'action',
@@ -81,11 +104,16 @@ const getPageColumns = (params: { label: string; openViewPage: (title: string) =
               openViewPage(record.name);
             }}
           >
-            {formatMessage({ id: 'odc.components.PLTable.View', defaultMessage: '查看' }) /*查看*/}
+            {
+              formatMessage({
+                id: 'odc.components.PLTable.View',
+                defaultMessage: '查看'
+              }) /*查看*/
+            }
           </Action.Link>
         );
-      },
-    },
+      }
+    }
   ];
 };
 
@@ -103,12 +131,12 @@ const PLTable: React.FC<{
       bordered={true}
       columns={getPageColumns({
         label,
-        openViewPage,
+        openViewPage
       })}
       dataSource={data}
       disablePagination={true}
       scroll={{
-        y: tableHeight,
+        y: tableHeight
       }}
     />
   );

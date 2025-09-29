@@ -32,7 +32,7 @@ export async function getPLTokens(sql) {
   const lexer = new OraclePLLexer(chars);
   const tokens = new CommonTokenStream(lexer);
   tokens.fill();
-  console.log(`pl parser token time(${performance.now() - now}): ${sql}`);
+  // console.log(`pl parser token time(${performance.now() - now}): ${sql}`);
   return tokens.tokens.filter((token) => {
     return token.channel !== Token.HIDDEN_CHANNEL;
   });

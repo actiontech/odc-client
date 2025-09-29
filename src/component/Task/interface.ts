@@ -23,7 +23,7 @@ import type {
   TaskRecord,
   TaskRecordParameters,
   IResponseData,
-  Operation,
+  Operation
 } from '@/d.ts';
 export interface ITaskDetailModalProps {
   visible: boolean;
@@ -52,5 +52,5 @@ export enum TaskDetailType {
   RECORD = 'record',
   EXECUTE_RECORD = 'execute_record',
   OPERATION_RECORD = 'operation_record',
-  PROGRESS = 'progress',
+  PROGRESS = 'progress'
 }

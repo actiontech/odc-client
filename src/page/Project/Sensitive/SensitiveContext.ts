@@ -61,7 +61,7 @@ const SensitiveContext = React.createContext<Partial<ISensitiveContext>>({
   tables: [],
   sensitiveRules: [],
   sensitiveRuleIdMap: {},
-  setSensitiveRuleIdMap: (sensitiveRuleIdMap = {}) => {},
+  setSensitiveRuleIdMap: (sensitiveRuleIdMap = {}) => {}
 });
 
 export default SensitiveContext;

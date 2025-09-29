@@ -9,7 +9,8 @@ interface IProps {
 const Constraint: React.FC<IProps> = (props) => {
   const { modified } = props;
   const mviewContext = useContext(MViewContext);
-  const { session, columns, primaryConstraints, setPrimaryConstraints } = mviewContext;
+  const { session, columns, primaryConstraints, setPrimaryConstraints } =
+    mviewContext;
 
   return (
     <PrimaryConstaint

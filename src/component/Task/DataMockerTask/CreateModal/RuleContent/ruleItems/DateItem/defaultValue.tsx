@@ -22,23 +22,23 @@ export default function (ruleType: DateRuleType) {
     case DateRuleType.NORMAL: {
       return {
         genParams: {
-          timestamp: dayjs('1980-01-01'),
-        },
+          timestamp: dayjs('1980-01-01')
+        }
       };
     }
     case DateRuleType.ORDER: {
       return {
         genParams: {
           step: 1,
-          timeUnit: 'DAYS',
+          timeUnit: 'DAYS'
         },
         order: 'asc',
-        lowValue: dayjs('1980-01-01'),
+        lowValue: dayjs('1980-01-01')
       };
     }
     case DateRuleType.RANDOM: {
       return {
-        range: [dayjs('1980-01-01'), dayjs('2060-01-01')],
+        range: [dayjs('1980-01-01'), dayjs('2060-01-01')]
       };
     }
     case DateRuleType.NULL: {

@@ -18,13 +18,10 @@ import Action from '@/component/Action';
 import Icon, { DeleteOutlined } from '@ant-design/icons';
 import { message, Modal, Tooltip } from 'antd';
 import classNames from 'classnames';
-import styles from './index.less';
-
 import { deleteScript, downloadScript, syncScript } from '@/common/network';
 import { ReactComponent as ConsoleSQLSvg } from '@/svgr/Console-SQL.svg';
 import { formatMessage } from '@/util/intl';
 import { useCallback } from 'react';
-
 import { IScriptMeta } from '@/d.ts';
 import { closePageByScriptIdAndType } from '@/store/helper/page';
 import login from '@/store/login';
@@ -32,6 +29,7 @@ import setting from '@/store/setting';
 import { formatBytes } from '@/util/utils';
 import copyToCB from 'copy-to-clipboard';
 import { toString } from 'lodash';
+import { ScriptFileItemStyleWrapper } from './style';
 
 interface IProps {
   name: string;
@@ -54,7 +52,7 @@ export default function Item({
   script,
   onClick,
   onDoubleClick,
-  activeFile,
+  activeFile
 }: IProps) {
   const isSuccess = !uploading && !errorMsg;
 
@@ -64,19 +62,22 @@ export default function Item({
       message.success(
         formatMessage({
           id: 'odc.components.OBClientPage.ScriptManageModal.CopiedSuccessfully',
-          defaultMessage: '复制成功！',
-        }),
+          defaultMessage: '复制成功！'
+        })
         // `复制成功！`
       );
       const nameArr = script.objectName.split('.');
-      const path = nameArr.length > 1 ? `${script.objectId}.${nameArr.pop()}` : script.objectId;
+      const path =
+        nameArr.length > 1
+          ? `${script.objectId}.${nameArr.pop()}`
+          : script.objectId;
       copyToCB(toString(path));
     } else {
       message.error(
         formatMessage({
           id: 'odc.components.ScriptManageModal.columns.ReplicationFailed',
-          defaultMessage: '复制失败',
-        }), //复制失败
+          defaultMessage: '复制失败'
+        }) //复制失败
       );
     }
   }, []);
@@ -85,7 +86,7 @@ export default function Item({
     Modal.confirm({
       title: formatMessage({
         id: 'odc.ScriptFile.Item.OkDeleteScript',
-        defaultMessage: '确定删除脚本',
+        defaultMessage: '确定删除脚本'
       }), //确定删除脚本
       onOk() {
         return deleteScript([script?.id]).then((isSuccess) => {
@@ -93,15 +94,15 @@ export default function Item({
             message.success(
               formatMessage({
                 id: 'odc.components.ScriptManageModal.columns.Deleted',
-                defaultMessage: '删除成功',
-              }),
+                defaultMessage: '删除成功'
+              })
               //删除成功
             );
             closePageByScriptIdAndType(script.id);
             login.scriptStore.getScriptList();
           }
         });
-      },
+      }
     });
   };
 
@@ -109,32 +110,34 @@ export default function Item({
 
   return (
     <Tooltip title={errorMsg}>
-      <div
+      <ScriptFileItemStyleWrapper
         onClick={onClick}
         onDoubleClick={onDoubleClick}
-        className={classNames(styles.item, {
-          [styles.error]: !!errorMsg,
-          [styles.uploading]: uploading,
-          [styles.active]: !!activeFile,
+        className={classNames({
+          error: !!errorMsg,
+          uploading: uploading,
+          active: !!activeFile
         })}
       >
-        <div className={styles.icon}>
+        <div className="icon">
           <Icon
             component={ConsoleSQLSvg}
             style={{
-              color: isSuccess ? 'var(--icon-color-1)' : 'var(--icon-color-disable)',
-              fontSize: 14,
+              color: isSuccess
+                ? 'var(--icon-color-1)'
+                : 'var(--icon-color-disable)',
+              fontSize: 14
             }}
           />
         </div>
         <div
-          className={classNames(styles.label, {
-            [styles.active]: !!activeFile,
+          className={classNames('label', {
+            active: !!activeFile
           })}
         >
           {name}
         </div>
-        <div className={styles.action}>
+        <div className="action">
           {isSuccess ? (
             <Action.Group ellipsisIcon="vertical" size={0}>
               <Action.Link
@@ -146,7 +149,7 @@ export default function Item({
                 {
                   formatMessage({
                     id: 'odc.ScriptFile.Item.CopyPath',
-                    defaultMessage: '复制路径',
+                    defaultMessage: '复制路径'
                   }) /*复制路径*/
                 }
               </Action.Link>
@@ -156,9 +159,9 @@ export default function Item({
                     formatMessage(
                       {
                         id: 'odc.components.ScriptManageModal.columns.CurrentlyYouCannotEditFiles',
-                        defaultMessage: '暂不支持超过 {maxLimitText} 的文件编辑',
+                        defaultMessage: '暂不支持超过 {maxLimitText} 的文件编辑'
                       },
-                      { maxLimitText: formatBytes(maxScriptEditLength) },
+                      { maxLimitText: formatBytes(maxScriptEditLength) }
                     )
                     //`暂不支持超过 ${maxLimitText} 的文件编辑`
                   }
@@ -167,7 +170,7 @@ export default function Item({
                     {
                       formatMessage({
                         id: 'odc.components.ScriptManageModal.columns.Edit',
-                        defaultMessage: '编辑',
+                        defaultMessage: '编辑'
                       })
                       /*编辑*/
                     }
@@ -178,18 +181,21 @@ export default function Item({
                   {
                     formatMessage({
                       id: 'odc.components.ScriptManageModal.columns.Edit',
-                      defaultMessage: '编辑',
+                      defaultMessage: '编辑'
                     })
                     /*编辑*/
                   }
                 </Action.Link>
               )}
 
-              <Action.Link onClick={() => downloadScript(script.id)} key="download">
+              <Action.Link
+                onClick={() => downloadScript(script.id)}
+                key="download"
+              >
                 {
                   formatMessage({
                     id: 'odc.ScriptFile.Item.Download',
-                    defaultMessage: '下载',
+                    defaultMessage: '下载'
                   }) /*下载*/
                 }
               </Action.Link>
@@ -197,7 +203,7 @@ export default function Item({
                 {
                   formatMessage({
                     id: 'odc.ScriptFile.Item.Delete',
-                    defaultMessage: '删除',
+                    defaultMessage: '删除'
                   }) /*删除*/
                 }
               </Action.Link>
@@ -210,7 +216,7 @@ export default function Item({
             />
           )}
         </div>
-      </div>
+      </ScriptFileItemStyleWrapper>
     </Tooltip>
   );
 }

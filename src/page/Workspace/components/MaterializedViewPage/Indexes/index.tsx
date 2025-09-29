@@ -13,7 +13,7 @@ import {
   TableIndex as ITableIndex,
   TableIndexMehod,
   TableIndexScope,
-  TableIndexType,
+  TableIndexType
 } from '@/page/Workspace/components/CreateTable/interface';
 import { clone, cloneDeep } from 'lodash';
 import { useColumns } from '@/page/Workspace/components/CreateTable/TableIndex/columns';
@@ -28,11 +28,14 @@ const defaultIndex: ITableIndex = {
   visible: true,
   type: TableIndexType.NORMAL,
   ordinalPosition: null,
-  columnGroups: [],
+  columnGroups: []
 };
 
 function getDefaultColumnGroups(session: SessionStore) {
-  if (!session?.supportFeature?.enableColumnStore || !session?.params?.defaultTableStoreFormat) {
+  if (
+    !session?.supportFeature?.enableColumnStore ||
+    !session?.params?.defaultTableStoreFormat
+  ) {
     return [];
   }
   switch (session.params.defaultTableStoreFormat) {
@@ -48,7 +51,9 @@ function getDefaultColumnGroups(session: SessionStore) {
 }
 
 function removeGridParams(rows: any[]) {
-  return rows.map((row) => Object.assign({}, row, { _originRow: null, key: null }));
+  return rows.map((row) =>
+    Object.assign({}, row, { _originRow: null, key: null })
+  );
 }
 
 interface IProps {}
@@ -56,7 +61,7 @@ const MvViewIndexes: React.FC<IProps> = () => {
   const [editIndexes, setEditIndexes] = useState(null);
   const gridRef = useRef<DataGridRef>();
   const { materializedView, session, onRefresh, showExecuteModal } = useContext(
-    MaterializedViewPageContext,
+    MaterializedViewPageContext
   );
   const gridColumns: any[] = useColumns(materializedView.columns, session);
 
@@ -65,7 +70,7 @@ const MvViewIndexes: React.FC<IProps> = () => {
       (editIndexes || materializedView?.indexes)?.map((index, idx) => {
         return {
           ...index,
-          key: `${index.name || ''}@@${idx}`,
+          key: `${index.name || ''}@@${idx}`
         };
       }) || []
     );
@@ -85,15 +90,16 @@ const MvViewIndexes: React.FC<IProps> = () => {
           }}
           onOk={async () => {
             const newData = cloneDeep(editIndexes);
-            const { sql: updateTableDML, tip } = await generateUpdateMaterializedViewDDL({
-              newData: {
-                ...materializedView,
-                indexes: newData,
-              },
-              oldData: materializedView,
-              sessionId: session?.sessionId,
-              dbName: session?.database?.dbName,
-            });
+            const { sql: updateTableDML, tip } =
+              await generateUpdateMaterializedViewDDL({
+                newData: {
+                  ...materializedView,
+                  indexes: newData
+                },
+                oldData: materializedView,
+                sessionId: session?.sessionId,
+                dbName: session?.database?.dbName
+              });
             if (!updateTableDML) {
               return;
             }
@@ -108,26 +114,32 @@ const MvViewIndexes: React.FC<IProps> = () => {
               async () => {
                 await onRefresh();
                 setEditIndexes(null);
-              },
+              }
             );
           }}
         >
           <Toolbar>
             <Toolbar.Button
-              text={formatMessage({ id: 'workspace.header.create', defaultMessage: '新建' })}
+              text={formatMessage({
+                id: 'workspace.header.create',
+                defaultMessage: '新建'
+              })}
               icon={PlusOutlined}
               onClick={() => {
                 const row = {
                   ...defaultIndex,
                   columnGroups: getDefaultColumnGroups(session),
-                  key: generateUniqKey(),
+                  key: generateUniqKey()
                 };
                 gridRef.current?.addRows([row]);
               }}
             />
             <Toolbar.Button
               text={
-                formatMessage({ id: 'odc.CreateTable.TableIndex.Delete', defaultMessage: '删除' }) //删除
+                formatMessage({
+                  id: 'odc.CreateTable.TableIndex.Delete',
+                  defaultMessage: '删除'
+                }) //删除
               }
               icon={DeleteOutlined}
               onClick={() => {
@@ -138,7 +150,7 @@ const MvViewIndexes: React.FC<IProps> = () => {
               icon={<SyncOutlined />}
               text={formatMessage({
                 id: 'odc.components.ShowTableBaseInfoForm.Refresh',
-                defaultMessage: '刷新',
+                defaultMessage: '刷新'
               })}
               /* 刷新 */ onClick={onRefresh}
             />

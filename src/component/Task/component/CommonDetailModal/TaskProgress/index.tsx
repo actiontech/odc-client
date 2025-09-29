@@ -14,14 +14,18 @@
  * limitations under the License.
  */
 
-import { getSubTask, getTaskDetail, swapTableName } from '@/common/network/task';
+import {
+  getSubTask,
+  getTaskDetail,
+  swapTableName
+} from '@/common/network/task';
 import DisplayTable from '@/component/DisplayTable';
 import {
   IMultipleAsyncTaskParams,
   TaskDetail,
   TaskPageType,
   TaskRecordParameters,
-  TaskType,
+  TaskType
 } from '@/d.ts';
 import { TaskStore } from '@/store/task';
 import { UserStore } from '@/store/login';
@@ -49,7 +53,8 @@ interface IProps {
 }
 const TaskProgress: React.FC<IProps> = (props) => {
   // #region ------------------------- props or state -------------------------
-  const { handleDetailVisible: _handleDetailVisible, setState } = useContext(TaskDetailContext);
+  const { handleDetailVisible: _handleDetailVisible, setState } =
+    useContext(TaskDetailContext);
   const { task, theme, taskStore, onReload, userStore } = props;
   const [subTasks, setSubTasks] = useState([]);
   const [databases, setDatabases] = useState([]);
@@ -61,33 +66,38 @@ const TaskProgress: React.FC<IProps> = (props) => {
       const res = await getSubTask(task.id);
       if (task?.type === TaskType.MULTIPLE_ASYNC) {
         const sortDb = flatArray(
-          (task as TaskDetail<IMultipleAsyncTaskParams>)?.parameters?.orderedDatabaseIds,
+          (task as TaskDetail<IMultipleAsyncTaskParams>)?.parameters
+            ?.orderedDatabaseIds
         );
         // @ts-ignore
-        const dbMap = res?.contents?.[0]?.databaseChangingRecordList?.reduce((pre, cur) => {
-          pre[cur?.database?.id] = cur;
-          return pre;
-        }, {});
+        const dbMap = res?.contents?.[0]?.databaseChangingRecordList?.reduce(
+          (pre, cur) => {
+            pre[cur?.database?.id] = cur;
+            return pre;
+          },
+          {}
+        );
         const rawData = [];
         let rawCount = 0;
-        (task as TaskDetail<IMultipleAsyncTaskParams>)?.parameters?.orderedDatabaseIds?.map(
-          (item, index) => {
-            item?.forEach((_item_, _index_) => {
-              rawData.push({
-                id: rawCount,
-                nodeIndex: index,
-                rowSpan: item?.length,
-                needMerge: _index_ === 0,
-                ...dbMap[_item_],
-              });
-              rawCount++;
+        (
+          task as TaskDetail<IMultipleAsyncTaskParams>
+        )?.parameters?.orderedDatabaseIds?.map((item, index) => {
+          item?.forEach((_item_, _index_) => {
+            rawData.push({
+              id: rawCount,
+              nodeIndex: index,
+              rowSpan: item?.length,
+              needMerge: _index_ === 0,
+              ...dbMap[_item_]
             });
-          },
-        );
+            rawCount++;
+          });
+        });
         // @ts-ignore
         setSubTasks(rawData);
         const databases = flatArray(
-          (task as TaskDetail<IMultipleAsyncTaskParams>)?.parameters?.orderedDatabaseIds,
+          (task as TaskDetail<IMultipleAsyncTaskParams>)?.parameters
+            ?.orderedDatabaseIds
         )?.map((item) => dbMap?.[item]);
         databases?.length && setDatabases(databases);
       } else if (task?.type === TaskType.LOGICAL_DATABASE_CHANGE) {
@@ -97,17 +107,19 @@ const TaskProgress: React.FC<IProps> = (props) => {
       }
     },
     {
-      pollingInterval: 3000,
-    },
+      pollingInterval: 3000
+    }
   );
   const subTask = subTasks?.find((item) => item.id === detailId);
   const resultJson = JSON.parse(subTask?.resultJson ?? '{}');
   const parametersJson = JSON.parse(subTask?.parametersJson ?? '{}');
-  const pendingExectionDatabases = databases?.filter((item) => !item?.status)?.length;
+  const pendingExectionDatabases = databases?.filter(
+    (item) => !item?.status
+  )?.length;
   const haveOperationPermission = useMemo(() => {
     return (
       task?.project?.currentUserResourceRoles?.some((item) =>
-        [ProjectRole.DBA, ProjectRole.OWNER].includes(item),
+        [ProjectRole.DBA, ProjectRole.OWNER].includes(item)
       ) || userStore?.user?.id === task?.creator?.id
     );
   }, [task]);
@@ -120,8 +132,8 @@ const TaskProgress: React.FC<IProps> = (props) => {
     if (res) {
       message.success(
         formatMessage({
-          id: 'odc.src.component.Task.component.CommonDetailModal.StartTheNameSwitching',
-        }), //'开始表名切换'
+          id: 'odc.src.component.Task.component.CommonDetailModal.StartTheNameSwitching'
+        }) //'开始表名切换'
       );
       loadData();
     }
@@ -135,7 +147,7 @@ const TaskProgress: React.FC<IProps> = (props) => {
   const handleMultipleAsyncOpen = async (taskId: number) => {
     const data = await getTaskDetail(taskId, true);
     setState({
-      detailVisible: false,
+      detailVisible: false
     });
     taskStore.changeTaskPageType(TaskPageType.ASYNC);
     _handleDetailVisible(data, true);
@@ -166,10 +178,10 @@ const TaskProgress: React.FC<IProps> = (props) => {
       handleDetailVisible,
       handleMultipleAsyncOpen,
       handleSwapTable,
-      handleProgressDetailVisible,
+      handleProgressDetailVisible
     },
     task.status,
-    haveOperationPermission,
+    haveOperationPermission
   );
 
   return (

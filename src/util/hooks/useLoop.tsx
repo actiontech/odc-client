@@ -26,7 +26,7 @@ type IUserFunc = (...args) => void;
  */
 export function useLoop<T extends IUserFunc>(
   func: ILoopWrapFunc<T>,
-  interval,
+  interval
 ): {
   loop: T;
   destory: () => void;
@@ -72,6 +72,6 @@ export function useLoop<T extends IUserFunc>(
     destory: () => {
       tokenRef.current = null;
       clockRef.current && clearTimeout(clockRef.current);
-    },
+    }
   };
 }

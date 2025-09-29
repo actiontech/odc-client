@@ -25,7 +25,7 @@ import {
   IConnectionType,
   IResponseData,
   ISessionStatus,
-  ISqlExecuteResultStatus,
+  ISqlExecuteResultStatus
 } from '@/d.ts';
 import { IDatabase } from '@/d.ts/database';
 import { IDatasource } from '@/d.ts/datasource';
@@ -37,7 +37,10 @@ import { generateSessionSid } from './pathUtil';
 import { executeSQL } from './sql';
 import login from '@/store/login';
 
-function generateConnectionParams(formData: Partial<IConnectionFormData>, isHiden?: boolean) {
+function generateConnectionParams(
+  formData: Partial<IConnectionFormData>,
+  isHiden?: boolean
+) {
   // 创建必须带上 userId
   const userId = userStore?.user?.id;
   const params: Partial<IConnection> = {
@@ -56,7 +59,9 @@ function generateConnectionParams(formData: Partial<IConnectionFormData>, isHide
     /**
      * 逻辑同 pwd
      */
-    sysTenantPassword: formData?.useSys ? encrypt(formData.sysTenantPassword) : null,
+    sysTenantPassword: formData?.useSys
+      ? encrypt(formData.sysTenantPassword)
+      : null,
     queryTimeoutSeconds: formData.queryTimeoutSeconds,
     properties: formData.properties || null,
     passwordSaved: formData.passwordSaved,
@@ -65,7 +70,7 @@ function generateConnectionParams(formData: Partial<IConnectionFormData>, isHide
     temp: isHiden,
     sessionInitScript: formData.sessionInitScript,
     catalogName: formData?.catalogName,
-    region: formData?.region,
+    region: formData?.region
   };
   const config = getDataSourceModeConfig(formData.type)?.connection;
   config?.address?.items?.forEach((item) => {
@@ -96,15 +101,21 @@ function generateConnectionParams(formData: Partial<IConnectionFormData>, isHide
 /**
  * 创建连接
  */
-export async function createConnection(formData: Partial<IDatasource>, isHiden?: boolean) {
-  const params: Partial<IConnection> = generateConnectionParams(formData, isHiden);
+export async function createConnection(
+  formData: Partial<IDatasource>,
+  isHiden?: boolean
+) {
+  const params: Partial<IConnection> = generateConnectionParams(
+    formData,
+    isHiden
+  );
   const requestParams = {
     wantCatchError: false,
-    holdErrorTip: true,
+    holdErrorTip: true
   };
   const ret = await request.post('/api/v2/datasource/datasources', {
     data: params,
-    params: requestParams,
+    params: requestParams
   });
   return !ret || ret?.isError ? null : ret.data;
 }
@@ -113,30 +124,32 @@ export async function updateConnection(formData: IConnectionFormData) {
   const sid = formData.id;
   const params = generateConnectionParams(formData);
   const requestParams = {
-    wantCatchError: true,
+    wantCatchError: true
   };
   const ret = await request.put(`/api/v2/datasource/datasources/${sid}`, {
     data: {
       id: sid,
-      ...params,
+      ...params
     },
-    params: requestParams,
+    params: requestParams
   });
   return ret && !ret.isError;
 }
 
 export async function updateConnectionFromConnection(c: IConnection) {
   const res = await request.put(`/api/v2/datasource/datasources/${c.id}`, {
-    data: { ...c, password: encrypt(c.password) },
+    data: { ...c, password: encrypt(c.password) }
   });
   return !!res && !res?.isError;
 }
 
-export async function parseConnectionStr(connectStr: string): Promise<Partial<IConnection>> {
+export async function parseConnectionStr(
+  connectStr: string
+): Promise<Partial<IConnection>> {
   let d = await request.post('/api/v2/datasource/help/parseConnectionStr', {
     data: {
-      connStr: encrypt(connectStr),
-    },
+      connStr: encrypt(connectStr)
+    }
   });
   const data = d?.data;
   if (data) {
@@ -147,9 +160,11 @@ export async function parseConnectionStr(connectStr: string): Promise<Partial<IC
   return d?.data;
 }
 
-export async function generateConnectionStr(formData: IConnectionFormData): Promise<string> {
+export async function generateConnectionStr(
+  formData: IConnectionFormData
+): Promise<string> {
   let d = await request.post(`/api/v2/datasource/help/generateConnectionStr`, {
-    data: { ...generateConnectionParams(formData), password: null },
+    data: { ...generateConnectionParams(formData), password: null }
   });
   return decrypt(d?.data);
 }
@@ -157,7 +172,7 @@ export async function generateConnectionStr(formData: IConnectionFormData): Prom
 export async function testConnection(
   formData: Partial<IDatasource>,
   accountType: AccountType,
-  ignoreError?: boolean,
+  ignoreError?: boolean
 ): Promise<{
   data: {
     active: boolean;
@@ -174,18 +189,18 @@ export async function testConnection(
     data: {
       id: sid,
       accountType,
-      ...params,
+      ...params
     },
     params: {
-      ignoreError,
-    },
+      ignoreError
+    }
   });
   return res;
 }
 
 export async function testExsitConnection(
   formData: Partial<IConnection>,
-  testSys?: boolean,
+  testSys?: boolean
 ): Promise<{
   data: {
     active: boolean;
@@ -199,11 +214,11 @@ export async function testExsitConnection(
   const ret = await request.post(`/api/v2/connect/test`, {
     data: {
       ...cloneFormData,
-      accountType: testSys ? AccountType.SYS_READ : AccountType.MAIN,
+      accountType: testSys ? AccountType.SYS_READ : AccountType.MAIN
     },
     params: {
-      ignoreError: true,
-    },
+      ignoreError: true
+    }
   });
 
   return ret;
@@ -221,7 +236,7 @@ export async function batchTest(cids: number[]): Promise<
   >
 > {
   const res = await request.post('/api/v2/datasource/datasources/status', {
-    data: cids,
+    data: cids
   });
   return res?.data;
 }
@@ -248,8 +263,8 @@ export async function getConnectionList(params: {
 }): Promise<IResponseData<IDatasource>> {
   const results = await request.get('/api/v2/datasource/datasources', {
     params: {
-      ...params,
-    },
+      ...params
+    }
   });
 
   return results?.data;
@@ -262,18 +277,22 @@ export async function getConnectionDetail(sid: number): Promise<IDatasource> {
 }
 
 export async function getConnectionDetailResponse(
-  sid: number,
+  sid: number
 ): Promise<{ data?: IDatasource; errCode: string; errMsg: string }> {
   const results = await request.get(`/api/v2/datasource/datasources/${sid}`, {
     params: {
-      ignoreError: true,
-    },
+      ignoreError: true
+    }
   });
 
   return results;
 }
 
-export async function changeDelimiter(v, sessionId: string, dbName: string): Promise<boolean> {
+export async function changeDelimiter(
+  v,
+  sessionId: string,
+  dbName: string
+): Promise<boolean> {
   const data = await executeSQL(`delimiter ${v}`, sessionId, dbName, false);
   return data?.executeResult?.[0]?.status === ISqlExecuteResultStatus.SUCCESS;
 }
@@ -281,7 +300,7 @@ export async function changeDelimiter(v, sessionId: string, dbName: string): Pro
 export async function newSessionByDataBase(
   databaseId: number,
   holdErrorTip?: boolean,
-  recordDbAccessHistory?: boolean,
+  recordDbAccessHistory?: boolean
 ): Promise<{
   sessionId: string;
   dataTypeUnits: IDataType[];
@@ -292,18 +311,23 @@ export async function newSessionByDataBase(
     supportType: string;
   }[];
 }> {
-  const { data } = await request.post(`/api/v2/datasource/databases/${databaseId}/sessions`, {
-    params: {
-      holdErrorTip,
-      recordDbAccessHistory: login.isPrivateSpace() ? undefined : recordDbAccessHistory,
-    },
-  });
+  const { data } = await request.post(
+    `/api/v2/datasource/databases/${databaseId}/sessions`,
+    {
+      params: {
+        holdErrorTip,
+        recordDbAccessHistory: login.isPrivateSpace()
+          ? undefined
+          : recordDbAccessHistory
+      }
+    }
+  );
   return data;
 }
 
 export async function newSessionByDataSource(
   dataSourceId: number,
-  holdErrorTip?: boolean,
+  holdErrorTip?: boolean
 ): Promise<{
   sessionId: string;
   dataTypeUnits: IDataType[];
@@ -312,11 +336,14 @@ export async function newSessionByDataSource(
     supportType: string;
   }[];
 }> {
-  const { data } = await request.post(`/api/v2/datasource/datasources/${dataSourceId}/sessions`, {
-    params: {
-      holdErrorTip,
-    },
-  });
+  const { data } = await request.post(
+    `/api/v2/datasource/datasources/${dataSourceId}/sessions`,
+    {
+      params: {
+        holdErrorTip
+      }
+    }
+  );
   return data;
 }
 
@@ -332,7 +359,9 @@ export async function getSessionStatus(sessionId?: string): Promise<{
   killCurrentQuerySupported: boolean;
 }> {
   const sid = generateSessionSid(sessionId);
-  const res = await request.get(`/api/v2/datasource/sessions/${sessionId}/status`);
+  const res = await request.get(
+    `/api/v2/datasource/sessions/${sessionId}/status`
+  );
   return res?.data;
 }
 
@@ -345,22 +374,27 @@ export async function setTransactionInfo(
     delimiter?: string;
     queryLimit?: number;
   },
-  sessionId?: string,
+  sessionId?: string
 ): Promise<boolean> {
   const sid = generateSessionSid(sessionId);
   const infos = await getSessionStatus(sessionId);
-  const res = await request.post(`/api/v1/transaction/setTransactionInfo/${sid}`, {
-    data: { ...infos?.settings, ...params },
-  });
+  const res = await request.post(
+    `/api/v1/transaction/setTransactionInfo/${sid}`,
+    {
+      data: { ...infos?.settings, ...params }
+    }
+  );
   return res?.data;
 }
 
 /**
  * 获取连接名称是否重复
  */
-export async function getConnectionExists(params: { name: string }): Promise<boolean> {
+export async function getConnectionExists(params: {
+  name: string;
+}): Promise<boolean> {
   const results = await request.get(`/api/v2/datasource/datasources/exists`, {
-    params,
+    params
   });
   return results?.data;
 }
@@ -368,14 +402,16 @@ export async function getConnectionExists(params: { name: string }): Promise<boo
 /**
  * 获取集群 & 租户列表
  */
-export async function getClusterAndTenantList(visibleScope: IConnectionType): Promise<{
+export async function getClusterAndTenantList(
+  visibleScope: IConnectionType
+): Promise<{
   tenantName: Record<string, string[]>;
   clusterName: Record<string, string[]>;
 }> {
   const results = await request.get('/api/v2/datasource/datasources/stats', {
     params: {
-      visibleScope,
-    },
+      visibleScope
+    }
   });
   return results?.data;
 }
@@ -388,17 +424,27 @@ export async function deleteConnection(cid: string): Promise<boolean> {
 /**
  * 批量导入个人连接
  */
-export async function batchImportPrivateConnection(data: IConnection[]): Promise<IConnection[]> {
-  const result = await request.post('/api/v2/datasource/datasources/batchCreate', {
-    data,
-  });
+export async function batchImportPrivateConnection(
+  data: IConnection[]
+): Promise<IConnection[]> {
+  const result = await request.post(
+    '/api/v2/datasource/datasources/batchCreate',
+    {
+      data
+    }
+  );
   return result?.data;
 }
 
-export async function batchDeleteConnection(ids: (string | number)[]): Promise<boolean> {
-  const res = await request.delete(`/api/v2/datasource/datasources/batchDelete`, {
-    data: ids,
-  });
+export async function batchDeleteConnection(
+  ids: (string | number)[]
+): Promise<boolean> {
+  const res = await request.delete(
+    `/api/v2/datasource/datasources/batchDelete`,
+    {
+      data: ids
+    }
+  );
   return res?.data;
 }
 export async function syncDatasource(dsId: number): Promise<boolean> {
@@ -409,25 +455,31 @@ export async function getDataSourceManageDatabase(
   datasourceId: number,
   name?: string,
   existed?: boolean,
-  belongsToProject?: boolean,
+  belongsToProject?: boolean
 ): Promise<IResponseData<IDatabase>> {
-  const res = await request.get(`/api/v2/datasource/datasources/${datasourceId}/databases`, {
-    params: {
-      name,
-      existed,
-      belongsToProject,
-    },
-  });
+  const res = await request.get(
+    `/api/v2/datasource/datasources/${datasourceId}/databases`,
+    {
+      params: {
+        name,
+        existed,
+        belongsToProject
+      }
+    }
+  );
   return res?.data;
 }
 
 export async function getDataSourceGroupByProject(
-  containsUnassigned: boolean = false,
+  containsUnassigned: boolean = false
 ): Promise<IResponseData<IDatasource>> {
-  const res = await request.get(`/api/v2/collaboration/projects/databases/stats`, {
-    params: {
-      containsUnassigned,
-    },
-  });
+  const res = await request.get(
+    `/api/v2/collaboration/projects/databases/stats`,
+    {
+      params: {
+        containsUnassigned
+      }
+    }
+  );
   return res?.data;
 }

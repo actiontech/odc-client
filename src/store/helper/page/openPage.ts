@@ -19,7 +19,7 @@ import {
   getFunctionCreateSQL,
   getProcedureByProName,
   getScript,
-  getTypemByName,
+  getTypemByName
 } from '@/common/network';
 import {
   DbObjectType,
@@ -34,30 +34,30 @@ import {
   TaskPageType,
   TriggerPropsTab,
   TriggerState,
-  TypePropsTab,
+  TypePropsTab
 } from '@/d.ts';
 
 import {
   PropsTab as FunctionPropsTab,
-  TopTab as FunctionTopTab,
+  TopTab as FunctionTopTab
 } from '@/page/Workspace/components/FunctionPage';
 import { PropsTab, TopTab } from '@/page/Workspace/components/PackagePage';
 import {
   PropsTab as ProcedurePropsTab,
-  TopTab as ProcedureTopTab,
+  TopTab as ProcedureTopTab
 } from '@/page/Workspace/components/ProcedurePage';
 import { PropsTab as SequencePropsTab } from '@/page/Workspace/components/SequencePage';
 import {
   PropsTab as TablePropsTab,
-  TopTab as TableTopTab,
+  TopTab as TableTopTab
 } from '@/page/Workspace/components/TablePage';
 import {
   PropsTab as ViewPropsTab,
-  TopTab as ViewTopTab,
+  TopTab as ViewTopTab
 } from '@/page/Workspace/components/ViewPage';
 import {
   PropsTab as MaterializedViewPropsTab,
-  TopTab as MaterializedViewTopTab,
+  TopTab as MaterializedViewTopTab
 } from '@/page/Workspace/components/MaterializedViewPage';
 import { formatMessage } from '@/util/intl';
 
@@ -88,23 +88,36 @@ import {
   TutorialPage,
   TypePage,
   ViewPage,
-  MaterializedViewPage,
+  MaterializedViewPage
 } from './pages';
 import {
   CreateMaterializedViewPage,
   CreateTablePage,
   CreateTriggerPage,
   CreateViewPage,
-  SQLConfirmPage,
+  SQLConfirmPage
 } from './pages/create';
-import { AnonymousPage, PackageBodyPage, PackageHeadPage, PLEditPage } from './pages/pl';
+import {
+  AnonymousPage,
+  PackageBodyPage,
+  PackageHeadPage,
+  PLEditPage
+} from './pages/pl';
 import { findPageByScriptIdAndType } from './util';
 import login from '@/store/login';
 
-export function openPackageHeadPage(packageName: string, sql: string, databaseId: number) {
+export function openPackageHeadPage(
+  packageName: string,
+  sql: string,
+  databaseId: number
+) {
   page.openPage(new PackageHeadPage(databaseId, packageName, sql));
 }
-export async function openPackageBodyPage(packageName: string, sql: string, databaseId: number) {
+export async function openPackageBodyPage(
+  packageName: string,
+  sql: string,
+  databaseId: number
+) {
   let pkgPage = new PackageBodyPage(databaseId, packageName, sql);
   const isNew = !page.pages.find((p) => p.key === pkgPage.pageKey);
   await page.openPage(pkgPage);
@@ -115,7 +128,7 @@ export function openPackageViewPage(
   packageName: string,
   topTab: TopTab,
   showCode: boolean,
-  databaseId: number,
+  databaseId: number
 ) {
   let propsTab: PropsTab = null;
   topTab = topTab || TopTab.HEAD;
@@ -132,7 +145,12 @@ export function openPackageViewPage(
       propsTab = PropsTab.PACKAGE_BODY_INFO;
     }
   }
-  const pkgPage = new PackageViewPage(databaseId, packageName, topTab, propsTab);
+  const pkgPage = new PackageViewPage(
+    databaseId,
+    packageName,
+    topTab,
+    propsTab
+  );
   page.openPage(pkgPage);
 }
 export async function openNewSQLPage(cid: number) {
@@ -170,13 +188,16 @@ export async function openSQLOrPLPage(file: IScript, cid: number) {
 export async function openNewDefaultPLPage(
   value?: { sql: string; params: any },
   cid?: number,
-  dbName?: string,
+  dbName?: string
 ) {
   let plPage = new AnonymousPage(cid, value?.sql);
   page.openPage(plPage);
 }
 
-export function openTasksPage(taskType?: TaskPageType, taskPageScope?: TaskPageScope) {
+export function openTasksPage(
+  taskType?: TaskPageType,
+  taskPageScope?: TaskPageScope
+) {
   taskStore.changeTaskManageVisible(true, taskType, taskPageScope);
   page.openPage(new TaskPage(taskType));
 }
@@ -185,8 +206,10 @@ export function openTasksPage(taskType?: TaskPageType, taskPageScope?: TaskPageS
 
 export async function openSessionManagePage(datasourceId?: number) {
   if (!datasourceId) {
-    modalStore.changeSelectDatabaseVisible(true, 'sessionManage', (datasourceId) =>
-      page.openPage(new SessionManagePage(datasourceId)),
+    modalStore.changeSelectDatabaseVisible(
+      true,
+      'sessionManage',
+      (datasourceId) => page.openPage(new SessionManagePage(datasourceId))
     );
   }
   if (!datasourceId) {
@@ -199,8 +222,10 @@ export async function openSessionManagePage(datasourceId?: number) {
 
 export async function openSessionParamsPage(datasourceId?: number) {
   if (!datasourceId) {
-    modalStore.changeSelectDatabaseVisible(true, 'sessionParams', (datasourceId) =>
-      page.openPage(new SessionParamsPage(datasourceId)),
+    modalStore.changeSelectDatabaseVisible(
+      true,
+      'sessionParams',
+      (datasourceId) => page.openPage(new SessionParamsPage(datasourceId))
     );
   }
   if (!datasourceId) {
@@ -213,7 +238,7 @@ export async function openSessionParamsPage(datasourceId?: number) {
 export async function openRecycleBin(datasourceId?: number) {
   if (!datasourceId) {
     modalStore.changeSelectDatabaseVisible(true, 'recycleBin', (datasourceId) =>
-      page.openPage(new RecycleBinPage(datasourceId)),
+      page.openPage(new RecycleBinPage(datasourceId))
     );
   }
   if (!datasourceId) {
@@ -233,9 +258,11 @@ export function openTableViewPage(
   topTab: TableTopTab = TableTopTab.PROPS,
   propsTab: TablePropsTab = TablePropsTab.INFO,
   databaseId: number,
-  tableId: number,
+  tableId: number
 ) {
-  page.openPage(new TablePage(databaseId, tableName, topTab, propsTab, tableId));
+  page.openPage(
+    new TablePage(databaseId, tableName, topTab, propsTab, tableId)
+  );
 }
 
 /** 外表Table详情页面 */
@@ -244,9 +271,11 @@ export function openExternalTableTableViewPage(
   topTab: TableTopTab = TableTopTab.PROPS,
   propsTab: TablePropsTab = TablePropsTab.INFO,
   databaseId: number,
-  tableId: number,
+  tableId: number
 ) {
-  page.openPage(new TablePage(databaseId, tableName, topTab, propsTab, tableId, true));
+  page.openPage(
+    new TablePage(databaseId, tableName, topTab, propsTab, tableId, true)
+  );
 }
 
 /**
@@ -270,7 +299,7 @@ export function openViewViewPage(
   topTab: ViewTopTab = ViewTopTab.PROPS,
   propsTab: ViewPropsTab = ViewPropsTab.INFO,
   dbId: number,
-  dbName: string,
+  dbName: string
 ) {
   page.openPage(new ViewPage(dbId, viewName, topTab, propsTab));
 }
@@ -281,24 +310,36 @@ export function openMaterializedViewViewPage(
   topTab: MaterializedViewTopTab = MaterializedViewTopTab.PROPS,
   propsTab: MaterializedViewPropsTab = MaterializedViewPropsTab.INFO,
   dbId: number,
-  dbName: string,
+  dbName: string
 ) {
-  page.openPage(new MaterializedViewPage(dbId, materializedViewName, topTab, propsTab, dbName));
+  page.openPage(
+    new MaterializedViewPage(
+      dbId,
+      materializedViewName,
+      topTab,
+      propsTab,
+      dbName
+    )
+  );
 }
 
 /** 创建函数页面 */
 
-export function openCreateFunctionPage(sql: string, databaseId: number, dbName: string) {
+export function openCreateFunctionPage(
+  sql: string,
+  databaseId: number,
+  dbName: string
+) {
   page.openPage(
     new SQLConfirmPage(
       PageType.CREATE_FUNCTION,
       databaseId,
       formatMessage({
         id: 'workspace.window.createFunction.modal.title',
-        defaultMessage: '新建函数',
+        defaultMessage: '新建函数'
       }),
-      sql,
-    ),
+      sql
+    )
   );
 }
 /** 函数详情页面 */
@@ -308,7 +349,7 @@ export function openFunctionViewPage(
   topTab: FunctionTopTab = FunctionTopTab.PROPS,
   propsTab: FunctionPropsTab = FunctionPropsTab.INFO,
   databaseId: number,
-  dbName: string,
+  dbName: string
 ) {
   page.openPage(new FunctionPage(databaseId, functionName, topTab, propsTab));
 }
@@ -318,7 +359,7 @@ export async function openCreateFunctionPageByRemote(
   func: IFunction,
   sessionId: string,
   dbName: string,
-  databaseId: number,
+  databaseId: number
 ) {
   const sql = await getFunctionCreateSQL(func.funName, func, sessionId, dbName);
   if (sql) {
@@ -327,17 +368,21 @@ export async function openCreateFunctionPageByRemote(
 }
 /** 创建存储过程页面 */
 
-export function openCreateProcedurePage(sql: string, databaseId: number, dbName: string) {
+export function openCreateProcedurePage(
+  sql: string,
+  databaseId: number,
+  dbName: string
+) {
   page.openPage(
     new SQLConfirmPage(
       PageType.CREATE_PROCEDURE,
       databaseId,
       formatMessage({
         id: 'workspace.window.createProcedure.modal.title',
-        defaultMessage: '新建存储过程',
+        defaultMessage: '新建存储过程'
       }),
-      sql,
-    ),
+      sql
+    )
   );
 }
 /** 存储过程详情页面 */
@@ -347,54 +392,66 @@ export function openProcedureViewPage(
   topTab: ProcedureTopTab = ProcedureTopTab.PROPS,
   propsTab: ProcedurePropsTab = ProcedurePropsTab.INFO,
   databaseId: number,
-  dbName: string,
+  dbName: string
 ) {
   page.openPage(new ProcedurePage(databaseId, procedureName, topTab, propsTab));
 }
 /** 创建程序包页面 */
 
-export function openCreatePackagePage(sql: string, databaseId: number, dbName: string) {
+export function openCreatePackagePage(
+  sql: string,
+  databaseId: number,
+  dbName: string
+) {
   page.openPage(
     new SQLConfirmPage(
       PageType.CREATE_PACKAGE,
       databaseId,
       formatMessage({
         id: 'workspace.window.createPackage.modal.title',
-        defaultMessage: '新建程序包',
+        defaultMessage: '新建程序包'
       }),
-      sql,
-    ),
+      sql
+    )
   );
 }
 /** 创建程序包包体页面 */
 
-export function openCreatePackageBodyPage(sql: string, databaseId: number, dbName: string) {
+export function openCreatePackageBodyPage(
+  sql: string,
+  databaseId: number,
+  dbName: string
+) {
   page.openPage(
     new SQLConfirmPage(
       PageType.CREATE_PACKAGE,
       databaseId,
       formatMessage({
         id: 'workspace.window.createPackageBody.modal.title',
-        defaultMessage: '新建程序包体',
+        defaultMessage: '新建程序包体'
       }),
       sql,
-      true,
-    ),
+      true
+    )
   );
 }
 /** 创建序列页面 */
 
-export function openCreateSequencePage(sql: string, databaseId: number, dbName: string) {
+export function openCreateSequencePage(
+  sql: string,
+  databaseId: number,
+  dbName: string
+) {
   page.openPage(
     new SQLConfirmPage(
       PageType.CREATE_SEQUENCE,
       databaseId,
       formatMessage({
         id: 'workspace.window.createSequence.modal.title',
-        defaultMessage: '新建序列',
+        defaultMessage: '新建序列'
       }),
-      sql,
-    ),
+      sql
+    )
   );
 }
 /** Sequence 查看序列详情页面 */
@@ -403,7 +460,7 @@ export function openSequenceViewPage(
   sequenceName: string,
   propsTab: SequencePropsTab = SequencePropsTab.INFO,
   databaseId: number,
-  dbName?: string,
+  dbName?: string
 ) {
   page.openPage(new SequencePage(databaseId, sequenceName, propsTab));
 }
@@ -413,16 +470,28 @@ export async function openProcedureEditPageByProName(
   proName: string,
   sessionId: string,
   dbName: string,
-  databaseId: number,
+  databaseId: number
 ) {
-  const plSchema = await getProcedureByProName(proName, false, sessionId, dbName);
+  const plSchema = await getProcedureByProName(
+    proName,
+    false,
+    sessionId,
+    dbName
+  );
   if (!plSchema) {
     return { plPage: null, isNew: false };
   }
   const readonly = !getDataSourceModeConfig(
-    sessionManager.sessionMap.get(sessionId)?.connection?.type,
+    sessionManager.sessionMap.get(sessionId)?.connection?.type
   )?.features?.plEdit;
-  const plPage = new PLEditPage(PLType.PROCEDURE, databaseId, proName, plSchema, false, readonly);
+  const plPage = new PLEditPage(
+    PLType.PROCEDURE,
+    databaseId,
+    proName,
+    plSchema,
+    false,
+    readonly
+  );
   const isNew = !page.pages.find((p) => p.key === plPage.pageKey);
   await page.openPage(plPage);
   return { plPage, isNew };
@@ -435,7 +504,7 @@ export async function openFunctionOrProcedureFromPackage(
   type: any,
   plSchema: IFunction | IProcedure,
   databaseId: number,
-  dbName: string,
+  dbName: string
 ) {
   const plName = `${packageName}.${subName}`;
   const plPage = new PLEditPage(type, databaseId, plName, plSchema, true);
@@ -449,13 +518,25 @@ export async function openFunctionEditPageByFuncName(
   funcName: string,
   sessionId: string,
   dbName: string,
-  databaseId: number,
+  databaseId: number
 ) {
-  const plSchema = await getFunctionByFuncName(funcName, false, sessionId, dbName);
+  const plSchema = await getFunctionByFuncName(
+    funcName,
+    false,
+    sessionId,
+    dbName
+  );
   const readonly = !getDataSourceModeConfig(
-    sessionManager.sessionMap.get(sessionId)?.connection?.type,
+    sessionManager.sessionMap.get(sessionId)?.connection?.type
   )?.features?.plEdit;
-  let plPage = new PLEditPage(PLType.FUNCTION, databaseId, funcName, plSchema, false, readonly);
+  let plPage = new PLEditPage(
+    PLType.FUNCTION,
+    databaseId,
+    funcName,
+    plSchema,
+    false,
+    readonly
+  );
   const isNew = !page.pages.find((p) => p.key === plPage.pageKey);
   await page.openPage(plPage);
   return { plPage, isNew };
@@ -472,7 +553,7 @@ export async function openOBClientPage(cid: number, dbId: number) {
         .map((p) => {
           return p.params.index as number;
         }),
-      -1,
+      -1
     ) + 1;
   const clientPageCounts = page.pages?.filter((p) => {
     return p.type === PageType.OB_CLIENT;
@@ -482,11 +563,11 @@ export async function openOBClientPage(cid: number, dbId: number) {
       formatMessage(
         {
           id: 'odc.helper.page.openPage.YouCannotOpenMoreThan',
-          defaultMessage: '不能打开超过 {MAXCLIENTPAGE} 个命令行窗口',
+          defaultMessage: '不能打开超过 {MAXCLIENTPAGE} 个命令行窗口'
         },
 
-        { MAXCLIENTPAGE: MAX_CLIENT_PAGE },
-      ),
+        { MAXCLIENTPAGE: MAX_CLIENT_PAGE }
+      )
       // `不能打开超过 ${MAX_CLIENT_PAGE} 个命令行窗口`
     );
     return;
@@ -500,7 +581,7 @@ export async function openOBClientPage(cid: number, dbId: number) {
 export async function openCreateTriggerPage(
   preData: ITriggerFormData = null,
   databaseId: number,
-  dbName: string,
+  dbName: string
 ) {
   await page.openPage(new CreateTriggerPage(databaseId, preData));
 }
@@ -510,7 +591,7 @@ export async function openCreateTriggerSQLPage(
   sql: string,
   preData: ITriggerFormData,
   databaseId: number,
-  dbName: string,
+  dbName: string
 ) {
   await page.openPage(
     new SQLConfirmPage(
@@ -518,12 +599,12 @@ export async function openCreateTriggerSQLPage(
       databaseId,
       formatMessage({
         id: 'odc.helper.page.openPage.CreateATrigger',
-        defaultMessage: '新建触发器',
+        defaultMessage: '新建触发器'
       }),
       sql,
       false,
-      preData,
-    ),
+      preData
+    )
   );
 }
 /** 触发器详情页面 */
@@ -534,9 +615,17 @@ export function openTriggerViewPage(
   triggerState: TriggerState,
   triggerData?: ITrigger,
   databaseId?: number,
-  dbName?: string,
+  dbName?: string
 ) {
-  page.openPage(new TriggerPage(databaseId, triggerName, triggerState, propsTab, triggerData));
+  page.openPage(
+    new TriggerPage(
+      databaseId,
+      triggerName,
+      triggerState,
+      propsTab,
+      triggerData
+    )
+  );
 }
 /** 编辑触发器页面 */
 
@@ -544,13 +633,26 @@ export async function openTriggerEditPageByName(
   triggerName: string,
   sessionId: string,
   dbName: string,
-  databaseId: number,
+  databaseId: number
 ) {
-  const plSchema: ITrigger = await getTriggerByName(triggerName, sessionId, dbName);
+  const plSchema: ITrigger = await getTriggerByName(
+    triggerName,
+    sessionId,
+    dbName
+  );
   const readonly = !getDataSourceModeConfig(
-    sessionManager.sessionMap.get(sessionId)?.connection?.type,
+    sessionManager.sessionMap.get(sessionId)?.connection?.type
   )?.features?.plEdit;
-  page.openPage(new PLEditPage(PLType.TRIGGER, databaseId, triggerName, plSchema, false, readonly));
+  page.openPage(
+    new PLEditPage(
+      PLType.TRIGGER,
+      databaseId,
+      triggerName,
+      plSchema,
+      false,
+      readonly
+    )
+  );
 }
 /** 创建同义词页面 */
 
@@ -558,18 +660,21 @@ export function openCreateSynonymPage(
   sql: string,
   synonymType?: SynonymType,
   databaseId?: number,
-  dbName?: string,
+  dbName?: string
 ) {
   page.openPage(
     new SQLConfirmPage(
       PageType.CREATE_SYNONYM,
       databaseId,
-      formatMessage({ id: 'odc.helper.page.openPage.CreateSynonym', defaultMessage: '新建同义词' }),
+      formatMessage({
+        id: 'odc.helper.page.openPage.CreateSynonym',
+        defaultMessage: '新建同义词'
+      }),
       sql,
       false,
       null,
-      synonymType,
-    ),
+      synonymType
+    )
   );
 }
 /** 同义词详情页面 */
@@ -578,20 +683,27 @@ export function openSynonymViewPage(
   synonymName: string,
   synonymType: SynonymType,
   databaseId: number,
-  dbName?: string,
+  dbName?: string
 ) {
   page.openPage(new SynonymPage(databaseId, synonymName, synonymType));
 }
 /** 创建类型页面 */
 
-export function openCreateTypePage(sql: string, databaseId: number, dbName: string) {
+export function openCreateTypePage(
+  sql: string,
+  databaseId: number,
+  dbName: string
+) {
   page.openPage(
     new SQLConfirmPage(
       PageType.CREATE_TYPE,
       databaseId,
-      formatMessage({ id: 'odc.helper.page.openPage.NewType', defaultMessage: '新建类型' }),
-      sql,
-    ),
+      formatMessage({
+        id: 'odc.helper.page.openPage.NewType',
+        defaultMessage: '新建类型'
+      }),
+      sql
+    )
   );
 }
 /** 类型详情页面 */
@@ -600,7 +712,7 @@ export function openTypeViewPage(
   typeName: string,
   propsTab: TypePropsTab = TypePropsTab.DDL,
   databaseId: number,
-  dbName?: string,
+  dbName?: string
 ) {
   page.openPage(new TypePage(databaseId, typeName, propsTab));
 }
@@ -610,13 +722,15 @@ export async function openTypeEditPageByName(
   typeName: string,
   sessionId: string,
   databaseId: number,
-  dbName: string,
+  dbName: string
 ) {
   const plSchema = await getTypemByName(typeName, sessionId, dbName);
   const readonly = !getDataSourceModeConfig(
-    sessionManager.sessionMap.get(sessionId)?.connection?.type,
+    sessionManager.sessionMap.get(sessionId)?.connection?.type
   )?.features?.plEdit;
-  page.openPage(new PLEditPage(PLType.TYPE, databaseId, typeName, plSchema, false, readonly));
+  page.openPage(
+    new PLEditPage(PLType.TYPE, databaseId, typeName, plSchema, false, readonly)
+  );
 }
 
 export async function openSQLResultSetViewPage(name, resultSets, sqlContent) {
@@ -629,7 +743,7 @@ export function openBatchCompilePLPage(
   dbObjectType: DbObjectType,
   label: string,
   databaseId: number,
-  dbName: string,
+  dbName: string
 ) {
   page.openPage(new BatchCompilePage(pageType, dbObjectType, databaseId));
 }

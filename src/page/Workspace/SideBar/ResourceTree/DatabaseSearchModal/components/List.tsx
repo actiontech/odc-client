@@ -39,9 +39,14 @@ const List = ({ modalStore }: Iprops) => {
     actions,
     databaseLoading,
     fetchSyncAll,
-    syncAllLoading,
+    syncAllLoading
   } = globalSearchContext;
-  const { positionResourceTree, positionProjectOrDataSource, openSql, applyPermission } = actions;
+  const {
+    positionResourceTree,
+    positionProjectOrDataSource,
+    openSql,
+    applyPermission
+  } = actions;
   const listRef = useRef<HTMLDivElement>();
   const options = useMemo(() => {
     let options: IDatabase[] | IProject[] | IConnection[] = [];
@@ -49,22 +54,26 @@ const List = ({ modalStore }: Iprops) => {
       case SearchStatus.forDataSource: {
         options = datasourceList
           ?.filter((datasource) => {
-            return datasource?.name?.toLowerCase().includes(searchKey?.toLowerCase() || '');
+            return datasource?.name
+              ?.toLowerCase()
+              .includes(searchKey?.toLowerCase() || '');
           })
           ?.map((datasource) => ({
             ...datasource,
-            key: `ds-${datasource?.id}`,
+            key: `ds-${datasource?.id}`
           }));
         break;
       }
       case SearchStatus.forProject: {
         options = projectList
           ?.filter((project) => {
-            return project?.name?.toLowerCase().includes(searchKey?.toLowerCase() || '');
+            return project?.name
+              ?.toLowerCase()
+              .includes(searchKey?.toLowerCase() || '');
           })
           ?.map((project) => ({
             ...project,
-            key: `p-${project?.id}`,
+            key: `p-${project?.id}`
           }));
         break;
       }
@@ -72,13 +81,15 @@ const List = ({ modalStore }: Iprops) => {
         options = databaseList
           ?.filter((db) => {
             return (
-              db?.name?.toLowerCase().includes(searchKey?.toLowerCase() || '') &&
+              db?.name
+                ?.toLowerCase()
+                .includes(searchKey?.toLowerCase() || '') &&
               db?.project?.id === project?.id
             );
           })
           ?.map((db) => ({
             ...db,
-            key: `db-${db?.id}`,
+            key: `db-${db?.id}`
           }));
         break;
       }
@@ -86,30 +97,42 @@ const List = ({ modalStore }: Iprops) => {
         options = databaseList
           ?.filter((db) => {
             return (
-              db?.name?.toLowerCase().includes(searchKey?.toLowerCase() || '') &&
+              db?.name
+                ?.toLowerCase()
+                .includes(searchKey?.toLowerCase() || '') &&
               db?.dataSource?.id === dataSource?.id
             );
           })
           ?.map((db) => ({
             ...db,
-            key: `db-${db?.id}`,
+            key: `db-${db?.id}`
           }));
         break;
       }
       default: {
         options = databaseList
           ?.filter((db) => {
-            return db?.name?.toLowerCase().includes(searchKey?.toLowerCase() || '');
+            return db?.name
+              ?.toLowerCase()
+              .includes(searchKey?.toLowerCase() || '');
           })
           ?.map((db) => ({
             ...db,
-            key: `db-${db?.id}`,
+            key: `db-${db?.id}`
           }));
         break;
       }
     }
     return options;
-  }, [searchKey, status, projectList, databaseList, datasourceList, project, dataSource]);
+  }, [
+    searchKey,
+    status,
+    projectList,
+    databaseList,
+    datasourceList,
+    project,
+    dataSource
+  ]);
 
   const getDataSourceIcon = (type) => {
     const DBIcon = getDataSourceStyleByConnectType(type)?.icon;
@@ -118,7 +141,7 @@ const List = ({ modalStore }: Iprops) => {
         style={{
           color: 'var(--icon-color-disable)',
           filter: 'grayscale(1) opacity(0.6)',
-          fontSize: 14,
+          fontSize: 14
         }}
         component={DBIcon?.component}
       />
@@ -142,7 +165,8 @@ const List = ({ modalStore }: Iprops) => {
                 break;
               }
               default: {
-                if (!(item as IDatabase)?.authorizedPermissionTypes?.length) return;
+                if (!(item as IDatabase)?.authorizedPermissionTypes?.length)
+                  return;
                 next?.({ database: item as IDatabase });
                 break;
               }
@@ -151,7 +175,7 @@ const List = ({ modalStore }: Iprops) => {
         >
           {formatMessage({
             id: 'src.page.Workspace.SideBar.ResourceTree.DatabaseSearchModal.components.D28EA9CA',
-            defaultMessage: '继续搜索',
+            defaultMessage: '继续搜索'
           })}
         </span>
       </div>
@@ -160,7 +184,7 @@ const List = ({ modalStore }: Iprops) => {
 
   const handlePosition = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    object: IDatabase | IProject | IConnection,
+    object: IDatabase | IProject | IConnection
   ) => {
     e.stopPropagation();
     switch (status) {
@@ -168,14 +192,14 @@ const List = ({ modalStore }: Iprops) => {
       case SearchStatus.forProject: {
         positionProjectOrDataSource?.({
           status,
-          object: object as IProject | IConnection,
+          object: object as IProject | IConnection
         });
         break;
       }
       default: {
         positionResourceTree?.({
           type: DbObjectType.database,
-          database: object as IDatabase,
+          database: object as IDatabase
         });
         break;
       }
@@ -200,13 +224,13 @@ const List = ({ modalStore }: Iprops) => {
                 <p>
                   {formatMessage({
                     id: 'src.page.Workspace.SideBar.ResourceTree.DatabaseSearchModal.components.49EEB88D',
-                    defaultMessage: '暂无数据',
+                    defaultMessage: '暂无数据'
                   })}
                 </p>
                 <p>
                   {formatMessage({
                     id: 'src.page.Workspace.SideBar.ResourceTree.DatabaseSearchModal.components.7880C5CD',
-                    defaultMessage: '请尝试',
+                    defaultMessage: '请尝试'
                   })}
 
                   <a
@@ -216,8 +240,8 @@ const List = ({ modalStore }: Iprops) => {
                         message.success(
                           formatMessage({
                             id: 'src.page.Workspace.SideBar.ResourceTree.DatabaseSearchModal.components.5D2CB0F6',
-                            defaultMessage: '同步发起成功',
-                          }),
+                            defaultMessage: '同步发起成功'
+                          })
                         );
                         reloadDatabaseList?.();
                       }
@@ -225,12 +249,12 @@ const List = ({ modalStore }: Iprops) => {
                   >
                     {formatMessage({
                       id: 'src.page.Workspace.SideBar.ResourceTree.DatabaseSearchModal.components.884084AB',
-                      defaultMessage: '同步数据库',
+                      defaultMessage: '同步数据库'
                     })}
                   </a>
                   {formatMessage({
                     id: 'src.page.Workspace.SideBar.ResourceTree.DatabaseSearchModal.components.55AB56DF',
-                    defaultMessage: '，或联系管理员',
+                    defaultMessage: '，或联系管理员'
                   })}
                 </p>
               </div>
@@ -253,7 +277,7 @@ const List = ({ modalStore }: Iprops) => {
         >
           {formatMessage({
             id: 'src.page.Workspace.SideBar.ResourceTree.DatabaseSearchModal.components.DC41DDB8',
-            defaultMessage: '申请库权限',
+            defaultMessage: '申请库权限'
           })}
         </Button>
       );
@@ -266,7 +290,13 @@ const List = ({ modalStore }: Iprops) => {
       <Popover
         showArrow={false}
         placement={'left'}
-        content={<ConnectionPopover showRemark database={db} connection={db?.dataSource} />}
+        content={
+          <ConnectionPopover
+            showRemark
+            database={db}
+            connection={db?.dataSource}
+          />
+        }
       >
         <div
           key={'database' + db.id}
@@ -281,7 +311,9 @@ const List = ({ modalStore }: Iprops) => {
             <span className={styles.nameInfo}>{db?.name}</span>
             <div className={styles.subInfo}>
               {getDataSourceIcon(db?.dataSource?.dialectType)}
-              <span className={styles.dataSouceName}>{db?.dataSource?.name}</span>
+              <span className={styles.dataSouceName}>
+                {db?.dataSource?.name}
+              </span>
             </div>
           </div>
           {renderDatabaseItemButton(db)}
@@ -298,7 +330,10 @@ const List = ({ modalStore }: Iprops) => {
         onClick={(e) => handlePosition(e, project)}
       >
         <div className={styles.nameContent}>
-          <Icon component={ProjectSvg} style={{ color: 'var(--icon-blue-color)', fontSize: 16 }} />
+          <Icon
+            component={ProjectSvg}
+            style={{ color: 'var(--icon-blue-color)', fontSize: 16 }}
+          />
           <div style={{ padding: '0 4px' }}>{project?.name}</div>
         </div>
         {ContinueSearchButton(project)}
@@ -347,19 +382,19 @@ const List = ({ modalStore }: Iprops) => {
       case SearchStatus.forDataSource: {
         return formatMessage({
           id: 'src.page.Workspace.SideBar.ResourceTree.DatabaseSearchModal.components.40A85606',
-          defaultMessage: '数据源',
+          defaultMessage: '数据源'
         });
       }
       case SearchStatus.forProject: {
         return formatMessage({
           id: 'src.page.Workspace.SideBar.ResourceTree.DatabaseSearchModal.components.F8D1DA01',
-          defaultMessage: '项目',
+          defaultMessage: '项目'
         });
       }
       default: {
         return formatMessage({
           id: 'src.page.Workspace.SideBar.ResourceTree.DatabaseSearchModal.components.BA1A0AD7',
-          defaultMessage: '数据库',
+          defaultMessage: '数据库'
         });
       }
     }

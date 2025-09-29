@@ -29,7 +29,7 @@ import { openMainWebWindow } from './windows/mainWeb';
 import startScreen from './windows/startScreen';
 
 Sentry.init({
-  dsn: 'https://859452cf23044aeda8677a8bdcc53081@obc-sentry.oceanbase.com/3',
+  dsn: 'https://859452cf23044aeda8677a8bdcc53081@obc-sentry.oceanbase.com/3'
 });
 /**
  * 注册render接口服务
@@ -143,8 +143,11 @@ async function initApp() {
     log.info(
       `Screen: ${screen
         .getAllDisplays()
-        .map((display) => `width: ${display.size.width}, height: ${display.size.height}`)
-        .join(' | ')}`,
+        .map(
+          (display) =>
+            `width: ${display.size.width}, height: ${display.size.height}`
+        )
+        .join(' | ')}`
     );
     if (process.platform === 'darwin') {
       createMenu(app);

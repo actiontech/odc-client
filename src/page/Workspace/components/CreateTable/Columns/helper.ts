@@ -22,32 +22,36 @@ export function getTypeByColumnName(columnName: string, dialectType) {
     return null;
   }
   const config =
-    getDataSourceModeConfigByConnectionMode(dialectType)?.schema?.table?.type2ColumnType;
+    getDataSourceModeConfigByConnectionMode(dialectType)?.schema?.table
+      ?.type2ColumnType;
   const matchArr = [
     {
       type: config?.['id'],
-      regexp: /id$/i,
+      regexp: /id$/i
     },
     {
       type: config?.['name'],
-      regexp: /name/i,
+      regexp: /name/i
     },
     {
       type: config?.['date'],
-      regexp: /date/i,
+      regexp: /date/i
     },
     {
       type: config?.['time'],
-      regexp: /time/i,
+      regexp: /time/i
     },
     {
       type: config?.['name'],
-      regexp: /.*/i,
-    },
+      regexp: /.*/i
+    }
   ];
   for (let item of matchArr) {
     if (item.regexp.test(columnName)) {
-      return { type: dataTypesIns.getDataType(dialectType, item.type), name: item.type };
+      return {
+        type: dataTypesIns.getDataType(dialectType, item.type),
+        name: item.type
+      };
     }
   }
   return null;

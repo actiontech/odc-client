@@ -41,7 +41,7 @@ export default function NewDataBaseButton({
   projectId,
   projectName,
   onSuccess,
-  mode,
+  mode
 }: IProps) {
   const [open, setOpen] = useState<boolean>(false);
   const [projectInfo, setProjectInfo] = useState<IProject>(null);
@@ -53,12 +53,18 @@ export default function NewDataBaseButton({
     }
   >();
   const { run, loading } = useRequest(createDataBase, {
-    manual: true,
+    manual: true
   });
-  const haveCharset = ![ConnectionMode.OB_ORACLE, ConnectionMode.ORACLE].includes(mode);
-  const { data: project, loading: projectListLoading } = useRequest(listProjects, {
-    defaultParams: [null, 1, 99999],
-  });
+  const haveCharset = ![
+    ConnectionMode.OB_ORACLE,
+    ConnectionMode.ORACLE
+  ].includes(mode);
+  const { data: project, loading: projectListLoading } = useRequest(
+    listProjects,
+    {
+      defaultParams: [null, 1, 99999]
+    }
+  );
   const sqlConfig = getDataSourceModeConfigByConnectionMode(mode)?.sql;
   function close() {
     setOpen(false);
@@ -76,7 +82,7 @@ export default function NewDataBaseButton({
       form.resetFields();
       if (projectId) {
         form.setFieldsValue({
-          projectId: projectId,
+          projectId: projectId
         });
         getProjectDetails(projectId);
       }
@@ -86,7 +92,7 @@ export default function NewDataBaseButton({
       case ConnectionMode.MYSQL: {
         form.setFieldsValue({
           collationName: 'utf8_general_ci',
-          charsetName: 'utf8',
+          charsetName: 'utf8'
         });
         return;
       }
@@ -97,14 +103,14 @@ export default function NewDataBaseButton({
       case ConnectionMode.DORIS: {
         form.setFieldsValue({
           collationName: 'utf8_general_ci',
-          charsetName: 'utf8',
+          charsetName: 'utf8'
         });
         return;
       }
       case ConnectionMode.PG: {
         form.setFieldsValue({
           collationName: 'C',
-          charsetName: 'UTF8',
+          charsetName: 'UTF8'
         });
         return;
       }
@@ -121,19 +127,19 @@ export default function NewDataBaseButton({
       collationName: formData?.collationName,
       charsetName: formData.charsetName,
       project: {
-        id: formData?.projectId,
+        id: formData?.projectId
       },
       dataSource: {
-        id: toInteger(dataSourceId),
+        id: toInteger(dataSourceId)
       },
-      ownerIds: formData.ownerIds,
+      ownerIds: formData.ownerIds
     });
     if (isSuccess) {
       message.success(
         formatMessage({
           id: 'odc.Info.NewDataBaseButton.New',
-          defaultMessage: '新建成功',
-        }), //新建成功
+          defaultMessage: '新建成功'
+        }) //新建成功
       );
       setOpen(false);
       onSuccess();
@@ -148,7 +154,7 @@ export default function NewDataBaseButton({
         {
           formatMessage({
             id: 'odc.Info.NewDataBaseButton.CreateADatabase',
-            defaultMessage: '新建数据库',
+            defaultMessage: '新建数据库'
           }) /*新建数据库*/
         }
       </Button>
@@ -156,7 +162,7 @@ export default function NewDataBaseButton({
         open={open}
         title={formatMessage({
           id: 'odc.Info.NewDataBaseButton.CreateADatabase',
-          defaultMessage: '新建数据库',
+          defaultMessage: '新建数据库'
         })}
         /*新建数据库*/ onOk={submit}
         onCancel={close}
@@ -181,18 +187,18 @@ export default function NewDataBaseButton({
             name={'name'}
             label={formatMessage({
               id: 'odc.Info.NewDataBaseButton.DatabaseName',
-              defaultMessage: '数据库名称',
+              defaultMessage: '数据库名称'
             })} /*数据库名称*/
           >
             <CaseInput
               caseSensitive={sqlConfig?.caseSensitivity}
               escapes={sqlConfig?.escapeChar}
               style={{
-                width: 320,
+                width: 320
               }}
               placeholder={formatMessage({
                 id: 'odc.Info.NewDataBaseButton.PleaseEnter',
-                defaultMessage: '请输入',
+                defaultMessage: '请输入'
               })} /*请输入*/
             />
           </Form.Item>
@@ -202,16 +208,16 @@ export default function NewDataBaseButton({
                 name={'charsetName'}
                 label={formatMessage({
                   id: 'odc.Info.NewDataBaseButton.CharacterEncoding',
-                  defaultMessage: '字符编码',
+                  defaultMessage: '字符编码'
                 })} /*字符编码*/
               >
                 <Input
                   style={{
-                    width: 200,
+                    width: 200
                   }}
                   placeholder={formatMessage({
                     id: 'odc.Info.NewDataBaseButton.PleaseEnter',
-                    defaultMessage: '请输入',
+                    defaultMessage: '请输入'
                   })} /*请输入*/
                   disabled={mode === ConnectionMode.DORIS}
                 />
@@ -220,16 +226,16 @@ export default function NewDataBaseButton({
                 name={'collationName'}
                 label={formatMessage({
                   id: 'odc.Info.NewDataBaseButton.SortingRules',
-                  defaultMessage: '排序规则',
+                  defaultMessage: '排序规则'
                 })} /*排序规则*/
               >
                 <Input
                   style={{
-                    width: 200,
+                    width: 200
                   }}
                   placeholder={formatMessage({
                     id: 'odc.Info.NewDataBaseButton.PleaseEnter',
-                    defaultMessage: '请输入',
+                    defaultMessage: '请输入'
                   })} /*请输入*/
                   disabled={mode === ConnectionMode.DORIS}
                 />
@@ -242,14 +248,14 @@ export default function NewDataBaseButton({
             label={
               formatMessage({
                 id: 'odc.src.page.Datasource.Info.NewDataBaseButton.Project',
-                defaultMessage: '项目',
+                defaultMessage: '项目'
               }) //'项目'
             }
           >
             <ProjectSelect
               defaultProject={{
                 projectName: projectName,
-                projectId: projectId,
+                projectId: projectId
               }}
               disabled={!!projectId}
               disabledTip={
@@ -257,9 +263,9 @@ export default function NewDataBaseButton({
                   {
                     id: 'odc.src.page.Datasource.Info.NewDataBaseButton.CurrentDataSourceProject',
                     defaultMessage:
-                      '当前数据源所属项目【{projectName}】, 无法修改，可通过编辑数据源修改所属项目',
+                      '当前数据源所属项目【{projectName}】, 无法修改，可通过编辑数据源修改所属项目'
                   },
-                  { projectName },
+                  { projectName }
                 ) //`当前数据源所属项目【${projectName}】, 无法修改，可通过编辑数据源修改所属项目`
               }
               projects={project?.contents}
@@ -272,7 +278,7 @@ export default function NewDataBaseButton({
             hasDefaultSet={false}
             setFormOwnerIds={(value) => {
               form.setFieldsValue({
-                ownerIds: value,
+                ownerIds: value
               });
             }}
             disabled={ownerSelectStatus}

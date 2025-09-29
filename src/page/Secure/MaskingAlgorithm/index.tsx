@@ -30,46 +30,56 @@ import ViewMaskingAlgorithmDrawer from './components/ViewMaskingAlgorithmDrawer'
 export const maskRuleTypeMap = {
   // 掩盖
   MASK: formatMessage({ id: 'odc.src.d.ts.CoverUp', defaultMessage: '掩盖' }), //掩盖 // 替换
-  SUBSTITUTION: formatMessage({ id: 'odc.src.d.ts.Replace', defaultMessage: '替换' }), //替换 // 保留格式
-  PSEUDO: formatMessage({ id: 'odc.src.d.ts.ReservedFormat', defaultMessage: '保留格式' }), //保留格式 // 哈希
+  SUBSTITUTION: formatMessage({
+    id: 'odc.src.d.ts.Replace',
+    defaultMessage: '替换'
+  }), //替换 // 保留格式
+  PSEUDO: formatMessage({
+    id: 'odc.src.d.ts.ReservedFormat',
+    defaultMessage: '保留格式'
+  }), //保留格式 // 哈希
   HASH: formatMessage({ id: 'odc.src.d.ts.Hash', defaultMessage: '哈希' }), //哈希 // 取整
-  ROUNDING: formatMessage({ id: 'odc.src.d.ts.Rounding', defaultMessage: '取整' }), //取整 // 置空
-  NULL: formatMessage({ id: 'odc.src.d.ts.Empty', defaultMessage: '置空' }), //置空
+  ROUNDING: formatMessage({
+    id: 'odc.src.d.ts.Rounding',
+    defaultMessage: '取整'
+  }), //取整 // 置空
+  NULL: formatMessage({ id: 'odc.src.d.ts.Empty', defaultMessage: '置空' }) //置空
 };
 interface MaskingAlgorithmProps {}
 const MaskingAlgorithm: React.FC<MaskingAlgorithmProps> = ({}) => {
   const tableRef = useRef<any>(null);
-  const [maskingAlgorithm, setMaskingAlgorithm] = useState<IResponseData<IMaskingAlgorithm>>(null);
+  const [maskingAlgorithm, setMaskingAlgorithm] =
+    useState<IResponseData<IMaskingAlgorithm>>(null);
   const [selectedData, setSelectedData] = useState<IMaskingAlgorithm>(null);
   const [visible, setVisible] = useState<boolean>(false);
 
-  const getColumns: (columnsFunction: { handleViewDrawerOpen }) => ColumnsType<IRule> = ({
-    handleViewDrawerOpen,
-  }) => {
+  const getColumns: (columnsFunction: {
+    handleViewDrawerOpen;
+  }) => ColumnsType<IRule> = ({ handleViewDrawerOpen }) => {
     return [
       {
         title: formatMessage({
           id: 'odc.Secure.MaskingAlgorithm.AlgorithmName',
-          defaultMessage: '算法名称',
+          defaultMessage: '算法名称'
         }), //算法名称
         width: 218,
         dataIndex: 'name',
-        key: 'name',
+        key: 'name'
       },
       {
         title: formatMessage({
           id: 'odc.Secure.MaskingAlgorithm.DesensitizationMethod',
-          defaultMessage: '脱敏方式',
+          defaultMessage: '脱敏方式'
         }), //脱敏方式
         width: 94,
         dataIndex: 'type',
         key: 'type',
-        render: (text) => <TooltipContent content={maskRuleTypeMap[text]} />,
+        render: (text) => <TooltipContent content={maskRuleTypeMap[text]} />
       },
       {
         title: formatMessage({
           id: 'odc.Secure.MaskingAlgorithm.TestData',
-          defaultMessage: '测试数据',
+          defaultMessage: '测试数据'
         }), //测试数据
         width: 150,
         dataIndex: 'sampleContent',
@@ -80,16 +90,16 @@ const MaskingAlgorithm: React.FC<MaskingAlgorithmProps> = ({}) => {
               maxWidth: '150px',
               overflow: 'hidden',
               whiteSpace: 'nowrap',
-              textOverflow: 'ellipsis',
-            },
+              textOverflow: 'ellipsis'
+            }
           };
         },
-        render: (text) => <TooltipContent content={text} />,
+        render: (text) => <TooltipContent content={text} />
       },
       {
         title: formatMessage({
           id: 'odc.Secure.MaskingAlgorithm.ResultPreview',
-          defaultMessage: '结果预览',
+          defaultMessage: '结果预览'
         }), //结果预览
         width: 378,
         dataIndex: 'maskedContent',
@@ -100,16 +110,16 @@ const MaskingAlgorithm: React.FC<MaskingAlgorithmProps> = ({}) => {
               maxWidth: '378px',
               overflow: 'hidden',
               whiteSpace: 'nowrap',
-              textOverflow: 'ellipsis',
-            },
+              textOverflow: 'ellipsis'
+            }
           };
         },
-        render: (text) => <TooltipContent content={text || '-'} />,
+        render: (text) => <TooltipContent content={text || '-'} />
       },
       {
         title: formatMessage({
           id: 'odc.Secure.MaskingAlgorithm.Operation',
-          defaultMessage: '操作',
+          defaultMessage: '操作'
         }), //操作
         width: 80,
         key: 'action',
@@ -120,14 +130,14 @@ const MaskingAlgorithm: React.FC<MaskingAlgorithmProps> = ({}) => {
                 {
                   formatMessage({
                     id: 'odc.Secure.MaskingAlgorithm.View',
-                    defaultMessage: '查看',
+                    defaultMessage: '查看'
                   }) /*查看*/
                 }
               </a>
             </Space>
           </>
-        ),
-      },
+        )
+      }
     ];
   };
 
@@ -138,9 +148,11 @@ const MaskingAlgorithm: React.FC<MaskingAlgorithmProps> = ({}) => {
     const data = {
       sort: column?.dataIndex,
       page: current,
-      size: pageSize,
+      size: pageSize
     };
-    data.sort = column ? `${column.dataIndex},${order === 'ascend' ? 'asc' : 'desc'}` : undefined;
+    data.sort = column
+      ? `${column.dataIndex},${order === 'ascend' ? 'asc' : 'desc'}`
+      : undefined;
     const rawData = await listMaskingAlgorithm(data);
     setMaskingAlgorithm(rawData);
   };
@@ -155,7 +167,7 @@ const MaskingAlgorithm: React.FC<MaskingAlgorithmProps> = ({}) => {
   };
 
   const columns: ColumnsType<IRule> = getColumns({
-    handleViewDrawerOpen,
+    handleViewDrawerOpen
   });
 
   return (
@@ -166,7 +178,7 @@ const MaskingAlgorithm: React.FC<MaskingAlgorithmProps> = ({}) => {
         showToolbar={false}
         filterContent={{}}
         operationContent={{
-          options: [],
+          options: []
         }}
         onLoad={initData}
         onChange={initData}
@@ -176,11 +188,11 @@ const MaskingAlgorithm: React.FC<MaskingAlgorithmProps> = ({}) => {
           rowKey: 'id',
           pagination: {
             current: maskingAlgorithm?.page?.number,
-            total: maskingAlgorithm?.page?.totalElements,
+            total: maskingAlgorithm?.page?.totalElements
           },
           scroll: {
-            x: 1000,
-          },
+            x: 1000
+          }
         }}
       />
 
@@ -188,7 +200,7 @@ const MaskingAlgorithm: React.FC<MaskingAlgorithmProps> = ({}) => {
         {...{
           visible,
           selectedData,
-          handleViewDrawerClose,
+          handleViewDrawerClose
         }}
       />
     </div>

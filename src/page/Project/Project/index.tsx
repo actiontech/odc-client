@@ -49,17 +49,17 @@ export const titleOptions: {
   {
     label: formatMessage({
       id: 'odc.Project.Project.AllProjects',
-      defaultMessage: '全部项目',
+      defaultMessage: '全部项目'
     }),
-    value: ProjectTabType.ALL,
+    value: ProjectTabType.ALL
   },
   {
     label: formatMessage({
       id: 'odc.Project.Project.ArchiveProject',
-      defaultMessage: '归档项目',
+      defaultMessage: '归档项目'
     }),
-    value: ProjectTabType.ARCHIVED,
-  },
+    value: ProjectTabType.ARCHIVED
+  }
 ];
 interface IProps {
   userStore: UserStore;
@@ -69,26 +69,40 @@ const Project: React.FC<IProps> = (props) => {
   const domRef = useRef<HTMLDivElement>();
   const [currentPage, setCurrentPage] = useState(0);
   const [selectedRows, setSelectedRows] = useState<Map<number, boolean>>(
-    new Map<number, boolean>(),
+    new Map<number, boolean>()
   );
   const { userStore } = props;
   const [searchParams, setSearchParams] = useSearchParams();
   const [dataSource, setDataSource] = useState<IProject[]>([]);
   const [projectSearchName, setProjectSearchName] = useState(null);
-  const [projectType, setProjectType] = useState<ProjectTabType>(ProjectTabType.ALL);
+  const [projectType, setProjectType] = useState<ProjectTabType>(
+    ProjectTabType.ALL
+  );
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const projectTypeIsArchived = projectType === ProjectTabType.ARCHIVED;
 
   const [openDeleteProjectModal, setOpenDeleteProjectModal] = useState(false);
-  const [selectProjectList, setSelectProjectList] = useState<SelectProject[]>([]);
+  const [selectProjectList, setSelectProjectList] = useState<SelectProject[]>(
+    []
+  );
   const sessionStorageKey = getSessionStorageKey(userStore);
 
-  const appendData = async (currentPage, dataSource, projectType, projectSearchName) => {
+  const appendData = async (
+    currentPage,
+    dataSource,
+    projectType,
+    projectSearchName
+  ) => {
     setLoading(true);
     try {
       const projectTypeIsArchived = projectType === ProjectTabType.ARCHIVED;
-      const res = await listProjects(projectSearchName, currentPage + 1, 40, projectTypeIsArchived);
+      const res = await listProjects(
+        projectSearchName,
+        currentPage + 1,
+        40,
+        projectTypeIsArchived
+      );
       if (res) {
         setCurrentPage(currentPage + 1);
         /**
@@ -96,7 +110,11 @@ const Project: React.FC<IProps> = (props) => {
          */
         const existIds = new Set();
         dataSource.forEach((item) => existIds.add(item.id));
-        setDataSource(dataSource.concat(res?.contents.filter((item) => !existIds.has(item.id))));
+        setDataSource(
+          dataSource.concat(
+            res?.contents.filter((item) => !existIds.has(item.id))
+          )
+        );
       }
     } catch (e) {
       console.error(e);
@@ -119,11 +137,14 @@ const Project: React.FC<IProps> = (props) => {
       currentPage,
       dataSource,
       params.projectType || projectType,
-      sessionStorageValue || projectSearchName,
+      sessionStorageValue || projectSearchName
     );
   }, []);
   const onScroll = (e: React.UIEvent<HTMLElement, UIEvent>) => {
-    if (e.currentTarget.scrollHeight - e.currentTarget.scrollTop === domRef.current?.clientHeight) {
+    if (
+      e.currentTarget.scrollHeight - e.currentTarget.scrollTop ===
+      domRef.current?.clientHeight
+    ) {
       appendData(currentPage, dataSource, projectType, projectSearchName);
     }
   };
@@ -131,7 +152,7 @@ const Project: React.FC<IProps> = (props) => {
   function resolveParams() {
     const archived = searchParams.get('archived');
     const obj = {
-      projectType: ProjectTabType.ALL,
+      projectType: ProjectTabType.ALL
     };
     if (archived && archived === 'true') {
       setProjectType(ProjectTabType.ARCHIVED);
@@ -148,12 +169,13 @@ const Project: React.FC<IProps> = (props) => {
         type: TitleType.TAB,
         options: titleOptions,
         showDivider: true,
-        defaultValue: projectType,
+        defaultValue: projectType
       }}
       onTabChange={(v: ProjectTabType) => {
         setProjectType(v);
         // 切换项目时，带上搜索值/固化值
-        const searchValues = projectSearchName || sessionStorage.getItem(sessionStorageKey);
+        const searchValues =
+          projectSearchName || sessionStorage.getItem(sessionStorageKey);
         reload(v, searchValues);
       }}
       tabActiveKey={projectType}
@@ -166,9 +188,15 @@ const Project: React.FC<IProps> = (props) => {
               {!projectTypeIsArchived && (
                 <Acess
                   fallback={<span></span>}
-                  {...createPermission(IManagerResourceType.project, actionTypes.create)}
+                  {...createPermission(
+                    IManagerResourceType.project,
+                    actionTypes.create
+                  )}
                 >
-                  <CreateProjectDrawer disabled={projectTypeIsArchived} onCreate={() => reload()} />
+                  <CreateProjectDrawer
+                    disabled={projectTypeIsArchived}
+                    onCreate={() => reload()}
+                  />
                 </Acess>
               )}
               {!projectTypeIsArchived && (
@@ -177,7 +205,7 @@ const Project: React.FC<IProps> = (props) => {
                   label={
                     formatMessage({
                       id: 'odc.src.page.Project.Project.JoinTheProject',
-                      defaultMessage: '加入项目',
+                      defaultMessage: '加入项目'
                     }) /* 加入项目 */
                   }
                 />
@@ -189,8 +217,8 @@ const Project: React.FC<IProps> = (props) => {
                       message.info(
                         formatMessage({
                           id: 'src.page.Project.Project.5CDFAB27',
-                          defaultMessage: '请先选择项目',
-                        }),
+                          defaultMessage: '请先选择项目'
+                        })
                       );
                       return;
                     }
@@ -199,7 +227,7 @@ const Project: React.FC<IProps> = (props) => {
                 >
                   {formatMessage({
                     id: 'src.page.Project.Project.FB11C8F8',
-                    defaultMessage: '删除项目',
+                    defaultMessage: '删除项目'
                   })}
                 </Button>
               )}
@@ -221,11 +249,11 @@ const Project: React.FC<IProps> = (props) => {
                   {
                     label: formatMessage({
                       id: 'odc.Project.Project.ProjectName',
-                      defaultMessage: '项目名称',
+                      defaultMessage: '项目名称'
                     }),
                     //项目名称
-                    value: 'projectName',
-                  },
+                    value: 'projectName'
+                  }
                 ]}
               />
 
@@ -239,7 +267,7 @@ const Project: React.FC<IProps> = (props) => {
         <div
           ref={domRef}
           style={{
-            height: '100%',
+            height: '100%'
           }}
         >
           {dataSource?.length ? (
@@ -262,7 +290,9 @@ const Project: React.FC<IProps> = (props) => {
                       setSelectProjectList([...selectProjectList, values]);
                     } else {
                       setSelectProjectList(
-                        selectProjectList.filter((item) => item.id !== values.id),
+                        selectProjectList.filter(
+                          (item) => item.id !== values.id
+                        )
                       );
                     }
                   }}
@@ -299,12 +329,15 @@ const Project: React.FC<IProps> = (props) => {
                                 label={
                                   formatMessage({
                                     id: 'odc.src.page.Project.Project.JoinTheProject',
-                                    defaultMessage: '加入项目',
+                                    defaultMessage: '加入项目'
                                   }) /* 加入项目 */
                                 }
                               />
                             }
-                            {...createPermission(IManagerResourceType.project, actionTypes.create)}
+                            {...createPermission(
+                              IManagerResourceType.project,
+                              actionTypes.create
+                            )}
                           >
                             <CreateProjectDrawer
                               disabled={projectTypeIsArchived}

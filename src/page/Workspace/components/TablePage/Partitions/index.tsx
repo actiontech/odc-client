@@ -34,7 +34,7 @@ import {
   ITableModel,
   ITableRangeColumnsPartition,
   ITableRangePartition,
-  TablePartition,
+  TablePartition
 } from '../../CreateTable/interface';
 import TableCardLayout from '../../CreateTable/TableCardLayout';
 import EditableTable from '../../EditableTable';
@@ -45,16 +45,24 @@ import styles from './index.less';
 
 const ToolbarButton = Toolbar.Button;
 
-export function getTitleByPartType(partType: IPartitionType | undefined): string {
-  if (partType === IPartitionType.RANGE || partType === IPartitionType.RANGE_COLUMNS) {
+export function getTitleByPartType(
+  partType: IPartitionType | undefined
+): string {
+  if (
+    partType === IPartitionType.RANGE ||
+    partType === IPartitionType.RANGE_COLUMNS
+  ) {
     return formatMessage({
       id: 'workspace.window.createTable.partition.value.range',
-      defaultMessage: '区间上限值',
+      defaultMessage: '区间上限值'
     });
-  } else if (partType === IPartitionType.LIST || partType === IPartitionType.LIST_COLUMNS) {
+  } else if (
+    partType === IPartitionType.LIST ||
+    partType === IPartitionType.LIST_COLUMNS
+  ) {
     return formatMessage({
       id: 'workspace.window.createTable.partition.value.list',
-      defaultMessage: '枚举值',
+      defaultMessage: '枚举值'
     });
   }
   return '';
@@ -66,7 +74,8 @@ const TablePartitions: React.FC<IProps> = function ({}) {
   const tableContext = useContext(TablePageContext);
   const session = tableContext.session;
   const [selectedRowsIdx, setSelectedRowIdx] = useState<number[]>([]);
-  const [editPartitions, setEditPartitions] = useState<ITableModel['partitions']>(null);
+  const [editPartitions, setEditPartitions] =
+    useState<ITableModel['partitions']>(null);
   const addPartitionRef = useRef<{
     addNewPartitions: () => Promise<Partial<TablePartition>>;
   }>();
@@ -80,7 +89,7 @@ const TablePartitions: React.FC<IProps> = function ({}) {
 
   const formItemLayout = {
     labelCol: { span: 4 },
-    wrapperCol: { span: 18 },
+    wrapperCol: { span: 18 }
   };
 
   const rdgColumns = [
@@ -88,24 +97,24 @@ const TablePartitions: React.FC<IProps> = function ({}) {
       key: 'name',
       name: formatMessage({
         id: 'workspace.window.createTable.partition.name',
-        defaultMessage: '分区名称',
+        defaultMessage: '分区名称'
       }),
       resizable: true,
       sortable: false,
       editor: TextEditor,
-      editable: (row) => !!row?.isNew,
+      editable: (row) => !!row?.isNew
     },
 
     {
       key: 'position',
       name: formatMessage({
         id: 'workspace.window.createTable.partition.position',
-        defaultMessage: '顺序',
+        defaultMessage: '顺序'
       }),
       resizable: true,
       sortable: false,
       width: 110,
-      editable: false,
+      editable: false
     },
     ![IPartitionType.HASH, IPartitionType.KEY]?.includes(partType)
       ? {
@@ -114,9 +123,9 @@ const TablePartitions: React.FC<IProps> = function ({}) {
           resizable: true,
           sortable: false,
           editable: (row) => !!row?.isNew,
-          editor: TextEditor,
+          editor: TextEditor
         }
-      : null,
+      : null
   ]?.filter(Boolean);
 
   const subpartitionsColumns = [
@@ -124,41 +133,42 @@ const TablePartitions: React.FC<IProps> = function ({}) {
       key: 'parentName',
       name: formatMessage({
         id: 'src.page.Workspace.components.TablePage.Partitions.30EACD95',
-        defaultMessage: '一级分区名称',
+        defaultMessage: '一级分区名称'
       }),
       resizable: true,
-      sortable: false,
+      sortable: false
     },
     {
       key: 'name',
       name: formatMessage({
         id: 'src.page.Workspace.components.TablePage.Partitions.E6EE95C1',
-        defaultMessage: '二级分区名称',
+        defaultMessage: '二级分区名称'
       }),
       resizable: true,
-      sortable: false,
+      sortable: false
     },
     {
       key: 'position',
       name: formatMessage({
         id: 'src.page.Workspace.components.TablePage.Partitions.AD70BB60',
-        defaultMessage: '顺序',
+        defaultMessage: '顺序'
       }),
       resizable: true,
       sortable: false,
-      width: 110,
+      width: 110
     },
     ![IPartitionType.HASH, IPartitionType.KEY]?.includes(subpartitionType)
       ? {
           key: 'partValues',
           name: getTitleByPartType(subpartitionType),
           resizable: true,
-          sortable: false,
+          sortable: false
         }
-      : null,
+      : null
   ]?.filter(Boolean);
 
-  const getSingleListPartitionKeyValue = (item) => item?.map((item) => item?.value);
+  const getSingleListPartitionKeyValue = (item) =>
+    item?.map((item) => item?.value);
   const getMultiListPartitionKeyValue = (columns, item) =>
     item.map((value) => {
       return columns.reduce((prev, current, index) => {
@@ -191,15 +201,16 @@ const TablePartitions: React.FC<IProps> = function ({}) {
                 {
                   ...part,
                   valueForColumnDisplay:
-                    session.odcDatabase?.dataSource?.dialectType === ConnectionMode.OB_ORACLE
+                    session.odcDatabase?.dataSource?.dialectType ===
+                    ConnectionMode.OB_ORACLE
                       ? getMultiListPartitionKeyValue(
                           (partitions as ITableListPartition)?.columns,
-                          part,
+                          part
                         )
-                      : getSingleListPartitionKeyValue(part),
-                },
+                      : getSingleListPartitionKeyValue(part)
+                }
               );
-            }),
+            })
           );
           setEditPartitions(newPartitions);
           return;
@@ -214,15 +225,16 @@ const TablePartitions: React.FC<IProps> = function ({}) {
                 {
                   ...part,
                   valueForColumnDisplay:
-                    session.odcDatabase?.dataSource?.dialectType === ConnectionMode.OB_ORACLE
+                    session.odcDatabase?.dataSource?.dialectType ===
+                    ConnectionMode.OB_ORACLE
                       ? getMultiRangePartitionKeyValue(
                           (partitions as ITableRangePartition)?.columns,
-                          part,
+                          part
                         )
-                      : getSingleRangePartitionKeyValue(part),
-                },
+                      : getSingleRangePartitionKeyValue(part)
+                }
               );
-            }),
+            })
           );
           setEditPartitions(newPartitions);
           return;
@@ -231,7 +243,9 @@ const TablePartitions: React.FC<IProps> = function ({}) {
           (newPartitions as ITableListColumnsPartition).partitions = (
             newPartitions as ITableListColumnsPartition
           ).partitions.concat(
-            values.partitions?.map((part) => Object.assign({ key: generateUniqKey() }, part)),
+            values.partitions?.map((part) =>
+              Object.assign({ key: generateUniqKey() }, part)
+            )
           );
           setEditPartitions(newPartitions);
           return;
@@ -240,7 +254,9 @@ const TablePartitions: React.FC<IProps> = function ({}) {
           (newPartitions as ITableRangeColumnsPartition).partitions = (
             newPartitions as ITableRangeColumnsPartition
           ).partitions.concat(
-            values.partitions?.map((part) => Object.assign({ key: generateUniqKey() }, part)),
+            values.partitions?.map((part) =>
+              Object.assign({ key: generateUniqKey() }, part)
+            )
           );
           setEditPartitions(newPartitions);
           return;
@@ -264,9 +280,9 @@ const TablePartitions: React.FC<IProps> = function ({}) {
     setSelectedRowIdx(
       keys.map((key) => {
         return (partitions as ITableListPartition).partitions?.findIndex(
-          (row) => (row.ordinalPosition ?? row.key) === key,
+          (row) => (row.ordinalPosition ?? row.key) === key
         );
-      }),
+      })
     );
   };
 
@@ -274,12 +290,12 @@ const TablePartitions: React.FC<IProps> = function ({}) {
     const rows = getRowsByPartType(
       partType,
       partitions,
-      session.odcDatabase?.dataSource?.dialectType,
+      session.odcDatabase?.dataSource?.dialectType
     );
     const subpartitionsRows = getRowsByPartType(
       subpartitionType,
       subpartitions,
-      session.odcDatabase?.dataSource?.dialectType,
+      session.odcDatabase?.dataSource?.dialectType
     );
     gridRef.current?.setRows?.(rows ?? []);
     subpartitionsGridRef?.current?.setRows?.(subpartitionsRows ?? []);
@@ -300,12 +316,12 @@ const TablePartitions: React.FC<IProps> = function ({}) {
       const rows = getRowsByPartType(
         partType,
         partitions,
-        session.odcDatabase?.dataSource?.dialectType,
+        session.odcDatabase?.dataSource?.dialectType
       );
       const subpartitionsRows = getRowsByPartType(
         subpartitionType,
         subpartitions,
-        session.odcDatabase?.dataSource?.dialectType,
+        session.odcDatabase?.dataSource?.dialectType
       );
       console.log('subpartitionsRows', subpartitionsRows);
       return (
@@ -318,16 +334,17 @@ const TablePartitions: React.FC<IProps> = function ({}) {
                   setEditPartitions(null);
                 }}
                 onOk={async () => {
-                  const { sql: updateTableDML, tip } = await generateUpdateTableDDL(
-                    {
-                      ...tableContext.table,
-                      partitions: partitions,
-                    },
+                  const { sql: updateTableDML, tip } =
+                    await generateUpdateTableDDL(
+                      {
+                        ...tableContext.table,
+                        partitions: partitions
+                      },
 
-                    tableContext.table,
-                    session.sessionId,
-                    session.database?.dbName,
-                  );
+                      tableContext.table,
+                      session.sessionId,
+                      session.database?.dbName
+                    );
 
                   if (!updateTableDML) {
                     return;
@@ -340,17 +357,19 @@ const TablePartitions: React.FC<IProps> = function ({}) {
                       setEditPartitions(null);
                     },
                     tip,
-                    () => setEditPartitions(null),
+                    () => setEditPartitions(null)
                   );
                 }}
               >
                 <Toolbar>
-                  {![IPartitionType.HASH, IPartitionType.KEY]?.includes(partType) ? (
+                  {![IPartitionType.HASH, IPartitionType.KEY]?.includes(
+                    partType
+                  ) ? (
                     <>
                       <ToolbarButton
                         text={formatMessage({
                           id: 'workspace.header.create',
-                          defaultMessage: '新建',
+                          defaultMessage: '新建'
                         })}
                         icon={<PlusOutlined />}
                         onClick={handleAddColumn}
@@ -360,7 +379,7 @@ const TablePartitions: React.FC<IProps> = function ({}) {
                         text={
                           formatMessage({
                             id: 'odc.TablePage.Partitions.Delete',
-                            defaultMessage: '删除',
+                            defaultMessage: '删除'
                           }) //删除
                         }
                         icon={DeleteOutlined}
@@ -373,7 +392,7 @@ const TablePartitions: React.FC<IProps> = function ({}) {
                     icon={<SyncOutlined />}
                     text={formatMessage({
                       id: 'odc.components.ShowTableBaseInfoForm.Refresh',
-                      defaultMessage: '刷新',
+                      defaultMessage: '刷新'
                     })}
                     /* 刷新 */ onClick={tableContext.onRefresh}
                   />
@@ -381,27 +400,29 @@ const TablePartitions: React.FC<IProps> = function ({}) {
               </EditToolbar>
             }
           >
-            <div style={{ lineHeight: '40px', height: 40, padding: '0px 12px' }}>
+            <div
+              style={{ lineHeight: '40px', height: 40, padding: '0px 12px' }}
+            >
               <Space size={'large'} align="center">
                 <Typography.Text strong>
                   {formatMessage({
                     id: 'src.page.Workspace.components.TablePage.Partitions.3FB355F5',
-                    defaultMessage: '一级分区',
+                    defaultMessage: '一级分区'
                   })}
                 </Typography.Text>
                 <span>
                   {formatMessage(
                     {
                       id: 'src.page.Workspace.components.TablePage.Partitions.189B7E31',
-                      defaultMessage: '分区类型: {partitionNameMapPartType}',
+                      defaultMessage: '分区类型: {partitionNameMapPartType}'
                     },
-                    { partitionNameMapPartType: partitionNameMap[partType] },
+                    { partitionNameMapPartType: partitionNameMap[partType] }
                   )}
                 </span>
                 <span>
                   {formatMessage({
                     id: 'src.page.Workspace.components.TablePage.Partitions.89FFF404',
-                    defaultMessage: '分区键:',
+                    defaultMessage: '分区键:'
                   })}
 
                   {(partitions as ITableListPartition)?.expression ||
@@ -423,27 +444,37 @@ const TablePartitions: React.FC<IProps> = function ({}) {
 
             {subpartitionsRows?.length > 0 ? (
               <>
-                <div style={{ lineHeight: '40px', height: 40, padding: '0px 12px' }}>
+                <div
+                  style={{
+                    lineHeight: '40px',
+                    height: 40,
+                    padding: '0px 12px'
+                  }}
+                >
                   <Space size={'large'} align="center">
                     <Typography.Text strong>
                       {formatMessage({
                         id: 'src.page.Workspace.components.TablePage.Partitions.59AC9434',
-                        defaultMessage: '二级分区',
+                        defaultMessage: '二级分区'
                       })}
                     </Typography.Text>
                     <span>
                       {formatMessage(
                         {
                           id: 'src.page.Workspace.components.TablePage.Partitions.7DB0502E',
-                          defaultMessage: '分区类型: {partitionNameMapSubpartitionType}',
+                          defaultMessage:
+                            '分区类型: {partitionNameMapSubpartitionType}'
                         },
-                        { partitionNameMapSubpartitionType: partitionNameMap[subpartitionType] },
+                        {
+                          partitionNameMapSubpartitionType:
+                            partitionNameMap[subpartitionType]
+                        }
                       )}
                     </span>
                     <span>
                       {formatMessage({
                         id: 'src.page.Workspace.components.TablePage.Partitions.79A4B409',
-                        defaultMessage: '分区键:',
+                        defaultMessage: '分区键:'
                       })}
 
                       {(subpartitions as ITableListPartition)?.expression ||
@@ -455,16 +486,16 @@ const TablePartitions: React.FC<IProps> = function ({}) {
                     <span>
                       {formatMessage({
                         id: 'src.page.Workspace.components.TablePage.Partitions.B3C734DB',
-                        defaultMessage: '二级分区模板化:',
+                        defaultMessage: '二级分区模板化:'
                       })}
                       {subpartitions?.subpartitionTemplated
                         ? formatMessage({
                             id: 'src.page.Workspace.components.TablePage.Partitions.67A2BC68',
-                            defaultMessage: '是',
+                            defaultMessage: '是'
                           })
                         : formatMessage({
                             id: 'src.page.Workspace.components.TablePage.Partitions.31C167AC',
-                            defaultMessage: '否',
+                            defaultMessage: '否'
                           })}
                     </span>
                   </Space>

@@ -21,21 +21,30 @@ import { formatMessage } from './intl';
 export const sourceAuthMap = {
   [actionTypes.writeAndReadConnect]: {
     hasSourceAuth: hasSourceWriteAuth,
-    title: formatMessage({ id: 'odc.page.Manage.ReadWrite', defaultMessage: '读写' }), //读写
-    value: actionTypes.writeAndReadConnect,
+    title: formatMessage({
+      id: 'odc.page.Manage.ReadWrite',
+      defaultMessage: '读写'
+    }), //读写
+    value: actionTypes.writeAndReadConnect
   },
 
   [actionTypes.readonlyconnect]: {
     hasSourceAuth: hasSourceReadAuth,
-    title: formatMessage({ id: 'odc.page.Manage.ReadOnly', defaultMessage: '只读' }), //只读
-    value: actionTypes.readonlyconnect,
+    title: formatMessage({
+      id: 'odc.page.Manage.ReadOnly',
+      defaultMessage: '只读'
+    }), //只读
+    value: actionTypes.readonlyconnect
   },
 
   [actionTypes.apply]: {
     hasSourceAuth: hasSourceApplyAuth,
-    title: formatMessage({ id: 'odc.page.Manage.CanApply', defaultMessage: '可申请' }), //可申请
-    value: actionTypes.apply,
-  },
+    title: formatMessage({
+      id: 'odc.page.Manage.CanApply',
+      defaultMessage: '可申请'
+    }), //可申请
+    value: actionTypes.apply
+  }
 };
 export function getSourceAuthLabelString(auths: string[] = []) {
   const label = getSourceAuthLabels(auths)?.join(', ');
@@ -59,7 +68,7 @@ export function getSourceAuthOptions() {
   return Object.values(sourceAuthMap).map(({ title, value }) => {
     return {
       title,
-      value,
+      value
     };
   });
 }

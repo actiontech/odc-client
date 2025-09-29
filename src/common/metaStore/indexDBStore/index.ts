@@ -44,7 +44,9 @@ export default class IndexDBStore implements IMetaStore {
       request.onupgradeneeded = (event) => {
         const db = request.result;
         if (!db.objectStoreNames.contains(IndexDBStore.ODC_TABLE_KEY)) {
-          db.createObjectStore(IndexDBStore.ODC_TABLE_KEY, { keyPath: IndexDBStore.uniqKey });
+          db.createObjectStore(IndexDBStore.ODC_TABLE_KEY, {
+            keyPath: IndexDBStore.uniqKey
+          });
         }
       };
     });
@@ -61,7 +63,7 @@ export default class IndexDBStore implements IMetaStore {
         .objectStore(IndexDBStore.ODC_TABLE_KEY)
         .put({
           [IndexDBStore.uniqKey]: key,
-          data: JSON.stringify(item),
+          data: JSON.stringify(item)
         });
       request.onerror = function (error) {
         logger.error('setItem failed ', error);
@@ -140,7 +142,7 @@ export default class IndexDBStore implements IMetaStore {
         resolve(
           request.result?.map((res) => {
             return [res[IndexDBStore.uniqKey], JSON.parse(res.data)];
-          }),
+          })
         );
       };
     });

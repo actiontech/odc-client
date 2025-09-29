@@ -23,7 +23,7 @@ import { IReactionDisposer, reaction } from 'mobx';
 function getOrganizationKey() {
   const userId = login?.user?.id;
   const organizationId = login?.organizationId;
-  const tabKey = /sqlworkspace\/(.+)/.exec(history.location.pathname)?.[1] || '';
+  const tabKey = /\/(.+)/.exec(history.location.pathname)?.[1] || '';
   const key = tabKey
     ? `tmp-${tabKey}-${userId}-organization-${organizationId}`
     : `${userId}-organization-${organizationId}`;
@@ -39,16 +39,16 @@ let isSaving = false;
 let saveRequestCount = 0;
 
 const saveToDB = throttle(async function () {
-  console.log('save to db');
+  // console.log('save to db');
 
   if (isSaving) {
     saveRequestCount++;
-    console.warn('db is saving');
+    // console.warn('db is saving');
     return;
   }
   isSaving = true;
   try {
-    for (let [key, value] of modifyCache.entries()) {
+    for (const [key, value] of modifyCache.entries()) {
       /**
        * 这里需要提前删除，假如异步删除，会导致updateDB执行之后，还未save的情况下，cache就被删了。
        */
@@ -56,18 +56,18 @@ const saveToDB = throttle(async function () {
       const oldData = (await getMetaStoreInstance().getItem(key)) || {};
       await getMetaStoreInstance().setItem(key, {
         ...oldData,
-        ...value,
+        ...value
       });
-      console.log('over', key);
+      // console.log('over', key);
     }
   } catch (e) {
     console.error(e);
   } finally {
     isSaving = false;
-    console.log('save done');
+    // console.log('save done');
   }
   if (saveRequestCount > 0) {
-    console.log('continue save');
+    // console.log('continue save');
     saveRequestCount = 0;
     saveToDB();
   }
@@ -80,7 +80,7 @@ async function updateDB(key, value, propertyDBKey) {
   }
   cacheValue = {
     ...cacheValue,
-    [propertyDBKey]: value,
+    [propertyDBKey]: value
   };
   // logger.debug(JSON.stringify(cacheValue, null, 4), key);
   modifyCache.set(key, cacheValue);
@@ -91,7 +91,7 @@ export async function autoSave(
   obj: any,
   property: string,
   propertyDBKey: string,
-  defaultValue: any,
+  defaultValue: any
 ): Promise<() => void> {
   let timer;
   let mobxDisposer: IReactionDisposer;
@@ -122,7 +122,9 @@ export async function autoSave(
       obj[property] = data;
       return;
     }
-    const dbValue = (await (await getMetaStoreInstance()).getItem(key))?.[propertyDBKey];
+    const dbValue = (await (await getMetaStoreInstance()).getItem(key))?.[
+      propertyDBKey
+    ];
     if (isNil(dbValue)) {
       data = defaultValue;
     } else {
@@ -138,7 +140,7 @@ export async function autoSave(
       () => obj[property],
       () => {
         updateDB(key, obj[property], propertyDBKey);
-      },
+      }
     );
     return;
   }

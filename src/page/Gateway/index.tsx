@@ -31,9 +31,15 @@ import { formatMessage } from '@/util/intl';
 import { useMatch } from '@umijs/max';
 import { Base64 } from 'js-base64';
 import { inject, observer } from 'mobx-react';
-import { action as customConnectAction, ICustomConnectAction } from './customConnect';
+import {
+  action as customConnectAction,
+  ICustomConnectAction
+} from './customConnect';
 import styles from './index.less';
-import { action as newCloudConnectionAction, INewCloudConnection } from './newCloudConnection';
+import {
+  action as newCloudConnectionAction,
+  INewCloudConnection
+} from './newCloudConnection';
 import { apply as ssoLoginAction, ISSOLogin } from './ssoLogin';
 import { action as taskAction, ITaskAction } from './task';
 import { action as tutorialAction, ITutorialAction } from './tutorial';
@@ -62,9 +68,9 @@ interface GatewayProps {
   settingStore?: SettingStore;
 }
 const Gateway: React.FC<GatewayProps> = (props: GatewayProps) => {
-  const [status, setStatus] = useState<'errorParams' | 'errorAction' | 'loading' | string>(
-    'loading',
-  );
+  const [status, setStatus] = useState<
+    'errorParams' | 'errorAction' | 'loading' | string
+  >('loading');
   const params = useMatch({ path: '/gateway/*' });
 
   const doActionWithParams = async () => {
@@ -86,7 +92,10 @@ const Gateway: React.FC<GatewayProps> = (props: GatewayProps) => {
 
     runAction(paramsConfig);
   };
-  const startAction = async (data: IRemoteStartData | string, encrypt: boolean) => {
+  const startAction = async (
+    data: IRemoteStartData | string,
+    encrypt: boolean
+  ) => {
     let jsonData: IRemoteStartData;
     if (encrypt && typeof data === 'string') {
       try {
@@ -102,7 +111,7 @@ const Gateway: React.FC<GatewayProps> = (props: GatewayProps) => {
       searchParamsObj.append('accountVerifyToken', jsonData.accountVerifyToken);
       history.replace({
         pathname: '/login',
-        search: searchParamsObj.toString(),
+        search: searchParamsObj.toString()
       });
       return;
     }
@@ -167,12 +176,12 @@ const Gateway: React.FC<GatewayProps> = (props: GatewayProps) => {
         return (
           <Spin
             style={{
-              marginTop: 30,
+              marginTop: 30
             }}
             size="large"
             tip={formatMessage({
               id: 'odc.page.Gateway.Jumping',
-              defaultMessage: '跳转中...',
+              defaultMessage: '跳转中...'
             })}
           />
         );
@@ -183,13 +192,13 @@ const Gateway: React.FC<GatewayProps> = (props: GatewayProps) => {
           <div
             style={{
               marginTop: 30,
-              textAlign: 'center',
+              textAlign: 'center'
             }}
           >
             <Tag color="red">
               {formatMessage({
                 id: 'odc.page.Gateway.SorryTheActionDoesNot',
-                defaultMessage: '抱歉，系统中不存在该 Action',
+                defaultMessage: '抱歉，系统中不存在该 Action'
               })}
             </Tag>
           </div>
@@ -201,13 +210,13 @@ const Gateway: React.FC<GatewayProps> = (props: GatewayProps) => {
           <div
             style={{
               marginTop: 30,
-              textAlign: 'center',
+              textAlign: 'center'
             }}
           >
             <Tag color="magenta">
               {formatMessage({
                 id: 'odc.page.Gateway.ConfirmTheFormatOfThe',
-                defaultMessage: '请确认传入的参数格式',
+                defaultMessage: '请确认传入的参数格式'
               })}
             </Tag>
           </div>
@@ -221,7 +230,7 @@ const Gateway: React.FC<GatewayProps> = (props: GatewayProps) => {
           <div
             style={{
               marginTop: 30,
-              textAlign: 'center',
+              textAlign: 'center'
             }}
           >
             <Tag color="magenta">{status}</Tag>
@@ -245,4 +254,8 @@ const Gateway: React.FC<GatewayProps> = (props: GatewayProps) => {
   );
 };
 
-export default inject('pageStore', 'userStore', 'settingStore')(observer(Gateway));
+export default inject(
+  'pageStore',
+  'userStore',
+  'settingStore'
+)(observer(Gateway));

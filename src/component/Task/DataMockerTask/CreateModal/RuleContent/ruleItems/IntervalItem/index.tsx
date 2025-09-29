@@ -25,7 +25,7 @@ const { Option } = Select;
 
 export enum IntervalRuleType {
   NORMAL = 'NORMAL',
-  SKIP = 'SKIP',
+  SKIP = 'SKIP'
 }
 
 interface IIntervalItemProps {
@@ -41,69 +41,73 @@ interface IIntervalItemProps {
   ref: React.Ref<FormInstance>;
 }
 
-const IntervalItem: React.FC<IIntervalItemProps> = forwardRef<FormInstance, IIntervalItemProps>(
-  (props, ref) => {
-    const { readonly, ruleType, value } = props;
+const IntervalItem: React.FC<IIntervalItemProps> = forwardRef<
+  FormInstance,
+  IIntervalItemProps
+>((props, ref) => {
+  const { readonly, ruleType, value } = props;
 
-    const [form] = Form.useForm();
+  const [form] = Form.useForm();
 
-    useImperativeHandle(ref, () => {
-      return form;
-    });
+  useImperativeHandle(ref, () => {
+    return form;
+  });
 
-    let items;
-    if (readonly) {
-      switch (ruleType) {
-        case IntervalRuleType.NORMAL: {
-          items = getTextItem([
-            [
-              formatMessage({ id: 'odc.ruleItems.IntervalItem.Value', defaultMessage: '值' }), // 值
-              value?.genParams?.fixText,
-            ],
-          ]);
-          break;
-        }
-        case IntervalRuleType.SKIP: {
-          items = '';
-          break;
-        }
+  let items;
+  if (readonly) {
+    switch (ruleType) {
+      case IntervalRuleType.NORMAL: {
+        items = getTextItem([
+          [
+            formatMessage({
+              id: 'odc.ruleItems.IntervalItem.Value',
+              defaultMessage: '值'
+            }), // 值
+            value?.genParams?.fixText
+          ]
+        ]);
+        break;
       }
-    } else {
-      switch (ruleType) {
-        case IntervalRuleType.NORMAL: {
-          items = (
-            <Form.Item
-              rules={getRequiredRules()}
-              style={{ width: '100%' }}
-              name={['genParams', 'fixText']}
-            >
-              <Input
-                addonBefore={formatMessage({
-                  id: 'odc.ruleItems.IntervalItem.Value',
-                  defaultMessage: '值',
-                })} /* 值 */
-              />
-            </Form.Item>
-          );
-
-          break;
-        }
-        case IntervalRuleType.SKIP: {
-          items = '';
-          break;
-        }
+      case IntervalRuleType.SKIP: {
+        items = '';
+        break;
       }
     }
+  } else {
+    switch (ruleType) {
+      case IntervalRuleType.NORMAL: {
+        items = (
+          <Form.Item
+            rules={getRequiredRules()}
+            style={{ width: '100%' }}
+            name={['genParams', 'fixText']}
+          >
+            <Input
+              addonBefore={formatMessage({
+                id: 'odc.ruleItems.IntervalItem.Value',
+                defaultMessage: '值'
+              })} /* 值 */
+            />
+          </Form.Item>
+        );
 
-    return readonly ? (
-      items
-    ) : (
-      <Form layout="inline" component="div" initialValues={value} form={form}>
-        {items}
-      </Form>
-    );
-  },
-);
+        break;
+      }
+      case IntervalRuleType.SKIP: {
+        items = '';
+        break;
+      }
+    }
+  }
+
+  return readonly ? (
+    items
+  ) : (
+    <Form layout="inline" component="div" initialValues={value} form={form}>
+      {items}
+    </Form>
+  );
+});
 
 export default IntervalItem;
 

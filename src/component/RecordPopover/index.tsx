@@ -15,7 +15,10 @@
  */
 
 import { getAuditList } from '@/common/network/manager';
-import type { ITableInstance, ITableLoadOptions } from '@/component/CommonTable/interface';
+import type {
+  ITableInstance,
+  ITableLoadOptions
+} from '@/component/CommonTable/interface';
 import { AuditEventMetaMap } from '@/constant/record';
 import { formatMessage } from '@/util/intl';
 import { getPreTime } from '@/util/utils';
@@ -23,7 +26,13 @@ import { SyncOutlined } from '@ant-design/icons';
 import { Drawer, Space } from 'antd';
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
-import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState
+} from 'react';
 import { RecordTable } from './components';
 
 export interface RecordRef {
@@ -38,7 +47,9 @@ const RecordPopover = forwardRef<any, any>((props, ref) => {
     return JSON.parse(localStorage?.getItem('audit:executeTime')) ?? 7;
   });
   const [executeDate, setExecuteDate] = useState<[Dayjs, Dayjs]>(() => {
-    const [start, end] = JSON.parse(localStorage?.getItem('audit:executeDate')) ?? [, dayjs()];
+    const [start, end] = JSON.parse(
+      localStorage?.getItem('audit:executeDate')
+    ) ?? [, dayjs()];
     return [start ? dayjs(start) : undefined, end ? dayjs(end) : dayjs()];
   });
 
@@ -56,10 +67,10 @@ const RecordPopover = forwardRef<any, any>((props, ref) => {
       return {
         handleOpenDrawer() {
           setVisible(true);
-        },
+        }
       };
     },
-    [],
+    []
   );
 
   const loadData = async (args: ITableLoadOptions) => {
@@ -74,7 +85,7 @@ const RecordPopover = forwardRef<any, any>((props, ref) => {
       connectionName,
       clientIpAddress,
       result,
-      username,
+      username
     } = filters ?? {};
     const { column, order } = sorter ?? {};
     const { current = 1 } = pagination ?? {};
@@ -91,7 +102,7 @@ const RecordPopover = forwardRef<any, any>((props, ref) => {
       endTime: executeDate?.[1]?.valueOf() ?? getPreTime(0),
       sort: column?.dataIndex,
       page: current,
-      size: pageSize,
+      size: pageSize
     };
 
     if (_executeTime !== 'custom' && typeof _executeTime === 'number') {
@@ -99,7 +110,9 @@ const RecordPopover = forwardRef<any, any>((props, ref) => {
       data.endTime = getPreTime(0);
     }
     // sorter
-    data.sort = column ? `${column.dataIndex},${order === 'ascend' ? 'asc' : 'desc'}` : undefined;
+    data.sort = column
+      ? `${column.dataIndex},${order === 'ascend' ? 'asc' : 'desc'}`
+      : undefined;
     const res = await getAuditList(data);
     setRecords(res);
     setExecuteTime(_executeTime);
@@ -135,11 +148,14 @@ const RecordPopover = forwardRef<any, any>((props, ref) => {
             {
               formatMessage({
                 id: 'odc.component.RecordPopover.OperationRecords',
-                defaultMessage: '操作记录',
+                defaultMessage: '操作记录'
               }) /*操作记录*/
             }
           </span>
-          <SyncOutlined onClick={handleReload} style={{ color: 'var(--text-color-hint)' }} />
+          <SyncOutlined
+            onClick={handleReload}
+            style={{ color: 'var(--text-color-hint)' }}
+          />
         </Space>
       }
       open={visible}

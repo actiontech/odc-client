@@ -18,7 +18,7 @@ export default ({ height = 160 }: IProps) => {
           image={Empty.PRESENTED_IMAGE_SIMPLE}
           description={formatMessage({
             id: 'src.component.Empty.DatasourceSelectEmpty.AD7EB9CC',
-            defaultMessage: '暂无数据源，请联系管理员',
+            defaultMessage: '暂无数据源，请联系管理员'
           })}
         />
       }
@@ -31,21 +31,24 @@ export default ({ height = 160 }: IProps) => {
           image={Empty.PRESENTED_IMAGE_SIMPLE}
           description={formatMessage({
             id: 'src.component.Empty.DatasourceSelectEmpty.41EBD586',
-            defaultMessage: '暂无数据源',
+            defaultMessage: '暂无数据源'
           })}
         />
 
         <Divider />
 
-        <div className={styles.setting}>
+        {/* <div className={styles.setting}>
           <SettingOutlined color="#1890ff" />
-          <span className={styles.action} onClick={() => window.open('#/datasource')}>
+          <span
+            className={styles.action}
+            onClick={() => window.open('#/datasource')}
+          >
             {formatMessage({
               id: 'src.component.Empty.DatasourceSelectEmpty.6DC59C18',
-              defaultMessage: '管理数据源',
+              defaultMessage: '管理数据源'
             })}
           </span>
-        </div>
+        </div> */}
       </div>
     </Acess>
   );

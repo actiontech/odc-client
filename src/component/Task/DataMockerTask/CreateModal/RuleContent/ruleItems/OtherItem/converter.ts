@@ -22,7 +22,7 @@ import { OtherRuleType } from './index';
 
 export const ruleTypeToGenerator = {
   [OtherRuleType.NULL]: MockGenerator.NULL_GENERATOR,
-  [OtherRuleType.SKIP]: MockGenerator.SKIP_GENERATOR,
+  [OtherRuleType.SKIP]: MockGenerator.SKIP_GENERATOR
 };
 
 const g2r = {};
@@ -35,7 +35,9 @@ function generatorToRuleType(column: IServerMockColumn): OtherRuleType {
   return g2r[generator];
 }
 
-export function convertFormDataToServerData(formData: IMockFormColumn): IServerMockColumn {
+export function convertFormDataToServerData(
+  formData: IMockFormColumn
+): IServerMockColumn {
   let generator = ruleTypeToGenerator[formData.rule];
   formData = cloneDeep(formData);
   let genParams = formData?.typeConfig?.genParams;
@@ -44,12 +46,14 @@ export function convertFormDataToServerData(formData: IMockFormColumn): IServerM
     typeConfig: {
       columnType: convertColumnType(formData.columnType),
       genParams,
-      generator,
-    },
+      generator
+    }
   };
 }
 
-export function convertServerDataToFormData(formData: IServerMockColumn): IMockFormColumn {
+export function convertServerDataToFormData(
+  formData: IServerMockColumn
+): IMockFormColumn {
   let rule = generatorToRuleType(formData);
   formData = cloneDeep(formData);
   let genParams = formData?.typeConfig?.genParams;
@@ -59,7 +63,7 @@ export function convertServerDataToFormData(formData: IServerMockColumn): IMockF
     columnType: formData.typeConfig.columnType,
     rule,
     typeConfig: {
-      genParams,
-    },
+      genParams
+    }
   };
 }

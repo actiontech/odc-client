@@ -18,13 +18,13 @@ export function DataSourceEmpty({ extra }) {
             <div>
               {formatMessage({
                 id: 'src.component.Empty.DataSourceEmpty.54644C36',
-                defaultMessage: '请联系管理员添加数据源；',
+                defaultMessage: '请联系管理员添加数据源；'
               })}
             </div>
             <div>
               {formatMessage({
                 id: 'src.component.Empty.DataSourceEmpty.809DB9AA',
-                defaultMessage: '也可尝试切换至个人空间，自由管理个人数据源',
+                defaultMessage: '也可尝试切换至个人空间，自由管理个人数据源'
               })}
             </div>
           </div>
@@ -35,13 +35,14 @@ export function DataSourceEmpty({ extra }) {
           <div>
             {formatMessage({
               id: 'src.component.Empty.DataSourceEmpty.46EEDFA4',
-              defaultMessage: '支持管理 OceanBase 、 MySQL 等数据源；',
+              defaultMessage: '支持管理 OceanBase 、 MySQL 等数据源；'
             })}
           </div>
           <div>
             {formatMessage({
               id: 'src.component.Empty.DataSourceEmpty.811D4040',
-              defaultMessage: '可将数据源下的数据库添加到对应的项目内，供团队协同开发使用',
+              defaultMessage:
+                '可将数据源下的数据库添加到对应的项目内，供团队协同开发使用'
             })}
           </div>
         </div>
@@ -55,7 +56,7 @@ export function DataSourceEmpty({ extra }) {
         <div className={styles.title}>
           {formatMessage({
             id: 'src.component.Empty.DataSourceEmpty.4FF7D961',
-            defaultMessage: '暂无数据源',
+            defaultMessage: '暂无数据源'
           })}
         </div>
       }
@@ -69,10 +70,16 @@ export function DataSourceEmpty({ extra }) {
       extra={[
         <Acess
           fallback={<></>}
-          {...createPermission(IManagerResourceType.project, actionTypes.create)}
+          {...createPermission(
+            IManagerResourceType.project,
+            actionTypes.create
+          )}
         >
-          <TitleButton onReload={() => paramContext.reloadTable()} key="titleButton" />
-        </Acess>,
+          <TitleButton
+            onReload={() => paramContext.reloadTable()}
+            key="titleButton"
+          />
+        </Acess>
       ]}
     />
   );

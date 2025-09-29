@@ -31,7 +31,7 @@ const Search = ({ userStore, modalStore }: Iprops) => {
     back,
     status,
     setSearchKey,
-    loadDatabaseObject,
+    loadDatabaseObject
   } = globalSearchContext;
   useEffect(() => {
     if (modalStore.databaseSearchModalVisible && inputRef.current) {
@@ -44,7 +44,9 @@ const Search = ({ userStore, modalStore }: Iprops) => {
     const divider = (
       <>
         <span className={styles.selectDivider}></span>
-        <span style={{ color: 'var(--icon-color-disable)', paddingRight: 4 }}>/</span>
+        <span style={{ color: 'var(--icon-color-disable)', paddingRight: 4 }}>
+          /
+        </span>
       </>
     );
 
@@ -54,7 +56,7 @@ const Search = ({ userStore, modalStore }: Iprops) => {
           marginRight: '6px',
           position: 'relative',
           top: '2px',
-          color: 'var(--icon-color-normal)',
+          color: 'var(--icon-color-normal)'
         }}
       />
     );
@@ -81,7 +83,11 @@ const Search = ({ userStore, modalStore }: Iprops) => {
         <>
           <span className={styles.selectedDatabase}>
             <StatusIcon item={dataSource} />
-            <Tooltip title={dataSource?.name} placement="top" overlayStyle={{ maxWidth: 280 }}>
+            <Tooltip
+              title={dataSource?.name}
+              placement="top"
+              overlayStyle={{ maxWidth: 280 }}
+            >
               <span className={styles.selectTitle}>{dataSource?.name}</span>
             </Tooltip>
           </span>
@@ -98,7 +104,11 @@ const Search = ({ userStore, modalStore }: Iprops) => {
               style={{ color: 'var(--icon-blue-color)', fontSize: 16 }}
             />
 
-            <Tooltip title={project?.name} placement="top" overlayStyle={{ maxWidth: 280 }}>
+            <Tooltip
+              title={project?.name}
+              placement="top"
+              overlayStyle={{ maxWidth: 280 }}
+            >
               <span className={styles.selectTitle}>{project?.name}</span>
             </Tooltip>
           </span>
@@ -123,7 +133,7 @@ const Search = ({ userStore, modalStore }: Iprops) => {
         SearchStatus.dataSourceforObject,
         SearchStatus.projectforObject,
         SearchStatus.dataSourceWithDatabaseforObject,
-        SearchStatus.projectWithDatabaseforObject,
+        SearchStatus.projectWithDatabaseforObject
       ].includes(status)
     ) {
       loadDatabaseObject?.(e.target.value);
@@ -138,12 +148,13 @@ const Search = ({ userStore, modalStore }: Iprops) => {
         if (userStore?.isPrivateSpace()) {
           text = formatMessage({
             id: 'src.page.Workspace.SideBar.ResourceTree.DatabaseSearchModal.components.57B0EBE9',
-            defaultMessage: '支持搜索数据源、数据库，也可继续搜索表、列、视图等',
+            defaultMessage: '支持搜索数据源、数据库，也可继续搜索表、列、视图等'
           });
         } else {
           text = formatMessage({
             id: 'src.page.Workspace.SideBar.ResourceTree.DatabaseSearchModal.components.7F586D70',
-            defaultMessage: '支持搜索项目、数据源、数据库，也可继续搜索表、列、视图等',
+            defaultMessage:
+              '支持搜索项目、数据源、数据库，也可继续搜索表、列、视图等'
           });
         }
         break;
@@ -152,12 +163,12 @@ const Search = ({ userStore, modalStore }: Iprops) => {
         if (database) {
           text = formatMessage({
             id: 'src.page.Workspace.SideBar.ResourceTree.DatabaseSearchModal.components.DB1BDB57',
-            defaultMessage: '搜索表、列、视图等',
+            defaultMessage: '搜索表、列、视图等'
           });
         } else {
           text = formatMessage({
             id: 'src.page.Workspace.SideBar.ResourceTree.DatabaseSearchModal.components.0260FE41',
-            defaultMessage: '搜索数据库、表、列、视图等',
+            defaultMessage: '搜索数据库、表、列、视图等'
           });
         }
         break;
@@ -180,7 +191,7 @@ const Search = ({ userStore, modalStore }: Iprops) => {
 
   const getIcon = () => {
     const props = {
-      style: { color: 'var(--icon-color-normal-2)' },
+      style: { color: 'var(--icon-color-normal-2)' }
     };
     if (objectloading) {
       return <LoadingOutlined {...props} />;

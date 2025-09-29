@@ -57,7 +57,7 @@ export interface IODCSetting<T = any> {
 const odcSetting: IODCSetting[] = []
   .concat(databaseSettings)
   .concat(editorSettings)
-  .concat(perferenceSettings)
+  // .concat(perferenceSettings)
   .concat(performanceSettings)
   .concat(accountSettings);
 

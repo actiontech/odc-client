@@ -27,33 +27,44 @@ import styles from './index.less';
 interface IProps {
   debug: Debug;
   removeBreakPoints: (
-    points: { line: number; plName: string; plType: PLType; packageName: string }[],
+    points: {
+      line: number;
+      plName: string;
+      plType: PLType;
+      packageName: string;
+    }[]
   ) => Promise<boolean>;
-  gotoBreakPoint: (lineNum: number, plName: string, plType: PLType, packageName: string) => void;
+  gotoBreakPoint: (
+    lineNum: number,
+    plName: string,
+    plType: PLType,
+    packageName: string
+  ) => void;
 }
 
 const Breakpoints: React.FC<IProps> = (props) => {
   const { debug, removeBreakPoints, gotoBreakPoint } = props;
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  const breakpoints: Array<IDebugBreakpoint & { pl: IDebugStackItem }> = debug?.plInfo
-    .map((pl) => {
-      return pl.breakpoints?.map((p) => {
-        return {
-          ...p,
-          pl,
-        };
-      });
-    })
-    ?.reduce((prev, current) => {
-      return current.concat(prev);
-    }, []);
+  const breakpoints: Array<IDebugBreakpoint & { pl: IDebugStackItem }> =
+    debug?.plInfo
+      .map((pl) => {
+        return pl.breakpoints?.map((p) => {
+          return {
+            ...p,
+            pl
+          };
+        });
+      })
+      ?.reduce((prev, current) => {
+        return current.concat(prev);
+      }, []);
   const isDebugEnd = debug?.isDebugEnd();
   let executeRecordColumns = [
     {
       dataIndex: 'plName',
       title: formatMessage({
         id: 'odc.components.PLDebugResultSet.PlObjectName',
-        defaultMessage: 'PL 对象名',
+        defaultMessage: 'PL 对象名'
       }),
       render(t, _) {
         return (
@@ -61,16 +72,16 @@ const Breakpoints: React.FC<IProps> = (props) => {
             {[_.pl.packageName, _.pl.plName].filter(Boolean).join('.')}
           </span>
         );
-      },
+      }
     },
 
     {
       dataIndex: 'line',
       title: formatMessage({
         id: 'odc.components.PLDebugResultSet.LineNumber',
-        defaultMessage: '行号',
+        defaultMessage: '行号'
       }),
-      width: 80,
+      width: 80
     },
 
     !isDebugEnd
@@ -78,7 +89,7 @@ const Breakpoints: React.FC<IProps> = (props) => {
           dataIndex: 'action',
           title: formatMessage({
             id: 'odc.components.PLDebugResultSet.Operation',
-            defaultMessage: '操作',
+            defaultMessage: '操作'
           }),
           width: 100,
           render: (_, point) => {
@@ -95,17 +106,19 @@ const Breakpoints: React.FC<IProps> = (props) => {
                           line: point.line,
                           plName: point.pl.plName,
                           plType: point.pl.plType,
-                          packageName: point.pl.packageName,
-                        },
+                          packageName: point.pl.packageName
+                        }
                       ])
                     ) {
-                      setSelectedRowKeys(selectedRowKeys.filter((key) => key !== point.num));
+                      setSelectedRowKeys(
+                        selectedRowKeys.filter((key) => key !== point.num)
+                      );
                     }
                   }}
                 >
                   {formatMessage({
                     id: 'odc.components.PLDebugResultSet.Cancel',
-                    defaultMessage: '取消',
+                    defaultMessage: '取消'
                   })}
                 </a>
                 <Divider type="vertical" />
@@ -115,20 +128,20 @@ const Breakpoints: React.FC<IProps> = (props) => {
                       point.line,
                       point.pl.plName,
                       point.pl.plType,
-                      point.pl.packageName,
+                      point.pl.packageName
                     );
                   }}
                 >
                   {formatMessage({
                     id: 'odc.components.PLDebugResultSet.See',
-                    defaultMessage: '查看',
+                    defaultMessage: '查看'
                   })}
                 </a>
               </span>
             );
-          },
+          }
         }
-      : null,
+      : null
   ].filter(Boolean);
 
   if (!breakpoints?.length) {
@@ -141,11 +154,14 @@ const Breakpoints: React.FC<IProps> = (props) => {
         <div className={styles.breakpointHead}>
           {formatMessage({
             id: 'odc.components.PLDebugResultSet.Selected',
-            defaultMessage: '已选',
+            defaultMessage: '已选'
           })}
           &nbsp;&nbsp;
           {selectedRowKeys?.length}&nbsp;&nbsp;
-          {formatMessage({ id: 'odc.components.PLDebugResultSet.Item', defaultMessage: '项' })}{' '}
+          {formatMessage({
+            id: 'odc.components.PLDebugResultSet.Item',
+            defaultMessage: '项'
+          })}{' '}
           <Button
             type="primary"
             onClick={async () => {
@@ -158,11 +174,11 @@ const Breakpoints: React.FC<IProps> = (props) => {
                           line: point.line,
                           plName: point.pl.plName,
                           plType: point.pl.plType,
-                          packageName: point.pl.packageName,
+                          packageName: point.pl.packageName
                         };
                       }
                     })
-                    .filter(Boolean),
+                    .filter(Boolean)
                 )
               ) {
                 setSelectedRowKeys([]);
@@ -171,7 +187,7 @@ const Breakpoints: React.FC<IProps> = (props) => {
           >
             {formatMessage({
               id: 'odc.components.PLDebugResultSet.BatchCancel',
-              defaultMessage: '批量取消',
+              defaultMessage: '批量取消'
             })}
           </Button>
         </div>
@@ -187,7 +203,7 @@ const Breakpoints: React.FC<IProps> = (props) => {
                 selectedRowKeys: selectedRowKeys,
                 onChange: (selectedRowKeys, selectedRows) => {
                   setSelectedRowKeys(selectedRowKeys);
-                },
+                }
               }
             : null
         }

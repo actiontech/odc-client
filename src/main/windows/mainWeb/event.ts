@@ -20,20 +20,23 @@ import log from '../../utils/log';
 
 export function downloadEvent(mainWindow: BrowserWindow) {
   // 拦截 electron 默认的下载事件
-  mainWindow!.webContents.session.on('will-download', async (event, item, webContents) => {
-    if (!mainWindow) {
+  mainWindow!.webContents.session.on(
+    'will-download',
+    async (event, item, webContents) => {
+      if (!mainWindow) {
+        return;
+      }
+      log.info(webContents.id, mainWindow.webContents.id);
+      if (webContents.id !== mainWindow.webContents.id) {
+        return;
+      }
+      const itemUrl = item.getURL();
+      log.info(
+        `download event(${item.eventNames()}): fileName:${item.getFilename()} itemUrl:${itemUrl}`
+      );
       return;
     }
-    log.info(webContents.id, mainWindow.webContents.id);
-    if (webContents.id !== mainWindow.webContents.id) {
-      return;
-    }
-    const itemUrl = item.getURL();
-    log.info(
-      `download event(${item.eventNames()}): fileName:${item.getFilename()} itemUrl:${itemUrl}`,
-    );
-    return;
-  });
+  );
 }
 
 export function newWindowEvent(mainWindow: BrowserWindow) {
@@ -42,7 +45,7 @@ export function newWindowEvent(mainWindow: BrowserWindow) {
     newWindow = new BrowserWindow({
       ...mainWebWindowConfig,
       width: mainWebWindowConfig.width,
-      height: mainWebWindowConfig.height,
+      height: mainWebWindowConfig.height
     });
     newWindowEvent(newWindow);
     downloadEvent(newWindow);
@@ -55,11 +58,13 @@ export function newWindowEvent(mainWindow: BrowserWindow) {
       newWindow!.webContents.openDevTools();
     }
     return {
-      action: 'deny',
+      action: 'deny'
     };
   });
   mainWindow.addListener('unresponsive', (e) => {
-    log.error(`webcontent unresponsive, url: ${mainWindow.webContents.getURL()}`);
+    log.error(
+      `webcontent unresponsive, url: ${mainWindow.webContents.getURL()}`
+    );
     log.error(e);
   });
   mainWindow.on('close', (e) => {
@@ -74,7 +79,7 @@ export function newWindowEvent(mainWindow: BrowserWindow) {
         type: 'question',
         buttons: ['关闭', '取消'],
         title: '关闭 ODC',
-        message: '确定关闭 ODC，您的SQL 窗口内容将会保留',
+        message: '确定关闭 ODC，您的SQL 窗口内容将会保留'
       });
 
       // 根据用户的选择进行处理

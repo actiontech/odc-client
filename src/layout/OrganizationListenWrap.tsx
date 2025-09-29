@@ -23,7 +23,10 @@ import { PageLoadingContext } from './PageLoadingWrapper';
 interface IProps {
   userStore?: UserStore;
 }
-const OrganizationListenWrap: React.FC<IProps> = function ({ children, userStore }) {
+const OrganizationListenWrap: React.FC<IProps> = function ({
+  children,
+  userStore
+}) {
   const organizationId = userStore?.organizationId;
   const isSwitching = userStore?.isSwitchingOrganization;
   const location = useLocation();
@@ -34,9 +37,9 @@ const OrganizationListenWrap: React.FC<IProps> = function ({ children, userStore
       loadingContext?.setTask({
         tip: formatMessage({
           id: 'odc.src.layout.SwitchSpace',
-          defaultMessage: '正在切换空间',
+          defaultMessage: '正在切换空间'
         }), //'正在切换空间'
-        showError: false,
+        showError: false
       });
     } else {
       loadingContext?.removeTask();
@@ -48,7 +51,7 @@ const OrganizationListenWrap: React.FC<IProps> = function ({ children, userStore
       /**
        * 私人空间禁止
        */
-      navigate('/sqlworkspace');
+      navigate('/');
     }
   }, [location.pathname, organizationId, userStore.organizations]);
   return isSwitching ? (

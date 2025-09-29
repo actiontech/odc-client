@@ -38,7 +38,9 @@ const StructDataFormItem: React.FC<IProps> = function (props) {
         const importContent = getFieldValue('importContent');
         const isSQLFile = getFieldValue('fileType') === IMPORT_TYPE.SQL;
         const isCsvFile = getFieldValue('fileType') === IMPORT_TYPE.CSV;
-        const replaceSchemaWhenExists = getFieldValue('replaceSchemaWhenExists');
+        const replaceSchemaWhenExists = getFieldValue(
+          'replaceSchemaWhenExists'
+        );
         if (isSQLFile) {
           return null;
         }
@@ -48,7 +50,7 @@ const StructDataFormItem: React.FC<IProps> = function (props) {
               <FormItemPanel
                 label={formatMessage({
                   id: 'odc.ImportDrawer.ImportForm.ImportDataSettings',
-                  defaultMessage: '导入数据设置',
+                  defaultMessage: '导入数据设置'
                 })}
                 keepExpand
                 overview={
@@ -60,14 +62,16 @@ const StructDataFormItem: React.FC<IProps> = function (props) {
                     >
                       <Checkbox
                         style={{
-                          color: replaceSchemaWhenExists ? 'rgba(0, 0, 0, 0.45)' : 'unset',
+                          color: replaceSchemaWhenExists
+                            ? 'rgba(0, 0, 0, 0.45)'
+                            : 'unset'
                         }}
                         disabled={replaceSchemaWhenExists}
                       >
                         <HelpDoc leftText isTip doc="truncateTableBeforeImport">
                           {formatMessage({
                             id: 'odc.ImportDrawer.ImportForm.ClearDataBeforeImport',
-                            defaultMessage: '导入前清空数据',
+                            defaultMessage: '导入前清空数据'
                           })}
                         </HelpDoc>
                       </Checkbox>
@@ -83,7 +87,7 @@ const StructDataFormItem: React.FC<IProps> = function (props) {
                           <HelpDoc leftText isTip doc="batchCommitNum">
                             {formatMessage({
                               id: 'odc.ImportDrawer.ImportForm.BatchSubmissionQuantity',
-                              defaultMessage: '批量提交数量',
+                              defaultMessage: '批量提交数量'
                             })}
                           </HelpDoc>
                         }
@@ -93,13 +97,17 @@ const StructDataFormItem: React.FC<IProps> = function (props) {
                             required: true,
                             message: formatMessage({
                               id: 'odc.ImportDrawer.ImportForm.EnterTheNumberOfBatch',
-                              defaultMessage: '请填写批量提交数量',
-                            }),
-                          },
+                              defaultMessage: '请填写批量提交数量'
+                            })
+                          }
                         ]}
                         style={{ marginBottom: 8, width: '100%' }}
                       >
-                        <InputNumber style={{ width: '100%' }} max={500} min={0} />
+                        <InputNumber
+                          style={{ width: '100%' }}
+                          max={500}
+                          min={0}
+                        />
                       </FormItem>
                     </Row>
                   </Col>
@@ -107,22 +115,28 @@ const StructDataFormItem: React.FC<IProps> = function (props) {
                     <FormItem noStyle shouldUpdate>
                       {({ getFieldValue }) => {
                         const showSkipDataTypes =
-                          getFieldValue('dataTransferFormat') === FILE_DATA_TYPE.CSV ||
+                          getFieldValue('dataTransferFormat') ===
+                            FILE_DATA_TYPE.CSV ||
                           getFieldValue('fileType') === IMPORT_TYPE.CSV;
                         return (
                           showSkipDataTypes && (
                             <FormItem
                               name="skippedDataType"
                               label={
-                                <span style={{ color: 'var(--text-color-primary)' }}>
+                                <span
+                                  style={{ color: 'var(--text-color-primary)' }}
+                                >
                                   {formatMessage({
                                     id: 'odc.ImportDrawer.ImportForm.DataTypeSkipped',
-                                    defaultMessage: '不导入的数据类型',
+                                    defaultMessage: '不导入的数据类型'
                                   })}
                                 </span>
                               }
                             >
-                              <DataTypeSelect isOracle={isOracle} dataTypes={dataTypes} />
+                              <DataTypeSelect
+                                isOracle={isOracle}
+                                dataTypes={dataTypes}
+                              />
                             </FormItem>
                           )
                         );
@@ -140,7 +154,7 @@ const StructDataFormItem: React.FC<IProps> = function (props) {
                     {
                       formatMessage({
                         id: 'odc.ImportForm.formitem.StructDataFormItem.ImportStructureSettingsWhenThe',
-                        defaultMessage: '导入结构设置：结构已存在时',
+                        defaultMessage: '导入结构设置：结构已存在时'
                       }) /* 导入结构设置：结构已存在时 */
                     }
                   </HelpDoc>
@@ -152,20 +166,20 @@ const StructDataFormItem: React.FC<IProps> = function (props) {
                   <Radio value={false}>
                     {formatMessage({
                       id: 'odc.ImportDrawer.ImportForm.Skip',
-                      defaultMessage: '跳过',
+                      defaultMessage: '跳过'
                     })}
                   </Radio>
                   <Radio
                     value
                     disabled={
                       setting?.getSpaceConfigByKey(
-                        'odc.task.default.importTaskStructureReplacementEnabled',
+                        'odc.task.default.importTaskStructureReplacementEnabled'
                       ) === 'false'
                     }
                   >
                     {formatMessage({
                       id: 'odc.ImportDrawer.ImportForm.Replacement',
-                      defaultMessage: '替换',
+                      defaultMessage: '替换'
                     })}
                   </Radio>
                 </Radio.Group>

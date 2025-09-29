@@ -23,20 +23,27 @@ import { getDataSourceStyleByConnectType } from '@/common/datasource';
 
 export default function TreeTitle({
   project,
-  datasource,
+  datasource
 }: {
   project?: IProject;
   datasource?: IDatasource;
 }) {
   const icon = getDataSourceStyleByConnectType(datasource?.type);
   return (
-    <div title={datasource?.name} style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+    <div
+      title={datasource?.name}
+      style={{ display: 'flex', alignItems: 'center', width: '100%' }}
+    >
       {!!datasource && (
         <>
           <div style={{ flexShrink: 0, flexGrow: 0 }}>
             <Icon
               component={icon?.icon?.component}
-              style={{ fontSize: '16px', verticalAlign: 'text-bottom', color: icon?.icon?.color }}
+              style={{
+                fontSize: '16px',
+                verticalAlign: 'text-bottom',
+                color: icon?.icon?.color
+              }}
             />
           </div>
           <div
@@ -45,7 +52,7 @@ export default function TreeTitle({
               overflow: 'hidden',
               textOverflow: 'ellipsis',
               whiteSpace: 'nowrap',
-              marginLeft: 4,
+              marginLeft: 4
             }}
           >
             {datasource?.name}
@@ -61,7 +68,12 @@ export default function TreeTitle({
             />
           </div>
           <div
-            style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+            style={{
+              flex: 1,
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap'
+            }}
           >
             {project?.name}
           </div>

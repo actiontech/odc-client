@@ -20,7 +20,11 @@ import DisplayTable from '@/component/DisplayTable';
 import RoleList, { useRoleListByIds } from '@/component/Manage/RoleList';
 import type { IManagerRole } from '@/d.ts';
 import { formatMessage } from '@/util/intl';
-import { getSourceAuthLabelString, getSourceAuthOptions, sourceAuthMap } from '@/util/manage';
+import {
+  getSourceAuthLabelString,
+  getSourceAuthOptions,
+  sourceAuthMap
+} from '@/util/manage';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { Space, Tooltip } from 'antd';
 import React, { useEffect, useState } from 'react';
@@ -29,7 +33,7 @@ import styles from './index.less';
 const getDefaultColumns = (roles: IManagerRole[]) => {
   const authFilters = getSourceAuthOptions().map(({ title: text, value }) => ({
     text,
-    value,
+    value
   }));
 
   return [
@@ -37,7 +41,7 @@ const getDefaultColumns = (roles: IManagerRole[]) => {
       dataIndex: 'name',
       title: formatMessage({
         id: 'odc.components.CommonUserResource.Name',
-        defaultMessage: '姓名',
+        defaultMessage: '姓名'
       }), // 姓名
       ellipsis: true,
       width: 120,
@@ -53,9 +57,9 @@ const getDefaultColumns = (roles: IManagerRole[]) => {
                   formatMessage(
                     {
                       id: 'odc.components.CommonUserResource.NameName',
-                      defaultMessage: '姓名：{name}',
+                      defaultMessage: '姓名：{name}'
                     },
-                    { name },
+                    { name }
                   ) /* 姓名：{name} */
                 }
               </span>
@@ -64,9 +68,9 @@ const getDefaultColumns = (roles: IManagerRole[]) => {
                   formatMessage(
                     {
                       id: 'odc.components.CommonUserResource.AccountRecordaccountname',
-                      defaultMessage: '账号：{recordAccountName}',
+                      defaultMessage: '账号：{recordAccountName}'
                     },
-                    { recordAccountName: record.accountName },
+                    { recordAccountName: record.accountName }
                   ) /* 账号：{recordAccountName} */
                 }
               </span>
@@ -74,38 +78,43 @@ const getDefaultColumns = (roles: IManagerRole[]) => {
           }
         >
           <span>{name}</span>
-          <InfoCircleOutlined style={{ margin: '0px 4px', color: 'var(--text-color-secondary)' }} />
+          <InfoCircleOutlined
+            style={{ margin: '0px 4px', color: 'var(--text-color-secondary)' }}
+          />
         </Tooltip>
-      ),
+      )
     },
 
     {
       dataIndex: 'roleIds',
       title: formatMessage({
         id: 'odc.components.CommonUserResource.Role',
-        defaultMessage: '角色',
+        defaultMessage: '角色'
       }), // 角色
       ellipsis: true,
       filters: roles.map(({ name, id }) => {
         return {
           text: name,
-          value: id,
+          value: id
         };
       }),
       onFilter: (value, record) => {
-        return record?.roleIds?.includes(value) || (!value && !record.roleIds?.length);
+        return (
+          record?.roleIds?.includes(value) ||
+          (!value && !record.roleIds?.length)
+        );
       },
       render: (roleIds) => {
         const _roles = useRoleListByIds(roles, roleIds);
         return <RoleList roles={_roles} isShowIcon />;
-      },
+      }
     },
 
     {
       dataIndex: 'authorizedActions',
       title: formatMessage({
         id: 'odc.components.CommonUserResource.Permissions',
-        defaultMessage: '权限',
+        defaultMessage: '权限'
       }),
       // 权限
       width: 108,
@@ -114,8 +123,8 @@ const getDefaultColumns = (roles: IManagerRole[]) => {
       onFilter: (value, record) => {
         return sourceAuthMap[value].hasSourceAuth(record?.authorizedActions);
       },
-      render: (authorizedActions) => getSourceAuthLabelString(authorizedActions),
-    },
+      render: (authorizedActions) => getSourceAuthLabelString(authorizedActions)
+    }
   ];
 };
 
@@ -131,18 +140,23 @@ export const CommonUserResource: React.FC<{
   const [allRoleIds, setAllRoleIds] = useState([]);
   const allRoles = useRoleListByIds(roles, allRoleIds);
   allRoles.unshift({ name: <EmptyLabel />, id: 0 } as any);
-  const columns = getColumns ? getColumns(allRoles) : getDefaultColumns(allRoles);
+  const columns = getColumns
+    ? getColumns(allRoles)
+    : getDefaultColumns(allRoles);
 
   useEffect(() => {
     (async () => {
       const data = await getUserList({
         authorizedResource,
-        roleId: roleIds,
+        roleId: roleIds
       });
 
       setUserInfo(data?.contents);
       if (data?.contents?.length) {
-        const allIds = data.contents.reduce((ids, item) => ids.concat(item.roleIds), []);
+        const allIds = data.contents.reduce(
+          (ids, item) => ids.concat(item.roleIds),
+          []
+        );
         setAllRoleIds(Array.from(new Set([...allIds])));
       }
     })();

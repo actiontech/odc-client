@@ -5,41 +5,41 @@ import {
   ILogicalTable,
   IPreviewSql,
   ISchemaChangeRecord,
-  ITopology,
+  ITopology
 } from '@/d.ts/logicalDatabase';
 import request from '@/util/request';
 
 export async function extractLogicalTables(logicalDatabaseId: number) {
   const res = await request.post(
-    `/api/v2/connect/logicaldatabase/logicalDatabases/${logicalDatabaseId}/logicalTables/extract`,
+    `/api/v2/connect/logicaldatabase/logicalDatabases/${logicalDatabaseId}/logicalTables/extract`
   );
   return res?.data;
 }
 
 export async function logicalDatabaseDetail(
-  logicalDatabaseId?: number,
+  logicalDatabaseId?: number
 ): Promise<IResponse<ILogicalDatabase>> {
   const res = await request.get(
-    `/api/v2/connect/logicaldatabase/logicalDatabases/${logicalDatabaseId}`,
+    `/api/v2/connect/logicaldatabase/logicalDatabases/${logicalDatabaseId}`
   );
   return res;
 }
 
 export async function deleteLogicalTable(
   logicalDatabaseId: number,
-  logicalTableId: number,
+  logicalTableId: number
 ): Promise<IResponseData<boolean>> {
   const res = await request.delete(
-    `/api/v2/connect/logicaldatabase/logicalDatabases/${logicalDatabaseId}/logicalTables/${logicalTableId}`,
+    `/api/v2/connect/logicaldatabase/logicalDatabases/${logicalDatabaseId}/logicalTables/${logicalTableId}`
   );
   return res?.data;
 }
 
 export async function deleteLogicalDatabse(
-  logicalDatabaseId: number,
+  logicalDatabaseId: number
 ): Promise<IResponseData<boolean>> {
   const res = await request.delete(
-    `/api/v2/connect/logicaldatabase/logicalDatabases/${logicalDatabaseId}`,
+    `/api/v2/connect/logicaldatabase/logicalDatabases/${logicalDatabaseId}`
   );
   return res?.data;
 }
@@ -50,55 +50,58 @@ export async function createLogicalDatabase(data: {
   alias: string;
   physicalDatabaseIds: number[];
 }): Promise<ILogicalDatabase> {
-  const res = await request.post('/api/v2/connect/logicaldatabase/logicalDatabases', {
-    data,
-  });
+  const res = await request.post(
+    '/api/v2/connect/logicaldatabase/logicalDatabases',
+    {
+      data
+    }
+  );
   return res?.data;
 }
 
 export async function checkLogicalTable(
   logicalDatabaseId: number,
-  logicalTableId: number,
+  logicalTableId: number
 ): Promise<IResponseData<boolean>> {
   const res = await request.post(
-    `/api/v2/connect/logicaldatabase/logicalDatabases/${logicalDatabaseId}/logicalTables/${logicalTableId}/checkStructureConsistency`,
+    `/api/v2/connect/logicaldatabase/logicalDatabases/${logicalDatabaseId}/logicalTables/${logicalTableId}/checkStructureConsistency`
   );
   return res?.data;
 }
 
 export async function getLogicalTable(
   logicalDatabaseId: number,
-  logicalTableId: number,
+  logicalTableId: number
 ): Promise<ITopology[]> {
   const res = await request.get(
-    `/api/v2/connect/logicaldatabase/logicalDatabases/${logicalDatabaseId}/logicalTables/${logicalTableId}/topologies`,
+    `/api/v2/connect/logicaldatabase/logicalDatabases/${logicalDatabaseId}/logicalTables/${logicalTableId}/topologies`
   );
   return res?.data?.contents;
 }
 
 export async function getLogicalTableDetail(
   logicalDatabaseId: number,
-  logicalTableId: number,
+  logicalTableId: number
 ): Promise<ILogicalTable> {
   const res = await request.get(
-    `/api/v2/connect/logicaldatabase/logicalDatabases/${logicalDatabaseId}/logicalTables/${logicalTableId}`,
+    `/api/v2/connect/logicaldatabase/logicalDatabases/${logicalDatabaseId}/logicalTables/${logicalTableId}`
   );
   return res?.data;
 }
 
 export async function previewLogicalTableTopologies(
   logicalDatabaseId: number,
-  expression: string,
+  expression: string
 ): Promise<ITopology[] | string> {
   const res = await request.post(
     `/api/v2/connect/logicaldatabase/logicalDatabases/${logicalDatabaseId}/previewLogicalTableTopologies?expression=${encodeURIComponent(
-      expression,
+      expression
     )}`,
     {
       params: {
-        ignoreError: true,
-      },
-    },
+        ignoreError: true
+      }
+    }
   );
   if (res.errCode) {
     return res?.errMsg;
@@ -109,13 +112,13 @@ export async function previewLogicalTableTopologies(
 /* 预览 SQL */
 export async function previewSqls(
   logicalDatabaseId: number,
-  data: { sql: string; delimiter: string },
+  data: { sql: string; delimiter: string }
 ): Promise<IPreviewSql[]> {
   const res = await request.post(
     `/api/v2/connect/logicaldatabase/logicaldatabases/${logicalDatabaseId}/previewSqls`,
     {
-      data,
-    },
+      data
+    }
   );
   return res?.data?.contents;
 }
@@ -124,10 +127,10 @@ export async function previewSqls(
 /* schedule->task(仅有一个task)->physicalDatabases(逻辑库特殊的资源) */
 export async function getPhysicalExecuteDetails(
   scheduleTaskId: number,
-  physicalDatabaseId: number,
+  physicalDatabaseId: number
 ): Promise<ISchemaChangeRecord> {
   const res = await request.get(
-    `/api/v2/logicaldatabase/scheduleTasks/${scheduleTaskId}/physicalDatabases/${physicalDatabaseId}`,
+    `/api/v2/logicaldatabase/scheduleTasks/${scheduleTaskId}/physicalDatabases/${physicalDatabaseId}`
   );
   return res?.data;
 }
@@ -135,10 +138,10 @@ export async function getPhysicalExecuteDetails(
 /* 终止某个物理库 SQL 执行 */
 export async function stopPhysicalSqlExecute(
   scheduleTaskId: number,
-  physicalDatabaseId: number,
+  physicalDatabaseId: number
 ): Promise<boolean> {
   const res = await request.post(
-    `/api/v2/logicaldatabase/scheduleTasks/${scheduleTaskId}/physicalDatabases/${physicalDatabaseId}/terminateCurrentStatement`,
+    `/api/v2/logicaldatabase/scheduleTasks/${scheduleTaskId}/physicalDatabases/${physicalDatabaseId}/terminateCurrentStatement`
   );
   return res?.data;
 }
@@ -146,10 +149,10 @@ export async function stopPhysicalSqlExecute(
 /* 跳过某个物理库 SQL 执行 */
 export async function skipPhysicalSqlExecute(
   scheduleTaskId: number,
-  physicalDatabaseId: number,
+  physicalDatabaseId: number
 ): Promise<boolean> {
   const res = await request.post(
-    `/api/v2/logicaldatabase/scheduleTasks/${scheduleTaskId}/physicalDatabases/${physicalDatabaseId}/skipCurrentStatement`,
+    `/api/v2/logicaldatabase/scheduleTasks/${scheduleTaskId}/physicalDatabases/${physicalDatabaseId}/skipCurrentStatement`
   );
   return res?.data;
 }

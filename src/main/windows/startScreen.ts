@@ -26,20 +26,25 @@ export default function () {
     windowOpts: {
       ...mainWebWindowConfig,
       webPreferences: {
-        ...mainWebWindowConfig.webPreferences,
+        ...mainWebWindowConfig.webPreferences
         // partition: sessionKey
-      },
+      }
     },
     templateUrl:
       process.env.NODE_ENV === 'development'
         ? path.join(process.cwd(), 'libraries/splash-screen/index.html')
-        : path.join(process.resourcesPath || '', 'libraries', 'splash-screen', 'index.html'),
+        : path.join(
+            process.resourcesPath || '',
+            'libraries',
+            'splash-screen',
+            'index.html'
+          ),
     splashScreenOpts: {
       width: 600,
       height: 300,
       backgroundColor: 'white',
-      resizable: false,
-    },
+      resizable: false
+    }
   };
   return Splashscreen.initSplashScreen(config);
 }

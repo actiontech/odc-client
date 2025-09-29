@@ -33,23 +33,23 @@ const getResourceColumns = () => {
       dataIndex: 'project',
       title: formatMessage({
         id: 'odc.src.page.Auth.Autoauth.component.DetailContent.Project',
-        defaultMessage: '项目',
+        defaultMessage: '项目'
       }), //'项目'
       ellipsis: true,
-      width: 160,
+      width: 160
     },
     {
       dataIndex: 'roles',
       title: formatMessage({
         id: 'odc.src.page.Auth.Autoauth.component.DetailContent.Role',
-        defaultMessage: '角色',
+        defaultMessage: '角色'
       }), //'角色'
       ellipsis: true,
       width: 108,
       render: (roles) => {
         return roles?.join(', ');
-      },
-    },
+      }
+    }
   ];
 };
 const DetailContent: React.FC<{
@@ -64,7 +64,7 @@ const DetailContent: React.FC<{
     enabled,
     eventName,
     conditions,
-    description,
+    description
   } = data;
   const { roles: _roles, projectRoles, projects } = useContext(ResourceContext);
   const roleIds = actions
@@ -75,11 +75,13 @@ const DetailContent: React.FC<{
     ?.filter((item) => item.action === 'BindProjectRole')
     ?.map((item) => ({
       project: getProjectName(projects, item.arguments.projectId),
-      roles: getProjectRoleNameByIds(projectRoles, item.arguments.roles),
+      roles: getProjectRoleNameByIds(projectRoles, item.arguments.roles)
     }));
   const actionsLabel = [];
   const hasRole = actions?.some((item) => item.action === 'BindRole');
-  const hasProjectRole = actions?.some((item) => item.action === 'BindProjectRole');
+  const hasProjectRole = actions?.some(
+    (item) => item.action === 'BindProjectRole'
+  );
   if (hasRole) {
     actionsLabel.push(actionLabelMap.BindRole);
   }
@@ -94,7 +96,7 @@ const DetailContent: React.FC<{
             {
               formatMessage({
                 id: 'odc.components.AutoAuthPage.component.RuleName',
-                defaultMessage: '规则名称:',
+                defaultMessage: '规则名称:'
               }) /*规则名称:*/
             }
           </span>
@@ -106,7 +108,7 @@ const DetailContent: React.FC<{
         <Descriptions.Item
           label={formatMessage({
             id: 'odc.components.AutoAuthPage.component.TriggerEvent',
-            defaultMessage: '触发事件',
+            defaultMessage: '触发事件'
           })} /*触发事件*/
         >
           {eventName}
@@ -114,22 +116,24 @@ const DetailContent: React.FC<{
         <Descriptions.Item
           label={formatMessage({
             id: 'odc.components.AutoAuthPage.component.MatchingCondition',
-            defaultMessage: '匹配条件',
+            defaultMessage: '匹配条件'
           })} /*匹配条件*/
         >
           <Space direction="vertical" size={4}>
             {conditions?.map(({ object, expression, operation, value }) => {
               const operationLabel = operationOptions?.find(
-                (item) => item.value === operation,
+                (item) => item.value === operation
               )?.label;
-              return <div>{`${object}, ${expression}, ${operationLabel}, ${value}`}</div>;
+              return (
+                <div>{`${object}, ${expression}, ${operationLabel}, ${value}`}</div>
+              );
             }) || '-'}
           </Space>
         </Descriptions.Item>
         <Descriptions.Item
           label={formatMessage({
             id: 'odc.components.AutoAuthPage.component.PerformAnAction',
-            defaultMessage: '执行动作',
+            defaultMessage: '执行动作'
           })} /*执行动作*/
         >
           {actionsLabel?.join(', ') || '-'}
@@ -137,7 +141,7 @@ const DetailContent: React.FC<{
         <Descriptions.Item
           label={formatMessage({
             id: 'odc.components.AutoAuthPage.component.Role',
-            defaultMessage: '角色',
+            defaultMessage: '角色'
           })} /*角色*/
         >
           {roles?.map((item) => item?.name)?.join(', ') || '-'}
@@ -148,13 +152,13 @@ const DetailContent: React.FC<{
           <Descriptions.Item
             span={2}
             style={{
-              paddingTop: '12px',
+              paddingTop: '12px'
             }}
           >
             {
               formatMessage({
                 id: 'odc.src.page.Auth.Autoauth.component.DetailContent.AwardedProjectRole',
-                defaultMessage: '授予项目角色',
+                defaultMessage: '授予项目角色'
               }) /* 
           授予项目角色
           */
@@ -175,11 +179,11 @@ const DetailContent: React.FC<{
       <Descriptions column={1}>
         <Descriptions.Item
           style={{
-            paddingTop: '12px',
+            paddingTop: '12px'
           }}
           label={formatMessage({
             id: 'odc.components.AutoAuthPage.component.Remarks',
-            defaultMessage: '备注',
+            defaultMessage: '备注'
           })} /*备注*/
         >
           {description || '-'}
@@ -187,7 +191,7 @@ const DetailContent: React.FC<{
       </Descriptions>
       <Divider
         style={{
-          margin: '12px 0',
+          margin: '12px 0'
         }}
       />
 
@@ -195,7 +199,7 @@ const DetailContent: React.FC<{
         <Descriptions.Item
           label={formatMessage({
             id: 'odc.components.AutoAuthPage.component.Founder',
-            defaultMessage: '创建人',
+            defaultMessage: '创建人'
           })} /*创建人*/
         >
           {creatorName}
@@ -203,7 +207,7 @@ const DetailContent: React.FC<{
         <Descriptions.Item
           label={formatMessage({
             id: 'odc.components.AutoAuthPage.component.CreationTime',
-            defaultMessage: '创建时间',
+            defaultMessage: '创建时间'
           })} /*创建时间*/
         >
           {getFormatDateTime(createTime)}
@@ -211,7 +215,7 @@ const DetailContent: React.FC<{
         <Descriptions.Item
           label={formatMessage({
             id: 'odc.components.AutoAuthPage.component.UpdateTime',
-            defaultMessage: '更新时间',
+            defaultMessage: '更新时间'
           })} /*更新时间*/
         >
           {getFormatDateTime(updateTime)}

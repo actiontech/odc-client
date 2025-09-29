@@ -6,17 +6,17 @@ export const shardingStrategyOptions = [
   {
     label: formatMessage({
       id: 'src.component.Task.component.ShardingStrategyItem.E5A6B481',
-      defaultMessage: '全表扫描',
+      defaultMessage: '全表扫描'
     }),
-    value: ShardingStrategy.FIXED_LENGTH,
+    value: ShardingStrategy.FIXED_LENGTH
   },
   {
     label: formatMessage({
       id: 'src.component.Task.component.ShardingStrategyItem.F91EEC6C',
-      defaultMessage: '条件匹配',
+      defaultMessage: '条件匹配'
     }),
-    value: ShardingStrategy.MATCH,
-  },
+    value: ShardingStrategy.MATCH
+  }
 ];
 
 const ShardingStrategyItem = () => {
@@ -24,7 +24,7 @@ const ShardingStrategyItem = () => {
     <Form.Item
       label={formatMessage({
         id: 'src.component.Task.component.ShardingStrategyItem.3BD95C1A',
-        defaultMessage: '搜索策略',
+        defaultMessage: '搜索策略'
       })}
       name="shardingStrategy"
       rules={[
@@ -32,9 +32,9 @@ const ShardingStrategyItem = () => {
           required: true,
           message: formatMessage({
             id: 'src.component.Task.component.ShardingStrategyItem.D5F45B7A',
-            defaultMessage: '请选择搜索策略',
-          }),
-        },
+            defaultMessage: '请选择搜索策略'
+          })
+        }
       ]}
     >
       <Radio.Group options={shardingStrategyOptions} />

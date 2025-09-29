@@ -19,7 +19,7 @@ import {
   getPurgeAllSQL,
   getRecycleConfig,
   getUpdateSQL,
-  updateRecycleConfig,
+  updateRecycleConfig
 } from '@/common/network/recycle';
 import WorkSpacePageLoading from '@/component/Loading/WorkSpacePageLoading';
 import MiniTable from '@/component/Table/MiniTable';
@@ -28,7 +28,11 @@ import { IRecycleConfig, IRecycleObject } from '@/d.ts';
 import SessionStore from '@/store/sessionManager/session';
 import { formatMessage } from '@/util/intl';
 import { sortString } from '@/util/utils';
-import { ExclamationCircleFilled, SettingOutlined, SyncOutlined } from '@ant-design/icons';
+import {
+  ExclamationCircleFilled,
+  SettingOutlined,
+  SyncOutlined
+} from '@ant-design/icons';
 import type { DataGridRef } from '@oceanbase-odc/ob-react-data-grid';
 import { Button, Drawer, Input, message, Modal, Space, Spin } from 'antd';
 import { ColumnsType } from 'antd/es/table';
@@ -75,7 +79,7 @@ class RecycleBin extends Component<
     selectAll: false,
     showDeleteDrawer: false,
     showRestoreDrawer: false,
-    recycleConfig: null,
+    recycleConfig: null
   };
 
   private session: SessionStore;
@@ -95,11 +99,20 @@ class RecycleBin extends Component<
     this.getRecycleConfig();
   }
 
-  componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<Record<string, any>>) {
-    const { selectedObjectNames, showRestoreDrawer, showDeleteDrawer } = this.state;
+  componentDidUpdate(
+    prevProps: Readonly<IProps>,
+    prevState: Readonly<Record<string, any>>
+  ) {
+    const { selectedObjectNames, showRestoreDrawer, showDeleteDrawer } =
+      this.state;
     const selectedObjects =
-      this.session?.recycleObjects?.filter((r) => selectedObjectNames.has(r.uniqueId)) ?? [];
-    if (showRestoreDrawer && prevState.showRestoreDrawer !== showRestoreDrawer) {
+      this.session?.recycleObjects?.filter((r) =>
+        selectedObjectNames.has(r.uniqueId)
+      ) ?? [];
+    if (
+      showRestoreDrawer &&
+      prevState.showRestoreDrawer !== showRestoreDrawer
+    ) {
       this.restoreGridRef.current?.setRows?.(selectedObjects);
     }
     if (showDeleteDrawer && prevState.showDeleteDrawer !== showDeleteDrawer) {
@@ -110,7 +123,7 @@ class RecycleBin extends Component<
   public getRecycleConfig = async () => {
     const setting = await getRecycleConfig(this.session?.sessionId);
     this.setState({
-      recycleConfig: setting,
+      recycleConfig: setting
     });
   };
   public async getRecycleObjectList() {
@@ -122,13 +135,13 @@ class RecycleBin extends Component<
   public onSuccess = async () => {
     await this.session.getRecycleObjectList();
     this.setState({
-      selectedObjectNames: new Set<string>(), // 清除掉当前选择的对象
+      selectedObjectNames: new Set<string>() // 清除掉当前选择的对象
     });
     message.success(
       formatMessage({
         id: 'workspace.window.recyclebin.success',
-        defaultMessage: '操作数据库对象成功',
-      }),
+        defaultMessage: '操作数据库对象成功'
+      })
     );
   };
 
@@ -140,26 +153,29 @@ class RecycleBin extends Component<
       icon: <ExclamationCircleFilled />,
       title: formatMessage({
         id: 'workspace.window.recyclebin.modal.purgeAll.title',
-        defaultMessage: '是否确定清空回收站？',
+        defaultMessage: '是否确定清空回收站？'
       }),
 
       content: formatMessage({
         id: 'workspace.window.recyclebin.modal.purgeAll.content',
-        defaultMessage: '清空后数据库对象将无法恢复！',
+        defaultMessage: '清空后数据库对象将无法恢复！'
       }),
 
       okText: formatMessage({
         id: 'workspace.window.recyclebin.button.purgeAll',
-        defaultMessage: '清空',
+        defaultMessage: '清空'
       }),
 
-      cancelText: formatMessage({ id: 'app.button.cancel', defaultMessage: '取消' }),
+      cancelText: formatMessage({
+        id: 'app.button.cancel',
+        defaultMessage: '取消'
+      }),
       okButtonProps: {
         danger: true,
-        ghost: true,
+        ghost: true
       },
 
-      onOk: this.handleSubmitPurgeAll,
+      onOk: this.handleSubmitPurgeAll
     });
   };
 
@@ -167,7 +183,10 @@ class RecycleBin extends Component<
    * 清空全部
    */
   public handleSubmitPurgeAll = async () => {
-    const isSuccess = await getPurgeAllSQL(this.session.sessionId, this.session?.database?.dbName);
+    const isSuccess = await getPurgeAllSQL(
+      this.session.sessionId,
+      this.session?.database?.dbName
+    );
     if (isSuccess) {
       await this.onSuccess();
     }
@@ -177,18 +196,18 @@ class RecycleBin extends Component<
     const { selectedObjectNames } = this.state;
 
     const selectedObjects = this.session.recycleObjects.filter((r) =>
-      selectedObjectNames.has(r.uniqueId),
+      selectedObjectNames.has(r.uniqueId)
     );
 
     const isSuccess = await getDeleteSQL(
       selectedObjects,
       this.session.sessionId,
-      this.session?.database?.dbName,
+      this.session?.database?.dbName
     );
     if (isSuccess) {
       await this.onSuccess();
       this.setState({
-        showDeleteDrawer: false,
+        showDeleteDrawer: false
       });
     }
   };
@@ -197,18 +216,18 @@ class RecycleBin extends Component<
     const { selectedObjectNames } = this.state;
 
     const selectedObjects = this.session.recycleObjects.filter((r) =>
-      selectedObjectNames.has(r.uniqueId),
+      selectedObjectNames.has(r.uniqueId)
     );
 
     const isSuccess = await getUpdateSQL(
       selectedObjects,
       this.session.sessionId,
-      this.session?.database?.dbName,
+      this.session?.database?.dbName
     );
     if (isSuccess) {
       await this.onSuccess();
       this.setState({
-        showRestoreDrawer: false,
+        showRestoreDrawer: false
       });
     }
   };
@@ -233,7 +252,7 @@ class RecycleBin extends Component<
   public handleRefresh = () => {
     this.getRecycleObjectList();
     this.setState({
-      selectedObjectNames: new Set<string>(),
+      selectedObjectNames: new Set<string>()
     });
   };
 
@@ -248,7 +267,7 @@ class RecycleBin extends Component<
       selectedObjectNames.add(id);
     });
     this.setState({
-      selectedObjectNames,
+      selectedObjectNames
     });
   };
 
@@ -260,12 +279,15 @@ class RecycleBin extends Component<
       }
     });
     this.setState({
-      selectedObjectNames,
+      selectedObjectNames
     });
   };
 
   private changeSetting = async (config: Partial<IRecycleConfig>) => {
-    const isSuccess = await updateRecycleConfig(config, this.session?.sessionId);
+    const isSuccess = await updateRecycleConfig(
+      config,
+      this.session?.sessionId
+    );
     if (isSuccess) {
       this.getRecycleConfig();
     }
@@ -279,7 +301,7 @@ class RecycleBin extends Component<
       searchKey,
       listLoading,
       selectedObjectNames,
-      recycleConfig,
+      recycleConfig
     } = this.state;
 
     const { simpleHeader, theme } = this.props;
@@ -289,36 +311,37 @@ class RecycleBin extends Component<
         dataIndex: 'id',
         title: formatMessage({
           id: 'workspace.window.recyclebin.column.originName',
-          defaultMessage: '原名称',
+          defaultMessage: '原名称'
         }),
 
-        sorter: (a: IRecycleObject, b: IRecycleObject) => sortString(a.id, b.id),
-        sortDirections: ['descend', 'ascend'],
+        sorter: (a: IRecycleObject, b: IRecycleObject) =>
+          sortString(a.id, b.id),
+        sortDirections: ['descend', 'ascend']
       },
 
       {
         dataIndex: 'objName',
         title: formatMessage({
           id: 'workspace.window.recyclebin.column.objName',
-          defaultMessage: '对象名称',
-        }),
+          defaultMessage: '对象名称'
+        })
       },
 
       {
         dataIndex: 'objType',
         title: formatMessage({
           id: 'workspace.window.recyclebin.column.objType',
-          defaultMessage: '对象类型',
-        }),
+          defaultMessage: '对象类型'
+        })
       },
 
       {
         dataIndex: 'createTime',
         title: formatMessage({
           id: 'workspace.window.recyclebin.column.createTime',
-          defaultMessage: '进入回收站时间',
-        }),
-      },
+          defaultMessage: '进入回收站时间'
+        })
+      }
     ];
 
     const columnsInDeleteDrawer = [
@@ -326,12 +349,12 @@ class RecycleBin extends Component<
         key: 'id',
         name: formatMessage({
           id: 'workspace.window.recyclebin.column.originName',
-          defaultMessage: '原名称',
+          defaultMessage: '原名称'
         }),
 
         editable: false,
-        sortable: false,
-      },
+        sortable: false
+      }
     ];
 
     const columnsInRestoreDrawer = [
@@ -339,50 +362,60 @@ class RecycleBin extends Component<
         key: 'id',
         name: formatMessage({
           id: 'workspace.window.recyclebin.column.originName',
-          defaultMessage: '原名称',
+          defaultMessage: '原名称'
         }),
 
         editable: false,
-        sortable: false,
+        sortable: false
       },
 
       {
         key: 'objType',
         name: formatMessage({
           id: 'workspace.window.recyclebin.column.objType',
-          defaultMessage: '对象类型',
+          defaultMessage: '对象类型'
         }),
 
         editable: false,
-        sortable: false,
+        sortable: false
       },
 
       {
         key: 'newName',
         name: formatMessage({
           id: 'workspace.window.recyclebin.column.newName',
-          defaultMessage: '重命名（可选）',
+          defaultMessage: '重命名（可选）'
         }),
 
         editor: TextEditor,
         editable: true,
-        sortable: false,
-      },
+        sortable: false
+      }
     ];
 
     // 查找原名称和对象名称，忽略大小写
     const filteredRows = this.session?.recycleObjects.filter(
       (p) =>
         (p.id && p.id.toLowerCase().indexOf(searchKey.toLowerCase()) > -1) ||
-        (p.objName && p.objName.toLowerCase().indexOf(searchKey.toLowerCase()) > -1),
+        (p.objName &&
+          p.objName.toLowerCase().indexOf(searchKey.toLowerCase()) > -1)
     );
 
     return (
       <>
         <Spin wrapperClassName={styles.wrap} spinning={listLoading}>
-          <div className={classNames(styles.toolbar, { [styles.simpleHeader]: simpleHeader })}>
-            <Toolbar style={{ borderBottom: 'none', height: simpleHeader ? 32 : 38 }}>
-              <div style={{ paddingLeft: simpleHeader ? '0px' : '12px' }} className="tools-left">
+          <div
+            className={classNames(styles.toolbar, {
+              [styles.simpleHeader]: simpleHeader
+            })}
+          >
+            <Toolbar
+              style={{ borderBottom: 'none', height: simpleHeader ? 32 : 38 }}
+            >
+              <div
+                style={{ paddingLeft: simpleHeader ? '0px' : '12px' }}
+                className="tools-left"
+              >
                 <Space size={12}>
                   <ToolbarButton
                     type="BUTTON"
@@ -390,7 +423,7 @@ class RecycleBin extends Component<
                     text={
                       formatMessage({
                         id: 'odc.components.RecycleBinPage.Delete',
-                        defaultMessage: '删除',
+                        defaultMessage: '删除'
                       }) //删除
                     }
                     onClick={() => this.setState({ showDeleteDrawer: true })}
@@ -401,7 +434,7 @@ class RecycleBin extends Component<
                     disabled={!selectedObjectNames.size}
                     text={formatMessage({
                       id: 'workspace.window.recyclebin.button.restore',
-                      defaultMessage: '还原',
+                      defaultMessage: '还原'
                     })}
                     onClick={() => this.setState({ showRestoreDrawer: true })}
                   />
@@ -411,7 +444,7 @@ class RecycleBin extends Component<
                     text={
                       formatMessage({
                         id: 'odc.components.RecycleBinPage.Clear',
-                        defaultMessage: '清空',
+                        defaultMessage: '清空'
                       }) //清空
                     }
                     onClick={this.handleOpenPurgeAllModal}
@@ -423,13 +456,13 @@ class RecycleBin extends Component<
                   allowClear
                   placeholder={formatMessage({
                     id: 'workspace.window.session.button.search',
-                    defaultMessage: '搜索',
+                    defaultMessage: '搜索'
                   })}
                   onSearch={this.handleSearch}
                   // onChange={(e) => this.handleSearch(e.target.value)}
                   size="small"
                   style={{
-                    height: 24,
+                    height: 24
                   }}
                   className={styles.search}
                 />
@@ -437,7 +470,7 @@ class RecycleBin extends Component<
                 <RecyleConfigContext.Provider
                   value={{
                     setting: recycleConfig,
-                    changeSetting: this.changeSetting,
+                    changeSetting: this.changeSetting
                   }}
                 >
                   <RecycleConfig>
@@ -445,7 +478,7 @@ class RecycleBin extends Component<
                       text={
                         formatMessage({
                           id: 'odc.components.RecycleBinPage.Settings',
-                          defaultMessage: '设置',
+                          defaultMessage: '设置'
                         })
                         //设置
                       }
@@ -456,7 +489,7 @@ class RecycleBin extends Component<
                 <ToolbarButton
                   text={formatMessage({
                     id: 'workspace.window.session.button.refresh',
-                    defaultMessage: '刷新',
+                    defaultMessage: '刷新'
                   })}
                   icon={<SyncOutlined />}
                   onClick={this.handleRefresh}
@@ -478,7 +511,10 @@ class RecycleBin extends Component<
               dataSource={filteredRows}
               rowSelection={{
                 selectedRowKeys: Array.from(selectedObjectNames),
-                onChange: (selectedRowKeys: string[], rows: IRecycleObject[]) => {
+                onChange: (
+                  selectedRowKeys: string[],
+                  rows: IRecycleObject[]
+                ) => {
                   this.handleRowSelected(selectedRowKeys);
                 },
                 selections: [
@@ -486,26 +522,28 @@ class RecycleBin extends Component<
                     key: 'all-data',
                     text: formatMessage({
                       id: 'odc.components.RecycleBinPage.SelectAllObjects',
-                      defaultMessage: '选择所有对象',
+                      defaultMessage: '选择所有对象'
                     }),
                     //选择所有对象
                     onSelect: () => {
-                      this.handleRowSelected(filteredRows.map((row) => row.uniqueId));
-                    },
+                      this.handleRowSelected(
+                        filteredRows.map((row) => row.uniqueId)
+                      );
+                    }
                   },
 
                   {
                     key: 'cancel-all-data',
                     text: formatMessage({
                       id: 'odc.components.RecycleBinPage.CancelAllObjects',
-                      defaultMessage: '取消所有对象',
+                      defaultMessage: '取消所有对象'
                     }),
                     //取消所有对象
                     onSelect: () => {
                       this.handleCancelAllSelected(filteredRows);
-                    },
-                  },
-                ],
+                    }
+                  }
+                ]
               }}
             />
           </div>
@@ -513,7 +551,7 @@ class RecycleBin extends Component<
         <Drawer
           title={formatMessage({
             id: 'workspace.window.recyclebin.drawer.delete.title',
-            defaultMessage: '清除数据库对象',
+            defaultMessage: '清除数据库对象'
           })}
           placement="right"
           closable
@@ -536,12 +574,15 @@ class RecycleBin extends Component<
               onClick={() => this.setState({ showDeleteDrawer: false })}
               style={{ marginRight: 8 }}
             >
-              {formatMessage({ id: 'app.button.cancel', defaultMessage: '取消' })}
+              {formatMessage({
+                id: 'app.button.cancel',
+                defaultMessage: '取消'
+              })}
             </Button>
             <Button onClick={this.handleDelete} danger ghost>
               {formatMessage({
                 id: 'workspace.window.recyclebin.button.clean',
-                defaultMessage: '清除',
+                defaultMessage: '清除'
               })}
             </Button>
           </div>
@@ -549,7 +590,7 @@ class RecycleBin extends Component<
         <Drawer
           title={formatMessage({
             id: 'workspace.window.recyclebin.drawer.restore.title',
-            defaultMessage: '还原数据库对象',
+            defaultMessage: '还原数据库对象'
           })}
           placement="right"
           closable
@@ -568,13 +609,19 @@ class RecycleBin extends Component<
           />
 
           <div className={styles.drawerFooter}>
-            <Button onClick={this.handleCancelRestore} style={{ marginRight: 8 }}>
-              {formatMessage({ id: 'app.button.cancel', defaultMessage: '取消' })}
+            <Button
+              onClick={this.handleCancelRestore}
+              style={{ marginRight: 8 }}
+            >
+              {formatMessage({
+                id: 'app.button.cancel',
+                defaultMessage: '取消'
+              })}
             </Button>
             <Button onClick={this.handleRestore} type="primary">
               {formatMessage({
                 id: 'workspace.window.recyclebin.button.restore',
-                defaultMessage: '还原',
+                defaultMessage: '还原'
               })}
             </Button>
           </div>

@@ -41,8 +41,8 @@ class TableRenameModal extends Component<IProps> {
       message.error(
         formatMessage({
           id: 'odc.component.TableRenameModal.TheTableNameHasNot',
-          defaultMessage: '表名称未修改',
-        }),
+          defaultMessage: '表名称未修改'
+        })
         // 表名称未修改
       );
       return;
@@ -50,8 +50,8 @@ class TableRenameModal extends Component<IProps> {
     const newData = Object.assign({}, this.props.model, {
       info: {
         ...model.info,
-        tableName: data.tableName,
-      },
+        tableName: data.tableName
+      }
     });
     onSave(newData);
   };
@@ -60,7 +60,7 @@ class TableRenameModal extends Component<IProps> {
     const { visible, onCancel, model, dbMode } = this.props;
     const formItemLayout = {
       labelCol: { span: 6 },
-      wrapperCol: { span: 14 },
+      wrapperCol: { span: 14 }
     };
 
     return (
@@ -68,7 +68,7 @@ class TableRenameModal extends Component<IProps> {
         destroyOnClose={true}
         title={formatMessage({
           id: 'workspace.tree.table.rename.modal.title',
-          defaultMessage: '重命名',
+          defaultMessage: '重命名'
         })}
         open={visible}
         onOk={this.save}
@@ -77,17 +77,19 @@ class TableRenameModal extends Component<IProps> {
       >
         <Form
           ref={this.form}
-          initialValues={{ tableName: getQuoteTableName(model?.info?.tableName, dbMode) }}
+          initialValues={{
+            tableName: getQuoteTableName(model?.info?.tableName, dbMode)
+          }}
           {...formItemLayout}
         >
           <Form.Item
             extra={formatMessage({
               id: 'odc.component.TableRenameModal.TheContentInQuotationMarks',
-              defaultMessage: '引号中内容区分大小写',
+              defaultMessage: '引号中内容区分大小写'
             })} /*引号中内容区分大小写*/
             label={formatMessage({
               id: 'workspace.window.createTable.baseInfo.tableName',
-              defaultMessage: '表名称',
+              defaultMessage: '表名称'
             })}
             name="tableName"
             rules={[
@@ -95,15 +97,15 @@ class TableRenameModal extends Component<IProps> {
                 required: true,
                 message: formatMessage({
                   id: 'workspace.window.createTable.baseInfo.tableName.validation',
-                  defaultMessage: '请填写表名称',
-                }),
-              },
+                  defaultMessage: '请填写表名称'
+                })
+              }
             ]}
           >
             <Input
               placeholder={formatMessage({
                 id: 'workspace.window.createTable.baseInfo.tableName.placeholder',
-                defaultMessage: '请填写表名称',
+                defaultMessage: '请填写表名称'
               })}
             />
           </Form.Item>

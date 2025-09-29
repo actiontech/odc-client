@@ -24,7 +24,18 @@ import { formatMessage } from '@/util/intl';
 import { formatBytes, getBlobValueKey } from '@/util/utils';
 import type { FormatterProps } from '@oceanbase-odc/ob-react-data-grid';
 import { getLocale } from '@umijs/max';
-import { Alert, Button, Image, Input, Modal, Radio, Row, Space, Spin, Typography } from 'antd';
+import {
+  Alert,
+  Button,
+  Image,
+  Input,
+  Modal,
+  Radio,
+  Row,
+  Space,
+  Spin,
+  Typography
+} from 'antd';
 import { UploadFile } from 'antd/es/upload/interface';
 import Cookies from 'js-cookie';
 import { inject, observer } from 'mobx-react';
@@ -38,7 +49,7 @@ enum DISPLAY_MODE {
   TEXT,
   HEXTEXT,
   UPLOAD,
-  IMG,
+  IMG
 }
 
 interface IProps {
@@ -70,7 +81,10 @@ const CreateFileLoader = (params: { request: Request; callback: Callback }) => {
     if (cancel) {
       return;
     }
-    if (offset !== 0 && (offset >= fileSize / 1024 || offset > maxReadyonlyTextSize / 1024)) {
+    if (
+      offset !== 0 &&
+      (offset >= fileSize / 1024 || offset > maxReadyonlyTextSize / 1024)
+    ) {
       isFinish = true;
       return;
     }
@@ -78,7 +92,7 @@ const CreateFileLoader = (params: { request: Request; callback: Callback }) => {
     const { content, size } = res;
     contents?.push({
       content: content,
-      size,
+      size
     });
 
     if (offset === 0) {
@@ -92,7 +106,7 @@ const CreateFileLoader = (params: { request: Request; callback: Callback }) => {
         if (isFinish) {
           callback({
             content: contents?.map((item) => item?.content)?.join(''),
-            size,
+            size
           });
         }
       });
@@ -102,7 +116,7 @@ const CreateFileLoader = (params: { request: Request; callback: Callback }) => {
     load: fileLoader,
     cancel: () => {
       cancel = true;
-    },
+    }
   };
 };
 
@@ -156,13 +170,13 @@ const BlobViewModal: React.FC<IProps> = (props) => {
       resultContext.sessionId,
       len,
       offset,
-      session?.database?.dbName,
+      session?.database?.dbName
     );
   };
 
   const fileLoader = CreateFileLoader({
     request,
-    callback: update,
+    callback: update
   });
 
   const updateData = async function () {
@@ -199,7 +213,7 @@ const BlobViewModal: React.FC<IProps> = (props) => {
             resultContext.sessionId,
             maxTextSize / 1024,
             0,
-            session?.database?.dbName,
+            session?.database?.dbName
           );
 
           setHexTextSize(data?.size);
@@ -240,7 +254,9 @@ const BlobViewModal: React.FC<IProps> = (props) => {
         const disabled = !isModeEditable || !resultContext.isEditing;
         return (
           <Spin spinning={loading}>
-            <div style={{ display: 'flex', flexDirection: 'column', height: 500 }}>
+            <div
+              style={{ display: 'flex', flexDirection: 'column', height: 500 }}
+            >
               {isOverSize && resultContext.isEditing && (
                 <Alert
                   style={{ width: '100%' }}
@@ -248,9 +264,9 @@ const BlobViewModal: React.FC<IProps> = (props) => {
                     formatMessage(
                       {
                         id: 'odc.components.BlobFormatter.BlobViewModal.TheSizeOfTheEditable',
-                        defaultMessage: '可编辑的内容大小不能超过 {maxSizeText}',
+                        defaultMessage: '可编辑的内容大小不能超过 {maxSizeText}'
                       },
-                      { maxSizeText },
+                      { maxSizeText }
                     ) //`可编辑的内容大小不能超过 ${maxSizeText}`
                   }
                 />
@@ -266,7 +282,9 @@ const BlobViewModal: React.FC<IProps> = (props) => {
                 />
               ) : disabled ? (
                 <div className={styles['contenttext-disabled']}>
-                  <Typography.Text>{mode == DISPLAY_MODE.TEXT ? text : hexText}</Typography.Text>
+                  <Typography.Text>
+                    {mode == DISPLAY_MODE.TEXT ? text : hexText}
+                  </Typography.Text>
                 </div>
               ) : (
                 <Input.TextArea
@@ -301,7 +319,7 @@ const BlobViewModal: React.FC<IProps> = (props) => {
               width: '100%',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center',
+              justifyContent: 'center'
             }}
           >
             <Spin spinning={isImgLoading}>
@@ -324,12 +342,14 @@ const BlobViewModal: React.FC<IProps> = (props) => {
             maxCount={1}
             action={
               odc.appConfig.network?.baseUrl?.() +
-              `/api/v2/datasource/sessions/${generateSessionSid(resultContext.sessionId)}/upload`
+              `/api/v2/datasource/sessions/${generateSessionSid(
+                resultContext.sessionId
+              )}/upload`
             }
             headers={{
               'X-XSRF-TOKEN': Cookies.get('XSRF-TOKEN') || '',
               'Accept-Language': getLocale(),
-              currentOrganizationId: login.organizationId?.toString(),
+              currentOrganizationId: login.organizationId?.toString()
             }}
             onFileChange={(files) => {
               const file = files?.[0];
@@ -340,7 +360,7 @@ const BlobViewModal: React.FC<IProps> = (props) => {
           >
             {formatMessage({
               id: 'odc.ImportDrawer.ImportForm.ClickOrDragTheFile',
-              defaultMessage: '点击或将文件拖拽到这里上传',
+              defaultMessage: '点击或将文件拖拽到这里上传'
             })}
           </ODCDragger>
         );
@@ -358,7 +378,7 @@ const BlobViewModal: React.FC<IProps> = (props) => {
           {
             formatMessage({
               id: 'odc.components.BlobFormatter.BlobViewModal.Cancel',
-              defaultMessage: '取消',
+              defaultMessage: '取消'
             })
             /*取消*/
           }
@@ -392,7 +412,7 @@ const BlobViewModal: React.FC<IProps> = (props) => {
             onRowChange({
               ...row,
               [columnKey]: value,
-              [getBlobValueKey(columnKey)]: new LobExt(value, type),
+              [getBlobValueKey(columnKey)]: new LobExt(value, type)
             });
 
             onCancel();
@@ -401,7 +421,7 @@ const BlobViewModal: React.FC<IProps> = (props) => {
           {
             formatMessage({
               id: 'odc.components.BlobFormatter.BlobViewModal.Ok',
-              defaultMessage: '确认',
+              defaultMessage: '确认'
             })
             /*确认*/
           }
@@ -433,7 +453,7 @@ const BlobViewModal: React.FC<IProps> = (props) => {
               {
                 formatMessage({
                   id: 'odc.components.BlobFormatter.BlobViewModal.Text',
-                  defaultMessage: '文本',
+                  defaultMessage: '文本'
                 })
 
                 /* 文本 */
@@ -443,7 +463,7 @@ const BlobViewModal: React.FC<IProps> = (props) => {
               {
                 formatMessage({
                   id: 'odc.components.BlobFormatter.BlobViewModal.JinZhi',
-                  defaultMessage: '十六进制',
+                  defaultMessage: '十六进制'
                 })
 
                 /* 16 进制 */
@@ -453,7 +473,7 @@ const BlobViewModal: React.FC<IProps> = (props) => {
               {
                 formatMessage({
                   id: 'odc.components.BlobFormatter.BlobViewModal.Image',
-                  defaultMessage: '图片',
+                  defaultMessage: '图片'
                 })
                 /*图片*/
               }
@@ -463,7 +483,7 @@ const BlobViewModal: React.FC<IProps> = (props) => {
                 {
                   formatMessage({
                     id: 'odc.components.BlobFormatter.BlobViewModal.ImportFiles',
-                    defaultMessage: '导入文件',
+                    defaultMessage: '导入文件'
                   })
                   /*导入文件*/
                 }
@@ -479,7 +499,7 @@ const BlobViewModal: React.FC<IProps> = (props) => {
               {
                 formatMessage({
                   id: 'odc.components.BlobFormatter.BlobViewModal.DownloadObjects',
-                  defaultMessage: '下载文件',
+                  defaultMessage: '下载文件'
                 })
 
                 /* 下载文件 */

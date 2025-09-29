@@ -16,7 +16,7 @@
 
 import { generateUpdateTableDDL } from '@/common/network/table';
 import { formatMessage } from '@/util/intl';
-import { Space } from 'antd';
+import { Space, Typography } from 'antd';
 import { cloneDeep } from 'lodash';
 import React, { useContext, useState } from 'react';
 import { useTableConfig } from '../../CreateTable/config';
@@ -30,10 +30,9 @@ import UniqueConstraints from '../../CreateTable/TableConstraint/Unique';
 import TableContext from '../../CreateTable/TableContext';
 import TablePageContext from '../context';
 import styles from './index.less';
+import { TableConstraintsStyleWrapper } from './style';
 
-interface IProps {}
-
-const TableConstraints: React.FC<IProps> = function ({}) {
+const TableConstraints: React.FC = function () {
   const [editPrimaryConstraints, setEditPrimaryConstraints] =
     useState<ITableModel['primaryConstraints']>(null);
   const [editUniqueConstraints, setEditUniqueConstraints] =
@@ -50,10 +49,12 @@ const TableConstraints: React.FC<IProps> = function ({}) {
     !!editUniqueConstraints ||
     !!editCheckConstraints ||
     !!editForeignConstraints;
-  const primaryConstraints = editPrimaryConstraints || table?.primaryConstraints;
+  const primaryConstraints =
+    editPrimaryConstraints || table?.primaryConstraints;
   const uniqueConstraints = editUniqueConstraints || table?.uniqueConstraints;
   const checkConstraints = editCheckConstraints || table?.checkConstraints;
-  const foreignConstraints = editForeignConstraints || table?.foreignConstraints;
+  const foreignConstraints =
+    editForeignConstraints || table?.foreignConstraints;
 
   return (
     <TableContext.Provider
@@ -67,7 +68,7 @@ const TableConstraints: React.FC<IProps> = function ({}) {
         foreignConstraints,
         setForeignConstraints: setEditForeignConstraints,
         columns: table.columns,
-        session: tableContext?.session,
+        session: tableContext?.session
       }}
     >
       <TableCardLayout
@@ -87,12 +88,12 @@ const TableConstraints: React.FC<IProps> = function ({}) {
                   primaryConstraints,
                   uniqueConstraints,
                   checkConstraints,
-                  foreignConstraints,
+                  foreignConstraints
                 },
 
                 tableContext.table,
                 tableContext?.session?.sessionId,
-                tableContext?.session?.database?.dbName,
+                tableContext?.session?.database?.dbName
               );
 
               if (!updateTableDML) {
@@ -115,75 +116,89 @@ const TableConstraints: React.FC<IProps> = function ({}) {
                   setEditUniqueConstraints(null);
                   setEditCheckConstraints(null);
                   setEditForeignConstraints(null);
-                },
+                }
               );
             }}
             modified={modified}
           >
-            <span style={{ paddingLeft: 12 }}>
+            <Typography.Text style={{ paddingLeft: 12 }}>
               {
                 formatMessage({
                   id: 'odc.TablePage.Constraints.PrimaryKeyConstraintsCannotBe',
-                  defaultMessage: '主键约束不可修改；已存在的约束无法修改，仅支持新增/删除',
+                  defaultMessage:
+                    '主键约束不可修改；已存在的约束无法修改，仅支持新增/删除'
                 }) /*主键约束不可修改；已存在的约束无法修改，仅支持新增/删除*/
               }
-            </span>
+            </Typography.Text>
           </EditToolbar>
         }
       >
-        <Space style={{ width: '100%', padding: '16px 16px' }} direction="vertical">
+        <TableConstraintsStyleWrapper
+          style={{ width: '100%', padding: '16px 16px' }}
+          direction="vertical"
+        >
           <div>
-            <div className={styles.title}>
+            <div className="title">
               {
                 formatMessage({
                   id: 'odc.TablePage.Constraints.PrimaryKeyConstraint',
-                  defaultMessage: '主键约束',
+                  defaultMessage: '主键约束'
                 }) /*主键约束*/
               }
             </div>
             <div
-              className={styles.itembox}
+              className="itembox"
               style={{
                 /**
                  * 这里的高度最小为175，因为select的下拉框最大高度为170，要避免被截断的情况
                  */
-                height: Math.max(175, Math.min(400, primaryConstraints?.length * 24 + 61)),
+                height: Math.max(
+                  175,
+                  Math.min(400, primaryConstraints?.length * 24 + 61)
+                )
               }}
             >
               <PrimaryConstaint />
             </div>
           </div>
+
           <div>
-            <div className={styles.title}>
+            <div className="title">
               {
                 formatMessage({
                   id: 'odc.TablePage.Constraints.UniqueConstraint',
-                  defaultMessage: '唯一约束',
+                  defaultMessage: '唯一约束'
                 }) /*唯一约束*/
               }
             </div>
             <div
-              className={styles.itembox}
+              className="itembox"
               style={{
-                height: Math.max(175, Math.min(400, uniqueConstraints?.length * 24 + 61)),
+                height: Math.max(
+                  175,
+                  Math.min(400, uniqueConstraints?.length * 24 + 61)
+                )
               }}
             >
               <UniqueConstraints />
             </div>
           </div>
           <div>
-            <div className={styles.title}>
+            <div className="title">
               {
                 formatMessage({
                   id: 'odc.TablePage.Constraints.ForeignKeyConstraint',
-                  defaultMessage: '外键约束',
+                  defaultMessage: '外键约束'
                 }) /*外键约束*/
               }
             </div>
             <div
-              className={styles.itembox}
+              className="itembox"
               style={{
-                height: Math.max(175, Math.min(400, foreignConstraints?.length * 24 + 61)),
+                height: Math.max(
+                  175,
+                  Math.min(400, foreignConstraints?.length * 24 + 61)
+                )
               }}
             >
               <Foreign />
@@ -191,25 +206,28 @@ const TableConstraints: React.FC<IProps> = function ({}) {
           </div>
           {config.enableCheckConstraint && (
             <div>
-              <div className={styles.title}>
+              <div className="title">
                 {
                   formatMessage({
                     id: 'odc.TablePage.Constraints.CheckConstraints',
-                    defaultMessage: '检查约束',
+                    defaultMessage: '检查约束'
                   }) /*检查约束*/
                 }
               </div>
               <div
-                className={styles.itembox}
+                className="itembox"
                 style={{
-                  height: Math.max(175, Math.min(400, checkConstraints?.length * 24 + 61)),
+                  height: Math.max(
+                    175,
+                    Math.min(400, checkConstraints?.length * 24 + 61)
+                  )
                 }}
               >
                 <CheckConstraint />
               </div>
             </div>
           )}
-        </Space>
+        </TableConstraintsStyleWrapper>
       </TableCardLayout>
     </TableContext.Provider>
   );

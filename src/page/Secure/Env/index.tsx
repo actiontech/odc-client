@@ -18,7 +18,12 @@ import { formatMessage } from '@/util/intl';
 import { deleteEnvironment, listEnvironments } from '@/common/network/env';
 import { getIntegrationList } from '@/common/network/manager';
 import { Acess, createPermission } from '@/component/Acess';
-import { actionTypes, IManagerIntegration, IManagerResourceType, IntegrationType } from '@/d.ts';
+import {
+  actionTypes,
+  IManagerIntegration,
+  IManagerResourceType,
+  IntegrationType
+} from '@/d.ts';
 import { IEnvironment } from '@/d.ts/environment';
 import { RuleType } from '@/d.ts/rule';
 import tracert from '@/util/tracert';
@@ -40,7 +45,7 @@ function genEnv(env: IEnvironment): {
   return {
     value: env.id,
     origin: env,
-    label: env.name,
+    label: env.name
   };
 }
 
@@ -53,11 +58,17 @@ const Environment = () => {
   const [ruleType, setRuleType] = useState<RuleType>(RuleType.SQL_CHECK);
   const [currentEnvironment, setCurrentEnviroment] = useState<IEnvironment>();
   const [integrations, setIntegrations] = useState<IManagerIntegration[]>([]);
-  const [integrationsIdMap, setIntegrationsIdMap] = useState<Record<string, string>>();
-  const [formEnvironmentModalOpen, setFormEnvironmentModalOpen] = useState<boolean>(false);
+  const [integrationsIdMap, setIntegrationsIdMap] =
+    useState<Record<string, string>>();
+  const [formEnvironmentModalOpen, setFormEnvironmentModalOpen] =
+    useState<boolean>(false);
   const [options, setOptions] = useState<SelectProps['options']>(null);
 
-  const handleItemClick = (item: { value: number; origin: IEnvironment; label: string }) => {
+  const handleItemClick = (item: {
+    value: number;
+    origin: IEnvironment;
+    label: string;
+  }) => {
     setSelectedItem(item?.value);
     setCurrentEnviroment(item?.origin);
     setRuleType(RuleType.SQL_CHECK);
@@ -70,15 +81,17 @@ const Environment = () => {
       envs?.map((env) => {
         return {
           label: env?.name,
-          value: env?.rulesetId,
+          value: env?.rulesetId
         };
-      }),
+      })
     );
     const resData = envs.map(genEnv).sort((a, b) => a?.value - b?.value);
     resData?.length > 0 && setSiderItemList(resData);
     if (currentEnvironmentId) {
       resData?.length > 0 &&
-        handleItemClick(resData?.find((item) => item.value === currentEnvironmentId));
+        handleItemClick(
+          resData?.find((item) => item.value === currentEnvironmentId)
+        );
     } else {
       resData?.length > 0 && handleItemClick(resData?.[0]);
     }
@@ -101,11 +114,11 @@ const Environment = () => {
     return Modal.confirm({
       title: formatMessage({
         id: 'src.page.Secure.Env.65EAAB75',
-        defaultMessage: '确认删除该环境么？',
+        defaultMessage: '确认删除该环境么？'
       }), //'确认删除该环境么？'
       content: formatMessage({
         id: 'src.page.Secure.Env.CFE6811F',
-        defaultMessage: '删除后不可撤回',
+        defaultMessage: '删除后不可撤回'
       }), //'删除后不可撤回'
       centered: true,
       onCancel: () => {},
@@ -119,8 +132,8 @@ const Environment = () => {
           message.success(
             formatMessage({
               id: 'src.page.Secure.Env.9D97D589' /*'删除成功'*/,
-              defaultMessage: '删除成功',
-            }),
+              defaultMessage: '删除成功'
+            })
           );
           setIsEdit(null);
           return;
@@ -128,10 +141,10 @@ const Environment = () => {
         message.error(
           formatMessage({
             id: 'src.page.Secure.Env.F0BFC158' /*'删除失败'*/,
-            defaultMessage: '删除失败',
-          }),
+            defaultMessage: '删除失败'
+          })
         );
-      },
+      }
     });
   };
   const callback = async (environmentId: number = null) => {
@@ -141,14 +154,16 @@ const Environment = () => {
   };
   const loadIntegrations = async () => {
     const integrations = await getIntegrationList({
-      type: IntegrationType.SQL_INTERCEPTOR,
+      type: IntegrationType.SQL_INTERCEPTOR
     });
     const map = {};
     integrations?.contents?.forEach((content) => {
       map[content?.id] = content?.name;
     });
     setIntegrationsIdMap(map);
-    setIntegrations(integrations?.contents?.filter((content) => content?.enabled));
+    setIntegrations(
+      integrations?.contents?.filter((content) => content?.enabled)
+    );
   };
 
   useLayoutEffect(() => {
@@ -167,13 +182,16 @@ const Environment = () => {
                 {
                   formatMessage({
                     id: 'src.page.Secure.Env.48529F6E' /*全部环境*/,
-                    defaultMessage: '全部环境',
+                    defaultMessage: '全部环境'
                   }) /* 全部环境 */
                 }
               </div>
               <Acess
                 fallback={null}
-                {...createPermission(IManagerResourceType.environment, actionTypes.create)}
+                {...createPermission(
+                  IManagerResourceType.environment,
+                  actionTypes.create
+                )}
               >
                 <Icon
                   component={PlusOutlined}

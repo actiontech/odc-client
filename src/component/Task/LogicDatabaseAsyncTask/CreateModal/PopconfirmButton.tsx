@@ -30,13 +30,13 @@ export const PopconfirmButton: React.FC<IProps> = (props) => {
       {hasEdit ? (
         <Popconfirm
           title={formatMessage({
-            id: 'odc.components.CreateAsyncTaskModal.PopconfirmButton.AreYouSureYouWant',
+            id: 'odc.components.CreateAsyncTaskModal.PopconfirmButton.AreYouSureYouWant'
           })} /* 确定要取消新建吗？ */
           okText={formatMessage({
-            id: 'odc.components.CreateAsyncTaskModal.PopconfirmButton.Determine',
+            id: 'odc.components.CreateAsyncTaskModal.PopconfirmButton.Determine'
           })} /* 确定 */
           cancelText={formatMessage({
-            id: 'odc.components.CreateAsyncTaskModal.PopconfirmButton.Cancel',
+            id: 'odc.components.CreateAsyncTaskModal.PopconfirmButton.Cancel'
           })} /* 取消 */
           onConfirm={onConfirm}
         >

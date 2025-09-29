@@ -35,7 +35,7 @@ dayjs.extend(duration);
 if (isClient()) {
   import('@sentry/electron').then((_Sentry) => {
     _Sentry.init({
-      dsn: 'https://859452cf23044aeda8677a8bdcc53081@obc-sentry.oceanbase.com/3',
+      dsn: 'https://859452cf23044aeda8677a8bdcc53081@obc-sentry.oceanbase.com/3'
     });
   });
 } else {
@@ -63,12 +63,12 @@ export const qiankun = {
   async unmount() {
     // console.log('odc unmount');
     window._odc_params = null;
-  },
+  }
 };
 
 export async function render(oldRender: () => void) {
   ConfigProvider.config({
-    theme: theme,
+    theme: theme
   });
   registerPlugins();
   await initIntl();

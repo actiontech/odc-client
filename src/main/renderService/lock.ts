@@ -22,7 +22,10 @@ import MainServer from '../server/main';
 import { getJavaDBFilePath } from '../utils';
 import log from '../utils/log';
 
-const secret = Buffer.from('KCj7tMS33mSnjRQu9WSvgPPtViEffoYOnlVVzxOL4JQ=', 'base64');
+const secret = Buffer.from(
+  'KCj7tMS33mSnjRQu9WSvgPPtViEffoYOnlVVzxOL4JQ=',
+  'base64'
+);
 
 const pwdFile = path.join(app.getPath('userData'), 'BYPZGDX');
 
@@ -33,14 +36,22 @@ function aesEncrypt(data) {
   if (!data) {
     return '';
   }
-  let cipher = crypto.createCipheriv('aes-256-cbc', secret, Buffer.alloc(16, 0));
+  let cipher = crypto.createCipheriv(
+    'aes-256-cbc',
+    secret,
+    Buffer.alloc(16, 0)
+  );
   cipher.update(data, 'utf8', 'hex');
   return cipher.final('hex');
 }
 
 // 解码
 function aesDecrypt(encrypt) {
-  let decipher = crypto.createDecipheriv('aes-256-cbc', secret, Buffer.alloc(16, 0));
+  let decipher = crypto.createDecipheriv(
+    'aes-256-cbc',
+    secret,
+    Buffer.alloc(16, 0)
+  );
   decipher.update(encrypt, 'hex', 'utf8');
   return decipher.final('utf8');
 }
@@ -83,4 +94,11 @@ async function resetPwdAndDB() {
   return true;
 }
 
-export { aesEncrypt, aesDecrypt, checkPwd, changePwd, resetPwdAndDB, checkProcessKey };
+export {
+  aesEncrypt,
+  aesDecrypt,
+  checkPwd,
+  changePwd,
+  resetPwdAndDB,
+  checkProcessKey
+};

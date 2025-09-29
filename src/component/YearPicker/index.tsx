@@ -32,7 +32,7 @@ export default class YearPicker extends Component<
 > {
   public readonly state = {
     isopen: false,
-    time: this.props.defaultValue,
+    time: this.props.defaultValue
   };
 
   public render() {
@@ -47,7 +47,7 @@ export default class YearPicker extends Component<
         mode="year"
         placeholder={formatMessage({
           id: 'odc.component.YearPicker.SelectAYear',
-          defaultMessage: '请选择年份',
+          defaultMessage: '请选择年份'
         })}
         format="YYYY"
         onOpenChange={(status) => {
@@ -61,12 +61,12 @@ export default class YearPicker extends Component<
           this.setState(
             {
               time: v,
-              isopen: false,
+              isopen: false
             },
 
             () => {
               onChange(this.state.time.format('YYYY'));
-            },
+            }
           );
         }}
         onChange={() => {

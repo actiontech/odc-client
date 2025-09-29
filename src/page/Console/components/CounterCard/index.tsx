@@ -13,7 +13,9 @@ const CounterCard = ({ title, counter, status }: IProps) => {
         icon={
           <div
             className={styles.counter}
-            style={{ color: counter > 0 && status === 'failed' ? '#ff4d4f' : undefined }}
+            style={{
+              color: counter > 0 && status === 'failed' ? '#ff4d4f' : undefined
+            }}
           >
             {counter || 0}
           </div>

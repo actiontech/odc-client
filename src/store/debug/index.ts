@@ -14,7 +14,11 @@
  * limitations under the License.
  */
 
-import { getFunctionByFuncName, getPackage, getProcedureByProName } from '@/common/network';
+import {
+  getFunctionByFuncName,
+  getPackage,
+  getProcedureByProName
+} from '@/common/network';
 import {
   addBreakpoints,
   createDebugSession,
@@ -24,7 +28,7 @@ import {
   executeStepOut,
   executeStepOver,
   getDebugContext,
-  removeBreakpoints,
+  removeBreakpoints
 } from '@/common/network/debug';
 import { PLType } from '@/constant/plType';
 import type { IFunction, IPLParam, IProcedure } from '@/d.ts';
@@ -41,11 +45,14 @@ import type {
   IDebugError,
   IDebugFunctionResult,
   IDebugProcedureResult,
-  IDebugStackItem,
+  IDebugStackItem
 } from './type';
 import { DebugStatus } from './type';
 
-type IDebugResult = IDebugFunctionResult | IDebugProcedureResult | IDebugError[];
+type IDebugResult =
+  | IDebugFunctionResult
+  | IDebugProcedureResult
+  | IDebugError[];
 
 export class Debug {
   @observable
@@ -77,7 +84,7 @@ export class Debug {
 
   public onContextChangeQueue?: ((
     newContext: IDebugStackItem[],
-    oldContext: IDebugStackItem[],
+    oldContext: IDebugStackItem[]
   ) => void)[] = [];
 
   public static async createDebug(config: ICreateDebugConfig) {
@@ -85,7 +92,7 @@ export class Debug {
       config.plType,
       config.function?.funName || config?.procedure?.proName,
       config.packageName,
-      config.session,
+      config.session
     );
     if (!ddl && config.plType !== PLType.ANONYMOUSBLOCK) {
       return null;
@@ -102,16 +109,16 @@ export class Debug {
       Debug.getConfigSchema(config),
       config.plType,
       config.anonymousBlock,
-      config.session,
+      config.session
     );
     if (debugId) {
       return new Debug(
         Object.assign(
           {
-            debugId,
+            debugId
           },
-          config,
-        ),
+          config
+        )
       );
     }
   }
@@ -147,15 +154,15 @@ export class Debug {
         packageName: config.packageName,
         breakpoints: [],
         plType: config.plType,
-        isActive: true,
-      },
+        isActive: true
+      }
     ];
     this.history.addHistory(
       {
-        debugId: this.debugId,
+        debugId: this.debugId
       },
       'Start Debug',
-      ILogType.INFO,
+      ILogType.INFO
     );
   }
 
@@ -176,7 +183,7 @@ export class Debug {
         this.getPlSchema(),
         this.plType,
         ddl,
-        this.session,
+        this.session
       );
       if (debugId) {
         this.debugId = debugId;
@@ -186,7 +193,7 @@ export class Debug {
             ...pl,
             breakpoints: [],
             isActive: mainPl === pl ? true : false,
-            activeLine: null,
+            activeLine: null
           };
         });
         await this.addBreakpoints(
@@ -195,9 +202,9 @@ export class Debug {
               ...point,
               plType: this.plType,
               plName: mainPlName,
-              packageName: this.packageName,
+              packageName: this.packageName
             };
-          }),
+          })
         );
         runInAction(() => {
           this.status = DebugStatus.INIT;
@@ -206,10 +213,10 @@ export class Debug {
           this.result = null;
           this.history.addHistory(
             {
-              debugId: this.debugId,
+              debugId: this.debugId
             },
             'Start Debug',
-            ILogType.INFO,
+            ILogType.INFO
           );
         });
       } else {
@@ -221,7 +228,10 @@ export class Debug {
     }
   }
 
-  public onContextChange = (newContext: IDebugStackItem[], oldContext: IDebugStackItem[]) => {
+  public onContextChange = (
+    newContext: IDebugStackItem[],
+    oldContext: IDebugStackItem[]
+  ) => {
     this.onContextChangeQueue.forEach((func) => {
       func?.(newContext, oldContext);
     });
@@ -235,9 +245,12 @@ export class Debug {
     });
   }
   public isDebugEnd() {
-    return [DebugStatus.STOP, DebugStatus.SUCCESS, DebugStatus.FAIL, DebugStatus.RECOVER].includes(
-      this.status,
-    );
+    return [
+      DebugStatus.STOP,
+      DebugStatus.SUCCESS,
+      DebugStatus.FAIL,
+      DebugStatus.RECOVER
+    ].includes(this.status);
   }
 
   public getPlSchema() {
@@ -298,7 +311,7 @@ export class Debug {
       return {
         ...pl,
         isActive: false,
-        activeLine: null,
+        activeLine: null
       };
     });
     this.onContextChange?.(this.plInfo, oldContext);
@@ -308,15 +321,15 @@ export class Debug {
     packageName: string | null,
     plName: string,
     plType: PLType,
-    line: number,
+    line: number
   ) {
     return await this.addBreakpoints([
       {
         packageName,
         plName,
         line,
-        plType,
-      },
+        plType
+      }
     ]);
   }
   public async addBreakpoints(
@@ -325,29 +338,38 @@ export class Debug {
       plName: string;
       plType: PLType;
       line: number;
-    }[],
+    }[]
   ) {
     const breakpoints = await addBreakpoints(this.debugId, points);
     if (breakpoints) {
       const oldContext = cloneDeep(this.plInfo);
       breakpoints.forEach(
-        ({ packageName, objectName: plName, objectType: plType, lineNum, breakpointNum }) => {
+        ({
+          packageName,
+          objectName: plName,
+          objectType: plType,
+          lineNum,
+          breakpointNum
+        }) => {
           const pl = this.getPlInfo(packageName, plName, plType);
           pl.breakpoints.push({
             line: lineNum,
-            num: breakpointNum,
+            num: breakpointNum
           });
           this.history.addHistory(
             {
               plName,
               packageName,
               line: lineNum,
-              plType,
+              plType
             },
-            `Add breakpoint ${Debug.getFullName(packageName, plName)} [line ${lineNum}].`,
-            ILogType.INFO,
+            `Add breakpoint ${Debug.getFullName(
+              packageName,
+              plName
+            )} [line ${lineNum}].`,
+            ILogType.INFO
           );
-        },
+        }
       );
       this.onContextChange?.(this.plInfo, oldContext);
       return true;
@@ -358,10 +380,13 @@ export class Debug {
             plName,
             packageName,
             line,
-            plType,
+            plType
           },
-          `Add breakpoint ${Debug.getFullName(packageName, plName)} [line ${line}].`,
-          ILogType.ERROR,
+          `Add breakpoint ${Debug.getFullName(
+            packageName,
+            plName
+          )} [line ${line}].`,
+          ILogType.ERROR
         );
       });
       this.onContextChange?.(this.plInfo, this.plInfo);
@@ -371,15 +396,15 @@ export class Debug {
     packageName: string | null,
     plName: string,
     line: number,
-    plType: PLType,
+    plType: PLType
   ) {
     return await this.removeBreakpoints([
       {
         packageName,
         plName,
         line,
-        plType,
-      },
+        plType
+      }
     ]);
   }
 
@@ -390,7 +415,7 @@ export class Debug {
       plName: string;
       line: number;
       plType: PLType;
-    }[],
+    }[]
   ) {
     const oldContext = cloneDeep(this.plInfo);
     const breakpoints = [];
@@ -403,7 +428,7 @@ export class Debug {
           plName,
           plType,
           line,
-          breakpointNum: breakPoint.num,
+          breakpointNum: breakPoint.num
         });
       }
     });
@@ -420,10 +445,13 @@ export class Debug {
           plName,
           packageName,
           line,
-          plType,
+          plType
         },
-        `Remove breakpoint ${Debug.getFullName(packageName, plName)} [line ${line}].`,
-        isSuccess ? ILogType.INFO : ILogType.ERROR,
+        `Remove breakpoint ${Debug.getFullName(
+          packageName,
+          plName
+        )} [line ${line}].`,
+        isSuccess ? ILogType.INFO : ILogType.ERROR
       );
     });
     if (!isSuccess) {
@@ -440,7 +468,11 @@ export class Debug {
   public async executeResume() {
     this.status = DebugStatus.RESUME;
     const isSuccess = await executeResume(this.debugId);
-    this.history.addHistory({}, 'Continue execution', isSuccess ? ILogType.INFO : ILogType.ERROR);
+    this.history.addHistory(
+      {},
+      'Continue execution',
+      isSuccess ? ILogType.INFO : ILogType.ERROR
+    );
     if (isSuccess) {
       await this.syncDebugContext();
     } else {
@@ -450,7 +482,11 @@ export class Debug {
   public async executeStepOver() {
     this.status = DebugStatus.STEP_OVER;
     const isSuccess = await executeStepOver(this.debugId);
-    this.history.addHistory({}, 'Execute next line', isSuccess ? ILogType.INFO : ILogType.ERROR);
+    this.history.addHistory(
+      {},
+      'Execute next line',
+      isSuccess ? ILogType.INFO : ILogType.ERROR
+    );
     if (isSuccess) {
       await this.syncDebugContext();
     } else {
@@ -460,7 +496,11 @@ export class Debug {
   public async executeSetpIn() {
     this.status = DebugStatus.STEP_IN;
     const isSuccess = await executeStepIn(this.debugId);
-    this.history.addHistory({}, 'Step in', isSuccess ? ILogType.INFO : ILogType.ERROR);
+    this.history.addHistory(
+      {},
+      'Step in',
+      isSuccess ? ILogType.INFO : ILogType.ERROR
+    );
     if (isSuccess) {
       await this.syncDebugContext();
     } else {
@@ -470,7 +510,11 @@ export class Debug {
   public async executeStepOut() {
     this.status = DebugStatus.STEP_OUT;
     const isSuccess = await executeStepOut(this.debugId);
-    this.history.addHistory({}, 'Step out', isSuccess ? ILogType.INFO : ILogType.ERROR);
+    this.history.addHistory(
+      {},
+      'Step out',
+      isSuccess ? ILogType.INFO : ILogType.ERROR
+    );
     if (isSuccess) {
       await this.syncDebugContext();
     } else {
@@ -496,8 +540,9 @@ export class Debug {
         if (result.errors?.length) {
           this.history.addHistory(
             { result },
-            result.errors?.map((error) => error.text)?.join('\n') || 'Execute fail',
-            ILogType.ERROR,
+            result.errors?.map((error) => error.text)?.join('\n') ||
+              'Execute fail',
+            ILogType.ERROR
           );
           this.result = result.errors;
           this.status = DebugStatus.FAIL;
@@ -510,7 +555,7 @@ export class Debug {
             }
             case PLType.PROCEDURE: {
               this.result = {
-                params: result.procedureResult,
+                params: result.procedureResult
               };
               break;
             }
@@ -538,20 +583,38 @@ export class Debug {
   /**
    * 更新当前上下文的执行信息
    */
-  public async updatePlStack(plType: PLType, plName: string, packageName: string, lineNum: number) {
+  public async updatePlStack(
+    plType: PLType,
+    plName: string,
+    packageName: string,
+    lineNum: number
+  ) {
     const pl = this.getActivePl();
-    if (pl.plName !== plName || packageName != pl.packageName || plType !== pl.plType) {
+    if (
+      pl.plName !== plName ||
+      packageName != pl.packageName ||
+      plType !== pl.plType
+    ) {
       /**
        * 上下文对象切换了
        */
       const newPl = this.plInfo.find((pl) => {
-        return pl.plName === plName && packageName == pl.packageName && plType === pl.plType;
+        return (
+          pl.plName === plName &&
+          packageName == pl.packageName &&
+          plType === pl.plType
+        );
       });
       if (!newPl) {
         /**
          * 不在缓存里面，去拉取
          */
-        const content = await Debug.getContentFromPL(plType, plName, packageName, this.session);
+        const content = await Debug.getContentFromPL(
+          plType,
+          plName,
+          packageName,
+          this.session
+        );
         if (content) {
           this.plInfo.push({
             content,
@@ -559,7 +622,7 @@ export class Debug {
             plType,
             packageName,
             breakpoints: [],
-            isActive: false,
+            isActive: false
           });
         }
       }
@@ -569,19 +632,28 @@ export class Debug {
       this.plInfo = [...this.plInfo];
     }
   }
-  private setPlActive(plType: PLType, plName: string, packageName: string, activeLine: number) {
+  private setPlActive(
+    plType: PLType,
+    plName: string,
+    packageName: string,
+    activeLine: number
+  ) {
     this.plInfo = this.plInfo.map((pl) => {
-      if (pl.plName === plName && packageName == pl.packageName && plType === pl.plType) {
+      if (
+        pl.plName === plName &&
+        packageName == pl.packageName &&
+        plType === pl.plType
+      ) {
         return {
           ...pl,
           isActive: true,
-          activeLine,
+          activeLine
         };
       } else if (pl.isActive) {
         return {
           ...pl,
           isActive: false,
-          activeLine: null,
+          activeLine: null
         };
       } else {
         return pl;
@@ -592,18 +664,33 @@ export class Debug {
     plType: PLType,
     plName: string,
     packageName: string,
-    session: SessionStore,
+    session: SessionStore
   ): Promise<string> {
     if (packageName) {
-      return (await getPackage(packageName, session?.sessionId, session?.database?.dbName))
-        ?.packageBody?.basicInfo?.ddl;
+      return (
+        await getPackage(
+          packageName,
+          session?.sessionId,
+          session?.database?.dbName
+        )
+      )?.packageBody?.basicInfo?.ddl;
     } else if (plType === PLType.FUNCTION) {
       return (
-        await getFunctionByFuncName(plName, false, session?.sessionId, session?.database?.dbName)
+        await getFunctionByFuncName(
+          plName,
+          false,
+          session?.sessionId,
+          session?.database?.dbName
+        )
       ).ddl;
     } else if (plType === PLType.PROCEDURE) {
       return (
-        await getProcedureByProName(plName, false, session?.sessionId, session?.database?.dbName)
+        await getProcedureByProName(
+          plName,
+          false,
+          session?.sessionId,
+          session?.database?.dbName
+        )
       ).ddl;
     } else {
       return null;
@@ -618,7 +705,11 @@ export class Debug {
   }
   public getPlInfo(packageName: string | null, plName: string, plType: PLType) {
     return this.plInfo.find((pl) => {
-      return pl.packageName == packageName && plName === pl.plName && plType === pl.plType;
+      return (
+        pl.packageName == packageName &&
+        plName === pl.plName &&
+        plType === pl.plType
+      );
     });
   }
   public getAllBreakpoints() {
@@ -627,7 +718,7 @@ export class Debug {
       .concat(
         ...this.plInfo.map((ctx) => {
           return ctx.breakpoints;
-        }),
+        })
       )
       .filter(Boolean)
       .sort((a, b) => a.num - b.num);

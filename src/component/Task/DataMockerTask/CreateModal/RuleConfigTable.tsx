@@ -46,17 +46,17 @@ const RuleConfigTable: React.FC<IRuleConfigTableProps> = (props) => {
       {
         title: formatMessage({
           id: 'odc.component.DataMockerDrawer.RuleConfigTable.FieldName',
-          defaultMessage: '字段名称',
+          defaultMessage: '字段名称'
         }), // 字段名称
         dataIndex: 'columnName',
         width: 200,
-        ellipsis: true,
+        ellipsis: true
       },
 
       {
         title: formatMessage({
           id: 'odc.component.DataMockerDrawer.RuleConfigTable.FieldType',
-          defaultMessage: '字段类型',
+          defaultMessage: '字段类型'
         }), // 字段类型
         dataIndex: 'columnType',
         width: 120,
@@ -81,13 +81,13 @@ const RuleConfigTable: React.FC<IRuleConfigTableProps> = (props) => {
               return columnType;
             }
           }
-        },
+        }
       },
 
       {
         title: formatMessage({
           id: 'odc.component.DataMockerDrawer.RuleConfigTable.Rules',
-          defaultMessage: '规则',
+          defaultMessage: '规则'
         }), // 规则
         dataIndex: 'rule',
         width: 120,
@@ -103,23 +103,25 @@ const RuleConfigTable: React.FC<IRuleConfigTableProps> = (props) => {
                   required: true,
                   message: formatMessage({
                     id: 'odc.component.DataMockerDrawer.RuleConfigTable.SelectARule',
-                    defaultMessage: '请选择规则',
-                  }), // 请选择规则
-                },
+                    defaultMessage: '请选择规则'
+                  }) // 请选择规则
+                }
               ]}
             >
               <RuleSelect
                 dbMode={taskDbMode}
                 readonly={readonly}
                 onChange={(v) => {
-                  const columns: IMockFormData['columns'] = [...form?.getFieldValue('columns')];
+                  const columns: IMockFormData['columns'] = [
+                    ...form?.getFieldValue('columns')
+                  ];
                   columns[index] = { ...columns[index] };
                   columns[index].rule = v as any;
                   columns[index].typeConfig = getDefaultValue(
                     taskDbMode,
                     t.columnType,
                     v,
-                    columnSizeMap[t.columnName],
+                    columnSizeMap[t.columnName]
                   );
 
                   form?.setFieldsValue({ columns });
@@ -128,13 +130,13 @@ const RuleConfigTable: React.FC<IRuleConfigTableProps> = (props) => {
               />
             </Form.Item>
           );
-        },
+        }
       },
 
       {
         title: formatMessage({
           id: 'odc.component.DataMockerDrawer.RuleConfigTable.Rules.1',
-          defaultMessage: '细则',
+          defaultMessage: '细则'
         }), // 细则
         dataIndex: 'typeConfig',
         render(_, t, index) {
@@ -155,8 +157,8 @@ const RuleConfigTable: React.FC<IRuleConfigTableProps> = (props) => {
               />
             </Form.Item>
           );
-        },
-      },
+        }
+      }
     ];
   }
   return (
@@ -184,7 +186,7 @@ const RuleConfigTable: React.FC<IRuleConfigTableProps> = (props) => {
         showSizeChanger: value.length >= 20 ? true : false,
         onShowSizeChange(current, size) {
           setPageSize(size);
-        },
+        }
       }}
     />
   );

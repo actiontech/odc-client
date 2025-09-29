@@ -20,20 +20,20 @@ import {
   generateFunctionSid,
   generatePackageSid,
   generateProcedureSid,
-  generateTypeSid,
+  generateTypeSid
 } from './pathUtil';
 
 export async function getProcedureByProName(
   proName: string,
   ignoreError?: boolean,
   sessionId?: string,
-  dbName?: string,
+  dbName?: string
 ) {
   const sid = generateProcedureSid(proName, sessionId, dbName);
   const { data: procedure } = await request.get(`/api/v1/procedure/${sid}`, {
     params: {
-      ignoreError,
-    },
+      ignoreError
+    }
   });
   if (procedure) {
     procedure.params?.forEach((p) => {
@@ -47,13 +47,13 @@ export async function getFunctionByFuncName(
   funcName: string,
   ignoreError?: boolean,
   sessionId?: string,
-  dbName?: string,
+  dbName?: string
 ) {
   const sid = generateFunctionSid(funcName, sessionId, dbName);
   const { data: func } = await request.get(`/api/v1/function/${sid}`, {
     params: {
-      ignoreError,
-    },
+      ignoreError
+    }
   });
   if (func) {
     func.params?.forEach((p) => {
@@ -64,7 +64,11 @@ export async function getFunctionByFuncName(
 }
 
 // 获取类型详情
-export async function getTypemByName(typeName: string, sessionId: string, dbName: string) {
+export async function getTypemByName(
+  typeName: string,
+  sessionId: string,
+  dbName: string
+) {
   const sid = generateTypeSid(typeName, sessionId, dbName);
   const { data: type } = await request.get(`/api/v1/type/${sid}`);
   return type;
@@ -73,14 +77,14 @@ export async function getTypemByName(typeName: string, sessionId: string, dbName
 export async function getPackageCreateSQL(
   packageName: string,
   sessionId: string,
-  dbName: string,
+  dbName: string
 ): Promise<string> {
   const sid = generatePackageSid(packageName, sessionId, dbName);
   const ret = await request.patch(`/api/v1/package/getCreateSql/${sid}`, {
     data: {
       packageName,
-      packageType: 'package',
-    },
+      packageType: 'package'
+    }
   });
   return ret?.data?.sql;
 }
@@ -88,19 +92,23 @@ export async function getPackageCreateSQL(
 export async function getPackageBodyCreateSQL(
   packageName: string,
   sessionId: string,
-  dbName: string,
+  dbName: string
 ): Promise<string> {
   const sid = generatePackageSid(packageName, sessionId, dbName);
   const ret = await request.patch(`/api/v1/package/getCreateSql/${sid}`, {
     data: {
       packageName,
-      packageType: 'packageBody',
-    },
+      packageType: 'packageBody'
+    }
   });
   return ret?.data?.sql;
 }
 
-export async function getPackage(pkgName: string, sessionId: string, dbName: string) {
+export async function getPackage(
+  pkgName: string,
+  sessionId: string,
+  dbName: string
+) {
   const sid = generatePackageSid(pkgName, sessionId, dbName);
   const res = await request.get(`/api/v1/package/${sid}`);
   const data = res?.data;
@@ -120,8 +128,8 @@ export async function getPackage(pkgName: string, sessionId: string, dbName: str
                 })
                 ?.join('$@p@$') +
                 '$@' +
-                returnType,
-            ),
+                returnType
+            )
           );
           const uniqKey = packageName + '.' + name + '*' + key;
           if (keyMap[uniqKey]) {
@@ -135,10 +143,10 @@ export async function getPackage(pkgName: string, sessionId: string, dbName: str
             ...obj,
             params: params?.map((param) =>
               Object.assign({}, param, {
-                originDefaultValue: param.defaultValue,
-              }),
+                originDefaultValue: param.defaultValue
+              })
             ),
-            key: uniqKey,
+            key: uniqKey
           };
         })
         .filter(Boolean);
@@ -161,11 +169,11 @@ export async function getProcedureCreateSQL(
   funName: string,
   func: Partial<IProcedure>,
   sessionId: string,
-  dbName: string,
+  dbName: string
 ) {
   const sid = generateProcedureSid(funName, sessionId, dbName);
   const ret = await request.patch(`/api/v1/procedure/getCreateSql/${sid}`, {
-    data: func,
+    data: func
   });
   return ret?.data?.sql;
 }

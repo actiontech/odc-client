@@ -1,6 +1,12 @@
-import { TableIndexScope, TableIndexType } from '@/page/Workspace/components/CreateTable/interface';
+import {
+  TableIndexScope,
+  TableIndexType
+} from '@/page/Workspace/components/CreateTable/interface';
 import { ColumnStoreType } from '@/d.ts/table';
-import { convertServerTablePartitionToTablePartition, PartitionLevelEnum } from '../table/helper';
+import {
+  convertServerTablePartitionToTablePartition,
+  PartitionLevelEnum
+} from '../table/helper';
 import { ConnectionMode, IPartitionType, IMaterializedView } from '@/d.ts';
 import { getQuoteTableName } from '@/util/utils';
 import { isBoolean } from 'lodash';
@@ -17,7 +23,9 @@ const convertMaterializedViewToTable = (data, dbMode?: ConnectionMode) => {
       scale: column.scale,
       width: column.precision,
       notNull: !column.nullable,
-      defaultValueOrExpr: column.virtual ? column.genExpression : column.defaultValue,
+      defaultValueOrExpr: column.virtual
+        ? column.genExpression
+        : column.defaultValue,
       generated: column.virtual,
       comment: column.comment,
       character: column.charsetName,
@@ -32,7 +40,7 @@ const convertMaterializedViewToTable = (data, dbMode?: ConnectionMode) => {
       secondPrecision: column.secondPrecision,
       dayPrecision: column.dayPrecision,
       yearPrecision: column.yearPrecision,
-      tableName: column.tableName,
+      tableName: column.tableName
     };
   });
   // index
@@ -53,7 +61,7 @@ const convertMaterializedViewToTable = (data, dbMode?: ConnectionMode) => {
       columnGroups:
         index.columnGroups?.map((item) => {
           return item.allColumns ? ColumnStoreType.ROW : ColumnStoreType.COLUMN;
-        }) || [],
+        }) || []
     };
   });
   // constraint
@@ -67,7 +75,7 @@ const convertMaterializedViewToTable = (data, dbMode?: ConnectionMode) => {
           columns: constraint.columnNames,
           ordinalPosition: constraint.ordinalPosition,
           enable: constraint.enabled,
-          defer: constraint.deferability,
+          defer: constraint.deferability
         });
         break;
       }
@@ -82,7 +90,7 @@ const convertMaterializedViewToTable = (data, dbMode?: ConnectionMode) => {
     partType,
     partition,
     partition?.subpartitionTemplated,
-    PartitionLevelEnum.partitions,
+    PartitionLevelEnum.partitions
   );
   if (partition?.subpartition) {
     convertServerTablePartitionToTablePartition(
@@ -91,7 +99,7 @@ const convertMaterializedViewToTable = (data, dbMode?: ConnectionMode) => {
       partition?.subpartition?.partitionOption?.type,
       data?.partition?.subpartition,
       data?.partition?.subpartitionTemplated,
-      PartitionLevelEnum.subpartitions,
+      PartitionLevelEnum.subpartitions
     );
   }
   return materializedView;
@@ -106,7 +114,7 @@ const convertCreateMaterializedViewData = (data, dbMode?: ConnectionMode) => {
     data?.info?.columnGroups?.map((item) => {
       return {
         allColumns: item === ColumnStoreType.ROW,
-        eachColumn: item === ColumnStoreType.COLUMN,
+        eachColumn: item === ColumnStoreType.COLUMN
       };
     }) || [];
   materializedView.refreshMethod = data?.info?.refreshMethod;
@@ -118,7 +126,7 @@ const convertCreateMaterializedViewData = (data, dbMode?: ConnectionMode) => {
     return {
       dbName: unit.dbName,
       tableName: unit.tableName || unit.viewName,
-      tableAliasName: unit.aliasName,
+      tableAliasName: unit.aliasName
     };
   });
   materializedView.createColumns = (data?.columns || []).map((col) => ({
@@ -126,7 +134,7 @@ const convertCreateMaterializedViewData = (data, dbMode?: ConnectionMode) => {
     dbName: col.dbName,
     aliasName: col.aliasName ? col.aliasName : col.columnName,
     tableName: col.tableName || col.viewName,
-    tableAliasName: col.tableOrViewAliasName,
+    tableAliasName: col.tableOrViewAliasName
   }));
   materializedView.operations = data?.operations;
   // constraint
@@ -139,7 +147,7 @@ const convertCreateMaterializedViewData = (data, dbMode?: ConnectionMode) => {
       columnNames: constraint.columns,
       ordinalPosition: constraint.ordinalPosition,
       enabled: constraint.enable,
-      deferability: constraint.defer,
+      deferability: constraint.defer
     });
   });
   // partitions
@@ -150,9 +158,11 @@ const convertCreateMaterializedViewData = (data, dbMode?: ConnectionMode) => {
         materializedView.partition = {
           partitionOption: {
             type: partType,
-            expression: partitions.expression || getQuoteTableName(partitions.columnName, dbMode),
-            partitionsNum: partitions.partNumber,
-          },
+            expression:
+              partitions.expression ||
+              getQuoteTableName(partitions.columnName, dbMode),
+            partitionsNum: partitions.partNumber
+          }
         };
         break;
       }
@@ -161,8 +171,8 @@ const convertCreateMaterializedViewData = (data, dbMode?: ConnectionMode) => {
           partitionOption: {
             type: partType,
             partitionsNum: partitions.partNumber,
-            columnNames: partitions.columns?.map((item) => item.columnName),
-          },
+            columnNames: partitions.columns?.map((item) => item.columnName)
+          }
         };
         break;
       }
@@ -170,15 +180,17 @@ const convertCreateMaterializedViewData = (data, dbMode?: ConnectionMode) => {
         materializedView.partition = {
           partitionOption: {
             type: partType,
-            expression: partitions.expression || getQuoteTableName(partitions.columnName, dbMode),
+            expression:
+              partitions.expression ||
+              getQuoteTableName(partitions.columnName, dbMode)
           },
           partitionDefinitions: partitions.partitions?.map((p) => {
             return {
               name: p.name,
               maxValues: [p.value],
-              ordinalPosition: p.ordinalPosition,
+              ordinalPosition: p.ordinalPosition
             };
-          }),
+          })
         };
         break;
       }
@@ -186,47 +198,56 @@ const convertCreateMaterializedViewData = (data, dbMode?: ConnectionMode) => {
         materializedView.partition = {};
         materializedView.partition.partitionOption = {
           type: partType,
-          columnNames: partitions.columns?.map((item) => item.columnName),
+          columnNames: partitions.columns?.map((item) => item.columnName)
         };
-        materializedView.partition.partitionDefinitions = partitions.partitions?.map((p) => {
-          return {
-            name: p.name,
-            maxValues: partitions.columns?.map((item) => p.value[item.columnName]),
-            ordinalPosition: p.ordinalPosition,
-          };
-        });
+        materializedView.partition.partitionDefinitions =
+          partitions.partitions?.map((p) => {
+            return {
+              name: p.name,
+              maxValues: partitions.columns?.map(
+                (item) => p.value[item.columnName]
+              ),
+              ordinalPosition: p.ordinalPosition
+            };
+          });
         break;
       }
       case IPartitionType.LIST: {
         materializedView.partition = {};
         materializedView.partition.partitionOption = {
           type: partType,
-          expression: partitions.expression || getQuoteTableName(partitions.columnName, dbMode),
+          expression:
+            partitions.expression ||
+            getQuoteTableName(partitions.columnName, dbMode)
         };
-        materializedView.partition.partitionDefinitions = partitions.partitions?.map((p) => {
-          return {
-            name: p.name,
-            valuesList: p.value?.split?.(',').map((item) => [item]),
-            ordinalPosition: p.ordinalPosition,
-          };
-        });
+        materializedView.partition.partitionDefinitions =
+          partitions.partitions?.map((p) => {
+            return {
+              name: p.name,
+              valuesList: p.value?.split?.(',').map((item) => [item]),
+              ordinalPosition: p.ordinalPosition
+            };
+          });
         break;
       }
       case IPartitionType.LIST_COLUMNS: {
         materializedView.partition = {};
         materializedView.partition.partitionOption = {
           type: partType,
-          columnNames: partitions.columns?.map((item) => item.columnName),
+          columnNames: partitions.columns?.map((item) => item.columnName)
         };
-        materializedView.partition.partitionDefinitions = partitions.partitions?.map((p) => {
-          return {
-            name: p.name,
-            valuesList: p.value?.map((valueItem) => {
-              return partitions.columns?.map((item) => valueItem[item.columnName]);
-            }),
-            ordinalPosition: p.ordinalPosition,
-          };
-        });
+        materializedView.partition.partitionDefinitions =
+          partitions.partitions?.map((p) => {
+            return {
+              name: p.name,
+              valuesList: p.value?.map((valueItem) => {
+                return partitions.columns?.map(
+                  (item) => valueItem[item.columnName]
+                );
+              }),
+              ordinalPosition: p.ordinalPosition
+            };
+          });
         break;
       }
     }
@@ -245,9 +266,9 @@ const convertCreateMaterializedViewData = (data, dbMode?: ConnectionMode) => {
         index.columnGroups?.map((item) => {
           return {
             allColumns: item === ColumnStoreType.ROW,
-            eachColumn: item === ColumnStoreType.COLUMN,
+            eachColumn: item === ColumnStoreType.COLUMN
           };
-        }) || [],
+        }) || []
     };
   });
   return materializedView;

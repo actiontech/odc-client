@@ -26,22 +26,29 @@ import { ResourceNodeType, TreeDataNode } from '../type';
 export function SynonymTreeData(
   dbSession: SessionStore,
   database: IDatabase,
-  isPublic: boolean = false,
+  isPublic: boolean = false
 ): TreeDataNode {
   const dbName = database.name;
-  const synonyms = isPublic ? dbSession?.database?.publicSynonyms : dbSession?.database?.synonyms;
+  const synonyms = isPublic
+    ? dbSession?.database?.publicSynonyms
+    : dbSession?.database?.synonyms;
   const treeData: TreeDataNode = {
     title: isPublic
       ? formatMessage({
           id: 'odc.ResourceTree.Nodes.synonym.CommonSynonyms',
-          defaultMessage: '公共同义词',
+          defaultMessage: '公共同义词'
         }) //公共同义词
-      : formatMessage({ id: 'odc.ResourceTree.Nodes.synonym.Synonym', defaultMessage: '同义词' }), //同义词
+      : formatMessage({
+          id: 'odc.ResourceTree.Nodes.synonym.Synonym',
+          defaultMessage: '同义词'
+        }), //同义词
     key: `${database.id}-${dbName}-synonym-${isPublic}`,
-    type: isPublic ? ResourceNodeType.PublicSynonymRoot : ResourceNodeType.SynonymRoot,
+    type: isPublic
+      ? ResourceNodeType.PublicSynonymRoot
+      : ResourceNodeType.SynonymRoot,
     data: database,
     sessionId: dbSession?.sessionId,
-    isLeaf: false,
+    isLeaf: false
   };
   if (synonyms) {
     treeData.children = synonyms.map((synonym) => {
@@ -49,14 +56,16 @@ export function SynonymTreeData(
       return {
         title: synonym.synonymName,
         key,
-        type: isPublic ? ResourceNodeType.PublicSynonym : ResourceNodeType.Synonym,
+        type: isPublic
+          ? ResourceNodeType.PublicSynonym
+          : ResourceNodeType.Synonym,
         data: synonym,
         dbObjectType: DbObjectType.synonym,
         icon: (
           <Icon
             component={SynonymSvg}
             style={{
-              color: 'var(--icon-color-5)',
+              color: 'var(--icon-color-5)'
             }}
           />
         ),
@@ -65,11 +74,11 @@ export function SynonymTreeData(
           openSynonymViewPage(
             synonym.synonymName,
             isPublic ? SynonymType.PUBLIC : SynonymType.COMMON,
-            session?.database?.databaseId,
+            session?.database?.databaseId
           );
         },
         sessionId: dbSession?.sessionId,
-        isLeaf: true,
+        isLeaf: true
       };
     });
   }

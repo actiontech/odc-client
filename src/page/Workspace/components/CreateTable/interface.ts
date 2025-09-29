@@ -20,7 +20,7 @@ import {
   TableConstraintDefer,
   TableForeignConstraintOnDeleteType,
   TableForeignConstraintOnUpdateType,
-  TablePermissionType,
+  TablePermissionType
 } from '@/d.ts/table';
 
 export enum TableTabType {
@@ -28,7 +28,7 @@ export enum TableTabType {
   COLUMN = 'column',
   INDEX = 'index',
   CONSTRAINT = 'constranint',
-  PARTITION = 'partition',
+  PARTITION = 'partition'
 }
 
 export interface ITableModel {
@@ -182,18 +182,18 @@ export enum TableIndexMehod {
   NONE = 'NONE',
   BTREE = 'BTREE',
   HASH = 'HASH',
-  FULLTEXT = 'FULLTEXT',
+  FULLTEXT = 'FULLTEXT'
 }
 
 export enum TableIndexType {
   FULLTEXT = 'FULLTEXT',
   UNIQUE = 'UNIQUE',
-  NORMAL = 'NORMAL',
+  NORMAL = 'NORMAL'
 }
 
 export enum TableIndexScope {
   GLOBAL = 'GLOBAL',
-  LOCAL = 'LOCAL',
+  LOCAL = 'LOCAL'
 }
 
 export interface ITableRangePartition {

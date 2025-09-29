@@ -19,11 +19,21 @@ import { addTablePermissions } from '@/common/network/project';
 import {
   expireTimeOptions,
   getExpireTime,
-  permissionOptions,
+  permissionOptions
 } from '@/component/Task/ApplyTablePermission/CreateModal';
 import TableSelecter from '@/component/Task/component/TableSelecter';
 import { groupTableIdsByDataBase } from '@/component/Task/component/TableSelecter/util';
-import { Button, Checkbox, DatePicker, Drawer, Form, Modal, Select, Space, message } from 'antd';
+import {
+  Button,
+  Checkbox,
+  DatePicker,
+  Drawer,
+  Form,
+  Modal,
+  Select,
+  Space,
+  message
+} from 'antd';
 import React, { useState } from 'react';
 import styles from './index.less';
 import dayjs from 'dayjs';
@@ -60,13 +70,13 @@ const CreateModal: React.FC<IProps> = (props) => {
       Modal.confirm({
         title: formatMessage({
           id: 'src.page.Project.User.ManageModal.Table.CreateAuth.994F4BA8',
-          defaultMessage: '确认取消新增授权吗？',
+          defaultMessage: '确认取消新增授权吗？'
         }),
         centered: true,
         onOk: () => {
           handleModalVisizble(false);
           hadleReset();
-        },
+        }
       });
     } else {
       handleModalVisizble(false);
@@ -88,8 +98,12 @@ const CreateModal: React.FC<IProps> = (props) => {
           projectId,
           tableIds: groupTableIdsByDataBase(tables),
           types,
-          expireTime: getExpireTime(expireTime, customExpireTime, isCustomExpireTime),
-          userId,
+          expireTime: getExpireTime(
+            expireTime,
+            customExpireTime,
+            isCustomExpireTime
+          ),
+          userId
         };
         setConfirmLoading(true);
         const res = await addTablePermissions(data);
@@ -99,8 +113,8 @@ const CreateModal: React.FC<IProps> = (props) => {
           message.success(
             formatMessage({
               id: 'src.page.Project.User.ManageModal.Table.CreateAuth.B6C313E1',
-              defaultMessage: '新增授权成功！',
-            }),
+              defaultMessage: '新增授权成功！'
+            })
           );
           onSwitchUserTab();
         }
@@ -121,7 +135,7 @@ const CreateModal: React.FC<IProps> = (props) => {
       >
         {formatMessage({
           id: 'src.page.Project.User.ManageModal.Table.CreateAuth.4B42194A',
-          defaultMessage: '新增表/视图授权',
+          defaultMessage: '新增表/视图授权'
         })}
       </Button>
       <Drawer
@@ -130,7 +144,7 @@ const CreateModal: React.FC<IProps> = (props) => {
         width={816}
         title={formatMessage({
           id: 'src.page.Project.User.ManageModal.Table.CreateAuth.680C9CFF',
-          defaultMessage: '新增授权',
+          defaultMessage: '新增授权'
         })}
         footer={
           <Space>
@@ -141,13 +155,17 @@ const CreateModal: React.FC<IProps> = (props) => {
             >
               {formatMessage({
                 id: 'src.page.Project.User.ManageModal.Table.CreateAuth.9F6C8075',
-                defaultMessage: '取消',
+                defaultMessage: '取消'
               })}
             </Button>
-            <Button type="primary" loading={confirmLoading} onClick={handleSubmit}>
+            <Button
+              type="primary"
+              loading={confirmLoading}
+              onClick={handleSubmit}
+            >
               {formatMessage({
                 id: 'src.page.Project.User.ManageModal.Table.CreateAuth.35C819CB',
-                defaultMessage: '新建',
+                defaultMessage: '新建'
               })}
             </Button>
           </Space>
@@ -169,7 +187,7 @@ const CreateModal: React.FC<IProps> = (props) => {
             name="tables"
             label={formatMessage({
               id: 'src.page.Project.User.ManageModal.Table.CreateAuth.0635BFD4',
-              defaultMessage: '数据库',
+              defaultMessage: '数据库'
             })}
             required
           >
@@ -179,16 +197,16 @@ const CreateModal: React.FC<IProps> = (props) => {
             name="types"
             label={formatMessage({
               id: 'src.page.Project.User.ManageModal.Table.CreateAuth.5FD0D70D',
-              defaultMessage: '权限类型',
+              defaultMessage: '权限类型'
             })}
             rules={[
               {
                 required: true,
                 message: formatMessage({
                   id: 'src.page.Project.User.ManageModal.Table.CreateAuth.F34065CE',
-                  defaultMessage: '请选择',
-                }),
-              },
+                  defaultMessage: '请选择'
+                })
+              }
             ]}
           >
             <CheckboxGroup options={permissionOptions} />
@@ -197,7 +215,7 @@ const CreateModal: React.FC<IProps> = (props) => {
             <Form.Item
               label={formatMessage({
                 id: 'src.page.Project.User.ManageModal.Table.CreateAuth.9C0612BE',
-                defaultMessage: '权限有效期',
+                defaultMessage: '权限有效期'
               })}
               name="expireTime"
               rules={[
@@ -205,9 +223,9 @@ const CreateModal: React.FC<IProps> = (props) => {
                   required: true,
                   message: formatMessage({
                     id: 'src.page.Project.User.ManageModal.Table.CreateAuth.705DD31B',
-                    defaultMessage: '请选择',
-                  }),
-                },
+                    defaultMessage: '请选择'
+                  })
+                }
               ]}
             >
               <Select
@@ -215,20 +233,21 @@ const CreateModal: React.FC<IProps> = (props) => {
                 showSearch
                 placeholder={formatMessage({
                   id: 'src.page.Project.User.ManageModal.Table.CreateAuth.1D45C292',
-                  defaultMessage: '请选择',
+                  defaultMessage: '请选择'
                 })}
                 options={expireTimeOptions}
               />
             </Form.Item>
             <Form.Item noStyle shouldUpdate>
               {({ getFieldValue }) => {
-                const isCustomExpireTime = getFieldValue('expireTime')?.startsWith('custom');
+                const isCustomExpireTime =
+                  getFieldValue('expireTime')?.startsWith('custom');
                 return (
                   isCustomExpireTime && (
                     <Form.Item
                       label={formatMessage({
                         id: 'src.page.Project.User.ManageModal.Table.CreateAuth.6D949D9E',
-                        defaultMessage: '结束日期',
+                        defaultMessage: '结束日期'
                       })}
                       name="customExpireTime"
                       rules={[
@@ -236,12 +255,15 @@ const CreateModal: React.FC<IProps> = (props) => {
                           required: true,
                           message: formatMessage({
                             id: 'src.page.Project.User.ManageModal.Table.CreateAuth.E589EDA6',
-                            defaultMessage: '请选择',
-                          }),
-                        },
+                            defaultMessage: '请选择'
+                          })
+                        }
                       ]}
                     >
-                      <DatePicker style={{ width: '327px' }} disabledDate={disabledDate} />
+                      <DatePicker
+                        style={{ width: '327px' }}
+                        disabledDate={disabledDate}
+                      />
                     </Form.Item>
                   )
                 );

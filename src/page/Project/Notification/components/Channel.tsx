@@ -21,10 +21,13 @@ import {
   editChannel,
   existsChannel,
   getChannelsList,
-  testChannel,
+  testChannel
 } from '@/common/network/projectNotification';
 import CommonTable from '@/component/CommonTable';
-import { IOperationOptionType, ITableLoadOptions } from '@/component/CommonTable/interface';
+import {
+  IOperationOptionType,
+  ITableLoadOptions
+} from '@/component/CommonTable/interface';
 import FormItemPanel from '@/component/FormItemPanel';
 import HelpDoc from '@/component/helpDoc';
 import { IResponseData } from '@/d.ts';
@@ -36,7 +39,7 @@ import {
   EOverLimitStrategyTipMap,
   ETimeUnit,
   IChannel,
-  IRateLimitConfig,
+  IRateLimitConfig
 } from '@/d.ts/projectNotification';
 import odc from '@/plugins/odc';
 import { formatMessage, getLocalDocs } from '@/util/intl';
@@ -55,7 +58,7 @@ import {
   Radio,
   Select,
   Space,
-  Tabs,
+  Tabs
 } from 'antd';
 import { useForm, useWatch } from 'antd/lib/form/Form';
 import classNames from 'classnames';
@@ -69,7 +72,7 @@ import {
   EContentTemplateMap,
   ELanguageMap,
   TimeUnitMap,
-  WebhookPlaceholderMap,
+  WebhookPlaceholderMap
 } from './interface';
 
 const Channel: React.FC<{
@@ -95,9 +98,11 @@ const Channel: React.FC<{
       type,
       sort: column?.dataIndex,
       page: current,
-      size: pageSize,
+      size: pageSize
     };
-    data.sort = column ? `${column.dataIndex},${order === 'ascend' ? 'asc' : 'desc'}` : undefined;
+    data.sort = column
+      ? `${column.dataIndex},${order === 'ascend' ? 'asc' : 'desc'}`
+      : undefined;
     const rawChannelsList = await getChannelsList(projectId, data);
     if (rawChannelsList) {
       setChannelsList(rawChannelsList);
@@ -107,11 +112,11 @@ const Channel: React.FC<{
     return Modal.confirm({
       title: formatMessage({
         id: 'src.page.Project.Notification.components.C66FA7EF',
-        defaultMessage: '确认要删除此通道吗？',
+        defaultMessage: '确认要删除此通道吗？'
       }), //'确认要删除此通道吗？'
       content: formatMessage({
         id: 'src.page.Project.Notification.components.C6EB2CE0',
-        defaultMessage: '删除后，关联工单事件的消息推送将不再生效。',
+        defaultMessage: '删除后，关联工单事件的消息推送将不再生效。'
       }), //'删除后，关联工单事件的消息推送将不再生效。'
       onOk: async () => {
         const result = await deleteChannel(projectId, channelId);
@@ -119,8 +124,8 @@ const Channel: React.FC<{
           message.success(
             formatMessage({
               id: 'src.page.Project.Notification.components.00F5D0D6' /*'删除成功!'*/,
-              defaultMessage: '删除成功!',
-            }),
+              defaultMessage: '删除成功!'
+            })
           );
           tableRef?.current?.reload?.();
           return;
@@ -128,11 +133,11 @@ const Channel: React.FC<{
         message.error(
           formatMessage({
             id: 'src.page.Project.Notification.components.FBB6B2D7' /*'删除失败'*/,
-            defaultMessage: '删除失败',
-          }),
+            defaultMessage: '删除失败'
+          })
         );
       },
-      onCancel: () => {},
+      onCancel: () => {}
     });
   };
   const handleChannelEdit = (channelId: number) => {
@@ -144,7 +149,9 @@ const Channel: React.FC<{
     needReload && tableRef?.current?.reload();
   };
 
-  const hanleOpenChannelDetailDrawer = (channel: Omit<IChannel<EChannelType>, 'channelConfig'>) => {
+  const hanleOpenChannelDetailDrawer = (
+    channel: Omit<IChannel<EChannelType>, 'channelConfig'>
+  ) => {
     setSelectedChannelId(channel?.id);
     setDetailDrawerOpen(true);
   };
@@ -156,7 +163,7 @@ const Channel: React.FC<{
           {
             formatMessage({
               id: 'src.page.Project.Notification.components.5909ABDC' /*新建推送通道*/,
-              defaultMessage: '新建推送通道',
+              defaultMessage: '新建推送通道'
             }) /* 新建推送通道 */
           }
         </span>
@@ -165,15 +172,15 @@ const Channel: React.FC<{
       isPrimary: true,
       onClick: () => {
         setFormDrawerOpen(true);
-      },
-    },
+      }
+    }
   ];
 
   const columns = getChannelColumns({
     handleDelete,
     handleChannelEdit,
     hanleOpenChannelDetailDrawer,
-    hideColumns: projectArchived ? ['action'] : [],
+    hideColumns: projectArchived ? ['action'] : []
   });
   return (
     <div className={styles.common}>
@@ -202,15 +209,15 @@ const Channel: React.FC<{
         onChange={loadChannels}
         operationContent={{
           options: projectArchived ? [] : operationOptions,
-          isNeedOccupyElement: projectArchived,
+          isNeedOccupyElement: projectArchived
         }}
         tableProps={{
           columns,
           dataSource: channelsList?.contents || [],
           pagination: {
             current: channelsList?.page?.number,
-            total: channelsList?.page?.totalElements,
-          },
+            total: channelsList?.page?.totalElements
+          }
         }}
       />
     </div>
@@ -220,9 +227,11 @@ const Channel: React.FC<{
 const docUrlMap = {
   [EChannelType.DING_TALK]:
     'https://help.aliyun.com/zh/arms/alarm-operation-center/obtain-the-webhook-url-of-a-dingtalk-chatbot',
-  [EChannelType.FEI_SHU]: 'https://open.feishu.cn/document/client-docs/bot-v3/add-custom-bot',
-  [EChannelType.WE_COM]: 'https://help.aliyun.com/zh/arms/alarm-operation-center/wecom-chatbots',
-  [EChannelType.WEBHOOK]: null,
+  [EChannelType.FEI_SHU]:
+    'https://open.feishu.cn/document/client-docs/bot-v3/add-custom-bot',
+  [EChannelType.WE_COM]:
+    'https://help.aliyun.com/zh/arms/alarm-operation-center/wecom-chatbots',
+  [EChannelType.WEBHOOK]: null
 };
 type GetFinalSignParams = {
   channelId: number;
@@ -236,23 +245,35 @@ export const FromChannelDrawer: React.FC<{
   formDrawerOpen: boolean;
   setFormDrawerOpen: (formDrawerOpen: boolean) => void;
   closedCallback?: (needReload?: boolean) => void;
-}> = ({ projectId, channelId, formDrawerOpen, setFormDrawerOpen, closedCallback }) => {
+}> = ({
+  projectId,
+  channelId,
+  formDrawerOpen,
+  setFormDrawerOpen,
+  closedCallback
+}) => {
   const [formRef] = useForm<IChannel<EChannelType>>();
   const type = useWatch('type', formRef);
   const sign = useWatch(['channelConfig', 'sign'], formRef);
   const isWebhook = type === EChannelType.WEBHOOK;
-  const hasSign = [EChannelType.DING_TALK, EChannelType.FEI_SHU]?.includes(type);
-  const hasAtMobiles = [EChannelType.DING_TALK, EChannelType.WE_COM]?.includes(type);
-  const [currentChannel, setCurrentChannel] = useState<IChannel<EChannelType>>();
+  const hasSign = [EChannelType.DING_TALK, EChannelType.FEI_SHU]?.includes(
+    type
+  );
+  const hasAtMobiles = [EChannelType.DING_TALK, EChannelType.WE_COM]?.includes(
+    type
+  );
+  const [currentChannel, setCurrentChannel] =
+    useState<IChannel<EChannelType>>();
   const [hasChangeSign, setHasChangeSign] = useState<boolean>(false);
   const [hasEdit, setHasEdit] = useState<boolean>(false);
   const [testChannelSuccess, setTestChannelSuccess] = useState<boolean>(false);
-  const [testChannelErrorMessage, setTestChannelErrorMessage] = useState<string>(null);
+  const [testChannelErrorMessage, setTestChannelErrorMessage] =
+    useState<string>(null);
   const [testLoading, setTestLoading] = useState<boolean>(false);
   const tip = formatMessage({
     id: 'src.page.Project.Notification.components.0963E13A',
     defaultMessage:
-      '配置{"key":"value"}来验证json结构的返回结果，验证返回结果中包含配置中的所有key、value，则认为发送成功',
+      '配置{"key":"value"}来验证json结构的返回结果，验证返回结果中包含配置中的所有key、value，则认为发送成功'
   }); //`配置{"key":"value"}来验证json结构的返回结果，验证返回结果中包含配置中的所有key、value，则认为发送成功`
   const loadChannelDetail = async (channelId) => {
     const channel = await detailChannel(projectId, channelId);
@@ -264,8 +285,8 @@ export const FromChannelDrawer: React.FC<{
     message.error(
       formatMessage({
         id: 'src.page.Project.Notification.components.A2B52297' /*'加载通道数据失败'*/,
-        defaultMessage: '加载通道数据失败',
-      }),
+        defaultMessage: '加载通道数据失败'
+      })
     );
   };
   const handleTestChannel = async () => {
@@ -274,12 +295,13 @@ export const FromChannelDrawer: React.FC<{
     setTestLoading(true);
     if (type === EChannelType.DING_TALK || type === EChannelType.FEI_SHU) {
       // 加密后的密钥在编辑时显示为星号，只有用户主动点击修改，并且修改输入框中的内容时才会重新生成加密后的密钥。
-      (channel as IChannel<EChannelType.FEI_SHU | EChannelType.DING_TALK>).channelConfig.sign =
-        getFinalSign({
-          channelId,
-          hasChangeSign,
-          sign,
-        });
+      (
+        channel as IChannel<EChannelType.FEI_SHU | EChannelType.DING_TALK>
+      ).channelConfig.sign = getFinalSign({
+        channelId,
+        hasChangeSign,
+        sign
+      });
     }
     if (channelId) {
       channel.id = channelId;
@@ -290,16 +312,16 @@ export const FromChannelDrawer: React.FC<{
       message.success(
         formatMessage({
           id: 'src.page.Project.Notification.components.A50DD7D6' /*'测试消息发送成功！'*/,
-          defaultMessage: '测试消息发送成功！',
-        }),
+          defaultMessage: '测试消息发送成功！'
+        })
       );
     } else {
       setTestChannelSuccess(false);
       message.error(
         formatMessage({
           id: 'src.page.Project.Notification.components.494A6AA0' /*'测试消息发送失败！'*/,
-          defaultMessage: '测试消息发送失败！',
-        }),
+          defaultMessage: '测试消息发送失败！'
+        })
       );
       setTestChannelErrorMessage(result?.errorMessage);
     }
@@ -310,7 +332,11 @@ export const FromChannelDrawer: React.FC<{
    * @param param0
    * @returns string ｜ null
    */
-  const getFinalSign: GetFinalSignFunc = ({ channelId, hasChangeSign, sign }) => {
+  const getFinalSign: GetFinalSignFunc = ({
+    channelId,
+    hasChangeSign,
+    sign
+  }) => {
     if (channelId) {
       // 编辑时内容未被修改返回null，已被修改则返回加密后的结果，未输入密钥时返回encrypt('')
       return hasChangeSign ? encrypt(sign ? sign : '') : null;
@@ -326,16 +352,16 @@ export const FromChannelDrawer: React.FC<{
         title: channelId
           ? formatMessage({
               id: 'src.page.Project.Notification.components.1E5D8CF3',
-              defaultMessage: '确认取消编辑通道？',
+              defaultMessage: '确认取消编辑通道？'
             })
           : formatMessage({
               id: 'src.page.Project.Notification.components.5ED12758',
-              defaultMessage: '确认取消创建通道？',
+              defaultMessage: '确认取消创建通道？'
             }),
         onOk: () => {
           setFormDrawerOpen(false);
         },
-        onCancel: () => {},
+        onCancel: () => {}
       });
     }
     setFormDrawerOpen(false);
@@ -347,12 +373,13 @@ export const FromChannelDrawer: React.FC<{
     // 只有飞书群和钉钉群机器人才有密钥
     if (type === EChannelType.DING_TALK || type === EChannelType.FEI_SHU) {
       // 加密后的密钥在编辑时显示为星号，只有用户主动点击修改，并且修改输入框中的内容时才会重新生成加密后的密钥。
-      (result as IChannel<EChannelType.FEI_SHU | EChannelType.DING_TALK>).channelConfig.sign =
-        getFinalSign({
-          channelId,
-          hasChangeSign,
-          sign,
-        });
+      (
+        result as IChannel<EChannelType.FEI_SHU | EChannelType.DING_TALK>
+      ).channelConfig.sign = getFinalSign({
+        channelId,
+        hasChangeSign,
+        sign
+      });
     }
     if (channelId) {
       data = await editChannel(projectId, channelId, result);
@@ -364,12 +391,12 @@ export const FromChannelDrawer: React.FC<{
         channelId
           ? formatMessage({
               id: 'src.page.Project.Notification.components.E4112EC6',
-              defaultMessage: '保存成功',
+              defaultMessage: '保存成功'
             })
           : formatMessage({
               id: 'src.page.Project.Notification.components.A1ADE4ED',
-              defaultMessage: '新建成功',
-            }),
+              defaultMessage: '新建成功'
+            })
       );
       setFormDrawerOpen(false);
       closedCallback?.(true);
@@ -379,12 +406,12 @@ export const FromChannelDrawer: React.FC<{
       channelId
         ? formatMessage({
             id: 'src.page.Project.Notification.components.CD9CDC1F',
-            defaultMessage: '保存失败',
+            defaultMessage: '保存失败'
           })
         : formatMessage({
             id: 'src.page.Project.Notification.components.562D512A',
-            defaultMessage: '新建失败',
-          }),
+            defaultMessage: '新建失败'
+          })
     );
   };
   const handleFieldsChange = async (changedFields, allFields) => {
@@ -399,7 +426,7 @@ export const FromChannelDrawer: React.FC<{
       const _language = fileValue || ELanguage.ZH_CN;
       await formRef.setFieldValue(
         ['channelConfig', 'contentTemplate'],
-        EContentTemplateMap?.[_language],
+        EContentTemplateMap?.[_language]
       );
     }
     if (fieldName === 'type') {
@@ -410,7 +437,7 @@ export const FromChannelDrawer: React.FC<{
             ['channelConfig', 'httpProxy'],
             ['channelConfig', 'headersTemplate'],
             ['channelConfig', 'bodyTemplate'],
-            ['channelConfig', 'responseValidation'],
+            ['channelConfig', 'responseValidation']
           ]);
           break;
         }
@@ -421,7 +448,7 @@ export const FromChannelDrawer: React.FC<{
             ['channelConfig', 'httpProxy'],
             ['channelConfig', 'headersTemplate'],
             ['channelConfig', 'bodyTemplate'],
-            ['channelConfig', 'responseValidation'],
+            ['channelConfig', 'responseValidation']
           ]);
           break;
         }
@@ -433,14 +460,14 @@ export const FromChannelDrawer: React.FC<{
             ['channelConfig', 'httpProxy'],
             ['channelConfig', 'headersTemplate'],
             ['channelConfig', 'bodyTemplate'],
-            ['channelConfig', 'responseValidation'],
+            ['channelConfig', 'responseValidation']
           ]);
           break;
         }
         case EChannelType.WEBHOOK: {
           formRef.resetFields([
             ['channelConfig', 'sign'],
-            ['channelConfig', 'atMobiles'],
+            ['channelConfig', 'atMobiles']
           ]);
           break;
         }
@@ -466,8 +493,11 @@ export const FromChannelDrawer: React.FC<{
       setHasChangeSign(false);
       await formRef.setFieldValue(
         ['channelConfig', 'sign'],
-        (currentChannel as IChannel<EChannelType.FEI_SHU | EChannelType.DING_TALK>)?.channelConfig
-          ?.sign,
+        (
+          currentChannel as IChannel<
+            EChannelType.FEI_SHU | EChannelType.DING_TALK
+          >
+        )?.channelConfig?.sign
       );
     } else {
       setHasChangeSign(true);
@@ -499,11 +529,11 @@ export const FromChannelDrawer: React.FC<{
         channelId
           ? formatMessage({
               id: 'src.page.Project.Notification.components.086256DF',
-              defaultMessage: '编辑推送通道',
+              defaultMessage: '编辑推送通道'
             })
           : formatMessage({
               id: 'src.page.Project.Notification.components.9A35D4DD',
-              defaultMessage: '新建推送通道',
+              defaultMessage: '新建推送通道'
             })
       }
       width={520}
@@ -515,7 +545,7 @@ export const FromChannelDrawer: React.FC<{
               {
                 formatMessage({
                   id: 'src.page.Project.Notification.components.BA80DE5A' /*取消*/,
-                  defaultMessage: '取消',
+                  defaultMessage: '取消'
                 }) /* 取消 */
               }
             </Button>
@@ -523,19 +553,23 @@ export const FromChannelDrawer: React.FC<{
               {
                 formatMessage({
                   id: 'src.page.Project.Notification.components.0ED8B37C' /*发送测试消息*/,
-                  defaultMessage: '发送测试消息',
+                  defaultMessage: '发送测试消息'
                 }) /* 发送测试消息 */
               }
             </Button>
-            <Button disabled={!testChannelSuccess} type="primary" onClick={handleFormDrawerSubmit}>
+            <Button
+              disabled={!testChannelSuccess}
+              type="primary"
+              onClick={handleFormDrawerSubmit}
+            >
               {channelId
                 ? formatMessage({
                     id: 'src.page.Project.Notification.components.F21F4A25',
-                    defaultMessage: '保存',
+                    defaultMessage: '保存'
                   })
                 : formatMessage({
                     id: 'src.page.Project.Notification.components.3FA9FBAE',
-                    defaultMessage: '新建',
+                    defaultMessage: '新建'
                   })}
             </Button>
           </Space>
@@ -565,8 +599,8 @@ export const FromChannelDrawer: React.FC<{
               language: ELanguage.ZH_CN,
               contentTemplate: EContentTemplateMap[ELanguage.ZH_CN],
               rateLimitConfig: null,
-              atMobiles: [],
-            },
+              atMobiles: []
+            }
           }
         }
       >
@@ -574,7 +608,7 @@ export const FromChannelDrawer: React.FC<{
           label={
             formatMessage({
               id: 'src.page.Project.Notification.components.E6860CB3',
-              defaultMessage: '通道名称',
+              defaultMessage: '通道名称'
             }) /*"通道名称"*/
           }
           name="name"
@@ -584,23 +618,23 @@ export const FromChannelDrawer: React.FC<{
               required: true,
               message: formatMessage({
                 id: 'src.page.Project.Notification.components.2E3BEDFA',
-                defaultMessage: '请输入',
-              }), //'请输入'
+                defaultMessage: '请输入'
+              }) //'请输入'
             },
             {
               message: formatMessage({
                 id: 'src.page.Project.Notification.components.CA33D8AB',
-                defaultMessage: '通道名称已存在',
+                defaultMessage: '通道名称已存在'
               }), //'通道名称已存在'
-              validator: checkNameRepeat,
-            },
+              validator: checkNameRepeat
+            }
           ]}
         >
           <Input
             placeholder={
               formatMessage({
                 id: 'src.page.Project.Notification.components.4E72988A',
-                defaultMessage: '请输入通道名称',
+                defaultMessage: '请输入通道名称'
               }) /*"请输入通道名称"*/
             }
           />
@@ -609,7 +643,7 @@ export const FromChannelDrawer: React.FC<{
           label={
             formatMessage({
               id: 'src.page.Project.Notification.components.6A1DF023',
-              defaultMessage: '通道类型',
+              defaultMessage: '通道类型'
             }) /*"通道类型"*/
           }
           name="type"
@@ -618,9 +652,9 @@ export const FromChannelDrawer: React.FC<{
               required: true,
               message: formatMessage({
                 id: 'src.page.Project.Notification.components.7C80562E',
-                defaultMessage: '请选择通道类型',
-              }), //'请选择通道类型'
-            },
+                defaultMessage: '请选择通道类型'
+              }) //'请选择通道类型'
+            }
           ]}
         >
           <Radio.Group defaultValue={EChannelType.DING_TALK}>
@@ -647,7 +681,7 @@ export const FromChannelDrawer: React.FC<{
                     {
                       formatMessage({
                         id: 'src.page.Project.Notification.components.D55443F5' /*Webhook 地址*/,
-                        defaultMessage: 'Webhook 地址',
+                        defaultMessage: 'Webhook 地址'
                       }) /* Webhook 地址 */
                     }
                   </div>
@@ -663,7 +697,7 @@ export const FromChannelDrawer: React.FC<{
                       {
                         formatMessage({
                           id: 'src.page.Project.Notification.components.E5532E71' /*如何配置*/,
-                          defaultMessage: '如何配置',
+                          defaultMessage: '如何配置'
                         }) /* 如何配置 */
                       }
                     </a>
@@ -677,9 +711,9 @@ export const FromChannelDrawer: React.FC<{
                   required: true,
                   message: formatMessage({
                     id: 'src.page.Project.Notification.components.982731E2',
-                    defaultMessage: '请输入',
-                  }), //'请输入'
-                },
+                    defaultMessage: '请输入'
+                  }) //'请输入'
+                }
               ]}
             >
               <Input placeholder={WebhookPlaceholderMap?.[type]} />
@@ -690,7 +724,7 @@ export const FromChannelDrawer: React.FC<{
                   label={
                     formatMessage({
                       id: 'src.page.Project.Notification.components.BE20D900',
-                      defaultMessage: '签名密钥',
+                      defaultMessage: '签名密钥'
                     }) /*"签名密钥"*/
                   }
                   name={['channelConfig', 'sign']}
@@ -699,7 +733,7 @@ export const FromChannelDrawer: React.FC<{
                     placeholder={
                       formatMessage({
                         id: 'src.page.Project.Notification.components.A3866291',
-                        defaultMessage: '若开启签名校验，请输入密钥',
+                        defaultMessage: '若开启签名校验，请输入密钥'
                       }) /*"若开启签名校验，请输入密钥"*/
                     }
                     type="password"
@@ -711,11 +745,11 @@ export const FromChannelDrawer: React.FC<{
                     {hasChangeSign
                       ? formatMessage({
                           id: 'src.page.Project.Notification.components.042EAFE9',
-                          defaultMessage: '取消修改',
+                          defaultMessage: '取消修改'
                         })
                       : formatMessage({
                           id: 'src.page.Project.Notification.components.2EE5076E',
-                          defaultMessage: '修改密钥',
+                          defaultMessage: '修改密钥'
                         })}
                   </a>
                 )}
@@ -727,7 +761,7 @@ export const FromChannelDrawer: React.FC<{
                   label={
                     formatMessage({
                       id: 'src.page.Project.Notification.components.8062E4B6',
-                      defaultMessage: '代理',
+                      defaultMessage: '代理'
                     }) /*"代理"*/
                   }
                   name={['channelConfig', 'httpProxy']}
@@ -736,7 +770,7 @@ export const FromChannelDrawer: React.FC<{
                     placeholder={
                       formatMessage({
                         id: 'src.page.Project.Notification.components.753E4F73',
-                        defaultMessage: '请输入',
+                        defaultMessage: '请输入'
                       }) /*"请输入"*/
                     }
                   />
@@ -745,7 +779,7 @@ export const FromChannelDrawer: React.FC<{
                   label={
                     formatMessage({
                       id: 'src.page.Project.Notification.components.DFE43F9E',
-                      defaultMessage: '请求方法',
+                      defaultMessage: '请求方法'
                     }) /*"请求方法"*/
                   }
                   name={['channelConfig', 'httpMethod']}
@@ -756,25 +790,31 @@ export const FromChannelDrawer: React.FC<{
                     <Radio value="PUT">PUT</Radio>
                   </Radio.Group>
                 </Form.Item>
-                <Form.Item label="Header" name={['channelConfig', 'headersTemplate']}>
+                <Form.Item
+                  label="Header"
+                  name={['channelConfig', 'headersTemplate']}
+                >
                   <Input.TextArea
                     placeholder={
                       formatMessage({
                         id: 'src.page.Project.Notification.components.B318E408',
                         defaultMessage:
-                          '请输入header，暂不支持模版，为空表示不使用header参数，多个header的格式为key1:value1;key2: value2',
+                          '请输入header，暂不支持模版，为空表示不使用header参数，多个header的格式为key1:value1;key2: value2'
                       }) /*"请输入header，赞不支持模版，为空表示不使用header参数，多个header的格式为key1:value1; key2: value2"*/
                     }
                     rows={4}
                   />
                 </Form.Item>
-                <Form.Item label="Body" name={['channelConfig', 'bodyTemplate']}>
+                <Form.Item
+                  label="Body"
+                  name={['channelConfig', 'bodyTemplate']}
+                >
                   <Input.TextArea
                     placeholder={
                       formatMessage({
                         id: 'src.page.Project.Notification.components.130EA25D',
                         defaultMessage:
-                          '请输入body模版，可通过输入$(message)引用通知消息，为空表示不使用HTTP body',
+                          '请输入body模版，可通过输入$(message)引用通知消息，为空表示不使用HTTP body'
                       }) /*"请输入body模版，可通过输入$(message)引用通知消息，为空表示不使用HTTP body"*/
                     }
                     rows={4}
@@ -784,16 +824,19 @@ export const FromChannelDrawer: React.FC<{
                   label={
                     formatMessage({
                       id: 'src.page.Project.Notification.components.A1BCCE0E',
-                      defaultMessage: 'Response校验',
+                      defaultMessage: 'Response校验'
                     }) /*"Response校验"*/
                   }
                 >
-                  <Form.Item noStyle name={['channelConfig', 'responseValidation']}>
+                  <Form.Item
+                    noStyle
+                    name={['channelConfig', 'responseValidation']}
+                  >
                     <Input.TextArea
                       placeholder={
                         formatMessage({
                           id: 'src.page.Project.Notification.components.C752DB2D',
-                          defaultMessage: '请输入',
+                          defaultMessage: '请输入'
                         }) /*"请输入"*/
                       }
                       rows={4}
@@ -808,7 +851,7 @@ export const FromChannelDrawer: React.FC<{
                 label={
                   formatMessage({
                     id: 'src.page.Project.Notification.components.3B557A1D',
-                    defaultMessage: '指定用户',
+                    defaultMessage: '指定用户'
                   }) /*"指定用户"*/
                 }
                 name={['channelConfig', 'atMobiles']}
@@ -818,7 +861,7 @@ export const FromChannelDrawer: React.FC<{
                   placeholder={
                     formatMessage({
                       id: 'src.page.Project.Notification.components.8CA4B168',
-                      defaultMessage: '请输入用户手机号',
+                      defaultMessage: '请输入用户手机号'
                     }) /*"请输入用户手机号"*/
                   }
                 />
@@ -829,12 +872,12 @@ export const FromChannelDrawer: React.FC<{
             label={
               formatMessage({
                 id: 'src.page.Project.Notification.components.099A08A2',
-                defaultMessage: '推送消息模版',
+                defaultMessage: '推送消息模版'
               }) /*"推送消息模版"*/
             }
             required
             style={{
-              marginBottom: '1px',
+              marginBottom: '1px'
             }}
           >
             <Form.Item
@@ -844,12 +887,12 @@ export const FromChannelDrawer: React.FC<{
                   required: true,
                   message: formatMessage({
                     id: 'src.page.Project.Notification.components.EA00E8BD',
-                    defaultMessage: '请选择通道类型',
-                  }), //'请选择通道类型'
-                },
+                    defaultMessage: '请选择通道类型'
+                  }) //'请选择通道类型'
+                }
               ]}
               style={{
-                marginBottom: '8px',
+                marginBottom: '8px'
               }}
             >
               <LangagueTab />
@@ -864,9 +907,9 @@ export const FromChannelDrawer: React.FC<{
                     required: true,
                     message: formatMessage({
                       id: 'src.page.Project.Notification.components.87BD7057',
-                      defaultMessage: '消息模版不能为空',
-                    }), //'消息模版不能为空'
-                  },
+                      defaultMessage: '消息模版不能为空'
+                    }) //'消息模版不能为空'
+                  }
                 ]}
               >
                 <Input.TextArea
@@ -876,7 +919,7 @@ export const FromChannelDrawer: React.FC<{
                   placeholder={
                     formatMessage({
                       id: 'src.page.Project.Notification.components.16067FAA',
-                      defaultMessage: '请输入消息模版',
+                      defaultMessage: '请输入消息模版'
                     }) /*"请输入消息模版"*/
                   }
                 />
@@ -885,7 +928,7 @@ export const FromChannelDrawer: React.FC<{
                 <span style={{ color: 'var(--text-color-hint)' }}>
                   {formatMessage({
                     id: 'src.page.Project.Notification.components.D0CF8521',
-                    defaultMessage: '可通过输入${ } 引入标签，',
+                    defaultMessage: '可通过输入${ } 引入标签，'
                   })}
                 </span>
                 <a
@@ -902,7 +945,7 @@ export const FromChannelDrawer: React.FC<{
                   {
                     formatMessage({
                       id: 'src.page.Project.Notification.components.E3748BB5' /*查看标签说明*/,
-                      defaultMessage: '查看标签说明',
+                      defaultMessage: '查看标签说明'
                     }) /* 查看标签说明 */
                   }
                 </a>
@@ -914,12 +957,15 @@ export const FromChannelDrawer: React.FC<{
             label={
               formatMessage({
                 id: 'src.page.Project.Notification.components.ACDD499F',
-                defaultMessage: '消息限流设置',
+                defaultMessage: '消息限流设置'
               }) /*"消息限流设置"*/
             }
           >
             <FormItemPanel keepExpand noPaddingBottom>
-              <Form.Item name={['channelConfig', 'rateLimitConfig']} shouldUpdate>
+              <Form.Item
+                name={['channelConfig', 'rateLimitConfig']}
+                shouldUpdate
+              >
                 <CheckboxWithTip />
               </Form.Item>
             </FormItemPanel>
@@ -929,7 +975,7 @@ export const FromChannelDrawer: React.FC<{
             label={
               formatMessage({
                 id: 'src.page.Project.Notification.components.9AD8F3D8',
-                defaultMessage: '描述',
+                defaultMessage: '描述'
               }) /*"描述"*/
             }
             name="description"
@@ -941,7 +987,7 @@ export const FromChannelDrawer: React.FC<{
               placeholder={
                 formatMessage({
                   id: 'src.page.Project.Notification.components.DC9065DF',
-                  defaultMessage: '请输入描述，200字以内',
+                  defaultMessage: '请输入描述，200字以内'
                 }) /*"请输入描述，200字以内"*/
               }
             />
@@ -958,7 +1004,13 @@ export const DetailChannelDrawer: React.FC<{
   detailDrawerOpen: boolean;
   setDetailDrawerOpen: (oepn: boolean) => void;
   closedCallback?: (needReload?: boolean) => void;
-}> = ({ projectId, channelId, detailDrawerOpen, setDetailDrawerOpen, closedCallback }) => {
+}> = ({
+  projectId,
+  channelId,
+  detailDrawerOpen,
+  setDetailDrawerOpen,
+  closedCallback
+}) => {
   const [channel, setChannel] = useState<IChannel<EChannelType>>();
   const handleOnClose = () => {
     setDetailDrawerOpen(false);
@@ -986,21 +1038,25 @@ export const DetailChannelDrawer: React.FC<{
       formatMessage(
         {
           id: 'src.page.Project.Notification.components.EE8B3451',
-          defaultMessage: '不超过{rateLimitConfigLimit}次',
+          defaultMessage: '不超过{rateLimitConfigLimit}次'
         },
-        { rateLimitConfigLimit },
+        { rateLimitConfigLimit }
       ); //`不超过${rateLimitConfigLimit}次`
     return result;
   }
   const isWebhook = channel?.type === EChannelType.WEBHOOK;
-  const hasSign = [EChannelType.DING_TALK, EChannelType.FEI_SHU]?.includes(channel?.type);
-  const hasAtMobiles = [EChannelType.DING_TALK, EChannelType.WE_COM]?.includes(channel?.type);
+  const hasSign = [EChannelType.DING_TALK, EChannelType.FEI_SHU]?.includes(
+    channel?.type
+  );
+  const hasAtMobiles = [EChannelType.DING_TALK, EChannelType.WE_COM]?.includes(
+    channel?.type
+  );
   return (
     <Drawer
       title={
         formatMessage({
           id: 'src.page.Project.Notification.components.139882C5',
-          defaultMessage: '推送通道详情',
+          defaultMessage: '推送通道详情'
         }) /*"推送通道详情"*/
       }
       width={520}
@@ -1013,7 +1069,7 @@ export const DetailChannelDrawer: React.FC<{
           label={
             formatMessage({
               id: 'src.page.Project.Notification.components.82FB9375',
-              defaultMessage: '通道名称',
+              defaultMessage: '通道名称'
             }) /*"通道名称"*/
           }
         >
@@ -1023,7 +1079,7 @@ export const DetailChannelDrawer: React.FC<{
           label={
             formatMessage({
               id: 'src.page.Project.Notification.components.6CDFEC70',
-              defaultMessage: '通道类型',
+              defaultMessage: '通道类型'
             }) /*"通道类型"*/
           }
         >
@@ -1033,7 +1089,7 @@ export const DetailChannelDrawer: React.FC<{
           label={
             formatMessage({
               id: 'src.page.Project.Notification.components.F40AD99E',
-              defaultMessage: 'Webhook地址',
+              defaultMessage: 'Webhook地址'
             }) /*"Webhook地址"*/
           }
         >
@@ -1044,12 +1100,13 @@ export const DetailChannelDrawer: React.FC<{
             label={
               formatMessage({
                 id: 'src.page.Project.Notification.components.1D7A027D',
-                defaultMessage: '签名密钥',
+                defaultMessage: '签名密钥'
               }) /*"签名密钥"*/
             }
           >
-            {(channel as IChannel<EChannelType.DING_TALK | EChannelType.FEI_SHU>)?.channelConfig
-              ?.sign || '-'}
+            {(
+              channel as IChannel<EChannelType.DING_TALK | EChannelType.FEI_SHU>
+            )?.channelConfig?.sign || '-'}
           </Descriptions.Item>
         )}
 
@@ -1058,7 +1115,7 @@ export const DetailChannelDrawer: React.FC<{
             label={
               formatMessage({
                 id: 'src.page.Project.Notification.components.2DFCA81C',
-                defaultMessage: '指定用户',
+                defaultMessage: '指定用户'
               }) /*"指定用户"*/
             }
           >
@@ -1074,38 +1131,42 @@ export const DetailChannelDrawer: React.FC<{
               label={
                 formatMessage({
                   id: 'src.page.Project.Notification.components.2724965A',
-                  defaultMessage: '代理',
+                  defaultMessage: '代理'
                 }) /*"代理"*/
               }
             >
-              {(channel as IChannel<EChannelType.WEBHOOK>)?.channelConfig?.httpProxy || '-'}
+              {(channel as IChannel<EChannelType.WEBHOOK>)?.channelConfig
+                ?.httpProxy || '-'}
             </Descriptions.Item>
             <Descriptions.Item
               label={
                 formatMessage({
                   id: 'src.page.Project.Notification.components.95A710C5',
-                  defaultMessage: '请求方法',
+                  defaultMessage: '请求方法'
                 }) /*"请求方法"*/
               }
             >
-              {(channel as IChannel<EChannelType.WEBHOOK>)?.channelConfig?.httpMethod || '-'}
+              {(channel as IChannel<EChannelType.WEBHOOK>)?.channelConfig
+                ?.httpMethod || '-'}
             </Descriptions.Item>
             <Descriptions.Item label="Header">
-              {(channel as IChannel<EChannelType.WEBHOOK>)?.channelConfig?.headersTemplate || '-'}
+              {(channel as IChannel<EChannelType.WEBHOOK>)?.channelConfig
+                ?.headersTemplate || '-'}
             </Descriptions.Item>
             <Descriptions.Item label="Body">
-              {(channel as IChannel<EChannelType.WEBHOOK>)?.channelConfig?.bodyTemplate || '-'}
+              {(channel as IChannel<EChannelType.WEBHOOK>)?.channelConfig
+                ?.bodyTemplate || '-'}
             </Descriptions.Item>
             <Descriptions.Item
               label={
                 formatMessage({
                   id: 'src.page.Project.Notification.components.E00F566E',
-                  defaultMessage: 'Response校验',
+                  defaultMessage: 'Response校验'
                 }) /*"Response校验"*/
               }
             >
-              {(channel as IChannel<EChannelType.WEBHOOK>)?.channelConfig?.responseValidation ||
-                '-'}
+              {(channel as IChannel<EChannelType.WEBHOOK>)?.channelConfig
+                ?.responseValidation || '-'}
             </Descriptions.Item>
           </>
         )}
@@ -1114,19 +1175,21 @@ export const DetailChannelDrawer: React.FC<{
           label={
             formatMessage({
               id: 'src.page.Project.Notification.components.8B494D6C',
-              defaultMessage: '消息限流设置',
+              defaultMessage: '消息限流设置'
             }) /*"消息限流设置"*/
           }
         >
           {channel?.channelConfig?.rateLimitConfig
-            ? parseRateLimitConfigToText(channel?.channelConfig?.rateLimitConfig)
+            ? parseRateLimitConfigToText(
+                channel?.channelConfig?.rateLimitConfig
+              )
             : '-'}
         </Descriptions.Item>
         {channel?.channelConfig?.rateLimitConfig?.overLimitStrategy && (
           <Descriptions.Item
             label={formatMessage({
               id: 'src.page.Project.Notification.components.C91AC4BD',
-              defaultMessage: '超出限流处理策略',
+              defaultMessage: '超出限流处理策略'
             })}
           >
             <HelpDoc
@@ -1138,7 +1201,11 @@ export const DetailChannelDrawer: React.FC<{
                 ]
               }
             >
-              {EOverLimitStrategyMap?.[channel?.channelConfig?.rateLimitConfig?.overLimitStrategy]}
+              {
+                EOverLimitStrategyMap?.[
+                  channel?.channelConfig?.rateLimitConfig?.overLimitStrategy
+                ]
+              }
             </HelpDoc>
           </Descriptions.Item>
         )}
@@ -1147,7 +1214,7 @@ export const DetailChannelDrawer: React.FC<{
           label={
             formatMessage({
               id: 'src.page.Project.Notification.components.A78D1371',
-              defaultMessage: '消息模版',
+              defaultMessage: '消息模版'
             }) /*"消息模版"*/
           }
         >
@@ -1158,7 +1225,7 @@ export const DetailChannelDrawer: React.FC<{
         style={{
           borderRadius: '2px',
           backgroundColor: '#F7F9FB',
-          padding: '8px 12px',
+          padding: '8px 12px'
         }}
       >
         {channel?.channelConfig?.contentTemplate || '-'}
@@ -1168,7 +1235,7 @@ export const DetailChannelDrawer: React.FC<{
           label={
             formatMessage({
               id: 'src.page.Project.Notification.components.DCC955A7',
-              defaultMessage: '描述',
+              defaultMessage: '描述'
             }) /*"描述"*/
           }
         >
@@ -1190,9 +1257,9 @@ const CheckboxWithTip: React.FC<{
         ? {
             timeUnit: ETimeUnit.MINUTES,
             limit: 20,
-            overLimitStrategy: EOverLimitStrategy.THROWN,
+            overLimitStrategy: EOverLimitStrategy.THROWN
           }
-        : null,
+        : null
     );
     setChecked(!checked);
   };
@@ -1203,19 +1270,25 @@ const CheckboxWithTip: React.FC<{
     <div className={styles.rateLimitConfig}>
       <Form.Item noStyle shouldUpdate>
         {({ getFieldValue }) => {
-          const rateLimitConfig = getFieldValue(['channelConfig', 'rateLimitConfig']);
+          const rateLimitConfig = getFieldValue([
+            'channelConfig',
+            'rateLimitConfig'
+          ]);
           return (
             <div
               className={classNames({
-                [styles.rateLimitConfigBottom]: !checked,
+                [styles.rateLimitConfigBottom]: !checked
               })}
             >
-              <Checkbox checked={checked} onChange={() => handleCheckboxOnChange()}>
+              <Checkbox
+                checked={checked}
+                onChange={() => handleCheckboxOnChange()}
+              >
                 <span style={{ userSelect: 'none' }}>
                   {
                     formatMessage({
                       id: 'src.page.Project.Notification.components.DD7AFBF7' /*使用消息限流*/,
-                      defaultMessage: '使用消息限流',
+                      defaultMessage: '使用消息限流'
                     }) /* 使用消息限流 */
                   }
                 </span>
@@ -1224,12 +1297,13 @@ const CheckboxWithTip: React.FC<{
                 {rateLimitConfig
                   ? formatMessage({
                       id: 'src.page.Project.Notification.components.6A310F2D',
-                      defaultMessage: '使用消息限流，可在规定时间内接收消息，避免忽略重要消息',
+                      defaultMessage:
+                        '使用消息限流，可在规定时间内接收消息，避免忽略重要消息'
                     })
                   : formatMessage({
                       id: 'src.page.Project.Notification.components.ED0EC433',
                       defaultMessage:
-                        '不使用消息限流，短时间内可能会收到过多消息，导致重要消息淹没',
+                        '不使用消息限流，短时间内可能会收到过多消息，导致重要消息淹没'
                     })}
               </div>
               {rateLimitConfig ? (
@@ -1238,40 +1312,44 @@ const CheckboxWithTip: React.FC<{
                     label={
                       formatMessage({
                         id: 'src.page.Project.Notification.components.E773F39A',
-                        defaultMessage: '消息次数限制',
+                        defaultMessage: '消息次数限制'
                       }) /*"消息次数限制"*/
                     }
                     required
                     style={{
-                      marginTop: '16px',
+                      marginTop: '16px'
                     }}
                   >
                     <Space>
-                      <Form.Item name={['channelConfig', 'rateLimitConfig', 'timeUnit']}>
+                      <Form.Item
+                        name={['channelConfig', 'rateLimitConfig', 'timeUnit']}
+                      >
                         <Select
                           style={{ width: '135px' }}
                           options={[
                             {
                               label: TimeUnitMap[ETimeUnit.DAYS],
-                              value: ETimeUnit.DAYS,
+                              value: ETimeUnit.DAYS
                             },
                             {
                               label: TimeUnitMap[ETimeUnit.HOURS],
-                              value: ETimeUnit.HOURS,
+                              value: ETimeUnit.HOURS
                             },
                             {
                               label: TimeUnitMap[ETimeUnit.MINUTES],
-                              value: ETimeUnit.MINUTES,
-                            },
+                              value: ETimeUnit.MINUTES
+                            }
                           ]}
                         />
                       </Form.Item>
-                      <Form.Item name={['channelConfig', 'rateLimitConfig', 'limit']}>
+                      <Form.Item
+                        name={['channelConfig', 'rateLimitConfig', 'limit']}
+                      >
                         <InputNumber
                           addonBefore={
                             formatMessage({
                               id: 'src.page.Project.Notification.components.713896D2',
-                              defaultMessage: '不超过',
+                              defaultMessage: '不超过'
                             }) /*"不超过"*/
                           }
                           style={{ width: '145px' }}
@@ -1279,7 +1357,7 @@ const CheckboxWithTip: React.FC<{
                           addonAfter={
                             formatMessage({
                               id: 'src.page.Project.Notification.components.90C16E2F',
-                              defaultMessage: '次',
+                              defaultMessage: '次'
                             }) /*"次"*/
                           }
                         />
@@ -1290,13 +1368,17 @@ const CheckboxWithTip: React.FC<{
                     label={
                       formatMessage({
                         id: 'src.page.Project.Notification.components.0785D0CB',
-                        defaultMessage: '超出限流处理策略',
+                        defaultMessage: '超出限流处理策略'
                       }) /*"超出限流处理策略"*/
                     }
                     required
-                    name={['channelConfig', 'rateLimitConfig', 'overLimitStrategy']}
+                    name={[
+                      'channelConfig',
+                      'rateLimitConfig',
+                      'overLimitStrategy'
+                    ]}
                     style={{
-                      marginBottom: '8px',
+                      marginBottom: '8px'
                     }}
                   >
                     <Radio.Group>
@@ -1304,7 +1386,11 @@ const CheckboxWithTip: React.FC<{
                         <HelpDoc
                           isTip
                           leftText
-                          title={EOverLimitStrategyTipMap?.[EOverLimitStrategy.THROWN]}
+                          title={
+                            EOverLimitStrategyTipMap?.[
+                              EOverLimitStrategy.THROWN
+                            ]
+                          }
                         >
                           {EOverLimitStrategyMap?.[EOverLimitStrategy.THROWN]}
                         </HelpDoc>
@@ -1313,7 +1399,11 @@ const CheckboxWithTip: React.FC<{
                         <HelpDoc
                           isTip
                           leftText
-                          title={EOverLimitStrategyTipMap?.[EOverLimitStrategy.RESEND]}
+                          title={
+                            EOverLimitStrategyTipMap?.[
+                              EOverLimitStrategy.RESEND
+                            ]
+                          }
                         >
                           {EOverLimitStrategyMap?.[EOverLimitStrategy.RESEND]}
                         </HelpDoc>
@@ -1345,18 +1435,18 @@ const LangagueTab: React.FC<{
     {
       label: ELanguageMap[ELanguage.ZH_CN],
       key: ELanguage.ZH_CN,
-      children: null,
+      children: null
     },
     {
       label: ELanguageMap[ELanguage.ZH_TW],
       key: ELanguage.ZH_TW,
-      children: null,
+      children: null
     },
     {
       label: ELanguageMap[ELanguage.EN_US],
       key: ELanguage.EN_US,
-      children: null,
-    },
+      children: null
+    }
   ];
 
   return (

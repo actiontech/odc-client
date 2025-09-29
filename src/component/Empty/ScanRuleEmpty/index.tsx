@@ -10,15 +10,20 @@ export default function ScanRuleEmpty({ showActionButton }) {
       fallback={
         <Empty
           description={
-            formatMessage({ id: 'odc.src.page.Secure.RiskLevel.components.NoRule' }) /* 暂无规则 */
+            formatMessage({
+              id: 'odc.src.page.Secure.RiskLevel.components.NoRule'
+            }) /* 暂无规则 */
           }
           image={Empty.PRESENTED_IMAGE_SIMPLE}
           style={{
-            flexGrow: 1,
+            flexGrow: 1
           }}
         />
       }
-      {...createPermission(IManagerResourceType.risk_detect, actionTypes.create)}
+      {...createPermission(
+        IManagerResourceType.risk_detect,
+        actionTypes.create
+      )}
     >
       <div className={styles.scanRuleEmptyWrapper}>
         <Empty
@@ -27,14 +32,15 @@ export default function ScanRuleEmpty({ showActionButton }) {
               <div>
                 {formatMessage({
                   id: 'src.component.Empty.ScanRuleEmpty.1A1158CB',
-                  defaultMessage: '风险识别规则是通过表达式配置的规则，会决定工单的审批流程。',
+                  defaultMessage:
+                    '风险识别规则是通过表达式配置的规则，会决定工单的审批流程。'
                 })}
               </div>
               <div>
                 {formatMessage({
                   id: 'src.component.Empty.ScanRuleEmpty.E341691D',
                   defaultMessage:
-                    '如：「环境 等于 生产」将会匹配在「生产」环境中执行的工单，并执行对应的审批流程',
+                    '如：「环境 等于 生产」将会匹配在「生产」环境中执行的工单，并执行对应的审批流程'
                 })}
               </div>
             </div>

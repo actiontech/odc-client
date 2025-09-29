@@ -25,28 +25,31 @@ const CheckboxInput: React.FC<CheckboxInputProps> = ({
   checkValue = '',
   value,
   formRef,
-  onChange,
+  onChange
 }) => {
   const [checked, setChecked] = useState<string[]>([]);
   const [regExp, setRegExp] = useState<string>('');
-  const triggerChange = (changedValue: { checked?: string[]; regExp?: string }) => {
+  const triggerChange = (changedValue: {
+    checked?: string[];
+    regExp?: string;
+  }) => {
     onChange?.({
       checked,
       regExp,
       ...value,
-      ...changedValue,
+      ...changedValue
     });
   };
   const onCheckboxChange = (checkedValue: string[]) => {
     setChecked(checkedValue);
     triggerChange({
-      checked: checkedValue || [],
+      checked: checkedValue || []
     });
   };
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRegExp(e.target.value);
     triggerChange({
-      regExp: e.target.value || '',
+      regExp: e.target.value || ''
     });
   };
   const handleLeastOneCheck = async (ruler, value) => {
@@ -59,8 +62,8 @@ const CheckboxInput: React.FC<CheckboxInputProps> = ({
       return Promise.reject(
         formatMessage({
           id: 'odc.SensitiveRule.components.CheckboxInput.SelectAtLeastOneRecognition',
-          defaultMessage: '至少勾选一个识别对象',
-        }), //至少勾选一个识别对象
+          defaultMessage: '至少勾选一个识别对象'
+        }) //至少勾选一个识别对象
       );
     }
     return Promise.resolve();
@@ -75,7 +78,7 @@ const CheckboxInput: React.FC<CheckboxInputProps> = ({
           hasLabel &&
           formatMessage({
             id: 'odc.SensitiveRule.components.CheckboxInput.IdentifyObjects',
-            defaultMessage: '识别对象',
+            defaultMessage: '识别对象'
           }) //识别对象
         }
         validateTrigger="onBlur"
@@ -83,17 +86,17 @@ const CheckboxInput: React.FC<CheckboxInputProps> = ({
           {
             message: formatMessage({
               id: 'odc.SensitiveRule.components.CheckboxInput.PleaseSelectTheIdentificationObject',
-              defaultMessage: '请先勾选识别对象',
+              defaultMessage: '请先勾选识别对象'
             }), //请先勾选识别对象
-            validator: handleLeastOneCheck,
-          },
+            validator: handleLeastOneCheck
+          }
         ]}
       >
         <Checkbox.Group
           value={value?.checked || checked}
           onChange={onCheckboxChange}
           style={{
-            width: '100px',
+            width: '100px'
           }}
         >
           <Checkbox value={checkValue}>{value?.label}</Checkbox>
@@ -106,7 +109,7 @@ const CheckboxInput: React.FC<CheckboxInputProps> = ({
           hasLabel &&
           formatMessage({
             id: 'odc.SensitiveRule.components.CheckboxInput.RegularExpression',
-            defaultMessage: '正则表达式',
+            defaultMessage: '正则表达式'
           }) //正则表达式
         }
         validateTrigger="onBlur"
@@ -115,14 +118,14 @@ const CheckboxInput: React.FC<CheckboxInputProps> = ({
             required: checked?.length > 0 || value?.checked?.length > 0,
             message: formatMessage({
               id: 'odc.SensitiveRule.components.CheckboxInput.EnterARegularExpression',
-              defaultMessage: '请填写正则表达式',
-            }), //请填写正则表达式
-          },
+              defaultMessage: '请填写正则表达式'
+            }) //请填写正则表达式
+          }
         ]}
       >
         <Input
           style={{
-            width: '432px',
+            width: '432px'
           }}
           value={value?.regExp || regExp}
           disabled={value?.checked?.length === 0 || false}
@@ -130,7 +133,7 @@ const CheckboxInput: React.FC<CheckboxInputProps> = ({
           placeholder={
             formatMessage({
               id: 'odc.SensitiveRule.components.CheckboxInput.PleaseEnter',
-              defaultMessage: '请输入',
+              defaultMessage: '请输入'
             }) //请输入
           }
         />

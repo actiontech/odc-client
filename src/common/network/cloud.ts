@@ -19,19 +19,20 @@ export async function loadClusterList() {
   let res = null;
   if (typeof getClusterList === 'function') {
     res = await getClusterList({
-      regionId: window._odc_params?.regionId,
+      regionId: window._odc_params?.regionId
     });
   }
   return res?.data?.instances;
 }
 
 export async function loadClusterTenants(clusterId: string) {
-  const queryClusterTenantsAndZones = window._odc_params?.service?.queryClusterTenantsAndZones;
+  const queryClusterTenantsAndZones =
+    window._odc_params?.service?.queryClusterTenantsAndZones;
   let res = null;
   if (typeof queryClusterTenantsAndZones === 'function') {
     res = await queryClusterTenantsAndZones({
       regionId: window._odc_params?.regionId,
-      clusterId,
+      clusterId
     });
   }
   return res?.data?.tenants;
@@ -44,7 +45,7 @@ export async function loadTenantDBUsers(clusterId: string, tenantId: string) {
     users = await queryTenantUsers({
       regionId: window._odc_params?.regionId,
       clusterId,
-      tenantId,
+      tenantId
     });
   }
   return users;

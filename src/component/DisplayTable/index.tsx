@@ -25,7 +25,7 @@ import {
   TABLE_ROW_HEIGHT,
   TABLE_TOOLBAR_HEIGHT,
   TAB_HEADER_HEIGHT,
-  WORKSPACE_HEADER_HEIGHT,
+  WORKSPACE_HEADER_HEIGHT
 } from '@/constant';
 import { TableRowSelection } from 'antd/es/table/interface';
 import { Resizable } from 'react-resizable';
@@ -72,13 +72,13 @@ export default class DisplayTable extends React.Component<
   public readonly state = {
     defaultPageSize: 10,
     columns: this.props.columns,
-    columnWidthMap: null,
+    columnWidthMap: null
   };
 
   public components = {
     header: {
-      cell: ResizeTitle,
-    },
+      cell: ResizeTitle
+    }
   };
 
   public componentDidMount() {
@@ -90,11 +90,11 @@ export default class DisplayTable extends React.Component<
             WORKSPACE_HEADER_HEIGHT -
             TAB_HEADER_HEIGHT -
             TABLE_TOOLBAR_HEIGHT -
-            TABLE_FOOTER_HEIGHT || 0) / TABLE_ROW_HEIGHT,
+            TABLE_FOOTER_HEIGHT || 0) / TABLE_ROW_HEIGHT
         ) - 1
       : 10;
     this.setState({
-      defaultPageSize,
+      defaultPageSize
     });
   }
 
@@ -107,7 +107,7 @@ export default class DisplayTable extends React.Component<
       this.setState(({ columnWidthMap }) => {
         const newColumnWidthMap = {
           ...columnWidthMap,
-          [oriColumn.key]: size?.width,
+          [oriColumn.key]: size?.width
         };
         return { columnWidthMap: newColumnWidthMap };
       });
@@ -119,12 +119,18 @@ export default class DisplayTable extends React.Component<
     return this.props?.columns?.map((oriColumn) => {
       return {
         ...oriColumn,
-        width: columnWidthMap?.[oriColumn?.key] || oriColumn.width || DEFAULT_COLUMN_WIDTH,
+        width:
+          columnWidthMap?.[oriColumn?.key] ||
+          oriColumn.width ||
+          DEFAULT_COLUMN_WIDTH,
         onHeaderCell: (column) =>
           ({
-            width: columnWidthMap?.[oriColumn?.key] || oriColumn.width || DEFAULT_COLUMN_WIDTH,
-            onResize: this.handleResize(oriColumn),
-          } as React.HTMLAttributes<HTMLElement>),
+            width:
+              columnWidthMap?.[oriColumn?.key] ||
+              oriColumn.width ||
+              DEFAULT_COLUMN_WIDTH,
+            onResize: this.handleResize(oriColumn)
+          } as React.HTMLAttributes<HTMLElement>)
       };
     });
   }
@@ -161,18 +167,19 @@ export default class DisplayTable extends React.Component<
               pageSize: pageSize || defaultPageSize,
               showSizeChanger,
               showQuickJumper,
-              onShowSizeChange: (_, size) => this.setState({ defaultPageSize: size }),
+              onShowSizeChange: (_, size) =>
+                this.setState({ defaultPageSize: size }),
               showTotal: showTotal
                 ? (total) => {
                     return formatMessage(
                       {
                         id: 'odc.component.DisplayTable.TotalTotal',
-                        defaultMessage: '共 {total} 条',
+                        defaultMessage: '共 {total} 条'
                       },
-                      { total },
+                      { total }
                     ); // `共 ${total} 条`
                   }
-                : null,
+                : null
             }
           }
           components={enableResize ? this.components : null}

@@ -19,7 +19,8 @@ import { openCreatePackagePage } from '@/store/helper/page';
 import { ModalStore } from '@/store/modal';
 import { useDBSession } from '@/store/sessionManager/hooks';
 import { formatMessage } from '@/util/intl';
-import { Form, Input, Modal } from 'antd';
+import { BasicButton, BasicInput, BasicModal } from '@actiontech/dms-kit';
+import { Form, Space } from 'antd';
 import { inject, observer } from 'mobx-react';
 
 interface IProps {
@@ -27,14 +28,14 @@ interface IProps {
 }
 
 export enum CheckOption {
-  NONE = 'NONE',
+  NONE = 'NONE'
 }
 
 function CreatePackageModal(props: IProps) {
   const { modalStore } = props;
   const { databaseId, dbName } = modalStore.createPackageModalData;
   const initialValues = {
-    packageName: null,
+    packageName: null
   };
 
   const [formRef] = Form.useForm();
@@ -47,7 +48,11 @@ function CreatePackageModal(props: IProps) {
       .validateFields()
       .then(async (data) => {
         const packageName = data?.packageName;
-        const sql = await getPackageCreateSQL(packageName, session?.sessionId, dbName);
+        const sql = await getPackageCreateSQL(
+          packageName,
+          session?.sessionId,
+          dbName
+        );
         openCreatePackagePage(sql, databaseId, dbName);
         modalStore.changeCreatePackageModalVisible(false);
       })
@@ -56,24 +61,41 @@ function CreatePackageModal(props: IProps) {
       });
   };
 
+  const onCancel = () => {
+    modalStore.changeCreatePackageModalVisible(false);
+  };
+
   return (
-    <Modal
+    <BasicModal
       centered={true}
       width={600}
       destroyOnClose={true}
       title={formatMessage({
         id: 'workspace.window.createPackage.modal.title',
-        defaultMessage: '新建程序包',
+        defaultMessage: '新建程序包'
       })}
       open={modalStore.createPackageModalVisible}
+      onCancel={onCancel}
       okText={formatMessage({
         id: 'odc.component.CreatePackageModal.NextConfirmTheSqlStatement',
-        defaultMessage: '下一步：确认 SQL',
+        defaultMessage: '下一步：确认 SQL'
       })} /* 下一步：确认 SQL */
-      onOk={save}
-      onCancel={() => {
-        modalStore.changeCreatePackageModalVisible(false);
-      }}
+      footer={
+        <Space>
+          <BasicButton onClick={onCancel}>
+            {formatMessage({
+              id: 'app.button.cancel',
+              defaultMessage: '取消'
+            })}
+          </BasicButton>
+          <BasicButton type="primary" onClick={save}>
+            {formatMessage({
+              id: 'app.button.save',
+              defaultMessage: '保存'
+            })}
+          </BasicButton>
+        </Space>
+      }
     >
       <Form
         layout="vertical"
@@ -85,29 +107,28 @@ function CreatePackageModal(props: IProps) {
           name="packageName"
           label={formatMessage({
             id: 'workspace.window.createPackage.packageName',
-            defaultMessage: '程序包名称',
+            defaultMessage: '程序包名称'
           })}
           rules={[
             {
               required: true,
               message: formatMessage({
                 id: 'workspace.window.createPackage.packageName.required',
-                defaultMessage: '程序包不能为空',
-              }),
-            },
+                defaultMessage: '程序包不能为空'
+              })
+            }
           ]}
         >
-          <Input
-            // eslint-disable-next-line
+          <BasicInput
             autoComplete={'off'}
             placeholder={formatMessage({
               id: 'workspace.window.createPackage.packageName.placeholder',
-              defaultMessage: '请输入程序包名称',
+              defaultMessage: '请输入程序包名称'
             })}
           />
         </Form.Item>
       </Form>
-    </Modal>
+    </BasicModal>
   );
 }
 

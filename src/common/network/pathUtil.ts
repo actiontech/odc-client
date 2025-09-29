@@ -20,10 +20,16 @@
 import { ConnectionPropertyType } from '@/d.ts/datasource';
 import { encodeObjName } from '@/util/utils';
 
-export function generateDatabaseSid(databaseName: string = '', sessionId?: string): string {
+export function generateDatabaseSid(
+  databaseName: string = '',
+  sessionId?: string
+): string {
   return `sid:${sessionId}:d:${encodeObjName(databaseName)}`;
 }
-export function generateDatabaseSidByDataBaseId(databaseId: number, sessionId?: string): string {
+export function generateDatabaseSidByDataBaseId(
+  databaseId: number,
+  sessionId?: string
+): string {
   return `sid:${sessionId}:did:${databaseId}`;
 }
 export function generateSessionSid(sessionId?: string): string {
@@ -33,51 +39,92 @@ export function generateSessionSid(sessionId?: string): string {
 export function generateTableSid(
   tableName: string,
   databaseName: string = '',
-  sessionId?: string,
+  sessionId?: string
 ): string {
-  return `${generateDatabaseSid(databaseName, sessionId)}:t:${encodeObjName(tableName)}`;
+  return `${generateDatabaseSid(databaseName, sessionId)}:t:${encodeObjName(
+    tableName
+  )}`;
 }
 
 export function generateViewSid(
   viewName: string,
   databaseName: string = '',
-  sessionId: string,
+  sessionId: string
 ): string {
-  return `${generateDatabaseSid(databaseName, sessionId)}:v:${encodeObjName(viewName)}`;
+  return `${generateDatabaseSid(databaseName, sessionId)}:v:${encodeObjName(
+    viewName
+  )}`;
 }
 
-export function generateFunctionSid(funName: string, sessionId?: string, dbName?: string): string {
-  return `${generateDatabaseSid(dbName, sessionId)}:f:${encodeObjName(funName)}`;
+export function generateFunctionSid(
+  funName: string,
+  sessionId?: string,
+  dbName?: string
+): string {
+  return `${generateDatabaseSid(dbName, sessionId)}:f:${encodeObjName(
+    funName
+  )}`;
 }
 
-export function generateProcedureSid(pName: string, sessionId?: string, dbName?: string): string {
+export function generateProcedureSid(
+  pName: string,
+  sessionId?: string,
+  dbName?: string
+): string {
   return `${generateDatabaseSid(dbName, sessionId)}:p:${encodeObjName(pName)}`;
 }
 
-export function generateSequenceSid(sName: string, sessionId: string, dbName: string): string {
+export function generateSequenceSid(
+  sName: string,
+  sessionId: string,
+  dbName: string
+): string {
   return `${generateDatabaseSid(dbName, sessionId)}:s:${encodeObjName(sName)}`;
 }
 
-export function generatePackageSid(paName: string, sessionId?: string, dbName?: string): string {
-  return `${generateDatabaseSid(dbName, sessionId)}:pkg:${encodeObjName(paName)}`;
+export function generatePackageSid(
+  paName: string,
+  sessionId?: string,
+  dbName?: string
+): string {
+  return `${generateDatabaseSid(dbName, sessionId)}:pkg:${encodeObjName(
+    paName
+  )}`;
 }
 
-export function generateTriggerSid(triggerName: string, sessionId: string, dbName: string): string {
-  return `${generateDatabaseSid(dbName, sessionId)}:tr:${encodeObjName(triggerName)}`;
+export function generateTriggerSid(
+  triggerName: string,
+  sessionId: string,
+  dbName: string
+): string {
+  return `${generateDatabaseSid(dbName, sessionId)}:tr:${encodeObjName(
+    triggerName
+  )}`;
 }
 
 export function generateSynonymSid(
   synonymName: string,
   sessionId?: string,
-  dbName?: string,
+  dbName?: string
 ): string {
-  return `${generateDatabaseSid(dbName, sessionId)}:syn:${encodeObjName(synonymName)}`;
+  return `${generateDatabaseSid(dbName, sessionId)}:syn:${encodeObjName(
+    synonymName
+  )}`;
 }
 
-export function generateTypeSid(typeName: string, sessionId: string, dbName: string): string {
-  return `${generateDatabaseSid(dbName, sessionId)}:ty:${encodeObjName(typeName)}`;
+export function generateTypeSid(
+  typeName: string,
+  sessionId: string,
+  dbName: string
+): string {
+  return `${generateDatabaseSid(dbName, sessionId)}:ty:${encodeObjName(
+    typeName
+  )}`;
 }
 
-export function generateVarSid(type: ConnectionPropertyType, sessionId?: string): string {
+export function generateVarSid(
+  type: ConnectionPropertyType,
+  sessionId?: string
+): string {
   return `${generateDatabaseSid('', sessionId)}:var:${type}`;
 }

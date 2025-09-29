@@ -23,7 +23,7 @@ const OracleColumnExtra: columnExtraComponent = ({
   column,
   originColumns,
   onChange,
-  dialectType,
+  dialectType
 }) => {
   if (!column) {
     return null;
@@ -34,7 +34,11 @@ const OracleColumnExtra: columnExtraComponent = ({
   } else {
     return (
       <>
-        <DefaultValue originColumns={originColumns} column={column} onChange={onChange} />
+        <DefaultValue
+          originColumns={originColumns}
+          column={column}
+          onChange={onChange}
+        />
         <Precision
           column={column}
           onChange={onChange}

@@ -31,7 +31,7 @@ export enum NumberRuleType {
   ORDER = 'ORDER',
   RANDOM = 'RANDOM',
   NULL = 'NULL',
-  SKIP = 'SKIP',
+  SKIP = 'SKIP'
 }
 
 interface INumberItemProps {
@@ -62,179 +62,200 @@ interface INumberItemProps {
   ref: React.Ref<FormInstance>;
 }
 
-const NumberItem: React.FC<INumberItemProps> = forwardRef<FormInstance, INumberItemProps>(
-  (props, ref) => {
-    const { type, readonly, ruleType, value } = props;
+const NumberItem: React.FC<INumberItemProps> = forwardRef<
+  FormInstance,
+  INumberItemProps
+>((props, ref) => {
+  const { type, readonly, ruleType, value } = props;
 
-    const [form] = Form.useForm();
-    const isInt = type === 'int';
+  const [form] = Form.useForm();
+  const isInt = type === 'int';
 
-    useImperativeHandle(ref, () => {
-      return form;
-    });
+  useImperativeHandle(ref, () => {
+    return form;
+  });
 
-    let items;
-    if (readonly) {
-      switch (ruleType) {
-        case NumberRuleType.NORMAL: {
-          items = getTextItem([
-            [
-              formatMessage({ id: 'odc.ruleItems.NumberItem.Value', defaultMessage: '值' }), // 值
-              value?.['genParams']?.fixNum,
-            ],
-          ]);
-          break;
-        }
-        case NumberRuleType.ORDER: {
-          items = getTextItem([
-            [
-              formatMessage({
-                id: 'odc.ruleItems.NumberItem.StartValue',
-                defaultMessage: '起始值',
-              }), // 起始值
-              value?.['lowValue'],
-            ],
-
-            [
-              formatMessage({ id: 'odc.ruleItems.NumberItem.StepSize', defaultMessage: '步长' }), // 步长
-              value?.['genParams']?.step,
-            ],
-
-            [
-              formatMessage({
-                id: 'odc.ruleItems.NumberItem.SortingMethod',
-                defaultMessage: '排序方式',
-              }), // 排序方式
-              value?.['order'] === 'asc'
-                ? formatMessage({
-                    id: 'odc.ruleItems.NumberItem.PositiveSequence',
-                    defaultMessage: '正序',
-                  }) // 正序
-                : formatMessage({ id: 'odc.ruleItems.NumberItem.Reverse', defaultMessage: '倒序' }), // 倒序
-            ],
-          ]);
-          break;
-        }
-        case NumberRuleType.RANDOM: {
-          items = getTextItem([
-            [
-              formatMessage({ id: 'odc.ruleItems.NumberItem.Interval', defaultMessage: '区间' }), // 区间
-              value?.['range'],
-            ],
-          ]);
-          break;
-        }
-        case NumberRuleType.NULL:
-        case NumberRuleType.SKIP: {
-          items = '';
-          break;
-        }
+  let items;
+  if (readonly) {
+    switch (ruleType) {
+      case NumberRuleType.NORMAL: {
+        items = getTextItem([
+          [
+            formatMessage({
+              id: 'odc.ruleItems.NumberItem.Value',
+              defaultMessage: '值'
+            }), // 值
+            value?.['genParams']?.fixNum
+          ]
+        ]);
+        break;
       }
-    } else {
-      switch (ruleType) {
-        case NumberRuleType.NORMAL: {
-          items = (
+      case NumberRuleType.ORDER: {
+        items = getTextItem([
+          [
+            formatMessage({
+              id: 'odc.ruleItems.NumberItem.StartValue',
+              defaultMessage: '起始值'
+            }), // 起始值
+            value?.['lowValue']
+          ],
+
+          [
+            formatMessage({
+              id: 'odc.ruleItems.NumberItem.StepSize',
+              defaultMessage: '步长'
+            }), // 步长
+            value?.['genParams']?.step
+          ],
+
+          [
+            formatMessage({
+              id: 'odc.ruleItems.NumberItem.SortingMethod',
+              defaultMessage: '排序方式'
+            }), // 排序方式
+            value?.['order'] === 'asc'
+              ? formatMessage({
+                  id: 'odc.ruleItems.NumberItem.PositiveSequence',
+                  defaultMessage: '正序'
+                }) // 正序
+              : formatMessage({
+                  id: 'odc.ruleItems.NumberItem.Reverse',
+                  defaultMessage: '倒序'
+                }) // 倒序
+          ]
+        ]);
+        break;
+      }
+      case NumberRuleType.RANDOM: {
+        items = getTextItem([
+          [
+            formatMessage({
+              id: 'odc.ruleItems.NumberItem.Interval',
+              defaultMessage: '区间'
+            }), // 区间
+            value?.['range']
+          ]
+        ]);
+        break;
+      }
+      case NumberRuleType.NULL:
+      case NumberRuleType.SKIP: {
+        items = '';
+        break;
+      }
+    }
+  } else {
+    switch (ruleType) {
+      case NumberRuleType.NORMAL: {
+        items = (
+          <Form.Item
+            rules={getRequiredRules()}
+            style={{ width: '100%' }}
+            name={['genParams', 'fixNum']}
+          >
+            <InputBigNumber
+              isInt={isInt}
+              addonBefore={formatMessage({
+                id: 'odc.ruleItems.NumberItem.Value',
+                defaultMessage: '值'
+              })} /* 值 */
+            />
+          </Form.Item>
+        );
+
+        break;
+      }
+      case NumberRuleType.ORDER: {
+        items = (
+          <Space style={{ width: '100%' }} direction="vertical">
             <Form.Item
               rules={getRequiredRules()}
               style={{ width: '100%' }}
-              name={['genParams', 'fixNum']}
+              name="lowValue"
             >
               <InputBigNumber
                 isInt={isInt}
                 addonBefore={formatMessage({
-                  id: 'odc.ruleItems.NumberItem.Value',
-                  defaultMessage: '值',
-                })} /* 值 */
+                  id: 'odc.ruleItems.NumberItem.StartValue',
+                  defaultMessage: '起始值'
+                })} /* 起始值 */
               />
             </Form.Item>
-          );
-
-          break;
-        }
-        case NumberRuleType.ORDER: {
-          items = (
-            <Space style={{ width: '100%' }} direction="vertical">
-              <Form.Item rules={getRequiredRules()} style={{ width: '100%' }} name="lowValue">
-                <InputBigNumber
-                  isInt={isInt}
-                  addonBefore={formatMessage({
-                    id: 'odc.ruleItems.NumberItem.StartValue',
-                    defaultMessage: '起始值',
-                  })} /* 起始值 */
-                />
-              </Form.Item>
-              <Form.Item
-                rules={getRequiredRules()}
-                style={{ width: '100%' }}
-                name={['genParams', 'step']}
-              >
-                <InputBigNumber
-                  min="1"
-                  isInt
-                  addonBefore={formatMessage({
-                    id: 'odc.ruleItems.NumberItem.StepSize',
-                    defaultMessage: '步长',
-                  })} /* 步长 */
-                />
-              </Form.Item>
-              <Form.Item style={{ width: '100%' }} name="order">
-                <WrapItemWithTitle
-                  addonBefore={formatMessage({
-                    id: 'odc.ruleItems.NumberItem.Sort',
-                    defaultMessage: '排序',
-                  })} /* 排序 */
-                >
-                  <Select>
-                    <Option key="asc" value="asc">
-                      {
-                        formatMessage({
-                          id: 'odc.ruleItems.NumberItem.PositiveSequence',
-                          defaultMessage: '正序',
-                        }) /* 正序 */
-                      }
-                    </Option>
-                    <Option key="desc" value="desc">
-                      {
-                        formatMessage({
-                          id: 'odc.ruleItems.NumberItem.Reverse',
-                          defaultMessage: '倒序',
-                        }) /* 倒序 */
-                      }
-                    </Option>
-                  </Select>
-                </WrapItemWithTitle>
-              </Form.Item>
-            </Space>
-          );
-
-          break;
-        }
-        case NumberRuleType.RANDOM: {
-          items = (
-            <Form.Item rules={getRangeInputRules()} style={{ width: '100%' }} name="range">
-              <RangeInput isInt={isInt} />
+            <Form.Item
+              rules={getRequiredRules()}
+              style={{ width: '100%' }}
+              name={['genParams', 'step']}
+            >
+              <InputBigNumber
+                min="1"
+                isInt
+                addonBefore={formatMessage({
+                  id: 'odc.ruleItems.NumberItem.StepSize',
+                  defaultMessage: '步长'
+                })} /* 步长 */
+              />
             </Form.Item>
-          );
+            <Form.Item style={{ width: '100%' }} name="order">
+              <WrapItemWithTitle
+                addonBefore={formatMessage({
+                  id: 'odc.ruleItems.NumberItem.Sort',
+                  defaultMessage: '排序'
+                })} /* 排序 */
+              >
+                <Select>
+                  <Option key="asc" value="asc">
+                    {
+                      formatMessage({
+                        id: 'odc.ruleItems.NumberItem.PositiveSequence',
+                        defaultMessage: '正序'
+                      }) /* 正序 */
+                    }
+                  </Option>
+                  <Option key="desc" value="desc">
+                    {
+                      formatMessage({
+                        id: 'odc.ruleItems.NumberItem.Reverse',
+                        defaultMessage: '倒序'
+                      }) /* 倒序 */
+                    }
+                  </Option>
+                </Select>
+              </WrapItemWithTitle>
+            </Form.Item>
+          </Space>
+        );
 
-          break;
-        }
-        case NumberRuleType.NULL:
-        case NumberRuleType.SKIP: {
-          items = '';
-          break;
-        }
+        break;
+      }
+      case NumberRuleType.RANDOM: {
+        items = (
+          <Form.Item
+            rules={getRangeInputRules()}
+            style={{ width: '100%' }}
+            name="range"
+          >
+            <RangeInput isInt={isInt} />
+          </Form.Item>
+        );
+
+        break;
+      }
+      case NumberRuleType.NULL:
+      case NumberRuleType.SKIP: {
+        items = '';
+        break;
       }
     }
+  }
 
-    return readonly ? (
-      items
-    ) : (
-      <Form layout="inline" component="div" initialValues={value} form={form}>
-        {items}
-      </Form>
-    );
-  },
-);
+  return readonly ? (
+    items
+  ) : (
+    <Form layout="inline" component="div" initialValues={value} form={form}>
+      {items}
+    </Form>
+  );
+});
 
 export default NumberItem;
 

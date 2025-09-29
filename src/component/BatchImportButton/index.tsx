@@ -51,7 +51,7 @@ const BatchImportButton = (props, ref) => {
       closeModal: handleClose,
       openModal: () => {
         handleVisible();
-      },
+      }
     };
   });
 
@@ -60,7 +60,9 @@ const BatchImportButton = (props, ref) => {
   }
 
   if (props.noButton) {
-    return <BatchImportModal {...rest} visible={visible} onClose={handleClose} />;
+    return (
+      <BatchImportModal {...rest} visible={visible} onClose={handleClose} />
+    );
   }
   return (
     <>
@@ -69,7 +71,7 @@ const BatchImportButton = (props, ref) => {
           {
             formatMessage({
               id: 'odc.component.BatchImportButton.BatchImport',
-              defaultMessage: '批量导入',
+              defaultMessage: '批量导入'
             }) /*批量导入*/
           }
         </Button>
@@ -78,7 +80,7 @@ const BatchImportButton = (props, ref) => {
           {
             formatMessage({
               id: 'odc.component.BatchImportButton.BatchImport',
-              defaultMessage: '批量导入',
+              defaultMessage: '批量导入'
             }) /*批量导入*/
           }
         </span>

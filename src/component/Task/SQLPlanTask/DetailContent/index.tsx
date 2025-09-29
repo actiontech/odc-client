@@ -19,7 +19,11 @@ import RiskLevelLabel from '@/component/RiskLevelLabel';
 import { SQLContent } from '@/component/SQLContent';
 import { operationTypeMap } from '@/component/Task/component/CommonDetailModal/TaskOperationRecord';
 import { SimpleTextItem } from '@/component/Task/component/SimpleTextItem';
-import type { CycleTaskDetail, ISqlPlayJobParameters, TaskOperationType } from '@/d.ts';
+import type {
+  CycleTaskDetail,
+  ISqlPlayJobParameters,
+  TaskOperationType
+} from '@/d.ts';
 import { TaskType } from '@/d.ts';
 import { formatMessage } from '@/util/intl';
 import { getFormatDateTime, milliSecondsToHour } from '@/util/utils';
@@ -34,25 +38,25 @@ const { Panel } = Collapse;
 const ErrorStrategy = {
   ABORT: formatMessage({
     id: 'odc.component.DetailModal.sqlPlan.StopATask',
-    defaultMessage: '停止任务',
+    defaultMessage: '停止任务'
   }), //停止任务
   CONTINUE: formatMessage({
     id: 'odc.component.DetailModal.sqlPlan.IgnoreErrorsToContinueThe',
-    defaultMessage: '忽略错误继续任务',
-  }),
+    defaultMessage: '忽略错误继续任务'
+  })
   //忽略错误继续任务
 };
 
 const CycleTaskLabel = {
   [TaskType.ALTER_SCHEDULE]: formatMessage({
     id: 'odc.component.DetailModal.sqlPlan.PlannedChange',
-    defaultMessage: '计划变更',
+    defaultMessage: '计划变更'
   }),
   //计划变更
   [TaskType.SQL_PLAN]: formatMessage({
     id: 'odc.component.DetailModal.sqlPlan.SqlPlan',
-    defaultMessage: 'SQL 计划',
-  }),
+    defaultMessage: 'SQL 计划'
+  })
   //SQL 计划
 };
 
@@ -74,7 +78,7 @@ const SqlPlanTaskContent: React.FC<IProps> = (props) => {
         <Descriptions.Item
           label={formatMessage({
             id: 'odc.component.DetailModal.sqlPlan.TaskNumber',
-            defaultMessage: '任务编号',
+            defaultMessage: '任务编号'
           })}
           /*任务编号*/
         >
@@ -83,7 +87,7 @@ const SqlPlanTaskContent: React.FC<IProps> = (props) => {
         <Descriptions.Item
           label={formatMessage({
             id: 'odc.component.DetailModal.dataMocker.Database',
-            defaultMessage: '所属数据库',
+            defaultMessage: '所属数据库'
           })}
         >
           <DatabaseLabel database={task?.database} />
@@ -91,7 +95,7 @@ const SqlPlanTaskContent: React.FC<IProps> = (props) => {
         <Descriptions.Item
           label={formatMessage({
             id: 'odc.src.component.Task.DataMockerTask.DetailContent.DataSource',
-            defaultMessage: '所属数据源',
+            defaultMessage: '所属数据源'
           })}
         >
           {task?.database?.dataSource?.name || '-'}
@@ -100,7 +104,7 @@ const SqlPlanTaskContent: React.FC<IProps> = (props) => {
         <Descriptions.Item
           label={formatMessage({
             id: 'odc.component.DetailModal.sqlPlan.TaskType',
-            defaultMessage: '任务类型',
+            defaultMessage: '任务类型'
           })}
           /*任务类型*/
         >
@@ -110,11 +114,14 @@ const SqlPlanTaskContent: React.FC<IProps> = (props) => {
           <Descriptions.Item
             label={formatMessage({
               id: 'odc.component.DetailModal.sqlPlan.RiskLevel',
-              defaultMessage: '风险等级',
+              defaultMessage: '风险等级'
             })}
             /*风险等级*/
           >
-            <RiskLevelLabel level={task?.riskLevel?.level} color={task?.riskLevel?.style} />
+            <RiskLevelLabel
+              level={task?.riskLevel?.level}
+              color={task?.riskLevel?.style}
+            />
           </Descriptions.Item>
         )}
 
@@ -122,7 +129,7 @@ const SqlPlanTaskContent: React.FC<IProps> = (props) => {
           <Descriptions.Item
             label={formatMessage({
               id: 'odc.component.DetailModal.sqlPlan.ChangeType',
-              defaultMessage: '变更类型',
+              defaultMessage: '变更类型'
             })}
             /*变更类型*/
           >
@@ -133,7 +140,7 @@ const SqlPlanTaskContent: React.FC<IProps> = (props) => {
       <SimpleTextItem
         label={formatMessage({
           id: 'odc.component.DetailModal.sqlPlan.SqlContent',
-          defaultMessage: 'SQL 内容',
+          defaultMessage: 'SQL 内容'
         })}
         /*SQL 内容*/
         content={
@@ -146,8 +153,9 @@ const SqlPlanTaskContent: React.FC<IProps> = (props) => {
               sqlObjectNames={jobParameters?.sqlObjectNames}
               taskId={task?.id}
               language={
-                getDataSourceModeConfigByConnectionMode(task?.database?.dataSource?.dialectType)
-                  ?.sql?.language
+                getDataSourceModeConfigByConnectionMode(
+                  task?.database?.dataSource?.dialectType
+                )?.sql?.language
               }
             />
           </div>
@@ -159,7 +167,7 @@ const SqlPlanTaskContent: React.FC<IProps> = (props) => {
         <Descriptions.Item
           label={formatMessage({
             id: 'odc.component.DetailModal.sqlPlan.TimingPeriod',
-            defaultMessage: '定时周期',
+            defaultMessage: '定时周期'
           })}
           /*定时周期*/
         >
@@ -175,7 +183,7 @@ const SqlPlanTaskContent: React.FC<IProps> = (props) => {
                 <SimpleTextItem
                   label={formatMessage({
                     id: 'odc.component.DetailModal.sqlPlan.NextExecutionTime',
-                    defaultMessage: '下一次执行时间',
+                    defaultMessage: '下一次执行时间'
                   })}
                   /*下一次执行时间*/
                   content={
@@ -201,7 +209,7 @@ const SqlPlanTaskContent: React.FC<IProps> = (props) => {
         <Descriptions.Item
           label={formatMessage({
             id: 'odc.component.DetailModal.sqlPlan.Separator',
-            defaultMessage: '分隔符',
+            defaultMessage: '分隔符'
           })}
           /*分隔符*/
         >
@@ -210,7 +218,7 @@ const SqlPlanTaskContent: React.FC<IProps> = (props) => {
         <Descriptions.Item
           label={formatMessage({
             id: 'odc.component.DetailModal.sqlPlan.QueryResultLimits',
-            defaultMessage: '查询结果限制',
+            defaultMessage: '查询结果限制'
           })}
           /*查询结果限制*/
         >
@@ -219,7 +227,7 @@ const SqlPlanTaskContent: React.FC<IProps> = (props) => {
         <Descriptions.Item
           label={formatMessage({
             id: 'odc.component.DetailModal.sqlPlan.TaskErrorHandling',
-            defaultMessage: '任务错误处理',
+            defaultMessage: '任务错误处理'
           })}
           /*任务错误处理*/
         >
@@ -228,7 +236,7 @@ const SqlPlanTaskContent: React.FC<IProps> = (props) => {
         <Descriptions.Item
           label={formatMessage({
             id: 'odc.component.DetailModal.sqlPlan.ExecutionTimeout',
-            defaultMessage: '执行超时时间',
+            defaultMessage: '执行超时时间'
           })}
           /*执行超时时间*/
         >
@@ -236,10 +244,10 @@ const SqlPlanTaskContent: React.FC<IProps> = (props) => {
             formatMessage(
               {
                 id: 'odc.component.DetailModal.sqlPlan.ExecutiontimeoutHours',
-                defaultMessage: '{executionTimeout}小时',
+                defaultMessage: '{executionTimeout}小时'
               },
 
-              { executionTimeout },
+              { executionTimeout }
             )
             //`${executionTimeout}小时`
           }
@@ -247,25 +255,25 @@ const SqlPlanTaskContent: React.FC<IProps> = (props) => {
         <Descriptions.Item
           label={formatMessage({
             id: 'odc.component.DetailModal.sqlPlan.ExecutionDurationHypercycleProcessing',
-            defaultMessage: '执行时长超周期处理',
+            defaultMessage: '执行时长超周期处理'
           })} /*执行时长超周期处理*/
         >
           {
             allowConcurrent
               ? formatMessage({
                   id: 'odc.component.DetailModal.sqlPlan.IgnoreTheCurrentTaskStatus',
-                  defaultMessage: '忽略当前任务状态，定期发起新任务',
+                  defaultMessage: '忽略当前任务状态，定期发起新任务'
                 }) //忽略当前任务状态，定期发起新任务
               : formatMessage({
                   id: 'odc.component.DetailModal.sqlPlan.AfterTheCurrentTaskIs',
-                  defaultMessage: '待当前任务执行完毕在新周期发起任务',
+                  defaultMessage: '待当前任务执行完毕在新周期发起任务'
                 }) //待当前任务执行完毕在新周期发起任务
           }
         </Descriptions.Item>
         <Descriptions.Item
           label={formatMessage({
             id: 'odc.SQLPlanTask.DetailContent.Description',
-            defaultMessage: '描述',
+            defaultMessage: '描述'
           })}
           /*描述*/ span={2}
         >
@@ -277,7 +285,7 @@ const SqlPlanTaskContent: React.FC<IProps> = (props) => {
         <Descriptions.Item
           label={formatMessage({
             id: 'odc.component.DetailModal.sqlPlan.Founder',
-            defaultMessage: '创建人',
+            defaultMessage: '创建人'
           })}
           /*创建人*/
         >
@@ -286,7 +294,7 @@ const SqlPlanTaskContent: React.FC<IProps> = (props) => {
         <Descriptions.Item
           label={formatMessage({
             id: 'odc.component.DetailModal.sqlPlan.CreationTime',
-            defaultMessage: '创建时间',
+            defaultMessage: '创建时间'
           })}
           /*创建时间*/
         >

@@ -31,7 +31,7 @@ export const Status: React.FC<ITaskStatus> = (props) => {
   return (
     <Space
       style={{
-        fontSize: 12,
+        fontSize: 12
       }}
     >
       <span>{icon}</span>
@@ -56,10 +56,10 @@ const TaskResult: React.FC<IProps> = (props) => {
               formatMessage(
                 {
                   id: 'odc.AsyncTask.components.PropssuccesscountSqlStatementsAreExecuted',
-                  defaultMessage: '{propsSuccessCount} 条 SQL 执行成功',
+                  defaultMessage: '{propsSuccessCount} 条 SQL 执行成功'
                 },
 
-                { propsSuccessCount: successCount },
+                { propsSuccessCount: successCount }
               )
               // `${props.successCount} 条 SQL 执行成功`
             }
@@ -72,10 +72,10 @@ const TaskResult: React.FC<IProps> = (props) => {
               formatMessage(
                 {
                   id: 'odc.AsyncTask.components.PropssuccesscountSqlStatementsFailedTo',
-                  defaultMessage: '{propsSuccessCount} 条 SQL 执行失败',
+                  defaultMessage: '{propsSuccessCount} 条 SQL 执行失败'
                 },
 
-                { propsSuccessCount: failCount },
+                { propsSuccessCount: failCount }
               )
               // `${props.successCount} 条 SQL 执行失败`
             }
@@ -86,7 +86,7 @@ const TaskResult: React.FC<IProps> = (props) => {
             {
               formatMessage({
                 id: 'odc.component.CommonTaskDetailModal.TaskResult.ExecutionFailure',
-                defaultMessage: '执行失败记录',
+                defaultMessage: '执行失败记录'
               }) /*执行失败记录*/
             }
           </span>

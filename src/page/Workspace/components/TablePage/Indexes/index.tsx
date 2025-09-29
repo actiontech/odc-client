@@ -31,7 +31,7 @@ const TableIndexes: React.FC<IProps> = function ({}) {
         indexes: editIndexes || table?.indexes,
         columns: table?.columns,
         session: tableContext.session,
-        setIndexes: setEditIndexes,
+        setIndexes: setEditIndexes
       }}
     >
       <TableIndex modified={!!editIndexes} />

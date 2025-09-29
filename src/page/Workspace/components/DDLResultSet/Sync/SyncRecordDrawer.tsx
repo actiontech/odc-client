@@ -34,9 +34,9 @@ const SyncRecordDrawer: React.FC<IProps> = (props) => {
   const {
     data = [],
     loading,
-    run: fetchRefreshRecords,
+    run: fetchRefreshRecords
   } = useRequest(getRefreshRecords, {
-    manual: true,
+    manual: true
   });
 
   const getRecordList = async () => {
@@ -44,7 +44,7 @@ const SyncRecordDrawer: React.FC<IProps> = (props) => {
       dbName: session?.database?.dbName,
       sessionId: session?.sessionId,
       materializedViewName: pageStore?.activePage?.params?.materializedViewName,
-      queryLimit: 1000,
+      queryLimit: 1000
     });
   };
 
@@ -60,7 +60,7 @@ const SyncRecordDrawer: React.FC<IProps> = (props) => {
       startTime: dayjs(item.startTime).format('YYYY-MM-DD HH:mm:ss'),
       endTime: dayjs(item.endTime).format('YYYY-MM-DD HH:mm:ss'),
       key: `${item.refreshId || ''}@@${idx}`,
-      _rowIndex: idx,
+      _rowIndex: idx
     }));
   }, [data]);
 
@@ -73,21 +73,21 @@ const SyncRecordDrawer: React.FC<IProps> = (props) => {
       {
         label: formatMessage({
           id: 'src.page.Workspace.components.DDLResultSet.Sync.37022016',
-          defaultMessage: '物化视图名称',
+          defaultMessage: '物化视图名称'
         }),
-        content: materializedView?.info?.name,
+        content: materializedView?.info?.name
       },
       {
         label: formatMessage({
           id: 'src.page.Workspace.components.DDLResultSet.Sync.06C6984C',
-          defaultMessage: '所属数据库',
+          defaultMessage: '所属数据库'
         }),
-        content: materializedView?.info?.schemaName,
+        content: materializedView?.info?.schemaName
       },
       {
         label: formatMessage({
           id: 'src.page.Workspace.components.DDLResultSet.Sync.D17C87D8',
-          defaultMessage: '存储模式',
+          defaultMessage: '存储模式'
         }),
         content: materializedView?.info?.columnGroups
           ?.map((item) => {
@@ -97,108 +97,113 @@ const SyncRecordDrawer: React.FC<IProps> = (props) => {
           })
           ?.join('+'),
         isHide:
-          !materializedView?.info?.columnGroups || !materializedView?.info?.columnGroups?.length,
+          !materializedView?.info?.columnGroups ||
+          !materializedView?.info?.columnGroups?.length
       },
       {
         label: formatMessage({
           id: 'src.page.Workspace.components.DDLResultSet.Sync.763D7D1D',
-          defaultMessage: '刷新方式',
+          defaultMessage: '刷新方式'
         }),
-        content: refreshMethodText[materializedView?.info?.refreshMethod],
+        content: refreshMethodText[materializedView?.info?.refreshMethod]
       },
       {
         label: formatMessage({
           id: 'src.page.Workspace.components.DDLResultSet.Sync.7EF2E04C',
-          defaultMessage: '刷新并行度',
+          defaultMessage: '刷新并行度'
         }),
-        content: materializedView?.info?.parallelismDegree,
+        content: materializedView?.info?.parallelismDegree
       },
       {
         label: formatMessage({
           id: 'src.page.Workspace.components.DDLResultSet.Sync.AB4F6A74',
-          defaultMessage: '自动刷新',
+          defaultMessage: '自动刷新'
         }),
         content: !!materializedView?.info?.refreshSchedule
           ? formatMessage({
               id: 'src.page.Workspace.components.DDLResultSet.Sync.77AA80C9',
-              defaultMessage: '开启',
+              defaultMessage: '开启'
             })
           : formatMessage({
               id: 'src.page.Workspace.components.DDLResultSet.Sync.E25CD4CC',
-              defaultMessage: '不开启',
-            }),
+              defaultMessage: '不开启'
+            })
       },
       {
         label: formatMessage({
           id: 'src.page.Workspace.components.DDLResultSet.Sync.896AD8B4',
-          defaultMessage: '开始刷新表达式',
+          defaultMessage: '开始刷新表达式'
         }),
         content: materializedView?.info?.refreshSchedule?.startExpression,
-        isHide: !materializedView?.info?.refreshSchedule,
+        isHide: !materializedView?.info?.refreshSchedule
       },
       {
         label: formatMessage({
           id: 'src.page.Workspace.components.DDLResultSet.Sync.E4C45DEC',
-          defaultMessage: '下次刷新表达式',
+          defaultMessage: '下次刷新表达式'
         }),
         content: materializedView?.info?.refreshSchedule?.nextExpression,
-        isHide: !materializedView?.info?.refreshSchedule,
+        isHide: !materializedView?.info?.refreshSchedule
       },
       {
         label: formatMessage({
           id: 'src.page.Workspace.components.DDLResultSet.Sync.56F9AF2F',
-          defaultMessage: '上一次刷新类型',
+          defaultMessage: '上一次刷新类型'
         }),
-        content: refreshMethodText[materializedView?.info?.lastRefreshType],
+        content: refreshMethodText[materializedView?.info?.lastRefreshType]
       },
       {
         label: formatMessage({
           id: 'src.page.Workspace.components.DDLResultSet.Sync.1709A66E',
-          defaultMessage: '上一次刷新开始时间',
+          defaultMessage: '上一次刷新开始时间'
         }),
         content:
           materializedView?.info?.lastRefreshStartTime &&
-          dayjs(materializedView?.info?.lastRefreshStartTime)?.format('YYYY-MM-DD HH:mm:ss'),
+          dayjs(materializedView?.info?.lastRefreshStartTime)?.format(
+            'YYYY-MM-DD HH:mm:ss'
+          )
       },
       {
         label: formatMessage({
           id: 'src.page.Workspace.components.DDLResultSet.Sync.595C4B1C',
-          defaultMessage: '上一次刷新结束时间',
+          defaultMessage: '上一次刷新结束时间'
         }),
         content:
           materializedView?.info?.lastRefreshEndTime &&
-          dayjs(materializedView?.info?.lastRefreshEndTime)?.format('YYYY-MM-DD HH:mm:ss'),
+          dayjs(materializedView?.info?.lastRefreshEndTime)?.format(
+            'YYYY-MM-DD HH:mm:ss'
+          )
       },
       {
         label: formatMessage({
           id: 'src.page.Workspace.components.DDLResultSet.Sync.F8CC4704',
-          defaultMessage: '查询改写',
+          defaultMessage: '查询改写'
         }),
         content: materializedView?.info?.enableQueryRewrite
           ? formatMessage({
               id: 'src.page.Workspace.components.DDLResultSet.Sync.162045FD',
-              defaultMessage: '开启',
+              defaultMessage: '开启'
             })
           : formatMessage({
               id: 'src.page.Workspace.components.DDLResultSet.Sync.F17F6386',
-              defaultMessage: '不开启',
-            }),
+              defaultMessage: '不开启'
+            })
       },
       {
         label: formatMessage({
           id: 'src.page.Workspace.components.DDLResultSet.Sync.619DF546',
-          defaultMessage: '实时',
+          defaultMessage: '实时'
         }),
         content: materializedView?.info?.enableQueryComputation
           ? formatMessage({
               id: 'src.page.Workspace.components.DDLResultSet.Sync.FB2B5757',
-              defaultMessage: '是',
+              defaultMessage: '是'
             })
           : formatMessage({
               id: 'src.page.Workspace.components.DDLResultSet.Sync.A34C9F84',
-              defaultMessage: '否',
-            }),
-      },
+              defaultMessage: '否'
+            })
+      }
     ];
 
     return options.filter((item) => !item?.isHide);
@@ -210,12 +215,15 @@ const SyncRecordDrawer: React.FC<IProps> = (props) => {
       onClose={onClose}
       title={formatMessage({
         id: 'src.page.Workspace.components.DDLResultSet.Sync.144EEF21',
-        defaultMessage: '刷新记录',
+        defaultMessage: '刷新记录'
       })}
       width={1000}
       className={styles.SyncRecordDrawer}
     >
-      <ObjectInfoView data={objectInfoOptions} className={styles.SyncRecordDrawerInfo} />
+      <ObjectInfoView
+        data={objectInfoOptions}
+        className={styles.SyncRecordDrawerInfo}
+      />
       <Spin spinning={loading}>
         {!!rows?.length && (
           <DDLResultSet
@@ -230,13 +238,16 @@ const SyncRecordDrawer: React.FC<IProps> = (props) => {
             rows={rows}
             sqlId=""
             enableRowId={true}
-            resultHeight={`calc(100vh - ${GLOBAL_HEADER_HEIGHT + TABBAR_HEIGHT + 80}px)`}
+            resultHeight={`calc(100vh - ${
+              GLOBAL_HEADER_HEIGHT + TABBAR_HEIGHT + 80
+            }px)`}
             onRefresh={(queryLimit) => {
               fetchRefreshRecords({
                 dbName: session?.database?.dbName,
                 sessionId: session?.sessionId,
-                materializedViewName: pageStore?.activePage?.params?.materializedViewName,
-                queryLimit,
+                materializedViewName:
+                  pageStore?.activePage?.params?.materializedViewName,
+                queryLimit
               });
             }}
           />

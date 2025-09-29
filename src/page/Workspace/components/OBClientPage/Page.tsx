@@ -33,5 +33,5 @@ export default inject('settingStore')(
         datasourceId={params?.dataSourceId}
       />
     );
-  }),
+  })
 );

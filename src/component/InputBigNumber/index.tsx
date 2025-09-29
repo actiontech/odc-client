@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-import { Input, InputRef } from 'antd';
+import { BasicInput } from '@actiontech/dms-kit';
+import { InputRef } from 'antd';
 import { InputProps } from 'antd/lib/input';
 import BigNumber from 'bignumber.js';
 import React, { useRef, useState } from 'react';
@@ -31,11 +32,16 @@ function isUnfinishedDecimal(v: string) {
   return /^\-?[\d]+\.(\d*?[0]+)?$/.test(v);
 }
 
-const InputBigNumber: React.FC<IProps> = React.forwardRef(function (props, ref) {
+const InputBigNumber: React.FC<IProps> = React.forwardRef(function (
+  props,
+  ref
+) {
   let { max, min, value: inValue, onChange, isInt, inputRef, ...rest } = props;
   const [, forceUpdate] = useState(0);
-  let bigMax = typeof max == 'undefined' ? new BigNumber(Infinity) : new BigNumber(max);
-  let bigMin = typeof min == 'undefined' ? new BigNumber(-Infinity) : new BigNumber(min);
+  const bigMax =
+    typeof max == 'undefined' ? new BigNumber(Infinity) : new BigNumber(max);
+  const bigMin =
+    typeof min == 'undefined' ? new BigNumber(-Infinity) : new BigNumber(min);
   if (typeof inValue === 'number') {
     /**
      * bigNumber 必须要string类型才能生效
@@ -46,7 +52,7 @@ const InputBigNumber: React.FC<IProps> = React.forwardRef(function (props, ref) 
    * input的实际值
    */
   const inputValue = useRef(null);
-  if ((props as Object).hasOwnProperty('value')) {
+  if ((props as object).hasOwnProperty('value')) {
     inputValue.current = inValue;
   }
 
@@ -107,13 +113,16 @@ const InputBigNumber: React.FC<IProps> = React.forwardRef(function (props, ref) 
         /**
          * 小数，需要把点给去掉
          */
-        inputValue.current = inputValue.current.substring(0, inputValue.current.length - 1);
+        inputValue.current = inputValue.current.substring(
+          0,
+          inputValue.current.length - 1
+        );
         onChange && onChange(inputValue.current);
       }
     },
-    value: inputValue.current,
+    value: inputValue.current
   };
-  return <Input ref={inputRef} {...inputProps} {...rest} />;
+  return <BasicInput ref={inputRef} {...inputProps} {...rest} />;
 });
 
 export default InputBigNumber;

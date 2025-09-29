@@ -8,7 +8,9 @@ import Icon from '@ant-design/icons';
 import { ReactComponent as ViewSvg } from '@/svgr/menuView.svg';
 import { ReactComponent as TableOutlined } from '@/svgr/menuTable.svg';
 import { ReactComponent as DatabaseSvg } from '@/svgr/database.svg';
-import SortableContainer, { DraggableItem } from '@/component/SortableContainer';
+import SortableContainer, {
+  DraggableItem
+} from '@/component/SortableContainer';
 import { DataNode } from 'antd/lib/tree';
 import TableItem from '../../CreateViewPage/component/TableSelector/Item';
 import { parse } from 'query-string';
@@ -46,30 +48,30 @@ const TableSelector = () => {
           {
             title: formatMessage({
               id: 'src.page.Workspace.components.CreateMaterializedView.TableSelector.7234E38C',
-              defaultMessage: '表',
+              defaultMessage: '表'
             }),
             key: `${TableSelectorNode.database}-${dbName}-${TableSelectorNode.tableRoot}`,
             type: TableSelectorNode.tableRoot,
             children: tables?.map((tableName) => ({
               title: tableName,
               key: `d=${dbName}&t=${encodeURIComponent(tableName)}`,
-              type: TableSelectorNode.table,
-            })),
+              type: TableSelectorNode.table
+            }))
           },
           {
             title: formatMessage({
               id: 'src.page.Workspace.components.CreateMaterializedView.TableSelector.6EFF8857',
-              defaultMessage: '物化视图',
+              defaultMessage: '物化视图'
             }),
             key: `${TableSelectorNode.database}-${dbName}-${TableSelectorNode.materializedViewRoot}`,
             type: TableSelectorNode.materializedViewRoot,
             children: mvs?.map((mvName) => ({
               title: mvName,
               key: `d=${dbName}&v=${encodeURIComponent(mvName)}`,
-              type: TableSelectorNode.materializedView,
-            })),
-          },
-        ],
+              type: TableSelectorNode.materializedView
+            }))
+          }
+        ]
       };
     });
     if (isInit && _treeData.length) {
@@ -77,7 +79,7 @@ const TableSelector = () => {
       setExpandedKeys([
         _treeData[0]?.key,
         _treeData[0]?.children?.[0]?.key,
-        _treeData[0]?.children?.[1]?.key,
+        _treeData[0]?.children?.[1]?.key
       ]);
     }
     setTreeData(_treeData);
@@ -88,14 +90,19 @@ const TableSelector = () => {
     let icon;
     switch (type) {
       case TableSelectorNode.database: {
-        icon = <Icon component={DatabaseSvg} style={{ color: '#3FA3FF', fontSize: 14 }} />;
+        icon = (
+          <Icon
+            component={DatabaseSvg}
+            style={{ color: '#3FA3FF', fontSize: 14 }}
+          />
+        );
         break;
       }
       case TableSelectorNode.table: {
         icon = (
           <TableOutlined
             style={{
-              color: '#3FA3FF',
+              color: '#3FA3FF'
             }}
           />
         );
@@ -110,7 +117,7 @@ const TableSelector = () => {
             style={{
               color: 'var(--icon-color-5)',
               position: 'relative',
-              top: 1,
+              top: 1
             }}
           />
         );
@@ -129,7 +136,11 @@ const TableSelector = () => {
       if (keywords) {
         const upperCaseTitle = title.toUpperCase();
         const upperKeywords = keywords.toUpperCase();
-        if (isBottomNode && !upperCaseTitle.includes(upperKeywords) && !isChecked) {
+        if (
+          isBottomNode &&
+          !upperCaseTitle.includes(upperKeywords) &&
+          !isChecked
+        ) {
           return null;
         }
       }
@@ -194,7 +205,7 @@ const TableSelector = () => {
         dbName: params.d,
         tableName: params.t,
         viewName: params.v,
-        aliasName,
+        aliasName
       };
       if (!isLast) {
         operations.push(operation || ',');
@@ -214,7 +225,7 @@ const TableSelector = () => {
     }
     // 存在同表多选情况，需要 uid 做唯一标识
     newKeys = newKeys.map((key) =>
-      key.indexOf('uid') !== -1 ? key : `${key}&uid=${uniqueId('t_')}`,
+      key.indexOf('uid') !== -1 ? key : `${key}&uid=${uniqueId('t_')}`
     );
     setTargetKeys([...newKeys]);
     handleSubmit([...newKeys]);
@@ -260,7 +271,12 @@ const TableSelector = () => {
 
   const renderTargetPanel = () => {
     if (!targetKeys.length) {
-      return <Empty style={{ marginTop: '80px' }} image={Empty.PRESENTED_IMAGE_SIMPLE} />;
+      return (
+        <Empty
+          style={{ marginTop: '80px' }}
+          image={Empty.PRESENTED_IMAGE_SIMPLE}
+        />
+      );
     }
     return (
       <div style={{ height: '462px', overflow: 'auto' }}>
@@ -297,13 +313,13 @@ const TableSelector = () => {
       <p>
         {formatMessage({
           id: 'src.page.Workspace.components.CreateMaterializedView.TableSelector.7AFF6985',
-          defaultMessage: '选择基表',
+          defaultMessage: '选择基表'
         })}
 
         <span style={{ color: 'var(--icon-color-normal-2)' }}>
           {formatMessage({
             id: 'src.page.Workspace.components.CreateMaterializedView.TableSelector.8DEC2BED',
-            defaultMessage: '（可选）',
+            defaultMessage: '（可选）'
           })}
         </span>
       </p>
@@ -316,8 +332,8 @@ const TableSelector = () => {
         locale={{
           searchPlaceholder: formatMessage({
             id: 'src.page.Workspace.components.CreateMaterializedView.TableSelector.AA55002C',
-            defaultMessage: '请输入表/物化视图名称',
-          }),
+            defaultMessage: '请输入表/物化视图名称'
+          })
         }}
         onChange={handleTransfer}
         onSearch={handleTreeSearch}

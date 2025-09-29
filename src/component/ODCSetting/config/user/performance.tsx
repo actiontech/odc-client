@@ -19,24 +19,27 @@ import { IODCSetting, ODCSettingGroup } from '../../config';
 import TextAreaItem from '../../Item/TextItem';
 
 const performanceGroup: ODCSettingGroup = {
-  label: formatMessage({ id: 'src.component.ODCSetting.config.353C6B46', defaultMessage: '性能' }), //'性能'
-  key: 'performance',
+  label: formatMessage({
+    id: 'src.component.ODCSetting.config.353C6B46',
+    defaultMessage: '性能'
+  }), //'性能'
+  key: 'performance'
 };
 const performanceDefaultGroup: ODCSettingGroup = {
   label: '',
-  key: 'performanceDefault',
+  key: 'performanceDefault'
 };
 
 const restartTip = formatMessage({
   id: 'src.component.ODCSetting.config.1ACE7366',
-  defaultMessage: '修改此参数，将在 ODC 重启后生效',
+  defaultMessage: '修改此参数，将在 ODC 重启后生效'
 }); //'修改此参数，将在 ODC 重启后生效'
 
 const performanceSettings: IODCSetting[] = [
   {
     label: formatMessage({
       id: 'src.component.ODCSetting.config.15368609',
-      defaultMessage: 'JVM 参数',
+      defaultMessage: 'JVM 参数'
     }), //'Jvm 参数'
     key: 'client.jvm.params',
     locationKey: 'jvmparams',
@@ -47,12 +50,12 @@ const performanceSettings: IODCSetting[] = [
     span: 24,
     render: (value, onChange) => {
       return <TextAreaItem value={value} onChange={onChange} />;
-    },
+    }
   },
   {
     label: formatMessage({
       id: 'src.component.ODCSetting.config.74959AFE',
-      defaultMessage: 'ODC 参数',
+      defaultMessage: 'ODC 参数'
     }), //'ODC 参数'
     key: 'client.start.params',
     locationKey: 'startparams',
@@ -63,7 +66,7 @@ const performanceSettings: IODCSetting[] = [
     span: 24,
     render: (value, onChange) => {
       return <TextAreaItem value={value} onChange={onChange} />;
-    },
+    }
   },
   {
     label: 'Electron Params',
@@ -76,8 +79,8 @@ const performanceSettings: IODCSetting[] = [
     span: 24,
     render: (value, onChange) => {
       return <TextAreaItem value={value} onChange={onChange} />;
-    },
-  },
+    }
+  }
 ];
 
 export default performanceSettings;

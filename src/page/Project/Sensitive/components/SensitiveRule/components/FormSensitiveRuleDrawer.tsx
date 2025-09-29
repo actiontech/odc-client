@@ -14,11 +14,24 @@
  * limitations under the License.
  */
 
-import { createSensitiveRule, updateSensitiveRule } from '@/common/network/sensitiveRule';
+import {
+  createSensitiveRule,
+  updateSensitiveRule
+} from '@/common/network/sensitiveRule';
 import { ISensitiveRule, SensitiveRuleType } from '@/d.ts/sensitiveRule';
 import { maskRuleTypeMap } from '@/page/Secure/MaskingAlgorithm';
 import { formatMessage } from '@/util/intl';
-import { Button, Drawer, Form, Input, message, Modal, Radio, Select, Space } from 'antd';
+import {
+  Button,
+  Drawer,
+  Form,
+  Input,
+  message,
+  Modal,
+  Radio,
+  Select,
+  Space
+} from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { useContext, useEffect, useState } from 'react';
 import ProjectContext from '../../../../ProjectContext';
@@ -30,7 +43,7 @@ const FormSensitiveRuleDrawer = ({
   formDrawerVisible,
   handleFormDrawerClose,
   isEdit,
-  selectedRecord,
+  selectedRecord
 }) => {
   const [formRef] = useForm();
   const context = useContext(ProjectContext);
@@ -39,7 +52,14 @@ const FormSensitiveRuleDrawer = ({
   const [hasValidated, setHasValidated] = useState<boolean>(false);
   const handleSubmit = async () => {
     const rawData = await formRef.validateFields().catch();
-    const { enabled, maskingAlgorithmId, name, type, regExp = {}, description } = rawData;
+    const {
+      enabled,
+      maskingAlgorithmId,
+      name,
+      type,
+      regExp = {},
+      description
+    } = rawData;
     if (type === SensitiveRuleType.GROOVY && script?.length === 0) {
       setHasValidated(true);
       return;
@@ -50,7 +70,7 @@ const FormSensitiveRuleDrawer = ({
       name,
       type,
       projectId: context.projectId,
-      description,
+      description
     };
     const wrapPath = (origin: string) => {
       if (origin?.includes(',')) {
@@ -65,13 +85,13 @@ const FormSensitiveRuleDrawer = ({
           pathIncludes: wrapPath(
             Array.isArray(rawData.pathIncludes)
               ? rawData?.pathIncludes?.join(',')
-              : rawData.pathIncludes,
+              : rawData.pathIncludes
           ),
           pathExcludes: wrapPath(
             Array.isArray(rawData.pathExcludes)
               ? rawData?.pathExcludes?.join(',')
-              : rawData.pathExcludes,
-          ),
+              : rawData.pathExcludes
+          )
         };
         break;
       }
@@ -84,14 +104,14 @@ const FormSensitiveRuleDrawer = ({
         });
         data = {
           ...data,
-          ...resRegExp,
+          ...resRegExp
         };
         break;
       }
       case SensitiveRuleType.GROOVY: {
         data = {
           ...data,
-          groovyScript: script,
+          groovyScript: script
         };
         break;
       }
@@ -100,14 +120,14 @@ const FormSensitiveRuleDrawer = ({
       const result = await updateSensitiveRule(
         context.projectId,
         selectedRecord.id,
-        data as ISensitiveRule,
+        data as ISensitiveRule
       );
       if (result) {
         message.success(
           formatMessage({
             id: 'odc.SensitiveRule.components.FormSensitiveRuleDrawer.UpdatedSuccessfully',
-            defaultMessage: '更新成功',
-          }), //更新成功
+            defaultMessage: '更新成功'
+          }) //更新成功
         );
 
         handleFormDrawerClose(formRef.resetFields);
@@ -115,8 +135,8 @@ const FormSensitiveRuleDrawer = ({
         message.error(
           formatMessage({
             id: 'odc.SensitiveRule.components.FormSensitiveRuleDrawer.UpdateFailed',
-            defaultMessage: '更新失败',
-          }), //更新失败
+            defaultMessage: '更新失败'
+          }) //更新失败
         );
       }
     } else {
@@ -125,8 +145,8 @@ const FormSensitiveRuleDrawer = ({
         message.success(
           formatMessage({
             id: 'odc.SensitiveRule.components.FormSensitiveRuleDrawer.New',
-            defaultMessage: '新建成功',
-          }), //新建成功
+            defaultMessage: '新建成功'
+          }) //新建成功
         );
 
         handleFormDrawerClose();
@@ -134,8 +154,8 @@ const FormSensitiveRuleDrawer = ({
         message.error(
           formatMessage({
             id: 'odc.SensitiveRule.components.FormSensitiveRuleDrawer.FailedToCreate',
-            defaultMessage: '新建失败',
-          }), //新建失败
+            defaultMessage: '新建失败'
+          }) //新建失败
         );
       }
     }
@@ -147,11 +167,11 @@ const FormSensitiveRuleDrawer = ({
       title: isEdit
         ? formatMessage({
             id: 'odc.SensitiveRule.components.FormSensitiveRuleDrawer.AreYouSureYouWant',
-            defaultMessage: '是否确认取消编辑？',
+            defaultMessage: '是否确认取消编辑？'
           }) //确认要取消编辑吗？
         : formatMessage({
             id: 'odc.SensitiveRule.components.FormSensitiveRuleDrawer.AreYouSureYouWant.1',
-            defaultMessage: '是否确认取消新建？',
+            defaultMessage: '是否确认取消新建？'
           }),
       //确认要取消新建吗？
       onOk: () => {
@@ -162,13 +182,13 @@ const FormSensitiveRuleDrawer = ({
       onCancel: () => {},
       okText: formatMessage({
         id: 'odc.SensitiveRule.components.FormSensitiveRuleDrawer.Ok',
-        defaultMessage: '确定',
+        defaultMessage: '确定'
       }),
       //确定
       cancelText: formatMessage({
         id: 'odc.SensitiveRule.components.FormSensitiveRuleDrawer.Cancel',
-        defaultMessage: '取消',
-      }), //取消
+        defaultMessage: '取消'
+      }) //取消
     });
   };
 
@@ -186,7 +206,7 @@ const FormSensitiveRuleDrawer = ({
         tableRegexExpression = '',
         columnRegexExpression = '',
         columnCommentRegexExpression = '',
-        description = '',
+        description = ''
       } = selectedRecord;
       const hasDatabaseRegexExpression = !!databaseRegexExpression;
       const hasTableRegexExpression = !!tableRegexExpression;
@@ -204,42 +224,46 @@ const FormSensitiveRuleDrawer = ({
           databaseRegexExpression: {
             label: formatMessage({
               id: 'odc.SensitiveRule.components.FormSensitiveRuleDrawer.LibraryName',
-              defaultMessage: '库名',
+              defaultMessage: '库名'
             }),
             //库名
-            checked: hasDatabaseRegexExpression ? ['databaseRegexExpression'] : [],
-            regExp: databaseRegexExpression,
+            checked: hasDatabaseRegexExpression
+              ? ['databaseRegexExpression']
+              : [],
+            regExp: databaseRegexExpression
           },
           tableRegexExpression: {
             label: formatMessage({
               id: 'odc.SensitiveRule.components.FormSensitiveRuleDrawer.TableName',
-              defaultMessage: '表名',
+              defaultMessage: '表名'
             }),
             //表名
             checked: hasTableRegexExpression ? ['tableRegexExpression'] : [],
-            regExp: tableRegexExpression,
+            regExp: tableRegexExpression
           },
           columnRegexExpression: {
             label: formatMessage({
               id: 'odc.SensitiveRule.components.FormSensitiveRuleDrawer.ColumnName',
-              defaultMessage: '列名',
+              defaultMessage: '列名'
             }),
             //列名
             checked: hasColumnRegexExpression ? ['columnRegexExpression'] : [],
-            regExp: columnRegexExpression,
+            regExp: columnRegexExpression
           },
           columnCommentRegexExpression: {
             label: formatMessage({
               id: 'odc.SensitiveRule.components.FormSensitiveRuleDrawer.ColumnRemarks',
-              defaultMessage: '列备注',
+              defaultMessage: '列备注'
             }),
             //列备注
-            checked: hasColumnCommentRegexExpression ? ['columnCommentRegexExpression'] : [],
-            regExp: columnCommentRegexExpression,
-          },
+            checked: hasColumnCommentRegexExpression
+              ? ['columnCommentRegexExpression']
+              : [],
+            regExp: columnCommentRegexExpression
+          }
         },
         maskingAlgorithmId: maskingAlgorithmId,
-        description,
+        description
       });
     } else {
       setScript('');
@@ -254,42 +278,42 @@ const FormSensitiveRuleDrawer = ({
           databaseRegexExpression: {
             label: formatMessage({
               id: 'odc.SensitiveRule.components.FormSensitiveRuleDrawer.LibraryName',
-              defaultMessage: '库名',
+              defaultMessage: '库名'
             }),
             //库名
             checked: [],
-            regExp: '',
+            regExp: ''
           },
           tableRegexExpression: {
             label: formatMessage({
               id: 'odc.SensitiveRule.components.FormSensitiveRuleDrawer.TableName',
-              defaultMessage: '表名',
+              defaultMessage: '表名'
             }),
             //表名
             checked: [],
-            regExp: '',
+            regExp: ''
           },
           columnRegexExpression: {
             label: formatMessage({
               id: 'odc.SensitiveRule.components.FormSensitiveRuleDrawer.ColumnName',
-              defaultMessage: '列名',
+              defaultMessage: '列名'
             }),
             //列名
             checked: [],
-            regExp: '',
+            regExp: ''
           },
           columnCommentRegexExpression: {
             label: formatMessage({
               id: 'odc.SensitiveRule.components.FormSensitiveRuleDrawer.ColumnRemarks',
-              defaultMessage: '列备注',
+              defaultMessage: '列备注'
             }),
             //列备注
             checked: [],
-            regExp: '',
-          },
+            regExp: ''
+          }
         },
         maskingAlgorithmId: undefined,
-        description: '',
+        description: ''
       });
     }
   }, [formDrawerVisible, isEdit, selectedRecord]);
@@ -300,11 +324,11 @@ const FormSensitiveRuleDrawer = ({
         isEdit
           ? formatMessage({
               id: 'odc.SensitiveRule.components.FormSensitiveRuleDrawer.EditIdentificationRules',
-              defaultMessage: '编辑识别规则',
+              defaultMessage: '编辑识别规则'
             }) //编辑识别规则
           : formatMessage({
               id: 'odc.SensitiveRule.components.FormSensitiveRuleDrawer.CreateAnIdentificationRule',
-              defaultMessage: '新建识别规则',
+              defaultMessage: '新建识别规则'
             }) //新建识别规则
       }
       width={596}
@@ -314,7 +338,7 @@ const FormSensitiveRuleDrawer = ({
         <div
           style={{
             display: 'flex',
-            justifyContent: 'flex-end',
+            justifyContent: 'flex-end'
           }}
         >
           <Space>
@@ -322,7 +346,7 @@ const FormSensitiveRuleDrawer = ({
               {
                 formatMessage({
                   id: 'odc.SensitiveRule.components.FormSensitiveRuleDrawer.Cancel',
-                  defaultMessage: '取消',
+                  defaultMessage: '取消'
                 }) /*取消*/
               }
             </Button>
@@ -331,11 +355,11 @@ const FormSensitiveRuleDrawer = ({
                 isEdit
                   ? formatMessage({
                       id: 'odc.SensitiveRule.components.FormSensitiveRuleDrawer.Submit',
-                      defaultMessage: '提交',
+                      defaultMessage: '提交'
                     }) //提交
                   : formatMessage({
                       id: 'odc.SensitiveRule.components.FormSensitiveRuleDrawer.Create',
-                      defaultMessage: '新建',
+                      defaultMessage: '新建'
                     }) //新建
               }
             </Button>
@@ -349,7 +373,7 @@ const FormSensitiveRuleDrawer = ({
           label={
             formatMessage({
               id: 'odc.SensitiveRule.components.FormSensitiveRuleDrawer.RuleName',
-              defaultMessage: '规则名称',
+              defaultMessage: '规则名称'
             }) //规则名称
           }
           name={'name'}
@@ -359,15 +383,15 @@ const FormSensitiveRuleDrawer = ({
               required: true,
               message: formatMessage({
                 id: 'odc.SensitiveRule.components.FormSensitiveRuleDrawer.EnterARuleName',
-                defaultMessage: '请输入规则名称',
-              }), //请输入规则名称
-            },
+                defaultMessage: '请输入规则名称'
+              }) //请输入规则名称
+            }
           ]}
         >
           <Input
             placeholder={formatMessage({
               id: 'odc.SensitiveRule.components.FormSensitiveRuleDrawer.PleaseEnter',
-              defaultMessage: '请输入',
+              defaultMessage: '请输入'
             })} /*请输入*/
           />
         </Form.Item>
@@ -375,7 +399,7 @@ const FormSensitiveRuleDrawer = ({
           label={
             formatMessage({
               id: 'odc.SensitiveRule.components.FormSensitiveRuleDrawer.RuleStatus',
-              defaultMessage: '规则状态',
+              defaultMessage: '规则状态'
             }) //规则状态
           }
           name={'enabled'}
@@ -385,9 +409,9 @@ const FormSensitiveRuleDrawer = ({
               required: true,
               message: formatMessage({
                 id: 'odc.SensitiveRule.components.FormSensitiveRuleDrawer.SelectARuleStatus',
-                defaultMessage: '请选择规则状态',
-              }), //请选择规则状态
-            },
+                defaultMessage: '请选择规则状态'
+              }) //请选择规则状态
+            }
           ]}
         >
           <Radio.Group>
@@ -395,7 +419,7 @@ const FormSensitiveRuleDrawer = ({
               {
                 formatMessage({
                   id: 'odc.SensitiveRule.components.FormSensitiveRuleDrawer.Enable',
-                  defaultMessage: '启用',
+                  defaultMessage: '启用'
                 }) /*启用*/
               }
             </Radio>
@@ -403,7 +427,7 @@ const FormSensitiveRuleDrawer = ({
               {
                 formatMessage({
                   id: 'odc.SensitiveRule.components.FormSensitiveRuleDrawer.Disable',
-                  defaultMessage: '停用',
+                  defaultMessage: '停用'
                 }) /*停用*/
               }
             </Radio>
@@ -416,7 +440,9 @@ const FormSensitiveRuleDrawer = ({
             formRef,
             hasValidated,
             setScript,
-            originType: isEdit ? SensitiveRuleType[selectedRecord.type] : undefined,
+            originType: isEdit
+              ? SensitiveRuleType[selectedRecord.type]
+              : undefined
           }}
         />
 
@@ -424,7 +450,7 @@ const FormSensitiveRuleDrawer = ({
           label={
             formatMessage({
               id: 'odc.SensitiveRule.components.FormSensitiveRuleDrawer.DesensitizationAlgorithm',
-              defaultMessage: '脱敏算法',
+              defaultMessage: '脱敏算法'
             }) //脱敏算法
           }
           name={'maskingAlgorithmId'}
@@ -434,29 +460,33 @@ const FormSensitiveRuleDrawer = ({
               required: true,
               message: formatMessage({
                 id: 'odc.SensitiveRule.components.FormSensitiveRuleDrawer.SelectADesensitizationAlgorithm',
-                defaultMessage: '请选择脱敏算法',
-              }), //请选择脱敏算法
-            },
+                defaultMessage: '请选择脱敏算法'
+              }) //请选择脱敏算法
+            }
           ]}
         >
           <Select
             placeholder={
               formatMessage({
                 id: 'odc.SensitiveRule.components.FormSensitiveRuleDrawer.PleaseSelect',
-                defaultMessage: '请选择',
+                defaultMessage: '请选择'
               }) //请选择
             }
             style={{
-              width: '262px',
+              width: '262px'
             }}
             optionLabelProp="label"
           >
             {sensitiveContext?.maskingAlgorithmOptions?.map((option, index) => {
               const target = sensitiveContext?.maskingAlgorithms?.find(
-                (maskingAlgorithm) => maskingAlgorithm?.id === option?.value,
+                (maskingAlgorithm) => maskingAlgorithm?.id === option?.value
               );
               return (
-                <Select.Option value={option?.value} key={index} label={option?.label}>
+                <Select.Option
+                  value={option?.value}
+                  key={index}
+                  label={option?.label}
+                >
                   <PopoverContainer
                     key={index}
                     title={option?.label}
@@ -464,24 +494,24 @@ const FormSensitiveRuleDrawer = ({
                       {
                         label: formatMessage({
                           id: 'odc.src.page.Project.Sensitive.components.SensitiveRule.components.DesensitizationMethod',
-                          defaultMessage: '脱敏方式',
+                          defaultMessage: '脱敏方式'
                         }), //'脱敏方式'
-                        value: maskRuleTypeMap?.[target?.type],
+                        value: maskRuleTypeMap?.[target?.type]
                       },
                       {
                         label: formatMessage({
                           id: 'odc.src.page.Project.Sensitive.components.SensitiveRule.components.TestData',
-                          defaultMessage: '测试数据',
+                          defaultMessage: '测试数据'
                         }), //'测试数据'
-                        value: target?.sampleContent,
+                        value: target?.sampleContent
                       },
                       {
                         label: formatMessage({
                           id: 'odc.src.page.Project.Sensitive.components.SensitiveRule.components.Preview',
-                          defaultMessage: '结果预览',
+                          defaultMessage: '结果预览'
                         }), //'结果预览'
-                        value: target?.maskedContent,
-                      },
+                        value: target?.maskedContent
+                      }
                     ]}
                     children={() => <div>{option?.label}</div>}
                   />
@@ -494,7 +524,7 @@ const FormSensitiveRuleDrawer = ({
           label={
             formatMessage({
               id: 'odc.SensitiveRule.components.FormSensitiveRuleDrawer.RuleDescription',
-              defaultMessage: '规则描述',
+              defaultMessage: '规则描述'
             }) //规则描述
           }
           name={'description'}
@@ -504,7 +534,7 @@ const FormSensitiveRuleDrawer = ({
             placeholder={
               formatMessage({
                 id: 'odc.SensitiveRule.components.FormSensitiveRuleDrawer.PleaseEnter',
-                defaultMessage: '请输入',
+                defaultMessage: '请输入'
               }) //请输入
             }
           />

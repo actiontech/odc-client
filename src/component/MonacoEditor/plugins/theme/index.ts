@@ -18,6 +18,7 @@ import * as monaco from 'monaco-editor';
 
 import { github, githubDark } from './github';
 import { monokai } from './monokai';
+import { CUSTOM_DIFF_EDITOR_THEME_NAME, editorDefaultThemeData } from './dms';
 
 let loaded = false;
 export function apply() {
@@ -27,5 +28,9 @@ export function apply() {
   monaco.editor.defineTheme('github', github as any);
   monaco.editor.defineTheme('githubDark', githubDark as any);
   monaco.editor.defineTheme('monokai', monokai as any);
+  monaco.editor.defineTheme(
+    CUSTOM_DIFF_EDITOR_THEME_NAME,
+    editorDefaultThemeData
+  );
   loaded = true;
 }

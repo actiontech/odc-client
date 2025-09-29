@@ -39,17 +39,17 @@ const DatasourceFilter: React.FC<IProps> = function ({
   envs,
   onClear,
   onTypesChange,
-  onEnvsChange,
+  onEnvsChange
 }) {
   const { data, run } = useRequest(listEnvironments, {
-    manual: true,
+    manual: true
   });
   const isFiltered = !!envs?.length || !!types?.length;
   return (
     <Popover
       placement="bottom"
       overlayStyle={{
-        width: 300,
+        width: 300
       }}
       onOpenChange={(v) => v && run()}
       title={
@@ -58,14 +58,14 @@ const DatasourceFilter: React.FC<IProps> = function ({
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            paddingTop: 5,
+            paddingTop: 5
           }}
         >
           <Typography.Text strong>
             {
               formatMessage({
                 id: 'odc.Header.Filter.FilterDataSources',
-                defaultMessage: '筛选数据源',
+                defaultMessage: '筛选数据源'
               }) /*筛选数据源*/
             }
           </Typography.Text>
@@ -73,7 +73,7 @@ const DatasourceFilter: React.FC<IProps> = function ({
             {
               formatMessage({
                 id: 'odc.Header.Filter.Clear',
-                defaultMessage: '清空',
+                defaultMessage: '清空'
               }) /*清空*/
             }
           </a>
@@ -87,7 +87,7 @@ const DatasourceFilter: React.FC<IProps> = function ({
                 {
                   formatMessage({
                     id: 'odc.Header.Filter.Type',
-                    defaultMessage: '类型',
+                    defaultMessage: '类型'
                   }) /*类型*/
                 }
               </Typography.Text>
@@ -95,7 +95,7 @@ const DatasourceFilter: React.FC<IProps> = function ({
                 value={types}
                 options={[].concat(getAllConnectTypes()).map((v) => ({
                   label: ConnectTypeText(v),
-                  value: v,
+                  value: v
                 }))}
                 onChange={(v) => {
                   onTypesChange(v as ConnectType[]);
@@ -107,7 +107,7 @@ const DatasourceFilter: React.FC<IProps> = function ({
                 {
                   formatMessage({
                     id: 'odc.src.page.Workspace.SideBar.ResourceTree.DatasourceFilter.Environment',
-                    defaultMessage: '环境',
+                    defaultMessage: '环境'
                   }) /* 环境 */
                 }
               </Typography.Text>
@@ -116,7 +116,7 @@ const DatasourceFilter: React.FC<IProps> = function ({
                 options={
                   data?.map((v) => ({
                     label: v.name,
-                    value: v.id,
+                    value: v.id
                   })) || []
                 }
                 onChange={(v) => {

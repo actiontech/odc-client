@@ -48,7 +48,7 @@ const CursorCell: React.FC<ICursorCellProps> = (props) => {
       columnIndex: index,
       columnComment: field.comment,
       internal: null,
-      readonly: true,
+      readonly: true
     };
   });
 
@@ -59,7 +59,7 @@ const CursorCell: React.FC<ICursorCellProps> = (props) => {
         newRowMap[columnKey] = value;
         return newRowMap;
       },
-      { _rowIndex: i },
+      { _rowIndex: i }
     );
   });
 

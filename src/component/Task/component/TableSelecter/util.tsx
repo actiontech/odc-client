@@ -6,10 +6,12 @@ import { TableItem, TableItemInDB } from './interface';
  * @param tables
  * @returns
  */
-export const groupTableByDataBase = (tables: TableItem[]): { tableId: number }[] => {
+export const groupTableByDataBase = (
+  tables: TableItem[]
+): { tableId: number }[] => {
   return tables.map((item) => {
     return {
-      tableId: item.tableId,
+      tableId: item.tableId
     };
   });
 };
@@ -31,7 +33,7 @@ export const groupTableIdsByDataBase = (tables: TableItem[]): number[] => {
  * @returns
  */
 export const flatTableByGroupedParams = (
-  tables: { databaseId: number; tableList: TableItemInDB[] }[],
+  tables: { databaseId: number; tableList: TableItemInDB[] }[]
 ): TableItem[] => {
   if (!tables) {
     return [];
@@ -39,7 +41,8 @@ export const flatTableByGroupedParams = (
   const result: TableItem[] = [];
   tables.forEach(({ databaseId, tableList }) => {
     tableList?.forEach((item) => {
-      item?.name && result.push({ databaseId, tableName: item.name, tableId: item.id });
+      item?.name &&
+        result.push({ databaseId, tableName: item.name, tableId: item.id });
     });
   });
   return result;

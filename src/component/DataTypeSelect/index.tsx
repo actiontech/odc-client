@@ -39,7 +39,7 @@ const DataTypeSelect: React.FC<{
       mode="multiple"
       placeholder={formatMessage({
         id: 'odc.component.DataTypeSelect.SelectADataType',
-        defaultMessage: '请选择数据类型',
+        defaultMessage: '请选择数据类型'
       })}
       ref={ref}
       {...rest}

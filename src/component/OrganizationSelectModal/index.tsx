@@ -12,7 +12,10 @@ interface IProps {
   onOk: (id: number) => void;
 }
 
-export default observer(function OrganizationSelectModal({ open, onOk }: IProps) {
+export default observer(function OrganizationSelectModal({
+  open,
+  onOk
+}: IProps) {
   const organizations = login.organizations;
   const [selectedKey, setSelectedKey] = useState(null);
   return (
@@ -25,13 +28,13 @@ export default observer(function OrganizationSelectModal({ open, onOk }: IProps)
           <Typography.Title level={5}>
             {formatMessage({
               id: 'src.component.OrganizationSelectModal.EDDC445E',
-              defaultMessage: '请先选择一个默认空间',
+              defaultMessage: '请先选择一个默认空间'
             })}
           </Typography.Title>
           <Typography.Text type="secondary" style={{ fontSize: 12 }}>
             {formatMessage({
               id: 'src.component.OrganizationSelectModal.21D23DE2',
-              defaultMessage: '选择后，也可在左侧导航切换',
+              defaultMessage: '选择后，也可在左侧导航切换'
             })}
           </Typography.Text>
         </div>
@@ -46,7 +49,7 @@ export default observer(function OrganizationSelectModal({ open, onOk }: IProps)
         >
           {formatMessage({
             id: 'src.component.OrganizationSelectModal.F08D9948',
-            defaultMessage: '确定',
+            defaultMessage: '确定'
           })}
         </Button>
       }
@@ -61,7 +64,7 @@ export default observer(function OrganizationSelectModal({ open, onOk }: IProps)
           items={organizations?.map((ora) => {
             return {
               label: ora.displayName,
-              key: ora.id?.toString(),
+              key: ora.id?.toString()
             };
           })}
         />

@@ -21,7 +21,7 @@ import {
   IConnectionPropertyType,
   IDataType,
   IndexRange,
-  IPartitionType,
+  IPartitionType
 } from '@/d.ts';
 import setting from '@/store/setting';
 import getIntl, { formatMessage } from '@/util/intl';
@@ -33,12 +33,15 @@ import { isSqlEmpty } from './parser/sql';
 import { encodeIdentifiers, splitSql } from './sql';
 import type { RangePickerProps } from 'antd/es/date-picker';
 import { runInAction } from 'mobx';
+import { EventEmitter } from '@actiontech/dms-kit';
 export const invalidRegexpStr = /[°"§%()\[\]{}=\\?´`'#<>|,;.:+_-]/g;
 
 /**
  * 解析 SID 为 key/value
  * @example sid:1000002-1:d:ZJCG:var:session
  */
+
+export const eventEmitter = new EventEmitter();
 
 export function extractResourceId(id: string): {
   [key: string]: string;
@@ -72,7 +75,7 @@ export async function getCurrentSQL(
   rawSQL: string,
   offset: number,
   isMysql: boolean = true,
-  delimiter: string,
+  delimiter: string
 ): Promise<{
   sql: string;
   begin: number;
@@ -128,7 +131,7 @@ export async function getCurrentSQL(
      */
     const lastSql = rawSQL.substring(
       splitSqls[splitSqls.length - 2] + 1,
-      splitSqls[splitSqls.length - 1] + 1,
+      splitSqls[splitSqls.length - 1] + 1
     );
     const isEmpty = await isSqlEmpty(lastSql, isMysql);
 
@@ -156,7 +159,7 @@ export async function getCurrentSQL(
       return {
         sql: sql?.replace(/\r\n/g, '\n'),
         begin: beginIndex,
-        end: sqlOffset,
+        end: sqlOffset
       };
     }
 
@@ -182,9 +185,11 @@ const convertMap = {
   [ColumnShowType.TIME]: IConnectionPropertyType.TIME,
   [ColumnShowType.DATE]: IConnectionPropertyType.DATE,
   [ColumnShowType.DATETIME]: IConnectionPropertyType.DATETIME,
-  [ColumnShowType.YEAR]: IConnectionPropertyType.YEAR,
+  [ColumnShowType.YEAR]: IConnectionPropertyType.YEAR
 };
-export function convertShowTypeToEditType(type: ColumnShowType): IConnectionPropertyType {
+export function convertShowTypeToEditType(
+  type: ColumnShowType
+): IConnectionPropertyType {
   return convertMap[type];
 }
 /**
@@ -194,7 +199,10 @@ export function convertShowTypeToEditType(type: ColumnShowType): IConnectionProp
  * date          -> date
  */
 
-export function convertDataTypeToDataShowType(dt: string = '', map: IDataType[]): ColumnShowType {
+export function convertDataTypeToDataShowType(
+  dt: string = '',
+  map: IDataType[]
+): ColumnShowType {
   // Oracle 模式会返回全大写数据格式，而后端规定的 map 为全小写，需要转换
   dt = (dt && dt.toLowerCase()) || ''; // 尝试去除括号里的精度匹配，例如 varchar(100)
 
@@ -227,7 +235,10 @@ export function convertDataTypeToDataShowType(dt: string = '', map: IDataType[])
 //   return value;
 // }
 
-export function isRangeDisabled(partitioned: boolean, dbMode: ConnectionMode | undefined): boolean {
+export function isRangeDisabled(
+  partitioned: boolean,
+  dbMode: ConnectionMode | undefined
+): boolean {
   return !partitioned; // return !(partitioned && dbMode === ConnectionMode.OB_ORACLE);
 }
 /**
@@ -241,9 +252,11 @@ export function isRangeDisabled(partitioned: boolean, dbMode: ConnectionMode | u
 
 export function getRangeInitialValue(
   partitioned: boolean,
-  dbMode: ConnectionMode | undefined,
+  dbMode: ConnectionMode | undefined
 ): IndexRange {
-  return isRangeDisabled(partitioned, dbMode) ? IndexRange.GLOBAL : IndexRange.LOCAL;
+  return isRangeDisabled(partitioned, dbMode)
+    ? IndexRange.GLOBAL
+    : IndexRange.LOCAL;
 }
 export function sortString(a: string = '', b: string = ''): number {
   return (a || '').localeCompare(b || '');
@@ -261,14 +274,20 @@ export function sortNumber(a: number = 0, b: number = 0): number {
 }
 export function isSupportAutoIncrement(dataType: string = ''): boolean {
   return (
-    ['int', 'tinyint', 'smallint', 'bigint', 'mediumint', 'float', 'double'].indexOf(
-      (dataType || '').toLowerCase(),
-    ) > -1
+    [
+      'int',
+      'tinyint',
+      'smallint',
+      'bigint',
+      'mediumint',
+      'float',
+      'double'
+    ].indexOf((dataType || '').toLowerCase()) > -1
   );
 }
 export function convertPartitionType(
   isOracle: boolean,
-  partitionType: IPartitionType,
+  partitionType: IPartitionType
 ): IPartitionType {
   if (isOracle && partitionType === IPartitionType.RANGE) {
     return IPartitionType.RANGE_COLUMNS;
@@ -302,7 +321,7 @@ export function getLocalFormatDateTime(time: number) {
     day: 'numeric',
     hour: '2-digit',
     minute: '2-digit',
-    second: '2-digit',
+    second: '2-digit'
   });
 }
 /**
@@ -314,7 +333,9 @@ export const generateUniqKey = (function () {
   let key = 0;
   return function (suffixStr: string = ''): string {
     key = key + 1;
-    return `${key}-${Date.now()}-${~~(Math.random() * 10000)}-${suffixStr || ''}`;
+    return `${key}-${Date.now()}-${~~(Math.random() * 10000)}-${
+      suffixStr || ''
+    }`;
   };
 })();
 export function transformSecond(d: number) {
@@ -364,37 +385,61 @@ export function transformOBConfigTimeStringToText(timeString: string) {
       switch (unit.toLowerCase()) {
         case 'us': {
           return (
-            num + formatMessage({ id: 'odc.src.util.utils.Microseconds', defaultMessage: '微秒' }) //微秒
+            num +
+            formatMessage({
+              id: 'odc.src.util.utils.Microseconds',
+              defaultMessage: '微秒'
+            }) //微秒
           );
         }
 
         case 'ms': {
           return (
-            num + formatMessage({ id: 'odc.src.util.utils.Milliseconds', defaultMessage: '毫秒' }) //毫秒
+            num +
+            formatMessage({
+              id: 'odc.src.util.utils.Milliseconds',
+              defaultMessage: '毫秒'
+            }) //毫秒
           );
         }
 
         case 's': {
           return (
-            num + formatMessage({ id: 'odc.src.util.utils.Seconds', defaultMessage: '秒' }) //秒
+            num +
+            formatMessage({
+              id: 'odc.src.util.utils.Seconds',
+              defaultMessage: '秒'
+            }) //秒
           );
         }
 
         case 'm': {
           return (
-            num + formatMessage({ id: 'odc.src.util.utils.Minutes', defaultMessage: '分钟' }) //分钟
+            num +
+            formatMessage({
+              id: 'odc.src.util.utils.Minutes',
+              defaultMessage: '分钟'
+            }) //分钟
           );
         }
 
         case 'h': {
           return (
-            num + formatMessage({ id: 'odc.src.util.utils.Hours', defaultMessage: '小时' }) //小时
+            num +
+            formatMessage({
+              id: 'odc.src.util.utils.Hours',
+              defaultMessage: '小时'
+            }) //小时
           );
         }
 
         case 'd': {
           return (
-            num + formatMessage({ id: 'odc.src.util.utils.Days', defaultMessage: '天' }) //天
+            num +
+            formatMessage({
+              id: 'odc.src.util.utils.Days',
+              defaultMessage: '天'
+            }) //天
           );
         }
       }
@@ -491,7 +536,7 @@ export function generateAndDownloadFile(fileName: string, content: string) {
     false,
     false,
     0,
-    null,
+    null
   );
   aDom.download = fileName;
   aDom.href = URL.createObjectURL(fileBlob);
@@ -541,7 +586,10 @@ export function getBlobValueKey(columnKey: string) {
   return columnKey + '%' + 'odc_lob_value_key$$$';
 }
 
-export const getPrefixCls = (suffixCls: string, customizePrefixCls?: string) => {
+export const getPrefixCls = (
+  suffixCls: string,
+  customizePrefixCls?: string
+) => {
   const prefixCls = 'tech';
   if (customizePrefixCls) return customizePrefixCls;
   return suffixCls ? `${prefixCls}-${suffixCls}` : prefixCls;
@@ -657,7 +705,7 @@ export const disabledTime = (selectedDate) => {
     return {
       disabledHours: () => range(0, 24),
       disabledMinutes: () => range(0, 60),
-      disabledSeconds: () => range(0, 60),
+      disabledSeconds: () => range(0, 60)
     };
   }
   if (selectedDate && selectedDate.isSame(now, 'day')) {
@@ -674,7 +722,7 @@ export const disabledTime = (selectedDate) => {
           return Array.from({ length: now.second() }, (_, i) => i);
         }
         return [];
-      },
+      }
     };
   }
   return {};
@@ -711,7 +759,7 @@ export function groupBySessionId(filteredRows) {
     if (!sessionMap.has(sessionId)) {
       sessionMap.set(sessionId, {
         ...row,
-        children: [],
+        children: []
       });
     } else {
       const existingEntry = sessionMap.get(sessionId);
@@ -719,7 +767,7 @@ export function groupBySessionId(filteredRows) {
       if (row.status === 'ACTIVE' && existingEntry.status !== 'ACTIVE') {
         sessionMap.set(sessionId, {
           ...row,
-          children: [existingEntry, ...existingEntry.children],
+          children: [existingEntry, ...existingEntry.children]
         });
         delete existingEntry.children;
       } else {

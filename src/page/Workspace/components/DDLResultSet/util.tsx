@@ -18,10 +18,16 @@ import { ConnectionMode, ResultSetColumn } from '@/d.ts';
 import { getNlsValueKey } from '@/util/column';
 import exportToSQL from '@/util/sqlExport';
 import { getBlobValueKey } from '@/util/utils';
-import { DataGridRef, getSelectedRangeData } from '@oceanbase-odc/ob-react-data-grid';
+import {
+  DataGridRef,
+  getSelectedRangeData
+} from '@oceanbase-odc/ob-react-data-grid';
 import copy from 'copy-to-clipboard';
 
-export function getColumnNameByColumnKey(columnKey: string, columns: ResultSetColumn[]) {
+export function getColumnNameByColumnKey(
+  columnKey: string,
+  columns: ResultSetColumn[]
+) {
   return columns.find((c) => {
     return c?.key === columnKey;
   })?.columnName;
@@ -37,8 +43,10 @@ export function wrapRow(row, columns: ResultSetColumn[]) {
   const newRow = { ...row };
   columns.forEach((column) => {
     newRow[column.columnName] = newRow[column.key];
-    newRow[getBlobValueKey(column.columnName)] = newRow[getBlobValueKey(column.key)];
-    newRow[getNlsValueKey(column.columnName)] = newRow[getNlsValueKey(column.key)];
+    newRow[getBlobValueKey(column.columnName)] =
+      newRow[getBlobValueKey(column.key)];
+    newRow[getNlsValueKey(column.columnName)] =
+      newRow[getNlsValueKey(column.key)];
   });
   return newRow;
 }
@@ -67,14 +75,18 @@ export function copyToSQL(
   columns: ResultSetColumn[],
   tableName: string = 'tmp_table',
   dbMode: ConnectionMode,
-  allRows?: any,
+  allRows?: any
 ) {
   let newRows = [];
   const { selectedRows, selectedColumns, rows } = gridRef;
 
   // export SQL by selected columns
   if (selectedColumns?.size > 0) {
-    const selectedColumnsData = getSelectedColumnsData(selectedColumns, rows, columns);
+    const selectedColumnsData = getSelectedColumnsData(
+      selectedColumns,
+      rows,
+      columns
+    );
     newRows = rows;
     copy(exportToSQL(selectedColumnsData, columns, tableName, dbMode, newRows));
     return;

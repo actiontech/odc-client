@@ -16,7 +16,7 @@ let enableSourceMap = process.env.ENABLE_SOURCEMAP === "true";
 
 console.log(disableBrowserUpdate);
 
-let publicPath = '/';
+let publicPath = '/odc_query/';
 
 const define = defineConfig();
 
@@ -28,9 +28,7 @@ const config = {
   hash: true,
   esbuildMinifyIIFE: true,
   targets: {
-    chrome: 76,
-    firefox: 60,
-    edge: 79,
+    chrome: 80,
   },
   metas: [
     {
@@ -46,20 +44,19 @@ const config = {
 
   theme: theme,
   proxy: {
+    '/external_api': {
+      target: 'http://10.186.62.13:11000',
+      pathRewrite: { '^/external_api' : '' },
+    },
+    '/odc_query': {
+      target: 'http://10.186.64.51:8989',
+      pathRewrite: { '^/odc_query' : '' },
+    },
     // 本地开发或者对内 Site 应用的开发环境的代理配置
     '/api/v1/webSocket/obclient': {
-      target: 'http://dev.odc-local.net:7001/proxy/96',
+      target: 'http://10.186.64.51:8989',
       ws: true,
     },
-    '/api/': {
-      target: 'http://dev.odc-local.net:7001/proxy/96',
-    },
-    '/oauth2/': {
-      target: 'http://dev.odc-local.net:7001/proxy/96',
-    },
-    '/login/': {
-      target: 'http://dev.odc-local.net:7001/proxy/96',
-    }
   },
 
   locale: {
@@ -106,5 +103,5 @@ config.headScripts = [
   `window.currentEnv=window.currentEnv || '${process.env.CURRENT_ENV || ''}'`,
   `window.publicPath=window.publicPath || '${publicPath}'`,
 ];
-config.headScripts.push(`window.ODCApiHost= window.ODCApiHost || ''`);
+config.headScripts.push(`window.ODCApiHost= window.ODCApiHost || '/odc_query'`);
 export default config;

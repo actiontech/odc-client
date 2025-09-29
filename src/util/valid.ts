@@ -24,9 +24,9 @@ export function checkNumberRange(min: number, max: number) {
         new Error(
           formatMessage({
             id: 'odc.src.util.valid.EnterAValidNumber',
-            defaultMessage: '请输入有效的数字',
-          }),
-        ), //请输入有效的数字
+            defaultMessage: '请输入有效的数字'
+          })
+        ) //请输入有效的数字
       );
     } else if (numberValue < min || numberValue > max) {
       return Promise.reject(
@@ -34,11 +34,11 @@ export function checkNumberRange(min: number, max: number) {
           formatMessage(
             {
               id: 'odc.src.util.valid.EnterANumberBetweenMin',
-              defaultMessage: '请输入 {min} ~ {max} 之间的数字',
+              defaultMessage: '请输入 {min} ~ {max} 之间的数字'
             },
-            { min, max },
-          ),
-        ), //`请输入 ${min} ~ ${max} 之间的数字`
+            { min, max }
+          )
+        ) //`请输入 ${min} ~ ${max} 之间的数字`
       );
     }
     return Promise.resolve();

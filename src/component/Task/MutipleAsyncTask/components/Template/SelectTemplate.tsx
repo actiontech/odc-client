@@ -1,5 +1,9 @@
 import { formatMessage } from '@/util/intl';
-import { Template, getTemplateList, detailTemplate } from '@/common/network/databaseChange';
+import {
+  Template,
+  getTemplateList,
+  detailTemplate
+} from '@/common/network/databaseChange';
 import { IDatabase } from '@/d.ts/database';
 import login from '@/store/login';
 import { SettingOutlined, DownOutlined } from '@ant-design/icons';
@@ -20,7 +24,7 @@ const SelectTemplate: React.FC<{
   manageTemplateModalOpen,
   setManageTemplateModalOpen,
   selectTemplateModalOpen,
-  setSelectTemplateModalOpen,
+  setSelectTemplateModalOpen
 }) => {
   const { projectId } = useContext(MultipleAsyncContext);
   const form = Form.useFormInstance();
@@ -28,7 +32,7 @@ const SelectTemplate: React.FC<{
   const loadTemplateList = async () => {
     const response = await getTemplateList({
       projectId,
-      currentOrganizationId: login.organizationId?.toString(),
+      currentOrganizationId: login.organizationId?.toString()
     });
     if (response?.contents?.length) {
       setTemplateList(response?.contents);
@@ -46,18 +50,20 @@ const SelectTemplate: React.FC<{
       return;
     }
     setSelectTemplateModalOpen(false);
-    const response = await detailTemplate(template?.id, login?.organizationId?.toString());
-    const rawData = ((response as any)?.databaseSequenceList as IDatabase[][])?.reduce(
-      (pre: number[][], cur) => {
-        pre?.push(
-          cur?.map((db) => {
-            return db?.id;
-          }),
-        );
-        return pre;
-      },
-      [],
+    const response = await detailTemplate(
+      template?.id,
+      login?.organizationId?.toString()
     );
+    const rawData = (
+      (response as any)?.databaseSequenceList as IDatabase[][]
+    )?.reduce((pre: number[][], cur) => {
+      pre?.push(
+        cur?.map((db) => {
+          return db?.id;
+        })
+      );
+      return pre;
+    }, []);
     form.setFieldValue(['parameters', 'orderedDatabaseIds'], rawData);
   };
   return (
@@ -69,10 +75,10 @@ const SelectTemplate: React.FC<{
           showArrow={false}
           open={selectTemplateModalOpen}
           overlayStyle={{
-            padding: 0,
+            padding: 0
           }}
           overlayInnerStyle={{
-            padding: 0,
+            padding: 0
           }}
           overlayClassName={styles.selectTemplatePopover}
           onOpenChange={(open) => {
@@ -94,7 +100,7 @@ const SelectTemplate: React.FC<{
                     height: '140px',
                     display: 'flex',
                     justifyContent: 'center',
-                    alignItems: 'center',
+                    alignItems: 'center'
                   }}
                 >
                   <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
@@ -109,16 +115,17 @@ const SelectTemplate: React.FC<{
                       databaseIdsMap[item?.id] = item;
                     }, {});
                   });
-                  const orderedDatabaseIds = template?.databaseSequenceList?.map((dbs) => {
-                    return dbs.map((db) => db.id);
-                  });
+                  const orderedDatabaseIds =
+                    template?.databaseSequenceList?.map((dbs) => {
+                      return dbs.map((db) => db.id);
+                    });
                   return template?.enabled ? (
                     <Popover
                       placement="left"
                       showArrow={false}
                       key={index}
                       overlayInnerStyle={{
-                        padding: '16px',
+                        padding: '16px'
                       }}
                       content={
                         <ShowTemplate
@@ -140,12 +147,15 @@ const SelectTemplate: React.FC<{
                       key={index}
                       title={formatMessage({
                         id: 'src.component.Task.MutipleAsyncTask.components.Template.4ACCCD33',
-                        defaultMessage: '模版已失效',
+                        defaultMessage: '模版已失效'
                       })}
                       placement="left"
                     >
                       <div
-                        className={classNames(styles.templateItem, styles.templateItemDisabled)}
+                        className={classNames(
+                          styles.templateItem,
+                          styles.templateItemDisabled
+                        )}
                         onClick={() => handleTemplateItemClick(template)}
                       >
                         {template?.name}
@@ -170,7 +180,7 @@ const SelectTemplate: React.FC<{
               >
                 {formatMessage({
                   id: 'src.component.Task.MutipleAsyncTask.components.Template.03C19F79',
-                  defaultMessage: '管理模版',
+                  defaultMessage: '管理模版'
                 })}
               </Button>
             </div>
@@ -181,7 +191,7 @@ const SelectTemplate: React.FC<{
               !Boolean(projectId)
                 ? formatMessage({
                     id: 'src.component.Task.MutipleAsyncTask.components.Template.FD8E488F',
-                    defaultMessage: '请先选择项目',
+                    defaultMessage: '请先选择项目'
                   })
                 : null
             }
@@ -192,7 +202,7 @@ const SelectTemplate: React.FC<{
               type="link"
               style={{
                 padding: 0,
-                margin: 0,
+                margin: 0
               }}
               onClick={() => {
                 setSelectTemplateModalOpen(!selectTemplateModalOpen);
@@ -200,7 +210,7 @@ const SelectTemplate: React.FC<{
             >
               {formatMessage({
                 id: 'src.component.Task.MutipleAsyncTask.components.Template.155DA3E4',
-                defaultMessage: '选择模版',
+                defaultMessage: '选择模版'
               })}
 
               <DownOutlined />

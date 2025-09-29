@@ -36,15 +36,18 @@ import dayjs from 'dayjs';
 async function getDefaultSchema(dsId: number, userName: string) {
   const res = await listDatabases(null, dsId, 1, 999);
   const databases = res?.contents;
-  // mysql 模式的默认数据库是 information_schema
-  const informationSchema = databases?.find((d) => d.name === 'information_schema');
-  // oracle 模式的的默认数据库是和用户名相同的 schema
-  const sameName = databases?.find((d) => d.name?.toLowerCase() === userName?.toLowerCase());
-  // 如果都没有，则取第一个
+  const informationSchema = databases?.find(
+    (d) => d.name === 'information_schema'
+  );
+  const sameName = databases?.find(
+    (d) => d.name?.toLowerCase() === userName?.toLowerCase()
+  );
   return informationSchema?.id || sameName?.id || databases?.[0]?.id;
 }
 
-async function newConnection(params: Partial<IDatasource>): Promise<IDatasource | null> {
+async function newConnection(
+  params: Partial<IDatasource>
+): Promise<IDatasource | null> {
   const envs = await listEnvironments();
   const targetConnection = await createConnection(
     {
@@ -54,9 +57,9 @@ async function newConnection(params: Partial<IDatasource>): Promise<IDatasource 
        * 新的名字一律加上id
        */
       name: params.name,
-      environmentId: envs?.[0]?.id,
+      environmentId: envs?.[0]?.id
     },
-    true,
+    true
   );
   return targetConnection;
 }
@@ -84,7 +87,9 @@ function resolveRemoteData(data: IRemoteCustomConnectionData) {
     data.properties = data.interceptData;
   }
 
-  const sessionName = `${data.username}@${data.tenantName}#${data.clusterName}-${Date.now()}`;
+  const sessionName = `${data.username}@${data.tenantName}#${
+    data.clusterName
+  }-${Date.now()}`;
   data.name = sessionName;
   return data;
 }
@@ -94,8 +99,8 @@ function wrapDataToString(data: IRemoteCustomConnectionData, encrypt) {
     JSON.stringify({
       encrypt,
       data,
-      action: 'newTempSession',
-    }),
+      action: 'newTempSession'
+    })
   );
 }
 
@@ -107,8 +112,8 @@ export const action = async (config: ICustomConnectAction) => {
       message.error(
         formatMessage({
           id: 'odc.page.Gateway.customConnect.EncryptOrDataParameterError',
-          defaultMessage: 'encrypt 或 data 参数错误',
-        }), //encrypt 或 data 参数错误
+          defaultMessage: 'encrypt 或 data 参数错误'
+        }) //encrypt 或 data 参数错误
       );
       return;
     }
@@ -119,8 +124,8 @@ export const action = async (config: ICustomConnectAction) => {
       message.error(
         formatMessage({
           id: 'odc.page.Gateway.customConnect.DecryptionFailed',
-          defaultMessage: '解密失败！',
-        }), //解密失败！
+          defaultMessage: '解密失败！'
+        }) //解密失败！
       );
       return;
     }
@@ -130,7 +135,7 @@ export const action = async (config: ICustomConnectAction) => {
     } catch (e) {
       const msg = formatMessage({
         id: 'odc.page.Gateway.customConnect.JsonParsingFailedCheckWhether',
-        defaultMessage: 'JSON 解析失败，请确认参数是否正确',
+        defaultMessage: 'JSON 解析失败，请确认参数是否正确'
       }); //JSON 解析失败，请确认参数是否正确
       console.error(msg);
       message.error(msg, 0);
@@ -147,11 +152,12 @@ export const action = async (config: ICustomConnectAction) => {
       searchParamsObj.append('accountVerifyToken', accountVerifyToken);
       searchParamsObj.append(
         'redirectTo',
-        '/gateway/' + wrapDataToString({ ...data, accountVerifyToken: null }, false),
+        '/gateway/' +
+          wrapDataToString({ ...data, accountVerifyToken: null }, false)
       );
       history.replace({
         pathname: '/login',
-        search: searchParamsObj.toString(),
+        search: searchParamsObj.toString()
       });
 
       return;
@@ -162,11 +168,13 @@ export const action = async (config: ICustomConnectAction) => {
   if (!login.organizations?.length) {
     return 'Get User Failed';
   }
-  const org = login.organizations?.find((item) => item.type === SpaceType.SYNERGY);
+  const org = login.organizations?.find(
+    (item) => item.type === SpaceType.SYNERGY
+  );
   if (!org) {
     return formatMessage({
       id: 'odc.page.Gateway.newCloudConnection.PersonalSpaceDoesNotExist',
-      defaultMessage: '个人空间不存在！',
+      defaultMessage: '个人空间不存在！'
     }); //个人空间不存在！
   }
   const isSuccess = await login.switchCurrentOrganization(org?.id);
@@ -179,7 +187,8 @@ export const action = async (config: ICustomConnectAction) => {
 
   const projectName = 'USER_PROJECT_' + login.user?.accountName;
 
-  const project = (await listProjects(projectName, 1, 20, false, true))?.contents?.[0];
+  const project = (await listProjects(projectName, 1, 20, false, true))
+    ?.contents?.[0];
 
   if (!project || project?.name !== projectName) {
     return 'User project not found, please contact adminitrator, confirm the bastion integration is enabled';
@@ -187,7 +196,7 @@ export const action = async (config: ICustomConnectAction) => {
 
   const params = resolveRemoteData({
     ...(data as IRemoteCustomConnectionData),
-    projectId: project?.id,
+    projectId: project?.id
   });
   /**
    * test connection
@@ -209,7 +218,7 @@ export const action = async (config: ICustomConnectAction) => {
       true,
       generateUniqKey(),
       false,
-      false,
+      false
     );
   } else {
     return 'create connection failed';

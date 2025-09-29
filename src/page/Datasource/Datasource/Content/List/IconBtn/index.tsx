@@ -32,7 +32,7 @@ interface IProps {
 
 const IconBtn = forwardRef<HTMLSpanElement, IProps>(function (
   { icon, activeIcon, isActive, style, onClick, className, ...rest },
-  ref,
+  ref
 ) {
   activeIcon = activeIcon || icon;
   const [loading, setLoading] = useState(false);
@@ -41,8 +41,8 @@ const IconBtn = forwardRef<HTMLSpanElement, IProps>(function (
       message.warning(
         formatMessage({
           id: 'odc.List.IconBtn.InProgressDoNotClick',
-          defaultMessage: '执行中，请勿重复点击',
-        }), //执行中，请勿重复点击
+          defaultMessage: '执行中，请勿重复点击'
+        }) //执行中，请勿重复点击
       );
       return;
     }
@@ -58,7 +58,7 @@ const IconBtn = forwardRef<HTMLSpanElement, IProps>(function (
       ref={ref}
       style={Object.assign({}, style)}
       className={classNames(styles.iconBtn, className, {
-        [styles.active]: isActive,
+        [styles.active]: isActive
       })}
       component={isActive ? activeIcon : icon}
       onClick={_onClick}

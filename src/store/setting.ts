@@ -19,7 +19,11 @@ import { formatMessage } from '@/util/intl';
  * 样式与功能开关
  */
 
-import { getPublicKey, getServerSystemInfo, getSystemConfig } from '@/common/network/other';
+import {
+  getPublicKey,
+  getServerSystemInfo,
+  getSystemConfig
+} from '@/common/network/other';
 import type { IUserConfig, ServerSystemInfo } from '@/d.ts';
 import odc from '@/plugins/odc';
 import { isClient } from '@/util/env';
@@ -28,10 +32,12 @@ import { isLinux, isWin64, kbToMb } from '@/util/utils';
 import { message } from 'antd';
 import { action, observable } from 'mobx';
 import login, { sessionKey } from '@/store/login';
+import { CUSTOM_DIFF_EDITOR_THEME_NAME } from '../component/MonacoEditor/plugins/theme/dms';
 
 export const themeKey = 'odc-theme';
 const SPACE_CONFIG_EXPIRES = 60 * 1000;
-export const getCurrentOrganizationId = () => sessionStorage.getItem(sessionKey);
+export const getCurrentOrganizationId = () =>
+  sessionStorage.getItem(sessionKey);
 
 interface IThemeConfig {
   editorTheme: Record<string, string>;
@@ -45,7 +51,7 @@ interface IThemeConfig {
 
 export enum EThemeConfigKey {
   ODC_WHITE = 'White',
-  ODC_DARK = 'Dark',
+  ODC_DARK = 'Dark'
 }
 const themeConfig: { [key: string]: IThemeConfig } = {
   [EThemeConfigKey.ODC_WHITE]: {
@@ -56,12 +62,13 @@ const themeConfig: { [key: string]: IThemeConfig } = {
       'VSCode-HC': 'hc-light',
       GitHub: 'github',
       Monokai: 'vs',
+      DMS: CUSTOM_DIFF_EDITOR_THEME_NAME
     },
     className: 'odc-white',
     sheetTheme: 'white',
     cmdTheme: 'white',
     maskType: 'white',
-    chartsTheme: 'white',
+    chartsTheme: 'white'
   },
   [EThemeConfigKey.ODC_DARK]: {
     key: EThemeConfigKey.ODC_DARK,
@@ -70,14 +77,14 @@ const themeConfig: { [key: string]: IThemeConfig } = {
       OceanBase: 'obdark',
       'VSCode-HC': 'hc-black',
       GitHub: 'githubDark',
-      Monokai: 'monokai',
+      Monokai: 'monokai'
     },
     className: 'odc-dark',
     sheetTheme: 'dark',
     cmdTheme: 'dark',
     maskType: 'dark',
-    chartsTheme: 'dark',
-  },
+    chartsTheme: 'dark'
+  }
 };
 const defaultTheme = EThemeConfigKey.ODC_WHITE;
 
@@ -255,7 +262,7 @@ export class SettingStore {
   @observable
   public headerStyle: any = {
     background: '#1F293D',
-    boxShadow: '0px 1px 4px 0px rgba(0,21,41,0.12)',
+    boxShadow: '0px 1px 4px 0px rgba(0,21,41,0.12)'
   };
 
   @action
@@ -275,9 +282,12 @@ export class SettingStore {
     const cacheData = {
       data: config,
       timestamp: Date.now(),
-      organizationId: getCurrentOrganizationId(),
+      organizationId: getCurrentOrganizationId()
     };
-    localStorage.setItem(`cached-${getCurrentOrganizationId()}`, JSON.stringify(cacheData));
+    localStorage.setItem(
+      `cached-${getCurrentOrganizationId()}`,
+      JSON.stringify(cacheData)
+    );
     this.cacheStorage.set(`cached-${getCurrentOrganizationId()}`, true);
   }
 
@@ -289,11 +299,16 @@ export class SettingStore {
 
   @action
   public readCachedSpaceConfig() {
-    const storageSpaceConfigurations = localStorage.getItem(`cached-${getCurrentOrganizationId()}`);
-    const { data, timestamp, organizationId } = JSON.parse(storageSpaceConfigurations) || {};
+    const storageSpaceConfigurations = localStorage.getItem(
+      `cached-${getCurrentOrganizationId()}`
+    );
+    const { data, timestamp, organizationId } =
+      JSON.parse(storageSpaceConfigurations) || {};
 
     const cached = organizationId === getCurrentOrganizationId();
-    const sessionExist = this.cacheStorage.get(`cached-${getCurrentOrganizationId()}`);
+    const sessionExist = this.cacheStorage.get(
+      `cached-${getCurrentOrganizationId()}`
+    );
 
     if (cached && sessionExist) {
       try {
@@ -311,7 +326,7 @@ export class SettingStore {
   public hideHeader() {
     this.headerStyle = {
       ...this.headerStyle,
-      display: 'none',
+      display: 'none'
     };
   }
 
@@ -319,7 +334,7 @@ export class SettingStore {
   public showHeader() {
     this.headerStyle = {
       ...this.headerStyle,
-      display: 'display',
+      display: 'display'
     };
   }
 
@@ -342,7 +357,7 @@ export class SettingStore {
         return data;
       }, {});
       this.configurations = config;
-      this.theme = themeConfig[this.configurations['odc.appearance.scheme']];
+      // this.theme = themeConfig[this.configurations['odc.appearance.scheme']];
     } else {
       this.configurations = {};
     }
@@ -370,7 +385,9 @@ export class SettingStore {
 
   @action
   public getSpaceConfigByKey(key: string) {
-    const storageSpaceConfigurations = localStorage.getItem(`cached-${getCurrentOrganizationId()}`);
+    const storageSpaceConfigurations = localStorage.getItem(
+      `cached-${getCurrentOrganizationId()}`
+    );
     const { data } = JSON.parse(storageSpaceConfigurations) || {};
     return data?.[key] || undefined;
   }
@@ -381,53 +398,74 @@ export class SettingStore {
     const isMacClient = isClient() && !isWin64() && !isLinux();
     const isPrivateSpace = login.isPrivateSpace();
     const maxResultsetRows =
-      parseInt(res?.['odc.session.sql-execute.max-result-set-rows']) || Number.MAX_SAFE_INTEGER;
+      parseInt(res?.['odc.session.sql-execute.max-result-set-rows']) ||
+      Number.MAX_SAFE_INTEGER;
     const maxSessionCount =
       parseInt(res?.['odc.session.sql-execute.max-single-session-count']) ||
       Number.MAX_SAFE_INTEGER;
-    this.enableDataExport = res?.['odc.data.export.enabled'] === 'true' || false;
-    this.enableOBClient = res?.['odc.features.obclient.enabled'] === 'true' && !isMacClient;
-    this.maxResultSetRows = maxResultsetRows === -1 ? Number.MAX_SAFE_INTEGER : maxResultsetRows;
-    this.maxSessionCount = maxSessionCount === -1 ? Number.MAX_SAFE_INTEGER : maxSessionCount;
+    this.enableDataExport =
+      res?.['odc.data.export.enabled'] === 'true' || false;
+    this.enableOBClient =
+      res?.['odc.features.obclient.enabled'] === 'true' && !isMacClient;
+    this.maxResultSetRows =
+      maxResultsetRows === -1 ? Number.MAX_SAFE_INTEGER : maxResultsetRows;
+    this.maxSessionCount =
+      maxSessionCount === -1 ? Number.MAX_SAFE_INTEGER : maxSessionCount;
     this.enableVersionTip =
       !isClient() && res?.['odc.features.show-new-features.enabled'] === 'true';
-    this.enablePersonalRecord = res?.['odc.features.personal-audit.enabled'] === 'true';
+    this.enablePersonalRecord =
+      res?.['odc.features.personal-audit.enabled'] === 'true';
     this.enableAsyncTask = res?.['odc.features.task.async.enabled'] === 'true';
     this.enableDBImport = res?.['odc.features.task.import.enabled'] === 'true';
     this.enableAuthRule = res?.['odc.automatic-auth-rule.enabled'] === 'true';
     this.enableDBExport =
-      res?.['odc.features.task.export.enabled'] === 'true' && this.enableDataExport;
-    this.enableMockdata = res?.['odc.features.task.mockdata.enabled'] === 'true';
-    this.enableLogicaldatabase = res?.['odc.features.logicaldatabase.enabled'] === 'true';
+      res?.['odc.features.task.export.enabled'] === 'true' &&
+      this.enableDataExport;
+    this.enableMockdata =
+      res?.['odc.features.task.mockdata.enabled'] === 'true';
+    this.enableLogicaldatabase =
+      res?.['odc.features.logicaldatabase.enabled'] === 'true';
     this.enableOSC = res?.['odc.features.task.osc.enabled'] === 'true';
     if (isPrivateSpace) {
-      this.enableOSC = res?.['odc.features.task.osc.individual.space.enabled'] === 'true';
+      this.enableOSC =
+        res?.['odc.features.task.osc.individual.space.enabled'] === 'true';
     }
     this.enableOSCLimiting = res?.['odc.osc.rate-limit.enabled'] === 'true';
-    this.isUploadCloudStore = res?.['odc.file.interaction-mode'] === 'CLOUD_STORAGE';
+    this.isUploadCloudStore =
+      res?.['odc.file.interaction-mode'] === 'CLOUD_STORAGE';
     this.maxSingleTaskRowLimit =
-      parseInt(res?.['odc.task.dlm.max-single-task-row-limit']) || Number.MAX_SAFE_INTEGER;
-    this.maxSingleTaskDataSizeLimit =
-      kbToMb?.(parseInt(res?.['odc.task.dlm.max-single-task-data-size-limit'])) ||
+      parseInt(res?.['odc.task.dlm.max-single-task-row-limit']) ||
       Number.MAX_SAFE_INTEGER;
+    this.maxSingleTaskDataSizeLimit =
+      kbToMb?.(
+        parseInt(res?.['odc.task.dlm.max-single-task-data-size-limit'])
+      ) || Number.MAX_SAFE_INTEGER;
 
     this.enableMultipleAsyncTask =
-      res?.['odc.features.task.multiple-async.enabled'] === 'true' && !isPrivateSpace;
-    this.enableShadowTableSync = res?.['odc.features.task.shadowtable-sync.enabled'] === 'true';
+      res?.['odc.features.task.multiple-async.enabled'] === 'true' &&
+      !isPrivateSpace;
+    this.enableShadowTableSync =
+      res?.['odc.features.task.shadowtable-sync.enabled'] === 'true';
     this.enableStructureCompare =
       res?.['odc.features.task.structure-comparison.enabled'] === 'true';
-    this.enableSQLPlan = res?.['odc.features.task.sql-plan.enabled'] === 'true' && !isClient();
+    this.enableSQLPlan =
+      res?.['odc.features.task.sql-plan.enabled'] === 'true' && !isClient();
     this.enablePartitionPlan =
-      res?.['odc.features.task.partition-plan.enabled'] === 'true' && !isClient();
+      res?.['odc.features.task.partition-plan.enabled'] === 'true' &&
+      !isClient();
     this.enableDataArchive =
       res?.['odc.features.task.data-archive.enabled'] === 'true' && !isClient();
-    this.enableDataClear = res?.['odc.features.task.data-delete.enabled'] === 'true' && !isClient();
+    this.enableDataClear =
+      res?.['odc.features.task.data-delete.enabled'] === 'true' && !isClient();
     this.enableApplyDBAuth =
-      res?.['odc.features.task.apply-database-permission.enabled'] === 'true' && !isPrivateSpace;
+      res?.['odc.features.task.apply-database-permission.enabled'] === 'true' &&
+      !isPrivateSpace;
     this.enableApplyProjectAuth =
-      res?.['odc.features.task.apply-project-permission.enabled'] === 'true' && !isPrivateSpace;
+      res?.['odc.features.task.apply-project-permission.enabled'] === 'true' &&
+      !isPrivateSpace;
     this.enableApplyTableAuth =
-      res?.['odc.features.task.apply-table-permission.enabled'] === 'true' && !isPrivateSpace;
+      res?.['odc.features.task.apply-table-permission.enabled'] === 'true' &&
+      !isPrivateSpace;
     this.enableWorkbench =
       res?.['odc.features.workbench.enabled'] === 'true' ||
       !res?.['odc.features.workbench.enabled'];
@@ -438,11 +476,11 @@ export class SettingStore {
     const serverData = Object.keys(newData).map((key) => {
       return {
         key,
-        value: newData[key],
+        value: newData[key]
       };
     });
     const res = await request.patch('/api/v2/config/users/me/configurations', {
-      data: serverData,
+      data: serverData
     });
     const data = res?.data?.contents;
     if (data) {
@@ -456,13 +494,16 @@ export class SettingStore {
     const serverData = Object.keys(newData).map((key) => {
       return {
         key,
-        value: newData[key],
+        value: newData[key]
       };
     });
 
-    const res = await request.patch('/api/v2/config/organization/configurations', {
-      data: serverData,
-    });
+    const res = await request.patch(
+      '/api/v2/config/organization/configurations',
+      {
+        data: serverData
+      }
+    );
     const data = res?.data?.contents;
     if (data) {
       this.setSpaceConfig(newData);
@@ -472,12 +513,17 @@ export class SettingStore {
 
   @action
   public async resetSpaceConfig() {
-    const res = await request.get('/api/v2/config/organization/default/configurations');
+    const res = await request.get(
+      '/api/v2/config/organization/default/configurations'
+    );
     const data = res?.data?.contents;
     if (data) {
-      const res = await request.patch('/api/v2/config/organization/configurations', {
-        data,
-      });
+      const res = await request.patch(
+        '/api/v2/config/organization/configurations',
+        {
+          data
+        }
+      );
       const userConfig = res?.data?.contents;
       if (userConfig) {
         await this.getSpaceConfig(true);
@@ -486,20 +532,31 @@ export class SettingStore {
     return !!data;
   }
 
-  public async updateOneUserConfig(params: { key: string; value: string | boolean }) {
-    const res = await request.put(`/api/v2/config/users/me/configurations/${params.key}`, {
-      data: params,
-    });
+  public async updateOneUserConfig(params: {
+    key: string;
+    value: string | boolean;
+  }) {
+    const res = await request.put(
+      `/api/v2/config/users/me/configurations/${params.key}`,
+      {
+        data: params
+      }
+    );
   }
 
   @action
   public async resetUserConfig() {
-    const res = await request.get('/api/v2/config/users/default/configurations');
+    const res = await request.get(
+      '/api/v2/config/users/default/configurations'
+    );
     const data = res?.data?.contents;
     if (data) {
-      const res = await request.patch('/api/v2/config/users/me/configurations', {
-        data,
-      });
+      const res = await request.patch(
+        '/api/v2/config/users/me/configurations',
+        {
+          data
+        }
+      );
       const userConfig = res?.data?.contents;
       if (userConfig) {
         await this.getUserConfig();
@@ -515,7 +572,7 @@ export class SettingStore {
       this.serverSystemInfo = {
         buildTime: 11,
         startTime: 22,
-        version: '2.1',
+        version: '2.1'
       };
     }
     try {
@@ -530,8 +587,8 @@ export class SettingStore {
       message.error(
         formatMessage({
           id: 'odc.src.store.setting.SystemInitializationFailedRefreshAnd',
-          defaultMessage: '系统初始化失败，请刷新重试！',
-        }), // 系统初始化失败，请刷新重试！
+          defaultMessage: '系统初始化失败，请刷新重试！'
+        }) // 系统初始化失败，请刷新重试！
       );
     }
   }
@@ -543,8 +600,8 @@ export class SettingStore {
       throw new Error(
         formatMessage({
           id: 'odc.src.store.setting.SystemConfigurationQueryFailed',
-          defaultMessage: '系统配置查询失败',
-        }),
+          defaultMessage: '系统配置查询失败'
+        })
       ); // 系统配置查询失败
     }
     try {

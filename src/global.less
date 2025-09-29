@@ -1,3 +1,45 @@
+@import 'antd/dist/reset.css';
+
+@font-face {
+  font-family: 'PlusJakartaSans Medium';
+  src: url('./assets/font/PlusJakartaSans-Medium.ttf');
+  unicode-range: U+30-39, U+61-7a, U+41-5a;
+}
+
+.font-en-num-medium {
+  font-family: 'PlusJakartaSans Medium', -apple-system, 'Microsoft YaHei',
+    BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans',
+    sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+    'Noto Color Emoji';
+}
+
+body * {
+  font-family: 'PlusJakartaSans Medium', -apple-system, 'Microsoft YaHei',
+    BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans',
+    sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+    'Noto Color Emoji';
+}
+
+/**
+ * 解决Chrome 80版本 a标签默认下划线会被带有inline-flex/grid样式的子元素(例如:Antd Button)继承问题
+ */
+a {
+  text-decoration: none;
+}
+
+body,
+body * {
+  &::-webkit-scrollbar {
+    width: 8px;
+    background-color: var(--scrollbar-background-color);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-thumb-background-color);
+    border-radius: 2px;
+  }
+}
+
 @odc-section-title-line-height: 20px;
 @odc-section-title-margin-bottom: 16px;
 @odc-base-font-size: 12px;
@@ -7,10 +49,10 @@
 // @import './style/theme/antd.dark.less';
 /* @import '~antd/dist/antd.less'; */
 
-@font-face {
-  font-family: 'RareWord';
-  src: url('../public/rareWordsFont.ttf');
-}
+// @font-face {
+//   font-family: 'RareWord';
+//   src: url('../public/rareWordsFont.ttf');
+// }
 
 html,
 body,
@@ -20,9 +62,9 @@ body,
   height: 100%;
   overflow: auto;
   overflow-y: hidden;
-  font-family: Chinese Quote, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, PingFang SC,
-    Hiragino Sans GB, Microsoft YaHei, RareWord, Helvetica Neue, Helvetica, Arial, sans-serif,
-    monospace;
+  // font-family: Chinese Quote, -apple-system, BlinkMacSystemFont, Segoe UI,
+  //   Roboto, PingFang SC, Hiragino Sans GB, Microsoft YaHei, RareWord,
+  //   Helvetica Neue, Helvetica, Arial, sans-serif, monospace;
 }
 #root-slave {
   position: relative;
@@ -204,7 +246,10 @@ ol {
 }
 
 // antd tree 箭头颜色替换
-.ant-tree.ant-tree-directory .ant-tree-treenode .ant-tree-switcher .ant-tree-switcher-icon {
+.ant-tree.ant-tree-directory
+  .ant-tree-treenode
+  .ant-tree-switcher
+  .ant-tree-switcher-icon {
   color: var(--text-color-primary);
 }
 
@@ -385,21 +430,21 @@ ol {
 }
 
 // tabs antd4 兼容 antd3
-.ant-tabs .ant-tabs-content > .ant-tabs-tabpane {
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
-  z-index: -1;
-  display: block !important;
-  opacity: 0;
+// .ant-tabs .ant-tabs-content > .ant-tabs-tabpane {
+//   position: absolute;
+//   top: 0;
+//   right: 0;
+//   left: 0;
+//   z-index: -1;
+//   display: block !important;
+//   opacity: 0;
 
-  &.ant-tabs-tabpane-active {
-    position: relative;
-    z-index: unset;
-    opacity: unset;
-  }
-}
+//   &.ant-tabs-tabpane-active {
+//     position: relative;
+//     z-index: unset;
+//     opacity: unset;
+//   }
+// }
 
 // pl-debug
 .editor-breakpoints {
@@ -424,9 +469,9 @@ ol {
 .editor-highlight-line {
   background: var(--code-background-highlight-color);
 }
-.editor-selection-stmt-info {
-  background: var(--code-background-hover-color);
-}
+// .editor-selection-stmt-info {
+//   background: var(--code-background-hover-color);
+// }
 .editor-selection-stmt-error {
   background: var(--code-background-error-color);
 }

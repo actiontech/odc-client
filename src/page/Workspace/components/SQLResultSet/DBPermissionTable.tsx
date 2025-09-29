@@ -43,7 +43,7 @@ const DBPermissionTable: React.FC<IProps> = (props) => {
         {
           label: formatMessage({
             id: 'src.page.Workspace.components.SQLResultSet.D12A3FE9',
-            defaultMessage: '日志',
+            defaultMessage: '日志'
           }), //'日志'
           key: PERMISSION_TAB_KEY,
           children: (
@@ -52,23 +52,26 @@ const DBPermissionTable: React.FC<IProps> = (props) => {
                 <CloseCircleFilled style={{ color: '#F5222D' }} />
                 {formatMessage({
                   id: 'src.page.Workspace.components.SQLResultSet.7A8EC0AB' /*执行以下 SQL 失败*/,
-                  defaultMessage: '执行以下 SQL 失败',
+                  defaultMessage: '执行以下 SQL 失败'
                 })}
               </Space>
-              <MultiLineOverflowText className={styles.executedSQL} content={sql} />
+              <MultiLineOverflowText
+                className={styles.executedSQL}
+                content={sql}
+              />
               <Space direction="vertical">
                 <span>
                   {
                     formatMessage({
                       id: 'src.page.Workspace.components.SQLResultSet.BDAE252A' /*失败原因：*/,
-                      defaultMessage: '失败原因：',
+                      defaultMessage: '失败原因：'
                     }) /* 失败原因： */
                   }
                 </span>
                 <Text type="secondary">
                   {formatMessage({
                     id: 'src.page.Workspace.components.SQLResultSet.DDB9284D',
-                    defaultMessage: '缺少以下数据库表对应权限，请先申请权限',
+                    defaultMessage: '缺少以下数据库表对应权限，请先申请权限'
                   })}
                 </Text>
               </Space>
@@ -76,8 +79,8 @@ const DBPermissionTable: React.FC<IProps> = (props) => {
                 <DBPermissionTableContent showAction dataSource={dataSource} />
               </div>
             </div>
-          ),
-        },
+          )
+        }
       ]}
     />
   );

@@ -21,7 +21,7 @@ import {
   ISSOConfig,
   ISSOType,
   SAMLType,
-  ISSO_SAML_CONFIG,
+  ISSO_SAML_CONFIG
 } from '@/d.ts';
 import { formatMessage } from '@/util/intl';
 import tracert from '@/util/tracert';
@@ -65,7 +65,7 @@ export default function NewSSODrawerButton({ onSuccess }: IProps) {
       for (let key in SAMLType) {
         (clone.ssoParameter as ISSO_SAML_CONFIG)[key] = form.getFieldValue([
           'ssoParameter',
-          key as any,
+          key as any
         ]);
       }
     }
@@ -76,13 +76,16 @@ export default function NewSSODrawerButton({ onSuccess }: IProps) {
       encryption: {
         enabled: true,
         algorithm: EncryptionAlgorithm.RAW,
-        secret: encrypt(secret),
+        secret: encrypt(secret)
       },
-      configuration: JSON.stringify(clone),
+      configuration: JSON.stringify(clone)
     });
     if (isSuccess) {
       message.success(
-        formatMessage({ id: 'odc.SSO.NewSSODrawerButton.New', defaultMessage: '新建成功' }), //新建成功
+        formatMessage({
+          id: 'odc.SSO.NewSSODrawerButton.New',
+          defaultMessage: '新建成功'
+        }) //新建成功
       );
       onSuccess();
       setOpen(false);
@@ -102,7 +105,7 @@ export default function NewSSODrawerButton({ onSuccess }: IProps) {
         {
           formatMessage({
             id: 'src.page.ExternalIntegration.SSO.NewSSODrawerButton.5B2934AC' /*新建登录集成*/,
-            defaultMessage: '新建登录集成',
+            defaultMessage: '新建登录集成'
           }) /* 新建登录集成 */
         }
       </Button>
@@ -110,7 +113,7 @@ export default function NewSSODrawerButton({ onSuccess }: IProps) {
         width={520}
         title={formatMessage({
           id: 'src.page.ExternalIntegration.SSO.NewSSODrawerButton.506C2E48',
-          defaultMessage: '新建登录集成',
+          defaultMessage: '新建登录集成'
         })}
         open={open}
         onClose={() => {
@@ -127,7 +130,7 @@ export default function NewSSODrawerButton({ onSuccess }: IProps) {
               {
                 formatMessage({
                   id: 'odc.SSO.NewSSODrawerButton.Cancel',
-                  defaultMessage: '取消',
+                  defaultMessage: '取消'
                 }) /*取消*/
               }
             </Button>
@@ -136,7 +139,7 @@ export default function NewSSODrawerButton({ onSuccess }: IProps) {
                 {
                   formatMessage({
                     id: 'odc.SSO.NewSSODrawerButton.Save',
-                    defaultMessage: '保存',
+                    defaultMessage: '保存'
                   }) /*保存*/
                 }
               </Button>
@@ -144,14 +147,14 @@ export default function NewSSODrawerButton({ onSuccess }: IProps) {
               <Tooltip
                 title={formatMessage({
                   id: 'odc.SSO.NewSSODrawerButton.PleaseTestTheConnectionFirst',
-                  defaultMessage: '请先进行测试连接',
+                  defaultMessage: '请先进行测试连接'
                 })} /*请先进行测试连接*/
               >
                 <Button type="primary" disabled>
                   {
                     formatMessage({
                       id: 'odc.SSO.NewSSODrawerButton.Save',
-                      defaultMessage: '保存',
+                      defaultMessage: '保存'
                     }) /*保存*/
                   }
                 </Button>
@@ -160,7 +163,11 @@ export default function NewSSODrawerButton({ onSuccess }: IProps) {
           </Space>
         }
       >
-        <SSOForm onTestInfoChanged={() => update()} ref={formRef} key={open + ' '} />
+        <SSOForm
+          onTestInfoChanged={() => update()}
+          ref={formRef}
+          key={open + ' '}
+        />
       </Drawer>
     </>
   );

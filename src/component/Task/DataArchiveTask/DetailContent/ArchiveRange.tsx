@@ -26,17 +26,17 @@ const columns = [
     key: 'tableName',
     title: formatMessage({
       id: 'odc.DataArchiveTask.DetailContent.ArchiveRange.TableName',
-      defaultMessage: '表名',
+      defaultMessage: '表名'
     }), //表名
     ellipsis: true,
-    width: 140,
+    width: 140
   },
   {
     dataIndex: 'conditionExpression',
     key: 'conditionExpression',
     title: formatMessage({
       id: 'odc.DataArchiveTask.DetailContent.ArchiveRange.FilterConditions',
-      defaultMessage: '过滤条件',
+      defaultMessage: '过滤条件'
     }), //过滤条件
     ellipsis: true,
     width: 200,
@@ -49,7 +49,7 @@ const columns = [
                 maxWidth: 160,
                 overflow: 'hidden',
                 whiteSpace: 'nowrap',
-                textOverflow: 'ellipsis',
+                textOverflow: 'ellipsis'
               }}
             >
               {value ?? '-'}
@@ -68,7 +68,7 @@ const columns = [
               <Typography.Link>
                 {formatMessage({
                   id: 'src.component.Task.DataArchiveTask.DetailContent.361EA0F5',
-                  defaultMessage: '关联表',
+                  defaultMessage: '关联表'
                 })}
               </Typography.Link>
             </Popover>
@@ -77,31 +77,31 @@ const columns = [
           )}
         </Flex>
       );
-    },
+    }
   },
   {
     dataIndex: 'targetTableName',
     key: 'targetTableName',
     title: formatMessage({
       id: 'src.component.Task.DataArchiveTask.DetailContent.8D9A2CED',
-      defaultMessage: '目标表名',
+      defaultMessage: '目标表名'
     }), //'目标表名'
     ellipsis: true,
-    width: 140,
+    width: 140
   },
   {
     dataIndex: 'partitions',
     key: 'partitions',
     title: formatMessage({
       id: 'src.component.Task.DataArchiveTask.DetailContent.5E7080E4',
-      defaultMessage: '指定分区',
+      defaultMessage: '指定分区'
     }),
     ellipsis: true,
     width: 190,
     render: (value) => {
       return value?.join(',') || '-';
-    },
-  },
+    }
+  }
 ];
 
 const ArchiveRange: React.FC<{

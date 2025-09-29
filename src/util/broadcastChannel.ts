@@ -19,10 +19,13 @@ import logger from './logger';
 export enum ChannelMap {
   LDAP_TEST = 'LDAP_TEST',
   LDAP_MAIN = 'LDAP_MAIN',
-  ODC_SSO_TEST = 'ODC_SSO_TEST',
+  ODC_SSO_TEST = 'ODC_SSO_TEST'
 }
 class Channel {
-  private channelMap: Map<ChannelMap, BroadcastChannel> = new Map<ChannelMap, BroadcastChannel>();
+  private channelMap: Map<ChannelMap, BroadcastChannel> = new Map<
+    ChannelMap,
+    BroadcastChannel
+  >();
   /**
    * 重置消息通道
    */
@@ -68,7 +71,7 @@ class Channel {
       return true;
     } else {
       logger.log(
-        `[Channel] ${channelName} is not existsed, if you want to send message to this channel, please add this channel firstly.`,
+        `[Channel] ${channelName} is not existsed, if you want to send message to this channel, please add this channel firstly.`
       );
       return false;
     }
@@ -89,13 +92,15 @@ class Channel {
   listen(
     channelName: ChannelMap,
     callback: (data?: any) => void,
-    callbackedClose: boolean = false,
+    callbackedClose: boolean = false
   ) {
     if (this.isExists(channelName)) {
-      this.channelMap.get(channelName).addEventListener('message', ({ data }) => {
-        callback?.(data);
-        callbackedClose && this.close(channelName);
-      });
+      this.channelMap
+        .get(channelName)
+        .addEventListener('message', ({ data }) => {
+          callback?.(data);
+          callbackedClose && this.close(channelName);
+        });
     }
   }
   /**
@@ -108,7 +113,9 @@ class Channel {
         logger.log(`[Channel] try to close ${channelName}`);
         this.channelMap.get(item)?.close();
         this.channelMap.delete(item);
-        logger.log(`[Channel] channel ${channelName?.join(', ')} is closed successfully`);
+        logger.log(
+          `[Channel] channel ${channelName?.join(', ')} is closed successfully`
+        );
       });
       return;
     }

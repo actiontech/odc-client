@@ -16,11 +16,12 @@
 
 import { IPage } from '@/d.ts';
 import { QuestionCircleFilled } from '@ant-design/icons';
-import { Button, Modal } from 'antd';
 import { Component, ReactNode } from 'react';
 
 import { formatMessage } from '@/util/intl';
 import styles from './index.less';
+import { WithConfirmModalStyleWrapper } from './style';
+import { BasicButton, BasicModal } from '@actiontech/dms-kit';
 
 export default function withConfirmModal(WrappedComponent: any) {
   return class extends Component<
@@ -51,7 +52,10 @@ export default function withConfirmModal(WrappedComponent: any) {
       /**
        * 关闭并保存
        */
-      onSaveAndCloseUnsavedModal: (pageKey: string, closeImmediately?: boolean) => void;
+      onSaveAndCloseUnsavedModal: (
+        pageKey: string,
+        closeImmediately?: boolean
+      ) => void;
       /**
        * 关闭当前页面
        */
@@ -68,9 +72,12 @@ export default function withConfirmModal(WrappedComponent: any) {
     public readonly state = {
       unsavedModalTitle: '',
       unsavedModalContent: '',
-      unsavedModalSaveButtonText: formatMessage({ id: 'app.button.save', defaultMessage: '保存' }),
+      unsavedModalSaveButtonText: formatMessage({
+        id: 'app.button.save',
+        defaultMessage: '保存'
+      }),
       disableUnsavedModalCloseUnsaveButton: false,
-      closeImmediately: false,
+      closeImmediately: false
     };
 
     public render() {
@@ -87,25 +94,17 @@ export default function withConfirmModal(WrappedComponent: any) {
         onUnsavedChange,
         onChangeSaved,
         closeSelf,
-        isShow,
+        isShow
       } = this.props;
       const {
         unsavedModalTitle,
         unsavedModalContent,
         unsavedModalSaveButtonText,
         disableUnsavedModalCloseUnsaveButton,
-        closeImmediately,
+        closeImmediately
       } = this.state;
       return (
-        <div
-          style={{
-            // 减去 topbar 和 tabbar 高度
-            height: '100%',
-            background: 'var(--background-secondry-color)',
-            position: 'relative',
-            overflow: 'auto',
-          }}
-        >
+        <WithConfirmModalStyleWrapper className="with-confirm-modal">
           <WrappedComponent
             pageKey={pageKey}
             page={page}
@@ -115,20 +114,26 @@ export default function withConfirmModal(WrappedComponent: any) {
             params={params}
             onUnsavedChange={onUnsavedChange}
             onChangeSaved={onChangeSaved}
-            onSetUnsavedModalTitle={(t: string) => this.setState({ unsavedModalTitle: t })}
-            onSetUnsavedModalContent={(t: string) => this.setState({ unsavedModalContent: t })}
+            onSetUnsavedModalTitle={(t: string) =>
+              this.setState({ unsavedModalTitle: t })
+            }
+            onSetUnsavedModalContent={(t: string) =>
+              this.setState({ unsavedModalContent: t })
+            }
             onSetUnsavedModalSaveButtonText={(t: string | ReactNode) =>
               this.setState({ unsavedModalSaveButtonText: t })
             }
             onSetDisableUnsavedModalCloseUnsaveButton={(t: boolean) =>
               this.setState({ disableUnsavedModalCloseUnsaveButton: t })
             }
-            onSetCloseImmediately={(t: boolean) => this.setState({ closeImmediately: t })}
+            onSetCloseImmediately={(t: boolean) =>
+              this.setState({ closeImmediately: t })
+            }
             closeSelf={closeSelf}
           />
 
           {showUnsavedModal && (
-            <Modal
+            <BasicModal
               className={styles.modal}
               centered={true}
               open={showUnsavedModal}
@@ -136,31 +141,46 @@ export default function withConfirmModal(WrappedComponent: any) {
               onCancel={onCancelUnsavedModal}
               footer={[
                 !disableUnsavedModalCloseUnsaveButton && (
-                  <Button key="close" onClick={() => onCloseUnsavedModal(pageKey)}>
-                    {formatMessage({ id: 'app.button.dontsave', defaultMessage: '不保存' })}
-                  </Button>
+                  <BasicButton
+                    key="close"
+                    onClick={() => onCloseUnsavedModal(pageKey)}
+                  >
+                    {formatMessage({
+                      id: 'app.button.dontsave',
+                      defaultMessage: '不保存'
+                    })}
+                  </BasicButton>
                 ),
 
-                <Button key="back" onClick={onCancelUnsavedModal}>
-                  {formatMessage({ id: 'app.button.cancel', defaultMessage: '取消' })}
-                </Button>,
-                <Button
+                <BasicButton key="back" onClick={onCancelUnsavedModal}>
+                  {formatMessage({
+                    id: 'app.button.cancel',
+                    defaultMessage: '取消'
+                  })}
+                </BasicButton>,
+                <BasicButton
                   key="submit"
                   type="primary"
-                  onClick={() => onSaveAndCloseUnsavedModal(pageKey, closeImmediately)}
+                  onClick={() =>
+                    onSaveAndCloseUnsavedModal(pageKey, closeImmediately)
+                  }
                 >
                   {unsavedModalSaveButtonText}
-                </Button>,
+                </BasicButton>
               ]}
             >
               <div className="ant-modal-confirm-body">
                 <QuestionCircleFilled style={{ color: 'rgb(250, 173, 20)' }} />
-                <span className="ant-modal-confirm-title">{unsavedModalTitle}</span>
-                <div className="ant-modal-confirm-content">{unsavedModalContent}</div>
+                <span className="ant-modal-confirm-title">
+                  {unsavedModalTitle}
+                </span>
+                <div className="ant-modal-confirm-content">
+                  {unsavedModalContent}
+                </div>
               </div>
-            </Modal>
+            </BasicModal>
           )}
-        </div>
+        </WithConfirmModalStyleWrapper>
       );
     }
   };

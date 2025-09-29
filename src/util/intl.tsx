@@ -20,6 +20,7 @@ import { setLocale } from '@umijs/max';
 import odc from '@/plugins/odc';
 import { IntlShape, createIntl } from 'react-intl';
 import { ObDocsUrlMap } from '@/constant';
+import { StorageKey } from '@actiontech/dms-kit';
 export const defaultLocale = 'en-us';
 
 let intl;
@@ -29,13 +30,15 @@ let intl;
 function getLocale() {
   const lang =
     navigator.cookieEnabled && typeof localStorage !== 'undefined'
-      ? window.localStorage.getItem('umi_locale')
+      ? window.localStorage.getItem(StorageKey.Language)
       : '';
   // support baseNavigator, default true
   let browserLang;
   const isNavigatorLanguageValid =
     typeof navigator !== 'undefined' && typeof navigator.language === 'string';
-  browserLang = isNavigatorLanguageValid ? navigator.language.split('-').join('-') : '';
+  browserLang = isNavigatorLanguageValid
+    ? navigator.language.split('-').join('-')
+    : '';
   return lang || browserLang || 'en-US';
 }
 
@@ -70,7 +73,13 @@ export function getLocalDocs(hash?: string) {
   if (!existLocal.includes(local)) {
     local = defaultLocale;
   }
-  return window.publicPath + 'help-doc/' + local + '/index.html' + (hash ? `#/${hash}` : '');
+  return (
+    window.publicPath +
+    'help-doc/' +
+    local +
+    '/index.html' +
+    (hash ? `#/${hash}` : '')
+  );
 }
 
 export function getOBDocsUrl(key?: string) {
@@ -87,7 +96,7 @@ let isInitialized = false;
 
 export async function initIntl() {
   if (isInitialized) return;
-  let locale: string = getEnvLocale();
+  const locale: string = getEnvLocale();
   setLocale(locale);
   let messages: Record<string, string> = {};
   switch (locale) {
@@ -111,12 +120,12 @@ export async function initIntl() {
   }
   intl = createIntl({
     locale,
-    messages,
+    messages
   });
   isInitialized = true;
   return true;
 }
-export function formatMessage(...args) {
+export function formatMessage(...args): string {
   if (!isInitialized) {
     console.warn('Intl not ready, return default message');
     return args[0]?.defaultMessage || '';

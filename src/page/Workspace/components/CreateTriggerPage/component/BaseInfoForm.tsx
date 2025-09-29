@@ -14,7 +14,12 @@
  * limitations under the License.
  */
 
-import { ITable, ITriggerBaseInfoForm, TriggerSchemaType, TriggerState } from '@/d.ts';
+import {
+  ITable,
+  ITriggerBaseInfoForm,
+  TriggerSchemaType,
+  TriggerState
+} from '@/d.ts';
 import { formatMessage } from '@/util/intl';
 import { Button, Col, Form, Input, Radio, Row, Select } from 'antd';
 import { FormInstance } from 'antd/lib/form';
@@ -44,7 +49,9 @@ class BaseInfoForm extends Component<IProps> {
         this.props.onSave(Step.BASEINFO, values);
       })
       .catch((errorInfo) => {
-        this?.formRef?.current?.scrollToField(errorInfo?.errorFields?.[0]?.name);
+        this?.formRef?.current?.scrollToField(
+          errorInfo?.errorFields?.[0]?.name
+        );
         throw new Error(errorInfo);
       });
   };
@@ -56,7 +63,7 @@ class BaseInfoForm extends Component<IProps> {
   handleSchemaModeChange = (value: string) => {
     this.props.reloadSchemaMode(value);
     this.formRef.current.setFieldsValue({
-      schemaName: '',
+      schemaName: ''
     });
   };
 
@@ -65,7 +72,12 @@ class BaseInfoForm extends Component<IProps> {
   };
 
   render() {
-    const { databases, tables, initialValues = {}, enableTriggerAlterStatus } = this.props;
+    const {
+      databases,
+      tables,
+      initialValues = {},
+      enableTriggerAlterStatus
+    } = this.props;
     return (
       <Form
         ref={this.formRef}
@@ -80,7 +92,7 @@ class BaseInfoForm extends Component<IProps> {
               name="triggerName"
               label={formatMessage({
                 id: 'odc.CreateTriggerPage.component.BaseInfoForm.TriggerName',
-                defaultMessage: '请输入触发器名称',
+                defaultMessage: '请输入触发器名称'
               })}
               /* 触发器名称 */
               rules={[
@@ -88,25 +100,25 @@ class BaseInfoForm extends Component<IProps> {
                   required: true,
                   message: formatMessage({
                     id: 'odc.CreateTriggerPage.component.BaseInfoForm.EnterTheTriggerName',
-                    defaultMessage: '请填写触发器名称',
-                  }),
+                    defaultMessage: '请填写触发器名称'
+                  })
                   // 请填写触发器名称
                 },
                 {
                   max: 128,
                   message: formatMessage({
                     id: 'odc.CreateTriggerPage.component.BaseInfoForm.TheLengthCannotExceedCharacters',
-                    defaultMessage: '长度不超过 128 个字符',
-                  }),
+                    defaultMessage: '长度不超过 128 个字符'
+                  })
 
                   // 长度不超过 128 个字符
-                },
+                }
               ]}
             >
               <Input
                 placeholder={formatMessage({
                   id: 'odc.CreateTriggerPage.component.BaseInfoForm.TriggerName',
-                  defaultMessage: '请输入触发器名称',
+                  defaultMessage: '请输入触发器名称'
                 })}
 
                 /* 触发器名称 */
@@ -117,12 +129,12 @@ class BaseInfoForm extends Component<IProps> {
         <div className={styles.space}>
           <Form.Item
             style={{
-              width: '216px',
+              width: '216px'
             }}
             name="schemaMode"
             label={formatMessage({
               id: 'odc.CreateTriggerPage.component.BaseInfoForm.ReferenceObjectMode',
-              defaultMessage: '基准对象模式',
+              defaultMessage: '基准对象模式'
             })}
             /* 基准对象模式 */
             rules={[
@@ -130,10 +142,10 @@ class BaseInfoForm extends Component<IProps> {
                 required: true,
                 message: formatMessage({
                   id: 'odc.CreateTriggerPage.component.BaseInfoForm.SelectTheBaseObjectMode',
-                  defaultMessage: '请选择基准对象模式',
-                }),
+                  defaultMessage: '请选择基准对象模式'
+                })
                 // 请选择基准对象模式
-              },
+              }
             ]}
           >
             <Select onChange={this.handleSchemaModeChange}>
@@ -148,12 +160,12 @@ class BaseInfoForm extends Component<IProps> {
           </Form.Item>
           <Form.Item
             style={{
-              width: '216px',
+              width: '216px'
             }}
             name="schemaType"
             label={formatMessage({
               id: 'odc.CreateTriggerPage.component.BaseInfoForm.BaseObjectType',
-              defaultMessage: '基准对象类型',
+              defaultMessage: '基准对象类型'
             })}
             /* 基准对象类型 */
             rules={[
@@ -161,24 +173,26 @@ class BaseInfoForm extends Component<IProps> {
                 required: true,
                 message: formatMessage({
                   id: 'odc.CreateTriggerPage.component.BaseInfoForm.SelectABaseObjectType',
-                  defaultMessage: '请选择基准对象类型',
-                }),
+                  defaultMessage: '请选择基准对象类型'
+                })
                 // 请选择基准对象类型
-              },
+              }
             ]}
           >
             <Select>
-              <Option value={TriggerSchemaType.TABLE}>{TriggerSchemaType.TABLE}</Option>
+              <Option value={TriggerSchemaType.TABLE}>
+                {TriggerSchemaType.TABLE}
+              </Option>
             </Select>
           </Form.Item>
           <Form.Item
             style={{
-              width: '216px',
+              width: '216px'
             }}
             name="schemaName"
             label={formatMessage({
               id: 'odc.CreateTriggerPage.component.BaseInfoForm.BaseObjectName',
-              defaultMessage: '基准对象名称',
+              defaultMessage: '基准对象名称'
             })}
             /* 基准对象名称 */
             rules={[
@@ -186,17 +200,17 @@ class BaseInfoForm extends Component<IProps> {
                 required: true,
                 message: formatMessage({
                   id: 'odc.CreateTriggerPage.component.BaseInfoForm.SelectABaseObjectName',
-                  defaultMessage: '请选择基准对象名称',
-                }),
+                  defaultMessage: '请选择基准对象名称'
+                })
                 // 请选择基准对象名称
-              },
+              }
             ]}
           >
             <Select
               placeholder={
                 formatMessage({
                   id: 'odc.CreateTriggerPage.component.BaseInfoForm.SelectABaseObject',
-                  defaultMessage: '请选择基准对象',
+                  defaultMessage: '请选择基准对象'
                 }) // 请选择基准对象
               }
               showSearch
@@ -219,7 +233,7 @@ class BaseInfoForm extends Component<IProps> {
               name="enableState"
               label={formatMessage({
                 id: 'odc.CreateTriggerPage.component.BaseInfoForm.TriggerStatus',
-                defaultMessage: '触发器状态',
+                defaultMessage: '触发器状态'
               })}
               /* 触发器状态 */
               rules={[
@@ -227,10 +241,10 @@ class BaseInfoForm extends Component<IProps> {
                   required: true,
                   message: formatMessage({
                     id: 'odc.CreateTriggerPage.component.BaseInfoForm.SelectTheTriggerStatus',
-                    defaultMessage: '请选择触发器状态',
-                  }),
+                    defaultMessage: '请选择触发器状态'
+                  })
                   // 请选择触发器状态
-                },
+                }
               ]}
               initialValue={TriggerState.enabled}
             >
@@ -239,7 +253,7 @@ class BaseInfoForm extends Component<IProps> {
                   {
                     formatMessage({
                       id: 'odc.CreateTriggerPage.component.BaseInfoForm.Enable',
-                      defaultMessage: '启用',
+                      defaultMessage: '启用'
                     })
 
                     /* 启用 */
@@ -250,7 +264,7 @@ class BaseInfoForm extends Component<IProps> {
                     {
                       formatMessage({
                         id: 'odc.CreateTriggerPage.component.BaseInfoForm.Disable',
-                        defaultMessage: '禁用',
+                        defaultMessage: '禁用'
                       })
 
                       /* 禁用 */
@@ -267,7 +281,7 @@ class BaseInfoForm extends Component<IProps> {
               {
                 formatMessage({
                   id: 'odc.CreateTriggerPage.component.BaseInfoForm.Determine',
-                  defaultMessage: '确定',
+                  defaultMessage: '确定'
                 })
 
                 /* 确定 */

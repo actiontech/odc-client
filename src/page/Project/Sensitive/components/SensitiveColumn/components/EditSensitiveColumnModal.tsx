@@ -30,7 +30,7 @@ const EditSensitiveColumnModal = ({
   maskingAlgorithms,
   modalVisible,
   setModalVisible,
-  initSensitiveColumn,
+  initSensitiveColumn
 }) => {
   const [formRef] = useForm();
   const onCancel = () => {
@@ -43,14 +43,14 @@ const EditSensitiveColumnModal = ({
     const rawData = await formRef.validateFields().catch();
     const successful = await batchUpdateSensitiveColumn(projectId, {
       sensitiveColumnIds,
-      maskingAlgorithmId: rawData.maskingAlgorithmId,
+      maskingAlgorithmId: rawData.maskingAlgorithmId
     });
     if (successful) {
       message.success(
         formatMessage({
           id: 'odc.SensitiveColumn.components.EditSensitiveColumnModal.UpdatedSuccessfully',
-          defaultMessage: '更新成功',
-        }), //更新成功
+          defaultMessage: '更新成功'
+        }) //更新成功
       );
 
       setModalVisible(false);
@@ -61,8 +61,8 @@ const EditSensitiveColumnModal = ({
       message.error(
         formatMessage({
           id: 'odc.SensitiveColumn.components.EditSensitiveColumnModal.UpdateFailed',
-          defaultMessage: '更新失败',
-        }), //更新失败
+          defaultMessage: '更新失败'
+        }) //更新失败
       );
     }
   };
@@ -72,7 +72,7 @@ const EditSensitiveColumnModal = ({
       width={400}
       title={formatMessage({
         id: 'odc.SensitiveColumn.components.EditSensitiveColumnModal.EditSensitiveColumns',
-        defaultMessage: '编辑敏感列',
+        defaultMessage: '编辑敏感列'
       })}
       /*编辑敏感列*/ open={modalVisible}
       onCancel={onCancel}
@@ -86,7 +86,7 @@ const EditSensitiveColumnModal = ({
           label={
             formatMessage({
               id: 'odc.SensitiveColumn.components.EditSensitiveColumnModal.DesensitizationAlgorithm',
-              defaultMessage: '脱敏算法',
+              defaultMessage: '脱敏算法'
             }) //脱敏算法
           }
           name="maskingAlgorithmId"
@@ -95,26 +95,30 @@ const EditSensitiveColumnModal = ({
               required: true,
               message: formatMessage({
                 id: 'odc.SensitiveColumn.components.EditSensitiveColumnModal.SelectADesensitizationAlgorithm',
-                defaultMessage: '请选择脱敏算法',
-              }), //请选择脱敏算法
-            },
+                defaultMessage: '请选择脱敏算法'
+              }) //请选择脱敏算法
+            }
           ]}
         >
           <Select
             placeholder={
               formatMessage({
                 id: 'odc.SensitiveColumn.components.EditSensitiveColumnModal.PleaseSelect',
-                defaultMessage: '请选择',
+                defaultMessage: '请选择'
               }) //请选择
             }
             optionLabelProp="label"
           >
             {maskingAlgorithmOptions?.map((option, index) => {
               const target = maskingAlgorithms?.find(
-                (maskingAlgorithm) => maskingAlgorithm?.id === option?.value,
+                (maskingAlgorithm) => maskingAlgorithm?.id === option?.value
               );
               return (
-                <Select.Option value={option?.value} key={index} label={option?.label}>
+                <Select.Option
+                  value={option?.value}
+                  key={index}
+                  label={option?.label}
+                >
                   <PopoverContainer
                     key={index}
                     title={option?.label}
@@ -122,24 +126,24 @@ const EditSensitiveColumnModal = ({
                       {
                         label: formatMessage({
                           id: 'odc.src.page.Project.Sensitive.components.SensitiveColumn.components.DesensitizationMethod.1',
-                          defaultMessage: '脱敏方式',
+                          defaultMessage: '脱敏方式'
                         }), //'脱敏方式'
-                        value: maskRuleTypeMap?.[target?.type],
+                        value: maskRuleTypeMap?.[target?.type]
                       },
                       {
                         label: formatMessage({
                           id: 'odc.src.page.Project.Sensitive.components.SensitiveColumn.components.TestData.1',
-                          defaultMessage: '测试数据',
+                          defaultMessage: '测试数据'
                         }), //'测试数据'
-                        value: target?.sampleContent,
+                        value: target?.sampleContent
                       },
                       {
                         label: formatMessage({
                           id: 'odc.src.page.Project.Sensitive.components.SensitiveColumn.components.Preview.1',
-                          defaultMessage: '结果预览',
+                          defaultMessage: '结果预览'
                         }), //'结果预览'
-                        value: target?.maskedContent,
-                      },
+                        value: target?.maskedContent
+                      }
                     ]}
                     children={() => <div>{option?.label}</div>}
                   />

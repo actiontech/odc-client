@@ -24,7 +24,7 @@ import {
   TableCheckConstraint,
   TableForeignConstraint,
   TablePrimaryConstraint,
-  TableUniqueConstraint,
+  TableUniqueConstraint
 } from '../../../components/CreateTable/interface';
 import { ResourceNodeType, TreeDataNode } from '../type';
 
@@ -36,16 +36,22 @@ import { ReactComponent as TableOutlined } from '@/svgr/menuTable.svg';
 import { ReactComponent as PartitionSvg } from '@/svgr/Partition.svg';
 import logger from '@/util/logger';
 
-export function TableTreeData(dbSession: SessionStore, database: IDatabase): TreeDataNode {
+export function TableTreeData(
+  dbSession: SessionStore,
+  database: IDatabase
+): TreeDataNode {
   const dbName = database.name;
   const tables = dbSession?.database?.tables;
   const treeData: TreeDataNode = {
-    title: formatMessage({ id: 'odc.ResourceTree.Nodes.table.Table', defaultMessage: '表' }), //表
+    title: formatMessage({
+      id: 'odc.ResourceTree.Nodes.table.Table',
+      defaultMessage: '表'
+    }), //表
     key: `${database?.id}-${dbName}-table`,
     type: ResourceNodeType.TableRoot,
     data: database,
     sessionId: dbSession?.sessionId,
-    isLeaf: false,
+    isLeaf: false
   };
   if (tables) {
     const dataTypes = dbSession?.dataTypes;
@@ -69,7 +75,7 @@ export function TableTreeData(dbSession: SessionStore, database: IDatabase): Tre
           columnRoot = {
             title: formatMessage({
               id: 'odc.ResourceTree.Nodes.table.Column',
-              defaultMessage: '列',
+              defaultMessage: '列'
             }), //列
             type: ResourceNodeType.TableColumnRoot,
             key: `${tableKey}-column`,
@@ -78,7 +84,7 @@ export function TableTreeData(dbSession: SessionStore, database: IDatabase): Tre
             icon: (
               <FolderOpenFilled
                 style={{
-                  color: '#3FA3FF',
+                  color: '#3FA3FF'
                 }}
               />
             ),
@@ -90,16 +96,20 @@ export function TableTreeData(dbSession: SessionStore, database: IDatabase): Tre
                 sessionId: dbSession?.sessionId,
                 icon: convertDataTypeToDataShowType(c.type, dataTypes) && (
                   <Icon
-                    component={fieldIconMap[convertDataTypeToDataShowType(c.type, dataTypes)]}
+                    component={
+                      fieldIconMap[
+                        convertDataTypeToDataShowType(c.type, dataTypes)
+                      ]
+                    }
                     style={{
-                      color: '#3FA3FF',
+                      color: '#3FA3FF'
                     }}
                   />
                 ),
 
-                isLeaf: true,
+                isLeaf: true
               };
-            }),
+            })
           };
         }
         let indexRoot: TreeDataNode;
@@ -107,7 +117,7 @@ export function TableTreeData(dbSession: SessionStore, database: IDatabase): Tre
           indexRoot = {
             title: formatMessage({
               id: 'odc.ResourceTree.Nodes.table.Index',
-              defaultMessage: '索引',
+              defaultMessage: '索引'
             }), //索引
             type: ResourceNodeType.TableIndexRoot,
             key: `${tableKey}-index`,
@@ -115,7 +125,7 @@ export function TableTreeData(dbSession: SessionStore, database: IDatabase): Tre
             icon: (
               <FolderOpenFilled
                 style={{
-                  color: '#3FA3FF',
+                  color: '#3FA3FF'
                 }}
               />
             ),
@@ -131,22 +141,22 @@ export function TableTreeData(dbSession: SessionStore, database: IDatabase): Tre
                   <Icon
                     component={IndexSvg}
                     style={{
-                      color: '#3FA3FF',
+                      color: '#3FA3FF'
                     }}
                   />
                 ),
 
                 sessionId: dbSession?.sessionId,
-                isLeaf: true,
+                isLeaf: true
               };
-            }),
+            })
           };
         }
 
         let partitionRoot: TreeDataNode = {
           title: formatMessage({
             id: 'odc.ResourceTree.Nodes.table.Partition',
-            defaultMessage: '分区',
+            defaultMessage: '分区'
           }), //分区
           type: ResourceNodeType.TablePartitionRoot,
           key: `${tableKey}-partition`,
@@ -155,10 +165,10 @@ export function TableTreeData(dbSession: SessionStore, database: IDatabase): Tre
           icon: (
             <FolderOpenFilled
               style={{
-                color: '#3FA3FF',
+                color: '#3FA3FF'
               }}
             />
-          ),
+          )
         };
 
         const subpartitionsDataHelper = (key, partitions, name) => {
@@ -175,11 +185,11 @@ export function TableTreeData(dbSession: SessionStore, database: IDatabase): Tre
                   <Icon
                     component={PartitionSvg}
                     style={{
-                      color: '#3FA3FF',
+                      color: '#3FA3FF'
                     }}
                   />
                 ),
-                type: ResourceNodeType.TablePartition,
+                type: ResourceNodeType.TablePartition
               };
             });
         };
@@ -201,12 +211,16 @@ export function TableTreeData(dbSession: SessionStore, database: IDatabase): Tre
                   <Icon
                     component={PartitionSvg}
                     style={{
-                      color: '#3FA3FF',
+                      color: '#3FA3FF'
                     }}
                   />
                 ),
                 type: ResourceNodeType.TablePartition,
-                children: subpartitionsDataHelper(key, table.subpartitions?.partitions, p.name),
+                children: subpartitionsDataHelper(
+                  key,
+                  table.subpartitions?.partitions,
+                  p.name
+                )
               };
             });
             break;
@@ -224,12 +238,16 @@ export function TableTreeData(dbSession: SessionStore, database: IDatabase): Tre
                   <Icon
                     component={PartitionSvg}
                     style={{
-                      color: '#3FA3FF',
+                      color: '#3FA3FF'
                     }}
                   />
                 ),
                 type: ResourceNodeType.TablePartition,
-                children: subpartitionsDataHelper(key, table.subpartitions?.partitions, p.name),
+                children: subpartitionsDataHelper(
+                  key,
+                  table.subpartitions?.partitions,
+                  p.name
+                )
               };
             });
             break;
@@ -246,13 +264,17 @@ export function TableTreeData(dbSession: SessionStore, database: IDatabase): Tre
                   <Icon
                     component={PartitionSvg}
                     style={{
-                      color: '#3FA3FF',
+                      color: '#3FA3FF'
                     }}
                   />
                 ),
 
                 type: ResourceNodeType.TablePartition,
-                children: subpartitionsDataHelper(key, table.subpartitions?.partitions, p.name),
+                children: subpartitionsDataHelper(
+                  key,
+                  table.subpartitions?.partitions,
+                  p.name
+                )
               };
             });
             break;
@@ -269,13 +291,17 @@ export function TableTreeData(dbSession: SessionStore, database: IDatabase): Tre
                   <Icon
                     component={PartitionSvg}
                     style={{
-                      color: '#3FA3FF',
+                      color: '#3FA3FF'
                     }}
                   />
                 ),
 
                 type: ResourceNodeType.TablePartition,
-                children: subpartitionsDataHelper(key, table.subpartitions?.partitions, p.name),
+                children: subpartitionsDataHelper(
+                  key,
+                  table.subpartitions?.partitions,
+                  p.name
+                )
               };
             });
             break;
@@ -292,13 +318,17 @@ export function TableTreeData(dbSession: SessionStore, database: IDatabase): Tre
                   <Icon
                     component={PartitionSvg}
                     style={{
-                      color: '#3FA3FF',
+                      color: '#3FA3FF'
                     }}
                   />
                 ),
 
                 type: ResourceNodeType.TablePartition,
-                children: subpartitionsDataHelper(key, table.subpartitions?.partitions, p.name),
+                children: subpartitionsDataHelper(
+                  key,
+                  table.subpartitions?.partitions,
+                  p.name
+                )
               };
             });
             break;
@@ -315,13 +345,17 @@ export function TableTreeData(dbSession: SessionStore, database: IDatabase): Tre
                   <Icon
                     component={PartitionSvg}
                     style={{
-                      color: '#3FA3FF',
+                      color: '#3FA3FF'
                     }}
                   />
                 ),
 
                 type: ResourceNodeType.TablePartition,
-                children: subpartitionsDataHelper(key, table.subpartitions?.partitions, p.name),
+                children: subpartitionsDataHelper(
+                  key,
+                  table.subpartitions?.partitions,
+                  p.name
+                )
               };
             });
             break;
@@ -349,7 +383,7 @@ export function TableTreeData(dbSession: SessionStore, database: IDatabase): Tre
           constraintRoot = {
             title: formatMessage({
               id: 'odc.ResourceTree.Nodes.table.Constraints',
-              defaultMessage: '约束',
+              defaultMessage: '约束'
             }), //约束
             type: ResourceNodeType.TableConstraintRoot,
             key: `${tableKey}-constraint`,
@@ -358,7 +392,7 @@ export function TableTreeData(dbSession: SessionStore, database: IDatabase): Tre
             icon: (
               <FolderOpenFilled
                 style={{
-                  color: '#3FA3FF',
+                  color: '#3FA3FF'
                 }}
               />
             ),
@@ -374,14 +408,14 @@ export function TableTreeData(dbSession: SessionStore, database: IDatabase): Tre
                   <Icon
                     component={IndexSvg}
                     style={{
-                      color: '#3FA3FF',
+                      color: '#3FA3FF'
                     }}
                   />
                 ),
 
-                key: `${tableKey}-constraint-${c.name}`,
+                key: `${tableKey}-constraint-${c.name}`
               };
-            }),
+            })
           };
         }
 
@@ -397,13 +431,13 @@ export function TableTreeData(dbSession: SessionStore, database: IDatabase): Tre
               TopTab.PROPS,
               PropsTab.DDL,
               session?.odcDatabase?.id,
-              node?.data?.info?.tableId,
+              node?.data?.info?.tableId
             );
           },
           icon: (
             <TableOutlined
               style={{
-                color: '#3FA3FF',
+                color: '#3FA3FF'
               }}
             />
           ),
@@ -411,8 +445,10 @@ export function TableTreeData(dbSession: SessionStore, database: IDatabase): Tre
           sessionId: dbSession?.sessionId,
           isLeaf: false,
           children: table.columns
-            ? [columnRoot, indexRoot, partitionRoot, constraintRoot].filter(Boolean)
-            : null,
+            ? [columnRoot, indexRoot, partitionRoot, constraintRoot].filter(
+                Boolean
+              )
+            : null
         };
       })
       .filter(Boolean);

@@ -39,7 +39,7 @@ import {
   IResourceRole,
   IResponseData,
   ISSOConfig,
-  ISSOType,
+  ISSOType
 } from '@/d.ts';
 import request from '@/util/request';
 import { encrypt } from '@/util/utils';
@@ -51,9 +51,13 @@ interface IRoleForUpdate extends IManagerRole {
 /**
  * 新建用户
  */
-export async function createUser(data: Partial<IManagerUser>[]): Promise<IManagerUser> {
+export async function createUser(
+  data: Partial<IManagerUser>[]
+): Promise<IManagerUser> {
   const result = await request.post('/api/v2/iam/users/batchCreate', {
-    data: data?.map((item) => Object.assign({}, item, { password: encrypt(item.password) })),
+    data: data?.map((item) =>
+      Object.assign({}, item, { password: encrypt(item.password) })
+    )
   });
   return result?.data;
 }
@@ -69,9 +73,11 @@ export async function deleteUser(id: number): Promise<IManagerUser> {
 /**
  * 更新用户
  */
-export async function updateUser(data: Partial<IManagerUser>): Promise<IManagerUser> {
+export async function updateUser(
+  data: Partial<IManagerUser>
+): Promise<IManagerUser> {
   const result = await request.put(`/api/v2/iam/users/${data.id}`, {
-    data,
+    data
   });
   return result?.data;
 }
@@ -79,11 +85,14 @@ export async function updateUser(data: Partial<IManagerUser>): Promise<IManagerU
 /**
  * 设置用户状态
  */
-export async function setUserEnable(data: { id: number; enabled: boolean }): Promise<IManagerUser> {
+export async function setUserEnable(data: {
+  id: number;
+  enabled: boolean;
+}): Promise<IManagerUser> {
   const result = await request.post(`/api/v2/iam/users/${data.id}/setEnabled`, {
     data: {
-      enabled: data.enabled,
-    },
+      enabled: data.enabled
+    }
   });
   return result?.data;
 }
@@ -100,13 +109,13 @@ export async function getUserDetail(id: number): Promise<IManagerUser> {
  * 获取用户列表
  */
 export async function getUserList(
-  params?: IManageUserListParams,
+  params?: IManageUserListParams
 ): Promise<IResponseData<IManagerUser>> {
   const result = await request.get('/api/v2/iam/users', {
     params: {
       ...params,
-      minPrivilege: params?.minPrivilege ?? 'update',
-    },
+      minPrivilege: params?.minPrivilege ?? 'update'
+    }
   });
   return result?.data;
 }
@@ -118,7 +127,7 @@ export async function getUserPermissionsList(params?: {
   resourceIdentifier: string;
 }): Promise<IManagerUserPermission[]> {
   const result = await request.get('/api/v2/iam/userPermissions', {
-    params,
+    params
   });
   return result?.data;
 }
@@ -133,11 +142,14 @@ export async function batchUpdateUserPermissions(
       userId: number;
       action: string;
     }[];
-  }>,
+  }>
 ): Promise<IManagerUserPermission[]> {
-  const result = await request.post('/api/v2/iam/userPermissions/batchUpdateForConnection', {
-    data,
-  });
+  const result = await request.post(
+    '/api/v2/iam/userPermissions/batchUpdateForConnection',
+    {
+      data
+    }
+  );
   return result?.data;
 }
 
@@ -151,9 +163,12 @@ export async function resetPassword(data: {
   if (data) {
     data = Object.assign({}, data, { newPassword: encrypt(data.newPassword) });
   }
-  const result = await request.post(`/api/v2/iam/users/resetPassword?id=${data.id}`, {
-    data,
-  });
+  const result = await request.post(
+    `/api/v2/iam/users/resetPassword?id=${data.id}`,
+    {
+      data
+    }
+  );
   return result?.data;
 }
 
@@ -163,8 +178,8 @@ export async function resetPassword(data: {
 export async function getAccountExist(name: string): Promise<boolean> {
   const res = await request.get(`/api/v1/manage/user/exist`, {
     params: {
-      name,
-    },
+      name
+    }
   });
   return res?.data;
 }
@@ -172,9 +187,11 @@ export async function getAccountExist(name: string): Promise<boolean> {
 /**
  * 新建角色
  */
-export async function createRole(data: Partial<IManagerRole>): Promise<IManagerRole> {
+export async function createRole(
+  data: Partial<IManagerRole>
+): Promise<IManagerRole> {
   const result = await request.post('/api/v2/iam/roles', {
-    data,
+    data
   });
   return result?.data;
 }
@@ -185,8 +202,8 @@ export async function createRole(data: Partial<IManagerRole>): Promise<IManagerR
 export async function getRoleExists(name: string): Promise<boolean> {
   const result = await request.get(`/api/v2/iam/roles/exists`, {
     params: {
-      name,
-    },
+      name
+    }
   });
   return result?.data;
 }
@@ -202,9 +219,11 @@ export async function deleteRole(id: number): Promise<IManagerRole> {
 /**
  * 更新角色
  */
-export async function updateRole(data: Partial<IRoleForUpdate>): Promise<IManagerRole> {
+export async function updateRole(
+  data: Partial<IRoleForUpdate>
+): Promise<IManagerRole> {
   const result = await request.put(`/api/v2/iam/roles/${data.id}`, {
-    data,
+    data
   });
   return result?.data;
 }
@@ -212,11 +231,14 @@ export async function updateRole(data: Partial<IRoleForUpdate>): Promise<IManage
 /**
  * 设置角色状态
  */
-export async function setRoleEnable(data: { id: number; enabled: boolean }): Promise<IManagerRole> {
+export async function setRoleEnable(data: {
+  id: number;
+  enabled: boolean;
+}): Promise<IManagerRole> {
   const result = await request.post(`/api/v2/iam/roles/${data.id}/setEnabled`, {
     data: {
-      enabled: data.enabled,
-    },
+      enabled: data.enabled
+    }
   });
   return result?.data;
 }
@@ -233,13 +255,13 @@ export async function getRoleDetail(roleId: number): Promise<IManagerRole> {
  * 获取角色列表
  */
 export async function getRoleList(
-  params?: IRequestListParamsV2,
+  params?: IRequestListParamsV2
 ): Promise<IResponseData<IManagerRole>> {
   const result = await request.get('/api/v2/iam/roles', {
     params: {
       ...params,
-      minPrivilege: params?.minPrivilege ?? 'update',
-    },
+      minPrivilege: params?.minPrivilege ?? 'update'
+    }
   });
   return result?.data;
 }
@@ -247,9 +269,11 @@ export async function getRoleList(
 /**
  * 批量导入用户
  */
-export async function batchImportUser(data: IManagerUser[]): Promise<IManagerUser[]> {
+export async function batchImportUser(
+  data: IManagerUser[]
+): Promise<IManagerUser[]> {
   const result = await request.post('/api/v2/iam/users/batchImport', {
-    data,
+    data
   });
   return result?.data;
 }
@@ -258,10 +282,10 @@ export async function batchImportUser(data: IManagerUser[]): Promise<IManagerUse
  * 新建资源组
  */
 export async function createResourceGroup(
-  data: Partial<IManagerResourceGroup>,
+  data: Partial<IManagerResourceGroup>
 ): Promise<IManagerResourceGroup> {
   const result = await request.post('/api/v2/resource/resourcegroups/', {
-    data,
+    data
   });
   return result?.data;
 }
@@ -269,7 +293,9 @@ export async function createResourceGroup(
 /**
  * 删除资源组
  */
-export async function deleteResourceGroup(id: number): Promise<IManagerResourceGroup> {
+export async function deleteResourceGroup(
+  id: number
+): Promise<IManagerResourceGroup> {
   const result = await request.delete(`/api/v2/resource/resourcegroups/${id}`);
   return result?.data;
 }
@@ -278,11 +304,14 @@ export async function deleteResourceGroup(id: number): Promise<IManagerResourceG
  * 更新资源组
  */
 export async function updateResourceGroup(
-  data: Partial<IManagerResourceGroup>,
+  data: Partial<IManagerResourceGroup>
 ): Promise<IManagerResourceGroup> {
-  const result = await request.put(`/api/v2/resource/resourcegroups/${data.id}`, {
-    data,
-  });
+  const result = await request.put(
+    `/api/v2/resource/resourcegroups/${data.id}`,
+    {
+      data
+    }
+  );
   return result?.data;
 }
 
@@ -293,17 +322,24 @@ export async function setPublicResourceGroup(data: {
   id: number;
   enabled: boolean;
 }): Promise<IManagerResourceGroup> {
-  const result = await request.post(`/api/v2/resource/resourcegroups/${data.id}/setEnabled`, {
-    data,
-  });
+  const result = await request.post(
+    `/api/v2/resource/resourcegroups/${data.id}/setEnabled`,
+    {
+      data
+    }
+  );
   return result?.data;
 }
 
 /**
  * 获取资源组详情
  */
-export async function getResourceGroupDetail(connectionId: number): Promise<IManagerResourceGroup> {
-  const result = await request.get(`/api/v2/resource/resourcegroups/${connectionId}`);
+export async function getResourceGroupDetail(
+  connectionId: number
+): Promise<IManagerResourceGroup> {
+  const result = await request.get(
+    `/api/v2/resource/resourcegroups/${connectionId}`
+  );
   return result?.data;
 }
 
@@ -321,8 +357,8 @@ export async function getResourceGroupList(params?: {
   const result = await request.get('/api/v2/resource/resourcegroups/', {
     params: {
       ...params,
-      minPrivilege: params?.minPrivilege ?? 'update',
-    },
+      minPrivilege: params?.minPrivilege ?? 'update'
+    }
   });
   return result?.data;
 }
@@ -333,8 +369,8 @@ export async function getResourceGroupList(params?: {
 export async function getResourceGroupExists(name: string): Promise<boolean> {
   const result = await request.get(`/api/v2/resource/resourcegroups/exists`, {
     params: {
-      name,
-    },
+      name
+    }
   });
   return result?.data;
 }
@@ -350,9 +386,11 @@ export async function getCurrentUserPermissions(): Promise<IUser> {
 /**
  * 新建任务流程
  */
-export async function createTaskFlow(data: Partial<ITaskFlow>): Promise<ITaskFlow> {
+export async function createTaskFlow(
+  data: Partial<ITaskFlow>
+): Promise<ITaskFlow> {
   const result = await request.post('/api/v2/regulation/approvalFlows', {
-    data,
+    data
   });
   return result?.data;
 }
@@ -368,10 +406,15 @@ export async function deleteTaskFlow(id: number): Promise<ITaskFlow> {
 /**
  * 更新任务流程
  */
-export async function updateTaskFlow(data: Partial<ITaskFlow>): Promise<ITaskFlow> {
-  const result = await request.put(`/api/v2/regulation/approvalFlows/${data.id}`, {
-    data,
-  });
+export async function updateTaskFlow(
+  data: Partial<ITaskFlow>
+): Promise<ITaskFlow> {
+  const result = await request.put(
+    `/api/v2/regulation/approvalFlows/${data.id}`,
+    {
+      data
+    }
+  );
   return result?.data;
 }
 
@@ -392,10 +435,10 @@ export async function getTaskFlowList(
     sort: string;
     page: number;
     size: number;
-  }>,
+  }>
 ): Promise<IResponseData<ITaskFlow>> {
   const result = await request.get('/api/v2/regulation/approvalFlows', {
-    params,
+    params
   });
   return result?.data;
 }
@@ -406,8 +449,8 @@ export async function getTaskFlowList(
 export async function getTaskFlowExists(name: string): Promise<boolean> {
   const result = await request.get('/api/v2/regulation/approvalFlows/exists', {
     params: {
-      name,
-    },
+      name
+    }
   });
   return result?.data;
 }
@@ -416,10 +459,10 @@ export async function getTaskFlowExists(name: string): Promise<boolean> {
  * 获取任务流程中的角色列表
  */
 export async function getResourceRoles(
-  params?: IRequestListParamsV2,
+  params?: IRequestListParamsV2
 ): Promise<IResponseData<IResourceRole>> {
   const result = await request.get('/api/v2/iam/resourceRoles', {
-    params,
+    params
   });
   return result?.data;
 }
@@ -442,7 +485,7 @@ export async function getAuditList(params?: {
   size?: number;
 }): Promise<IResponseData<IAudit>> {
   const result = await request.get('/api/v2/audit/events', {
-    params,
+    params
   });
   return result?.data;
 }
@@ -466,9 +509,11 @@ export async function getAuditEventMeta(): Promise<IAuditEvent[]> {
 /**
  * 导出操作记录
  */
-export async function exportAudit(data: Partial<IAuditExport>): Promise<string> {
+export async function exportAudit(
+  data: Partial<IAuditExport>
+): Promise<string> {
   const result = await request.post('/api/v2/audit/events/export', {
-    data,
+    data
   });
   return result?.data;
 }
@@ -476,7 +521,9 @@ export async function exportAudit(data: Partial<IAuditExport>): Promise<string> 
 /**
  * 获取用户选项列表
  */
-export async function getUserOptionList(): Promise<IResponseData<IManagerUser>> {
+export async function getUserOptionList(): Promise<
+  IResponseData<IManagerUser>
+> {
   const result = await request.get('/api/v2/audit/events/users');
   return result?.data;
 }
@@ -484,7 +531,9 @@ export async function getUserOptionList(): Promise<IResponseData<IManagerUser>> 
 /**
  * 获取连接选项列表
  */
-export async function getConnectionOptionList(): Promise<IResponseData<IManagerPublicConnection>> {
+export async function getConnectionOptionList(): Promise<
+  IResponseData<IManagerPublicConnection>
+> {
   const result = await request.get('/api/v2/audit/events/connections');
   return result?.data;
 }
@@ -492,9 +541,11 @@ export async function getConnectionOptionList(): Promise<IResponseData<IManagerP
 /**
  * 新建脱敏规则
  */
-export async function createMaskRule(data: Partial<IMaskRule>): Promise<IMaskRule> {
+export async function createMaskRule(
+  data: Partial<IMaskRule>
+): Promise<IMaskRule> {
   const result = await request.post('/api/v2/mask/rules', {
-    data,
+    data
   });
   return result?.data;
 }
@@ -510,9 +561,11 @@ export async function deleteMaskRule(id: number): Promise<IMaskRule> {
 /**
  * 更新脱敏规则
  */
-export async function updateMaskRule(data: Partial<IMaskRule>): Promise<IMaskRule> {
+export async function updateMaskRule(
+  data: Partial<IMaskRule>
+): Promise<IMaskRule> {
   const result = await request.put(`/api/v2/mask/rules/${data.id}`, {
-    data,
+    data
   });
   return result?.data;
 }
@@ -524,9 +577,12 @@ export async function setMaskRuleEnable(data: {
   id: number;
   enabled: boolean;
 }): Promise<IMaskRule> {
-  const result = await request.post(`/api/v2/mask/rules/${data.id}/setEnabled`, {
-    data,
-  });
+  const result = await request.post(
+    `/api/v2/mask/rules/${data.id}/setEnabled`,
+    {
+      data
+    }
+  );
   return result?.data;
 }
 
@@ -549,7 +605,7 @@ export async function getMaskRuleList(params?: {
   size?: number;
 }): Promise<IResponseData<IMaskRule>> {
   const result = await request.get('/api/v2/mask/rules', {
-    params,
+    params
   });
   return result?.data;
 }
@@ -560,8 +616,8 @@ export async function getMaskRuleList(params?: {
 export async function getMaskRuleExists(name: string): Promise<boolean> {
   const result = await request.post(`/api/v2/mask/rules/exists`, {
     data: {
-      name,
-    },
+      name
+    }
   });
   return result?.data;
 }
@@ -571,7 +627,7 @@ export async function getMaskRuleExists(name: string): Promise<boolean> {
  */
 export async function testMaskRule(data: Partial<IMaskRule>): Promise<string> {
   const result = await request.post('/api/v2/mask/rules/test', {
-    data,
+    data
   });
   return result?.data;
 }
@@ -587,7 +643,7 @@ export async function getAutoRuleList(params?: {
   size?: number;
 }): Promise<IResponseData<IAutoAuthRule>> {
   const result = await request.get('/api/v2/management/auto/rules', {
-    params,
+    params
   });
   return result?.data;
 }
@@ -599,9 +655,12 @@ export async function setAutoRuleEnable(data: {
   id: number;
   enabled: boolean;
 }): Promise<IAutoAuthRule> {
-  const result = await request.post(`/api/v2/management/auto/rules/${data.id}/setEnabled`, {
-    data,
-  });
+  const result = await request.post(
+    `/api/v2/management/auto/rules/${data.id}/setEnabled`,
+    {
+      data
+    }
+  );
   return result?.data;
 }
 
@@ -632,11 +691,13 @@ export async function getAutoRuleEventList(): Promise<IAutoAuthEvent[]> {
 /**
  * 获取自动授权规则事件的推荐匹配表达式
  */
-export async function getPromptExpression(eventName: string): Promise<IPromptVo> {
+export async function getPromptExpression(
+  eventName: string
+): Promise<IPromptVo> {
   const result = await request.get('/api/v2/management/auto/rules/prompt', {
     params: {
-      eventName,
-    },
+      eventName
+    }
   });
   return result?.data;
 }
@@ -644,9 +705,11 @@ export async function getPromptExpression(eventName: string): Promise<IPromptVo>
 /**
  * 新建自动授权规则
  */
-export async function createAutoRule(data: Partial<IAutoAuthRule>): Promise<IAutoAuthRule> {
+export async function createAutoRule(
+  data: Partial<IAutoAuthRule>
+): Promise<IAutoAuthRule> {
   const result = await request.post('/api/v2/management/auto/rules', {
-    data,
+    data
   });
   return result?.data;
 }
@@ -654,9 +717,11 @@ export async function createAutoRule(data: Partial<IAutoAuthRule>): Promise<IAut
 /**
  * 更新自动授权规则
  */
-export async function updateAutoRule(data: Partial<IAutoAuthRule>): Promise<IAutoAuthRule> {
+export async function updateAutoRule(
+  data: Partial<IAutoAuthRule>
+): Promise<IAutoAuthRule> {
   const result = await request.put(`/api/v2/management/auto/rules/${data.id}`, {
-    data,
+    data
   });
   return result?.data;
 }
@@ -667,8 +732,8 @@ export async function updateAutoRule(data: Partial<IAutoAuthRule>): Promise<IAut
 export async function geteAutoRuleExists(name: string): Promise<boolean> {
   const result = await request.get(`/api/v2/management/auto/rules/exists`, {
     params: {
-      name,
-    },
+      name
+    }
   });
   return result?.data;
 }
@@ -677,10 +742,10 @@ export async function geteAutoRuleExists(name: string): Promise<boolean> {
  * 创建外部集成
  */
 export async function createIntegration(
-  data: Partial<IManagerIntegration>,
+  data: Partial<IManagerIntegration>
 ): Promise<IManagerIntegration> {
   const result = await request.post('/api/v2/integration/', {
-    data,
+    data
   });
   return result?.data;
 }
@@ -688,7 +753,9 @@ export async function createIntegration(
 /**
  * 删除集成
  */
-export async function deleteIntegration(id: number): Promise<IManagerIntegration> {
+export async function deleteIntegration(
+  id: number
+): Promise<IManagerIntegration> {
   const result = await request.delete(`/api/v2/integration/${id}`);
   return result?.data;
 }
@@ -697,10 +764,10 @@ export async function deleteIntegration(id: number): Promise<IManagerIntegration
  * 更新集成
  */
 export async function updateIntegration(
-  data: Partial<IManagerIntegration>,
+  data: Partial<IManagerIntegration>
 ): Promise<IManagerIntegration> {
   const result = await request.put(`/api/v2/integration/${data.id}`, {
-    data,
+    data
   });
   return result?.data;
 }
@@ -712,16 +779,21 @@ export async function setIntegration(data: {
   id: number;
   enabled: boolean;
 }): Promise<IManagerIntegration> {
-  const result = await request.post(`/api/v2/integration/${data.id}/setEnabled`, {
-    data,
-  });
+  const result = await request.post(
+    `/api/v2/integration/${data.id}/setEnabled`,
+    {
+      data
+    }
+  );
   return result?.data;
 }
 
 /**
  * 获取集成详情
  */
-export async function getIntegrationDetail(id: number): Promise<IManagerIntegration> {
+export async function getIntegrationDetail(
+  id: number
+): Promise<IManagerIntegration> {
   const result = await request.get(`/api/v2/integration/${id}`);
   return result?.data;
 }
@@ -739,7 +811,7 @@ export async function getIntegrationList(params?: {
   size?: number;
 }): Promise<IResponseData<IManagerIntegration>> {
   const result = await request.get('/api/v2/integration/', {
-    params,
+    params
   });
   return result?.data;
 }
@@ -749,13 +821,13 @@ export async function getIntegrationList(params?: {
  */
 export async function checkIntegrationExists(
   type: IntegrationType,
-  name: string,
+  name: string
 ): Promise<boolean> {
   const result = await request.get(`/api/v2/integration/exists`, {
     params: {
       type,
-      name,
-    },
+      name
+    }
   });
   return result?.data;
 }
@@ -765,7 +837,7 @@ export async function testClientRegistration(
   type: 'info' | 'test',
   params?: {
     odcBackUrl?: string;
-  },
+  }
 ): Promise<{
   testLoginUrl: string;
   testId: string;
@@ -783,14 +855,14 @@ export async function testClientRegistration(
       encryption: {
         enabled: true,
         algorithm: EncryptionAlgorithm.RAW,
-        secret,
+        secret
       },
-      enabled: true,
+      enabled: true
     },
     params: {
       ...params,
-      type,
-    },
+      type
+    }
   });
   return res?.data;
 }
@@ -798,8 +870,8 @@ export async function testClientRegistration(
 export async function getTestUserInfo(testId: string): Promise<string> {
   const res = await request.get('/api/v2/sso/test/info', {
     params: {
-      testId,
-    },
+      testId
+    }
   });
   return res?.data;
 }

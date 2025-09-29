@@ -20,10 +20,11 @@ import { DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons';
 
 // compatible
 
-import { Form, Input, Tooltip } from 'antd';
+import { Form, Input, Space, Tooltip } from 'antd';
 // @ts-ignore
 import { formatMessage } from '@/util/intl';
 import styles from './PartitionValueInput.less';
+import { BasicInput, BasicToolTip } from '@actiontech/dms-kit';
 
 interface PartitionValueInputProps {
   index: number;
@@ -54,7 +55,7 @@ class ToolTipInput extends React.PureComponent<ToolTipInputProos> {
   inputRef = React.createRef();
 
   state = {
-    isShowTop: false,
+    isShowTop: false
   };
 
   timer = null;
@@ -64,7 +65,8 @@ class ToolTipInput extends React.PureComponent<ToolTipInputProos> {
     if (!tempDiv) {
       const el = document.createElement('DIV');
       el.id = 'J_inputResizeTemp';
-      el.style.cssText = 'position:absolute;top:-99999px;padding:0 11px;height:0';
+      el.style.cssText =
+        'position:absolute;top:-99999px;padding:0 11px;height:0';
       document.body.appendChild(el);
       tempDiv = el;
     }
@@ -88,7 +90,7 @@ class ToolTipInput extends React.PureComponent<ToolTipInputProos> {
     clearTimeout(this.timer);
     this.timer = setTimeout(() => {
       this.setState({
-        isShowTop: el.clientWidth + 2 < el.scrollWidth,
+        isShowTop: el.clientWidth + 2 < el.scrollWidth
       });
     }, 300);
   };
@@ -109,20 +111,20 @@ class ToolTipInput extends React.PureComponent<ToolTipInputProos> {
   render() {
     const { minWidth } = this.props;
     return (
-      <Tooltip
+      <BasicToolTip
         trigger="focus"
         open={this.state.isShowTop}
         title={
           this.props.value ||
           formatMessage({
             id: 'odc.component.PartitionRange.PartitionValueInput.PleaseFillIn',
-            defaultMessage: '请填写',
+            defaultMessage: '请填写'
           })
         }
         placement="topLeft"
-        arrowPointAtCenter
+        arrow={{ pointAtCenter: true }}
       >
-        <Input
+        <BasicInput
           {...this.props}
           // @ts-ignore
           ref={this.inputRef}
@@ -131,11 +133,11 @@ class ToolTipInput extends React.PureComponent<ToolTipInputProos> {
           onChange={this.handleInputChange}
           onBlur={() => {
             this.setState({
-              isShowTop: false,
+              isShowTop: false
             });
           }}
         />
-      </Tooltip>
+      </BasicToolTip>
     );
   }
 }
@@ -181,7 +183,7 @@ class PartitionValueInput extends React.PureComponent<PartitionValueInputProps> 
         <span className="empty-tip">
           {formatMessage({
             id: 'odc.component.PartitionRange.PartitionValueInput.SelectAFieldFirst',
-            defaultMessage: '请先选择字段',
+            defaultMessage: '请先选择字段'
           })}
         </span>
       );
@@ -203,7 +205,7 @@ class PartitionValueInput extends React.PureComponent<PartitionValueInputProps> 
                 addonBefore={columnName}
                 placeholder={formatMessage({
                   id: 'odc.component.PartitionRange.PartitionValueInput.PleaseFillIn',
-                  defaultMessage: '请填写',
+                  defaultMessage: '请填写'
                 })}
               />
             </Form.Item>
@@ -222,7 +224,7 @@ class PartitionValueInput extends React.PureComponent<PartitionValueInputProps> 
         <span className="empty-tip">
           {formatMessage({
             id: 'odc.component.PartitionRange.PartitionValueInput.SelectAFieldFirst',
-            defaultMessage: '请先选择字段',
+            defaultMessage: '请先选择字段'
           })}
         </span>
       );
@@ -237,7 +239,7 @@ class PartitionValueInput extends React.PureComponent<PartitionValueInputProps> 
               className={styles.inputGroupWrap}
               key={`list-colum-${i}`}
             >
-              <Input.Group compact>
+              <Space.Compact>
                 {selectColums.map((col) => {
                   const { columnName } = col;
                   return (
@@ -248,12 +250,16 @@ class PartitionValueInput extends React.PureComponent<PartitionValueInputProps> 
                       key={`${columnName}-list-input`}
                       placeholder={columnName}
                       onChange={(e) => {
-                        this.handleListColumInputChange(i, columnName, e.target.value);
+                        this.handleListColumInputChange(
+                          i,
+                          columnName,
+                          e.target.value
+                        );
                       }}
                     />
                   );
                 })}
-              </Input.Group>
+              </Space.Compact>
               {vauleList.length > 1 ? (
                 <DeleteOutlined
                   className={styles.close}
@@ -292,7 +298,7 @@ class PartitionValueInput extends React.PureComponent<PartitionValueInputProps> 
         validateStatus={error ? 'error' : null}
         help={error}
       >
-        <Input style={{ flex: 1 }} placeholder={placeholder} />
+        <BasicInput style={{ flex: 1 }} placeholder={placeholder} />
       </Form.Item>
     );
   }

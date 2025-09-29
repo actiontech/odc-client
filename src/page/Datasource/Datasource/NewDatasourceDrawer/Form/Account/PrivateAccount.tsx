@@ -54,7 +54,7 @@ const PrivateAccount: React.FC<IProps> = function (props) {
         IConnectionTestErrorType.OB_MYSQL_ACCESS_DENIED,
         IConnectionTestErrorType.UNKNOWN,
         IConnectionTestErrorType.INIT_SCRIPT_FAILED,
-        IConnectionTestErrorType.OB_WEAK_READ_CONSISTENCY_REQUIRED,
+        IConnectionTestErrorType.OB_WEAK_READ_CONSISTENCY_REQUIRED
       ].includes(formContext?.testResult?.errorCode)
     ) {
       return 'error';
@@ -68,7 +68,7 @@ const PrivateAccount: React.FC<IProps> = function (props) {
       <FormItemGroup
         label={formatMessage({
           id: 'odc.AddConnectionForm.Account.PrivateAccount.DatabaseAccount',
-          defaultMessage: '数据库账号',
+          defaultMessage: '数据库账号'
         })}
 
         /*数据库账号*/
@@ -79,7 +79,7 @@ const PrivateAccount: React.FC<IProps> = function (props) {
             label={
               formatMessage({
                 id: 'src.page.Datasource.Datasource.NewDatasourceDrawer.Form.Account.C21B3C92',
-                defaultMessage: '角色',
+                defaultMessage: '角色'
               }) /*"角色"*/
             }
             name={'userRole'}
@@ -90,18 +90,18 @@ const PrivateAccount: React.FC<IProps> = function (props) {
                 {
                   label: formatMessage({
                     id: 'src.page.Datasource.Datasource.NewDatasourceDrawer.Form.Account.445C8BBC',
-                    defaultMessage: '默认',
+                    defaultMessage: '默认'
                   }), //'默认'
-                  value: 'NORMAL',
+                  value: 'NORMAL'
                 },
                 {
                   label: 'SYSDBA',
-                  value: 'SYSDBA',
+                  value: 'SYSDBA'
                 },
                 {
                   label: 'SYSOPER',
-                  value: 'SYSOPER',
-                },
+                  value: 'SYSOPER'
+                }
               ]}
             />
           </Form.Item>
@@ -119,7 +119,7 @@ const PrivateAccount: React.FC<IProps> = function (props) {
                     label={
                       formatMessage({
                         id: 'odc.AddConnectionForm.Account.PrivateAccount.DatabaseUsername',
-                        defaultMessage: '数据库用户名',
+                        defaultMessage: '数据库用户名'
                       }) //数据库用户名
                     }
                     name="username"
@@ -128,8 +128,8 @@ const PrivateAccount: React.FC<IProps> = function (props) {
                         required: true,
                         message: formatMessage({
                           id: 'odc.AddConnectionForm.Account.PrivateAccount.EnterAnAccount',
-                          defaultMessage: '请输入账号',
-                        }),
+                          defaultMessage: '请输入账号'
+                        })
                         //请输入账号
                       },
 
@@ -137,11 +137,11 @@ const PrivateAccount: React.FC<IProps> = function (props) {
                         validator: validTrimEmptyWithWarn(
                           formatMessage({
                             id: 'odc.AddConnectionForm.Account.PrivateAccount.TheEndOfTheAccount',
-                            defaultMessage: '账号首尾包含空格',
-                          }),
+                            defaultMessage: '账号首尾包含空格'
+                          })
                           //账号首尾包含空格
-                        ),
-                      },
+                        )
+                      }
                     ]}
                   >
                     <UserInput
@@ -150,7 +150,7 @@ const PrivateAccount: React.FC<IProps> = function (props) {
                       placeholder={
                         formatMessage({
                           id: 'odc.AddConnectionForm.Account.PrivateAccount.EnterADatabaseUsername',
-                          defaultMessage: '请输入数据库用户名',
+                          defaultMessage: '请输入数据库用户名'
                         }) //请输入数据库用户名
                       }
                     />
@@ -167,7 +167,7 @@ const PrivateAccount: React.FC<IProps> = function (props) {
               label={
                 formatMessage({
                   id: 'odc.AddConnectionForm.Account.PrivateAccount.DatabasePassword',
-                  defaultMessage: '数据库密码',
+                  defaultMessage: '数据库密码'
                 }) //数据库密码
               }
               name={!isPwdCopyMode || passwordIsEditing ? 'password' : null}
@@ -178,20 +178,20 @@ const PrivateAccount: React.FC<IProps> = function (props) {
                   disabled={!passwordEditable}
                   defaultValue={''}
                   style={{
-                    width: '100%',
+                    width: '100%'
                   }}
                   visibilityToggle={false}
                   placeholder={
                     formatMessage({
                       id: 'odc.AddConnectionForm.Account.PrivateAccount.EnterAPassword',
-                      defaultMessage: '请输入密码',
+                      defaultMessage: '请输入密码'
                     }) //请输入密码
                   }
                 />
               ) : (
                 <Input.Password
                   style={{
-                    width: '100%',
+                    width: '100%'
                   }}
                   visibilityToggle={false}
                   value="******"
@@ -203,7 +203,9 @@ const PrivateAccount: React.FC<IProps> = function (props) {
         </Row>
         <ErrorTip
           errorMessage={
-            passwordValidStatus === 'error' ? formContext?.testResult?.errorMessage : null
+            passwordValidStatus === 'error'
+              ? formContext?.testResult?.errorMessage
+              : null
           }
         />
 
@@ -216,7 +218,7 @@ const PrivateAccount: React.FC<IProps> = function (props) {
             >
               {formatMessage({
                 id: 'portal.connection.form.test',
-                defaultMessage: '测试连接',
+                defaultMessage: '测试连接'
               })}
             </Action.Link>
             {isPwdCopyMode &&
@@ -225,14 +227,14 @@ const PrivateAccount: React.FC<IProps> = function (props) {
                   onClick={() => {
                     setPasswordIsEditing(false);
                     formContext.form?.setFieldsValue({
-                      password: null,
+                      password: null
                     });
                   }}
                 >
                   {
                     formatMessage({
                       id: 'odc.AddConnectionDrawer.AddConnectionForm.CancelModification',
-                      defaultMessage: '取消修改',
+                      defaultMessage: '取消修改'
                     })
 
                     /* 取消修改 */
@@ -243,14 +245,14 @@ const PrivateAccount: React.FC<IProps> = function (props) {
                   onClick={() => {
                     setPasswordIsEditing(true);
                     formContext.form?.setFieldsValue({
-                      password: '',
+                      password: ''
                     });
                   }}
                 >
                   {
                     formatMessage({
                       id: 'odc.AddConnectionDrawer.AddConnectionForm.ChangePassword',
-                      defaultMessage: '修改密码',
+                      defaultMessage: '修改密码'
                     })
 
                     /* 修改密码 */

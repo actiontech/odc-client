@@ -18,7 +18,7 @@ import { compareNumber } from '@/util/bigNumber';
 
 export function getValidOfCompareTo(
   getTarget: () => string,
-  resultCallback: (result: number, fn: (errMsg?: string) => void) => void,
+  resultCallback: (result: number, fn: (errMsg?: string) => void) => void
 ) {
   return (rule, value, callback) => {
     const target = getTarget();

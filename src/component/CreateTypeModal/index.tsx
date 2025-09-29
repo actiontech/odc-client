@@ -20,7 +20,13 @@ import { openCreateTypePage } from '@/store/helper/page';
 import { ModalStore } from '@/store/modal';
 import { useDBSession } from '@/store/sessionManager/hooks';
 import { formatMessage } from '@/util/intl';
-import { Button, Form, Input, Modal, Select, Space } from 'antd';
+import {
+  BasicButton,
+  BasicInput,
+  BasicModal,
+  BasicSelect
+} from '@actiontech/dms-kit';
+import { Form, Select, Space } from 'antd';
 import { inject, observer } from 'mobx-react';
 import { useState } from 'react';
 
@@ -29,7 +35,7 @@ interface IProps {
 }
 
 export enum CheckOption {
-  NONE = 'NONE',
+  NONE = 'NONE'
 }
 
 const { Option } = Select;
@@ -59,9 +65,13 @@ function CreateTypeModal(props: IProps) {
           values.typeName,
           values,
           session?.sessionId,
-          modalStore.createTypeModalData.dbName,
+          modalStore.createTypeModalData.dbName
         );
-        openCreateTypePage(sql, session?.odcDatabase?.id, modalStore.createTypeModalData.dbName);
+        openCreateTypePage(
+          sql,
+          session?.odcDatabase?.id,
+          modalStore.createTypeModalData.dbName
+        );
         handleSwitchLoading(false);
         modalStore.changeCreateTypeModalVisible(false);
       })
@@ -71,12 +81,12 @@ function CreateTypeModal(props: IProps) {
   };
 
   return (
-    <Modal
+    <BasicModal
       width={480}
       destroyOnClose
       title={formatMessage({
         id: 'odc.component.CreateTypeModal.NewType',
-        defaultMessage: '新建类型',
+        defaultMessage: '新建类型'
       })}
       /* 新建类型 */
       open={modalStore.createTypeModalVisible}
@@ -85,58 +95,63 @@ function CreateTypeModal(props: IProps) {
       centered
       footer={
         <Space>
-          <Button onClick={handleCancel}>
+          <BasicButton onClick={handleCancel}>
             {
               formatMessage({
                 id: 'odc.component.CreateTypeModal.Cancel',
-                defaultMessage: '取消',
+                defaultMessage: '取消'
               })
               /* 取消 */
             }
-          </Button>
-          <Button type="primary" loading={loading} onClick={handleConfirm}>
+          </BasicButton>
+          <BasicButton type="primary" loading={loading} onClick={handleConfirm}>
             {
               formatMessage({
                 id: 'odc.component.CreateTypeModal.NextConfirmTheSqlStatement',
-                defaultMessage: '下一步：确认 SQL',
+                defaultMessage: '下一步：确认 SQL'
               })
               /* 下一步: 确认SQL */
             }
-          </Button>
+          </BasicButton>
         </Space>
       }
     >
-      <Form form={formRef} layout="vertical" requiredMark={false} onFinish={handleConfirm}>
+      <Form
+        form={formRef}
+        layout="vertical"
+        requiredMark={false}
+        onFinish={handleConfirm}
+      >
         <Form.Item
           name="typeName"
           label={formatMessage({
             id: 'odc.component.CreateTypeModal.Type.1',
-            defaultMessage: '类型名称',
+            defaultMessage: '类型名称'
           })} /* 类型名称 */
           rules={[
             {
               required: true,
               message: formatMessage({
                 id: 'odc.component.CreateTypeModal.EnterATypeName',
-                defaultMessage: '请输入类型名称',
-              }),
+                defaultMessage: '请输入类型名称'
+              })
               // 请输入类型名称
             },
             {
               max: 128,
               message: formatMessage({
                 id: 'odc.component.CreateTypeModal.TheLengthCannotExceedCharacters',
-                defaultMessage: '长度不超过 128 个字符',
-              }),
+                defaultMessage: '长度不超过 128 个字符'
+              })
 
               // 长度不超过 128 个字符
-            },
+            }
           ]}
         >
-          <Input
+          <BasicInput
             placeholder={formatMessage({
               id: 'odc.component.CreateTypeModal.EnterATypeName',
-              defaultMessage: '请输入类型名称',
+              defaultMessage: '请输入类型名称'
             })}
           />
         </Form.Item>
@@ -144,7 +159,7 @@ function CreateTypeModal(props: IProps) {
           name="typeCode"
           label={formatMessage({
             id: 'odc.component.CreateTypeModal.Type',
-            defaultMessage: '类型',
+            defaultMessage: '类型'
           })}
           /* 类型 */
           rules={[
@@ -152,19 +167,19 @@ function CreateTypeModal(props: IProps) {
               required: true,
               message: formatMessage({
                 id: 'odc.component.CreateTypeModal.TheTypeMustBeSpecified',
-                defaultMessage: '类型不能为空',
-              }),
+                defaultMessage: '类型不能为空'
+              })
 
               // 类型不能为空
-            },
+            }
           ]}
           initialValue={TypeCode.OBJECT}
           style={{ width: '144px' }}
         >
-          <Select
+          <BasicSelect
             placeholder={formatMessage({
               id: 'odc.component.CreateTypeModal.EnterAType',
-              defaultMessage: '请输入类型',
+              defaultMessage: '请输入类型'
             })}
 
             /* 请输入类型 */
@@ -173,7 +188,7 @@ function CreateTypeModal(props: IProps) {
               {
                 formatMessage({
                   id: 'odc.component.CreateTypeModal.ObjectType',
-                  defaultMessage: '对象类型',
+                  defaultMessage: '对象类型'
                 })
                 /* 对象类型 */
               }
@@ -182,7 +197,7 @@ function CreateTypeModal(props: IProps) {
               {
                 formatMessage({
                   id: 'odc.component.CreateTypeModal.ArrayType',
-                  defaultMessage: '数组类型',
+                  defaultMessage: '数组类型'
                 })
                 /* 数组类型 */
               }
@@ -191,15 +206,15 @@ function CreateTypeModal(props: IProps) {
               {
                 formatMessage({
                   id: 'odc.component.CreateTypeModal.TableType',
-                  defaultMessage: '表类型',
+                  defaultMessage: '表类型'
                 })
                 /* 表类型 */
               }
             </Option>
-          </Select>
+          </BasicSelect>
         </Form.Item>
       </Form>
-    </Modal>
+    </BasicModal>
   );
 }
 

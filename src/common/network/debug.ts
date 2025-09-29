@@ -26,12 +26,12 @@ export async function createDebugSession(
   plSchema: IFunction | IProcedure | null,
   plType: PLType,
   anonymousBlock: string,
-  session: SessionStore,
+  session: SessionStore
 ): Promise<string> {
   const reqParams: any = {
     sid: generateDatabaseSid(session?.database?.dbName, session?.sessionId),
     // 存在anonymousBlock的情况下，实际上走的是匿名块跳入的方式，所以类型是ANONYMOUSBLOCK；
-    debugType: anonymousBlock ? PLType.ANONYMOUSBLOCK : plType,
+    debugType: anonymousBlock ? PLType.ANONYMOUSBLOCK : plType
   };
   switch (plType) {
     case PLType.FUNCTION: {
@@ -54,7 +54,7 @@ export async function createDebugSession(
   }
 
   const res = await request.post(`/api/v2/pldebug/sessions/`, {
-    data: reqParams,
+    data: reqParams
   });
   return res?.data;
 }
@@ -71,18 +71,21 @@ export async function addBreakpoints(
     plName: string;
     packageName: string;
     line: number;
-  }[],
+  }[]
 ) {
-  const res = await request.post(`/api/v2/pldebug/sessions/${debugId}/breakpoints/batchCreate`, {
-    data: points.map((point) => {
-      return {
-        lineNum: point.line,
-        objectName: point.plName,
-        objectType: point.plType,
-        packageName: point.packageName,
-      };
-    }),
-  });
+  const res = await request.post(
+    `/api/v2/pldebug/sessions/${debugId}/breakpoints/batchCreate`,
+    {
+      data: points.map((point) => {
+        return {
+          lineNum: point.line,
+          objectName: point.plName,
+          objectType: point.plType,
+          packageName: point.packageName
+        };
+      })
+    }
+  );
 
   return res?.data;
 }
@@ -95,19 +98,22 @@ export async function removeBreakpoints(
     packageName: string;
     line: number;
     breakpointNum: number;
-  }[],
+  }[]
 ): Promise<boolean> {
-  const res = await request.delete(`/api/v2/pldebug/sessions/${debugId}/breakpoints/batchDelete`, {
-    data: points.map((p) => {
-      return {
-        lineNum: p.line,
-        objectName: p.plName,
-        objectType: p.plType,
-        packageName: p.packageName,
-        breakpointNum: p.breakpointNum,
-      };
-    }),
-  });
+  const res = await request.delete(
+    `/api/v2/pldebug/sessions/${debugId}/breakpoints/batchDelete`,
+    {
+      data: points.map((p) => {
+        return {
+          lineNum: p.line,
+          objectName: p.plName,
+          objectType: p.plType,
+          packageName: p.packageName,
+          breakpointNum: p.breakpointNum
+        };
+      })
+    }
+  );
 
   return res?.data;
 }
@@ -118,7 +124,9 @@ export async function executeResume(debugId: string): Promise<boolean> {
 }
 
 export async function executeStepOver(debugId: string): Promise<boolean> {
-  const res = await request.post(`/api/v2/pldebug/sessions/${debugId}/stepOver`);
+  const res = await request.post(
+    `/api/v2/pldebug/sessions/${debugId}/stepOver`
+  );
   return res?.data;
 }
 
@@ -132,8 +140,12 @@ export async function executeStepOut(debugId: string): Promise<boolean> {
   return res?.data;
 }
 
-export async function executeResumeIgnoreBreakpoints(debugId: string): Promise<boolean> {
-  const res = await request.post(`/api/v2/pldebug/sessions/${debugId}/resumeIgnoreBreakpoints`);
+export async function executeResumeIgnoreBreakpoints(
+  debugId: string
+): Promise<boolean> {
+  const res = await request.post(
+    `/api/v2/pldebug/sessions/${debugId}/resumeIgnoreBreakpoints`
+  );
   return res?.data;
 }
 

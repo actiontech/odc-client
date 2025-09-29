@@ -16,7 +16,10 @@
 
 import { IConnection, IConnectionStatus } from '@/d.ts';
 import { formatMessage } from '@/util/intl';
-import Icon, { Loading3QuartersOutlined, MinusCircleFilled } from '@ant-design/icons';
+import Icon, {
+  Loading3QuartersOutlined,
+  MinusCircleFilled
+} from '@ant-design/icons';
 import { Tooltip } from 'antd';
 
 import { getDataSourceStyleByConnectType } from '@/common/datasource';
@@ -24,8 +27,9 @@ import datasourceStatus from '@/store/datasourceStatus';
 
 export default function StatusIcon({ item }: { item: IConnection }) {
   const statusInfo = datasourceStatus.statusMap.get(item.id) || item.status;
-  let status = statusInfo?.status;
+  const status = statusInfo?.status;
   const icon = getDataSourceStyleByConnectType(item.type)?.icon;
+
   switch (status) {
     case IConnectionStatus.TESTING: {
       return (
@@ -33,13 +37,13 @@ export default function StatusIcon({ item }: { item: IConnection }) {
           placement="top"
           title={formatMessage({
             id: 'odc.components.ConnectionCardList.StatusSynchronizationInProgress',
-            defaultMessage: '状态同步中',
+            defaultMessage: '状态同步中'
           })}
         >
           <Loading3QuartersOutlined
             spin
             style={{
-              color: '#1890FF',
+              color: '#1890FF'
             }}
           />
         </Tooltip>
@@ -51,10 +55,13 @@ export default function StatusIcon({ item }: { item: IConnection }) {
           placement="top"
           title={formatMessage({
             id: 'odc.components.ConnectionCardList.ValidConnection',
-            defaultMessage: '有效连接',
+            defaultMessage: '有效连接'
           })}
         >
-          <Icon component={icon.component} style={{ fontSize: 16, color: icon?.color }} />
+          <Icon
+            component={icon.component}
+            style={{ fontSize: 16, color: icon?.color }}
+          />
         </Tooltip>
       );
     }
@@ -65,7 +72,7 @@ export default function StatusIcon({ item }: { item: IConnection }) {
           title={
             formatMessage({
               id: 'odc.components.ConnectionCardList.TheConnectionPasswordIsNot',
-              defaultMessage: '连接密码未保存，无法获取状态',
+              defaultMessage: '连接密码未保存，无法获取状态'
             })
 
             // 连接密码未保存，无法获取状态
@@ -81,7 +88,7 @@ export default function StatusIcon({ item }: { item: IConnection }) {
           placement="top"
           title={formatMessage({
             id: 'odc.page.ConnectionList.columns.TheConnectionIsDisabled',
-            defaultMessage: '连接已停用',
+            defaultMessage: '连接已停用'
           })}
 
           /* 连接已停用 */

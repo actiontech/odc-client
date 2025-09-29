@@ -31,7 +31,7 @@ interface IEditableProps extends TableProps<any> {
 
 class Editable extends React.Component<IEditableProps, any> {
   state = {
-    selected: [],
+    selected: []
   };
 
   initColumns = () => {
@@ -44,7 +44,9 @@ class Editable extends React.Component<IEditableProps, any> {
           return columnConvert(c);
         }),
         render: (text, record, i) => {
-          const originContent = column.render ? column.render(text, record, i) : text;
+          const originContent = column.render
+            ? column.render(text, record, i)
+            : text;
           if (column.editor) {
             return (
               <Popover
@@ -60,7 +62,7 @@ class Editable extends React.Component<IEditableProps, any> {
                     height: '100%',
                     position: 'relative',
                     cursor: 'pointer',
-                    lineHeight: '24px',
+                    lineHeight: '24px'
                   }}
                 >
                   {originContent}
@@ -70,7 +72,7 @@ class Editable extends React.Component<IEditableProps, any> {
           } else {
             return originContent;
           }
-        },
+        }
       };
     }
     return columns.map((column) => {

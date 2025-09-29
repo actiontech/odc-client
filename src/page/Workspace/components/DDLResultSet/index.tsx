@@ -26,7 +26,7 @@ import {
   ResultSetColumn,
   RSModifyDataType,
   TaskType,
-  TransState,
+  TransState
 } from '@/d.ts';
 import type { GuideCacheStore } from '@/store/guideCache';
 import modal from '@/store/modal';
@@ -38,7 +38,10 @@ import { ReactComponent as TraceSvg } from '@/svgr/Trace.svg';
 
 import { getDataSourceModeConfig } from '@/common/datasource';
 import { uploadTableObject } from '@/common/network/sql';
-import { downloadDataObject, getDataObjectDownloadUrl } from '@/common/network/table';
+import {
+  downloadDataObject,
+  getDataObjectDownloadUrl
+} from '@/common/network/table';
 import SessionStore from '@/store/sessionManager/session';
 import { ReactComponent as MockSvg } from '@/svgr/mock_toolbar.svg';
 import { ReactComponent as RollbackSvg } from '@/svgr/Roll-back.svg';
@@ -61,28 +64,42 @@ import Icon, {
   SyncOutlined,
   UpOutlined,
   VerticalLeftOutlined,
-  VerticalRightOutlined,
+  VerticalRightOutlined
 } from '@ant-design/icons';
 import type { DataGridRef } from '@oceanbase-odc/ob-react-data-grid';
-import { defaultOnCopy, defaultOnCopyCsv } from '@oceanbase-odc/ob-react-data-grid';
+import {
+  defaultOnCopy,
+  defaultOnCopyCsv
+} from '@oceanbase-odc/ob-react-data-grid';
 import type { CalculatedColumn } from '@oceanbase-odc/ob-react-data-grid/lib/types';
 import { useControllableValue, useUpdate } from 'ahooks';
 import {
   Checkbox,
   Col,
-  Input,
   InputNumber,
   message,
   Popover,
   Row,
   Spin,
-  Tooltip,
-  Typography,
+  Typography
 } from 'antd';
 import BigNumber from 'bignumber.js';
-import { cloneDeep, debounce, isNil, isNull, isString, isUndefined } from 'lodash';
+import {
+  cloneDeep,
+  debounce,
+  isNil,
+  isNull,
+  isString,
+  isUndefined
+} from 'lodash';
 import { inject, observer } from 'mobx-react';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
 import type { RowType } from '../EditableTable';
 import EditableTable from '../EditableTable';
 import ColumnModeModal from './ColumnModeModal';
@@ -92,6 +109,11 @@ import ResultContext from './ResultContext';
 import StatusBar from './StatusBar';
 import { copyToSQL, getColumnNameByColumnKey } from './util';
 import Sync from './Sync';
+import {
+  BasicInputNumber,
+  BasicToolTip,
+  SearchInput
+} from '@actiontech/dms-kit';
 
 // @ts-ignore
 const ToolbarButton = Toolbar.Button;
@@ -103,7 +125,7 @@ const ExpainSvg = icon.EXPAIN;
 export enum ColumnOrder {
   ASC = 'ASC',
   DESC = 'DESC',
-  NONE = 'NONE',
+  NONE = 'NONE'
 }
 interface IProps {
   sqlStore?: SQLStore;
@@ -163,7 +185,7 @@ interface IProps {
     newRows,
     limit: number,
     autoCommit: boolean,
-    columnList?: Partial<ITableColumn>[],
+    columnList?: Partial<ITableColumn>[]
   ) => void;
   onExport?: (limit: number) => void;
   onShowExecuteDetail?: () => void;
@@ -173,7 +195,7 @@ interface IProps {
     traceId: string,
     sql?: string,
     sessionId?: string,
-    traceEmptyReason?: string,
+    traceEmptyReason?: string
   ) => void;
   isExternalTable?: boolean; // 是否为外表
 }
@@ -216,7 +238,7 @@ const DDLResultSet: React.FC<IProps> = function (props) {
     traceId,
     onOpenExecutingDetailModal,
     originSql,
-    isExternalTable,
+    isExternalTable
   } = props;
   const sessionId = session?.sessionId;
   const obVersion = session?.params?.obVersion;
@@ -233,7 +255,7 @@ const DDLResultSet: React.FC<IProps> = function (props) {
   /**
    * 表数据搜索
    */
-  const [searchKey, _setSearchKey] = useState('');
+  const [searchKey, setSearchKey] = useState('');
   /**
    * 列模式展示隐藏
    */
@@ -245,18 +267,22 @@ const DDLResultSet: React.FC<IProps> = function (props) {
   /**
    * 选中的rows
    */
-  const [selectedCellRowsKey, setSelectedCellRowsKey] = useState<React.Key[]>([]);
+  const [selectedCellRowsKey, setSelectedCellRowsKey] = useState<React.Key[]>(
+    []
+  );
   /**
    * 选中的cell column
    */
-  const [selectedCellColumnsKey, setSelectedCellColumnsKey] = useState<React.Key[]>([]);
+  const [selectedCellColumnsKey, setSelectedCellColumnsKey] = useState<
+    React.Key[]
+  >([]);
   /**
    * 是否处于编辑态
    */
   const [isEditing, setIsEditing] = useControllableValue(props, {
     defaultValue: false,
     valuePropName: 'isEditing',
-    trigger: 'onUpdateEditing',
+    trigger: 'onUpdateEditing'
   });
 
   /**
@@ -274,7 +300,7 @@ const DDLResultSet: React.FC<IProps> = function (props) {
         window.dispatchEvent(new Event('resize'));
       });
     },
-    [_setColumnsToDisplay],
+    [_setColumnsToDisplay]
   );
   /**
    * 设置编辑态
@@ -303,7 +329,7 @@ const DDLResultSet: React.FC<IProps> = function (props) {
   const setSelectedRowIndex = useCallback((rowIdx: number) => {
     gridRef.current?.selectCell?.({
       rowIdx,
-      columnIdx: 1,
+      columnIdx: 1
     });
     setTimeout(() => {
       /**
@@ -331,12 +357,17 @@ const DDLResultSet: React.FC<IProps> = function (props) {
   useEffect(() => {
     if (columns) {
       if (enableRowId) {
-        setColumnsToDisplay(cloneDeep(columns.filter((column) => !column.internal)));
+        setColumnsToDisplay(
+          cloneDeep(columns.filter((column) => !column.internal))
+        );
       } else {
         setColumnsToDisplay(
           cloneDeep(
-            columns.filter((column) => column.name.toUpperCase() !== 'ROWID' && !column.internal),
-          ),
+            columns.filter(
+              (column) =>
+                column.name.toUpperCase() !== 'ROWID' && !column.internal
+            )
+          )
         );
       }
     }
@@ -358,7 +389,7 @@ const DDLResultSet: React.FC<IProps> = function (props) {
    */
   const handleAddRow = useCallback(() => {
     const row = {
-      _rowIndex: generateUniqKey(),
+      _rowIndex: generateUniqKey()
     };
     gridRef.current?.addRows([row]);
   }, [columns, rows]);
@@ -393,7 +424,7 @@ const DDLResultSet: React.FC<IProps> = function (props) {
         _deleted: false,
         modified: false,
         _originRow: null,
-        _rowIndex: generateUniqKey(),
+        _rowIndex: generateUniqKey()
       };
       gridRef.current?.addRows([row]);
     }
@@ -408,7 +439,7 @@ const DDLResultSet: React.FC<IProps> = function (props) {
     (newRows) => {
       setEditRows(newRows);
     },
-    [rows],
+    [rows]
   );
   const handleToggleEditable = useCallback(async () => {
     setIsEditing(true);
@@ -418,7 +449,13 @@ const DDLResultSet: React.FC<IProps> = function (props) {
       return column.key === columnKey;
     });
     const rowIndex = row._rowIndex;
-    downloadDataObject(sqlId, columnIndex, rowIndex, sessionId, session?.database?.dbName);
+    downloadDataObject(
+      sqlId,
+      columnIndex,
+      rowIndex,
+      sessionId,
+      session?.database?.dbName
+    );
   };
   const getDonwloadUrl = async (columnKey, row) => {
     const columnIndex = columns.findIndex((column) => {
@@ -430,7 +467,7 @@ const DDLResultSet: React.FC<IProps> = function (props) {
       columnIndex,
       rowIndex,
       sessionId,
-      session?.database?.dbName,
+      session?.database?.dbName
     );
   };
   const getMenus = useCallback(
@@ -454,7 +491,7 @@ const DDLResultSet: React.FC<IProps> = function (props) {
         key: 'clip',
         text: formatMessage({
           id: 'odc.components.DDLResultSet.OutputToShearPlate',
-          defaultMessage: '输出到剪切板',
+          defaultMessage: '输出到剪切板'
         }),
         isShowRowSelected: true,
         // 输出到剪切板
@@ -463,29 +500,35 @@ const DDLResultSet: React.FC<IProps> = function (props) {
             key: 'clip-sql',
             text: 'SQL',
             // SQL 文件
-            onClick: clipSQL,
+            onClick: clipSQL
           },
           {
             key: 'clip-csv',
             text: 'CSV',
             // CSV 文件
-            onClick: clipCsv,
-          },
-        ],
+            onClick: clipCsv
+          }
+        ]
       };
       function copy() {
         defaultOnCopy(gridRef.current);
       }
       function clipSQL() {
         if (!tableColumns || (!columnName && !isSelectedRow)) {
-          copyToSQL(gridRef.current, columns, undefined, session?.connection?.dialectType, rows);
+          copyToSQL(
+            gridRef.current,
+            columns,
+            undefined,
+            session?.connection?.dialectType,
+            rows
+          );
         } else {
           copyToSQL(
             gridRef.current,
             columns,
             table?.tableName,
             session?.connection?.dialectType,
-            rows,
+            rows
           );
         }
       }
@@ -501,17 +544,18 @@ const DDLResultSet: React.FC<IProps> = function (props) {
             key: 'copy',
             text: formatMessage({
               id: 'odc.components.ConnectionCardList.Copy',
-              defaultMessage: '复制',
+              defaultMessage: '复制'
             }),
-            onClick: copy,
+            onClick: copy
           },
-          clipMenu,
+          clipMenu
         ];
       }
       if (!column) {
         return [];
       }
-      const showUpload = isObjectColumn(column.columnType) && isEditing && !column.readonly;
+      const showUpload =
+        isObjectColumn(column.columnType) && isEditing && !column.readonly;
       const showDownload =
         isObjectColumn(column.columnType) &&
         isSingleSelected &&
@@ -522,9 +566,9 @@ const DDLResultSet: React.FC<IProps> = function (props) {
           key: 'copy',
           text: formatMessage({
             id: 'odc.components.ConnectionCardList.Copy',
-            defaultMessage: '复制',
+            defaultMessage: '复制'
           }),
-          onClick: copy,
+          onClick: copy
         },
         clipMenu,
         isEditing &&
@@ -532,41 +576,45 @@ const DDLResultSet: React.FC<IProps> = function (props) {
             key: 'setnull',
             text: formatMessage({
               id: 'odc.components.DDLResultSet.SetToNull',
-              defaultMessage: '设置为 Null',
+              defaultMessage: '设置为 Null'
             }),
             // 设置为 Null
             disabled: isNull(row[columnKey]) || column.readonly,
             onClick: () => {
-              const targetRowIndex = rows.findIndex((newRow) => newRow._rowIndex === row._rowIndex);
+              const targetRowIndex = rows.findIndex(
+                (newRow) => newRow._rowIndex === row._rowIndex
+              );
               gridRef?.current?.setCellsByRowIndex(targetRowIndex, {
                 [columnKey]: null,
                 [getBlobValueKey(columnKey)]: null,
-                [getNlsValueKey(columnKey)]: null,
+                [getNlsValueKey(columnKey)]: null
               });
-            },
+            }
           },
         isEditing &&
           isSingleSelected && {
             key: 'setDefault',
             text: formatMessage({
               id: 'odc.components.DDLResultSet.DefaultValue',
-              defaultMessage: '设置为默认值',
+              defaultMessage: '设置为默认值'
             }),
             // 设置为默认值
             disabled: isUndefined(row[columnKey]) || column.readonly,
             onClick: () => {
-              const targetRowIndex = rows.findIndex((newRow) => newRow._rowIndex === row._rowIndex);
+              const targetRowIndex = rows.findIndex(
+                (newRow) => newRow._rowIndex === row._rowIndex
+              );
               gridRef?.current?.setCellsByRowIndex(targetRowIndex, {
                 [columnKey]: undefined,
-                [getBlobValueKey(columnKey)]: null,
+                [getBlobValueKey(columnKey)]: null
               });
-            },
+            }
           },
         showDownload && {
           key: 'download',
           text: formatMessage({
             id: 'odc.components.DDLResultSet.DownloadAndView',
-            defaultMessage: '下载查看',
+            defaultMessage: '下载查看'
           }),
           // 下载查看
           disabled:
@@ -575,13 +623,13 @@ const DDLResultSet: React.FC<IProps> = function (props) {
             row._created,
           onClick: () => {
             downloadObjectData(columnKey, row);
-          },
+          }
         },
         showUpload && {
           key: 'upload',
           text: formatMessage({
             id: 'odc.components.DDLResultSet.UploadAndModify',
-            defaultMessage: '上传修改',
+            defaultMessage: '上传修改'
           }),
           onClick: () => {
             const upload = document.createElement('input');
@@ -594,26 +642,29 @@ const DDLResultSet: React.FC<IProps> = function (props) {
                 const serverFileName = await uploadTableObject(file, sessionId);
                 if (serverFileName) {
                   const targetRowIndex = rowsRef.current?.findIndex(
-                    (newRow) => newRow._rowIndex === row._rowIndex,
+                    (newRow) => newRow._rowIndex === row._rowIndex
                   );
                   gridRef?.current?.setCellsByRowIndex(targetRowIndex, {
                     [columnKey]: serverFileName,
-                    [getBlobValueKey(columnKey)]: new LobExt(serverFileName, RSModifyDataType.FILE),
+                    [getBlobValueKey(columnKey)]: new LobExt(
+                      serverFileName,
+                      RSModifyDataType.FILE
+                    )
                   });
                   message.success(
                     `${file.name} ` +
                       formatMessage({
                         id: 'workspace.window.table.object.upload.success',
-                        defaultMessage: '上传成功',
-                      }),
+                        defaultMessage: '上传成功'
+                      })
                   );
                 } else {
                   message.error(
                     `${file.name} ` +
                       formatMessage({
                         id: 'workspace.window.table.object.upload.failure',
-                        defaultMessage: '上传失败',
-                      }),
+                        defaultMessage: '上传失败'
+                      })
                   );
                 }
               }
@@ -622,33 +673,32 @@ const DDLResultSet: React.FC<IProps> = function (props) {
               document.body.removeChild(upload);
             });
             upload.click();
-          },
+          }
 
           // 上传修改
-        },
+        }
       ].filter(Boolean);
     },
-    [table, columns, isEditing, gridRef, downloadObjectData, rows, sessionId],
+    [table, columns, isEditing, gridRef, downloadObjectData, rows, sessionId]
   );
   const getContextMenuConfig = useCallback(
     function (row: any, column: CalculatedColumn<any, any>) {
       return getMenus(row, column);
     },
-    [getMenus],
+    [getMenus]
   );
-  const setSearchKey = useCallback(
+  const handleChangeSearchKey = useCallback(
     debounce(
       (v) => {
-        console.log(v);
-        _setSearchKey(v);
+        setSearchKey(v);
       },
       500,
       {
         leading: false,
-        trailing: true,
-      },
+        trailing: true
+      }
     ),
-    [],
+    []
   );
 
   /**
@@ -657,15 +707,19 @@ const DDLResultSet: React.FC<IProps> = function (props) {
   let selectedRowIdx;
   let filterRowIdx;
   if (selectedCellRowsKey.length === 1) {
-    selectedRowIdx = rows.findIndex((row) => row._rowIndex == selectedCellRowsKey[0]);
-    filterRowIdx = filterRows.findIndex((row) => row._rowIndex == selectedCellRowsKey[0]);
+    selectedRowIdx = rows.findIndex(
+      (row) => row._rowIndex == selectedCellRowsKey[0]
+    );
+    filterRowIdx = filterRows.findIndex(
+      (row) => row._rowIndex == selectedCellRowsKey[0]
+    );
   }
   const rgdColumns = useColumns(
     columnsToDisplay,
     isEditing,
     !!sqlId,
     originRows,
-    session?.connection?.dialectType,
+    session?.connection?.dialectType
   );
 
   useEffect(() => {
@@ -676,9 +730,11 @@ const DDLResultSet: React.FC<IProps> = function (props) {
     function pasteFormatter(
       row: RowType<any>,
       column: CalculatedColumn<RowType<any>, any>,
-      value: any,
+      value: any
     ) {
-      const nativeColumn = columnsToDisplay.find((item) => item.key === column.key);
+      const nativeColumn = columnsToDisplay.find(
+        (item) => item.key === column.key
+      );
       const originValue = row[column.key];
       if (!nativeColumn) return originValue;
       if (isObjectColumn(nativeColumn.columnType)) return originValue;
@@ -692,7 +748,7 @@ const DDLResultSet: React.FC<IProps> = function (props) {
       }
       return value;
     },
-    [columnsToDisplay],
+    [columnsToDisplay]
   );
   const isInTransaction = session?.transState?.transState === TransState.IDLE;
 
@@ -703,17 +759,23 @@ const DDLResultSet: React.FC<IProps> = function (props) {
     if (guideCacheStore?.[guideCacheStore.cacheEnum.executePlan]) return null;
     return (
       <div style={{ color: 'var(--text-color-secondary)' }}>
-        <div style={{ fontSize: 14, color: 'var(--text-color-primary)', fontWeight: 500 }}>
+        <div
+          style={{
+            fontSize: 14,
+            color: 'var(--text-color-primary)',
+            fontWeight: 500
+          }}
+        >
           {formatMessage({
             id: 'src.page.Workspace.components.DDLResultSet.E32AB474',
-            defaultMessage: 'SQL 执行画像',
+            defaultMessage: 'SQL 执行画像'
           })}
         </div>
         <div>
           {formatMessage({
             id: 'src.page.Workspace.components.DDLResultSet.6477DD60',
             defaultMessage:
-              '集合 SQL 的执行详情、物理执行计划、全链路诊断的多维度视图，帮助快速定位执行慢查询的根因',
+              '集合 SQL 的执行详情、物理执行计划、全链路诊断的多维度视图，帮助快速定位执行慢查询的根因'
           })}
         </div>
         <img
@@ -724,7 +786,7 @@ const DDLResultSet: React.FC<IProps> = function (props) {
         <Link onClick={updateExecutePlanGuideCache}>
           {formatMessage({
             id: 'src.page.Workspace.components.DDLResultSet.90E40FCF',
-            defaultMessage: '我知道了',
+            defaultMessage: '我知道了'
           })}
         </Link>
       </div>
@@ -742,24 +804,31 @@ const DDLResultSet: React.FC<IProps> = function (props) {
           key="execute-profile"
           text={formatMessage({
             id: 'src.page.Workspace.components.DDLResultSet.22F863D6',
-            defaultMessage: '执行画像',
+            defaultMessage: '执行画像'
           })}
           icon={<Icon component={SqlProfile} />}
           onClick={() => {
-            onOpenExecutingDetailModal?.(traceId, originSql, null, traceEmptyReason);
+            onOpenExecutingDetailModal?.(
+              traceId,
+              originSql,
+              null,
+              traceEmptyReason
+            );
             setTimeout(() => {
               updateExecutePlanGuideCache();
             }, 1000);
           }}
           tip={executeGuideTipContent()}
           overlayInnerStyle={{ width: 300 }}
-        />,
+        />
       );
     } else {
       // 执行计划按钮
       if (showExplain) {
         if (
-          [GeneralSQLType.DML, GeneralSQLType.DQL].includes(props?.generalSqlType) &&
+          [GeneralSQLType.DML, GeneralSQLType.DQL].includes(
+            props?.generalSqlType
+          ) &&
           props?.traceId
         ) {
           buttons.push(
@@ -767,28 +836,30 @@ const DDLResultSet: React.FC<IProps> = function (props) {
               key="execute-plan"
               text={formatMessage({
                 id: 'odc.components.DDLResultSet.Plan',
-                defaultMessage: '计划',
+                defaultMessage: '计划'
               })}
               icon={<ExpainSvg status={IConStatus.INIT} />}
               onClick={() => {
                 onShowExecuteDetail?.();
               }}
-            />,
+            />
           );
         } else {
           buttons.push(
-            <Tooltip
+            <BasicToolTip
               key="execute-plan-disabled"
               title={
-                [GeneralSQLType.DDL, GeneralSQLType.OTHER].includes(props?.generalSqlType)
+                [GeneralSQLType.DDL, GeneralSQLType.OTHER].includes(
+                  props?.generalSqlType
+                )
                   ? formatMessage({
                       id: 'odc.components.DDLResultSet.TheCurrentStatementTypeDoes',
-                      defaultMessage: '当前语句类型不支持查看执行详情',
+                      defaultMessage: '当前语句类型不支持查看执行详情'
                     })
                   : formatMessage({
                       id: 'odc.components.DDLResultSet.TheTraceIdIsEmpty',
                       defaultMessage:
-                        'TRACE ID 为空，请确保该语句运行时 enable_sql_audit 系统参数及 ob_enable_trace_log 变量值均为 ON',
+                        'TRACE ID 为空，请确保该语句运行时 enable_sql_audit 系统参数及 ob_enable_trace_log 变量值均为 ON'
                     })
               }
             >
@@ -799,14 +870,17 @@ const DDLResultSet: React.FC<IProps> = function (props) {
                 }}
                 disabled
               />
-            </Tooltip>,
+            </BasicToolTip>
           );
         }
       }
 
       // Trace按钮
       if (showTrace) {
-        if (isString(obVersion) && OBCompare(obVersion, ODC_TRACE_SUPPORT_VERSION, '>=')) {
+        if (
+          isString(obVersion) &&
+          OBCompare(obVersion, ODC_TRACE_SUPPORT_VERSION, '>=')
+        ) {
           buttons.push(
             <ToolbarButton
               key="trace"
@@ -814,7 +888,7 @@ const DDLResultSet: React.FC<IProps> = function (props) {
                 withFullLinkTrace
                   ? formatMessage({
                       id: 'odc.src.page.Workspace.components.DDLResultSet.FullLinkTrace',
-                      defaultMessage: '全链路 Trace',
+                      defaultMessage: '全链路 Trace'
                     })
                   : traceEmptyReason
               }
@@ -823,7 +897,7 @@ const DDLResultSet: React.FC<IProps> = function (props) {
               onClick={() => {
                 onShowTrace?.();
               }}
-            />,
+            />
           );
         } else {
           buttons.push(
@@ -835,7 +909,7 @@ const DDLResultSet: React.FC<IProps> = function (props) {
               onClick={() => {
                 onShowTrace?.();
               }}
-            />,
+            />
           );
         }
       }
@@ -862,13 +936,13 @@ const DDLResultSet: React.FC<IProps> = function (props) {
           <ToolbarButton
             text={formatMessage({
               id: 'odc.components.DDLResultSet.ModifyAndSubmit',
-              defaultMessage: '修改并提交',
+              defaultMessage: '修改并提交'
             })}
             icon={<CloudUploadOutlined />}
             status={isSubmitting ? IConStatus.RUNNING : IConStatus.INIT}
             isShowText
           />
-        </SubmitConfirm>,
+        </SubmitConfirm>
       );
     }
 
@@ -877,7 +951,7 @@ const DDLResultSet: React.FC<IProps> = function (props) {
         key="confirm-modify"
         text={formatMessage({
           id: 'odc.components.DDLResultSet.ConfirmModification',
-          defaultMessage: '确认修改',
+          defaultMessage: '确认修改'
         })}
         icon={<CheckOutlined />}
         isShowText
@@ -890,7 +964,7 @@ const DDLResultSet: React.FC<IProps> = function (props) {
             setIsSubmitting(false);
           }
         }}
-      />,
+      />
     );
 
     buttons.push(
@@ -898,12 +972,12 @@ const DDLResultSet: React.FC<IProps> = function (props) {
         key="cancel"
         text={formatMessage({
           id: 'odc.components.DDLResultSet.Cancel',
-          defaultMessage: '取消',
+          defaultMessage: '取消'
         })}
         icon={<CloseOutlined />}
         isShowText
         onClick={handleCancel}
-      />,
+      />
     );
 
     return buttons;
@@ -919,7 +993,7 @@ const DDLResultSet: React.FC<IProps> = function (props) {
           key="add-row"
           text={formatMessage({
             id: 'workspace.window.sql.button.add',
-            defaultMessage: '添加行',
+            defaultMessage: '添加行'
           })}
           icon={<PlusOutlined />}
           onClick={handleAddRow}
@@ -928,7 +1002,7 @@ const DDLResultSet: React.FC<IProps> = function (props) {
           key="delete-row"
           text={formatMessage({
             id: 'workspace.window.sql.button.delete',
-            defaultMessage: '删除行',
+            defaultMessage: '删除行'
           })}
           icon={<MinusOutlined />}
           onClick={handleDeleteRows}
@@ -938,11 +1012,11 @@ const DDLResultSet: React.FC<IProps> = function (props) {
           disabled={!rows[selectedRowIdx]}
           text={formatMessage({
             id: 'workspace.window.sql.button.copy',
-            defaultMessage: '复制当前行',
+            defaultMessage: '复制当前行'
           })}
           icon={<CopyOutlined />}
           onClick={handleCopyRow}
-        />,
+        />
       ];
     } else {
       const buttons = [
@@ -950,13 +1024,13 @@ const DDLResultSet: React.FC<IProps> = function (props) {
           key="enable-edit"
           text={formatMessage({
             id: 'workspace.window.sql.button.edit.enable',
-            defaultMessage: '开启编辑',
+            defaultMessage: '开启编辑'
           })}
           icon={<EditOutlined />}
           onClick={() => {
             setIsEditing(true);
           }}
-        />,
+        />
       ];
 
       if (!autoCommit) {
@@ -964,7 +1038,11 @@ const DDLResultSet: React.FC<IProps> = function (props) {
           <SubmitConfirm
             key="commit"
             onConfirm={async () => {
-              await sqlStore.commit(props.pageKey, sessionId, session?.database?.dbName);
+              await sqlStore.commit(
+                props.pageKey,
+                sessionId,
+                session?.database?.dbName
+              );
               onRefresh(limit || 1000);
             }}
             disabled={isInTransaction}
@@ -972,7 +1050,7 @@ const DDLResultSet: React.FC<IProps> = function (props) {
             <ToolbarButton
               text={formatMessage({
                 id: 'odc.components.DDLResultSet.Submitted',
-                defaultMessage: '提交',
+                defaultMessage: '提交'
               })}
               icon={<Icon component={SubmitSvg} />}
             />
@@ -980,7 +1058,11 @@ const DDLResultSet: React.FC<IProps> = function (props) {
           <SubmitConfirm
             key="rollback"
             onConfirm={async () => {
-              await sqlStore.rollback(props.pageKey, sessionId, session?.database?.dbName);
+              await sqlStore.rollback(
+                props.pageKey,
+                sessionId,
+                session?.database?.dbName
+              );
               onRefresh(limit || 1000);
             }}
             isRollback
@@ -989,11 +1071,11 @@ const DDLResultSet: React.FC<IProps> = function (props) {
             <ToolbarButton
               text={formatMessage({
                 id: 'odc.components.DDLResultSet.Rollback',
-                defaultMessage: '回滚',
+                defaultMessage: '回滚'
               })}
               icon={<Icon component={RollbackSvg} />}
             />
-          </SubmitConfirm>,
+          </SubmitConfirm>
         );
       }
 
@@ -1012,7 +1094,7 @@ const DDLResultSet: React.FC<IProps> = function (props) {
           disabled={!isEditing}
           text={formatMessage({
             id: 'workspace.window.sql.button.edit.add',
-            defaultMessage: '添加一行',
+            defaultMessage: '添加一行'
           })}
           icon={<PlusOutlined />}
           onClick={handleAddRow}
@@ -1022,7 +1104,7 @@ const DDLResultSet: React.FC<IProps> = function (props) {
           disabled={!isEditing}
           text={formatMessage({
             id: 'workspace.window.sql.button.edit.delete',
-            defaultMessage: '删除',
+            defaultMessage: '删除'
           })}
           icon={<MinusOutlined />}
           onClick={handleDeleteRows}
@@ -1032,11 +1114,11 @@ const DDLResultSet: React.FC<IProps> = function (props) {
           disabled={!isEditing || !rows[selectedRowIdx]}
           text={formatMessage({
             id: 'workspace.window.sql.button.copy',
-            defaultMessage: '复制当前行',
+            defaultMessage: '复制当前行'
           })}
           icon={<CopyOutlined />}
           onClick={handleCopyRow}
-        />,
+        />
       ];
     } else {
       return [
@@ -1044,11 +1126,11 @@ const DDLResultSet: React.FC<IProps> = function (props) {
           key="enable-edit-non-table"
           text={formatMessage({
             id: 'workspace.window.sql.button.edit.enable',
-            defaultMessage: '开启编辑',
+            defaultMessage: '开启编辑'
           })}
           icon={<EditOutlined />}
           onClick={handleToggleEditable}
-        />,
+        />
       ];
     }
   };
@@ -1063,49 +1145,49 @@ const DDLResultSet: React.FC<IProps> = function (props) {
       allowExport &&
       onExport &&
       settingStore.enableDBExport &&
-      getDataSourceModeConfig(session?.connection?.type)?.features?.task?.includes(
-        TaskType.EXPORT_RESULT_SET,
-      )
+      getDataSourceModeConfig(
+        session?.connection?.type
+      )?.features?.task?.includes(TaskType.EXPORT_RESULT_SET)
     ) {
       buttons.push(
         <ToolbarButton
           key="export"
           text={formatMessage({
             id: 'odc.components.DDLResultSet.DownloadData',
-            defaultMessage: '下载数据',
+            defaultMessage: '下载数据'
           })}
           icon={<ExportOutlined />}
           onClick={handleExport}
-        />,
+        />
       );
     }
 
     // 模拟数据按钮
-    if (
-      !isEditing &&
-      !isExternalTable &&
-      showMock &&
-      getDataSourceModeConfig(session?.connection?.type)?.features?.task?.includes(
-        TaskType.DATAMOCK,
-      )
-    ) {
-      buttons.push(
-        <ToolbarButton
-          key="mock"
-          text={formatMessage({
-            id: 'odc.components.DDLResultSet.AnalogData',
-            defaultMessage: '模拟数据',
-          })}
-          icon={<Icon component={MockSvg} />}
-          onClick={() => {
-            modal.changeDataMockerModal(true, {
-              tableName: table?.tableName,
-              databaseId: session?.database?.databaseId,
-            });
-          }}
-        />,
-      );
-    }
+    // if (
+    //   !isEditing &&
+    //   !isExternalTable &&
+    //   showMock &&
+    //   getDataSourceModeConfig(
+    //     session?.connection?.type
+    //   )?.features?.task?.includes(TaskType.DATAMOCK)
+    // ) {
+    //   buttons.push(
+    //     <ToolbarButton
+    //       key="mock"
+    //       text={formatMessage({
+    //         id: 'odc.components.DDLResultSet.AnalogData',
+    //         defaultMessage: '模拟数据'
+    //       })}
+    //       icon={<Icon component={MockSvg} />}
+    //       onClick={() => {
+    //         modal.changeDataMockerModal(true, {
+    //           tableName: table?.tableName,
+    //           databaseId: session?.database?.databaseId
+    //         });
+    //       }}
+    //     />
+    //   );
+    // }
 
     return buttons;
   };
@@ -1119,12 +1201,12 @@ const DDLResultSet: React.FC<IProps> = function (props) {
         key="back-to-start"
         text={formatMessage({
           id: 'odc.components.DDLResultSet.BackToStart',
-          defaultMessage: '回到开始',
+          defaultMessage: '回到开始'
         })}
         icon={
           <VerticalRightOutlined
             style={{
-              transform: 'rotate(90deg)',
+              transform: 'rotate(90deg)'
             }}
           />
         }
@@ -1134,7 +1216,7 @@ const DDLResultSet: React.FC<IProps> = function (props) {
         key="prev-page"
         text={formatMessage({
           id: 'odc.components.DDLResultSet.PreviousPage',
-          defaultMessage: '上一页',
+          defaultMessage: '上一页'
         })}
         icon={<UpOutlined />}
         onClick={() => {
@@ -1145,7 +1227,7 @@ const DDLResultSet: React.FC<IProps> = function (props) {
         key="next-page"
         text={formatMessage({
           id: 'odc.components.DDLResultSet.NextPage',
-          defaultMessage: '下一页',
+          defaultMessage: '下一页'
         })}
         icon={<DownOutlined />}
         onClick={() => gridRef.current.scrollToNextPage()}
@@ -1154,22 +1236,25 @@ const DDLResultSet: React.FC<IProps> = function (props) {
         key="jump-to-bottom"
         text={formatMessage({
           id: 'odc.components.DDLResultSet.JumpToTheBottom',
-          defaultMessage: '跳至底部',
+          defaultMessage: '跳至底部'
         })}
         icon={
           <VerticalLeftOutlined
             style={{
-              transform: 'rotate(90deg)',
+              transform: 'rotate(90deg)'
             }}
           />
         }
         onClick={() => gridRef.current.scrollToRow(rows.length - 1)}
-      />,
+      />
     ];
   };
 
   // 按钮分组辅助函数
-  const renderButtonGroup = (buttons: React.ReactNode[], isLastGroup = false) => {
+  const renderButtonGroup = (
+    buttons: React.ReactNode[],
+    isLastGroup = false
+  ) => {
     const validButtons = buttons.filter(Boolean);
     if (validButtons.length === 0) return null;
 
@@ -1189,7 +1274,7 @@ const DDLResultSet: React.FC<IProps> = function (props) {
       { name: 'nonTableDataEdit', buttons: getNonTableDataEditButtons() },
       { name: 'action', buttons: getActionButtons() },
       { name: 'analysis', buttons: getAnalysisButtons() },
-      { name: 'pagination', buttons: getPaginationButtons() },
+      { name: 'pagination', buttons: getPaginationButtons() }
     ];
 
     // 过滤出有内容的按钮组 - 确保按钮数组不为空且有有效元素
@@ -1215,7 +1300,7 @@ const DDLResultSet: React.FC<IProps> = function (props) {
       style={{
         height: resultHeight,
         display: 'flex',
-        flexDirection: 'column',
+        flexDirection: 'column'
       }}
     >
       <Spin spinning={false}>
@@ -1227,24 +1312,25 @@ const DDLResultSet: React.FC<IProps> = function (props) {
                 <>
                   {formatMessage({
                     id: 'workspace.window.sql.limit',
-                    defaultMessage: '展示数据量',
+                    defaultMessage: '展示数据量'
                   })}
-                  <InputNumber
+                  <BasicInputNumber
                     onInput={(limit) => {
                       if (limit == '' || isNil(limit)) {
                         setLimit(0);
                       }
                     }}
-                    onChange={(limit) => setLimit(limit || 0)}
+                    size="small"
+                    onChange={(limit) => setLimit(Number(limit) || 0)}
                     min={1}
                     precision={0}
                     placeholder={formatMessage({
                       id: 'workspace.window.sql.limit.placeholder',
-                      defaultMessage: '1000',
+                      defaultMessage: '1000'
                     })}
                     style={{
                       width: 70,
-                      marginLeft: 8,
+                      marginLeft: 8
                     }}
                     onPressEnter={() => {
                       onRefresh(limit || 1000);
@@ -1252,20 +1338,19 @@ const DDLResultSet: React.FC<IProps> = function (props) {
                   />
                 </>
               ) : null}
-              <Input.Search
+              <SearchInput
                 className={styles.search}
                 placeholder={
                   formatMessage({
                     id: 'odc.components.DDLResultSet.EnterAKeyword',
-                    defaultMessage: '请输入关键字',
+                    defaultMessage: '请输入关键字'
                   })
 
                   // 请输入关键字
                 }
                 onChange={(e) => {
-                  setSearchKey(e.target?.value);
+                  handleChangeSearchKey(e);
                 }}
-                onSearch={setSearchKey}
               />
             </span>
             <Popover
@@ -1277,7 +1362,7 @@ const DDLResultSet: React.FC<IProps> = function (props) {
                     setColumnsToDisplay(
                       columns.filter((column) => {
                         return checkedValues.includes(column.key);
-                      }),
+                      })
                     );
                   }}
                   style={{
@@ -1285,7 +1370,7 @@ const DDLResultSet: React.FC<IProps> = function (props) {
                     maxHeight: '500px',
                     overflowY: 'auto',
                     overflowX: 'hidden',
-                    padding: 2, // 这个变量在样式上不是必须的，但是加上之后可以避免checkboxgroup高度抖动的问题
+                    padding: 2 // 这个变量在样式上不是必须的，但是加上之后可以避免checkboxgroup高度抖动的问题
                   }}
                 >
                   <Row>
@@ -1304,13 +1389,13 @@ const DDLResultSet: React.FC<IProps> = function (props) {
               }
               title={formatMessage({
                 id: 'workspace.window.sql.button.columnFilter.title',
-                defaultMessage: '请选择要展示的列',
+                defaultMessage: '请选择要展示的列'
               })}
             >
               <ToolbarButton
                 text={formatMessage({
                   id: 'workspace.window.sql.button.columnFilter',
-                  defaultMessage: '列管理',
+                  defaultMessage: '列管理'
                 })}
                 icon={<FilterOutlined />}
               />
@@ -1320,7 +1405,7 @@ const DDLResultSet: React.FC<IProps> = function (props) {
               disabled={!rows[selectedRowIdx]}
               text={formatMessage({
                 id: 'workspace.window.sql.button.columnMode',
-                defaultMessage: '列模式',
+                defaultMessage: '列模式'
               })}
               icon={<BarsOutlined />}
               onClick={() => {
@@ -1335,7 +1420,7 @@ const DDLResultSet: React.FC<IProps> = function (props) {
               <ToolbarButton
                 text={formatMessage({
                   id: 'workspace.window.session.button.refresh',
-                  defaultMessage: '刷新',
+                  defaultMessage: '刷新'
                 })}
                 icon={<SyncOutlined />}
                 onClick={onRefresh.bind(this, limit || 1000)}
@@ -1355,7 +1440,7 @@ const DDLResultSet: React.FC<IProps> = function (props) {
             isEditing,
             downloadObjectData,
             getDonwloadUrl,
-            session,
+            session
           }}
         >
           <EditableTable
@@ -1401,4 +1486,8 @@ const DDLResultSet: React.FC<IProps> = function (props) {
     </div>
   );
 };
-export default inject('sqlStore', 'settingStore', 'guideCacheStore')(observer(DDLResultSet));
+export default inject(
+  'sqlStore',
+  'settingStore',
+  'guideCacheStore'
+)(observer(DDLResultSet));

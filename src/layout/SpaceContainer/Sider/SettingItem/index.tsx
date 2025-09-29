@@ -36,7 +36,7 @@ const SettingItem: React.FC<IProps> = function ({ collapsed }) {
         collapsed={collapsed}
         label={formatMessage({
           id: 'src.layout.SpaceContainer.Sider.SettingItem.CBBE0F8B',
-          defaultMessage: '设置',
+          defaultMessage: '设置'
         })}
       />
 

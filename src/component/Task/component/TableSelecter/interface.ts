@@ -1,7 +1,11 @@
 import { IDatabase } from '@/d.ts/database';
 import { DataNode, EventDataNode } from 'antd/lib/tree';
 
-export type TableItem = { databaseId: number; tableName: string; tableId?: number };
+export type TableItem = {
+  databaseId: number;
+  tableName: string;
+  tableId?: number;
+};
 
 export interface tableTreeEventDataNode extends EventDataNode<DataNode> {
   isLogicalDatabase: boolean;

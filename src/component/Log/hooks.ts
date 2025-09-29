@@ -15,14 +15,22 @@
  */
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import type { LineData, LogData, LogValue, SafeLine, SearchedLine } from './typings';
+import type {
+  LineData,
+  LogData,
+  LogValue,
+  SafeLine,
+  SearchedLine
+} from './typings';
 import { encodeRegexpStr, formatSafeData, range } from './utils';
 
 const defaultStyle = {
-  'min-height': '22px',
+  'min-height': '22px'
 };
 
-export const useHeight = (ref: React.MutableRefObject<HTMLDivElement | null>) => {
+export const useHeight = (
+  ref: React.MutableRefObject<HTMLDivElement | null>
+) => {
   const calcElem = useRef<HTMLSpanElement>();
   /** 解决空行问题，创建行号的DOM */
   const lineElem = useRef<HTMLSpanElement>();
@@ -85,15 +93,18 @@ export const useHeight = (ref: React.MutableRefObject<HTMLDivElement | null>) =>
 export const useLazyLogData = (
   dataList: LogValue,
   keyword: string,
-  ignoreCase: boolean,
+  ignoreCase: boolean
 ): LogData => {
   const [lazyCacheData, setLazyCacheData] = useState<LogData>({
     foundCount: 0,
     data: [],
     searchResultIndexList: [],
-    searchResultMap: {},
+    searchResultMap: {}
   });
-  const regex = RegExp(`${encodeRegexpStr(keyword)}`, `${ignoreCase ? 'ig' : 'g'}`);
+  const regex = RegExp(
+    `${encodeRegexpStr(keyword)}`,
+    `${ignoreCase ? 'ig' : 'g'}`
+  );
 
   const intervalRef = useRef(-1);
 
@@ -101,7 +112,11 @@ export const useLazyLogData = (
     return formatSafeData(dataList);
   }, [dataList]);
 
-  const formatSliceData = (sliceData: SafeLine[], index: number, cursor: number) => {
+  const formatSliceData = (
+    sliceData: SafeLine[],
+    index: number,
+    cursor: number
+  ) => {
     let data: SearchedLine[];
     let foundCount = 0;
     let searchResultIndexList = [];
@@ -117,7 +132,7 @@ export const useLazyLogData = (
         const result: SearchedLine = {
           rowIndex: item.rowIndex,
           content: item.content,
-          brokenMark: item.brokenMark,
+          brokenMark: item.brokenMark
         };
         if (searchCount > 0) {
           const indexArr = range(innerIndex, searchCount);
@@ -125,7 +140,7 @@ export const useLazyLogData = (
           innerIndex += indexArr.length;
           searchResultMap[item.rowIndex] = indexArr;
           searchResultIndexList = searchResultIndexList.concat(
-            Array(indexArr.length).fill(itemIndex + cursor),
+            Array(indexArr.length).fill(itemIndex + cursor)
           );
           result.textArr = textArr;
           result.keywords = keywords;
@@ -137,7 +152,7 @@ export const useLazyLogData = (
         return {
           rowIndex: item.rowIndex,
           content: item.content,
-          brokenMark: item.brokenMark,
+          brokenMark: item.brokenMark
         };
       });
     }
@@ -147,7 +162,7 @@ export const useLazyLogData = (
       foundCount,
       searchResultIndexList,
       searchResultMap,
-      index: innerIndex,
+      index: innerIndex
     };
   };
 
@@ -157,7 +172,7 @@ export const useLazyLogData = (
       foundCount: 0,
       data: [],
       searchResultIndexList: [],
-      searchResultMap: {},
+      searchResultMap: {}
     };
 
     let index = 0;
@@ -175,7 +190,7 @@ export const useLazyLogData = (
       initData.data = initData.data.concat(subCacheData.data);
       initData.foundCount += subCacheData.foundCount;
       initData.searchResultIndexList = initData.searchResultIndexList.concat(
-        subCacheData.searchResultIndexList,
+        subCacheData.searchResultIndexList
       );
       Object.assign(initData.searchResultMap, subCacheData.searchResultMap);
 

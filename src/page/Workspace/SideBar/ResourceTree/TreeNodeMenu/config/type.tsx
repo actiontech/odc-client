@@ -24,21 +24,27 @@ import modal from '@/store/modal';
 import pageStore from '@/store/page';
 import { formatMessage } from '@/util/intl';
 import { downloadPLDDL } from '@/util/sqlExport';
-import { PlusOutlined, QuestionCircleFilled, ReloadOutlined } from '@ant-design/icons';
+import {
+  PlusOutlined,
+  QuestionCircleFilled,
+  ReloadOutlined
+} from '@ant-design/icons';
 import { message, Modal } from 'antd';
 import { ResourceNodeType } from '../../type';
 import { hasChangePermission, hasExportPermission } from '../index';
 import { IMenuItemConfig } from '../type';
 import { isSupportExport } from './helper';
-export const typeMenusConfig: Partial<Record<ResourceNodeType, IMenuItemConfig[]>> = {
+export const typeMenusConfig: Partial<
+  Record<ResourceNodeType, IMenuItemConfig[]>
+> = {
   [ResourceNodeType.TypeRoot]: [
     {
       key: 'CREATE',
       text: [
         formatMessage({
           id: 'odc.ResourceTree.actions.NewType',
-          defaultMessage: '新建类型',
-        }),
+          defaultMessage: '新建类型'
+        })
       ],
 
       actionType: actionTypes.create,
@@ -47,25 +53,25 @@ export const typeMenusConfig: Partial<Record<ResourceNodeType, IMenuItemConfig[]
         modal.changeCreateTypeModalVisible(
           true,
           session?.odcDatabase?.id,
-          session?.database?.dbName,
+          session?.database?.dbName
         );
-      },
+      }
     },
     {
       key: 'REFRESH',
       text: [
         formatMessage({
           id: 'odc.ResourceTree.actions.Refresh',
-          defaultMessage: '刷新',
-        }), //刷新
+          defaultMessage: '刷新'
+        }) //刷新
       ],
 
       icon: ReloadOutlined,
       actionType: actionTypes.read,
       async run(session, node) {
         await session.database.getTypeList();
-      },
-    },
+      }
+    }
   ],
 
   [ResourceNodeType.Type]: [
@@ -75,8 +81,8 @@ export const typeMenusConfig: Partial<Record<ResourceNodeType, IMenuItemConfig[]
       text: [
         formatMessage({
           id: 'odc.ResourceTree.actions.ViewType',
-          defaultMessage: '查看类型',
-        }),
+          defaultMessage: '查看类型'
+        })
       ],
 
       run(session, node) {
@@ -85,15 +91,15 @@ export const typeMenusConfig: Partial<Record<ResourceNodeType, IMenuItemConfig[]
           type?.typeName,
           TypePropsTab.DDL,
           session?.odcDatabase?.id,
-          session?.database?.dbName,
+          session?.database?.dbName
         );
-      },
+      }
     },
     {
       key: 'EXPORT',
       text: formatMessage({
         id: 'odc.src.page.Workspace.SideBar.ResourceTree.TreeNodeMenu.config.Export',
-        defaultMessage: '导出',
+        defaultMessage: '导出'
       }), //'导出'
       ellipsis: true,
       disabled: (session) => {
@@ -107,9 +113,9 @@ export const typeMenusConfig: Partial<Record<ResourceNodeType, IMenuItemConfig[]
         modal.changeExportModal(true, {
           type: DbObjectType.type,
           name: type?.typeName,
-          databaseId: session?.database?.databaseId,
+          databaseId: session?.database?.databaseId
         });
-      },
+      }
     },
     {
       key: 'DOWNLOAD',
@@ -117,8 +123,8 @@ export const typeMenusConfig: Partial<Record<ResourceNodeType, IMenuItemConfig[]
       text: [
         formatMessage({
           id: 'odc.ResourceTree.actions.Download',
-          defaultMessage: '下载',
-        }), //下载
+          defaultMessage: '下载'
+        }) //下载
       ],
 
       hasDivider: true,
@@ -128,13 +134,18 @@ export const typeMenusConfig: Partial<Record<ResourceNodeType, IMenuItemConfig[]
           type?.typeName,
           false,
           session?.database?.dbName,
-          session?.sessionId,
+          session?.sessionId
         );
         const ddl = obj?.ddl;
         if (ddl) {
-          downloadPLDDL(type?.typeName, PLType.TYPE, ddl, session?.database?.dbName);
+          downloadPLDDL(
+            type?.typeName,
+            PLType.TYPE,
+            ddl,
+            session?.database?.dbName
+          );
         }
-      },
+      }
     },
     {
       key: 'DELETE',
@@ -142,8 +153,8 @@ export const typeMenusConfig: Partial<Record<ResourceNodeType, IMenuItemConfig[]
       text: [
         formatMessage({
           id: 'odc.ResourceTree.actions.Delete',
-          defaultMessage: '删除',
-        }), //删除
+          defaultMessage: '删除'
+        }) //删除
       ],
 
       actionType: actionTypes.delete,
@@ -156,20 +167,20 @@ export const typeMenusConfig: Partial<Record<ResourceNodeType, IMenuItemConfig[]
           title: formatMessage(
             {
               id: 'odc.components.ResourceTree.TypeTree.AreYouSureYouWant',
-              defaultMessage: '是否确定删除类型{title}？',
+              defaultMessage: '是否确定删除类型{title}？'
             },
             {
-              title: type?.typeName,
-            },
+              title: type?.typeName
+            }
           ),
           // `确定要删除类型${title}吗？`
           okText: formatMessage({
             id: 'app.button.ok',
-            defaultMessage: '确定',
+            defaultMessage: '确定'
           }),
           cancelText: formatMessage({
             id: 'app.button.cancel',
-            defaultMessage: '取消',
+            defaultMessage: '取消'
           }),
           centered: true,
           icon: <QuestionCircleFilled />,
@@ -177,7 +188,7 @@ export const typeMenusConfig: Partial<Record<ResourceNodeType, IMenuItemConfig[]
             const isSuccess = await dropObject(
               type?.typeName,
               DbObjectType.type,
-              session?.sessionId,
+              session?.sessionId
             );
             if (!isSuccess) {
               return;
@@ -186,23 +197,24 @@ export const typeMenusConfig: Partial<Record<ResourceNodeType, IMenuItemConfig[]
             message.success(
               formatMessage({
                 id: 'odc.components.ResourceTree.TypeTree.DeletedSuccessfully',
-                defaultMessage: '删除成功',
-              }),
+                defaultMessage: '删除成功'
+              })
               // 删除成功
             );
 
             const openedPages = pageStore?.pages.filter(
               (p) =>
-                p.title === type?.typeName && (p.type === PageType.TYPE || p.type === PageType.PL),
+                p.title === type?.typeName &&
+                (p.type === PageType.TYPE || p.type === PageType.PL)
             );
             if (openedPages.length) {
               for (let p of openedPages) {
                 await pageStore.close(p.key);
               }
             }
-          },
+          }
         });
-      },
+      }
     },
     {
       key: 'REFRESH',
@@ -210,14 +222,14 @@ export const typeMenusConfig: Partial<Record<ResourceNodeType, IMenuItemConfig[]
       text: [
         formatMessage({
           id: 'odc.ResourceTree.actions.Refresh',
-          defaultMessage: '刷新',
-        }), //刷新
+          defaultMessage: '刷新'
+        }) //刷新
       ],
 
       actionType: actionTypes.create,
       async run(session, node) {
         await session.database.getTypeList();
-      },
-    },
-  ],
+      }
+    }
+  ]
 };

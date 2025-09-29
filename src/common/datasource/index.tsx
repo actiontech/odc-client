@@ -59,84 +59,84 @@ const _styles = {
   [IDataSourceType.OceanBase]: {
     icon: {
       component: OBSvg,
-      color: undefined,
+      color: undefined
     },
     dbIcon: {
-      component: DBOBSvg,
-    },
+      component: DBOBSvg
+    }
   },
   [IDataSourceType.MySQL]: {
     icon: {
       component: MySQLSvg,
-      color: '#01608a',
+      color: '#01608a'
     },
     dbIcon: {
-      component: DBMySQLSvg,
-    },
+      component: DBMySQLSvg
+    }
   },
   [IDataSourceType.Doris]: {
     icon: {
       component: DorisSvg,
-      color: '#09C7F7',
+      color: '#09C7F7'
     },
     dbIcon: {
-      component: DBDorisSvg,
-    },
+      component: DBDorisSvg
+    }
   },
   [IDataSourceType.Oracle]: {
     icon: {
       component: OracleSvg,
-      color: '#ed1d25',
+      color: '#ed1d25'
     },
     dbIcon: {
-      component: DBOracleSvg,
-    },
+      component: DBOracleSvg
+    }
   },
   [IDataSourceType.PG]: {
     icon: {
       component: PGSvg,
-      color: '#000000',
+      color: '#000000'
     },
     dbIcon: {
-      component: DBPGSvg,
-    },
+      component: DBPGSvg
+    }
   },
   [IDataSourceType.ALIYUNOSS]: {
     icon: {
       component: OSSSvg,
-      color: '#000000',
+      color: '#000000'
     },
     dbIcon: {
-      component: DBOSSSvg,
-    },
+      component: DBOSSSvg
+    }
   },
   [IDataSourceType.HUAWEI]: {
     icon: {
       component: OBSSvg,
-      color: '#000000',
+      color: '#000000'
     },
     dbIcon: {
-      component: DBOBSSvg,
-    },
+      component: DBOBSSvg
+    }
   },
   [IDataSourceType.AWSS3]: {
     icon: {
       component: S3Svg,
-      color: '#000000',
+      color: '#000000'
     },
     dbIcon: {
-      component: DBS3Svg,
-    },
+      component: DBS3Svg
+    }
   },
   [IDataSourceType.QCLOUD]: {
     icon: {
       component: COSSvg,
-      color: '#000000',
+      color: '#000000'
     },
     dbIcon: {
-      component: DBCOSSvg,
-    },
-  },
+      component: DBCOSSvg
+    }
+  }
 };
 
 const _gruops = {
@@ -148,18 +148,21 @@ const _gruops = {
   [IDataSourceType.ALIYUNOSS]: DatasourceGroup.FileSystem,
   [IDataSourceType.AWSS3]: DatasourceGroup.FileSystem,
   [IDataSourceType.HUAWEI]: DatasourceGroup.FileSystem,
-  [IDataSourceType.QCLOUD]: DatasourceGroup.FileSystem,
+  [IDataSourceType.QCLOUD]: DatasourceGroup.FileSystem
 };
 
 export const connectType2Ds: Map<ConnectType, IDataSourceType> = new Map();
 
 function register(
   dataSourceType: IDataSourceType,
-  items: Partial<Record<ConnectType, IDataSourceModeConfig>>,
+  items: Partial<Record<ConnectType, IDataSourceModeConfig>>
 ) {
   const connectTypes: ConnectType[] = Object.entries(items)
     .map(([key, value]) => {
-      if (odc.datasourceSupport && !odc.datasourceSupport?.(key as ConnectType, value)) {
+      if (
+        odc.datasourceSupport &&
+        !odc.datasourceSupport?.(key as ConnectType, value)
+      ) {
         return null;
       }
       if (value?.disable) {
@@ -172,7 +175,7 @@ function register(
     connectTypes: [],
     config: {},
     defaultConnectType: null,
-    _currentPriority: -1,
+    _currentPriority: -1
   };
   obj.connectTypes = obj.connectTypes.concat(connectTypes);
   for (const type of connectTypes) {
@@ -240,7 +243,7 @@ function getDataSourceModeConfig(connectType: ConnectType) {
 }
 
 function getDataSourceModeConfigByConnectionMode(
-  connectionMode: ConnectionMode,
+  connectionMode: ConnectionMode
 ): IDataSourceModeConfig {
   const ds = connectType2Ds[connectionMode];
   return _types.get(ds)?.config?.[connectionMode];
@@ -292,5 +295,5 @@ export {
   getAllDBTypes,
   getIsDBAvailableInDataSourceTypes,
   getIsDBBelongsToProjectsInDataSourceTypes,
-  isFileSystemSupport,
+  isFileSystemSupport
 };

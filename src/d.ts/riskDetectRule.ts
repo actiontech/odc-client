@@ -16,7 +16,7 @@
 
 import {
   EBooleanOperator,
-  EConditionType,
+  EConditionType
 } from '@/page/Secure/RiskLevel/components/InnerRiskLevel';
 import { ProjectUser } from './project';
 import { IRiskLevel } from './riskLevel';

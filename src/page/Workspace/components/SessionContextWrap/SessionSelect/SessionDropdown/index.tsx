@@ -9,16 +9,33 @@ import { formatMessage } from '@/util/intl';
 import tracert from '@/util/tracert';
 import { useParams } from '@umijs/max';
 import { useRequest } from 'ahooks';
-import { Badge, Popover, Spin, Tooltip, Tree, Button, Radio } from 'antd';
+import { Popover, Spin, Typography } from 'antd';
 import { DataNode } from 'antd/lib/tree';
 import { toInteger } from 'lodash';
 import { UserStore } from '@/store/login';
 import { inject, observer } from 'mobx-react';
-import { isConnectTypeBeFileSystemGroup, isPgDataDataSource } from '@/util/connection';
-import React, { Key, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  isConnectTypeBeFileSystemGroup,
+  isPgDataDataSource
+} from '@/util/connection';
+import React, {
+  Key,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
 import SessionContext from '../../context';
 import { DEFALT_HEIGHT, DEFALT_WIDTH } from '../const';
-import styles from './index.less';
+import {
+  HeaderStyleWrapper,
+  GroupIconStyleWrapper,
+  FooterStyleWrapper,
+  TreeContainerStyleWrapper,
+  TreeStyleWrapper,
+  TextOverflowStyleWrapper
+} from './style';
 import Search, { SearchType } from './components/Search';
 import Group from '@/page/Workspace/SideBar/ResourceTree/DatabaseGroup';
 import { DatabaseGroup } from '@/d.ts/database';
@@ -38,7 +55,7 @@ import {
   getShouldExpandedGroupKeys,
   getIcon,
   DatabaseGroupArr,
-  hasSecondGroup,
+  hasSecondGroup
 } from './helper';
 import DatasourceSelectEmpty from '@/component/Empty/DatasourceSelectEmpty';
 import DatabaseSelectEmpty from '@/component/Empty/DatabaseSelectEmpty';
@@ -63,7 +80,7 @@ export interface ISessionDropdownCheckModeConfigProps {
 }
 export enum TabsType {
   all = 'all',
-  recentlyUsed = 'recentlyUsed',
+  recentlyUsed = 'recentlyUsed'
 }
 interface IProps {
   width?: number | string;
@@ -90,16 +107,19 @@ const SessionDropdown: React.FC<IProps> = (props) => {
     disabled = false,
     userStore,
     groupMode: initGroupMode,
-    checkModeConfig = null,
+    checkModeConfig = null
   } = props;
-  const { onSelect, checkedKeys, setCheckedKeys, setOptions } = checkModeConfig || {};
+  const { onSelect, checkedKeys, setCheckedKeys, setOptions } =
+    checkModeConfig || {};
   const context = useContext(SessionContext);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [canCheckedDbKeys, setCanCheckedDbKeys] = useState<number[]>([]);
   const [tab, setTab] = useState<TabsType>(TabsType.all);
   const [groupMode, _setGroupMode] = useState(
-    userStore.isPrivateSpace() ? DatabaseGroup.dataSource : DatabaseGroup.project,
+    userStore.isPrivateSpace()
+      ? DatabaseGroup.dataSource
+      : DatabaseGroup.project
   );
   const setGroupMode = (type: DatabaseGroup) => {
     localStorage.setItem('sessionDropdownGroupMode', type);
@@ -114,21 +134,26 @@ const SessionDropdown: React.FC<IProps> = (props) => {
   const { datasourceId } = useParams<{
     datasourceId: string;
   }>();
-  const [searchValue, setSearchValue] = useState<{ value: string; type: SearchType }>({
+  const [searchValue, setSearchValue] = useState<{
+    value: string;
+    type: SearchType;
+  }>({
     value: null,
-    type: null,
+    type: null
   });
   const [searchValueByDataSource, setSearchValueByDataSource] = useState('');
   const [expandedKeys, setExpandedKeys] = useState<Key[]>([]);
   const hasDialectTypesFilter =
-    filters?.dialectTypes && Array.isArray(filters?.dialectTypes) && filters?.dialectTypes?.length;
+    filters?.dialectTypes &&
+    Array.isArray(filters?.dialectTypes) &&
+    filters?.dialectTypes?.length;
   const hasFeature = !!filters?.feature;
   const isIncludeLogicalDb = !!filters?.isIncludeLogicalDb;
 
   const {
     data,
     run,
-    loading: fetchLoading,
+    loading: fetchLoading
   } = useRequest(listDatabases, {
     manual: true,
     onSuccess: (dataList) => {
@@ -136,24 +161,31 @@ const SessionDropdown: React.FC<IProps> = (props) => {
       const options =
         dataList?.contents?.map((content) => ({
           label: content.name,
-          value: content.id,
+          value: content.id
         })) || [];
       setOptions(options);
-    },
+    }
   });
 
   const {
     data: databasesHistory,
     run: runGetDatabasesHistories,
-    loading: databaseHistoryLoading,
-  } = useRequest((params: IDatabaseHistoriesParam) => getDatabasesHistories(params), {
-    manual: true,
-  });
+    loading: databaseHistoryLoading
+  } = useRequest(
+    (params: IDatabaseHistoriesParam) => getDatabasesHistories(params),
+    {
+      manual: true
+    }
+  );
 
   const { DatabaseGroupMap, allDatasources } = useGroupData({
     databaseList: data?.contents,
     filter: (database: IDatabase) => {
-      if (!context?.isLogicalDatabase && database.type === 'LOGICAL' && !isIncludeLogicalDb) {
+      if (
+        !context?.isLogicalDatabase &&
+        database.type === 'LOGICAL' &&
+        !isIncludeLogicalDb
+      ) {
         return false;
       }
       if (
@@ -166,11 +198,17 @@ const SessionDropdown: React.FC<IProps> = (props) => {
       const support =
         !taskType ||
         database.type === 'LOGICAL' ||
-        getDataSourceModeConfig(database.dataSource?.type)?.features?.task?.includes(taskType);
+        getDataSourceModeConfig(
+          database.dataSource?.type
+        )?.features?.task?.includes(taskType);
       if (!support) {
         return false;
       }
-      if (!taskType && !getDataSourceModeConfig(database?.dataSource?.type)?.features?.sqlconsole) {
+      if (
+        !taskType &&
+        !getDataSourceModeConfig(database?.dataSource?.type)?.features
+          ?.sqlconsole
+      ) {
         return false;
       }
       if (
@@ -179,17 +217,22 @@ const SessionDropdown: React.FC<IProps> = (props) => {
       ) {
         return false;
       }
-      if (isConnectTypeBeFileSystemGroup(database?.dataSource?.type) && filters?.hideFileSystem) {
+      if (
+        isConnectTypeBeFileSystemGroup(database?.dataSource?.type) &&
+        filters?.hideFileSystem
+      ) {
         return false;
       }
       if (
         hasFeature &&
-        !getDataSourceModeConfig(database?.dataSource?.type)?.features[filters?.feature]
+        !getDataSourceModeConfig(database?.dataSource?.type)?.features[
+          filters?.feature
+        ]
       ) {
         return false;
       }
       return true;
-    },
+    }
   });
 
   useEffect(() => {
@@ -208,12 +251,16 @@ const SessionDropdown: React.FC<IProps> = (props) => {
         null,
         searchValue.type === SearchType.DATASOURCE ? searchValue.value : null,
         searchValue.type === SearchType.CLUSTER ? searchValue.value : null,
-        searchValue.type === SearchType.TENANT ? searchValue.value : null,
+        searchValue.type === SearchType.TENANT ? searchValue.value : null
       );
-      if (!context.datasourceMode && !checkModeConfig && !userStore.isPrivateSpace()) {
+      if (
+        !context.datasourceMode &&
+        !checkModeConfig &&
+        !userStore.isPrivateSpace()
+      ) {
         runGetDatabasesHistories({
           currentOrganizationId: userStore.organizationId,
-          limit: 10,
+          limit: 10
         });
       }
     }
@@ -248,7 +295,9 @@ const SessionDropdown: React.FC<IProps> = (props) => {
         if (type && type !== 'null' && type !== 'undefined') {
           if (
             userStore.isPrivateSpace() &&
-            [DatabaseGroup.project, DatabaseGroup.none].includes(type as DatabaseGroup)
+            [DatabaseGroup.project, DatabaseGroup.none].includes(
+              type as DatabaseGroup
+            )
           ) {
             return;
           }
@@ -266,10 +315,12 @@ const SessionDropdown: React.FC<IProps> = (props) => {
           key,
           type,
           groupMode,
-          databaseList: data?.contents,
+          databaseList: data?.contents
         });
         setTimeout(() => {
-          setExpandedKeys(Array.from(new Set([...expandedKeys, ...shouldExpandedGroupKeys])));
+          setExpandedKeys(
+            Array.from(new Set([...expandedKeys, ...shouldExpandedGroupKeys]))
+          );
         });
       }
       positionTreeByKey(key, 300);
@@ -283,13 +334,18 @@ const SessionDropdown: React.FC<IProps> = (props) => {
         key: context.databaseId,
         type: NodeType.Database,
         groupMode,
-        databaseList: data?.contents,
+        databaseList: data?.contents
       });
       setTimeout(() => {
-        setExpandedKeys(Array.from(new Set([...expandedKeys, ...shouldExpandedGroupKeys])));
+        setExpandedKeys(
+          Array.from(new Set([...expandedKeys, ...shouldExpandedGroupKeys]))
+        );
       });
       positionTreeByKey(context.databaseId, 300).then(() => {
-        setCurrentObject({ value: context.databaseId, type: NodeType.Database });
+        setCurrentObject({
+          value: context.databaseId,
+          type: NodeType.Database
+        });
       });
     }
     initDefaultExpandedKeys();
@@ -297,20 +353,30 @@ const SessionDropdown: React.FC<IProps> = (props) => {
 
   const initDefaultExpandedKeys = () => {
     const defaultExpandedKeys = [];
-    if (data?.contents?.length && !context.datasourceMode && !context.databaseId) {
+    if (
+      data?.contents?.length &&
+      !context.datasourceMode &&
+      !context.databaseId
+    ) {
       DatabaseGroupArr.forEach((item) => {
         if (item !== DatabaseGroup.none) {
           const group = DatabaseGroupMap?.[item]?.entries()?.next()?.value?.[1];
-          group?.mapId && defaultExpandedKeys.push(getGroupKey(group?.mapId, item));
+          group?.mapId &&
+            defaultExpandedKeys.push(getGroupKey(group?.mapId, item));
           if (hasSecondGroup(item)) {
-            const secondGroup = group?.secondGroup?.entries()?.next()?.value?.[1];
+            const secondGroup = group?.secondGroup?.entries()?.next()
+              ?.value?.[1];
             secondGroup?.mapId &&
-              defaultExpandedKeys.push(getSecondGroupKey(group?.mapId, secondGroup?.mapId, item));
+              defaultExpandedKeys.push(
+                getSecondGroupKey(group?.mapId, secondGroup?.mapId, item)
+              );
           }
         }
       });
     }
-    setExpandedKeys(Array.from(new Set([...expandedKeys, ...defaultExpandedKeys])));
+    setExpandedKeys(
+      Array.from(new Set([...expandedKeys, ...defaultExpandedKeys]))
+    );
   };
 
   function onOpen(open: boolean) {
@@ -326,7 +392,9 @@ const SessionDropdown: React.FC<IProps> = (props) => {
     let _treeData = [];
     const _canCheckedDbKeys: number[] = [];
     if (context.datasourceMode) {
-      _treeData = [...(DatabaseGroupMap[DatabaseGroup.dataSource]?.values() || [])]
+      _treeData = [
+        ...(DatabaseGroupMap[DatabaseGroup.dataSource]?.values() || [])
+      ]
         ?.map((item) => {
           const { dataSource } = item;
           if (!dataSource) {
@@ -334,7 +402,9 @@ const SessionDropdown: React.FC<IProps> = (props) => {
           }
           if (
             searchValueByDataSource &&
-            !dataSource?.name?.toLowerCase().includes(searchValueByDataSource?.toLowerCase())
+            !dataSource?.name
+              ?.toLowerCase()
+              .includes(searchValueByDataSource?.toLowerCase())
           ) {
             return null;
           }
@@ -345,7 +415,9 @@ const SessionDropdown: React.FC<IProps> = (props) => {
                 placement={'right'}
                 content={<ConnectionPopover connection={dataSource} />}
               >
-                <div className={styles.textoverflow}>{dataSource?.name}</div>
+                <TextOverflowStyleWrapper>
+                  {dataSource?.name}
+                </TextOverflowStyleWrapper>
               </Popover>
             ),
 
@@ -353,18 +425,24 @@ const SessionDropdown: React.FC<IProps> = (props) => {
             key: dataSource?.id,
             selectable: true,
             isLeaf: true,
-            type: NodeType.Connection,
+            type: NodeType.Connection
           };
         })
         .filter(Boolean);
     } else if (tab === TabsType.recentlyUsed) {
-      _treeData = databasesHistory?.map((database) => renderDatabaseNode({ taskType, database }));
+      _treeData = databasesHistory?.map((database) =>
+        renderDatabaseNode({ taskType, database })
+      );
     } else {
       switch (groupMode) {
         case DatabaseGroup.none: {
           _treeData = [...(DatabaseGroupMap[groupMode]?.values() || [])]
             ?.map((database: IDatabase) =>
-              renderDatabaseNode({ taskType, database, canCheckedDbKeys: _canCheckedDbKeys }),
+              renderDatabaseNode({
+                taskType,
+                database,
+                canCheckedDbKeys: _canCheckedDbKeys
+              })
             )
             ?.sort((a, b) => {
               if (a.disabled === b.disabled) return 0;
@@ -375,67 +453,81 @@ const SessionDropdown: React.FC<IProps> = (props) => {
         case DatabaseGroup.project:
         case DatabaseGroup.dataSource:
         case DatabaseGroup.tenant: {
-          _treeData = [...(DatabaseGroupMap[groupMode]?.values() || [])].map((groupItem) => {
-            const groupKey = getGroupKey(groupItem.mapId, groupMode);
-            return {
-              title: <GroupNodeTitle item={groupItem} tip={groupItem?.tip} />,
-              key: groupKey,
-              icon: getIcon({
-                type: GroupNodeToNodeType[groupMode],
-                dataSource: data?.contents?.find(
-                  (db: IDatabase) => db?.dataSource?.id === groupItem.mapId,
-                )?.dataSource,
-              }),
-              type: GroupNodeToNodeType[groupMode],
-              children: groupItem.databases
-                ?.map((database) =>
-                  renderDatabaseNode({ taskType, database, canCheckedDbKeys: _canCheckedDbKeys }),
-                )
-                ?.sort((a, b) => {
-                  if (a.disabled === b.disabled) return 0;
-                  return a.disabled ? 1 : -1;
+          _treeData = [...(DatabaseGroupMap[groupMode]?.values() || [])].map(
+            (groupItem) => {
+              const groupKey = getGroupKey(groupItem.mapId, groupMode);
+              return {
+                title: <GroupNodeTitle item={groupItem} tip={groupItem?.tip} />,
+                key: groupKey,
+                icon: getIcon({
+                  type: GroupNodeToNodeType[groupMode],
+                  dataSource: data?.contents?.find(
+                    (db: IDatabase) => db?.dataSource?.id === groupItem.mapId
+                  )?.dataSource
                 }),
-            };
-          });
+                type: GroupNodeToNodeType[groupMode],
+                children: groupItem.databases
+                  ?.map((database) =>
+                    renderDatabaseNode({
+                      taskType,
+                      database,
+                      canCheckedDbKeys: _canCheckedDbKeys
+                    })
+                  )
+                  ?.sort((a, b) => {
+                    if (a.disabled === b.disabled) return 0;
+                    return a.disabled ? 1 : -1;
+                  })
+              };
+            }
+          );
           break;
         }
         case DatabaseGroup.cluster:
         case DatabaseGroup.environment:
         case DatabaseGroup.connectType: {
-          _treeData = [...(DatabaseGroupMap[groupMode]?.values() || [])].map((groupItem) => {
-            const groupKey = getGroupKey(groupItem.mapId, groupMode);
-            return {
-              title: <GroupNodeTitle item={groupItem} />,
-              key: groupKey,
-              type: GroupNodeToNodeType[groupMode],
-              children: [...(groupItem.secondGroup.values() || [])].map((sItem) => {
-                const sencondGroupKey = getSecondGroupKey(groupItem.mapId, sItem.mapId, groupMode);
-                return {
-                  title: sItem.groupName,
-                  key: sencondGroupKey,
-                  icon: getIcon({
-                    type: NodeType.SecondGroupNodeDataSource,
-                    dataSource: data?.contents?.find(
-                      (db: IDatabase) => db?.dataSource?.id === sItem.mapId,
-                    )?.dataSource,
-                  }),
-                  type: NodeType.SecondGroupNodeDataSource,
-                  children: sItem.databases
-                    ?.map((database) =>
-                      renderDatabaseNode({
-                        taskType,
-                        database,
-                        canCheckedDbKeys: _canCheckedDbKeys,
+          _treeData = [...(DatabaseGroupMap[groupMode]?.values() || [])].map(
+            (groupItem) => {
+              const groupKey = getGroupKey(groupItem.mapId, groupMode);
+              return {
+                title: <GroupNodeTitle item={groupItem} />,
+                key: groupKey,
+                type: GroupNodeToNodeType[groupMode],
+                children: [...(groupItem.secondGroup.values() || [])].map(
+                  (sItem) => {
+                    const sencondGroupKey = getSecondGroupKey(
+                      groupItem.mapId,
+                      sItem.mapId,
+                      groupMode
+                    );
+                    return {
+                      title: sItem.groupName,
+                      key: sencondGroupKey,
+                      icon: getIcon({
+                        type: NodeType.SecondGroupNodeDataSource,
+                        dataSource: data?.contents?.find(
+                          (db: IDatabase) => db?.dataSource?.id === sItem.mapId
+                        )?.dataSource
                       }),
-                    )
-                    ?.sort((a, b) => {
-                      if (a.disabled === b.disabled) return 0;
-                      return a.disabled ? 1 : -1;
-                    }),
-                };
-              }),
-            };
-          });
+                      type: NodeType.SecondGroupNodeDataSource,
+                      children: sItem.databases
+                        ?.map((database) =>
+                          renderDatabaseNode({
+                            taskType,
+                            database,
+                            canCheckedDbKeys: _canCheckedDbKeys
+                          })
+                        )
+                        ?.sort((a, b) => {
+                          if (a.disabled === b.disabled) return 0;
+                          return a.disabled ? 1 : -1;
+                        })
+                    };
+                  }
+                )
+              };
+            }
+          );
           break;
         }
       }
@@ -447,9 +539,8 @@ const SessionDropdown: React.FC<IProps> = (props) => {
 
   function TreeRender() {
     return (
-      <Tree
+      <TreeStyleWrapper
         ref={treeRef}
-        className={styles.tree}
         expandAction="click"
         height={215}
         onSelect={async (_, info) => {
@@ -497,13 +588,12 @@ const SessionDropdown: React.FC<IProps> = (props) => {
   function footerRender() {
     if (!checkModeConfig || !treeData?.length) return;
     return (
-      <div className={styles.footer}>
+      <FooterStyleWrapper>
         {checkedKeys.length !== canCheckedDbKeys?.length && (
-          <Button
-            type="link"
+          <Typography.Link
             onClick={() => {
               const KeyList = filterGroupKey(
-                Array.from(new Set([...expandedKeys, ...canCheckedDbKeys])),
+                Array.from(new Set([...expandedKeys, ...canCheckedDbKeys]))
               );
               setCheckedKeys(KeyList);
               onSelect?.(KeyList);
@@ -511,13 +601,12 @@ const SessionDropdown: React.FC<IProps> = (props) => {
           >
             {formatMessage({
               id: 'src.page.Workspace.components.SessionContextWrap.SessionSelect.SessionDropdown.86AE09B0',
-              defaultMessage: '全选',
+              defaultMessage: '全选'
             })}
-          </Button>
+          </Typography.Link>
         )}
         {checkedKeys?.length === canCheckedDbKeys?.length && (
-          <Button
-            type="link"
+          <Typography.Link
             onClick={() => {
               setCheckedKeys([]);
               onSelect?.([]);
@@ -525,11 +614,11 @@ const SessionDropdown: React.FC<IProps> = (props) => {
           >
             {formatMessage({
               id: 'src.page.Workspace.components.SessionContextWrap.SessionSelect.SessionDropdown.7FA7CC62',
-              defaultMessage: '取消全选',
+              defaultMessage: '取消全选'
             })}
-          </Button>
+          </Typography.Link>
         )}
-      </div>
+      </FooterStyleWrapper>
     );
   }
 
@@ -547,19 +636,20 @@ const SessionDropdown: React.FC<IProps> = (props) => {
     <Popover
       trigger={['click']}
       placement="bottom"
-      overlayClassName={styles.sessionSelectPopover}
       open={isOpen}
       showArrow={false}
       onOpenChange={onOpen}
-      overlayStyle={{ paddingTop: 2, width }}
+      styles={{ root: { padding: 0 } }}
       content={
         disabled ? null : (
           <Spin spinning={loading || fetchLoading || databaseHistoryLoading}>
-            <div className={styles.main}>
-              <div className={styles.header} style={{ width: width || DEFALT_WIDTH }}>
-                {!context.datasourceMode && !checkModeConfig && !userStore.isPrivateSpace() && (
-                  <DatabaseSelectTab tab={tab} setTab={setTab} />
-                )}
+            <>
+              <HeaderStyleWrapper $width={width || DEFALT_WIDTH}>
+                {!context.datasourceMode &&
+                  !checkModeConfig &&
+                  !userStore.isPrivateSpace() && (
+                    <DatabaseSelectTab tab={tab} setTab={setTab} />
+                  )}
                 {tab === TabsType.all && (
                   <Search
                     searchValue={searchValue}
@@ -570,19 +660,19 @@ const SessionDropdown: React.FC<IProps> = (props) => {
                     }}
                   />
                 )}
-                {!context.datasourceMode && tab === TabsType.all && (
-                  <span className={styles.groupIcon}>
+                {/* {!context.datasourceMode && tab === TabsType.all && (
+                  <GroupIconStyleWrapper>
                     <Group setGroupMode={setGroupMode} groupMode={groupMode} />
-                  </span>
-                )}
-              </div>
-              <div
-                style={{ height: DEFALT_HEIGHT, width: width || DEFALT_WIDTH }}
-                className={styles.treeContainer}
+                  </GroupIconStyleWrapper>
+                )} */}
+              </HeaderStyleWrapper>
+              <TreeContainerStyleWrapper
+                $height={DEFALT_HEIGHT}
+                $width={width || DEFALT_WIDTH}
               >
                 {treeData?.length > 0 ? TreeRender() : empty}
-              </div>
-            </div>
+              </TreeContainerStyleWrapper>
+            </>
 
             {footerRender()}
           </Spin>
@@ -593,4 +683,7 @@ const SessionDropdown: React.FC<IProps> = (props) => {
     </Popover>
   );
 };
-export default inject('dataSourceStatusStore', 'userStore')(observer(SessionDropdown));
+export default inject(
+  'dataSourceStatusStore',
+  'userStore'
+)(observer(SessionDropdown));

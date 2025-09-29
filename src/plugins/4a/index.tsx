@@ -22,7 +22,7 @@ import { ODC } from '../odc';
 enum I4AErrorCode {
   SqlInterceptBlocked = 'SqlInterceptBlocked',
   SqlInterceptApprovalRequired = 'SqlInterceptApprovalRequired',
-  SqlInterceptExternalServiceError = 'SqlInterceptExternalServiceError',
+  SqlInterceptExternalServiceError = 'SqlInterceptExternalServiceError'
 }
 
 export function apply(ODC: ODC) {
@@ -37,9 +37,9 @@ export function apply(ODC: ODC) {
             errMsg ||
             formatMessage({
               id: 'odc.plugins.4a.CurrentSqlExecutionIsNot',
-              defaultMessage: '不允许执行当前 SQL',
+              defaultMessage: '不允许执行当前 SQL'
             }), //不允许执行当前 SQL
-          requestId: requestId,
+          requestId: requestId
         });
         return true;
       }
@@ -51,8 +51,8 @@ export function apply(ODC: ODC) {
           errMsg ||
             formatMessage({
               id: 'odc.plugins.4a.TheCurrentSqlCannotBe',
-              defaultMessage: '当前 SQL 无法直接执行，请提交审批',
-            }), //当前 SQL 无法直接执行，请提交审批
+              defaultMessage: '当前 SQL 无法直接执行，请提交审批'
+            }) //当前 SQL 无法直接执行，请提交审批
         );
         return true;
       }
@@ -65,9 +65,9 @@ export function apply(ODC: ODC) {
             errMsg ||
             formatMessage({
               id: 'odc.plugins.4a.ApprovalSystemFailurePleaseTry',
-              defaultMessage: '审批系统故障，请稍后再试',
+              defaultMessage: '审批系统故障，请稍后再试'
             }), //审批系统故障，请稍后再试
-          requestId: requestId,
+          requestId: requestId
         });
         return true;
       }

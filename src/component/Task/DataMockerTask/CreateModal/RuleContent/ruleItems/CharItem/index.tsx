@@ -41,7 +41,7 @@ export enum CharRuleType {
   RANDOM_NUMBER = 'RANDOM_NUMBER',
   ORDER_NUMBER = 'ORDER_NUMBER',
   NULL = 'NULL',
-  SKIP = 'SKIP',
+  SKIP = 'SKIP'
 }
 
 interface ICharItemProps {
@@ -112,495 +112,569 @@ interface ICharItemProps {
   ref: React.Ref<FormInstance>;
 }
 
-const CharItem: React.FC<ICharItemProps> = forwardRef<FormInstance, ICharItemProps>(
-  (props, ref) => {
-    const { readonly, ruleType, value, maxLength } = props;
-    const [form] = Form.useForm();
+const CharItem: React.FC<ICharItemProps> = forwardRef<
+  FormInstance,
+  ICharItemProps
+>((props, ref) => {
+  const { readonly, ruleType, value, maxLength } = props;
+  const [form] = Form.useForm();
 
-    useImperativeHandle(ref, () => {
-      return form;
-    });
+  useImperativeHandle(ref, () => {
+    return form;
+  });
 
-    let items;
-    if (readonly) {
-      switch (ruleType) {
-        case CharRuleType.NORMAL_TEXT: {
-          items = getTextItem([
-            [
-              formatMessage({ id: 'odc.ruleItems.CharItem.Value', defaultMessage: '值' }), // 值
-              value?.['genParams']?.fixText,
-            ],
-          ]);
-          break;
-        }
-        case CharRuleType.RANDOM_TEXT: {
-          items = getTextItem([
-            [
-              formatMessage({
-                id: 'odc.ruleItems.CharItem.LengthRange',
-                defaultMessage: '长度区间',
-              }), // 长度区间
-              value?.['range'],
-            ],
-
-            [
-              formatMessage({ id: 'odc.ruleItems.CharItem.Case', defaultMessage: '大小写' }), // 大小写
-              value?.['genParams']?.caseOption === 'ALL_LOWER_CASE'
-                ? formatMessage({
-                    id: 'odc.ruleItems.CharItem.AllLowercase',
-                    defaultMessage: '全部小写',
-                  }) // 全部小写
-                : formatMessage({
-                    id: 'odc.ruleItems.CharItem.AllUppercase',
-                    defaultMessage: '全部大写',
-                  }), // 全部大写
-            ],
-          ]);
-          break;
-        }
-        case CharRuleType.REGEXP_TEXT: {
-          items = getTextItem([
-            [
-              formatMessage({
-                id: 'odc.ruleItems.CharItem.RegularExpression',
-                defaultMessage: '正则表达式',
-              }), // 正则表达式
-              value?.['genParams']?.regText,
-            ],
-          ]);
-          break;
-        }
-        case CharRuleType.RANDOM_BOOL: {
-          items = '';
-          break;
-        }
-        case CharRuleType.NORMAL_BOOL: {
-          items = getTextItem([
-            [
-              formatMessage({
-                id: 'odc.ruleItems.CharItem.BooleanValue',
-                defaultMessage: '布尔值',
-              }), // 布尔值
-              value?.['genParams']?.fixText,
-            ],
-          ]);
-          break;
-        }
-        case CharRuleType.NORMAL_DATE: {
-          items = getTextItem([
-            [
-              formatMessage({ id: 'odc.ruleItems.CharItem.Date', defaultMessage: '日期' }), // 日期
-              value?.['genParams']?.timestamp,
-            ],
-          ]);
-          break;
-        }
-        case CharRuleType.RANDOM_DATE:
-        case CharRuleType.RANDOM_NUMBER: {
-          items = getTextItem([
-            [
-              formatMessage({ id: 'odc.ruleItems.CharItem.Interval', defaultMessage: '区间' }), // 区间
-              value?.['range'],
-            ],
-          ]);
-          break;
-        }
-        case CharRuleType.ORDER_DATE: {
-          const step = value?.['genParams']?.step;
-          items = getTextItem([
-            [
-              formatMessage({ id: 'odc.ruleItems.CharItem.Date', defaultMessage: '日期' }), // 日期
-              value?.['lowValue'],
-            ],
-
-            [
-              formatMessage({ id: 'odc.ruleItems.CharItem.StepSize', defaultMessage: '步长' }), // 步长
-              step + formatMessage({ id: 'odc.ruleItems.CharItem.Days', defaultMessage: '天' }), // 天
-            ],
-            [
-              formatMessage({ id: 'odc.ruleItems.CharItem.Sort', defaultMessage: '排序' }), // 排序
-              value?.['order'] === 'asc'
-                ? formatMessage({
-                    id: 'odc.ruleItems.CharItem.PositiveSequence',
-                    defaultMessage: '正序',
-                  }) // 正序
-                : formatMessage({ id: 'odc.ruleItems.CharItem.Reverse', defaultMessage: '倒序' }), // 倒序
-            ],
-          ]);
-          break;
-        }
-        case CharRuleType.ORDER_NUMBER: {
-          const step = value?.['genParams']?.step;
-          items = getTextItem([
-            [
-              formatMessage({ id: 'odc.ruleItems.CharItem.StartValue', defaultMessage: '起始值' }), // 起始值
-              value?.['lowValue'],
-            ],
-
-            [
-              formatMessage({ id: 'odc.ruleItems.CharItem.StepSize', defaultMessage: '步长' }), // 步长
-              step,
-            ],
-
-            [
-              formatMessage({ id: 'odc.ruleItems.CharItem.Sort', defaultMessage: '排序' }), // 排序
-              value?.['order'] === 'asc'
-                ? formatMessage({
-                    id: 'odc.ruleItems.CharItem.PositiveSequence',
-                    defaultMessage: '正序',
-                  }) // 正序
-                : formatMessage({ id: 'odc.ruleItems.CharItem.Reverse', defaultMessage: '倒序' }), // 倒序
-            ],
-          ]);
-          break;
-        }
-        case CharRuleType.NORMAL_NUMBER: {
-          items = getTextItem([
-            [
-              formatMessage({ id: 'odc.ruleItems.CharItem.Value', defaultMessage: '值' }), // 值
-              value?.['genParams']?.fixNum,
-            ],
-          ]);
-          break;
-        }
-        case CharRuleType.NULL:
-        case CharRuleType.SKIP: {
-          items = '';
-          break;
-        }
+  let items;
+  if (readonly) {
+    switch (ruleType) {
+      case CharRuleType.NORMAL_TEXT: {
+        items = getTextItem([
+          [
+            formatMessage({
+              id: 'odc.ruleItems.CharItem.Value',
+              defaultMessage: '值'
+            }), // 值
+            value?.['genParams']?.fixText
+          ]
+        ]);
+        break;
       }
-    } else {
-      switch (ruleType) {
-        case CharRuleType.NORMAL_TEXT: {
-          items = (
-            <Space style={{ width: '100%' }} direction="vertical">
-              <Form.Item
-                rules={getRequiredRules()}
-                style={{ width: '100%' }}
-                name={['genParams', 'fixText']}
-              >
-                <Input
-                  maxLength={maxLength}
-                  addonBefore={formatMessage({
-                    id: 'odc.ruleItems.CharItem.Value',
-                    defaultMessage: '值',
-                  })} /* 值 */
-                />
-              </Form.Item>
-            </Space>
-          );
+      case CharRuleType.RANDOM_TEXT: {
+        items = getTextItem([
+          [
+            formatMessage({
+              id: 'odc.ruleItems.CharItem.LengthRange',
+              defaultMessage: '长度区间'
+            }), // 长度区间
+            value?.['range']
+          ],
 
-          break;
-        }
-        case CharRuleType.RANDOM_TEXT: {
-          items = (
-            <Space style={{ width: '100%' }} direction="vertical">
-              <Form.Item rules={getRangeInputRules()} style={{ width: '100%' }} name="range">
-                <RangeInput
-                  max={`${maxLength}`}
-                  min={`${1}`}
-                  addonBefore={formatMessage({
-                    id: 'odc.ruleItems.CharItem.LengthRange',
-                    defaultMessage: '长度区间',
-                  })} /* 长度区间 */
-                />
-              </Form.Item>
-              <Form.Item style={{ width: '100%' }} name={['genParams', 'caseOption']}>
-                <WrapItemWithTitle
-                  addonBefore={formatMessage({
-                    id: 'odc.ruleItems.CharItem.Case',
-                    defaultMessage: '大小写',
-                  })} /* 大小写 */
-                >
-                  <Select>
-                    <Option key="ALL_LOWER_CASE" value="ALL_LOWER_CASE">
-                      {
-                        formatMessage({
-                          id: 'odc.ruleItems.CharItem.AllLowercase',
-                          defaultMessage: '全部小写',
-                        }) /* 全部小写 */
-                      }
-                    </Option>
-                    <Option key="ALL_UPPER_CASE" value="ALL_UPPER_CASE">
-                      {
-                        formatMessage({
-                          id: 'odc.ruleItems.CharItem.AllUppercase',
-                          defaultMessage: '全部大写',
-                        }) /* 全部大写 */
-                      }
-                    </Option>
-                  </Select>
-                </WrapItemWithTitle>
-              </Form.Item>
-            </Space>
-          );
+          [
+            formatMessage({
+              id: 'odc.ruleItems.CharItem.Case',
+              defaultMessage: '大小写'
+            }), // 大小写
+            value?.['genParams']?.caseOption === 'ALL_LOWER_CASE'
+              ? formatMessage({
+                  id: 'odc.ruleItems.CharItem.AllLowercase',
+                  defaultMessage: '全部小写'
+                }) // 全部小写
+              : formatMessage({
+                  id: 'odc.ruleItems.CharItem.AllUppercase',
+                  defaultMessage: '全部大写'
+                }) // 全部大写
+          ]
+        ]);
+        break;
+      }
+      case CharRuleType.REGEXP_TEXT: {
+        items = getTextItem([
+          [
+            formatMessage({
+              id: 'odc.ruleItems.CharItem.RegularExpression',
+              defaultMessage: '正则表达式'
+            }), // 正则表达式
+            value?.['genParams']?.regText
+          ]
+        ]);
+        break;
+      }
+      case CharRuleType.RANDOM_BOOL: {
+        items = '';
+        break;
+      }
+      case CharRuleType.NORMAL_BOOL: {
+        items = getTextItem([
+          [
+            formatMessage({
+              id: 'odc.ruleItems.CharItem.BooleanValue',
+              defaultMessage: '布尔值'
+            }), // 布尔值
+            value?.['genParams']?.fixText
+          ]
+        ]);
+        break;
+      }
+      case CharRuleType.NORMAL_DATE: {
+        items = getTextItem([
+          [
+            formatMessage({
+              id: 'odc.ruleItems.CharItem.Date',
+              defaultMessage: '日期'
+            }), // 日期
+            value?.['genParams']?.timestamp
+          ]
+        ]);
+        break;
+      }
+      case CharRuleType.RANDOM_DATE:
+      case CharRuleType.RANDOM_NUMBER: {
+        items = getTextItem([
+          [
+            formatMessage({
+              id: 'odc.ruleItems.CharItem.Interval',
+              defaultMessage: '区间'
+            }), // 区间
+            value?.['range']
+          ]
+        ]);
+        break;
+      }
+      case CharRuleType.ORDER_DATE: {
+        const step = value?.['genParams']?.step;
+        items = getTextItem([
+          [
+            formatMessage({
+              id: 'odc.ruleItems.CharItem.Date',
+              defaultMessage: '日期'
+            }), // 日期
+            value?.['lowValue']
+          ],
 
-          break;
-        }
-        case CharRuleType.REGEXP_TEXT: {
-          items = (
-            <Form.Item style={{ width: '100%' }} name={['genParams', 'regText']}>
+          [
+            formatMessage({
+              id: 'odc.ruleItems.CharItem.StepSize',
+              defaultMessage: '步长'
+            }), // 步长
+            step +
+              formatMessage({
+                id: 'odc.ruleItems.CharItem.Days',
+                defaultMessage: '天'
+              }) // 天
+          ],
+          [
+            formatMessage({
+              id: 'odc.ruleItems.CharItem.Sort',
+              defaultMessage: '排序'
+            }), // 排序
+            value?.['order'] === 'asc'
+              ? formatMessage({
+                  id: 'odc.ruleItems.CharItem.PositiveSequence',
+                  defaultMessage: '正序'
+                }) // 正序
+              : formatMessage({
+                  id: 'odc.ruleItems.CharItem.Reverse',
+                  defaultMessage: '倒序'
+                }) // 倒序
+          ]
+        ]);
+        break;
+      }
+      case CharRuleType.ORDER_NUMBER: {
+        const step = value?.['genParams']?.step;
+        items = getTextItem([
+          [
+            formatMessage({
+              id: 'odc.ruleItems.CharItem.StartValue',
+              defaultMessage: '起始值'
+            }), // 起始值
+            value?.['lowValue']
+          ],
+
+          [
+            formatMessage({
+              id: 'odc.ruleItems.CharItem.StepSize',
+              defaultMessage: '步长'
+            }), // 步长
+            step
+          ],
+
+          [
+            formatMessage({
+              id: 'odc.ruleItems.CharItem.Sort',
+              defaultMessage: '排序'
+            }), // 排序
+            value?.['order'] === 'asc'
+              ? formatMessage({
+                  id: 'odc.ruleItems.CharItem.PositiveSequence',
+                  defaultMessage: '正序'
+                }) // 正序
+              : formatMessage({
+                  id: 'odc.ruleItems.CharItem.Reverse',
+                  defaultMessage: '倒序'
+                }) // 倒序
+          ]
+        ]);
+        break;
+      }
+      case CharRuleType.NORMAL_NUMBER: {
+        items = getTextItem([
+          [
+            formatMessage({
+              id: 'odc.ruleItems.CharItem.Value',
+              defaultMessage: '值'
+            }), // 值
+            value?.['genParams']?.fixNum
+          ]
+        ]);
+        break;
+      }
+      case CharRuleType.NULL:
+      case CharRuleType.SKIP: {
+        items = '';
+        break;
+      }
+    }
+  } else {
+    switch (ruleType) {
+      case CharRuleType.NORMAL_TEXT: {
+        items = (
+          <Space style={{ width: '100%' }} direction="vertical">
+            <Form.Item
+              rules={getRequiredRules()}
+              style={{ width: '100%' }}
+              name={['genParams', 'fixText']}
+            >
               <Input
-                addonBefore={formatMessage({
-                  id: 'odc.ruleItems.CharItem.RegularExpression',
-                  defaultMessage: '正则表达式',
-                })} /* 正则表达式 */
-              />
-            </Form.Item>
-          );
-
-          break;
-        }
-        case CharRuleType.NORMAL_BOOL: {
-          items = (
-            <Form.Item style={{ width: '100%' }} name={['genParams', 'fixText']}>
-              <WrapItemWithTitle
+                maxLength={maxLength}
                 addonBefore={formatMessage({
                   id: 'odc.ruleItems.CharItem.Value',
-                  defaultMessage: '值',
+                  defaultMessage: '值'
                 })} /* 值 */
+              />
+            </Form.Item>
+          </Space>
+        );
+
+        break;
+      }
+      case CharRuleType.RANDOM_TEXT: {
+        items = (
+          <Space style={{ width: '100%' }} direction="vertical">
+            <Form.Item
+              rules={getRangeInputRules()}
+              style={{ width: '100%' }}
+              name="range"
+            >
+              <RangeInput
+                max={`${maxLength}`}
+                min={`${1}`}
+                addonBefore={formatMessage({
+                  id: 'odc.ruleItems.CharItem.LengthRange',
+                  defaultMessage: '长度区间'
+                })} /* 长度区间 */
+              />
+            </Form.Item>
+            <Form.Item
+              style={{ width: '100%' }}
+              name={['genParams', 'caseOption']}
+            >
+              <WrapItemWithTitle
+                addonBefore={formatMessage({
+                  id: 'odc.ruleItems.CharItem.Case',
+                  defaultMessage: '大小写'
+                })} /* 大小写 */
               >
                 <Select>
-                  <Option key="TRUE" value="TRUE">
-                    TRUE
+                  <Option key="ALL_LOWER_CASE" value="ALL_LOWER_CASE">
+                    {
+                      formatMessage({
+                        id: 'odc.ruleItems.CharItem.AllLowercase',
+                        defaultMessage: '全部小写'
+                      }) /* 全部小写 */
+                    }
                   </Option>
-                  <Option key="FALSE" value="FALSE">
-                    FALSE
+                  <Option key="ALL_UPPER_CASE" value="ALL_UPPER_CASE">
+                    {
+                      formatMessage({
+                        id: 'odc.ruleItems.CharItem.AllUppercase',
+                        defaultMessage: '全部大写'
+                      }) /* 全部大写 */
+                    }
                   </Option>
                 </Select>
               </WrapItemWithTitle>
             </Form.Item>
-          );
+          </Space>
+        );
 
-          break;
-        }
-        case CharRuleType.NORMAL_DATE: {
-          items = (
+        break;
+      }
+      case CharRuleType.REGEXP_TEXT: {
+        items = (
+          <Form.Item style={{ width: '100%' }} name={['genParams', 'regText']}>
+            <Input
+              addonBefore={formatMessage({
+                id: 'odc.ruleItems.CharItem.RegularExpression',
+                defaultMessage: '正则表达式'
+              })} /* 正则表达式 */
+            />
+          </Form.Item>
+        );
+
+        break;
+      }
+      case CharRuleType.NORMAL_BOOL: {
+        items = (
+          <Form.Item style={{ width: '100%' }} name={['genParams', 'fixText']}>
+            <WrapItemWithTitle
+              addonBefore={formatMessage({
+                id: 'odc.ruleItems.CharItem.Value',
+                defaultMessage: '值'
+              })} /* 值 */
+            >
+              <Select>
+                <Option key="TRUE" value="TRUE">
+                  TRUE
+                </Option>
+                <Option key="FALSE" value="FALSE">
+                  FALSE
+                </Option>
+              </Select>
+            </WrapItemWithTitle>
+          </Form.Item>
+        );
+
+        break;
+      }
+      case CharRuleType.NORMAL_DATE: {
+        items = (
+          <Form.Item
+            rules={getRequiredRules()}
+            style={{ width: '100%' }}
+            name={['genParams', 'timestamp']}
+          >
+            <WrapItemWithTitle
+              addonBefore={formatMessage({
+                id: 'odc.ruleItems.CharItem.Date',
+                defaultMessage: '日期'
+              })} /* 日期 */
+            >
+              <DatePicker disabledDate={disabledDateOfMock} />
+            </WrapItemWithTitle>
+          </Form.Item>
+        );
+
+        break;
+      }
+      case CharRuleType.RANDOM_DATE: {
+        items = (
+          <Form.Item
+            rules={getRangeInputRules(true)}
+            style={{ width: '100%' }}
+            name="range"
+          >
+            <WrapItemWithTitle
+              addonBefore={formatMessage({
+                id: 'odc.ruleItems.CharItem.DateRange',
+                defaultMessage: '日期范围'
+              })} /* 日期范围 */
+            >
+              <DatePicker.RangePicker disabledDate={disabledDateOfMock} />
+            </WrapItemWithTitle>
+          </Form.Item>
+        );
+
+        break;
+      }
+      case CharRuleType.ORDER_DATE: {
+        items = (
+          <Space style={{ width: '100%' }} direction="vertical">
             <Form.Item
               rules={getRequiredRules()}
               style={{ width: '100%' }}
-              name={['genParams', 'timestamp']}
+              name="lowValue"
             >
               <WrapItemWithTitle
                 addonBefore={formatMessage({
                   id: 'odc.ruleItems.CharItem.Date',
-                  defaultMessage: '日期',
+                  defaultMessage: '日期'
                 })} /* 日期 */
               >
                 <DatePicker disabledDate={disabledDateOfMock} />
               </WrapItemWithTitle>
             </Form.Item>
-          );
-
-          break;
-        }
-        case CharRuleType.RANDOM_DATE: {
-          items = (
-            <Form.Item rules={getRangeInputRules(true)} style={{ width: '100%' }} name="range">
-              <WrapItemWithTitle
-                addonBefore={formatMessage({
-                  id: 'odc.ruleItems.CharItem.DateRange',
-                  defaultMessage: '日期范围',
-                })} /* 日期范围 */
-              >
-                <DatePicker.RangePicker disabledDate={disabledDateOfMock} />
-              </WrapItemWithTitle>
-            </Form.Item>
-          );
-
-          break;
-        }
-        case CharRuleType.ORDER_DATE: {
-          items = (
-            <Space style={{ width: '100%' }} direction="vertical">
-              <Form.Item rules={getRequiredRules()} style={{ width: '100%' }} name="lowValue">
-                <WrapItemWithTitle
-                  addonBefore={formatMessage({
-                    id: 'odc.ruleItems.CharItem.Date',
-                    defaultMessage: '日期',
-                  })} /* 日期 */
-                >
-                  <DatePicker disabledDate={disabledDateOfMock} />
-                </WrapItemWithTitle>
-              </Form.Item>
-              <Form.Item
-                rules={getRequiredRules()}
-                style={{ width: '100%' }}
-                name={['genParams', 'step']}
-              >
-                <WrapItemWithTitle
-                  addonBefore={formatMessage({
-                    id: 'odc.ruleItems.CharItem.StepSize',
-                    defaultMessage: '步长',
-                  })} /* 步长 */
-                >
-                  <InputNumber<number | string>
-                    precision={0}
-                    min={0}
-                    formatter={
-                      (value) =>
-                        value +
-                        formatMessage({
-                          id: 'odc.ruleItems.CharItem.Days',
-                          defaultMessage: '天',
-                        }) // 天
-                    }
-                    parser={(value) =>
-                      value.replace(
-                        formatMessage({ id: 'odc.ruleItems.CharItem.Days', defaultMessage: '天' }),
-                        '',
-                      )
-                    }
-                  />
-                </WrapItemWithTitle>
-              </Form.Item>
-              <Form.Item style={{ width: '100%' }} name="order">
-                <WrapItemWithTitle
-                  addonBefore={formatMessage({
-                    id: 'odc.ruleItems.CharItem.Sort',
-                    defaultMessage: '排序',
-                  })} /* 排序 */
-                >
-                  <Select>
-                    <Option key="asc" value="asc">
-                      {
-                        formatMessage({
-                          id: 'odc.ruleItems.CharItem.PositiveSequence',
-                          defaultMessage: '正序',
-                        }) /* 正序 */
-                      }
-                    </Option>
-                    <Option key="desc" value="desc">
-                      {
-                        formatMessage({
-                          id: 'odc.ruleItems.CharItem.Reverse',
-                          defaultMessage: '倒序',
-                        }) /* 倒序 */
-                      }
-                    </Option>
-                  </Select>
-                </WrapItemWithTitle>
-              </Form.Item>
-            </Space>
-          );
-
-          break;
-        }
-        case CharRuleType.NORMAL_NUMBER: {
-          items = (
             <Form.Item
               rules={getRequiredRules()}
               style={{ width: '100%' }}
-              name={['genParams', 'fixNum']}
+              name={['genParams', 'step']}
+            >
+              <WrapItemWithTitle
+                addonBefore={formatMessage({
+                  id: 'odc.ruleItems.CharItem.StepSize',
+                  defaultMessage: '步长'
+                })} /* 步长 */
+              >
+                <InputNumber<number | string>
+                  precision={0}
+                  min={0}
+                  formatter={
+                    (value) =>
+                      value +
+                      formatMessage({
+                        id: 'odc.ruleItems.CharItem.Days',
+                        defaultMessage: '天'
+                      }) // 天
+                  }
+                  parser={(value) =>
+                    value.replace(
+                      formatMessage({
+                        id: 'odc.ruleItems.CharItem.Days',
+                        defaultMessage: '天'
+                      }),
+                      ''
+                    )
+                  }
+                />
+              </WrapItemWithTitle>
+            </Form.Item>
+            <Form.Item style={{ width: '100%' }} name="order">
+              <WrapItemWithTitle
+                addonBefore={formatMessage({
+                  id: 'odc.ruleItems.CharItem.Sort',
+                  defaultMessage: '排序'
+                })} /* 排序 */
+              >
+                <Select>
+                  <Option key="asc" value="asc">
+                    {
+                      formatMessage({
+                        id: 'odc.ruleItems.CharItem.PositiveSequence',
+                        defaultMessage: '正序'
+                      }) /* 正序 */
+                    }
+                  </Option>
+                  <Option key="desc" value="desc">
+                    {
+                      formatMessage({
+                        id: 'odc.ruleItems.CharItem.Reverse',
+                        defaultMessage: '倒序'
+                      }) /* 倒序 */
+                    }
+                  </Option>
+                </Select>
+              </WrapItemWithTitle>
+            </Form.Item>
+          </Space>
+        );
+
+        break;
+      }
+      case CharRuleType.NORMAL_NUMBER: {
+        items = (
+          <Form.Item
+            rules={getRequiredRules()}
+            style={{ width: '100%' }}
+            name={['genParams', 'fixNum']}
+          >
+            <InputBigNumber
+              min="-9223372036854775808"
+              max={getColumnMaxValue(maxLength, 0, '9223372036854775807')}
+              addonBefore={formatMessage({
+                id: 'odc.ruleItems.CharItem.Value',
+                defaultMessage: '值'
+              })} /* 值 */
+            />
+          </Form.Item>
+        );
+
+        break;
+      }
+      case CharRuleType.ORDER_NUMBER: {
+        items = (
+          <Space style={{ width: '100%' }} direction="vertical">
+            <Form.Item
+              rules={getRequiredRules()}
+              style={{ width: '100%' }}
+              name="lowValue"
             >
               <InputBigNumber
                 min="-9223372036854775808"
                 max={getColumnMaxValue(maxLength, 0, '9223372036854775807')}
                 addonBefore={formatMessage({
-                  id: 'odc.ruleItems.CharItem.Value',
-                  defaultMessage: '值',
-                })} /* 值 */
+                  id: 'odc.ruleItems.CharItem.StartValue',
+                  defaultMessage: '起始值'
+                })} /* 起始值 */
               />
             </Form.Item>
-          );
-
-          break;
-        }
-        case CharRuleType.ORDER_NUMBER: {
-          items = (
-            <Space style={{ width: '100%' }} direction="vertical">
-              <Form.Item rules={getRequiredRules()} style={{ width: '100%' }} name="lowValue">
-                <InputBigNumber
-                  min="-9223372036854775808"
-                  max={getColumnMaxValue(maxLength, 0, '9223372036854775807')}
-                  addonBefore={formatMessage({
-                    id: 'odc.ruleItems.CharItem.StartValue',
-                    defaultMessage: '起始值',
-                  })} /* 起始值 */
-                />
-              </Form.Item>
-              <Form.Item
-                rules={getRequiredRules()}
-                style={{ width: '100%' }}
-                name={['genParams', 'step']}
-              >
-                <InputBigNumber
-                  min="0"
-                  addonBefore={formatMessage({
-                    id: 'odc.ruleItems.CharItem.StepSize',
-                    defaultMessage: '步长',
-                  })} /* 步长 */
-                />
-              </Form.Item>
-              <Form.Item style={{ width: '100%' }} name="order">
-                <WrapItemWithTitle
-                  addonBefore={formatMessage({
-                    id: 'odc.ruleItems.CharItem.Sort',
-                    defaultMessage: '排序',
-                  })} /* 排序 */
-                >
-                  <Select>
-                    <Option key="asc" value="asc">
-                      {
-                        formatMessage({
-                          id: 'odc.ruleItems.CharItem.PositiveSequence',
-                          defaultMessage: '正序',
-                        }) /* 正序 */
-                      }
-                    </Option>
-                    <Option key="desc" value="desc">
-                      {
-                        formatMessage({
-                          id: 'odc.ruleItems.CharItem.Reverse',
-                          defaultMessage: '倒序',
-                        }) /* 倒序 */
-                      }
-                    </Option>
-                  </Select>
-                </WrapItemWithTitle>
-              </Form.Item>
-            </Space>
-          );
-
-          break;
-        }
-        case CharRuleType.RANDOM_NUMBER: {
-          items = (
-            <Form.Item rules={getRangeInputRules()} style={{ width: '100%' }} name="range">
-              <RangeInput
-                min="-9223372036854775808"
-                max={getColumnMaxValue(maxLength, 0, '9223372036854775807')}
+            <Form.Item
+              rules={getRequiredRules()}
+              style={{ width: '100%' }}
+              name={['genParams', 'step']}
+            >
+              <InputBigNumber
+                min="0"
                 addonBefore={formatMessage({
-                  id: 'odc.ruleItems.CharItem.Interval',
-                  defaultMessage: '区间',
-                })} /* 区间 */
+                  id: 'odc.ruleItems.CharItem.StepSize',
+                  defaultMessage: '步长'
+                })} /* 步长 */
               />
             </Form.Item>
-          );
+            <Form.Item style={{ width: '100%' }} name="order">
+              <WrapItemWithTitle
+                addonBefore={formatMessage({
+                  id: 'odc.ruleItems.CharItem.Sort',
+                  defaultMessage: '排序'
+                })} /* 排序 */
+              >
+                <Select>
+                  <Option key="asc" value="asc">
+                    {
+                      formatMessage({
+                        id: 'odc.ruleItems.CharItem.PositiveSequence',
+                        defaultMessage: '正序'
+                      }) /* 正序 */
+                    }
+                  </Option>
+                  <Option key="desc" value="desc">
+                    {
+                      formatMessage({
+                        id: 'odc.ruleItems.CharItem.Reverse',
+                        defaultMessage: '倒序'
+                      }) /* 倒序 */
+                    }
+                  </Option>
+                </Select>
+              </WrapItemWithTitle>
+            </Form.Item>
+          </Space>
+        );
 
-          break;
-        }
-        case CharRuleType.RANDOM_BOOL:
-        case CharRuleType.NULL:
-        case CharRuleType.SKIP: {
-          items = '';
-          break;
-        }
+        break;
+      }
+      case CharRuleType.RANDOM_NUMBER: {
+        items = (
+          <Form.Item
+            rules={getRangeInputRules()}
+            style={{ width: '100%' }}
+            name="range"
+          >
+            <RangeInput
+              min="-9223372036854775808"
+              max={getColumnMaxValue(maxLength, 0, '9223372036854775807')}
+              addonBefore={formatMessage({
+                id: 'odc.ruleItems.CharItem.Interval',
+                defaultMessage: '区间'
+              })} /* 区间 */
+            />
+          </Form.Item>
+        );
+
+        break;
+      }
+      case CharRuleType.RANDOM_BOOL:
+      case CharRuleType.NULL:
+      case CharRuleType.SKIP: {
+        items = '';
+        break;
       }
     }
+  }
 
-    return readonly ? (
-      items
-    ) : (
-      <Form layout="inline" component="div" initialValues={value} form={form}>
-        {items}
-      </Form>
-    );
-  },
-);
+  return readonly ? (
+    items
+  ) : (
+    <Form layout="inline" component="div" initialValues={value} form={form}>
+      {items}
+    </Form>
+  );
+});
 
 export default CharItem;
 
 export function isShowEmpty(ruleType: CharRuleType) {
-  return [CharRuleType.RANDOM_BOOL, CharRuleType.NULL, CharRuleType.SKIP].includes(ruleType);
+  return [
+    CharRuleType.RANDOM_BOOL,
+    CharRuleType.NULL,
+    CharRuleType.SKIP
+  ].includes(ruleType);
 }

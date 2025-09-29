@@ -37,7 +37,9 @@ export const TitleContent: React.FC<IProps> = (props) => {
           optionType="button"
         />
       )}
-      {!!title && <div className={`${styles.title} ${wrapperClass}`}>{title}</div>}
+      {!!title && (
+        <div className={`${styles.title} ${wrapperClass}`}>{title}</div>
+      )}
       {!!description && <span className={styles.desc}>{description}</span>}
     </Space>
   );

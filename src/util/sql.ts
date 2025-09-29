@@ -16,7 +16,13 @@
 
 import { getDataSourceModeConfig } from '@/common/datasource';
 import { PLType } from '@/constant/plType';
-import { ConnectionMode, ConnectType, DbObjectType, IFormatPLSchema, IPLParam } from '@/d.ts';
+import {
+  ConnectionMode,
+  ConnectType,
+  DbObjectType,
+  IFormatPLSchema,
+  IPLParam
+} from '@/d.ts';
 import dayjs from 'dayjs';
 import { Oracle } from './dataType';
 import { getQuoteTableName } from './utils';
@@ -62,7 +68,10 @@ BEGIN
 END;`;
 }
 
-export function getPLDebugExecuteSql(plSchema: IFormatPLSchema, isDebug: boolean = false) {
+export function getPLDebugExecuteSql(
+  plSchema: IFormatPLSchema,
+  isDebug: boolean = false
+) {
   const { plType, function: plfunction, procedure, packageName } = plSchema;
   const isFunction = PLType.FUNCTION === plType;
   const params = isFunction ? plfunction?.params : procedure?.params;
@@ -79,14 +88,16 @@ export function getPLDebugExecuteSql(plSchema: IFormatPLSchema, isDebug: boolean
     'BEGIN',
     isFunction ? `  result := ${callExpr};` : `  ${callExpr};`,
     isDebug ? null : getParamEndExpr(params),
-    'END;',
+    'END;'
   ]
     .filter(Boolean)
     .join('\n');
 }
 
 export function getParamString(params: IPLParam[]) {
-  return params?.map(({ paramName }) => `${paramName} => ${paramName}`)?.join(', ');
+  return params
+    ?.map(({ paramName }) => `${paramName} => ${paramName}`)
+    ?.join(', ');
 }
 
 export function getDataType(type: string) {
@@ -214,7 +225,7 @@ export function getRealNameInDatabase(
   /**
    * 忽略引号，“aBc” => ABC
    */
-  ignoreQoute: boolean = false,
+  ignoreQoute: boolean = false
 ) {
   if (!name || !name.trim?.()) {
     return '';
@@ -229,7 +240,11 @@ export function getRealNameInDatabase(
 /**
  * 生成查询SQL
  */
-export function generateSelectSql(addRowId: boolean, type: ConnectType, tableName: string) {
+export function generateSelectSql(
+  addRowId: boolean,
+  type: ConnectType,
+  tableName: string
+) {
   let column = '*';
   let table = tableName;
   const char = getDataSourceModeConfig(type)?.sql?.escapeChar;
@@ -252,12 +267,12 @@ export function encodeIdentifiers(str, char: string) {
 export async function splitSql(
   sql: string,
   isOracle: boolean = false,
-  delimiter,
+  delimiter
 ): Promise<number[]> {
   const { SQLDocument } = await import('@oceanbase-odc/ob-parser-js');
   const doc = new SQLDocument({
     text: sql,
-    delimiter: delimiter,
+    delimiter: delimiter
   });
   return doc?.statements?.map((stmt) => {
     return stmt.stop + (stmt.delimiter?.length || 0);
@@ -267,12 +282,12 @@ export async function splitSql(
 export async function splitSqlForHighlight(
   sql: string,
   isOracle: boolean = false,
-  delimiter,
+  delimiter
 ): Promise<number[]> {
   const { SQLDocument } = await import('@oceanbase-odc/ob-parser-js');
   const doc = new SQLDocument({
     text: sql,
-    delimiter: delimiter,
+    delimiter: delimiter
   });
   return doc?.statements
     ?.filter((stmt) => !stmt.isDelimiter)
@@ -306,7 +321,10 @@ export function textExpaste(text: string, dialectType?: ConnectionMode) {
    */
   dialectType = dialectType || ConnectionMode.OB_ORACLE;
   return (text || '')
-    .replace(/(\S+)[ \t]?/g, dialectType === ConnectionMode.OB_ORACLE ? "'$1'," : '"$1",')
+    .replace(
+      /(\S+)[ \t]?/g,
+      dialectType === ConnectionMode.OB_ORACLE ? "'$1'," : '"$1",'
+    )
     .replace(/,(\s*)$/, ')$1')
     .replace(/^(\s*)/, '$1(');
 }
@@ -315,7 +333,7 @@ export function getDropSQL(
   objName: string,
   objType: DbObjectType,
   schemaName: string,
-  mode: ConnectionMode,
+  mode: ConnectionMode
 ) {
   let objTypeKeywords = {
     [DbObjectType.table]: 'TABLE',
@@ -329,7 +347,7 @@ export function getDropSQL(
     [DbObjectType.synonym]: 'SYNONYM',
     [DbObjectType.public_synonym]: 'PUBLIC SYNONYM',
     [DbObjectType.trigger]: 'TRIGGER',
-    [DbObjectType.materialized_view]: 'MATERIALIZED VIEW',
+    [DbObjectType.materialized_view]: 'MATERIALIZED VIEW'
   };
   const objTypeKeyword: string = objTypeKeywords[objType];
   if (!objTypeKeyword) {

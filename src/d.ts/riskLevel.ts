@@ -29,5 +29,5 @@ export interface IRiskLevel {
 export enum EnvironmentStyle {
   GREEN = 'GREEN',
   ORANGE = 'ORANGE',
-  RED = 'RED',
+  RED = 'RED'
 }

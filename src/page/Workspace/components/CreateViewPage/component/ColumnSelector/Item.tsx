@@ -46,7 +46,7 @@ const Item: React.FC<IProps> = React.memo((props) => {
     caseSensitive,
     escapes,
     isWarning = false,
-    warnTip = [],
+    warnTip = []
   } = props;
   const isCustomer = dataKey.includes('odc.customer.column');
   const params = parse(dataKey);
@@ -62,7 +62,7 @@ const Item: React.FC<IProps> = React.memo((props) => {
     <div className="dragable-item">
       <Row
         className={classNames(styles.column, styles.dragable, {
-          [styles.warningColumnItem]: isWarning,
+          [styles.warningColumnItem]: isWarning
         })}
       >
         <Col className={styles['dragable-item']} span={24}>
@@ -81,7 +81,7 @@ const Item: React.FC<IProps> = React.memo((props) => {
                 onChange={handleSetColumnName}
                 placeholder={formatMessage({
                   id: 'odc.component.ColumnSelector.Item.CustomFields',
-                  defaultMessage: '自定义字段',
+                  defaultMessage: '自定义字段'
                 })} /* 自定义字段 */
               />
             )}
@@ -113,7 +113,7 @@ const Item: React.FC<IProps> = React.memo((props) => {
                 onChange={handleChangeAliasName}
                 placeholder={formatMessage({
                   id: 'odc.component.ColumnSelector.Item.Alias',
-                  defaultMessage: '别名',
+                  defaultMessage: '别名'
                 })} /* 别名 */
               />
             ) : (
@@ -121,12 +121,15 @@ const Item: React.FC<IProps> = React.memo((props) => {
                 onChange={handleChangeAliasName}
                 placeholder={formatMessage({
                   id: 'odc.component.ColumnSelector.Item.Alias',
-                  defaultMessage: '别名',
+                  defaultMessage: '别名'
                 })} /* 别名 */
               />
             )}
           </Space>
-          <DeleteOutlined className={styles.close} onClick={() => handleDelete(dataKey)} />
+          <DeleteOutlined
+            className={styles.close}
+            onClick={() => handleDelete(dataKey)}
+          />
         </Col>
       </Row>
     </div>

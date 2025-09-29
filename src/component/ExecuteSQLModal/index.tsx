@@ -15,7 +15,13 @@
  */
 
 import { formatMessage } from '@/util/intl';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
 // compatible
 import { getDataSourceModeConfigByConnectionMode } from '@/common/datasource';
 import { EStatus } from '@/d.ts';
@@ -23,7 +29,7 @@ import LintResultTable from '@/page/Workspace/components/SQLResultSet/LintResult
 import modal from '@/store/modal';
 import SessionStore from '@/store/sessionManager/session';
 import { useUpdate } from 'ahooks';
-import { Alert, Button, message, Modal } from 'antd';
+import { Alert, message } from 'antd';
 import { editor } from 'monaco-editor/esm/vs/editor/editor.api';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import MonacoEditor from '../MonacoEditor';
@@ -31,6 +37,7 @@ import { ISQLLintReuslt } from '../SQLLintResult/type';
 import styles from './index.less';
 import { IUnauthorizedDBResources } from '@/d.ts/table';
 import DBPermissionTableContent from '@/page/Workspace/components/DBPermissionTableContent';
+import { BasicButton, BasicModal } from '@actiontech/dms-kit';
 
 interface IProps {
   sessionStore: SessionStore;
@@ -38,8 +45,10 @@ interface IProps {
   tip?: string;
   theme?: 'dark' | 'white';
   onSave: (
-    sql?: string,
-  ) => Promise<boolean | void | { unauthorizedDBResources: IUnauthorizedDBResources[] }>;
+    sql?: string
+  ) => Promise<
+    boolean | void | { unauthorizedDBResources: IUnauthorizedDBResources[] }
+  >;
   visible: boolean;
   onCancel: () => void;
   readonly?: boolean;
@@ -62,7 +71,7 @@ const ExecuteSQLModal: React.FC<IProps> = (props) => {
     callback,
     status,
     lintResultSet,
-    unauthorizedDBResources,
+    unauthorizedDBResources
   } = props;
   const [loading, setLoading] = useState(false);
   const [isFormatting, setIsFormatting] = useState(false);
@@ -70,8 +79,9 @@ const ExecuteSQLModal: React.FC<IProps> = (props) => {
   const editorRef = useRef<editor.IStandaloneCodeEditor>();
   const connectionMode = sessionStore?.connection?.dialectType;
   const config = getDataSourceModeConfigByConnectionMode(connectionMode);
-  const [permissionList, setPermissionList] =
-    useState<IUnauthorizedDBResources[]>(unauthorizedDBResources);
+  const [permissionList, setPermissionList] = useState<
+    IUnauthorizedDBResources[]
+  >(unauthorizedDBResources);
   const hadlintResultSet = lintResultSet?.length > 0;
 
   useEffect(() => {
@@ -112,7 +122,7 @@ const ExecuteSQLModal: React.FC<IProps> = (props) => {
       modal.changeCreateAsyncTaskModal(true, {
         sql: updateSQL,
         databaseId: sessionStore?.odcDatabase?.id,
-        rules: lintResultSet,
+        rules: lintResultSet
       });
       onCancel?.();
       // 打开新建数据库抽屉后执行回调完成交互，例如 取消表格编辑状态、关闭当前页
@@ -147,27 +157,27 @@ const ExecuteSQLModal: React.FC<IProps> = (props) => {
   };
   return (
     <>
-      <Modal
+      <BasicModal
         zIndex={1002}
         width={840}
-        destroyOnClose={true}
+        destroyOnHidden={true}
         title={formatMessage({
           id: 'workspace.window.session.modal.sql.title',
-          defaultMessage: 'SQL 确认',
+          defaultMessage: 'SQL 确认'
         })}
         open={visible}
         onOk={handleSubmit}
         onCancel={handleCancel}
         footer={[
-          <Button key="format" onClick={handleFormat}>
+          <BasicButton key="format" onClick={handleFormat}>
             {
               formatMessage({
                 id: 'odc.component.ExecuteSQLModal.Format',
-                defaultMessage: '格式化',
+                defaultMessage: '格式化'
               })
               /*格式化*/
             }
-          </Button>,
+          </BasicButton>,
           <CopyToClipboard
             key="copy"
             text={sql}
@@ -175,34 +185,46 @@ const ExecuteSQLModal: React.FC<IProps> = (props) => {
               message.success(
                 formatMessage({
                   id: 'workspace.window.session.modal.sql.copied',
-                  defaultMessage: '已拷贝到剪贴板',
-                }),
+                  defaultMessage: '已拷贝到剪贴板'
+                })
               );
             }}
           >
-            <Button>{formatMessage({ id: 'app.button.copy', defaultMessage: '复制' })}</Button>
+            <BasicButton>
+              {formatMessage({ id: 'app.button.copy', defaultMessage: '复制' })}
+            </BasicButton>
           </CopyToClipboard>,
-          <Button key="back" onClick={handleCancel}>
+          <BasicButton key="back" onClick={handleCancel}>
             {formatMessage({ id: 'app.button.cancel', defaultMessage: '取消' })}
-          </Button>,
-          <Button
+          </BasicButton>,
+          <BasicButton
             key="submit"
             type="primary"
             onClick={handleSubmit}
             loading={loading}
             disabled={status === EStatus.DISABLED}
           >
-            {formatMessage({ id: 'app.button.execute', defaultMessage: '执行' })}
-          </Button>,
+            {formatMessage({
+              id: 'app.button.execute',
+              defaultMessage: '执行'
+            })}
+          </BasicButton>
         ].filter(Boolean)}
         className={styles.executeSqlModal}
       >
-        {tip && <Alert message={tip} type="warning" showIcon={true} style={{ marginBottom: 4 }} />}
+        {tip && (
+          <Alert
+            message={tip}
+            type="warning"
+            showIcon={true}
+            style={{ marginBottom: 4 }}
+          />
+        )}
         <div
           style={{
             display: 'flex',
             flexDirection: 'column',
-            gap: hasTable ? '16px' : '0px',
+            gap: hasTable ? '16px' : '0px'
           }}
         >
           <div
@@ -212,7 +234,7 @@ const ExecuteSQLModal: React.FC<IProps> = (props) => {
               padding: 4,
               border: '1px solid var(--odc-border-color)',
               borderRadius: 4,
-              position: 'relative',
+              position: 'relative'
             }}
           >
             <MonacoEditor
@@ -238,10 +260,14 @@ const ExecuteSQLModal: React.FC<IProps> = (props) => {
             />
           )}
           {permissionList?.length > 0 && (
-            <DBPermissionTableContent showAction dataSource={permissionList} pageSize={5} />
+            <DBPermissionTableContent
+              showAction
+              dataSource={permissionList}
+              pageSize={5}
+            />
           )}
         </div>
-      </Modal>
+      </BasicModal>
     </>
   );
 };

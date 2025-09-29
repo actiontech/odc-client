@@ -27,7 +27,7 @@ import {
   ISqlExecuteResultStatus,
   PageType,
   TriggerPropsTab,
-  TypePropsTab,
+  TypePropsTab
 } from '@/d.ts';
 import {
   openCreateTriggerPage,
@@ -38,7 +38,7 @@ import {
   openSynonymViewPage,
   openTriggerViewPage,
   openTypeViewPage,
-  updatePage,
+  updatePage
 } from '@/store/helper/page';
 import SessionStore from '@/store/sessionManager/session';
 import { formatMessage } from '@/util/intl';
@@ -54,27 +54,34 @@ import SessionContext from '../SessionContextWrap/context';
 import WrapSessionPage from '../SessionContextWrap/SessionPageWrap';
 import styles from './index.less';
 import type { IProps, IState } from './type';
+import { BasicButton } from '@actiontech/dms-kit';
 
 @inject('sqlStore', 'pageStore', 'sessionManagerStore')
 @observer
-class SQLConfirmPage extends Component<IProps & { session: SessionStore }, IState> {
+class SQLConfirmPage extends Component<
+  IProps & { session: SessionStore },
+  IState
+> {
   constructor(props: IProps & { session: SessionStore }) {
     super(props);
     this.state = {
       sql: props.params?.sql,
       log: '',
       hasChange: false,
-      loading: false,
+      loading: false
     };
   }
 
   private isPL = () => {
-    return ![PageType.CREATE_SYNONYM, PageType.CREATE_SEQUENCE].includes(this.props.params?.type);
+    return ![PageType.CREATE_SYNONYM, PageType.CREATE_SEQUENCE].includes(
+      this.props.params?.type
+    );
   };
 
   private getNameBySQL = async (sql: string) => {
     const { session } = this.props;
-    const isOracle = session.connection.dialectType === ConnectionMode.OB_ORACLE;
+    const isOracle =
+      session.connection.dialectType === ConnectionMode.OB_ORACLE;
     let name;
     if (!this.isPL()) {
       // 同义词不处于 PL 文件中，需要用 SQL 来解析
@@ -90,7 +97,7 @@ class SQLConfirmPage extends Component<IProps & { session: SessionStore }, IStat
   };
   private execute: (
     sql: string,
-    type: PageType,
+    type: PageType
   ) => Promise<{
     isSuccess: boolean;
     errMsg: string;
@@ -104,20 +111,25 @@ class SQLConfirmPage extends Component<IProps & { session: SessionStore }, IStat
       PageType.CREATE_FUNCTION,
       PageType.CREATE_PROCEDURE,
       PageType.CREATE_SYNONYM,
-      PageType.CREATE_TRIGGER_SQL,
+      PageType.CREATE_TRIGGER_SQL
     ].includes(type);
-    const result = await executeSQL({ sql, split }, this.props?.session?.sessionId, dbName);
+    const result = await executeSQL(
+      { sql, split },
+      this.props?.session?.sessionId,
+      dbName
+    );
     if (result?.invalid || !result) {
       return {
         isSuccess: false,
-        errMsg: '',
+        errMsg: ''
       };
     }
-    isSuccess = result?.executeResult?.[0]?.status === ISqlExecuteResultStatus.SUCCESS;
+    isSuccess =
+      result?.executeResult?.[0]?.status === ISqlExecuteResultStatus.SUCCESS;
     errMsg = result?.executeResult?.[0]?.track;
     return {
       isSuccess,
-      errMsg,
+      errMsg
     };
   };
   private handleSubmit = async () => {
@@ -125,11 +137,11 @@ class SQLConfirmPage extends Component<IProps & { session: SessionStore }, IStat
       pageStore,
       session,
       pageKey,
-      params: { type, synonymType, isPackageBody },
+      params: { type, synonymType, isPackageBody }
     } = this.props;
     const { sql } = this.state;
     this.setState({
-      loading: true,
+      loading: true
     });
     try {
       const { isSuccess, errMsg } = await this.execute(sql, type);
@@ -142,11 +154,11 @@ class SQLConfirmPage extends Component<IProps & { session: SessionStore }, IStat
               formatMessage(
                 {
                   id: 'odc.components.SQLConfirmPage.TheNameTriggerWasCreated',
-                  defaultMessage: '{name} 触发器创建成功',
+                  defaultMessage: '{name} 触发器创建成功'
                 },
 
-                { name },
-              ),
+                { name }
+              )
               // `${name} 触发器创建成功`
             ); // 刷新对应的资源树
 
@@ -158,8 +170,8 @@ class SQLConfirmPage extends Component<IProps & { session: SessionStore }, IStat
               name +
                 formatMessage({
                   id: 'odc.components.SQLConfirmPage.SynonymCreatedSuccessfully',
-                  defaultMessage: '同义词创建成功',
-                }), // 同义词创建成功
+                  defaultMessage: '同义词创建成功'
+                }) // 同义词创建成功
             );
             this.handleCheckName(name, PageType.SYNONYM, { synonymType });
             return;
@@ -169,11 +181,11 @@ class SQLConfirmPage extends Component<IProps & { session: SessionStore }, IStat
               formatMessage(
                 {
                   id: 'odc.components.SQLConfirmPage.NameTypeCreated',
-                  defaultMessage: '{name} 类型创建成功',
+                  defaultMessage: '{name} 类型创建成功'
                 },
 
-                { name },
-              ),
+                { name }
+              )
               // `${name} 类型创建成功`
             ); // 刷新对应的资源树
 
@@ -185,15 +197,15 @@ class SQLConfirmPage extends Component<IProps & { session: SessionStore }, IStat
               message.success(
                 formatMessage({
                   id: 'workspace.window.createPackageBody.success',
-                  defaultMessage: '新建程序包体成功',
-                }),
+                  defaultMessage: '新建程序包体成功'
+                })
               );
             } else {
               message.success(
                 formatMessage({
                   id: 'workspace.window.createPackage.success',
-                  defaultMessage: '新建程序包成功',
-                }),
+                  defaultMessage: '新建程序包成功'
+                })
               );
             }
             this.handleCheckName(name, PageType.PACKAGE);
@@ -204,10 +216,10 @@ class SQLConfirmPage extends Component<IProps & { session: SessionStore }, IStat
               formatMessage(
                 {
                   id: 'odc.components.SQLConfirmPage.SequenceNameCreated',
-                  defaultMessage: '创建序列 {name} 成功',
+                  defaultMessage: '创建序列 {name} 成功'
                 },
-                { name },
-              ), // `创建序列 ${name} 成功`
+                { name }
+              ) // `创建序列 ${name} 成功`
             );
             this.handleCheckName(name, PageType.SEQUENCE);
             return;
@@ -216,8 +228,8 @@ class SQLConfirmPage extends Component<IProps & { session: SessionStore }, IStat
             message.success(
               formatMessage({
                 id: 'workspace.window.createFunction.success',
-                defaultMessage: '创建函数成功',
-              }),
+                defaultMessage: '创建函数成功'
+              })
             );
             this.handleCheckName(name, PageType.FUNCTION);
             return;
@@ -226,8 +238,8 @@ class SQLConfirmPage extends Component<IProps & { session: SessionStore }, IStat
             message.success(
               formatMessage({
                 id: 'workspace.window.createProcedure.success',
-                defaultMessage: '创建存储过程成功',
-              }),
+                defaultMessage: '创建存储过程成功'
+              })
             );
             this.handleCheckName(name, PageType.PROCEDURE);
             return;
@@ -236,7 +248,7 @@ class SQLConfirmPage extends Component<IProps & { session: SessionStore }, IStat
       } else {
         this.setState({
           log: errMsg,
-          loading: false,
+          loading: false
         });
       }
     } catch (e) {
@@ -250,7 +262,7 @@ class SQLConfirmPage extends Component<IProps & { session: SessionStore }, IStat
   private handleCheckName = async (
     name: string,
     pageType: PageType,
-    options?: Record<string, any>,
+    options?: Record<string, any>
   ) => {
     const { params, session } = this.props;
     const dbName = this.props.session?.odcDatabase?.name;
@@ -258,7 +270,11 @@ class SQLConfirmPage extends Component<IProps & { session: SessionStore }, IStat
     const databaseId = session?.odcDatabase?.id;
     switch (pageType) {
       case PageType.TRIGGER: {
-        const trigger = await getTriggerByName(name, session?.sessionId, dbName);
+        const trigger = await getTriggerByName(
+          name,
+          session?.sessionId,
+          dbName
+        );
         if (trigger) {
           openTriggerViewPage(
             name,
@@ -266,7 +282,7 @@ class SQLConfirmPage extends Component<IProps & { session: SessionStore }, IStat
             trigger.enableState,
             trigger,
             session?.odcDatabase?.id,
-            dbName,
+            dbName
           );
         }
         return;
@@ -274,14 +290,29 @@ class SQLConfirmPage extends Component<IProps & { session: SessionStore }, IStat
       case PageType.TYPE: {
         const type = await getType(name, true, dbName, session?.sessionId);
         if (type) {
-          openTypeViewPage(name, TypePropsTab.DDL, session?.odcDatabase?.id, dbName);
+          openTypeViewPage(
+            name,
+            TypePropsTab.DDL,
+            session?.odcDatabase?.id,
+            dbName
+          );
         }
         return;
       }
       case PageType.SYNONYM: {
-        const synonym = await getSynonym(name, options?.synonymType, sessionId, dbName);
+        const synonym = await getSynonym(
+          name,
+          options?.synonymType,
+          sessionId,
+          dbName
+        );
         if (synonym) {
-          openSynonymViewPage(name, options?.synonymType, session?.odcDatabase?.id, dbName);
+          openSynonymViewPage(
+            name,
+            options?.synonymType,
+            session?.odcDatabase?.id,
+            dbName
+          );
         }
         return;
       }
@@ -292,7 +323,7 @@ class SQLConfirmPage extends Component<IProps & { session: SessionStore }, IStat
             name,
             params.isPackageBody ? TopTab.BODY : TopTab.HEAD,
             true,
-            databaseId,
+            databaseId
           );
         }
         return;
@@ -300,28 +331,50 @@ class SQLConfirmPage extends Component<IProps & { session: SessionStore }, IStat
       case PageType.SEQUENCE: {
         const sequence = await getSequence(name, sessionId, dbName);
         if (sequence) {
-          openSequenceViewPage(name, undefined, session?.odcDatabase?.id, dbName);
+          openSequenceViewPage(
+            name,
+            undefined,
+            session?.odcDatabase?.id,
+            dbName
+          );
         }
         return;
       }
       case PageType.FUNCTION: {
         const func = await getFunctionByFuncName(name, true, sessionId, dbName);
         if (func) {
-          openFunctionViewPage(name, undefined, undefined, session?.odcDatabase?.id, dbName);
+          openFunctionViewPage(
+            name,
+            undefined,
+            undefined,
+            session?.odcDatabase?.id,
+            dbName
+          );
         }
         return;
       }
       case PageType.PROCEDURE: {
-        const procedure = await getProcedureByProName(name, true, sessionId, dbName);
+        const procedure = await getProcedureByProName(
+          name,
+          true,
+          sessionId,
+          dbName
+        );
         if (procedure) {
-          openProcedureViewPage(name, undefined, undefined, session?.odcDatabase?.id, dbName);
+          openProcedureViewPage(
+            name,
+            undefined,
+            undefined,
+            session?.odcDatabase?.id,
+            dbName
+          );
         }
       }
     }
   };
   private handlePre = () => {
     const {
-      params: { type },
+      params: { type }
     } = this.props;
     const { hasChange } = this.state;
 
@@ -330,16 +383,16 @@ class SQLConfirmPage extends Component<IProps & { session: SessionStore }, IStat
         Modal.confirm({
           title: formatMessage({
             id: 'odc.components.SQLConfirmPage.AreYouSureYouWant',
-            defaultMessage: '是否确认返回上一步？',
+            defaultMessage: '是否确认返回上一步？'
           }), // 确认要返回上一步吗？
           content: formatMessage({
             id: 'odc.components.SQLConfirmPage.IfYouReturnToThe',
-            defaultMessage: '若返回上一步，当前编辑的代码将不会生效且不保存',
+            defaultMessage: '若返回上一步，当前编辑的代码将不会生效且不保存'
           }), // 若返回上一步，当前编辑的代码将不会生效且不保存
           centered: true,
           onOk: () => {
             this.handleGotoPre();
-          },
+          }
         });
       } else {
         this.handleGotoPre();
@@ -351,7 +404,7 @@ class SQLConfirmPage extends Component<IProps & { session: SessionStore }, IStat
       params: { preData },
       session,
       pageStore,
-      pageKey,
+      pageKey
     } = this.props;
     const dbName = this.props.session?.odcDatabase?.name;
     await pageStore.close(pageKey);
@@ -361,9 +414,9 @@ class SQLConfirmPage extends Component<IProps & { session: SessionStore }, IStat
     this.setState(
       {
         sql,
-        hasChange: true,
+        hasChange: true
       },
-      this.syncPageParams,
+      this.syncPageParams
     );
   };
   private syncPageParams = _.debounce(() => {
@@ -375,7 +428,7 @@ class SQLConfirmPage extends Component<IProps & { session: SessionStore }, IStat
         <Space>
           <CloseCircleFilled
             style={{
-              color: '#ff4d4f',
+              color: '#ff4d4f'
             }}
           />
 
@@ -383,7 +436,7 @@ class SQLConfirmPage extends Component<IProps & { session: SessionStore }, IStat
             {
               formatMessage({
                 id: 'odc.components.SQLConfirmPage.ExecuteDdlError',
-                defaultMessage: '执行 DDL 出错',
+                defaultMessage: '执行 DDL 出错'
               }) /* 执行DDL出错 */
             }
           </span>
@@ -397,7 +450,7 @@ class SQLConfirmPage extends Component<IProps & { session: SessionStore }, IStat
     const {
       params: { hasPre },
       session,
-      sessionManagerStore,
+      sessionManagerStore
     } = this.props;
     const { sql, log, loading } = this.state;
     const logEle = log ? this.getLogEle(log) : null;
@@ -405,31 +458,37 @@ class SQLConfirmPage extends Component<IProps & { session: SessionStore }, IStat
       <>
         <CommonIDE
           session={session}
-          language={getDataSourceModeConfig(session?.connection?.type)?.sql?.language}
+          language={
+            getDataSourceModeConfig(session?.connection?.type)?.sql?.language
+          }
           initialSQL={sql}
           log={logEle}
           onSQLChange={this.handleSqlChange}
           toolbarActions={
             <Space>
               {hasPre && (
-                <Button onClick={this.handlePre}>
+                <BasicButton onClick={this.handlePre}>
                   {
                     formatMessage({
                       id: 'odc.components.SQLConfirmPage.PreviousStep',
-                      defaultMessage: '上一步',
+                      defaultMessage: '上一步'
                     }) /* 上一步 */
                   }
-                </Button>
+                </BasicButton>
               )}
 
-              <Button type="primary" onClick={this.handleSubmit} loading={loading}>
+              <BasicButton
+                type="primary"
+                onClick={this.handleSubmit}
+                loading={loading}
+              >
                 {
                   formatMessage({
                     id: 'odc.components.SQLConfirmPage.Create',
-                    defaultMessage: '创建',
+                    defaultMessage: '创建'
                   }) /* 创建 */
                 }
-              </Button>
+              </BasicButton>
             </Space>
           }
         />

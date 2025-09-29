@@ -11,26 +11,26 @@ const AGGREGATE_CONFIGS: AggregateConfig[] = [
     key: 'databaseChangeResultSets',
     subKeys: [
       'odc.task.databaseChange.allowShowResultSets',
-      'odc.task.databaseChange.allowDownloadResultSets',
-    ],
-  },
+      'odc.task.databaseChange.allowDownloadResultSets'
+    ]
+  }
 ];
 
 export const resultSetsGroup = [
   {
     label: formatMessage({
       id: 'src.component.ODCSetting.utils.E642F884',
-      defaultMessage: '支持查看查询结果',
+      defaultMessage: '支持查看查询结果'
     }),
-    value: 'odc.task.databaseChange.allowShowResultSets',
+    value: 'odc.task.databaseChange.allowShowResultSets'
   },
   {
     label: formatMessage({
       id: 'src.component.ODCSetting.utils.9CE1F69C',
-      defaultMessage: '支持下载查询结果',
+      defaultMessage: '支持下载查询结果'
     }),
-    value: 'odc.task.databaseChange.allowDownloadResultSets',
-  },
+    value: 'odc.task.databaseChange.allowDownloadResultSets'
+  }
 ];
 
 export class ConfigHelper {
@@ -43,7 +43,7 @@ export class ConfigHelper {
     AGGREGATE_CONFIGS.forEach((config) => {
       // 将子配置项聚合成数组
       const aggregateValue = config.subKeys.filter(
-        (subKey) => rawData[subKey] === 'true' || rawData[subKey] === true,
+        (subKey) => rawData[subKey] === 'true' || rawData[subKey] === true
       );
       transformedData[config.key] = aggregateValue;
     });
@@ -63,7 +63,9 @@ export class ConfigHelper {
       if (Array.isArray(aggregateValue)) {
         // 展开聚合配置
         config.subKeys.forEach((subKey) => {
-          expandedData[subKey] = aggregateValue.includes(subKey) ? 'true' : 'false';
+          expandedData[subKey] = aggregateValue.includes(subKey)
+            ? 'true'
+            : 'false';
         });
 
         // 删除聚合配置项

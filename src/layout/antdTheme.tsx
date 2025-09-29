@@ -1,91 +1,72 @@
+import {
+  ComponentControlHeight,
+  DEFAULT_THEME_DATA,
+  SupportTheme
+} from '@actiontech/dms-kit';
 import { ThemeConfig } from 'antd/es';
+import { theme as antdTheme } from 'antd';
 
-const colorToken = {
-  action: '#006aff',
-  warning: '#ffa21a',
-  error: '#f93939',
-  success: '#0ac185',
-};
+// todo
+const themeData = DEFAULT_THEME_DATA[SupportTheme.LIGHT];
 
 export const theme: ThemeConfig = {
-  token: {
-    fontSize: 12,
-    controlHeight: 28,
-    borderRadius: 2,
-    colorText: 'var(--text-color-primary)',
-    colorTextSecondary: 'var(--text-color-hint)',
-    colorTextTertiary: 'var(--text-color-hint)',
-    colorBgContainerDisabled: 'var(--forbiden-color)',
-    colorTextDisabled: 'var(--text-color-placeholder)',
-    colorTextPlaceholder: 'var(--text-color-placeholder)',
-    colorIcon: 'var(--icon-color-normal)',
-    colorSplit: 'var(--divider-color)',
-
-    // antd seed token 只能读具体值，无法读取 less 变量
-    colorPrimary: colorToken.action,
-    colorLink: colorToken.action,
-    colorWarning: colorToken.warning,
-    colorError: colorToken.error,
-    colorSuccess: colorToken.success,
-  },
   components: {
-    Tree: {
-      titleHeight: 24,
-      colorBgContainer: 'transparent',
-      paddingXS: 4,
-    },
-    Transfer: {
-      colorIcon: 'var(--icon-color-normal)',
-      colorBorder: 'var(--odc-border-color)',
-    },
-    Radio: {
-      colorPrimaryBorder: 'var(--odc-border-color)',
-    },
-    Drawer: {
-      colorBorder: 'var(--odc-border-color)',
-      colorSplit: 'var(--odc-border-color)',
-    },
-    Divider: {
-      colorSplit: 'var(--divider-color)',
-    },
     Input: {
-      colorBorder: 'var(--odc-border-color)',
-      colorIcon: 'var(--icon-color-normal)',
-    },
-    Collapse: {
-      colorBorder: 'var(--odc-border-color)',
-    },
-    InputNumber: {
-      colorBorder: 'var(--odc-border-color)',
-    },
-    Tabs: {
-      colorBorder: 'var(--odc-border-color)',
-    },
-    Select: {
-      colorBorder: 'var(--odc-border-color)',
-      colorIcon: 'var(--icon-color-normal)',
-    },
-    Checkbox: {
-      colorBorder: 'var(--odc-border-color)',
-    },
-    Menu: {
-      itemBorderRadius: 0,
-      horizontalItemBorderRadius: 0,
-      subMenuItemBorderRadius: 0,
-    },
-    Dropdown: {
-      controlItemBgActive: 'var(--hover-color)',
+      controlHeight: ComponentControlHeight.default,
+      controlHeightLG: ComponentControlHeight.lg,
+      controlHeightSM: ComponentControlHeight.sm
     },
     Button: {
-      defaultBorderColor: 'var(--odc-border-color)',
+      controlHeight: 32,
+      controlHeightLG: 36,
+      controlHeightSM: 28
+    },
+    DatePicker: {
+      controlHeight: ComponentControlHeight.default,
+      controlHeightLG: ComponentControlHeight.lg,
+      controlHeightSM: ComponentControlHeight.sm
+    },
+    Select: {
+      controlHeight: ComponentControlHeight.default,
+      controlHeightLG: ComponentControlHeight.lg,
+      controlHeightSM: ComponentControlHeight.sm
+    },
+    Pagination: {
+      itemSize: 28
     },
     Table: {
-      colorTextHeading: 'var(--text-color-primary)',
-      borderColor: 'var(--table-border-color)',
-      headerBg: 'var(--table-header-background-color)',
+      fontSize: 13,
+      fontWeightStrong: 500
     },
-    Modal: {
-      contentBg: 'var(--background-primary-color)',
-    },
+    Dropdown: {
+      fontSize: 13
+    }
   },
+  algorithm: antdTheme.defaultAlgorithm,
+  token: {
+    fontFamily: `PlusJakartaSans Medium, -apple-system, 'Microsoft YaHei', BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+'Noto Color Emoji'`,
+    fontSize: 14,
+    colorInfo: themeData.sharedTheme.uiToken.colorInfo,
+    colorPrimary: themeData.sharedTheme.uiToken.colorPrimary,
+    colorSuccess: themeData.sharedTheme.uiToken.colorSuccess,
+    colorWarning: themeData.sharedTheme.uiToken.colorWarning,
+    colorError: themeData.sharedTheme.uiToken.colorError,
+    colorTextBase: themeData.sharedTheme.uiToken.colorTextBase,
+    colorBgBase: themeData.sharedTheme.uiToken.colorBgBase,
+    colorText: themeData.sharedTheme.uiToken.colorText,
+    colorTextSecondary: themeData.sharedTheme.uiToken.colorTextSecondary,
+    colorTextTertiary: themeData.sharedTheme.uiToken.colorTextTertiary,
+    colorTextQuaternary: themeData.sharedTheme.uiToken.colorTextQuaternary,
+    colorBorderSecondary: themeData.sharedTheme.uiToken.colorBorderSecondary,
+    colorBorder: themeData.sharedTheme.uiToken.colorBorder,
+    colorFill: themeData.sharedTheme.uiToken.colorFill,
+    colorFillSecondary: themeData.sharedTheme.uiToken.colorFillSecondary,
+    colorFillTertiary: themeData.sharedTheme.uiToken.colorFillTertiary,
+    colorFillQuaternary: themeData.sharedTheme.uiToken.colorFillQuaternary,
+    colorBgLayout: themeData.sharedTheme.uiToken.colorBgLayout,
+    colorWarningBgHover: themeData.sharedTheme.uiToken.colorWarningBgHover,
+    colorErrorBgHover: themeData.sharedTheme.uiToken.colorErrorBgHover
+  }
 };

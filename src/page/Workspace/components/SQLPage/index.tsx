@@ -39,10 +39,14 @@ import {
   ISqlExecuteResultStatus,
   ISQLScript,
   ITableColumn,
-  IUserConfig,
+  IUserConfig
 } from '@/d.ts';
 import { IUnauthorizedDBResources } from '@/d.ts/table';
-import { debounceUpdatePageScriptText, ISQLPageParams, updatePage } from '@/store/helper/page';
+import {
+  debounceUpdatePageScriptText,
+  ISQLPageParams,
+  updatePage
+} from '@/store/helper/page';
 import { SQLPage as SQLPageModel } from '@/store/helper/page/pages';
 import type { UserStore } from '@/store/login';
 import modal, { ModalStore } from '@/store/modal';
@@ -61,7 +65,11 @@ import { generateAndDownloadFile, getCurrentSQL } from '@/util/utils';
 import { message, Spin } from 'antd';
 import { debounce, isNil } from 'lodash';
 import { inject, observer } from 'mobx-react';
-import { IDisposable, KeyCode, KeyMod } from 'monaco-editor/esm/vs/editor/editor.api';
+import {
+  IDisposable,
+  KeyCode,
+  KeyMod
+} from 'monaco-editor/esm/vs/editor/editor.api';
 import { Component, forwardRef } from 'react';
 import { wrapRow } from '../DDLResultSet/util';
 import SessionContextWrap from '../SessionContextWrap';
@@ -128,7 +136,14 @@ interface IProps {
   onSetUnsavedModalContent?: (title: string) => void;
 }
 
-@inject('sqlStore', 'userStore', 'pageStore', 'sessionManagerStore', 'modalStore', 'settingStore')
+@inject(
+  'sqlStore',
+  'userStore',
+  'pageStore',
+  'sessionManagerStore',
+  'modalStore',
+  'settingStore'
+)
 @observer
 export class SQLPage extends Component<IProps, ISQLPageState> {
   public readonly state: ISQLPageState = {
@@ -158,7 +173,7 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
     baseOffset: 0,
     status: null,
     hasExecuted: false,
-    isSavingScript: false,
+    isSavingScript: false
   };
 
   public editor: IEditor;
@@ -174,37 +189,49 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
 
   constructor(props) {
     super(props);
-    const resultSetKey: string = props.sqlStore.getFirstUnlockedResultKey(props.pageKey);
-    props.sqlStore.setActiveTab(props.pageKey, resultSetKey ? resultSetKey : recordsTabKey);
+    const resultSetKey: string = props.sqlStore.getFirstUnlockedResultKey(
+      props.pageKey
+    );
+    props.sqlStore.setActiveTab(
+      props.pageKey,
+      resultSetKey ? resultSetKey : recordsTabKey
+    );
   }
 
   public async componentDidMount() {
-    const { pageKey, sqlStore, onSetUnsavedModalTitle, onSetUnsavedModalContent, page } =
-      this.props;
+    const {
+      pageKey,
+      sqlStore,
+      onSetUnsavedModalTitle,
+      onSetUnsavedModalContent,
+      page
+    } = this.props;
 
     onSetUnsavedModalTitle(
       formatMessage({
         id: 'workspace.window.sql.modal.close.title',
-        defaultMessage: '是否保存脚本？',
-      }),
+        defaultMessage: '是否保存脚本？'
+      })
     );
 
     onSetUnsavedModalContent(
       formatMessage(
         {
           id: 'workspace.window.sql.modal.close.content',
-          defaultMessage: '“{name}” 已经被修改，如不保存，修改将丢失',
+          defaultMessage: '“{name}” 已经被修改，如不保存，修改将丢失'
         },
 
         {
-          name: getPageTitleText(page),
+          name: getPageTitleText(page)
 
           // `SQL 窗口_${pageName}`
-        },
-      ),
+        }
+      )
     );
 
-    const resultSetKey = this.props.sqlStore.getFirstUnlockedResultKey(this.props.pageKey);
+    const resultSetKey = this.props.sqlStore.getFirstUnlockedResultKey(
+      this.props.pageKey
+    );
     sqlStore.setActiveTab(pageKey, resultSetKey ? resultSetKey : recordsTabKey);
   }
 
@@ -214,7 +241,9 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
   };
 
   public getSession() {
-    return this.props.sessionManagerStore?.sessionMap?.get(this.props.sessionId);
+    return this.props.sessionManagerStore?.sessionMap?.get(
+      this.props.sessionId
+    );
   }
 
   public async UNSAFE_componentWillReceiveProps(nextProps) {
@@ -229,7 +258,7 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
       nextProps.params?.scriptText != this.editor.getValue()
     ) {
       this.setState({
-        initialSQL: nextProps.params?.scriptText,
+        initialSQL: nextProps.params?.scriptText
       });
     }
   }
@@ -243,7 +272,10 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
       this.props.pageStore.updatePage(
         this.props.pageKey,
         {},
-        { cid: this.getSession()?.odcDatabase?.id, dbName: this.getSession()?.odcDatabase?.name },
+        {
+          cid: this.getSession()?.odcDatabase?.id,
+          dbName: this.getSession()?.odcDatabase?.name
+        }
       );
       /**
        * 异步加载内置片段
@@ -275,7 +307,7 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
 
   public handleChangeSplitPane = debounce((size: number) => {
     this.setState({
-      resultHeight: size,
+      resultHeight: size
     });
 
     // 手动触发 resize 事件
@@ -292,7 +324,7 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
     }
     const {
       'odc.editor.shortcut.executeCurrentStatement': executeCurrentStatement,
-      'odc.editor.shortcut.executeStatement': executeStatement,
+      'odc.editor.shortcut.executeStatement': executeStatement
     } = setting.configurations;
     this.actions?.forEach((action) => {
       action.dispose();
@@ -302,26 +334,30 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
         id: 'sql_download',
         label: 'download',
         keybindings: [KeyMod.WinCtrl | KeyCode.KeyD],
-        run: () => this.handleDownload(),
+        run: () => this.handleDownload()
       }),
       this.editor.addAction({
         id: 'sql_save',
         label: 'save',
         keybindings: [KeyMod.CtrlCmd | KeyCode.KeyS],
-        run: () => this.saveScript(),
+        run: () => this.saveScript()
       }),
       this.editor.addAction({
         id: 'sql_executeSql',
         label: 'execute',
-        keybindings: executeStatement ? [getKeyCodeValue(executeStatement)] : [],
-        run: () => this.handleExecuteSQL(),
+        keybindings: executeStatement
+          ? [getKeyCodeValue(executeStatement)]
+          : [],
+        run: () => this.handleExecuteSQL()
       }),
       this.editor.addAction({
         id: 'sql_executeSelectedSql',
         label: 'executeSelected',
-        keybindings: executeCurrentStatement ? [getKeyCodeValue(executeCurrentStatement)] : [],
-        run: () => this.handleExecuteSelectedSQL(),
-      }),
+        keybindings: executeCurrentStatement
+          ? [getKeyCodeValue(executeCurrentStatement)]
+          : [],
+        run: () => this.handleExecuteSelectedSQL()
+      })
     ];
 
     this.config = setting.configurations;
@@ -347,11 +383,11 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
     }
     if (executeOrPreCheckSql && executeOrPreCheckSql !== sql) {
       this.setState({
-        sqlChanged: true,
+        sqlChanged: true
       });
     } else {
       this.setState({
-        sqlChanged: false,
+        sqlChanged: false
       });
     }
   };
@@ -365,62 +401,75 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
     const result = await this.executeSQL(
       sqlToExecute,
       false,
-      selectedSQL ? await utils.getCurrentSelectRange(this.editor) : null,
+      selectedSQL ? await utils.getCurrentSelectRange(this.editor) : null
     );
     if (selectedSQL) {
       if (range.begin === range.end) {
         this.setState({
-          baseOffset: selectedSQL ? range.begin - this.editor?.getSelectionContent()?.length : 0,
+          baseOffset: selectedSQL
+            ? range.begin - this.editor?.getSelectionContent()?.length
+            : 0
         });
       } else if (range.begin < range.end) {
         this.setState({
-          baseOffset: selectedSQL ? range.begin : 0,
+          baseOffset: selectedSQL ? range.begin : 0
         });
       }
     } else {
       this.setState({
-        baseOffset: 0,
+        baseOffset: 0
       });
     }
     if (result?.hasLintResults) {
       if (
         result?.executeResult &&
         Array.isArray(result?.executeResult) &&
-        result?.executeResult?.find((result) => result.status !== ISqlExecuteResultStatus.SUCCESS)
+        result?.executeResult?.find(
+          (result) => result.status !== ISqlExecuteResultStatus.SUCCESS
+        )
       ) {
         const firstResultKey = sqlStore.getFirstUnlockedResultKey(pageKey);
-        sqlStore.setActiveTab(pageKey, firstResultKey ? firstResultKey : recordsTabKey);
+        sqlStore.setActiveTab(
+          pageKey,
+          firstResultKey ? firstResultKey : recordsTabKey
+        );
       } else if (result?.status !== EStatus.SUBMIT) {
         sqlStore.setActiveTab(pageKey, sqlLintTabKey);
       }
       this.setState({
         lintResultSet: result?.lintResultSet,
         executeOrPreCheckSql: sqlToExecute,
-        sqlChanged: false,
+        sqlChanged: false
       });
     } else {
       this.setState({
         baseOffset: 0,
         lintResultSet: null,
         executeOrPreCheckSql: sqlToExecute,
-        sqlChanged: false,
+        sqlChanged: false
       });
     }
   };
   // 执行选中的 SQL
   public handleExecuteSelectedSQL = async () => {
     const { sqlStore, pageKey } = this.props;
-    let selectedSQL = this.editor.getModel().getValueInRange(this.editor.getSelection()); // 如果没有选中，尝试获取当前语句
+    let selectedSQL = this.editor
+      .getModel()
+      .getValueInRange(this.editor.getSelection()); // 如果没有选中，尝试获取当前语句
     let begin, end;
     if (!selectedSQL) {
-      const offset = this.editor.getModel().getOffsetAt(this.editor.getPosition());
+      const offset = this.editor
+        .getModel()
+        .getOffsetAt(this.editor.getPosition());
 
       if (offset > -1) {
         const result = await getCurrentSQL(
           this.editor.getValue(),
           offset,
-          isConnectionModeBeMySQLType(this.getSession()?.connection.dialectType),
-          this.getSession()?.params?.delimiter,
+          isConnectionModeBeMySQLType(
+            this.getSession()?.connection.dialectType
+          ),
+          this.getSession()?.params?.delimiter
         );
 
         if (result) {
@@ -442,35 +491,41 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
     const range = await utils.getCurrentSelectRange(this.editor);
     if (range.begin === range.end) {
       this.setState({
-        baseOffset: range.begin - this.editor?.getSelectionContent()?.length || 0,
+        baseOffset:
+          range.begin - this.editor?.getSelectionContent()?.length || 0
       });
     } else if (range.begin < range.end) {
       this.setState({
-        baseOffset: range.begin || 0,
+        baseOffset: range.begin || 0
       });
     }
     if (results?.hasLintResults) {
       if (
         results?.executeResult &&
         Array.isArray(results?.executeResult) &&
-        results?.executeResult?.find((result) => result.status !== ISqlExecuteResultStatus.SUCCESS)
+        results?.executeResult?.find(
+          (result) => result.status !== ISqlExecuteResultStatus.SUCCESS
+        )
       ) {
         const firstResultKey = sqlStore.getFirstUnlockedResultKey(pageKey);
-        sqlStore.setActiveTab(pageKey, firstResultKey ? firstResultKey : recordsTabKey);
+        sqlStore.setActiveTab(
+          pageKey,
+          firstResultKey ? firstResultKey : recordsTabKey
+        );
       } else if (results?.status !== EStatus.SUBMIT) {
         sqlStore.setActiveTab(pageKey, sqlLintTabKey);
       }
       this.setState({
         lintResultSet: results?.lintResultSet,
         executeOrPreCheckSql: selectedSQL,
-        sqlChanged: false,
+        sqlChanged: false
       });
     } else {
       this.setState({
         baseOffset: 0,
         lintResultSet: null,
         executeOrPreCheckSql: selectedSQL,
-        sqlChanged: false,
+        sqlChanged: false
       });
     }
   };
@@ -481,19 +536,23 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
       return;
     }
     this.setState({
-      isSavingScript: true,
+      isSavingScript: true
     });
 
     try {
       if (params.scriptId) {
         // 仅更新 SQL 内容
-        const file = await updateScript(params.scriptId, params.scriptText, params.objectName);
+        const file = await updateScript(
+          params.scriptId,
+          params.scriptText,
+          params.objectName
+        );
 
         if (file) {
           message.success(
             formatMessage({
-              id: 'workspace.window.sql.modal.saveSQL.success',
-            }),
+              id: 'workspace.window.sql.modal.saveSQL.success'
+            })
           );
 
           await userStore.scriptStore.getScriptList();
@@ -503,12 +562,12 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
       } else {
         // 新窗口，弹出创建脚本弹窗
         this.setState({
-          showSaveSQLModal: true,
+          showSaveSQLModal: true
         });
       }
     } finally {
       this.setState({
-        isSavingScript: false,
+        isSavingScript: false
       });
     }
   } // 点击“保存”按钮
@@ -518,12 +577,18 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
   }; // 保存 SQL
 
   public handleCreateSQL = async (script: ISQLScript) => {
-    const { userStore, pageStore, pageKey, onSetUnsavedModalContent, onChangeSaved, params } =
-      this.props;
+    const {
+      userStore,
+      pageStore,
+      pageKey,
+      onSetUnsavedModalContent,
+      onChangeSaved,
+      params
+    } = this.props;
     let existedScriptId;
     const newFiles = await newScript(
       [new File([params.scriptText], script.objectName)],
-      'UploadScript',
+      'UploadScript'
     );
 
     const newFile = newFiles?.[0];
@@ -534,7 +599,7 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
       await userStore.scriptStore.getScriptList(); // 更新页面标题 & url
       const sqlPage = new SQLPageModel(params?.cid, {
         scriptMeta: newFile,
-        content: params?.scriptText,
+        content: params?.scriptText
       });
       pageStore.updatePage(
         pageKey,
@@ -542,34 +607,34 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
           title: newFile.objectName,
           updateKey: sqlPage.pageKey,
           isSaved: true,
-          startSaving: false,
+          startSaving: false
         },
 
-        { ...newFile, scriptId: newFile.id },
+        { ...newFile, scriptId: newFile.id }
       );
 
       onSetUnsavedModalContent(
         formatMessage(
           {
             id: 'workspace.window.sql.modal.close.content',
-            defaultMessage: '“{name}” 已经被修改，如不保存，修改将丢失',
+            defaultMessage: '“{name}” 已经被修改，如不保存，修改将丢失'
           },
 
           {
-            name: script.objectName,
-          },
-        ),
+            name: script.objectName
+          }
+        )
       );
 
       onChangeSaved(pageKey);
       message.success(
         formatMessage({
-          id: 'workspace.window.sql.modal.saveSQL.success',
-        }),
+          id: 'workspace.window.sql.modal.saveSQL.success'
+        })
       );
 
       this.setState({
-        showSaveSQLModal: false,
+        showSaveSQLModal: false
       });
     }
   };
@@ -593,26 +658,27 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
     const result = await runSQLLint(
       this.getSession()?.sessionId,
       this.getSession()?.params?.delimiter,
-      value,
+      value
     );
     if (selectted) {
       if (range.begin === range.end) {
         this.setState({
-          baseOffset: range.begin - this.editor?.getSelectionContent()?.length || 0,
+          baseOffset:
+            range.begin - this.editor?.getSelectionContent()?.length || 0
         });
       } else if (range.begin < range.end) {
         this.setState({
-          baseOffset: range.begin || 0,
+          baseOffset: range.begin || 0
         });
       }
     } else {
       this.setState({
-        baseOffset: 0,
+        baseOffset: 0
       });
     }
     this.setState({
       executeOrPreCheckSql: value,
-      sqlChanged: false,
+      sqlChanged: false
     });
     if (result?.checkResults) {
       if (!result.checkResults.length) {
@@ -622,26 +688,31 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
         message.success(
           formatMessage({
             id: 'odc.components.SQLPage.SqlCheckPassed',
-            defaultMessage: 'SQL 检查通过',
-          }), //SQL 检查通过
+            defaultMessage: 'SQL 检查通过'
+          }) //SQL 检查通过
         );
         this.setState({
-          baseOffset: 0,
+          baseOffset: 0
         });
         return;
       }
 
       this.setState(
         {
-          lintResultSet: result?.checkResults,
+          lintResultSet: result?.checkResults
         },
-        () => this.props.sqlStore.setActiveTab(this.props.pageKey, sqlLintTabKey),
+        () =>
+          this.props.sqlStore.setActiveTab(this.props.pageKey, sqlLintTabKey)
       );
     }
   };
   public handleRefreshResultSet = async (resultSetIndex: number) => {
     const { sqlStore, pageKey } = this.props;
-    await sqlStore.refreshResultSet(pageKey, resultSetIndex, this.getSession()?.sessionId);
+    await sqlStore.refreshResultSet(
+      pageKey,
+      resultSetIndex,
+      this.getSession()?.sessionId
+    );
     this.triggerTableLayout();
   };
 
@@ -650,24 +721,26 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
     this.setState(
       {
         baseOffset: 0,
-        lintResultSet: null,
+        lintResultSet: null
       },
       () =>
         this.props.sqlStore.setActiveTab(
           pageKey,
           sqlStore.activeTab[pageKey] === sqlLintTabKey
             ? recordsTabKey
-            : sqlStore.activeTab[pageKey],
-        ),
+            : sqlStore.activeTab[pageKey]
+        )
     );
   };
 
   public handleCloseResultSet = (resultSetKey: string) => {
     const { sqlStore, pageKey } = this.props;
     const oldLastIndex = sqlStore.resultSets.get(pageKey).length - 1;
-    const resultSetIndex = sqlStore.resultSets.get(pageKey)?.findIndex((set) => {
-      return set.uniqKey === resultSetKey;
-    });
+    const resultSetIndex = sqlStore.resultSets
+      .get(pageKey)
+      ?.findIndex((set) => {
+        return set.uniqKey === resultSetKey;
+      });
     sqlStore.closeResultSet(pageKey, resultSetIndex);
     const resultSet = sqlStore.resultSets.get(pageKey); // 如果已经关闭了全部结果集，只剩下历史记录，需要切换
 
@@ -701,7 +774,7 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
   public handleCheckDatabasePermission = (result: IExecuteTaskResult) => {
     this.setState({
       unauthorizedResource: result?.unauthorizedDBResources,
-      unauthorizedSql: result?.unauthorizedSql,
+      unauthorizedSql: result?.unauthorizedSql
     });
   };
 
@@ -710,8 +783,8 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
     this.setState({
       editingMap: {
         ...this.state.editingMap,
-        [resultSets[resultSetIndex].uniqKey]: editing,
-      },
+        [resultSets[resultSetIndex].uniqKey]: editing
+      }
     });
   };
 
@@ -731,7 +804,7 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
     limit: number,
     autoCommit: boolean,
     columnList: ITableColumn[],
-    dbName: string,
+    dbName: string
   ) => {
     const { sqlStore, pageKey } = this.props;
     const resultSets = sqlStore.resultSets.get(pageKey);
@@ -758,8 +831,8 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
             message.warning(
               formatMessage({
                 id: 'odc.TablePage.TableData.DoNotSubmitBlankLines',
-                defaultMessage: '请不要提交空行',
-              }),
+                defaultMessage: '请不要提交空行'
+              })
 
               // 请不要提交空行
             );
@@ -783,7 +856,7 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
             type,
             row: wrapRow(row, resultSet.columns),
             initialRow: wrapRow(resultSet.rows[i], resultSet.columns),
-            enableRowId: type !== 'INSERT',
+            enableRowId: type !== 'INSERT'
           };
         })
         .filter(Boolean);
@@ -791,8 +864,8 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
         message.warning(
           formatMessage({
             id: 'odc.TablePage.TableData.NoContentToSubmit',
-            defaultMessage: '无内容可提交',
-          }), // 无内容可提交
+            defaultMessage: '无内容可提交'
+          }) // 无内容可提交
         );
         return;
       }
@@ -804,7 +877,7 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
         editRows,
         this.getSession()?.sessionId,
         this.getSession()?.database?.dbName,
-        resultSet.whereColumns,
+        resultSet.whereColumns
       );
 
       if (!res) {
@@ -820,8 +893,8 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
         message.warning(
           formatMessage({
             id: 'odc.TablePage.TableData.NoContentToSubmit',
-            defaultMessage: '无内容可提交',
-          }), // 无内容可提交
+            defaultMessage: '无内容可提交'
+          }) // 无内容可提交
         );
         return;
       }
@@ -835,21 +908,27 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
         updateDataDML: sql,
         lintResultSet: [],
         tipToShow,
-        resultSetIndex,
+        resultSetIndex
       });
     }
   };
 
   public handleExecuteDataDML = async () => {
     const { sqlStore, pageKey } = this.props;
-    const { resultSetIndex, updateDataDML, hasExecuted, status, lintResultSet } = this.state;
+    const {
+      resultSetIndex,
+      updateDataDML,
+      hasExecuted,
+      status,
+      lintResultSet
+    } = this.state;
 
     try {
       const result = await executeSQL(
         updateDataDML,
         this.getSession()?.sessionId,
         this.getSession()?.database?.dbName,
-        false,
+        false
       );
       if (!result) {
         return;
@@ -859,7 +938,7 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
        * 这里只需要第一个错误的节点，因为一个报错，后面的都会取消执行，没必要把取消执行的错误也抛出去
        */
       const errorResult = result?.executeResult?.find(
-        (item) => item.status !== ISqlExecuteResultStatus.SUCCESS,
+        (item) => item.status !== ISqlExecuteResultStatus.SUCCESS
       );
       if (!hasExecuted) {
         /**
@@ -870,7 +949,7 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
           this.setState({
             lintResultSet: result?.lintResultSet,
             status: result?.status,
-            hasExecuted: true,
+            hasExecuted: true
           });
           return;
         }
@@ -878,14 +957,16 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
         if (result?.status === EStatus.APPROVAL) {
           modal.changeCreateAsyncTaskModal(true, {
             sql: updateDataDML,
-            databaseId: sessionManager.sessionMap.get(this.getSession()?.sessionId).odcDatabase?.id,
-            rules: lintResultSet,
+            databaseId: sessionManager.sessionMap.get(
+              this.getSession()?.sessionId
+            ).odcDatabase?.id,
+            rules: lintResultSet
           });
         }
         this.setState({
           lintResultSet: null,
           status: null,
-          hasExecuted: false,
+          hasExecuted: false
         });
       }
       if (result?.invalid) {
@@ -895,8 +976,9 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
           tipToShow: '',
           editingMap: {
             ...this.state.editingMap,
-            [sqlStore.resultSets?.get(pageKey)?.[resultSetIndex]?.uniqKey]: false,
-          },
+            [sqlStore.resultSets?.get(pageKey)?.[resultSetIndex]?.uniqKey]:
+              false
+          }
         });
         return;
       }
@@ -906,21 +988,21 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
         if (this.getSession()?.params?.autoCommit) {
           msg = formatMessage({
             id: 'odc.components.SQLPage.SubmittedSuccessfully',
-            defaultMessage: '提交成功',
+            defaultMessage: '提交成功'
           });
 
           // 提交成功
         } else if (!/commit;$/.test(this.state.updateDataDML)) {
           msg = formatMessage({
             id: 'odc.components.SQLPage.TheModificationIsSuccessfulAnd',
-            defaultMessage: '修改成功，手动提交后生效',
+            defaultMessage: '修改成功，手动提交后生效'
           });
 
           // 修改成功，手动提交后生效
         } else {
           msg = formatMessage({
             id: 'odc.components.SQLPage.SubmittedSuccessfully',
-            defaultMessage: '提交成功',
+            defaultMessage: '提交成功'
           });
 
           // 提交成功
@@ -932,8 +1014,9 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
           tipToShow: '',
           editingMap: {
             ...this.state.editingMap,
-            [sqlStore.resultSets?.get(pageKey)?.[resultSetIndex]?.uniqKey]: false,
-          },
+            [sqlStore.resultSets?.get(pageKey)?.[resultSetIndex]?.uniqKey]:
+              false
+          }
         });
 
         await this.handleRefreshResultSet(resultSetIndex);
@@ -949,15 +1032,15 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
   public handleStartExportResultSet = (
     resultSetIndex: number,
     limit: number,
-    tableName: string,
+    tableName: string
   ) => {
     this.setState(
       {
-        resultSetIndexToExport: resultSetIndex,
+        resultSetIndexToExport: resultSetIndex
       },
       () => {
         this.showExportResuleSetModal(tableName);
-      },
+      }
     );
   };
 
@@ -966,22 +1049,26 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
     let selectedSQL = this.editor.getSelectionContent(); // 如果没有选中，尝试获取当前语句
 
     if (!selectedSQL) {
-      const offset = this.editor.getModel().getOffsetAt(this.editor.getPosition());
+      const offset = this.editor
+        .getModel()
+        .getOffsetAt(this.editor.getPosition());
 
       if (offset > -1) {
         selectedSQL = (
           await getCurrentSQL(
             this.editor.getValue(),
             offset,
-            isConnectionModeBeMySQLType(this.getSession()?.connection.dialectType),
-            this.getSession()?.params?.delimiter,
+            isConnectionModeBeMySQLType(
+              this.getSession()?.connection.dialectType
+            ),
+            this.getSession()?.params?.delimiter
           )
         )?.sql;
         let trimSQL = selectedSQL?.trim();
         if (trimSQL?.endsWith(this.getSession()?.params?.delimiter)) {
           selectedSQL = trimSQL?.slice(
             0,
-            trimSQL.length - this.getSession()?.params?.delimiter.length,
+            trimSQL.length - this.getSession()?.params?.delimiter.length
           );
         }
       }
@@ -999,12 +1086,12 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
         this?.state?.initialSQL,
         this?.getSession(),
         selectedSQL,
-        ProfileType.Plan,
+        ProfileType.Plan
       );
     } else {
       this.setState({
         selectedSQL,
-        showExplainDrawer: true,
+        showExplainDrawer: true
       });
     }
   };
@@ -1013,14 +1100,14 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
     this.setState({
       execDetailSql: sql,
       execDetailTraceId: traceId,
-      showExecuteDetailDrawer: true,
+      showExecuteDetailDrawer: true
     });
   };
   public handleShowTrace = async (sql: string, traceId: string) => {
     this.setState({
       execDetailSql: sql,
       execDetailTraceId: traceId,
-      showTrace: true,
+      showTrace: true
     });
   };
 
@@ -1028,7 +1115,7 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
 
   public highlightSelectionLine = async (
     type: 'error' | 'info' = 'info',
-    sectionRange?: { begin: number; end: number },
+    sectionRange?: { begin: number; end: number }
   ) => {
     const editor = this.editor;
     utils.removeHighlight(editor);
@@ -1041,8 +1128,8 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
         message.warning(
           formatMessage({
             id: 'odc.components.SQLPage.BecauseTheSqlIsToo',
-            defaultMessage: '由于 SQL 过长，编辑器将只支持预览',
-          }), //由于 SQL 过长，编辑器将只支持预览
+            defaultMessage: '由于 SQL 过长，编辑器将只支持预览'
+          }) //由于 SQL 过长，编辑器将只支持预览
         );
       this.outOfLimitTipHaveShow = true;
       console.log('MAX_LIMIT: ', MAX_LIMIT, 'size:', value.length);
@@ -1054,7 +1141,12 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
       return;
     }
     if (sectionRange) {
-      utils.addHighlight(editor, sectionRange.begin, sectionRange.end, type as EHighLight);
+      utils.addHighlight(
+        editor,
+        sectionRange.begin,
+        sectionRange.end,
+        type as EHighLight
+      );
       return;
     }
     const offset = editor.getModel().getOffsetAt(editor.getPosition());
@@ -1062,7 +1154,7 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
       value,
       offset,
       isConnectionModeBeMySQLType(this.getSession()?.connection.dialectType),
-      this.getSession()?.params?.delimiter,
+      this.getSession()?.params?.delimiter
     );
 
     if (!result) {
@@ -1072,7 +1164,10 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
     utils.addHighlight(editor, begin, end, type as EHighLight);
   };
 
-  public debounceHighlightSelectionLine = debounce(this.highlightSelectionLine, 200);
+  public debounceHighlightSelectionLine = debounce(
+    this.highlightSelectionLine,
+    200
+  );
 
   // public onOpenObjDetail = (obj) => {
   //   const session = this.getSession()
@@ -1105,7 +1200,7 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
     const {
       modalStore,
       pageKey,
-      sqlStore: { resultSets },
+      sqlStore: { resultSets }
     } = this.props;
     const { resultSetIndexToExport } = this.state;
     const session = this.getSession();
@@ -1113,14 +1208,16 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
     modalStore.changeCreateResultSetExportTaskModal(true, {
       sql,
       databaseId: session?.database.databaseId,
-      tableName,
+      tableName
     });
   };
 
   public render() {
     const { pageKey, pageStore, sqlStore, params } = this.props;
     const session = this.getSession();
-    const config = getDataSourceModeConfigByConnectionMode(session?.connection?.dialectType);
+    const config = getDataSourceModeConfigByConnectionMode(
+      session?.connection?.dialectType
+    );
     const {
       initialSQL,
       showSaveSQLModal,
@@ -1140,7 +1237,7 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
       sqlChanged,
       baseOffset,
       unauthorizedResource,
-      unauthorizedSql,
+      unauthorizedSql
     } = this.state;
     const getKey = () => {
       return sqlStore.activeTab[pageKey];
@@ -1156,20 +1253,20 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
             actionGroupKey: 'SQL_DEFAULT_ACTION_GROUP',
             query: {
               isHideText: {
-                maxWidth: 780,
+                maxWidth: 780
               },
 
               isShrinkLeft: {
-                maxWidth: 580,
-              },
-            },
+                maxWidth: 580
+              }
+            }
           }}
           editor={{
             readOnly: this.editor?.getValue()?.length > 10000 * 500,
             defaultValue: initialSQL,
             enableSnippet: true,
             onValueChange: this.handleSQLChanged,
-            onEditorCreated: this.handleEditorCreated,
+            onEditorCreated: this.handleEditorCreated
             // onOpenObjDetail: this.onOpenObjDetail,
           }}
           handleChangeSplitPane={this.handleChangeSplitPane}
@@ -1219,7 +1316,7 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
               onClose={() => {
                 this.setState({
                   showExplainDrawer: false,
-                  selectedSQL: null,
+                  selectedSQL: null
                 });
               }}
             />,
@@ -1234,7 +1331,7 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
                 this.setState({
                   showExecuteDetailDrawer: false,
                   execDetailSql: null,
-                  execDetailTraceId: null,
+                  execDetailTraceId: null
                 });
               }}
             />,
@@ -1253,7 +1350,7 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
                   showDataExecuteSQLModal: false,
                   hasExecuted: false,
                   status: null,
-                  lintResultSet: null,
+                  lintResultSet: null
                 })
               }
               onChange={(sql) => this.setState({ updateDataDML: sql })}
@@ -1266,7 +1363,7 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
               session={this.getSession()}
               traceId={execDetailTraceId}
               setOpen={() => this.setState({ showTrace: false })}
-            />,
+            />
           ]}
         />
       </SQLConfigContext.Provider>
@@ -1283,7 +1380,7 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
   private executeSQL = async (
     sql: string,
     isSection?: boolean,
-    sectionRange?: { begin: number; end: number },
+    sectionRange?: { begin: number; end: number }
   ) => {
     if (!this.getSession()) {
       return;
@@ -1301,7 +1398,7 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
       isSection,
       this.getSession()?.sessionId,
       this.getSession()?.database?.dbName,
-      false,
+      false
     );
     this.handleCheckDatabasePermission(results);
     if ((!results || results?.invalid) && !results?.hasLintResults) {
@@ -1312,7 +1409,9 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
       return;
     }
     if (
-      results?.executeResult?.find((result) => result.status !== ISqlExecuteResultStatus.SUCCESS)
+      results?.executeResult?.find(
+        (result) => result.status !== ISqlExecuteResultStatus.SUCCESS
+      )
     ) {
       this.showFirrstErrorStmt(results?.executeResult, sectionRange);
     }
@@ -1320,7 +1419,10 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
      * 装填一下额外数据,详细的列名
      */
     const firstResultKey = sqlStore.getFirstUnlockedResultKey(pageKey);
-    sqlStore.setActiveTab(pageKey, firstResultKey ? firstResultKey : recordsTabKey);
+    sqlStore.setActiveTab(
+      pageKey,
+      firstResultKey ? firstResultKey : recordsTabKey
+    );
 
     // TODO: 刷新左侧资源树
 
@@ -1333,7 +1435,7 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
 
   private async showFirrstErrorStmt(
     results: ISqlExecuteResult[],
-    sectionRange?: { begin: number; end: number },
+    sectionRange?: { begin: number; end: number }
   ) {
     if (sectionRange) {
       utils.setPositionAndScroll(this.editor, sectionRange.begin);
@@ -1347,21 +1449,21 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
         const sqlIndexs = await splitSqlForHighlight(
           this.editor.getValue(),
           session.connection?.dialectType === ConnectionMode.MYSQL,
-          session?.params?.delimiter,
+          session?.params?.delimiter
         );
         const endOffset = sqlIndexs[i];
         const result = await getCurrentSQL(
           this.editor.getValue(),
           endOffset,
           session.connection?.dialectType === ConnectionMode.MYSQL,
-          session?.params?.delimiter,
+          session?.params?.delimiter
         );
 
         if (result) {
           utils.setPositionAndScroll(this.editor, endOffset);
           this.debounceHighlightSelectionLine('error', {
             begin: result.begin,
-            end: result.end,
+            end: result.end
           });
         }
         return;
@@ -1440,14 +1542,23 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
   //   }
   // };
 
-  private isDbObjectTypeExists(resultsToRefresh: ISqlExecuteResult[], type: DbObjectType) {
+  private isDbObjectTypeExists(
+    resultsToRefresh: ISqlExecuteResult[],
+    type: DbObjectType
+  ) {
     return resultsToRefresh.some((r) => r.dbObjectType === type);
   }
 }
 
-export default forwardRef(function (props: IProps, ref: React.ForwardedRef<SQLPage>) {
+export default forwardRef(function (
+  props: IProps,
+  ref: React.ForwardedRef<SQLPage>
+) {
   return (
-    <SessionContextWrap defaultDatabaseId={props.params?.cid} warnIfNotFound={false}>
+    <SessionContextWrap
+      defaultDatabaseId={props.params?.cid}
+      warnIfNotFound={false}
+    >
       {({ session }) => {
         return <SQLPage sessionId={session?.sessionId} {...props} ref={ref} />;
       }}

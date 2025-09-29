@@ -26,7 +26,7 @@ export default function exportToSQL(
   columns: ResultSetColumn[],
   tableName: string = 'tmp_table',
   dbMode: ConnectionMode,
-  rows?: any,
+  rows?: any
 ) {
   const headerColumnNames = selectData[0];
   if (!headerColumnNames) {
@@ -63,7 +63,7 @@ export default function exportToSQL(
       .join(',');
     return `insert into ${getQuoteTableName(
       tableName,
-      dbMode,
+      dbMode
     )}(${columnsText}) values(${rowsText})`;
   };
 
@@ -73,6 +73,11 @@ export default function exportToSQL(
     .join(';\n');
 }
 
-export function downloadPLDDL(plName: string, plType, ddl: string, dbName: string) {
+export function downloadPLDDL(
+  plName: string,
+  plType,
+  ddl: string,
+  dbName: string
+) {
   generateAndDownloadFile(`${dbName}_${plType}_${plName}.sql`, ddl);
 }

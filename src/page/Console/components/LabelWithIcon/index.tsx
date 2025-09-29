@@ -8,13 +8,17 @@ interface IProps {
 }
 const LabelWithIcon = ({ icon, label, gap, align }: IProps) => {
   const displayedLabel =
-    typeof label === 'string' ? <span className={styles.icon}>{label}</span> : label;
+    typeof label === 'string' ? (
+      <span className={styles.icon}>{label}</span>
+    ) : (
+      label
+    );
   return (
     <span
       style={{
         gap,
         flexDirection: align?.[0] === 'vertical' ? 'column' : 'row',
-        alignItems: align?.[0] === 'vertical' ? align?.[1] : '',
+        alignItems: align?.[0] === 'vertical' ? align?.[1] : ''
       }}
       className={styles.labelWithIcon}
     >

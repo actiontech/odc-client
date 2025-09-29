@@ -63,7 +63,9 @@ const TableSelector: React.FC<{
     ?.map((node) => {
       if (
         sourceSearchValue &&
-        node?.title?.toLowerCase()?.indexOf(sourceSearchValue?.toLowerCase()) === -1
+        node?.title
+          ?.toLowerCase()
+          ?.indexOf(sourceSearchValue?.toLowerCase()) === -1
       ) {
         return null;
       }
@@ -75,7 +77,9 @@ const TableSelector: React.FC<{
     ?.map((node) => {
       if (
         targetSearchValue &&
-        node?.title?.toLowerCase()?.indexOf(targetSearchValue?.toLowerCase()) === -1
+        node?.title
+          ?.toLowerCase()
+          ?.indexOf(targetSearchValue?.toLowerCase()) === -1
       ) {
         return null;
       }
@@ -89,13 +93,16 @@ const TableSelector: React.FC<{
   const loadTableListByDatabaseName = async () => {
     if (databaseId && sessionId && database) {
       setLoading(true);
-      const result = await getTableListByDatabaseName(sessionId, database?.name);
+      const result = await getTableListByDatabaseName(
+        sessionId,
+        database?.name
+      );
       const newResult = result?.map((table, index) => {
         return {
           key: `0-${index}`,
           title: table?.tableName,
           icon: <Icon component={DbObjsIcon[DbObjectType.table]} />,
-          children: [],
+          children: []
         };
       });
       setTreeData(newResult);
@@ -144,13 +151,18 @@ const TableSelector: React.FC<{
             formatMessage(
               {
                 id: 'src.component.Task.StructureComparisonTask.CreateModal.8C047E8D',
-                defaultMessage: '源表（{checkedKeysLength}/{treeDataLength}）',
+                defaultMessage: '源表（{checkedKeysLength}/{treeDataLength}）'
               },
-              { checkedKeysLength: checkedKeys?.length, treeDataLength: treeData?.length },
+              {
+                checkedKeysLength: checkedKeys?.length,
+                treeDataLength: treeData?.length
+              }
             ) /*`选择源表 (${checkedKeys?.length}/${treeData?.length})`*/
           }
           hasSelectAll={false}
-          onSelectAll={() => setCheckedKeys(allTreeData?.map((node) => node?.key) as string[])}
+          onSelectAll={() =>
+            setCheckedKeys(allTreeData?.map((node) => node?.key) as string[])
+          }
           onSearch={(v) => setSourceSearchValue(v)}
         >
           <Spin spinning={loading}>
@@ -179,9 +191,9 @@ const TableSelector: React.FC<{
             formatMessage(
               {
                 id: 'src.component.Task.StructureComparisonTask.CreateModal.199215C7',
-                defaultMessage: '已选表（{checkedKeysLength}）',
+                defaultMessage: '已选表（{checkedKeysLength}）'
               },
-              { checkedKeysLength: checkedKeys?.length },
+              { checkedKeysLength: checkedKeys?.length }
             ) /*`已选表(${checkedKeys?.length})`*/
           }
           onSearch={(v) => setTargetSearchValue(v)}
@@ -194,7 +206,7 @@ const TableSelector: React.FC<{
               title={
                 formatMessage({
                   id: 'src.component.Task.StructureComparisonTask.CreateModal.C8820D9E',
-                  defaultMessage: '确定要清空已选对象吗？',
+                  defaultMessage: '确定要清空已选对象吗？'
                 }) /*"确定要清空已选对象吗？"*/
               }
             >
@@ -202,7 +214,7 @@ const TableSelector: React.FC<{
                 {
                   formatMessage({
                     id: 'src.component.Task.StructureComparisonTask.CreateModal.4CA31C77' /*清空*/,
-                    defaultMessage: '清空',
+                    defaultMessage: '清空'
                   }) /* 清空 */
                 }
               </a>
@@ -225,7 +237,9 @@ const TableSelector: React.FC<{
                     className={styles.delete}
                     onClick={() => {
                       const nodeKey = node?.key;
-                      const newCheckedKeys = checkedKeys.filter((key) => key !== nodeKey);
+                      const newCheckedKeys = checkedKeys.filter(
+                        (key) => key !== nodeKey
+                      );
                       const newValue = treeData
                         ?.map((node) => {
                           if (newCheckedKeys?.includes(node?.key)) {

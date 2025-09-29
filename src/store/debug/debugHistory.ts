@@ -25,7 +25,7 @@ export default class DebugHistory {
       log,
       logType,
       time: Date.now(),
-      key: generateUniqKey(),
+      key: generateUniqKey()
     });
   }
   public clearHistory() {

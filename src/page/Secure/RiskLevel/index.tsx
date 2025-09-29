@@ -33,12 +33,16 @@ function genRiskLevel(riskLevel: IRiskLevel): {
   return {
     label: RiskLevelMap(riskLevel?.level),
     value: riskLevel?.level,
-    origin: riskLevel,
+    origin: riskLevel
   };
 }
 
 const RiskLevel = ({ userStore }) => {
-  const currentSiderItemRef = useRef<{ value: number; origin: IRiskLevel; label: string }>(null);
+  const currentSiderItemRef = useRef<{
+    value: number;
+    origin: IRiskLevel;
+    label: string;
+  }>(null);
   const [selectedItem, setSelectedItem] = useState<number>();
   const [siderItemList, setSiderItemList] = useState<SiderItem[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -46,23 +50,32 @@ const RiskLevel = ({ userStore }) => {
 
   const initRiskLevel = async () => {
     const riskLevels = await listRiskLevels();
-    const newSiderItemList = riskLevels?.map(genRiskLevel)?.sort((a, b) => b?.value - a?.value);
+    const newSiderItemList = riskLevels
+      ?.map(genRiskLevel)
+      ?.sort((a, b) => b?.value - a?.value);
     newSiderItemList?.length > 0 && setSiderItemList(newSiderItemList);
     newSiderItemList?.length > 0 && handleItemClick(newSiderItemList?.[0]);
   };
 
-  const handleItemClick = (item: { value: number; origin: IRiskLevel; label: string }) => {
+  const handleItemClick = (item: {
+    value: number;
+    origin: IRiskLevel;
+    label: string;
+  }) => {
     setSelectedItem(item?.value);
     setCurrentRiskLevel(item?.origin);
     currentSiderItemRef.current = item;
   };
   const memoryReload = async () => {
     const riskLevels = await listRiskLevels();
-    const newSiderItemList = riskLevels?.map(genRiskLevel)?.sort((a, b) => b?.value - a?.value);
+    const newSiderItemList = riskLevels
+      ?.map(genRiskLevel)
+      ?.sort((a, b) => b?.value - a?.value);
     newSiderItemList?.length > 0 && setSiderItemList(newSiderItemList);
-    newSiderItemList?.length > 0 && setSelectedItem(currentSiderItemRef.current?.value);
+    newSiderItemList?.length > 0 &&
+      setSelectedItem(currentSiderItemRef.current?.value);
     const newCrrentRiskLevel = riskLevels?.find(
-      (riskLevel) => riskLevel?.id === currentSiderItemRef.current?.origin?.id,
+      (riskLevel) => riskLevel?.id === currentSiderItemRef.current?.origin?.id
     );
     newCrrentRiskLevel && setCurrentRiskLevel(newCrrentRiskLevel);
   };

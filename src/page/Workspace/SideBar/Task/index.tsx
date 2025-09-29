@@ -21,9 +21,7 @@ import React, { useEffect } from 'react';
 import SideTabs from '../components/SideTabs';
 import styles from './index.less';
 
-interface IProps {}
-
-const Task: React.FC<IProps> = () => {
+const Task: React.FC = () => {
   useEffect(() => {
     tracert.expo('a3112.b41896.c330990');
   }, []);
@@ -32,13 +30,16 @@ const Task: React.FC<IProps> = () => {
       key="Task"
       tabs={[
         {
-          title: formatMessage({ id: 'odc.SideBar.Task.Ticket', defaultMessage: '工单' }), //工单
+          title: formatMessage({
+            id: 'odc.SideBar.Task.Ticket',
+            defaultMessage: '工单'
+          }), //工单
           key: 'task',
           actions: [],
           render() {
             return <Sider className={styles.taskSider} isPage={true} />;
-          },
-        },
+          }
+        }
       ]}
     />
   );

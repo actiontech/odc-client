@@ -15,7 +15,10 @@
  */
 
 import { executeSQL } from '@/common/network/sql';
-import { batchGetDataModifySQL, queryTableOrViewData } from '@/common/network/table';
+import {
+  batchGetDataModifySQL,
+  queryTableOrViewData
+} from '@/common/network/table';
 import ExecuteSQLModal from '@/component/ExecuteSQLModal';
 import { ISQLLintReuslt } from '@/component/SQLLintResult/type';
 import { EStatus, IResultSet, ISqlExecuteResultStatus, ITable } from '@/d.ts';
@@ -87,7 +90,7 @@ class TableData extends React.Component<
       lintResultSet: null,
       status: null,
       hasExecuted: false,
-      allowExport: true,
+      allowExport: true
     };
   }
 
@@ -112,7 +115,7 @@ class TableData extends React.Component<
   public reloadTableData = async (
     tableName: string,
     keepInitialSQL: boolean = false,
-    limit: number = 1000,
+    limit: number = 1000
   ) => {
     const { table, session } = this.props;
 
@@ -121,7 +124,7 @@ class TableData extends React.Component<
     }
 
     this.setState({
-      dataLoading: true,
+      dataLoading: true
     });
 
     try {
@@ -130,32 +133,39 @@ class TableData extends React.Component<
         tableName,
         limit,
         session.supportFeature.enableRowId,
-        session?.sessionId,
+        session?.sessionId
       );
       if (data?.status !== ISqlExecuteResultStatus.SUCCESS && data?.track) {
         notification.error({
-          track: data?.track,
+          track: data?.track
         });
       }
-      let resultSet = generateResultSetColumns([data], session?.connection?.dialectType)?.[0];
+      let resultSet = generateResultSetColumns(
+        [data],
+        session?.connection?.dialectType
+      )?.[0];
       if (resultSet) {
         this._resultSetKey = generateUniqKey();
         this.setState({
-          resultSet,
+          resultSet
         });
       }
       this.setState({
-        allowExport: data?.allowExport ?? true, // 当data.allowExport为null或undefined时赋值为true，即默认为允许导出
+        allowExport: data?.allowExport ?? true // 当data.allowExport为null或undefined时赋值为true，即默认为允许导出
       });
     } catch (e) {
       console.error(e);
     } finally {
       this.setState({
-        dataLoading: false,
+        dataLoading: false
       });
     }
   };
-  public handleSaveRowData = async (newRows: any[], limit: number, autoCommit: boolean) => {
+  public handleSaveRowData = async (
+    newRows: any[],
+    limit: number,
+    autoCommit: boolean
+  ) => {
     const { tableName, session, pageKey } = this.props;
     const { resultSet } = this.state;
     const originRows = resultSet.rows;
@@ -177,8 +187,8 @@ class TableData extends React.Component<
           message.warning(
             formatMessage({
               id: 'odc.TablePage.TableData.DoNotSubmitBlankLines',
-              defaultMessage: '请不要提交空行',
-            }), // 请不要提交空行
+              defaultMessage: '请不要提交空行'
+            }) // 请不要提交空行
           );
           return;
         }
@@ -201,7 +211,7 @@ class TableData extends React.Component<
           type,
           row: wrapRow(row, resultSet.columns),
           initialRow: wrapRow(originRows[i], resultSet.columns),
-          enableRowId: type !== 'INSERT',
+          enableRowId: type !== 'INSERT'
         };
       })
       .filter(Boolean);
@@ -209,8 +219,8 @@ class TableData extends React.Component<
       message.warning(
         formatMessage({
           id: 'odc.TablePage.TableData.NoContentToSubmit',
-          defaultMessage: '无内容可提交',
-        }), // 无内容可提交
+          defaultMessage: '无内容可提交'
+        }) // 无内容可提交
       );
       return;
     }
@@ -222,7 +232,7 @@ class TableData extends React.Component<
       editRows,
       session.sessionId,
       session?.database?.dbName,
-      resultSet.whereColumns,
+      resultSet.whereColumns
     );
     if (!res) {
       return;
@@ -236,20 +246,23 @@ class TableData extends React.Component<
       message.warning(
         formatMessage({
           id: 'odc.TablePage.TableData.NoContentToSubmit',
-          defaultMessage: '无内容可提交',
-        }), // 无内容可提交
+          defaultMessage: '无内容可提交'
+        }) // 无内容可提交
       );
       return;
     }
 
     if (autoCommit) {
-      sql = sql + (session.params.delimiter === ';' ? '' : session.params.delimiter) + '\ncommit;';
+      sql =
+        sql +
+        (session.params.delimiter === ';' ? '' : session.params.delimiter) +
+        '\ncommit;';
     }
 
     this.setState({
       showDataExecuteSQLModal: true,
       updateDataDML: sql,
-      tipToShow,
+      tipToShow
     });
   };
 
@@ -261,7 +274,7 @@ class TableData extends React.Component<
         updateDataDML,
         session.sessionId,
         session.database.dbName,
-        false,
+        false
       );
       if (result?.unauthorizedDBResources?.length) {
         return { unauthorizedDBResources: result?.unauthorizedDBResources };
@@ -271,7 +284,7 @@ class TableData extends React.Component<
           this.setState({
             lintResultSet: result?.lintResultSet,
             status: result?.status,
-            hasExecuted: true,
+            hasExecuted: true
           });
           return;
         }
@@ -279,13 +292,14 @@ class TableData extends React.Component<
         this.setState({
           lintResultSet: null,
           status: null,
-          hasExecuted: false,
+          hasExecuted: false
         });
         if (result?.status === EStatus.APPROVAL) {
           modal.changeCreateAsyncTaskModal(true, {
             sql: updateDataDML,
-            databaseId: sessionManager.sessionMap.get(session.sessionId).odcDatabase?.id,
-            rules: lintResultSet,
+            databaseId: sessionManager.sessionMap.get(session.sessionId)
+              .odcDatabase?.id,
+            rules: lintResultSet
           });
         }
       }
@@ -301,7 +315,7 @@ class TableData extends React.Component<
           this.setState({
             lintResultSet: result?.lintResultSet,
             status: result?.status,
-            hasExecuted: true,
+            hasExecuted: true
           });
           return;
         }
@@ -310,14 +324,15 @@ class TableData extends React.Component<
         if (result?.status === EStatus.APPROVAL) {
           modal.changeCreateAsyncTaskModal(true, {
             sql: updateDataDML,
-            databaseId: sessionManager.sessionMap.get(session.sessionId).odcDatabase?.id,
-            rules: lintResultSet,
+            databaseId: sessionManager.sessionMap.get(session.sessionId)
+              .odcDatabase?.id,
+            rules: lintResultSet
           });
         }
         this.setState({
           lintResultSet: null,
           status: null,
-          hasExecuted: false,
+          hasExecuted: false
         });
       }
       if (result?.invalid) {
@@ -325,28 +340,30 @@ class TableData extends React.Component<
           showDataExecuteSQLModal: false,
           isEditing: false,
           updateDataDML: '',
-          tipToShow: '',
+          tipToShow: ''
         });
         return;
       }
 
-      if (result?.executeResult?.[0]?.status === ISqlExecuteResultStatus.SUCCESS) {
+      if (
+        result?.executeResult?.[0]?.status === ISqlExecuteResultStatus.SUCCESS
+      ) {
         let msg;
 
         if (session.params.autoCommit) {
           msg = formatMessage({
             id: 'odc.TablePage.TableData.SubmittedSuccessfully',
-            defaultMessage: '提交成功',
+            defaultMessage: '提交成功'
           }); // 提交成功
         } else if (!/commit;$/.test(this.state.updateDataDML)) {
           msg = formatMessage({
             id: 'odc.TablePage.TableData.TheModificationIsSuccessfulAnd',
-            defaultMessage: '修改成功，手动提交后生效',
+            defaultMessage: '修改成功，手动提交后生效'
           }); // 修改成功，手动提交后生效
         } else {
           msg = formatMessage({
             id: 'odc.TablePage.TableData.SubmittedSuccessfully',
-            defaultMessage: '提交成功',
+            defaultMessage: '提交成功'
           }); // 提交成功
         } // 关闭对话框
 
@@ -354,7 +371,7 @@ class TableData extends React.Component<
           showDataExecuteSQLModal: false,
           isEditing: false,
           updateDataDML: '',
-          tipToShow: '',
+          tipToShow: ''
         });
 
         /**
@@ -378,12 +395,19 @@ class TableData extends React.Component<
     modalStore.changeCreateResultSetExportTaskModal(true, {
       sql,
       databaseId: session?.database.databaseId,
-      tableName,
+      tableName
     });
   };
 
   render() {
-    const { tableName, pageKey, table, settingStore, session, isExternalTable } = this.props;
+    const {
+      tableName,
+      pageKey,
+      table,
+      settingStore,
+      session,
+      isExternalTable
+    } = this.props;
     const {
       dataLoading,
       resultSet,
@@ -392,7 +416,7 @@ class TableData extends React.Component<
       isEditing,
       lintResultSet,
       status,
-      allowExport,
+      allowExport
     } = this.state;
 
     return (
@@ -405,13 +429,18 @@ class TableData extends React.Component<
             showPagination={true}
             showMock={settingStore.enableMockdata}
             isEditing={isEditing}
-            disableEdit={!resultSet.resultSetMetaData?.editable || isExternalTable}
-            table={{ ...table, columns: resultSet.resultSetMetaData?.columnList }}
+            disableEdit={
+              !resultSet.resultSetMetaData?.editable || isExternalTable
+            }
+            table={{
+              ...table,
+              columns: resultSet.resultSetMetaData?.columnList
+            }}
             pageKey={pageKey}
             session={session}
             onUpdateEditing={(editing) => {
               this.setState({
-                isEditing: editing,
+                isEditing: editing
               });
             }}
             allowExport={allowExport}
@@ -425,7 +454,7 @@ class TableData extends React.Component<
             onRefresh={(limit) => this.reloadTableData(tableName, false, limit)}
             onExport={(limitToExport) => {
               this.setState({
-                limitToExport,
+                limitToExport
               });
               this.showExportResuleSetModal();
             }}
@@ -445,7 +474,7 @@ class TableData extends React.Component<
               showDataExecuteSQLModal: false,
               hasExecuted: false,
               status: null,
-              lintResultSet: null,
+              lintResultSet: null
             })
           }
           callback={() => {
@@ -453,12 +482,12 @@ class TableData extends React.Component<
               showDataExecuteSQLModal: false,
               hasExecuted: false,
               status: null,
-              lintResultSet: null,
+              lintResultSet: null
             });
           }}
           onChange={(sql) =>
             this.setState({
-              updateDataDML: sql,
+              updateDataDML: sql
             })
           }
         />

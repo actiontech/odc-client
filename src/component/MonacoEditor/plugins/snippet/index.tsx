@@ -34,7 +34,7 @@ export function addSnippet(language: string, snippets: ISnippet[]) {
           startLineNumber: position.lineNumber,
           endLineNumber: position.lineNumber,
           startColumn: word.startColumn,
-          endColumn: word.endColumn,
+          endColumn: word.endColumn
         };
         return {
           incomplete: false,
@@ -45,12 +45,13 @@ export function addSnippet(language: string, snippets: ISnippet[]) {
                 kind: monaco.languages.CompletionItemKind.Snippet,
                 documentation: item.description || '',
                 insertText: item.body || '',
-                insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
-                range,
+                insertTextRules:
+                  monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                range
               };
-            }) || [],
+            }) || []
         };
-      },
-    },
+      }
+    }
   );
 }

@@ -38,7 +38,7 @@ import {
   CloudDownloadOutlined,
   EditOutlined,
   FileSearchOutlined,
-  SyncOutlined,
+  SyncOutlined
 } from '@ant-design/icons';
 import { Layout, message } from 'antd';
 import { inject, observer } from 'mobx-react';
@@ -55,13 +55,22 @@ const { Content } = Layout;
 const ToolbarButton = Toolbar.Button;
 
 const TypeCodeMap = {
-  OBJECT: formatMessage({ id: 'odc.components.TypePage.Object', defaultMessage: '对象' }), // 对象
-  VARRAY: formatMessage({ id: 'odc.components.TypePage.Array', defaultMessage: '数组' }), // 数组
-  TABLE: formatMessage({ id: 'odc.components.TypePage.Table', defaultMessage: '表' }), // 表
+  OBJECT: formatMessage({
+    id: 'odc.components.TypePage.Object',
+    defaultMessage: '对象'
+  }), // 对象
+  VARRAY: formatMessage({
+    id: 'odc.components.TypePage.Array',
+    defaultMessage: '数组'
+  }), // 数组
+  TABLE: formatMessage({
+    id: 'odc.components.TypePage.Table',
+    defaultMessage: '表'
+  }), // 表
   COLLECTION: formatMessage({
     id: 'src.page.Workspace.components.TypePage.ACF1EB3E',
-    defaultMessage: '集合',
-  }), //'集合'
+    defaultMessage: '集合'
+  }) //'集合'
 };
 interface IProps {
   sqlStore: SQLStore;
@@ -92,10 +101,10 @@ class TypePage extends Component<
       owner: '',
       createTime: 0,
       lastDdlTime: 0,
-      ddl: '',
+      ddl: ''
     },
 
-    formated: false,
+    formated: false
   };
 
   public async componentDidMount() {
@@ -110,7 +119,7 @@ class TypePage extends Component<
       nextProps.params.propsTab !== this.state.propsTab
     ) {
       this.setState({
-        propsTab: nextProps.params.propsTab,
+        propsTab: nextProps.params.propsTab
       });
     }
   }
@@ -125,40 +134,45 @@ class TypePage extends Component<
 
       {
         typeName: type.typeName,
-        propsTab,
-      },
+        propsTab
+      }
     );
   };
   private reloadType = async () => {
     const {
       session,
-      params: { typeName },
+      params: { typeName }
     } = this.props;
-    const type = await getType(typeName, false, session?.odcDatabase?.name, session?.sessionId);
+    const type = await getType(
+      typeName,
+      false,
+      session?.odcDatabase?.name,
+      session?.sessionId
+    );
 
     if (type) {
       this.setState({
-        type,
+        type
       });
     } else {
       message.error(
         formatMessage({
           id: 'odc.components.TypePage.FailedToLoadTheType',
-          defaultMessage: '加载类型失败',
-        }), // 加载类型失败
+          defaultMessage: '加载类型失败'
+        }) // 加载类型失败
       );
     }
   };
   private handleEditType = () => {
     const {
       session,
-      params: { typeName },
+      params: { typeName }
     } = this.props;
     openTypeEditPageByName(
       typeName,
       session?.sessionId,
       session?.odcDatabase?.id,
-      session?.odcDatabase?.name,
+      session?.odcDatabase?.name
     );
   };
   private showSearchWidget = () => {
@@ -174,7 +188,7 @@ class TypePage extends Component<
       this.editor.setValue(type?.ddl || '');
     }
     this.setState({
-      formated: !formated,
+      formated: !formated
     });
   };
 
@@ -194,7 +208,7 @@ class TypePage extends Component<
                   key: TypePropsTab.BASE_INFO,
                   label: formatMessage({
                     id: 'odc.components.TypePage.BasicInformation',
-                    defaultMessage: '基本信息',
+                    defaultMessage: '基本信息'
                   }),
                   children: (
                     <ToolContentWrpper>
@@ -204,43 +218,49 @@ class TypePage extends Component<
                             {
                               formatMessage({
                                 id: 'odc.components.TypePage.Name.1',
-                                defaultMessage: '名称：',
+                                defaultMessage: '名称：'
                               })
                               /* 名称: */
                             }
                           </span>
-                          <span className={`${preTextForm}-content`}>{type.typeName}</span>
+                          <span className={`${preTextForm}-content`}>
+                            {type.typeName}
+                          </span>
                         </div>
                         <div className={`${preTextForm}-line`}>
                           <span className={`${preTextForm}-label`}>
                             {
                               formatMessage({
                                 id: 'odc.components.TypePage.Owner.1',
-                                defaultMessage: '所有者:',
+                                defaultMessage: '所有者:'
                               })
                               /* 所有者: */
                             }
                           </span>
-                          <span className={`${preTextForm}-content`}>{type.owner}</span>
+                          <span className={`${preTextForm}-content`}>
+                            {type.owner}
+                          </span>
                         </div>
                         <div className={`${preTextForm}-line`}>
                           <span className={`${preTextForm}-label`}>
                             {
                               formatMessage({
                                 id: 'odc.components.TypePage.Type.1',
-                                defaultMessage: '类型：',
+                                defaultMessage: '类型：'
                               })
                               /* 类型: */
                             }
                           </span>
-                          <span className={`${preTextForm}-content`}>{TypeCodeMap[type.type]}</span>
+                          <span className={`${preTextForm}-content`}>
+                            {TypeCodeMap[type.type]}
+                          </span>
                         </div>
                         <div className={`${preTextForm}-line`}>
                           <span className={`${preTextForm}-label`}>
                             {
                               formatMessage({
                                 id: 'odc.components.TypePage.Created',
-                                defaultMessage: '创建时间:',
+                                defaultMessage: '创建时间:'
                               })
                               /* 创建时间: */
                             }
@@ -254,7 +274,7 @@ class TypePage extends Component<
                             {
                               formatMessage({
                                 id: 'odc.components.TypePage.ModificationTime',
-                                defaultMessage: '修改时间:',
+                                defaultMessage: '修改时间:'
                               })
 
                               /* 修改时间: */
@@ -266,7 +286,7 @@ class TypePage extends Component<
                         </div>
                       </ToolPageTextFromWrapper>
                     </ToolContentWrpper>
-                  ),
+                  )
                 },
                 {
                   key: TypePropsTab.DDL,
@@ -278,7 +298,7 @@ class TypePage extends Component<
                           <ToolbarButton
                             text={formatMessage({
                               id: 'workspace.window.session.button.edit',
-                              defaultMessage: '编辑',
+                              defaultMessage: '编辑'
                             })}
                             icon={<EditOutlined />}
                             onClick={this.handleEditType}
@@ -289,7 +309,7 @@ class TypePage extends Component<
                           text={
                             formatMessage({
                               id: 'odc.components.TypePage.Download',
-                              defaultMessage: '下载',
+                              defaultMessage: '下载'
                             }) //下载
                           }
                           icon={<CloudDownloadOutlined />}
@@ -298,7 +318,7 @@ class TypePage extends Component<
                               type?.typeName,
                               PLType.TYPE,
                               type?.ddl,
-                              session?.odcDatabase?.name,
+                              session?.odcDatabase?.name
                             );
                           }}
                         />
@@ -306,7 +326,7 @@ class TypePage extends Component<
                         <ToolbarButton
                           text={formatMessage({
                             id: 'workspace.window.sql.button.search',
-                            defaultMessage: '查找',
+                            defaultMessage: '查找'
                           })}
                           icon={<FileSearchOutlined />}
                           onClick={this.showSearchWidget}
@@ -315,7 +335,7 @@ class TypePage extends Component<
                         <ToolbarButton
                           text={formatMessage({
                             id: 'workspace.window.session.button.refresh',
-                            defaultMessage: '刷新',
+                            defaultMessage: '刷新'
                           })}
                           icon={<SyncOutlined />}
                           onClick={this.reloadType}
@@ -326,18 +346,20 @@ class TypePage extends Component<
                             formated
                               ? formatMessage({
                                   id: 'odc.components.TypePage.Unformat',
-                                  defaultMessage: '取消格式化',
+                                  defaultMessage: '取消格式化'
                                 })
                               : // 取消格式化
                                 formatMessage({
                                   id: 'odc.components.TypePage.Formatting',
-                                  defaultMessage: '格式化',
+                                  defaultMessage: '格式化'
                                 })
                             // 格式化
                           }
                           icon={<AlignLeftOutlined />}
                           onClick={this.handleFormat}
-                          status={formated ? IConStatus.ACTIVE : IConStatus.INIT}
+                          status={
+                            formated ? IConStatus.ACTIVE : IConStatus.INIT
+                          }
                         />
                       </Toolbar>
                       <ToolContentWrpper>
@@ -345,7 +367,8 @@ class TypePage extends Component<
                           readOnly
                           value={type?.ddl || ''}
                           language={
-                            getDataSourceModeConfig(session?.connection?.type)?.sql?.language
+                            getDataSourceModeConfig(session?.connection?.type)
+                              ?.sql?.language
                           }
                           onEditorCreated={(editor: IEditor) => {
                             this.editor = editor;
@@ -353,8 +376,8 @@ class TypePage extends Component<
                         />
                       </ToolContentWrpper>
                     </>
-                  ),
-                },
+                  )
+                }
               ]}
             />
           </Content>
@@ -375,5 +398,5 @@ export default WrapSessionPage(
   },
   true,
   false,
-  true,
+  true
 );

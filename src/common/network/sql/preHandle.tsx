@@ -63,7 +63,7 @@ export function executeSQLPreHandle(
   params: IExecuteSQLParams | IExecutePLForMysqlParams | string,
   needModal: boolean,
   sessionId: string,
-  handleUnauthInModal?: boolean,
+  handleUnauthInModal?: boolean
 ): {
   data: any;
   lintResultSet: ISQLLintReuslt[];
@@ -76,9 +76,9 @@ export function executeSQLPreHandle(
         sqlTuple: {
           executedSql: cur?.violation?.text,
           offset: cur?.violation?.offset,
-          originalSql: cur?.violation?.text,
+          originalSql: cur?.violation?.text
         },
-        violatedRules: [cur],
+        violatedRules: [cur]
       });
     }
     return pre;
@@ -94,10 +94,11 @@ export function executeSQLPreHandle(
         executeResult: [],
         violatedRules: [],
         unauthorizedDBResources,
-        unauthorizedSql: (params as IExecuteSQLParams)?.sql || (params as string),
+        unauthorizedSql:
+          (params as IExecuteSQLParams)?.sql || (params as string)
       },
       lintResultSet: [],
-      pass: false,
+      pass: false
     };
   }
 
@@ -105,7 +106,7 @@ export function executeSQLPreHandle(
     if (Array.isArray(cur?.violatedRules) && cur?.violatedRules?.length > 0) {
       return pre.concat({
         sql: cur?.sqlTuple?.executedSql,
-        violations: cur?.violatedRules?.map((item) => item?.violation),
+        violations: cur?.violatedRules?.map((item) => item?.violation)
       });
     } else {
       return pre;
@@ -127,11 +128,11 @@ export function executeSQLPreHandle(
           executeResult: [],
           violatedRules,
           lintResultSet,
-          status: lintStatus,
+          status: lintStatus
         },
         status: lintStatus,
         lintResultSet,
-        pass: false,
+        pass: false
       };
     }
 
@@ -152,15 +153,16 @@ export function executeSQLPreHandle(
           modal.updateWorkSpaceExecuteSQLModalProps();
           modal.changeCreateAsyncTaskModal(true, {
             sql: (params as IExecuteSQLParams)?.sql || (params as string),
-            databaseId: sessionManager.sessionMap.get(sessionId).odcDatabase?.id,
-            rules: lintResultSet,
+            databaseId:
+              sessionManager.sessionMap.get(sessionId).odcDatabase?.id,
+            rules: lintResultSet
           });
         },
         // 关闭SQL确认弹窗
         onCancel: () =>
           modal.updateWorkSpaceExecuteSQLModalProps({
-            visible: false,
-          }),
+            visible: false
+          })
       });
     }
   }
@@ -171,7 +173,7 @@ export function executeSQLPreHandle(
       data: null,
       lintResultSet,
       status: lintStatus,
-      pass: false,
+      pass: false
     };
   }
 
@@ -179,7 +181,7 @@ export function executeSQLPreHandle(
     lintResultSet,
     status: lintStatus,
     data: null,
-    pass: true,
+    pass: true
   };
 }
 

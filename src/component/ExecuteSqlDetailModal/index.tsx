@@ -1,21 +1,30 @@
 import {
   getFullLinkTraceDownloadUrl,
   getSQLExecuteProfile,
-  getSQLExplain,
+  getSQLExplain
 } from '@/common/network/sql';
 import DisplayTable from '@/component/DisplayTable';
 import Flow from '@/component/ProfileFlow';
 import { handleShowOutputFilter } from '@/page/Workspace/components/SQLExplain';
 import {
   getSqlExplainColumns,
-  getSqlProfileColumns,
+  getSqlProfileColumns
 } from '@/page/Workspace/components/SQLExplain/column';
 import { TraceTabsType } from '@/page/Workspace/components/Trace';
 import TraceComp from '@/page/Workspace/components/Trace/TraceComponent';
 import modal, { ModalStore } from '@/store/modal';
 import { formatMessage } from '@/util/intl';
 import { downloadFile } from '@/util/utils';
-import { Button, Input, message, Modal, Radio, Space, Spin, Tooltip } from 'antd';
+import {
+  Button,
+  Input,
+  message,
+  Modal,
+  Radio,
+  Space,
+  Spin,
+  Tooltip
+} from 'antd';
 import { inject, observer } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
 import {
@@ -28,7 +37,7 @@ import {
   PLAN_PAGE_TYPE,
   ProfileType,
   traceViewOptions,
-  TypeMap,
+  TypeMap
 } from './constant';
 import styles from './index.less';
 
@@ -50,33 +59,35 @@ const ExecuteSQLDetailModal: React.FC<IProps> = ({ modalStore }: IProps) => {
   const [downloadLoading, setDownloadLoading] = useState<boolean>(false);
   const [pageLoading, setPageLoading] = useState<boolean>(false);
   const [searchValue, setSearchValue] = useState<string>(null);
-  const finished = !!data?.graph?.status && data?.graph?.status === IProfileStatus.FINISHED;
+  const finished =
+    !!data?.graph?.status && data?.graph?.status === IProfileStatus.FINISHED;
   const enableTrace =
-    finished && modalStore?.executeSqlDetailData?.session?.params?.fullLinkTraceEnabled;
+    finished &&
+    modalStore?.executeSqlDetailData?.session?.params?.fullLinkTraceEnabled;
   const getExecuteRadioOption = () => {
     return [
       {
         value: EXECUTE_PAGE_TYPE.EXECUTE_DETAIL,
         label: formatMessage({
           id: 'src.component.ExecuteSqlDetailModal.38BDF819',
-          defaultMessage: '执行详情',
-        }),
+          defaultMessage: '执行详情'
+        })
       },
       {
         value: EXECUTE_PAGE_TYPE.EXECUTE_PLAN,
         label: formatMessage({
           id: 'src.component.ExecuteSqlDetailModal.8A207B02',
-          defaultMessage: '执行计划',
-        }),
+          defaultMessage: '执行计划'
+        })
       },
       {
         value: EXECUTE_PAGE_TYPE.FULL_TRACE,
         label: formatMessage({
           id: 'src.component.ExecuteSqlDetailModal.0B221F0A',
-          defaultMessage: '全链路诊断',
+          defaultMessage: '全链路诊断'
         }),
-        disabled: !enableTrace,
-      },
+        disabled: !enableTrace
+      }
     ];
   };
 
@@ -85,9 +96,9 @@ const ExecuteSQLDetailModal: React.FC<IProps> = ({ modalStore }: IProps) => {
       value: PLAN_PAGE_TYPE.PLAN_DETAIL,
       label: formatMessage({
         id: 'src.component.ExecuteSqlDetailModal.14585364',
-        defaultMessage: '计划统计',
-      }),
-    },
+        defaultMessage: '计划统计'
+      })
+    }
   ];
 
   const getDisabledTooltip = (val) => {
@@ -99,7 +110,7 @@ const ExecuteSQLDetailModal: React.FC<IProps> = ({ modalStore }: IProps) => {
     }
     return formatMessage({
       id: 'src.component.ExecuteSqlDetailModal.D6886430',
-      defaultMessage: val,
+      defaultMessage: val
     });
   };
 
@@ -112,16 +123,16 @@ const ExecuteSQLDetailModal: React.FC<IProps> = ({ modalStore }: IProps) => {
           rowKey="key"
           bordered={true}
           expandable={{
-            defaultExpandAllRows: true,
+            defaultExpandAllRows: true
           }}
           scroll={{
             x: 1400,
-            y: '100%',
+            y: '100%'
           }}
           columns={
             isPlan
               ? getSqlExplainColumns({
-                  handleShowOutputFilter: handleShowOutputFilter,
+                  handleShowOutputFilter: handleShowOutputFilter
                 })
               : getSqlProfileColumns()
           }
@@ -138,7 +149,7 @@ const ExecuteSQLDetailModal: React.FC<IProps> = ({ modalStore }: IProps) => {
             backgroundColor: 'var(--background-tertraiy-color)',
             color: 'var(--text-color-primary)',
             overflow: 'auto',
-            marginBottom: 0,
+            marginBottom: 0
           }}
         >
           <CopyToClipboard
@@ -149,15 +160,15 @@ const ExecuteSQLDetailModal: React.FC<IProps> = ({ modalStore }: IProps) => {
                   message.success(
                     formatMessage({
                       id: 'odc.component.Log.CopiedSuccessfully',
-                      defaultMessage: '复制成功',
-                    }), //复制成功
+                      defaultMessage: '复制成功'
+                    }) //复制成功
                   );
                 } else {
                   message.error(
                     formatMessage({
                       id: 'odc.component.Log.ReplicationFailed',
-                      defaultMessage: '复制失败',
-                    }), //复制失败
+                      defaultMessage: '复制失败'
+                    }) //复制失败
                   );
                 }
               }
@@ -167,7 +178,7 @@ const ExecuteSQLDetailModal: React.FC<IProps> = ({ modalStore }: IProps) => {
               <Tooltip
                 title={formatMessage({
                   id: 'src.component.ExecuteSqlDetailModal.68BF8995',
-                  defaultMessage: '复制',
+                  defaultMessage: '复制'
                 })}
               >
                 <CopyOutlined style={{ cursor: 'pointer' }} />
@@ -196,7 +207,7 @@ const ExecuteSQLDetailModal: React.FC<IProps> = ({ modalStore }: IProps) => {
           session={modalStore?.executeSqlDetailData?.session}
           searchValue={searchValue}
         />
-      ),
+      )
     };
     return config[type];
   }
@@ -208,15 +219,20 @@ const ExecuteSQLDetailModal: React.FC<IProps> = ({ modalStore }: IProps) => {
         title={
           formatMessage({
             id: 'odc.src.page.Workspace.components.Trace.ExportTheJSONFileThat',
-            defaultMessage: '导出符合 OpenTracing 规范的 Json 文件，可导入 Jaeger 查看',
+            defaultMessage:
+              '导出符合 OpenTracing 规范的 Json 文件，可导入 Jaeger 查看'
           }) //'导出符合 OpenTracing 规范的 Json 文件，可导入 Jaeger 查看'
         }
       >
-        <Button loading={downloadLoading} disabled={downloadLoading} onClick={handleJsonDownload}>
+        <Button
+          loading={downloadLoading}
+          disabled={downloadLoading}
+          onClick={handleJsonDownload}
+        >
           {
             formatMessage({
               id: 'odc.src.page.Workspace.components.Trace.ExportJson',
-              defaultMessage: '\n            导出 Json\n          ',
+              defaultMessage: '\n            导出 Json\n          '
             }) /* 
           导出 Json
           */
@@ -251,25 +267,25 @@ const ExecuteSQLDetailModal: React.FC<IProps> = ({ modalStore }: IProps) => {
     [EXECUTE_PAGE_TYPE.EXECUTE_DETAIL]: {
       label: formatMessage({
         id: 'src.component.ExecuteSqlDetailModal.69A79B8E',
-        defaultMessage: '执行详情',
+        defaultMessage: '执行详情'
       }),
       key: EXECUTE_PAGE_TYPE.EXECUTE_DETAIL,
       children: viewContentConfig(viewType),
-      toolBar: <></>,
+      toolBar: <></>
     },
     [EXECUTE_PAGE_TYPE.EXECUTE_PLAN]: {
       label: formatMessage({
         id: 'src.component.ExecuteSqlDetailModal.BF467954',
-        defaultMessage: '执行计划',
+        defaultMessage: '执行计划'
       }),
       key: EXECUTE_PAGE_TYPE.EXECUTE_PLAN,
       children: viewContentConfig(viewType),
-      toolBar: getExecuteProfile(),
+      toolBar: getExecuteProfile()
     },
     [EXECUTE_PAGE_TYPE.FULL_TRACE]: {
       label: formatMessage({
         id: 'src.component.ExecuteSqlDetailModal.D47F3410',
-        defaultMessage: '全链路诊断',
+        defaultMessage: '全链路诊断'
       }),
       key: EXECUTE_PAGE_TYPE.FULL_TRACE,
       children: viewContentConfig(viewType),
@@ -277,12 +293,12 @@ const ExecuteSQLDetailModal: React.FC<IProps> = ({ modalStore }: IProps) => {
         <>
           <Input.Search
             style={{
-              width: '256px',
+              width: '256px'
             }}
             placeholder={
               formatMessage({
                 id: 'odc.src.page.Workspace.components.Trace.SearchForTheKeyword',
-                defaultMessage: '搜索关键字',
+                defaultMessage: '搜索关键字'
               }) /* 搜索关键字 */
             }
             onSearch={(e) => setSearchValue(e)}
@@ -304,20 +320,20 @@ const ExecuteSQLDetailModal: React.FC<IProps> = ({ modalStore }: IProps) => {
             })}
           </Radio.Group>
         </>
-      ),
-    },
+      )
+    }
   };
 
   const PLAN_PAGE_CONFIG = {
     [PLAN_PAGE_TYPE.PLAN_DETAIL]: {
       label: formatMessage({
         id: 'src.component.ExecuteSqlDetailModal.D11F8620',
-        defaultMessage: '计划统计',
+        defaultMessage: '计划统计'
       }),
       key: PLAN_PAGE_TYPE.PLAN_DETAIL,
       children: viewContentConfig(viewType, true),
-      toolBar: getExecuteProfile(true),
-    },
+      toolBar: getExecuteProfile(true)
+    }
   };
 
   const executeInfo = {
@@ -325,29 +341,33 @@ const ExecuteSQLDetailModal: React.FC<IProps> = ({ modalStore }: IProps) => {
       title: formatMessage(
         {
           id: 'src.component.ExecuteSqlDetailModal.5B8FA08A',
-          defaultMessage: 'Trace ID 为 "{modalStoreExecuteSqlDetailDataTraceId}" 的执行画像',
+          defaultMessage:
+            'Trace ID 为 "{modalStoreExecuteSqlDetailDataTraceId}" 的执行画像'
         },
-        { modalStoreExecuteSqlDetailDataTraceId: modalStore?.executeSqlDetailData?.traceId },
+        {
+          modalStoreExecuteSqlDetailDataTraceId:
+            modalStore?.executeSqlDetailData?.traceId
+        }
       ),
       sql: modalStore?.executeSqlDetailData?.sql,
       session: modalStore?.executeSqlDetailData?.session,
       traceId: modalStore?.executeSqlDetailData?.traceId,
       getDetail: getExecuteDetail,
       pageConfig: EXECUTE_PAGE_CONFIG,
-      radioOption: getExecuteRadioOption(),
+      radioOption: getExecuteRadioOption()
     },
     [ProfileType.Plan]: {
       title: formatMessage({
         id: 'src.component.ExecuteSqlDetailModal.A944EAD1',
-        defaultMessage: '执行计划详情',
+        defaultMessage: '执行计划详情'
       }),
       sql: modalStore?.executeSqlDetailData?.selectedSQL,
       session: modalStore?.executeSqlDetailData?.session,
       traceId: modalStore?.executeSqlDetailData?.traceId,
       getDetail: getPlanDetail,
       pageConfig: PLAN_PAGE_CONFIG,
-      radioOption: null,
-    },
+      radioOption: null
+    }
   };
 
   const page = executeInfo?.[profileType];
@@ -392,7 +412,7 @@ const ExecuteSQLDetailModal: React.FC<IProps> = ({ modalStore }: IProps) => {
               overlayInnerStyle={{
                 whiteSpace: 'pre-wrap',
                 maxHeight: '500px',
-                overflowY: 'auto',
+                overflowY: 'auto'
               }}
               title={formatTitle(page?.sql)}
               placement="bottom"
@@ -411,8 +431,14 @@ const ExecuteSQLDetailModal: React.FC<IProps> = ({ modalStore }: IProps) => {
                 >
                   {page?.radioOption.map((i) => {
                     return (
-                      <Radio.Button value={i.value} disabled={i.disabled} key={i?.value}>
-                        <Tooltip title={getDisabledTooltip(i.label)}>{i.label}</Tooltip>
+                      <Radio.Button
+                        value={i.value}
+                        disabled={i.disabled}
+                        key={i?.value}
+                      >
+                        <Tooltip title={getDisabledTooltip(i.label)}>
+                          {i.label}
+                        </Tooltip>
                       </Radio.Button>
                     );
                   })}
@@ -457,8 +483,8 @@ const ExecuteSQLDetailModal: React.FC<IProps> = ({ modalStore }: IProps) => {
       modalStore?.executeSqlDetailData?.session?.database?.dbName,
       {
         sql: modalStore?.executeSqlDetailData?.sql,
-        tag: modalStore?.executeSqlDetailData?.traceId,
-      },
+        tag: modalStore?.executeSqlDetailData?.traceId
+      }
     );
     if (url) {
       await downloadFile(url);
@@ -478,7 +504,7 @@ const ExecuteSQLDetailModal: React.FC<IProps> = ({ modalStore }: IProps) => {
     const explain = await getSQLExecuteProfile(
       modalStore?.executeSqlDetailData?.traceId,
       modalStore?.executeSqlDetailData?.session?.sessionId,
-      modalStore?.executeSqlDetailData?.session?.database?.dbName,
+      modalStore?.executeSqlDetailData?.session?.database?.dbName
     );
     setData(explain);
     setPageLoading(false);
@@ -488,7 +514,7 @@ const ExecuteSQLDetailModal: React.FC<IProps> = ({ modalStore }: IProps) => {
     const explain = await getSQLExplain(
       modalStore?.executeSqlDetailData?.selectedSQL,
       modalStore?.executeSqlDetailData?.session?.sessionId,
-      modalStore?.executeSqlDetailData?.session?.database?.dbName,
+      modalStore?.executeSqlDetailData?.session?.database?.dbName
     );
     setData(explain);
     setPageLoading(false);

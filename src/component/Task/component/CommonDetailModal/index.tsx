@@ -18,7 +18,13 @@ import TaskLog from '@/component/Task/component/Log';
 import StatusLabel from '@/component/Task/component/Status';
 import type { ITaskDetailModalProps } from '@/component/Task/interface';
 import { TaskDetailType } from '@/component/Task/interface';
-import { ITaskResult, TaskDetail, TaskRecordParameters, TaskType, CommonTaskLogType } from '@/d.ts';
+import {
+  ITaskResult,
+  TaskDetail,
+  TaskRecordParameters,
+  TaskType,
+  CommonTaskLogType
+} from '@/d.ts';
 import login from '@/store/login';
 import { formatMessage } from '@/util/intl';
 import { ShareAltOutlined } from '@ant-design/icons';
@@ -51,11 +57,14 @@ const TaskContent: React.FC<ICommonTaskDetailModalProps> = (props) => {
     hasFlow,
     onLogTypeChange,
     onReload,
-    downloadUrl,
+    downloadUrl
   } = props;
   let content = null;
   const getDownloadUrl = () => {
-    if (isLogicalDbChangeTask(task?.type) && logType === CommonTaskLogType.ALL) {
+    if (
+      isLogicalDbChangeTask(task?.type) &&
+      logType === CommonTaskLogType.ALL
+    ) {
       return downloadUrl;
     } else if (!isLogicalDbChangeTask(task?.type)) {
       return result?.fullLogDownloadUrl;
@@ -98,11 +107,21 @@ const TaskContent: React.FC<ICommonTaskDetailModalProps> = (props) => {
       content = <TaskRecord task={task} />;
       break;
     case TaskDetailType.EXECUTE_RECORD:
-      content = <TaskExecuteRecord task={task} subTasks={subTasks} onReload={onReload} />;
+      content = (
+        <TaskExecuteRecord
+          task={task}
+          subTasks={subTasks}
+          onReload={onReload}
+        />
+      );
       break;
     case TaskDetailType.OPERATION_RECORD:
       content = (
-        <TaskOperationRecord opRecord={opRecord} onReload={onReload} taskType={task.type} />
+        <TaskOperationRecord
+          opRecord={opRecord}
+          onReload={onReload}
+          taskType={task.type}
+        />
       );
       break;
     case TaskDetailType.PROGRESS:
@@ -126,11 +145,13 @@ interface ICommonTaskDetailModalProps extends ITaskDetailModalProps {
     task: TaskDetail<TaskRecordParameters>,
     result: ITaskResult,
     hasFlow: boolean,
-    theme: string,
+    theme: string
   ) => ITaskInfoProps['taskItems'];
   taskContent?: React.ReactNode;
 }
-const CommonTaskDetailModal: React.FC<ICommonTaskDetailModalProps> = function (props) {
+const CommonTaskDetailModal: React.FC<ICommonTaskDetailModalProps> = function (
+  props
+) {
   const {
     width = 750,
     visible,
@@ -140,7 +161,7 @@ const CommonTaskDetailModal: React.FC<ICommonTaskDetailModalProps> = function (p
     detailId,
     hasFlow,
     theme,
-    onClose,
+    onClose
   } = props;
   // 任务信息
   const hasInfo = [
@@ -161,7 +182,7 @@ const CommonTaskDetailModal: React.FC<ICommonTaskDetailModalProps> = function (p
     TaskType.APPLY_DATABASE_PERMISSION,
     TaskType.APPLY_TABLE_PERMISSION,
     TaskType.MULTIPLE_ASYNC,
-    TaskType.LOGICAL_DATABASE_CHANGE,
+    TaskType.LOGICAL_DATABASE_CHANGE
   ].includes(task?.type);
   // 任务日志
   const hasLog = [
@@ -178,7 +199,7 @@ const CommonTaskDetailModal: React.FC<ICommonTaskDetailModalProps> = function (p
     TaskType.APPLY_PROJECT_PERMISSION,
     TaskType.APPLY_DATABASE_PERMISSION,
     TaskType.APPLY_TABLE_PERMISSION,
-    TaskType.LOGICAL_DATABASE_CHANGE,
+    TaskType.LOGICAL_DATABASE_CHANGE
   ].includes(task?.type);
   function onShare() {
     const url =
@@ -189,8 +210,8 @@ const CommonTaskDetailModal: React.FC<ICommonTaskDetailModalProps> = function (p
     message.success(
       formatMessage({
         id: 'odc.src.component.Task.component.CommonDetailModal.Replication',
-        defaultMessage: '复制成功',
-      }), //'复制成功'
+        defaultMessage: '复制成功'
+      }) //'复制成功'
     );
   }
   return (
@@ -202,7 +223,7 @@ const CommonTaskDetailModal: React.FC<ICommonTaskDetailModalProps> = function (p
         <div className={styles.title}>
           {formatMessage({
             id: 'odc.component.CommonTaskDetailModal.TaskDetails',
-            defaultMessage: '任务详情',
+            defaultMessage: '任务详情'
           })}
           {login.isPrivateSpace() ? (
             <div></div>
@@ -211,7 +232,7 @@ const CommonTaskDetailModal: React.FC<ICommonTaskDetailModalProps> = function (p
               {
                 formatMessage({
                   id: 'odc.src.component.Task.component.CommonDetailModal.Share',
-                  defaultMessage: '分享',
+                  defaultMessage: '分享'
                 }) /*
           分享  */
               }
@@ -236,7 +257,7 @@ const CommonTaskDetailModal: React.FC<ICommonTaskDetailModalProps> = function (p
               {
                 formatMessage({
                   id: 'odc.component.CommonTaskDetailModal.TaskInformation',
-                  defaultMessage: '任务信息',
+                  defaultMessage: '任务信息'
                 })
 
                 /* 任务信息 */
@@ -249,7 +270,7 @@ const CommonTaskDetailModal: React.FC<ICommonTaskDetailModalProps> = function (p
               {
                 formatMessage({
                   id: 'odc.component.CommonTaskDetailModal.TaskFlow',
-                  defaultMessage: '任务流程',
+                  defaultMessage: '任务流程'
                 })
 
                 /*任务流程*/
@@ -258,11 +279,14 @@ const CommonTaskDetailModal: React.FC<ICommonTaskDetailModalProps> = function (p
           )}
 
           {task?.type === TaskType.PARTITION_PLAN && (
-            <Radio.Button value={TaskDetailType.RECORD} key={TaskDetailType.RECORD}>
+            <Radio.Button
+              value={TaskDetailType.RECORD}
+              key={TaskDetailType.RECORD}
+            >
               {
                 formatMessage({
                   id: 'odc.component.CommonTaskDetailModal.AssociatedRecords',
-                  defaultMessage: '关联记录',
+                  defaultMessage: '关联记录'
                 })
                 /*关联记录*/
               }
@@ -278,7 +302,7 @@ const CommonTaskDetailModal: React.FC<ICommonTaskDetailModalProps> = function (p
                 {
                   formatMessage({
                     id: 'odc.component.CommonTaskDetailModal.ExecutionRecord',
-                    defaultMessage: '执行记录',
+                    defaultMessage: '执行记录'
                   }) /*执行记录*/
                 }
               </Radio.Button>
@@ -290,30 +314,38 @@ const CommonTaskDetailModal: React.FC<ICommonTaskDetailModalProps> = function (p
                   {
                     formatMessage({
                       id: 'odc.component.CommonTaskDetailModal.OperationRecord',
-                      defaultMessage: '操作记录',
+                      defaultMessage: '操作记录'
                     }) /*操作记录*/
                   }
                 </Radio.Button>
               )}
             </>
           )}
-          {[TaskType.ONLINE_SCHEMA_CHANGE, TaskType.MULTIPLE_ASYNC]?.includes(task?.type) && (
-            <Radio.Button value={TaskDetailType.PROGRESS} key={TaskDetailType.PROGRESS}>
+          {[TaskType.ONLINE_SCHEMA_CHANGE, TaskType.MULTIPLE_ASYNC]?.includes(
+            task?.type
+          ) && (
+            <Radio.Button
+              value={TaskDetailType.PROGRESS}
+              key={TaskDetailType.PROGRESS}
+            >
               {
                 formatMessage({
                   id: 'odc.component.CommonTaskDetailModal.ExecutionRecord',
-                  defaultMessage: '执行记录',
+                  defaultMessage: '执行记录'
                 }) /*执行记录*/
               }
             </Radio.Button>
           )}
 
           {task?.type === TaskType.ASYNC && (
-            <Radio.Button value={TaskDetailType.RESULT} key={TaskDetailType.RESULT}>
+            <Radio.Button
+              value={TaskDetailType.RESULT}
+              key={TaskDetailType.RESULT}
+            >
               {
                 formatMessage({
                   id: 'odc.component.CommonTaskDetailModal.ExecutionResult',
-                  defaultMessage: '执行结果',
+                  defaultMessage: '执行结果'
                 })
 
                 /*执行结果*/
@@ -322,11 +354,14 @@ const CommonTaskDetailModal: React.FC<ICommonTaskDetailModalProps> = function (p
           )}
 
           {task?.type === TaskType.ASYNC && (
-            <Radio.Button value={TaskDetailType.RECORD} key={TaskDetailType.RECORD}>
+            <Radio.Button
+              value={TaskDetailType.RECORD}
+              key={TaskDetailType.RECORD}
+            >
               {
                 formatMessage({
                   id: 'odc.component.CommonDetailModal.RollbackTicket',
-                  defaultMessage: '回滚工单',
+                  defaultMessage: '回滚工单'
                 }) /*回滚工单*/
               }
             </Radio.Button>
@@ -337,7 +372,7 @@ const CommonTaskDetailModal: React.FC<ICommonTaskDetailModalProps> = function (p
               {
                 formatMessage({
                   id: 'odc.component.CommonTaskDetailModal.TaskLog',
-                  defaultMessage: '任务日志',
+                  defaultMessage: '任务日志'
                 })
 
                 /* 任务日志 */
@@ -345,7 +380,11 @@ const CommonTaskDetailModal: React.FC<ICommonTaskDetailModalProps> = function (p
             </Radio.Button>
           )}
         </Radio.Group>
-        <StatusLabel status={task?.status} progress={task?.progressPercentage} type={task?.type} />
+        <StatusLabel
+          status={task?.status}
+          progress={task?.progressPercentage}
+          type={task?.type}
+        />
       </div>
       <TaskContent {...props} />
       <div className={styles.tools}>{taskTools}</div>

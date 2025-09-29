@@ -19,7 +19,7 @@ import {
   EnumSnippetType,
   ISnippet,
   SnippetStore,
-  SNIPPET_TYPES,
+  SNIPPET_TYPES
 } from '@/store/snippet';
 import { formatMessage } from '@/util/intl';
 import { CloseOutlined, DownOutlined, PlusOutlined } from '@ant-design/icons';
@@ -54,13 +54,15 @@ class GrammerHelpSider extends Component<
     currectType: EnumSnippetType.ALL,
     action: null,
     snippet: null,
-    keyword: '',
+    keyword: ''
   };
 
   public render() {
     const { currectType } = this.state;
     const snippets = this.getFilterSnippets();
-    const targetSnippetType = SNIPPET_TYPES.find((snippet) => snippet.key === currectType);
+    const targetSnippetType = SNIPPET_TYPES.find(
+      (snippet) => snippet.key === currectType
+    );
     return (
       <Sider
         className={styles['snippet-sider']}
@@ -75,7 +77,7 @@ class GrammerHelpSider extends Component<
             {
               formatMessage({
                 id: 'odc.component.GrammerHelpSider.YouCanDragCodeSnippets',
-                defaultMessage: '可将代码片段拖入编辑器使用',
+                defaultMessage: '可将代码片段拖入编辑器使用'
               }) /*可将代码片段拖入编辑器使用*/
             }
           </span>
@@ -86,19 +88,22 @@ class GrammerHelpSider extends Component<
             <Search
               placeholder={formatMessage({
                 id: 'odc.component.GrammerHelpSider.SearchSyntaxHelp',
-                defaultMessage: '搜索代码片段',
+                defaultMessage: '搜索代码片段'
               })}
               /*搜索代码片段*/
               onChange={this.handleSearchChange}
               onSearch={this.handleSearch}
             />
 
-            <a style={{ whiteSpace: 'nowrap' }} onClick={this.handleCreateSnippet}>
+            <a
+              style={{ whiteSpace: 'nowrap' }}
+              onClick={this.handleCreateSnippet}
+            >
               <PlusOutlined />
               {
                 formatMessage({
                   id: 'odc.component.GrammerHelpSider.New',
-                  defaultMessage: '新建',
+                  defaultMessage: '新建'
                 }) /*新建*/
               }
             </a>
@@ -110,12 +115,15 @@ class GrammerHelpSider extends Component<
                 items: SNIPPET_TYPES.map((snippetType) => {
                   return {
                     key: snippetType.key,
-                    label: snippetType.name,
+                    label: snippetType.name
                   };
-                }),
+                })
               }}
             >
-              <a className="ant-dropdown-link" onClick={(e) => e.preventDefault()}>
+              <a
+                className="ant-dropdown-link"
+                onClick={(e) => e.preventDefault()}
+              >
                 {targetSnippetType.name} <DownOutlined />
               </a>
             </Dropdown>
@@ -124,15 +132,17 @@ class GrammerHelpSider extends Component<
                 formatMessage(
                   {
                     id: 'odc.component.GrammerHelpSider.SnippetslacksInTotal',
-                    defaultMessage: '共 {snippetsLength} 条',
+                    defaultMessage: '共 {snippetsLength} 条'
                   },
-                  { snippetsLength: snippets.length },
+                  { snippetsLength: snippets.length }
                 ) /*共 {snippetsLength} 条*/
               }
             </span>
           </div>
           <div className={styles['snippet-sider-card-list']}>
-            {!snippets.length ? <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} /> : null}
+            {!snippets.length ? (
+              <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+            ) : null}
             {snippets.length
               ? snippets.map((snippet) => (
                   <SnippetCard
@@ -160,7 +170,7 @@ class GrammerHelpSider extends Component<
     this.setState({
       showSnippetForm: true,
       action: EnumSnippetAction.CREATE,
-      snippet: null,
+      snippet: null
     });
   };
   public onCloseSnippetForm = (isNeedReload?: boolean) => {
@@ -169,26 +179,28 @@ class GrammerHelpSider extends Component<
     this.setState(
       {
         showSnippetForm: false,
-        currectType: isNeedReload ? EnumSnippetType.ALL : currectType,
+        currectType: isNeedReload ? EnumSnippetType.ALL : currectType
       },
       async () => {
         if (isNeedReload) {
           await snippetStore.resetSnippets();
         }
-      },
+      }
     );
   };
   public handleSearch = async (keyword: string) => {
     this.setState({
-      keyword,
+      keyword
     });
   };
-  public handleSearchChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  public handleSearchChange = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     await this.handleSearch(e.target.value);
   };
   public handleTypeChange = (item) => {
     this.setState({
-      currectType: item.key,
+      currectType: item.key
     });
   };
   public handleSnippetMenuClick = (actionKey, snippet) => {
@@ -199,7 +211,7 @@ class GrammerHelpSider extends Component<
         this.setState({
           showSnippetForm: true,
           action: EnumSnippetAction.EDIT,
-          snippet,
+          snippet
         });
         break;
 
@@ -208,9 +220,9 @@ class GrammerHelpSider extends Component<
           title: formatMessage(
             {
               id: 'odc.component.GrammerHelpSider.AreYouSureYouWant',
-              defaultMessage: '是否确认删除代码片段 {snippetPrefix}？',
+              defaultMessage: '是否确认删除代码片段 {snippetPrefix}？'
             },
-            { snippetPrefix: snippet.prefix },
+            { snippetPrefix: snippet.prefix }
           ), //`确认删除代码片段：${snippet.prefix}?`
           content: snippet.desc,
 
@@ -222,15 +234,15 @@ class GrammerHelpSider extends Component<
                 formatMessage(
                   {
                     id: 'odc.component.GrammerHelpSider.TheSyntaxSnippetSnippetprefixHas',
-                    defaultMessage: '代码片段 {snippetPrefix} 删除成功！',
+                    defaultMessage: '代码片段 {snippetPrefix} 删除成功！'
                   },
-                  { snippetPrefix: snippet.prefix },
-                ), //`代码片段 ${snippet.prefix} 删除成功！`
+                  { snippetPrefix: snippet.prefix }
+                ) //`代码片段 ${snippet.prefix} 删除成功！`
               );
             }
 
             await snippetStore.resetSnippets();
-          },
+          }
         });
         break;
 
@@ -244,7 +256,9 @@ class GrammerHelpSider extends Component<
     const { keyword, currectType } = this.state;
     return snippetStore.snippets.filter((snippet: ISnippet) => {
       const isMatchType =
-        currectType === EnumSnippetType.ALL ? true : snippet.snippetType === currectType;
+        currectType === EnumSnippetType.ALL
+          ? true
+          : snippet.snippetType === currectType;
       const isMatchkeyWord = !keyword
         ? true
         : snippet.prefix.toUpperCase().indexOf(keyword.toUpperCase()) !== -1;

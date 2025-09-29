@@ -7,7 +7,9 @@ import { parse } from 'query-string';
 import { getMaterializedView } from '@/common/network/materializedView/index';
 import { Checkbox, Empty, Spin, Transfer, Tree, message } from 'antd';
 import styles from '../index.less';
-import SortableContainer, { DraggableItem } from '@/component/SortableContainer';
+import SortableContainer, {
+  DraggableItem
+} from '@/component/SortableContainer';
 import { debounce, uniqueId } from 'lodash';
 import { MaterializedViewTabType } from '../interface';
 import { DataNode } from 'antd/lib/tree';
@@ -17,8 +19,14 @@ const { TreeNode, DirectoryTree } = Tree;
 
 const Columns = () => {
   const mviewContext = useContext(MViewContext);
-  const { viewUnits, session, setColumns, activetab, warningColumns, setWarningColumns } =
-    mviewContext;
+  const {
+    viewUnits,
+    session,
+    setColumns,
+    activetab,
+    warningColumns,
+    setWarningColumns
+  } = mviewContext;
   const [treeData, setTreeData] = useState<DataNode[]>();
   const [loading, setLoading] = useState<boolean>(false);
   const [keywords, setKeyWords] = useState<string>('');
@@ -32,7 +40,9 @@ const Columns = () => {
       columnName?: string;
     };
   }>({});
-  const [targetKeyAliasNameMap, setTargetKeyAliasNameMap] = useState<{ [key: string]: string }>({});
+  const [targetKeyAliasNameMap, setTargetKeyAliasNameMap] = useState<{
+    [key: string]: string;
+  }>({});
 
   useEffect(() => {
     loadTreeData();
@@ -43,8 +53,8 @@ const Columns = () => {
       message.warning(
         formatMessage({
           id: 'odc.components.CreateViewPage.SelectABaseTableFirst',
-          defaultMessage: '请先选择基表',
-        }),
+          defaultMessage: '请先选择基表'
+        })
         // 请先选择基表
       );
     }
@@ -69,7 +79,7 @@ const Columns = () => {
         root = {
           key: `d=${dbName}`,
           title: dbName,
-          children: [],
+          children: []
         };
 
         treeData.push(root);
@@ -81,19 +91,21 @@ const Columns = () => {
         }`,
 
         title: `${tableName || viewName}${aliasName ? `<${aliasName}>` : ''}`,
-        children: [],
+        children: []
       };
 
       if (tableName) {
-        requests.push(getTableColumnList(tableName, dbName, session?.sessionId));
+        requests.push(
+          getTableColumnList(tableName, dbName, session?.sessionId)
+        );
         nodes.push(node);
       } else if (viewName) {
         requests.push(
           getMaterializedView({
             materializedViewName: viewName,
             sessionId: session.sessionId,
-            dbName: session.database.dbName,
-          }),
+            dbName: session.database.dbName
+          })
         );
         nodes.push(node);
       }
@@ -108,14 +120,14 @@ const Columns = () => {
         node.children = res.map((col) => {
           return {
             key: `${node.key}&c=${col.columnName}&dataType=${col.dataType}`,
-            title: col.columnName,
+            title: col.columnName
           };
         });
       } else if (v) {
         node.children = res?.columns?.map((col) => {
           return {
             key: `${node.key}&c=${col.name}&dataType=${col.type}`,
-            title: col.name,
+            title: col.name
           };
         });
       }
@@ -199,7 +211,7 @@ const Columns = () => {
   const handleSelectAll = (e, onItemSelectAll) => {
     const { checked } = e.target;
     const keys = getTreeKeys({
-      children: treeData,
+      children: treeData
     });
 
     onItemSelectAll(keys, checked);
@@ -213,14 +225,14 @@ const Columns = () => {
       newKeys = nextTargetKeys;
     }
     newKeys = newKeys.filter(
-      (key) => key.indexOf('c=') > -1 || key.indexOf('odc.customer.column') > -1,
+      (key) => key.indexOf('c=') > -1 || key.indexOf('odc.customer.column') > -1
     );
 
     // 数组去重
     newKeys = Array.from(new Set(newKeys));
     // 存在同字段多选情况，需要 uid 做唯一标识
     newKeys = newKeys.map((key) =>
-      key.indexOf('uid') !== -1 ? key : `${key}&uid=${uniqueId('c_')}`,
+      key.indexOf('uid') !== -1 ? key : `${key}&uid=${uniqueId('c_')}`
     );
     setTargetKeys([...newKeys]);
     handleCheckColumn([...newKeys], selectMap);
@@ -259,7 +271,7 @@ const Columns = () => {
         tableOrViewAliasName,
         viewName: v,
         columnName: c || columnName,
-        aliasName,
+        aliasName
       });
     });
     setColumns(columns);
@@ -287,7 +299,7 @@ const Columns = () => {
         >
           {formatMessage({
             id: 'src.page.Workspace.components.CreateMaterializedView.Columns.4E0A7E66',
-            defaultMessage: '全部列',
+            defaultMessage: '全部列'
           })}
         </Checkbox>
         <DirectoryTree
@@ -331,7 +343,7 @@ const Columns = () => {
     for (let i of tKey) {
       obj[i] = {
         isWarning: false,
-        warnTip: [],
+        warnTip: []
       };
       // 没有设置别名的情况下，检查列名是否重复
       if (!_selectMap?.[i]?.aliasName) {
@@ -360,7 +372,7 @@ const Columns = () => {
         dataKey: string;
         columnName?: string;
       };
-    },
+    }
   ) => {
     const aliasName = _selectMap?.[i]?.aliasName;
     for (let otherKey of tKey) {
@@ -372,8 +384,8 @@ const Columns = () => {
         obj[i].warnTip.push(
           formatMessage({
             id: 'src.page.Workspace.components.CreateMaterializedView.Columns.C838FDD8',
-            defaultMessage: '别名与其他别名不可以重复',
-          }),
+            defaultMessage: '别名与其他别名不可以重复'
+          })
         );
       }
       const { c: otherColumnName } = parse(otherKey);
@@ -382,8 +394,8 @@ const Columns = () => {
         obj[i].warnTip.push(
           formatMessage({
             id: 'src.page.Workspace.components.CreateMaterializedView.Columns.19B4BA2D',
-            defaultMessage: '别名与其他没有设置别名的列名不可以重复',
-          }),
+            defaultMessage: '别名与其他没有设置别名的列名不可以重复'
+          })
         );
       }
     }
@@ -404,7 +416,7 @@ const Columns = () => {
         dataKey: string;
         columnName?: string;
       };
-    },
+    }
   ) => {
     const { c: ColumnName } = parse(i);
     for (let otherKey of tKey) {
@@ -412,13 +424,16 @@ const Columns = () => {
         continue;
       }
       const { c: otherColumnName } = parse(otherKey);
-      if (!_selectMap?.[otherKey]?.aliasName && ColumnName === otherColumnName) {
+      if (
+        !_selectMap?.[otherKey]?.aliasName &&
+        ColumnName === otherColumnName
+      ) {
         obj[i].isWarning = true;
         obj[i].warnTip.push(
           formatMessage({
             id: 'src.page.Workspace.components.CreateMaterializedView.Columns.A0A1E23D',
-            defaultMessage: '列名与其他列名不可以重复',
-          }),
+            defaultMessage: '列名与其他列名不可以重复'
+          })
         );
       }
     }
@@ -426,7 +441,12 @@ const Columns = () => {
 
   const renderTargetPanel = () => {
     if (loading || !targetKeys.length) {
-      return <Empty style={{ marginTop: '60px' }} image={Empty.PRESENTED_IMAGE_SIMPLE} />;
+      return (
+        <Empty
+          style={{ marginTop: '60px' }}
+          image={Empty.PRESENTED_IMAGE_SIMPLE}
+        />
+      );
     }
     return (
       <div style={{ height: '462px', overflow: 'auto' }}>
@@ -463,13 +483,13 @@ const Columns = () => {
       <p>
         {formatMessage({
           id: 'src.page.Workspace.components.CreateMaterializedView.Columns.68D7301A',
-          defaultMessage: '选择列',
+          defaultMessage: '选择列'
         })}
 
         <span style={{ color: 'var(--icon-color-normal-2)' }}>
           {formatMessage({
             id: 'src.page.Workspace.components.CreateMaterializedView.Columns.98CDC21D',
-            defaultMessage: '（可选）',
+            defaultMessage: '（可选）'
           })}
         </span>
       </p>
@@ -486,23 +506,23 @@ const Columns = () => {
             <span className={styles['header-tip']}>
               {formatMessage({
                 id: 'src.page.Workspace.components.CreateMaterializedView.Columns.C831E1E0',
-                defaultMessage: '提示：可点击自定义新建列',
+                defaultMessage: '提示：可点击自定义新建列'
               })}
             </span>
             <a onClick={handleItemAdd}>
               <PlusOutlined />
               {formatMessage({
                 id: 'odc.component.ColumnSelector.Custom',
-                defaultMessage: '自定义',
+                defaultMessage: '自定义'
               })}
             </a>
-          </>,
+          </>
         ]}
         locale={{
           searchPlaceholder: formatMessage({
             id: 'src.page.Workspace.components.CreateMaterializedView.Columns.9A13C46F',
-            defaultMessage: '请输入列名称',
-          }),
+            defaultMessage: '请输入列名称'
+          })
         }}
         onChange={handleTransfer}
         onSearch={handleTreeSearch}

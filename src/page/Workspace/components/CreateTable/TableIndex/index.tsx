@@ -32,7 +32,7 @@ import {
   TableIndex as ITableIndex,
   TableIndexMehod,
   TableIndexScope,
-  TableIndexType,
+  TableIndexType
 } from '../interface';
 import TableCardLayout from '../TableCardLayout';
 import TableContext from '../TableContext';
@@ -46,11 +46,14 @@ const defaultIndex: ITableIndex = {
   visible: true,
   type: TableIndexType.NORMAL,
   ordinalPosition: null,
-  columnGroups: [],
+  columnGroups: []
 };
 
 function getDefaultColumnGroups(session: SessionStore) {
-  if (!session?.supportFeature?.enableColumnStore || !session?.params?.defaultTableStoreFormat) {
+  if (
+    !session?.supportFeature?.enableColumnStore ||
+    !session?.params?.defaultTableStoreFormat
+  ) {
     return [];
   }
   switch (session.params.defaultTableStoreFormat) {
@@ -80,7 +83,7 @@ const TableIndex: React.FC<IProps> = function ({ modified }) {
     return tableContext?.indexes?.map((index, idx) => {
       return {
         ...index,
-        key: `${index.name || ''}@@${idx}`,
+        key: `${index.name || ''}@@${idx}`
       };
     });
   }, [tableContext.indexes]);
@@ -106,13 +109,13 @@ const TableIndex: React.FC<IProps> = function ({ modified }) {
             const { sql: updateTableDML, tip } = await generateUpdateTableDDL(
               {
                 ...pageContext.table,
-                indexes: newData,
+                indexes: newData
               },
 
               pageContext.table,
 
               session?.sessionId,
-              session?.database.dbName,
+              session?.database.dbName
             );
 
             if (!updateTableDML) {
@@ -129,19 +132,22 @@ const TableIndex: React.FC<IProps> = function ({ modified }) {
               async () => {
                 await pageContext.onRefresh();
                 tableContext.setIndexes(null);
-              },
+              }
             );
           }}
         >
           <Toolbar>
             <Toolbar.Button
-              text={formatMessage({ id: 'workspace.header.create', defaultMessage: '新建' })}
+              text={formatMessage({
+                id: 'workspace.header.create',
+                defaultMessage: '新建'
+              })}
               icon={PlusOutlined}
               onClick={() => {
                 const row = {
                   ...defaultIndex,
                   columnGroups: getDefaultColumnGroups(session),
-                  key: generateUniqKey(),
+                  key: generateUniqKey()
                 };
                 gridRef.current?.addRows([row]);
               }}
@@ -149,7 +155,10 @@ const TableIndex: React.FC<IProps> = function ({ modified }) {
 
             <Toolbar.Button
               text={
-                formatMessage({ id: 'odc.CreateTable.TableIndex.Delete', defaultMessage: '删除' }) //删除
+                formatMessage({
+                  id: 'odc.CreateTable.TableIndex.Delete',
+                  defaultMessage: '删除'
+                }) //删除
               }
               icon={DeleteOutlined}
               onClick={() => {
@@ -162,7 +171,7 @@ const TableIndex: React.FC<IProps> = function ({ modified }) {
                 icon={<SyncOutlined />}
                 text={formatMessage({
                   id: 'odc.components.ShowTableBaseInfoForm.Refresh',
-                  defaultMessage: '刷新',
+                  defaultMessage: '刷新'
                 })}
                 /* 刷新 */ onClick={pageContext.onRefresh}
               />
@@ -186,7 +195,7 @@ const TableIndex: React.FC<IProps> = function ({ modified }) {
           setSelectedRowIdx(
             keys.map((key) => {
               return rows.findIndex((row) => row.key === key);
-            }),
+            })
           );
         }}
         gridRef={gridRef}

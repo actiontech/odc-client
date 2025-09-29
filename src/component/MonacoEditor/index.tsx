@@ -24,7 +24,6 @@ import setting, { SettingStore } from '@/store/setting';
 import editorUtils from '@/util/editor';
 import { getUnWrapedSnippetBody } from '@/util/snippet';
 import { inject, observer } from 'mobx-react';
-import styles from './index.less';
 import * as groovy from './plugins/languageSupport/groovy';
 import { apply as markerPluginApply } from './plugins/marker';
 import { getModelService } from './plugins/ob-language/service';
@@ -32,6 +31,8 @@ import logger from '@/util/logger';
 import { getFontSize } from './config';
 import { apply as themeApply } from './plugins/theme';
 import PlaceholderContentWidget from './PlaceholderContentWidget';
+import { MonacoEditorContainerStyleWrapper } from './style';
+import { CUSTOM_DIFF_EDITOR_THEME_NAME } from './plugins/theme/dms';
 export interface IEditor extends monaco.editor.IStandaloneCodeEditor {
   doFormat: () => void;
   getSelectionContent: () => string;
@@ -79,11 +80,13 @@ const MonacoEditor: React.FC<IProps> = function (props) {
     sessionStore,
     onValueChange,
     onEditorCreated,
-    placeholder,
+    placeholder
   } = props;
   const [innerValue, _setInnerValue] = useState<string>(defaultValue);
   const settingTheme =
-    settingStore.theme.editorTheme?.[settingStore.configurations['odc.editor.style.theme']];
+    settingStore.theme.editorTheme?.[
+      settingStore.configurations['odc.editor.style.theme']
+    ];
   function setInnerValue(v: string) {
     if (readOnly) {
       return;
@@ -99,13 +102,7 @@ const MonacoEditor: React.FC<IProps> = function (props) {
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor>();
 
   const sessionRef = useRef<SessionStore>(sessionStore);
-
-  const themeValue = useMemo(() => {
-    if (!theme) {
-      return settingTheme;
-    }
-    return theme;
-  }, [theme, settingTheme]);
+  const themeValue = CUSTOM_DIFF_EDITOR_THEME_NAME;
 
   useEffect(() => {
     sessionRef.current = sessionStore;
@@ -126,7 +123,7 @@ const MonacoEditor: React.FC<IProps> = function (props) {
     if (editorRef.current) {
       editorRef.current.updateOptions({
         readOnly,
-        theme: themeValue,
+        theme: themeValue
       });
     }
   }, [readOnly, themeValue]);
@@ -135,7 +132,7 @@ const MonacoEditor: React.FC<IProps> = function (props) {
     const fontSize = setting.configurations['odc.editor.style.fontSize'];
     if (fontSize && editorRef.current) {
       editorRef.current.updateOptions({
-        fontSize: getFontSize(fontSize),
+        fontSize: getFontSize(fontSize)
       });
     }
   }, [setting.configurations?.['odc.editor.style.fontSize']]);
@@ -155,10 +152,10 @@ const MonacoEditor: React.FC<IProps> = function (props) {
           modelId: editorRef.current.getModel().id,
           delimiter() {
             return sessionRef.current?.params?.delimiter;
-          },
+          }
         },
-        () => sessionRef.current,
-      ),
+        () => sessionRef.current
+      )
     );
     markerPluginApply(editorRef.current.getModel());
     themeApply();
@@ -173,13 +170,44 @@ const MonacoEditor: React.FC<IProps> = function (props) {
       lineNumbers: showLineNumbers ? 'on' : 'off',
       lineNumbersMinChars: showLineNumbers ? 5 : 0,
       minimap: { enabled: false },
-      fontSize: getFontSize(settingStore.configurations['odc.editor.style.fontSize']),
+      fontSize: getFontSize(
+        settingStore.configurations['odc.editor.style.fontSize']
+      ),
+      fontFamily: 'SF Mono',
       automaticLayout: true,
       unicodeHighlight: {
         invisibleCharacters: false,
-        ambiguousCharacters: false,
+        ambiguousCharacters: false
       },
       readOnly: readOnly,
+      fontWeight: '400',
+      suggestFontSize: 14,
+      scrollBeyondLastLine: false,
+      lineHeight: 24,
+      letterSpacing: 0.8,
+      overviewRulerBorder: false,
+      wordWrap: 'on',
+      wrappingStrategy: 'advanced',
+      wrappingIndent: 'indent',
+      // 滚动配置
+      scrollbar: {
+        vertical: 'visible',
+        horizontal: 'visible',
+        useShadows: false,
+        verticalScrollbarSize: 12,
+        horizontalScrollbarSize: 12,
+        alwaysConsumeMouseWheel: false
+      },
+
+      folding: false,
+      glyphMargin: false,
+      lineDecorationsWidth: 50,
+      renderValidationDecorations: 'on',
+
+      guides: {
+        indentation: true,
+        highlightActiveIndentation: true
+      }
     });
 
     /* 初始化 PlaceholderContentWidget */
@@ -190,7 +218,7 @@ const MonacoEditor: React.FC<IProps> = function (props) {
     await initPlugin();
     editorRef.current.updateOptions({
       readOnly,
-      theme: themeValue,
+      theme: themeValue
     });
     if (!editorRef.current?.getModel?.()) {
       return;
@@ -221,15 +249,25 @@ const MonacoEditor: React.FC<IProps> = function (props) {
             .getModel()
             .getValueInRange(editorRef.current.getSelection());
           if (!selection) {
-            editorRef.current.trigger('editor', 'editor.action.formatDocument', null);
+            editorRef.current.trigger(
+              'editor',
+              'editor.action.formatDocument',
+              null
+            );
           } else {
-            editorRef.current.trigger('editor', 'editor.action.formatSelection', null);
+            editorRef.current.trigger(
+              'editor',
+              'editor.action.formatSelection',
+              null
+            );
           }
         },
         getSelectionContent() {
-          return editorRef.current.getModel().getValueInRange(editorRef.current.getSelection());
-        },
-      }),
+          return editorRef.current
+            .getModel()
+            .getValueInRange(editorRef.current.getSelection());
+        }
+      })
     );
   }
 
@@ -240,7 +278,9 @@ const MonacoEditor: React.FC<IProps> = function (props) {
       language !== editorRef.current?.getModel().getLanguageId()
     ) {
       monaco.editor.setModelLanguage(editorRef.current?.getModel(), language);
-      import('./plugins/ob-language/index').then((module) => module.register(language));
+      import('./plugins/ob-language/index').then((module) =>
+        module.register(language)
+      );
     }
   }, [language]);
 
@@ -250,15 +290,18 @@ const MonacoEditor: React.FC<IProps> = function (props) {
         getWorkerUrl(workerId: string, label: string) {
           if (!odc.appConfig.worker.needOrigin) {
             return `data:text/javascript;charset=utf-8,${encodeURIComponent(
-              `importScripts('${window.publicPath}editor.worker.js')`,
+              `importScripts('${window.publicPath}editor.worker.js')`
             )}`;
           } else {
-            const url = new URL(`${window.publicPath}editor.worker.js`, location.origin);
+            const url = new URL(
+              `${window.publicPath}editor.worker.js`,
+              location.origin
+            );
             return `data:text/javascript;charset=utf-8,${encodeURIComponent(
-              `importScripts('${url.href}')`,
+              `importScripts('${url.href}')`
             )}`;
           }
-        },
+        }
       };
       initEditor();
     }
@@ -273,9 +316,9 @@ const MonacoEditor: React.FC<IProps> = function (props) {
   }, []);
 
   return (
-    <div className={styles.container}>
-      <div ref={domRef} className={styles.editor}></div>
-    </div>
+    <MonacoEditorContainerStyleWrapper>
+      <div ref={domRef} className="editor"></div>
+    </MonacoEditorContainerStyleWrapper>
   );
 };
 

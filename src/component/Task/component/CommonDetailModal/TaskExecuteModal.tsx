@@ -8,7 +8,7 @@ import { SqlExecuteResultStatusLabel } from '@/page/Workspace/components/SQLResu
 import DBTimeline from '@/page/Workspace/components/SQLResultSet/DBTimeline';
 import {
   getResultText,
-  getSqlExecuteResultStatusIcon,
+  getSqlExecuteResultStatusIcon
 } from '@/page/Workspace/components/SQLResultSet/ExecuteHistory';
 import { formatTimeTemplate } from '@/util/utils';
 import Icon, { InfoCircleOutlined } from '@ant-design/icons';
@@ -22,7 +22,7 @@ const getColumns = () => {
     {
       title: formatMessage({
         id: 'src.component.Task.component.CommonDetailModal.E54A5EC1',
-        defaultMessage: '状态',
+        defaultMessage: '状态'
       }),
       key: 'status',
       dataIndex: 'status',
@@ -35,19 +35,19 @@ const getColumns = () => {
       filters: Object.entries(ISqlExecuteResultStatus).map(([key, value]) => {
         return {
           text: SqlExecuteResultStatusLabel[key],
-          value: key,
+          value: key
         };
-      }),
+      })
     },
     {
       title: formatMessage({
         id: 'src.component.Task.component.CommonDetailModal.5E35D23F',
-        defaultMessage: 'SQL 语句',
+        defaultMessage: 'SQL 语句'
       }),
       key: 'executeSql',
       dataIndex: 'executeSql',
       ellipsis: {
-        showTitle: false,
+        showTitle: false
       },
       render: (value: string) => (
         <Tooltip
@@ -56,7 +56,7 @@ const getColumns = () => {
             <div
               style={{
                 maxHeight: 300,
-                overflowY: 'auto',
+                overflowY: 'auto'
               }}
             >
               {value || '-'}
@@ -65,12 +65,12 @@ const getColumns = () => {
         >
           {value || '-'}
         </Tooltip>
-      ),
+      )
     },
     {
       title: formatMessage({
         id: 'src.component.Task.component.CommonDetailModal.E05F7579',
-        defaultMessage: '结果',
+        defaultMessage: '结果'
       }),
       key: 'track',
       dataIndex: 'track',
@@ -85,7 +85,7 @@ const getColumns = () => {
               <div
                 style={{
                   maxHeight: 300,
-                  overflowY: 'auto',
+                  overflowY: 'auto'
                 }}
               >
                 {value || '-'}
@@ -94,7 +94,7 @@ const getColumns = () => {
           >
             {value || '-'}
           </Tooltip>
-        ),
+        )
     },
     {
       title: 'TRACE ID',
@@ -108,27 +108,31 @@ const getColumns = () => {
           </Tooltip>
         );
       },
-      width: 200,
+      width: 200
     },
     {
       title: formatMessage({
         id: 'src.component.Task.component.CommonDetailModal.7021CF96',
-        defaultMessage: 'DB 耗时',
+        defaultMessage: 'DB 耗时'
       }),
       key: 'timeout',
       dataIndex: 'timeout',
       render: (value: string, row: ISqlExecuteResult) => {
         const { timer } = row;
-        const executeStage = timer?.stages?.find((stage) => stage.stageName === 'Execute');
+        const executeStage = timer?.stages?.find(
+          (stage) => stage.stageName === 'Execute'
+        );
         const executeSQLStage = executeStage?.subStages?.find(
-          (stage) => stage.stageName === 'DB Server Execute SQL',
+          (stage) => stage.stageName === 'DB Server Execute SQL'
         );
         const DBCostTime = formatTimeTemplate(
-          BigNumber(executeStage?.totalDurationMicroseconds).div(1000000).toNumber(),
+          BigNumber(executeStage?.totalDurationMicroseconds)
+            .div(1000000)
+            .toNumber()
         );
         const showDBTimeline = ![
           ISqlExecuteResultStatus.CANCELED,
-          ISqlExecuteResultStatus.CREATED,
+          ISqlExecuteResultStatus.CREATED
         ].includes(row?.status);
 
         return (
@@ -140,28 +144,38 @@ const getColumns = () => {
                 color="var(--background-primary-color)"
                 overlayInnerStyle={{
                   maxHeight: 500,
-                  overflow: 'auto',
+                  overflow: 'auto'
                 }}
                 placement="rightTop"
                 showArrow={false}
                 title={<DBTimeline row={row} />}
               >
-                <InfoCircleOutlined style={{ color: 'var(--text-color-hint)' }} />
+                <InfoCircleOutlined
+                  style={{ color: 'var(--text-color-hint)' }}
+                />
               </Tooltip>
             ) : null}
           </Space>
         );
-      },
-    },
+      }
+    }
   ];
 };
 
-const TaskProgressModal = ({ physicalDatabaseId, scheduleTaskId, modalOpen, setModalOpen }) => {
+const TaskProgressModal = ({
+  physicalDatabaseId,
+  scheduleTaskId,
+  modalOpen,
+  setModalOpen
+}) => {
   const columns = getColumns();
   const [details, setDetails] = useState<ISchemaChangeRecord>();
 
   const getLogicalDbChangeTaskJobDetails = async () => {
-    const res = await getPhysicalExecuteDetails(scheduleTaskId, physicalDatabaseId);
+    const res = await getPhysicalExecuteDetails(
+      scheduleTaskId,
+      physicalDatabaseId
+    );
     setDetails(res);
   };
 
@@ -185,7 +199,7 @@ const TaskProgressModal = ({ physicalDatabaseId, scheduleTaskId, modalOpen, setM
     <Modal
       title={formatMessage({
         id: 'src.component.Task.component.CommonDetailModal.8FBFD910',
-        defaultMessage: '执行详情',
+        defaultMessage: '执行详情'
       })}
       width={840}
       open={modalOpen}
@@ -199,7 +213,7 @@ const TaskProgressModal = ({ physicalDatabaseId, scheduleTaskId, modalOpen, setM
         <Descriptions.Item
           label={formatMessage({
             id: 'src.component.Task.component.CommonDetailModal.F4DCEC5F',
-            defaultMessage: '执行数据库',
+            defaultMessage: '执行数据库'
           })}
         >
           {' '}
@@ -207,14 +221,16 @@ const TaskProgressModal = ({ physicalDatabaseId, scheduleTaskId, modalOpen, setM
             <Space size={4}>
               <Icon
                 component={
-                  getDataSourceStyleByConnectType(details?.database?.dataSource?.type)?.icon
-                    ?.component
+                  getDataSourceStyleByConnectType(
+                    details?.database?.dataSource?.type
+                  )?.icon?.component
                 }
                 style={{
-                  color: getDataSourceStyleByConnectType(details?.database?.dataSource?.type)?.icon
-                    ?.color,
+                  color: getDataSourceStyleByConnectType(
+                    details?.database?.dataSource?.type
+                  )?.icon?.color,
                   fontSize: 16,
-                  marginRight: 4,
+                  marginRight: 4
                 }}
               />
 
@@ -228,7 +244,7 @@ const TaskProgressModal = ({ physicalDatabaseId, scheduleTaskId, modalOpen, setM
         <Descriptions.Item
           label={formatMessage({
             id: 'src.component.Task.component.CommonDetailModal.8CDFB676',
-            defaultMessage: '所属数据源',
+            defaultMessage: '所属数据源'
           })}
         >
           {details?.dataSource?.name}
@@ -241,7 +257,7 @@ const TaskProgressModal = ({ physicalDatabaseId, scheduleTaskId, modalOpen, setM
         dataSource={mergedData}
         disablePagination
         scroll={{
-          x: 0,
+          x: 0
         }}
       />
     </Modal>

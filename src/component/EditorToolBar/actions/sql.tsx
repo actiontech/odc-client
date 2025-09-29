@@ -24,14 +24,15 @@ import login from '@/store/login';
 import setting from '@/store/setting';
 import sqlStore from '@/store/sql';
 import { formatMessage } from '@/util/intl';
-import { SaveOutlined } from '@ant-design/icons';
+import notification from '@/util/notification';
+import { SaveOutlined, UploadOutlined } from '@ant-design/icons';
 import { ToolBarActions } from '..';
 
 const sqlActions: ToolBarActions = {
   SQL_SAVE: {
     name: formatMessage({
       id: 'odc.component.SaveSQLModal.SaveScript',
-      defaultMessage: '保存脚本',
+      defaultMessage: '保存脚本'
     }),
     icon: SaveOutlined,
     statusFunc: (ctx) => {
@@ -46,11 +47,14 @@ const sqlActions: ToolBarActions = {
     },
     async action(ctx: any) {
       await ctx.saveScript();
-    },
+    }
   },
 
   SQL_PLAN: {
-    name: formatMessage({ id: 'odc.EditorToolBar.actions.sql.Plan', defaultMessage: '执行计划' }),
+    name: formatMessage({
+      id: 'odc.EditorToolBar.actions.sql.Plan',
+      defaultMessage: '执行计划'
+    }),
     icon: 'EXPAIN',
     isVisible(ctx: SQLPage) {
       if (!ctx.getSession?.()) {
@@ -60,15 +64,18 @@ const sqlActions: ToolBarActions = {
     },
     async action(ctx: any) {
       await ctx.handleExplain();
-    },
+    }
   },
 
   SQL_EXEC: {
     name: () =>
       /*'运行 '*/ formatMessage({
         id: 'src.component.EditorToolBar.actions.C07F15B8' /*'运行 '*/,
-        defaultMessage: '运行 ',
-      }) + getKeyCodeText(setting.configurations['odc.editor.shortcut.executeStatement']).join(''),
+        defaultMessage: '运行 '
+      }) +
+      getKeyCodeText(
+        setting.configurations['odc.editor.shortcut.executeStatement']
+      ).join(''),
 
     icon: 'SQL_RUN',
     statusFunc: (ctx: SQLPage) => {
@@ -81,7 +88,7 @@ const sqlActions: ToolBarActions = {
         rollbackPageKey,
         stopingPageKey,
         commitingPageKey,
-        isRunningSection,
+        isRunningSection
       } = sqlStore;
       if (
         commitingPageKey.has(pageKey) ||
@@ -89,7 +96,10 @@ const sqlActions: ToolBarActions = {
         !!stopingPageKey.has(pageKey)
       ) {
         return IConStatus.DISABLE;
-      } else if (runningPageKey.has(pageKey) && !isRunningSection.has(pageKey)) {
+      } else if (
+        runningPageKey.has(pageKey) &&
+        !isRunningSection.has(pageKey)
+      ) {
         return IConStatus.RUNNING;
       }
       return IConStatus.INIT;
@@ -97,18 +107,18 @@ const sqlActions: ToolBarActions = {
 
     async action(ctx: any) {
       await ctx.handleExecuteSQL();
-    },
+    }
   },
 
   SQL_EXEC_SECTION: {
     name: () =>
       /*'运行当前语句 '*/ formatMessage({
         id: 'src.component.EditorToolBar.actions.3BDAC881' /*'运行当前语句 '*/,
-        defaultMessage: '运行当前语句 ',
+        defaultMessage: '运行当前语句 '
       }) +
-      getKeyCodeText(setting.configurations['odc.editor.shortcut.executeCurrentStatement']).join(
-        '',
-      ),
+      getKeyCodeText(
+        setting.configurations['odc.editor.shortcut.executeCurrentStatement']
+      ).join(''),
 
     icon: 'SQL_RUN_SECTION',
     statusFunc: (ctx: SQLPage) => {
@@ -121,7 +131,7 @@ const sqlActions: ToolBarActions = {
         rollbackPageKey,
         stopingPageKey,
         commitingPageKey,
-        isRunningSection,
+        isRunningSection
       } = sqlStore;
       if (
         commitingPageKey.has(pageKey) ||
@@ -137,12 +147,15 @@ const sqlActions: ToolBarActions = {
 
     async action(ctx: SQLPage) {
       await ctx.handleExecuteSelectedSQL();
-    },
+    }
   },
 
   SQL_COMMIT: {
     isShowText: true,
-    name: formatMessage({ id: 'odc.EditorToolBar.actions.sql.Submitted', defaultMessage: '提交' }), // 提交
+    name: formatMessage({
+      id: 'odc.EditorToolBar.actions.sql.Submitted',
+      defaultMessage: '提交'
+    }), // 提交
     icon: 'SQL_COMMIT',
     confirmConfig: () => {
       return null;
@@ -153,7 +166,12 @@ const sqlActions: ToolBarActions = {
         return IConStatus.DISABLE;
       }
       const { pageKey, sqlStore } = ctx.props;
-      const { runningPageKey, rollbackPageKey, stopingPageKey, commitingPageKey } = sqlStore;
+      const {
+        runningPageKey,
+        rollbackPageKey,
+        stopingPageKey,
+        commitingPageKey
+      } = sqlStore;
       const transaction = ctx.getSession()?.transState;
       if (transaction?.transState === TransState.IDLE) {
         return IConStatus.DISABLE;
@@ -179,14 +197,17 @@ const sqlActions: ToolBarActions = {
       ctx.props.sqlStore.commit(
         ctx.props.pageKey,
         ctx.getSession()?.sessionId,
-        ctx?.getSession()?.database?.dbName,
+        ctx?.getSession()?.database?.dbName
       );
-    },
+    }
   },
 
   SQL_ROLLBACK: {
     isShowText: true,
-    name: formatMessage({ id: 'odc.EditorToolBar.actions.sql.Rollback', defaultMessage: '回滚' }), // 回滚
+    name: formatMessage({
+      id: 'odc.EditorToolBar.actions.sql.Rollback',
+      defaultMessage: '回滚'
+    }), // 回滚
     icon: 'SQL_ROLLBACK',
     confirmConfig: () => {
       return null;
@@ -196,7 +217,12 @@ const sqlActions: ToolBarActions = {
         return IConStatus.DISABLE;
       }
       const { pageKey, sqlStore } = ctx.props;
-      const { runningPageKey, rollbackPageKey, stopingPageKey, commitingPageKey } = sqlStore;
+      const {
+        runningPageKey,
+        rollbackPageKey,
+        stopingPageKey,
+        commitingPageKey
+      } = sqlStore;
       const sessionId = ctx.getSession()?.sessionId;
       const transaction = ctx.getSession()?.transState;
       if (transaction?.transState === TransState.IDLE) {
@@ -223,15 +249,15 @@ const sqlActions: ToolBarActions = {
       sqlStore.rollback(
         ctx.props.pageKey,
         ctx.getSession()?.sessionId,
-        ctx?.getSession()?.database?.dbName,
+        ctx?.getSession()?.database?.dbName
       );
-    },
+    }
   },
 
   SQL_STOP: {
     name: formatMessage({
       id: 'odc.EditorToolBar.actions.sql.Termination',
-      defaultMessage: '终止',
+      defaultMessage: '终止'
     }), // 终止
     icon: 'SQL_STOP',
     statusFunc: (ctx) => {
@@ -253,44 +279,129 @@ const sqlActions: ToolBarActions = {
     },
     async action(ctx: SQLPage) {
       sqlStore.stopExec(ctx.props.pageKey, ctx?.getSession()?.sessionId);
+    }
+  },
+
+  SQL_IMPORT_FILE: {
+    name: formatMessage({
+      id: 'odc.EditorToolBar.actions.sql.ImportFile',
+      defaultMessage: '导入文件'
+    }),
+    icon: UploadOutlined,
+    statusFunc: (ctx: SQLPage) => {
+      const { pageKey } = ctx.props;
+      if (sqlStore.runningPageKey.has(pageKey)) {
+        return IConStatus.DISABLE;
+      }
+      return IConStatus.INIT;
     },
+    async action(ctx: SQLPage) {
+      // 创建隐藏的文件输入元素
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = '.sql,.txt';
+      input.style.display = 'none';
+
+      // 文件大小限制 (10MB)
+      const MAX_FILE_SIZE = 10 * 1024 * 1024;
+
+      input.onchange = (event: Event) => {
+        const target = event.target as HTMLInputElement;
+        const file = target.files?.[0];
+
+        if (!file) return;
+
+        // 检查文件类型
+        const allowedTypes = ['.sql', '.txt'];
+        const fileExtension = '.' + file.name.split('.').pop()?.toLowerCase();
+        if (!allowedTypes.includes(fileExtension)) {
+          notification.error({
+            track: formatMessage({
+              id: 'odc.EditorToolBar.actions.sql.FileTypeErrorContent',
+              defaultMessage: '仅支持 .sql 和 .txt 文件'
+            })
+          });
+          return;
+        }
+
+        // 检查文件大小
+        if (file.size > MAX_FILE_SIZE) {
+          notification.error({
+            track: formatMessage({
+              id: 'odc.EditorToolBar.actions.sql.FileSizeErrorContent',
+              defaultMessage: '文件大小不能超过 10MB'
+            })
+          });
+          return;
+        }
+
+        // 读取文件内容
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const content = e.target?.result as string;
+          if (content && ctx.editor) {
+            // 将文件内容设置到编辑器中
+            ctx.editor.setValue(content);
+            // 触发内容变化事件
+            ctx.handleSQLChanged(content);
+          }
+        };
+        reader.onerror = () => {
+          notification.error({
+            track: formatMessage({
+              id: 'odc.EditorToolBar.actions.sql.ReadFileErrorContent',
+              defaultMessage: '无法读取文件内容，请检查文件是否损坏'
+            })
+          });
+        };
+        reader.readAsText(file, 'utf-8');
+      };
+
+      // 触发文件选择
+      document.body.appendChild(input);
+      input.click();
+      document.body.removeChild(input);
+    }
   },
 
   SQL_CONFIG: {
-    Component: SQLConfig,
+    Component: SQLConfig
   },
 
   DELIMITER: {
-    Component: DelimiterSelect,
+    Component: DelimiterSelect
   },
 
   VIEW_CREATE_SQL_SUBMIT: {
     isShowText: true,
-    name: formatMessage({ id: 'odc.EditorToolBar.actions.sql.Create', defaultMessage: '创建' }), // 创建
+    name: formatMessage({
+      id: 'odc.EditorToolBar.actions.sql.Create',
+      defaultMessage: '创建'
+    }), // 创建
     icon: null,
     type: 'BUTTON_PRIMARY',
     async action(ctx: any) {
       await ctx.handleCreateView();
-    },
+    }
   },
 
   VIEW_CREATE_LASR_STEP: {
     isShowText: true,
     name: formatMessage({
       id: 'odc.EditorToolBar.actions.sql.PreviousStep',
-      defaultMessage: '上一步',
+      defaultMessage: '上一步'
     }), // 上一步
     icon: null,
     type: 'BUTTON',
     async action(ctx: any) {
       ctx.handleSwitchToSteps();
-    },
+    }
   },
 
   SQL_LINT: {
     name: formatMessage({
       id: 'odc.EditorToolBar.actions.sql.SqlCheck',
-      defaultMessage: 'SQL 检查',
+      defaultMessage: 'SQL 检查'
     }), //SQL 检查
     icon: 'LINT',
     isVisible(ctx: SQLPage) {
@@ -301,8 +412,8 @@ const sqlActions: ToolBarActions = {
     },
     async action(ctx: any) {
       await ctx.doSQLLint();
-    },
-  },
+    }
+  }
 };
 
 export default sqlActions;

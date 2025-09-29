@@ -34,7 +34,11 @@ interface IProps {
   className?: string;
   getDetail: (id: number) => void;
   onClose: () => void;
-  renderContent: (key: IManagerDetailTabs, data: any, onClose: () => void) => ReactNode;
+  renderContent: (
+    key: IManagerDetailTabs,
+    data: any,
+    onClose: () => void
+  ) => ReactNode;
 }
 
 const CommonDetailModal: React.FC<IProps> = (props) => {
@@ -48,7 +52,7 @@ const CommonDetailModal: React.FC<IProps> = (props) => {
     className = '',
     getDetail,
     onClose,
-    renderContent,
+    renderContent
   } = props;
   const [detail, setDetail] = useState(null);
   const filteredTabs = tabs?.filter((tab) => !tab.hidden);
@@ -95,7 +99,9 @@ const CommonDetailModal: React.FC<IProps> = (props) => {
         </div>
       )}
       <div className={`${className} ${styles.content}`}>
-        {detail ? renderContent(activeKey as IManagerDetailTabs, detail, onClose) : null}
+        {detail
+          ? renderContent(activeKey as IManagerDetailTabs, detail, onClose)
+          : null}
       </div>
     </Drawer>
   );

@@ -18,7 +18,11 @@ import DisplayTable from '@/component/DisplayTable';
 import { ILogType } from '@/d.ts';
 import { Debug } from '@/store/debug';
 import { formatMessage } from '@/util/intl';
-import { CloseCircleOutlined, ExclamationCircleFilled, InfoCircleFilled } from '@ant-design/icons';
+import {
+  CloseCircleOutlined,
+  ExclamationCircleFilled,
+  InfoCircleFilled
+} from '@ant-design/icons';
 import { Empty } from 'antd';
 import dayjs from 'dayjs';
 import React from 'react';
@@ -35,37 +39,39 @@ const DebugLog: React.FC<IProps> = (props) => {
       width: 60,
       title: formatMessage({
         id: 'odc.components.PLDebugResultSet.State',
-        defaultMessage: '状态',
+        defaultMessage: '状态'
       }),
       render(type) {
         const iconMap = {
           [ILogType.INFO]: <InfoCircleFilled style={{ color: '#1890ff' }} />,
-          [ILogType.WARN]: <ExclamationCircleFilled style={{ color: '#faad14' }} />,
-          [ILogType.ERROR]: <CloseCircleOutlined style={{ color: '#f5222d' }} />,
+          [ILogType.WARN]: (
+            <ExclamationCircleFilled style={{ color: '#faad14' }} />
+          ),
+          [ILogType.ERROR]: <CloseCircleOutlined style={{ color: '#f5222d' }} />
         };
         return iconMap[type] || iconMap.INFO;
-      },
+      }
     },
     {
       dataIndex: 'time',
       title: formatMessage({
         id: 'odc.components.PLDebugResultSet.Time',
-        defaultMessage: '时间',
+        defaultMessage: '时间'
       }),
       render(value) {
         return dayjs(value - 0).format('YYYY-MM-DD HH:mm:ss');
-      },
+      }
     },
     {
       dataIndex: 'log',
       title: formatMessage({
         id: 'odc.components.PLDebugResultSet.Results',
-        defaultMessage: '结果',
+        defaultMessage: '结果'
       }),
       render(t, _) {
         return <span style={{ wordBreak: 'break-all' }}>{t}</span>;
-      },
-    },
+      }
+    }
   ];
 
   const logs = debug?.history.records;

@@ -45,12 +45,14 @@ const NewVersion: React.FC<IProps> = () => {
       <Space direction="vertical">
         <Typography.Title level={5}>{currentCard?.title}</Typography.Title>
         <div>{currentCard?.describe}</div>
-        {currentCard?.img ? <Image width="100%" src={getNewVersionImg(currentCard?.img)} /> : null}
+        {currentCard?.img ? (
+          <Image width="100%" src={getNewVersionImg(currentCard?.img)} />
+        ) : null}
         <div
           style={{
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'space-between',
+            justifyContent: 'space-between'
           }}
         >
           <Radio.Group
@@ -74,7 +76,7 @@ const NewVersion: React.FC<IProps> = () => {
                 {
                   formatMessage({
                     id: 'odc.component.VersionModal.NewVersion.Previous',
-                    defaultMessage: '上一个',
+                    defaultMessage: '上一个'
                   })
 
                   /* 上一个 */
@@ -92,7 +94,7 @@ const NewVersion: React.FC<IProps> = () => {
                 {
                   formatMessage({
                     id: 'odc.component.VersionModal.NewVersion.GotIt',
-                    defaultMessage: '知道了',
+                    defaultMessage: '知道了'
                   })
 
                   /* 知道了 */
@@ -108,7 +110,7 @@ const NewVersion: React.FC<IProps> = () => {
                 {
                   formatMessage({
                     id: 'odc.component.VersionModal.NewVersion.Next',
-                    defaultMessage: '下一个',
+                    defaultMessage: '下一个'
                   })
 
                   /* 下一个 */
@@ -123,12 +125,15 @@ const NewVersion: React.FC<IProps> = () => {
 
   return (
     <Space direction="vertical">
-      <Typography.Title style={{ display: 'flex', alignItems: 'center' }} level={5}>
+      <Typography.Title
+        style={{ display: 'flex', alignItems: 'center' }}
+        level={5}
+      >
         <Icon component={WelComeSvg} style={{ marginRight: 8, fontSize: 20 }} />
         {
           formatMessage({
             id: 'odc.component.VersionModal.NewVersion.OdcOptimizationUpdate',
-            defaultMessage: '新版本 ODC 优化更新',
+            defaultMessage: '新版本 ODC 优化更新'
           })
 
           /* 新版本 ODC 优化更新 */
@@ -138,18 +143,21 @@ const NewVersion: React.FC<IProps> = () => {
         {
           formatMessage({
             id: 'odc.component.VersionModal.NewVersion.TheNewDarkThemeHas',
-            defaultMessage: '全新暗色主题已上线',
+            defaultMessage: '全新暗色主题已上线'
           }) /*全新暗色主题已上线*/
         }
       </div>
       <Space style={{ float: 'right', paddingTop: 5 }}>
-        <a target={'oceanbase_odc_help'} href="https://www.oceanbase.com/product/odc">
+        <a
+          target={'oceanbase_odc_help'}
+          href="https://www.oceanbase.com/product/odc"
+        >
           <Space>
             <Icon component={NewOpenSvg} />
             {
               formatMessage({
                 id: 'odc.component.VersionModal.NewVersion.MoreProductTrends',
-                defaultMessage: '更多产品动态',
+                defaultMessage: '更多产品动态'
               })
 
               /* 更多产品动态 */
@@ -165,7 +173,7 @@ const NewVersion: React.FC<IProps> = () => {
           {
             formatMessage({
               id: 'odc.component.VersionModal.NewVersion.DarkTheme',
-              defaultMessage: '暗色主题',
+              defaultMessage: '暗色主题'
             }) /*暗色主题*/
           }
         </Button>
@@ -178,7 +186,7 @@ const NewVersion: React.FC<IProps> = () => {
           {
             formatMessage({
               id: 'odc.component.VersionModal.NewVersion.LearnMore',
-              defaultMessage: '了解详情',
+              defaultMessage: '了解详情'
             })
 
             /* 了解详情 */
@@ -195,6 +203,6 @@ export default function openNewVersionTip() {
     description: <NewVersion />,
     duration: null,
     key: newVersionModalKey,
-    className: styles.newVersion,
+    className: styles.newVersion
   });
 }

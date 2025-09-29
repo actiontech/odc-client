@@ -35,7 +35,7 @@ const textActions: ToolBarActions = {
   TEXT_FORMAT: {
     name: formatMessage({
       id: 'odc.EditorToolBar.actions.text.Formatting',
-      defaultMessage: '格式化',
+      defaultMessage: '格式化'
     }),
     icon: 'FORMAT',
     statusFunc: getStatus,
@@ -50,26 +50,26 @@ const textActions: ToolBarActions = {
       } catch (e) {
         console.trace(e);
       }
-    },
+    }
   },
 
   TEXT_FIND_OR_REPLACE: {
     name: formatMessage({
       id: 'odc.EditorToolBar.actions.text.FindReplace',
-      defaultMessage: '查找/替换',
+      defaultMessage: '查找/替换'
     }),
     icon: FileSearchOutlined,
     statusFunc: getStatus,
     async action(ctx: any) {
       const codeEditor: IEditor = ctx.editor;
       codeEditor.trigger('FIND_OR_REPLACE', 'actions.find', null);
-    },
+    }
   },
 
   TEXT_UNDO: {
     name: formatMessage({
       id: 'odc.EditorToolBar.actions.text.Revocation',
-      defaultMessage: '撤销',
+      defaultMessage: '撤销'
     }),
 
     icon: UndoSvg,
@@ -78,13 +78,13 @@ const textActions: ToolBarActions = {
       const codeEditor = ctx.editor;
       codeEditor.trigger('xxx', 'undo');
       ctx.editor?.focus();
-    },
+    }
   },
 
   TEXT_REDO: {
     name: formatMessage({
       id: 'odc.EditorToolBar.actions.text.Redo',
-      defaultMessage: '重做',
+      defaultMessage: '重做'
     }),
 
     icon: RedoSvg,
@@ -93,20 +93,23 @@ const textActions: ToolBarActions = {
       const codeEditor: IEditor = ctx.editor;
       codeEditor.trigger('xxx', 'redo', null);
       ctx.editor?.focus();
-    },
+    }
   },
 
   TEXT_CASE: {
-    name: formatMessage({ id: 'odc.EditorToolBar.actions.text.Case', defaultMessage: '大小写' }), // 大小写
+    name: formatMessage({
+      id: 'odc.EditorToolBar.actions.text.Case',
+      defaultMessage: '大小写'
+    }), // 大小写
     icon: 'TEXT_UPPERCASE',
     statusFunc: getStatus,
-    menu: ['TEXT_UPPERCASE', 'TEXT_LOWERCASE', 'TEXT_CAPITALIZE'],
+    menu: ['TEXT_UPPERCASE', 'TEXT_LOWERCASE', 'TEXT_CAPITALIZE']
   },
 
   TEXT_UPPERCASE: {
     name: formatMessage({
       id: 'odc.EditorToolBar.actions.text.AllUppercase',
-      defaultMessage: '全部大写',
+      defaultMessage: '全部大写'
     }), // 全部大写
     icon: 'TEXT_UPPERCASE',
 
@@ -124,30 +127,30 @@ const textActions: ToolBarActions = {
         selection.startLineNumber,
         selection.startColumn,
         selection.endLineNumber,
-        selection.endColumn,
+        selection.endColumn
       );
 
       const op = {
         identifier: {
           major: 1,
-          minor: 1,
+          minor: 1
         },
 
         range,
         text: selectText.toUpperCase(),
-        forceMoveMarkers: true,
+        forceMoveMarkers: true
       };
 
       codeEditor.executeEdits('UPPERCASE', [op]);
       codeEditor.setSelection(range);
       ctx.editor?.focus();
-    },
+    }
   },
 
   TEXT_LOWERCASE: {
     name: formatMessage({
       id: 'odc.EditorToolBar.actions.text.AllLowercase',
-      defaultMessage: '全部小写',
+      defaultMessage: '全部小写'
     }), // 全部小写
     icon: 'TEXT_LOWERCASE',
 
@@ -165,30 +168,30 @@ const textActions: ToolBarActions = {
         selection.startLineNumber,
         selection.startColumn,
         selection.endLineNumber,
-        selection.endColumn,
+        selection.endColumn
       );
 
       const op = {
         identifier: {
           major: 1,
-          minor: 1,
+          minor: 1
         },
 
         range,
         text: selectText.toLowerCase(),
-        forceMoveMarkers: true,
+        forceMoveMarkers: true
       };
 
       codeEditor.executeEdits('LOWERCASE', [op]);
       codeEditor.setSelection(range);
       ctx.editor?.focus();
-    },
+    }
   },
 
   TEXT_CAPITALIZE: {
     name: formatMessage({
       id: 'odc.EditorToolBar.actions.text.UppercaseLetters',
-      defaultMessage: '首字母大写',
+      defaultMessage: '首字母大写'
     }),
 
     icon: 'TEXT_FIRST_UPPERCASE',
@@ -210,37 +213,40 @@ const textActions: ToolBarActions = {
         selection.startLineNumber,
         selection.startColumn,
         selection.endLineNumber,
-        selection.endColumn,
+        selection.endColumn
       );
 
       const op = {
         identifier: {
           major: 1,
-          minor: 1,
+          minor: 1
         },
 
         range,
         text: capitalizeText,
-        forceMoveMarkers: true,
+        forceMoveMarkers: true
       };
 
       codeEditor.executeEdits('CAPITALIZE', [op]);
       codeEditor.setSelection(range);
       ctx.editor?.focus();
-    },
+    }
   },
 
   TEXT_INDENT_GROUP: {
-    name: formatMessage({ id: 'odc.EditorToolBar.actions.text.Indent', defaultMessage: '缩进' }), // 缩进
+    name: formatMessage({
+      id: 'odc.EditorToolBar.actions.text.Indent',
+      defaultMessage: '缩进'
+    }), // 缩进
     icon: 'TEXT_INDENT',
     statusFunc: getStatus,
-    menu: ['TEXT_INDENT', 'TEXT_UN_INDENT'],
+    menu: ['TEXT_INDENT', 'TEXT_UN_INDENT']
   },
 
   TEXT_INDENT: {
     name: formatMessage({
       id: 'odc.EditorToolBar.actions.text.AddIndentation',
-      defaultMessage: '添加缩进',
+      defaultMessage: '添加缩进'
     }),
 
     icon: 'TEXT_INDENT',
@@ -249,13 +255,13 @@ const textActions: ToolBarActions = {
       const codeEditor: IEditor = ctx.editor;
       codeEditor.trigger('xxx', 'editor.action.indentLines', null);
       codeEditor?.focus();
-    },
+    }
   },
 
   TEXT_UN_INDENT: {
     name: formatMessage({
       id: 'odc.EditorToolBar.actions.text.DeleteIndentation',
-      defaultMessage: '删除缩进',
+      defaultMessage: '删除缩进'
     }),
 
     icon: 'TEXT_UN_INDENT',
@@ -264,23 +270,23 @@ const textActions: ToolBarActions = {
       const codeEditor: IEditor = ctx.editor;
       codeEditor.trigger('xxx', 'editor.action.outdentLines', null);
       ctx.editor?.focus();
-    },
+    }
   },
 
   TEXT_COMMENT_GROUP: {
     name: formatMessage({
       id: 'odc.EditorToolBar.actions.text.Annotation',
-      defaultMessage: '注释',
+      defaultMessage: '注释'
     }), // 注释
     icon: 'TEXT_COMMENT',
     statusFunc: getStatus,
-    menu: ['TEXT_COMMENT', 'TEXT_UN_COMMENT'],
+    menu: ['TEXT_COMMENT', 'TEXT_UN_COMMENT']
   },
 
   TEXT_COMMENT: {
     name: formatMessage({
       id: 'odc.EditorToolBar.actions.text.AddComments',
-      defaultMessage: '添加注释',
+      defaultMessage: '添加注释'
     }),
 
     icon: 'TEXT_COMMENT',
@@ -289,13 +295,13 @@ const textActions: ToolBarActions = {
       const codeEditor: IEditor = ctx.editor;
       codeEditor.trigger('xxx', 'editor.action.addCommentLine', null);
       ctx.editor?.focus();
-    },
+    }
   },
 
   TEXT_UN_COMMENT: {
     name: formatMessage({
       id: 'odc.EditorToolBar.actions.text.DeleteComments',
-      defaultMessage: '删除注释',
+      defaultMessage: '删除注释'
     }),
 
     icon: 'TEXT_UN_COMMENT',
@@ -304,13 +310,13 @@ const textActions: ToolBarActions = {
       const codeEditor: IEditor = ctx.editor;
       codeEditor.trigger('xxx', 'editor.action.removeCommentLine', null);
       ctx.editor?.focus();
-    },
+    }
   },
 
   TEXT_EXPASTE: {
     name: formatMessage({
       id: 'odc.EditorToolBar.actions.text.InValueConversion',
-      defaultMessage: 'IN 值转化',
+      defaultMessage: 'IN 值转化'
     }), // IN 值转化
     icon: OneToOneOutlined,
     async action(ctx: any) {
@@ -327,27 +333,28 @@ const textActions: ToolBarActions = {
         selection.startLineNumber,
         selection.startColumn,
         selection.endLineNumber,
-        selection.endColumn,
+        selection.endColumn
       );
 
       const op = {
         identifier: {
           major: 1,
-          minor: 1,
+          minor: 1
         },
 
         range,
         text: textExpaste(
           selectText,
-          ((ctx.getSession?.() || ctx.session) as SessionStore)?.connection?.dialectType,
+          ((ctx.getSession?.() || ctx.session) as SessionStore)?.connection
+            ?.dialectType
         ),
-        forceMoveMarkers: true,
+        forceMoveMarkers: true
       };
 
       codeEditor.executeEdits('INCONVERT', [op]);
       ctx.editor?.focus();
-    },
-  },
+    }
+  }
 };
 
 export default textActions;

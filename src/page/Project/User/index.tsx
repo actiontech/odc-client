@@ -39,21 +39,21 @@ import { renderTool } from '@/util/renderTool';
 export const projectRoleTextMap = {
   [ProjectRole.OWNER]: formatMessage({
     id: 'odc.User.AddUserModal.Administrator',
-    defaultMessage: '管理员',
+    defaultMessage: '管理员'
   }),
   [ProjectRole.DEVELOPER]: formatMessage({
     id: 'src.page.Project.User.A0288936',
-    defaultMessage: '开发者',
+    defaultMessage: '开发者'
   }), //'开发者'
   [ProjectRole.DBA]: 'DBA',
   [ProjectRole.SECURITY_ADMINISTRATOR]: formatMessage({
     id: 'odc.src.page.Project.User.SecurityAdministrator',
-    defaultMessage: '安全管理员',
+    defaultMessage: '安全管理员'
   }), //'安全管理员'
   [ProjectRole.PARTICIPANT]: formatMessage({
     id: 'odc.src.page.Project.User.Participant',
-    defaultMessage: '参与者',
-  }), //'参与者'
+    defaultMessage: '参与者'
+  }) //'参与者'
 };
 
 interface IProps {
@@ -64,8 +64,12 @@ const User: React.FC<IProps> = ({ id, userStore }) => {
   const context = useContext(ProjectContext);
   const { project } = context;
   const projectArchived = isProjectArchived(project);
-  const isOwner = project?.currentUserResourceRoles?.some((item) => item === ProjectRole.OWNER);
-  const isDBA = project?.currentUserResourceRoles?.some((item) => item === ProjectRole.DBA);
+  const isOwner = project?.currentUserResourceRoles?.some(
+    (item) => item === ProjectRole.OWNER
+  );
+  const isDBA = project?.currentUserResourceRoles?.some(
+    (item) => item === ProjectRole.DBA
+  );
   const [addUserModalVisiable, setAddUserModalVisiable] = useState(false);
   const [manageModalVisiable, setManageModalVisiable] = useState(false);
   const [editUserId, setEditUserId] = useState<number>(null);
@@ -87,12 +91,13 @@ const User: React.FC<IProps> = ({ id, userStore }) => {
         const { id, role, derivedFromGlobalProjectRole } = mem;
         if (userMap.has(id)) {
           userMap.get(id).roles.push(role);
-          derivedFromGlobalProjectRole && userMap.get(id).globalRoles.push(role);
+          derivedFromGlobalProjectRole &&
+            userMap.get(id).globalRoles.push(role);
         } else {
           const obj = {
             ...mem,
             roles: [role],
-            globalRoles: [],
+            globalRoles: []
           };
           derivedFromGlobalProjectRole && obj.globalRoles.push(role);
           userMap.set(id, obj);
@@ -106,14 +111,14 @@ const User: React.FC<IProps> = ({ id, userStore }) => {
   async function deleteUser(id: number) {
     const isSuccess = await deleteProjectMember({
       projectId: context?.project?.id,
-      userId: id,
+      userId: id
     });
     if (isSuccess) {
       message.success(
         formatMessage({
           id: 'odc.Project.User.DeletedSuccessfully',
-          defaultMessage: '删除成功',
-        }), //删除成功
+          defaultMessage: '删除成功'
+        }) //删除成功
       );
 
       context.reloadProject();
@@ -147,67 +152,67 @@ const User: React.FC<IProps> = ({ id, userStore }) => {
         disable: !isOwner && !isMe,
         text: formatMessage({
           id: 'src.page.Project.User.3AE67EC2',
-          defaultMessage: '管理权限',
+          defaultMessage: '管理权限'
         }),
         action: () => showManageModal(record.id),
         disableTooltip: () => {
           if (!isOwner && !isMe) {
             return formatMessage({
               id: 'src.page.Project.User.907FD906',
-              defaultMessage: '暂无权限',
+              defaultMessage: '暂无权限'
             });
           } else {
             return '';
           }
-        },
+        }
       },
       {
         disable: !isOwner,
         action: () => updateUser(record.id),
         text: formatMessage({
           id: 'src.page.Project.User.D1A92D2A',
-          defaultMessage: '编辑角色',
+          defaultMessage: '编辑角色'
         }),
         key: UserOperationKey.EDIT_ROLES,
         disableTooltip: () => {
           if (!isOwner) {
             return formatMessage({
               id: 'src.page.Project.User.907FD906',
-              defaultMessage: '暂无权限',
+              defaultMessage: '暂无权限'
             });
           } else {
             return '';
           }
-        },
+        }
       },
       {
         disable: !isOwner || isGlobalRolesUser,
         key: UserOperationKey.REMOVE_ROLES,
         text: formatMessage({
           id: 'odc.Project.User.Remove',
-          defaultMessage: '移除',
+          defaultMessage: '移除'
         }),
         action: () => deleteUser(record.id),
         confirmText: formatMessage({
           id: 'odc.Project.User.AreYouSureYouWant',
-          defaultMessage: '是否确定删除该成员？',
+          defaultMessage: '是否确定删除该成员？'
         }),
         disableTooltip: () => {
           if (isGlobalRolesUser) {
             return formatMessage({
               id: 'src.page.Project.User.68557BE1',
-              defaultMessage: '全局角色不可移除',
+              defaultMessage: '全局角色不可移除'
             });
           } else if (!isOwner) {
             return formatMessage({
               id: 'src.page.Project.User.FE2F4924',
-              defaultMessage: '暂无权限',
+              defaultMessage: '暂无权限'
             });
           } else {
             return '';
           }
-        },
-      },
+        }
+      }
     ];
   };
 
@@ -218,15 +223,19 @@ const User: React.FC<IProps> = ({ id, userStore }) => {
           ? ''
           : formatMessage({
               id: 'src.page.Project.User.0C0586E8',
-              defaultMessage: '暂无权限',
+              defaultMessage: '暂无权限'
             })
       }
     >
-      <Button type="primary" onClick={() => setAddUserModalVisiable(true)} disabled={!isOwner}>
+      <Button
+        type="primary"
+        onClick={() => setAddUserModalVisiable(true)}
+        disabled={!isOwner}
+      >
         {
           formatMessage({
             id: 'odc.Project.User.AddMembers',
-            defaultMessage: '添加成员',
+            defaultMessage: '添加成员'
           }) /*添加成员*/
         }
       </Button>
@@ -253,7 +262,7 @@ const User: React.FC<IProps> = ({ id, userStore }) => {
           {
             title: formatMessage({
               id: 'odc.Project.User.UserName',
-              defaultMessage: '用户名称',
+              defaultMessage: '用户名称'
             }),
             //用户名称
             dataIndex: 'name',
@@ -266,7 +275,7 @@ const User: React.FC<IProps> = ({ id, userStore }) => {
                     {
                       formatMessage({
                         id: 'src.page.Project.User.15775BB9' /*我*/,
-                        defaultMessage: '我',
+                        defaultMessage: '我'
                       }) /* 我 */
                     }
                   </Tag>
@@ -274,21 +283,21 @@ const User: React.FC<IProps> = ({ id, userStore }) => {
               ) : (
                 name
               );
-            },
+            }
           },
           {
             title: formatMessage({
               id: 'odc.Project.User.Account',
-              defaultMessage: '账号',
+              defaultMessage: '账号'
             }),
             //账号
             dataIndex: 'accountName',
-            width: 370,
+            width: 370
           },
           {
             title: formatMessage({
               id: 'odc.Project.User.ProjectRole',
-              defaultMessage: '项目角色',
+              defaultMessage: '项目角色'
             }),
             //项目角色
             dataIndex: 'roles',
@@ -297,12 +306,12 @@ const User: React.FC<IProps> = ({ id, userStore }) => {
               return Array.from(new Set(v))
                 ?.map((item) => projectRoleTextMap[item] || item)
                 ?.join(' | ');
-            },
+            }
           },
           {
             title: formatMessage({
               id: 'odc.Project.User.Operation',
-              defaultMessage: '操作',
+              defaultMessage: '操作'
             }),
             //操作
             dataIndex: 'name',
@@ -317,12 +326,12 @@ const User: React.FC<IProps> = ({ id, userStore }) => {
                   })}
                 </Action.Group>
               );
-            },
-          },
+            }
+          }
         ]}
         dataSource={dataSource}
         pagination={{
-          total: dataSource?.length || 0,
+          total: dataSource?.length || 0
         }}
         loadData={(page) => {}}
       />
@@ -347,11 +356,15 @@ const User: React.FC<IProps> = ({ id, userStore }) => {
         }}
         projectId={context.project?.id}
         roles={
-          context.project?.members?.filter((m) => m.id === editUserId)?.map((m) => m.role) || []
+          context.project?.members
+            ?.filter((m) => m.id === editUserId)
+            ?.map((m) => m.role) || []
         }
         globalRoles={
           context.project?.members
-            ?.filter((m) => m.id === editUserId && m.derivedFromGlobalProjectRole)
+            ?.filter(
+              (m) => m.id === editUserId && m.derivedFromGlobalProjectRole
+            )
             ?.map((m) => m.role) || []
         }
       />

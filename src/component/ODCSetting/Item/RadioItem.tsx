@@ -14,17 +14,21 @@
  * limitations under the License.
  */
 
-import { Radio, RadioGroupProps } from 'antd';
 import { useState } from 'react';
+import { ToggleTokensStyleWrapper } from './style';
+import { ToggleTokensProps } from '@actiontech/dms-kit';
 
 export default function RadioItem(props: {
-  options: RadioGroupProps['options'];
+  options: ToggleTokensProps['options'];
   value: string;
   onChange: (value: string) => Promise<void>;
 }) {
   const [loading, setLoading] = useState(false);
+
   return (
-    <Radio.Group
+    <ToggleTokensStyleWrapper
+      multiple={false}
+      noStyle
       options={props.options}
       key={props.value}
       defaultValue={props.value}
@@ -32,7 +36,7 @@ export default function RadioItem(props: {
       onChange={async (e) => {
         setLoading(true);
         try {
-          await props.onChange(e.target.value);
+          await props.onChange(e as string);
         } finally {
           setLoading(false);
         }
