@@ -30,7 +30,7 @@ export function gotoSQLWorkspace(
     location.origin +
     location.pathname +
     (tabKey
-      ? `#//${tabKey}/${datasourceId}?databaseName=${databaseName}`
+      ? `#/${tabKey}/${datasourceId}?databaseName=${databaseName}`
       : `#/?projectId=${projectId || ''}&datasourceId=${
           datasourceId || ''
         }&databaseId=${

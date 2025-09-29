@@ -209,7 +209,6 @@ export const action = async (config: ICustomConnectAction) => {
     return 'Connection Test Failed';
   }
   const createResult = await newConnection(params);
-  const databaseName = params?.defaultSchema;
 
   if (createResult) {
     gotoSQLWorkspace(
@@ -219,8 +218,7 @@ export const action = async (config: ICustomConnectAction) => {
       true,
       generateUniqKey(),
       false,
-      false,
-      databaseName
+      false
     );
   } else {
     return 'create connection failed';

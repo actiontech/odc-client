@@ -90,7 +90,10 @@ export default {
     sys: true
   },
   task: {
-    sys: true
+    sys: true,
+    isSupportTaksImport: false,
+    isSupportTaksExport: false,
+    isSupportTaksTerminate: false
   },
   systemConfig: {
     default: null

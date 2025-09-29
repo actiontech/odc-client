@@ -14,8 +14,7 @@ import {
   isSupportTaksExport,
   isSupportTaksImport,
   isSupportTaksTerminate
-} from '../AsyncTaskOperationButton/helper';
-
+} from '@/component/Task/component/TaskTable';
 export const statusThatCanBeExport = Object.keys(TaskStatus);
 
 export const statusThatCanBeTerminate = [
