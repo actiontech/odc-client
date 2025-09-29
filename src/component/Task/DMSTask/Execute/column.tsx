@@ -12,8 +12,7 @@ import { BriefcaseFilled } from '@actiontech/icons';
 import { WorkflowNameStyleWrapper } from './style';
 import WorkflowStatus from './WorkflowStatus';
 import { formatMessage } from '@/util/intl';
-import { Space, Typography } from 'antd';
-import { ProjectV2ProjectPriorityEnum } from '../../../../external_api/base/common.enum';
+import { Space } from 'antd';
 
 export const SqlExecWorkflowListColumn: () => ActiontechTableColumn<IWorkflowDetailResV1> =
   () => {

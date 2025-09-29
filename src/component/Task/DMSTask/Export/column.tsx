@@ -112,6 +112,16 @@ export const ExportWorkflowListColumn: () => ActiontechTableColumn<IListDataExpo
             return <CustomAvatar key={v.uid} name={v.name} />;
           });
         }
+      },
+      {
+        dataIndex: 'project_name',
+        title: formatMessage({
+          id: 'execWorkflow.list.project',
+          defaultMessage: '所属项目'
+        }),
+        render: (project_name) => {
+          return project_name;
+        }
       }
     ];
   };

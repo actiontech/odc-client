@@ -6,6 +6,7 @@ import {
   GetDataExportTaskStatusEnum,
   GetUserAuthenticationTypeEnum,
   GetUserStatEnum,
+  GetUserSystemEnum,
   ListDBServiceLastConnectionTestStatusEnum,
   ListDBServiceV2LastConnectionTestStatusEnum,
   ListDataExportWorkflowStatusEnum,
@@ -19,6 +20,7 @@ import {
   ListRoleStatEnum,
   ListUserAuthenticationTypeEnum,
   ListUserStatEnum,
+  ListUserSystemEnum,
   ListUserGroupStatEnum,
   MemberRoleWithOpRangeOpRangeTypeEnum,
   OpPermissionItemOpPermissionTypeEnum,
@@ -28,8 +30,10 @@ import {
   ProjectV2ProjectPriorityEnum,
   SQLQueryConfigAllowQueryWhenLessThanAuditLevelEnum,
   TestFeishuConfigurationAccountTypeEnum,
+  UpdateCurrentUserSystemEnum,
   UpdateProjectProjectPriorityEnum,
   UpdateProjectV2ProjectPriorityEnum,
+  UpdateUserSystemEnum,
   WorkflowRecordStatusEnum,
   WorkflowStepStateEnum
 } from './common.enum';
@@ -1018,6 +1022,14 @@ export interface IGetSmsConfigurationReplyItem {
   url?: string;
 }
 
+export interface IGetSystemVariablesReply {
+  code?: number;
+
+  data?: ISystemVariablesResV1;
+
+  message?: string;
+}
+
 export interface IGetUser {
   access_token_info?: IAccessTokenInfo;
 
@@ -1036,6 +1048,8 @@ export interface IGetUser {
   phone?: string;
 
   stat?: GetUserStatEnum;
+
+  system?: GetUserSystemEnum;
 
   third_party_user_info?: string;
 
@@ -1537,6 +1551,8 @@ export interface IListDataExportWorkflow {
 
   exported_at?: string;
 
+  project_name?: string;
+
   project_uid?: string;
 
   status?: ListDataExportWorkflowStatusEnum;
@@ -1944,6 +1960,8 @@ export interface IListUser {
   projects?: string[];
 
   stat?: ListUserStatEnum;
+
+  system?: ListUserSystemEnum;
 
   third_party_user_info?: string;
 
@@ -2428,6 +2446,20 @@ export interface ISyncGatewayReq {
   gateways?: IGateway[];
 }
 
+export interface ISystemVariablesResV1 {
+  cb_operation_logs_expired_hours?: number;
+
+  operation_record_expired_hours?: number;
+
+  system_variable_sql_manage_raw_expired_hours?: number;
+
+  system_variable_ssh_primary_key?: string;
+
+  system_variable_workflow_expired_hours?: number;
+
+  url?: string;
+}
+
 export interface ITask {
   task_uid?: string;
 }
@@ -2586,6 +2618,8 @@ export interface IUpdateCurrentUser {
   password?: string;
 
   phone?: string;
+
+  system?: UpdateCurrentUserSystemEnum;
 
   two_factor_enabled?: boolean;
 
@@ -2814,6 +2848,20 @@ export interface IUpdateSmsConfigurationReq {
   update_sms_configuration?: IUpdateSmsConfiguration;
 }
 
+export interface IUpdateSystemVariablesReqV1 {
+  cb_operation_logs_expired_hours?: number;
+
+  operation_record_expired_hours?: number;
+
+  system_variable_sql_manage_raw_expired_hours?: number;
+
+  system_variable_ssh_primary_key?: string;
+
+  system_variable_workflow_expired_hours?: number;
+
+  url?: string;
+}
+
 export interface IUpdateUser {
   email?: string;
 
@@ -2826,6 +2874,8 @@ export interface IUpdateUser {
   password?: string;
 
   phone?: string;
+
+  system?: UpdateUserSystemEnum;
 
   third_party_user_id?: string;
 

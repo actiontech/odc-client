@@ -4,14 +4,15 @@ import {
   useTableRequestError,
   ActiontechTable,
   ActiontechTableWrapper,
-  PageHeader
+  PageHeader,
+  ROUTE_PATHS
 } from '@actiontech/dms-kit';
 import { useRequest } from 'ahooks';
 import { useMemo, useState } from 'react';
 import { ExportWorkflowListColumn } from './column';
 import WorkflowStatusFilter from './components/WorkflowStatusFilter';
-import { IListDataExportWorkflowsParams } from '@/external_api/base/DataExportWorkflows/index.type';
-import { ListDataExportWorkflowsFilterByStatusEnum } from '@/external_api/base/DataExportWorkflows/index.enum';
+import { IListAllDataExportWorkflowsParams } from '@/external_api/base/DataExportWorkflows/index.type';
+import { ListAllDataExportWorkflowsFilterByStatusEnum } from '@/external_api/base/DataExportWorkflows/index.enum';
 import {
   DataExportWorkflowsService,
   SessionService
@@ -26,7 +27,7 @@ const ExportWorkflowList: React.FC<{ modalStore?: ModalStore }> = ({
   modalStore
 }) => {
   const [filterStatus, setFilterStatus] = useState<
-    ListDataExportWorkflowsFilterByStatusEnum | 'all'
+    ListAllDataExportWorkflowsFilterByStatusEnum | 'all'
   >('all');
   const { requestErrorMessage, handleTableRequestError } =
     useTableRequestError();
@@ -56,18 +57,18 @@ const ExportWorkflowList: React.FC<{ modalStore?: ModalStore }> = ({
         id: 'dmsDataExport.iframe.title',
         defaultMessage: '工单详情'
       }),
-      url: getDetailUrl(record.workflow_uid)
+      url: getDetailUrl(record)
     });
   };
 
-  // 构建详情页面 URL（用户可以后续调整）
-  const getDetailUrl = (workflowId: string): URL => {
-    // TODO: 调整 URL以及初次登陆问题
-    // return `http://10.186.62.13:11000${ROUTE_PATHS.BASE.DATA_EXPORT.detail.prefix.replace(
-    //   ':projectID',
-    //   projectID
-    // )}/${workflowId}`;
-    return new URL('');
+  const getDetailUrl = (record: IListDataExportWorkflow): URL => {
+    return new URL(
+      `${ROUTE_PATHS.BASE.DATA_EXPORT.detail.prefix.replace(
+        ':projectID',
+        record.project_uid
+      )}/${record.workflow_uid}`,
+      window.location.origin
+    );
   };
 
   const tableAction = exportDataWorkflowAction(getDetailUrl);
@@ -82,16 +83,14 @@ const ExportWorkflowList: React.FC<{ modalStore?: ModalStore }> = ({
     refresh
   } = useRequest(
     () => {
-      const params: IListDataExportWorkflowsParams = {
+      const params: IListAllDataExportWorkflowsParams = {
         ...pagination,
         filter_by_status: filterStatus === 'all' ? undefined : filterStatus,
-        // todo 项目id，后续需要换成全局接口
-        project_uid: '700300',
         fuzzy_keyword: searchKeyword,
         filter_by_create_user_uid: userUID
       };
       return handleTableRequestError(
-        DataExportWorkflowsService.ListDataExportWorkflows(params)
+        DataExportWorkflowsService.ListAllDataExportWorkflows(params)
       );
     },
     {

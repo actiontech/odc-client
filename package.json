@@ -41,7 +41,7 @@
     "test": "max test",
     "type-check": "tsc --noEmit",
     "updateDoc": "node ./scripts/pulldoc.js",
-    "api_client:g": "actiontech/cli api-client -y",
+    "api_client:g": "actionsky-cli api-client -y",
     "checker": "concurrently \"pnpm type-check\" \"pnpm eslint\" \"pnpm prettier:c\"",
     "ai-doc": "actionsky-cli ai-doc"
   },
