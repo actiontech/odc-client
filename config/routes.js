@@ -34,12 +34,12 @@ module.exports = [
             //     { path: '/', component: '@/layout/DefaultRedirect'},
             //   ],
             // },
-            {
-              path: '/login',
-              name: 'login',
-              component: '@/page/Login',
-              spmBPos: 'b41895',
-            },
+            // {
+            //   path: '/login',
+            //   name: 'login',
+            //   component: '@/page/Login',
+            //   spmBPos: 'b41895',
+            // },
             // {
             //   path: '/testLDAP',
             //   name: 'testLDAP',
