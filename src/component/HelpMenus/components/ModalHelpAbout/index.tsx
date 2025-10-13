@@ -67,7 +67,7 @@ export default class ModalHelp extends PureComponent<{
           <Space size={18}>
             <img
               style={{ height: 16 }}
-              src={window.publicPath + 'img/ob_logo.svg'}
+              src={window.publicPath + 'img/logo.png'}
             />
             <a
               href="https://github.com/oceanbase/odc"

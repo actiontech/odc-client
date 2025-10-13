@@ -15,7 +15,6 @@ import { formatMessage } from '@/util/intl';
  * limitations under the License.
  */
 
-import { ReactComponent as ODCBlackSvg } from '@/svgr/odc_logo_color.svg';
 import { isClient } from '@/util/env';
 import Icon, { HomeOutlined } from '@ant-design/icons';
 import { useState } from 'react';
@@ -71,7 +70,7 @@ export default function Logo() {
           />
         </BasicToolTip>
       ) : (
-        <Icon component={ODCBlackSvg} style={{ fontSize: 16, padding: 6 }} />
+        <Icon component={HomeOutlined} style={{ fontSize: 16, padding: 6 }} />
       )}
     </span>
   );
