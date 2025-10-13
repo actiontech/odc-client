@@ -242,10 +242,9 @@ export default (api: IApi) => {
                 <div class="dot"></div>
             </div>
         </div>
-        <img src="/odc_query/img/odc_icon.svg" width="90px" />
+        <img src="/odc_query/img/logo.png" width="90px" />
         <span class='loading-tip'>Downloading</span>
-    </div>`,
-      `<img id="ob-loading-icon" src="/odc_query/img/ob_logo.svg" />`
+    </div>`
     ]);
     return $;
   });

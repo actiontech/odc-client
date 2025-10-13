@@ -39,7 +39,7 @@ export default (props: {
             </div>
           </div>
         ) : null}
-        <img src={window.publicPath + 'img/odc_icon.svg'} width="90px" />
+        <img src={window.publicPath + 'img/logo.png'} width="90px" />
         {props.tip ? <span className={styles.tip}>{props.tip}</span> : null}
         {props.showError ? (
           <strong style={{ color: '#ff4d4f' }}>
@@ -63,10 +63,6 @@ export default (props: {
             ) //`前方还有${props.queue.waitNumber}人正在排队中，请耐心等待。`
           : null}
       </div>
-      <img
-        className={styles['ob-loading-icon']}
-        src={window.publicPath + 'img/ob_logo.svg'}
-      />
     </div>
   );
 };

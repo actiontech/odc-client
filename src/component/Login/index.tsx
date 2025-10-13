@@ -17,7 +17,6 @@
 import LocalMenus from '@/component/LocalMenus';
 import { ESSOLgoinType } from '@/d.ts';
 import { LDAPLogin } from '@/page/Login/components/LDAPModal';
-import { ReactComponent as LogoImg } from '@/svgr/ob_logo.svg';
 import { formatMessage } from '@/util/intl';
 import { useControllableValue } from 'ahooks';
 import { Divider, message, Typography } from 'antd';
@@ -269,11 +268,11 @@ const Login: React.FC<LoginProps> = (props) => {
             </div>
           )}
 
-          {showWaterMark ? (
+          {/* {showWaterMark ? (
             <div className={`${prefix}-watermark-wrapper`}>
               <LogoImg className={`${prefix}-watermark`} />
             </div>
-          ) : null}
+          ) : null} */}
         </div>
       </div>
     </div>

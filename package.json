@@ -192,7 +192,7 @@
     "xterm": "^4.9.0",
     "xterm-addon-fit": "^0.4.0"
   },
-  "appName": "OceanBase Developer Center",
+  "appName": "DMS Workbench",
   "build": {
     "extends": "build/electron-build.config.js",
     "electronDownload": {

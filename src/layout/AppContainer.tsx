@@ -147,7 +147,7 @@ const AppContainer: React.FC<IBasicLayoutProps> = (
     };
   };
   const getPageTitle = (pathname: any) => {
-    return 'OceanBase Developer Center';
+    return 'DMS Workbench';
   };
   useEffect(() => {
     // LocalStorageWrapper.set(
