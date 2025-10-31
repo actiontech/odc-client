@@ -44,7 +44,7 @@ const SqlExecWorkflowList: React.FC<{ modalStore?: ModalStore }> = ({
     () => {
       const params: IGetGlobalWorkflowsV1Params = {
         ...pagination,
-        filter_status_list: [filterStatus],
+        filter_status_list: filterStatus ? [filterStatus] : undefined,
         filter_create_user_id: userUID
       };
       return handleTableRequestError(
