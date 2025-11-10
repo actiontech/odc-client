@@ -64,6 +64,7 @@ import { isString } from 'lodash';
 import DatabaseSelectEmpty from '@/component/Empty/DatabaseSelectEmpty';
 import { ReactComponent as ProjectSvg } from '@/svgr/project_space.svg';
 import Icon from '@ant-design/icons';
+import Logo from '../../ActivityBar/Logo';
 
 interface IProps {
   sessionManagerStore?: SessionManagerStore;
@@ -461,10 +462,13 @@ const ResourceTree: React.FC<IProps> = function ({
       <div className={styles.resourceTree}>
         <div className={styles.title}>
           <span className={styles.titleText}>
-            {formatMessage({
-              id: 'src.page.Workspace.SideBar.ResourceTree.87784E3D',
-              defaultMessage: '数据库'
-            })}
+            <Logo />
+            <span>
+              {formatMessage({
+                id: 'src.page.Workspace.SideBar.ResourceTree.87784E3D',
+                defaultMessage: '数据库'
+              })}
+            </span>
           </span>
           <span className={styles.titleAction}>
             <Space size={8} style={{ lineHeight: 1.5 }}>

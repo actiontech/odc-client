@@ -68,7 +68,7 @@ const WorkBenchLayout: React.FC<IProps> = function ({ editorGroup }) {
   };
   return (
     <WorkspaceLayoutStyleWrapper className="workbench">
-      <ActivityBar />
+      {/* <ActivityBar /> */}
 
       <div className="splitPane">
         <SplitPane

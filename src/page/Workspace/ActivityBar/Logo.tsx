@@ -65,7 +65,7 @@ export default function Logo() {
               fontSize: 16,
               padding: 6,
               backgroundColor: 'var(--hover-color)',
-              cursor: 'pointer'
+              cursor: 'pointer !important'
             }}
           />
         </BasicToolTip>
