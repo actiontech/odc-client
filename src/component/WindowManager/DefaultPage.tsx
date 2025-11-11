@@ -17,17 +17,14 @@
 import { formatMessage } from '@/util/intl';
 import { Typography } from 'antd';
 
-import Icon, { FormatPainterFilled } from '@ant-design/icons';
+import Icon from '@ant-design/icons';
 
 import styles from './DefaultPage.less';
 
 import { ReactComponent as ConsoleSQLSvg } from '@/svgr/Console-SQL.svg';
-import { ReactComponent as TaskSvg } from '@/svgr/icon_task.svg';
 
-import { ActivityBarItemType } from '@/page/Workspace/ActivityBar/type';
 import ActivityBarContext from '@/page/Workspace/context/ActivityBarContext';
 import { openNewDefaultPLPage, openNewSQLPage } from '@/store/helper/page';
-import setting, { EThemeConfigKey } from '@/store/setting';
 import { ReactComponent as ConsolePLSvg } from '@/svgr/Console-PL.svg';
 import tracert from '@/util/tracert';
 import { useContext, useEffect } from 'react';
@@ -36,7 +33,6 @@ export default function DefaultPage() {
   useEffect(() => {
     tracert.expo('a3112.b41896.c330987');
   }, []);
-  const context = useContext(ActivityBarContext);
   return (
     <div
       style={{
@@ -73,67 +69,6 @@ export default function DefaultPage() {
               id: 'odc.component.WindowManager.DefaultPage.OpenTheSqlWindow',
               defaultMessage: '打开 SQL 窗口'
             }) /*打开 SQL 窗口*/
-          }
-        </div>
-      </div>
-      <div
-        onClick={() => {
-          tracert.click('a3112.b41896.c330987.d367618');
-          openNewDefaultPLPage(null, null, null);
-        }}
-        className={styles.item}
-      >
-        <div className={styles.icon}>
-          <Icon component={ConsolePLSvg} />
-        </div>
-        <div className={styles.label}>
-          {
-            formatMessage({
-              id: 'odc.component.WindowManager.DefaultPage.OpenTheAnonymousBlockWindow',
-              defaultMessage: '打开匿名块窗口'
-            }) /*打开匿名块窗口*/
-          }
-        </div>
-      </div>
-      <div
-        onClick={() => {
-          tracert.click('a3112.b41896.c330987.d367619');
-          context?.setActiveKey(ActivityBarItemType.Task);
-        }}
-        className={styles.item}
-      >
-        <div className={styles.icon}>
-          <Icon component={TaskSvg} />
-        </div>
-        <div className={styles.label}>
-          {
-            formatMessage({
-              id: 'odc.component.WindowManager.DefaultPage.ViewTickets',
-              defaultMessage: '查看工单'
-            }) /*查看工单*/
-          }
-        </div>
-      </div>
-      <div
-        onClick={() => {
-          tracert.click('a3112.b41896.c330987.d367620');
-          setting.setTheme(
-            setting.theme?.key === EThemeConfigKey.ODC_WHITE
-              ? EThemeConfigKey.ODC_DARK
-              : EThemeConfigKey.ODC_WHITE
-          );
-        }}
-        className={styles.item}
-      >
-        <div className={styles.icon}>
-          <Icon component={FormatPainterFilled} />
-        </div>
-        <div className={styles.label}>
-          {
-            formatMessage({
-              id: 'odc.component.WindowManager.DefaultPage.SwitchTopics',
-              defaultMessage: '切换主题'
-            }) /*切换主题*/
           }
         </div>
       </div>

@@ -50,13 +50,6 @@ const CustomAddTabTrigger: React.FC<CustomAddTabTriggerProps> = ({
         defaultMessage: '新建 SQL 窗口'
       }),
       key: 'newSQL'
-    },
-    {
-      label: formatMessage({
-        id: 'odc.src.component.WindowManager.CreateAnonymousBlockWindow',
-        defaultMessage: '新建匿名块窗口'
-      }),
-      key: 'newPL'
     }
   ];
 

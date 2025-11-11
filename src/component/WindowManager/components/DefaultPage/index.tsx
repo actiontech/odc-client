@@ -61,42 +61,6 @@ export default function DefaultPage() {
             }
           </div>
         </DefaultPageItemStyleWrapper>
-        <DefaultPageItemStyleWrapper
-          onClick={() => {
-            tracert.click('a3112.b41896.c330987.d367618');
-            openNewDefaultPLPage(null, null, null);
-          }}
-        >
-          <div className="icon">
-            <Icon component={ConsolePLSvg} />
-          </div>
-          <div className="label">
-            {
-              formatMessage({
-                id: 'odc.component.WindowManager.DefaultPage.OpenTheAnonymousBlockWindow',
-                defaultMessage: '打开匿名块窗口'
-              }) /*打开匿名块窗口*/
-            }
-          </div>
-        </DefaultPageItemStyleWrapper>
-        <DefaultPageItemStyleWrapper
-          onClick={() => {
-            tracert.click('a3112.b41896.c330987.d367619');
-            context?.setActiveKey(ActivityBarItemType.Task);
-          }}
-        >
-          <div className="icon">
-            <Icon component={TaskSvg} />
-          </div>
-          <div className="label">
-            {
-              formatMessage({
-                id: 'odc.component.WindowManager.DefaultPage.ViewTickets',
-                defaultMessage: '查看工单'
-              }) /*查看工单*/
-            }
-          </div>
-        </DefaultPageItemStyleWrapper>
       </div>
     </DefaultPageStyleWrapper>
   );

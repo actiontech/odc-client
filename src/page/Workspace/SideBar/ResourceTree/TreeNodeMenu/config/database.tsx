@@ -104,27 +104,27 @@ export const databaseMenusConfig: Partial<
         return isLogicalDatabase(node?.data);
       }
     },
-    {
-      key: 'NEW_PL',
-      text: [
-        formatMessage({
-          id: 'odc.TreeNodeMenu.config.database.OpenTheAnonymousBlockWindow',
-          defaultMessage: '打开匿名块窗口'
-        }) //打开匿名块窗口
-      ],
-      isHide(_, node) {
-        const database: IDatabase = node.data;
-        return (
-          !getDataSourceModeConfig(database?.dataSource?.type)?.features
-            ?.anonymousBlock || isLogicalDatabase(database)
-        );
-      },
-      ellipsis: true,
-      run(session, node) {
-        const database: IDatabase = node.data;
-        openNewDefaultPLPage(null, node.cid, database?.name);
-      }
-    },
+    // {
+    //   key: 'NEW_PL',
+    //   text: [
+    //     formatMessage({
+    //       id: 'odc.TreeNodeMenu.config.database.OpenTheAnonymousBlockWindow',
+    //       defaultMessage: '打开匿名块窗口'
+    //     }) //打开匿名块窗口
+    //   ],
+    //   isHide(_, node) {
+    //     const database: IDatabase = node.data;
+    //     return (
+    //       !getDataSourceModeConfig(database?.dataSource?.type)?.features
+    //         ?.anonymousBlock || isLogicalDatabase(database)
+    //     );
+    //   },
+    //   ellipsis: true,
+    //   run(session, node) {
+    //     const database: IDatabase = node.data;
+    //     openNewDefaultPLPage(null, node.cid, database?.name);
+    //   }
+    // },
     // {
     //   key: 'NEW_OBCLIENT',
     //   text: [
