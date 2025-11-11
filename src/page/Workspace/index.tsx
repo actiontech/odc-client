@@ -51,11 +51,18 @@ import { isLogicalDatabase } from '@/util/database';
 import { ResourceNodeType } from '@/page/Workspace/SideBar/ResourceTree/type';
 import { getAsyncResultSet } from '@/common/network/task';
 import DMSIframeModal from '../../component/DMSIframeModal';
+import { UI_VERSION } from '@/constant/version';
 
 let _closeMsg = '';
 export function changeCloseMsg(t: any) {
   _closeMsg = t;
 }
+
+// eslint-disable-next-line no-console
+console.log(
+  '======================= UI_VERSION =======================',
+  UI_VERSION
+);
 
 interface WorkspaceProps {
   pageStore: PageStore;
