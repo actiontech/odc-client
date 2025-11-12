@@ -107,7 +107,6 @@ import useColumns, { isNumberType } from './hooks/useColumns';
 import styles from './index.less';
 import ResultContext from './ResultContext';
 import StatusBar from './StatusBar';
-import { copyToSQL, getColumnNameByColumnKey } from './util';
 import Sync from './Sync';
 import {
   BasicInputNumber,
@@ -481,63 +480,15 @@ const DDLResultSet: React.FC<IProps> = function (props) {
         selectedRange?.columnIdx === selectedRange?.endColumnIdx &&
         selectedRange?.rowIdx === selectedRange?.endRowIdx;
       const tableColumns: Partial<ITableColumn>[] = table?.columns;
-      const columnName = getColumnNameByColumnKey(columnKey, columns);
       const column: Partial<ResultSetColumn> = columns?.find((column) => {
         return column?.key === columnKey;
       });
       const isMasked = column?.masked;
-      const isSelectedRow = !!gridRef.current?.selectedRows?.size;
-      const clipMenu = {
-        key: 'clip',
-        text: formatMessage({
-          id: 'odc.components.DDLResultSet.OutputToShearPlate',
-          defaultMessage: '输出到剪切板'
-        }),
-        isShowRowSelected: true,
-        // 输出到剪切板
-        children: [
-          {
-            key: 'clip-sql',
-            text: 'SQL',
-            // SQL 文件
-            onClick: clipSQL
-          },
-          {
-            key: 'clip-csv',
-            text: 'CSV',
-            // CSV 文件
-            onClick: clipCsv
-          }
-        ]
-      };
+
       function copy() {
         defaultOnCopy(gridRef.current);
       }
-      function clipSQL() {
-        if (!tableColumns || (!columnName && !isSelectedRow)) {
-          copyToSQL(
-            gridRef.current,
-            columns,
-            undefined,
-            session?.connection?.dialectType,
-            rows
-          );
-        } else {
-          copyToSQL(
-            gridRef.current,
-            columns,
-            table?.tableName,
-            session?.connection?.dialectType,
-            rows
-          );
-        }
-      }
-      function clipCsv() {
-        defaultOnCopyCsv(gridRef.current);
-      }
-      if (isSelectedRow) {
-        return [clipMenu];
-      }
+
       if (!tableColumns) {
         return [
           {
@@ -547,8 +498,7 @@ const DDLResultSet: React.FC<IProps> = function (props) {
               defaultMessage: '复制'
             }),
             onClick: copy
-          },
-          clipMenu
+          }
         ];
       }
       if (!column) {
@@ -570,7 +520,6 @@ const DDLResultSet: React.FC<IProps> = function (props) {
           }),
           onClick: copy
         },
-        clipMenu,
         isEditing &&
           isSingleSelected && {
             key: 'setnull',

@@ -49,12 +49,12 @@ const config = {
       pathRewrite: { '^/external_api' : '' },
     },
     '/odc_query': {
-      target: 'http://10.186.64.51:8989',
+      target: 'http://10.186.63.28:8989',
       pathRewrite: { '^/odc_query' : '' },
     },
     // 本地开发或者对内 Site 应用的开发环境的代理配置
     '/api/v1/webSocket/obclient': {
-      target: 'http://10.186.64.51:8989',
+      target: 'http://10.186.63.146:8989',
       ws: true,
     },
   },
@@ -64,7 +64,7 @@ const config = {
     antd: true,
   },
   title: false,
-  favicons: [publicPath + 'img/favicon.png'],
+  favicons: [publicPath + 'img/logo.png'],
   // ctoken: false,
   clickToComponent: {},
   externals: {

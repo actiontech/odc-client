@@ -126,7 +126,7 @@ const ObjectList = ({ modalStore }: Iprops) => {
                   defaultMessage: '暂无数据'
                 })}
               </p>
-              <p>
+              {/* <p>
                 {formatMessage({
                   id: 'src.page.Workspace.SideBar.ResourceTree.DatabaseSearchModal.components.0A19E90A',
                   defaultMessage: '请尝试'
@@ -155,7 +155,7 @@ const ObjectList = ({ modalStore }: Iprops) => {
                   id: 'src.page.Workspace.SideBar.ResourceTree.DatabaseSearchModal.components.6B9FDF51',
                   defaultMessage: '，或联系管理员'
                 })}
-              </p>
+              </p> */}
             </div>
           }
         />
@@ -302,7 +302,7 @@ const ObjectList = ({ modalStore }: Iprops) => {
                               <div
                                 className={styles.objectTypeItem}
                                 onClick={(e) => {
-                                  let params = {
+                                  const params = {
                                     type: undefined,
                                     database: undefined,
                                     name: undefined,
@@ -522,7 +522,7 @@ const ObjectList = ({ modalStore }: Iprops) => {
                   <div
                     className={styles.objectItem}
                     onClick={(e) => {
-                      let params = {
+                      const params = {
                         type: undefined,
                         database: undefined,
                         name: undefined,

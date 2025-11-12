@@ -227,7 +227,7 @@ const List = ({ modalStore }: Iprops) => {
                     defaultMessage: '暂无数据'
                   })}
                 </p>
-                <p>
+                {/* <p>
                   {formatMessage({
                     id: 'src.page.Workspace.SideBar.ResourceTree.DatabaseSearchModal.components.7880C5CD',
                     defaultMessage: '请尝试'
@@ -256,7 +256,7 @@ const List = ({ modalStore }: Iprops) => {
                     id: 'src.page.Workspace.SideBar.ResourceTree.DatabaseSearchModal.components.55AB56DF',
                     defaultMessage: '，或联系管理员'
                   })}
-                </p>
+                </p> */}
               </div>
             }
           />
