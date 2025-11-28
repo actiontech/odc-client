@@ -56,6 +56,12 @@ export const EditableTableStyleWrapper = styled(DataGrid)`
     }
   }
 
+  .rdg-row-selected.rdg-row .rdg-cell {
+    background-color: ${({ theme }) =>
+      theme.sharedTheme.basic.colorPrimaryBgHover} !important;
+    color: ${({ theme }) => theme.sharedTheme.uiToken.colorTextBase} !important;
+  }
+
   .rdg-antd-editor.ant-popover {
     padding: 0;
     .ant-popover-arrow {
