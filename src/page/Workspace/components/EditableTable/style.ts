@@ -4,6 +4,7 @@ import DataGrid from '@oceanbase-odc/ob-react-data-grid';
 export const EditableTableStyleWrapper = styled(DataGrid)`
   background-color: ${({ theme }) =>
     theme.sharedTheme.uiToken.colorBgBase} !important;
+  overflow-x: auto;
 
   &.fillGrid {
     height: 100%;
@@ -54,6 +55,12 @@ export const EditableTableStyleWrapper = styled(DataGrid)`
       color: ${({ theme }) =>
         theme.sharedTheme.uiToken.colorTextBase} !important;
     }
+  }
+
+  .rdg-row-selected.rdg-row .rdg-cell {
+    background-color: ${({ theme }) =>
+      theme.sharedTheme.basic.colorPrimaryBgHover} !important;
+    color: ${({ theme }) => theme.sharedTheme.uiToken.colorTextBase} !important;
   }
 
   .rdg-antd-editor.ant-popover {
