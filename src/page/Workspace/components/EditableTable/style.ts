@@ -4,7 +4,6 @@ import DataGrid from '@oceanbase-odc/ob-react-data-grid';
 export const EditableTableStyleWrapper = styled(DataGrid)`
   background-color: ${({ theme }) =>
     theme.sharedTheme.uiToken.colorBgBase} !important;
-  overflow-x: auto;
 
   &.fillGrid {
     height: 100%;
