@@ -237,32 +237,6 @@ const TablePage: React.FC<IProps> = function ({
             ]}
             value={topTab}
           />
-          <Space>
-            {settingStore.enableDBExport &&
-            getDataSourceModeConfig(
-              session?.connection?.type
-            )?.features?.task?.includes(TaskType.EXPORT) &&
-            !isLogicalDatabase(session?.odcDatabase) &&
-            !isExternalTable ? (
-              <Toolbar.Button
-                text={
-                  formatMessage({
-                    id: 'odc.components.TablePage.Export',
-                    defaultMessage: '导出'
-                  }) //导出
-                }
-                icon={ExportOutlined}
-                isShowText
-                onClick={() => {
-                  modal.changeExportModal(true, {
-                    type: DbObjectType.table,
-                    name: table?.info?.tableName,
-                    databaseId: session?.database.databaseId
-                  });
-                }}
-              />
-            ) : null}
-          </Space>
         </div>
         <TablePageContext.Provider
           value={{
