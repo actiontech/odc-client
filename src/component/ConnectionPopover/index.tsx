@@ -160,10 +160,9 @@ const ConnectionPopover: React.FC<{
       </div>
     );
   }
-  const [projectName] = database?.name.includes(':')
-    ? database?.name.split(':')
+  const [projectName] = database?.dataSource?.name.includes(':')
+    ? database?.dataSource?.name.split(':')
     : [];
-
   if (isLogicDb) {
     return (
       <div
