@@ -47,9 +47,6 @@ const ConnectionPopover: React.FC<{
   } = props;
   const isLogicDb = isLogicalDatabase(database);
   const isFileSyetem = isConnectTypeBeFileSystemGroup(connection?.type);
-  if (!connection && !isLogicDb) {
-    return null;
-  }
 
   const DBIcon = getDataSourceStyleByConnectType(
     connection?.type || database?.connectType
@@ -100,6 +97,10 @@ const ConnectionPopover: React.FC<{
       </div>
     );
   }, [database, connection]);
+
+  if (!connection && !isLogicDb) {
+    return null;
+  }
 
   if (isFileSyetem) {
     return (
@@ -159,6 +160,9 @@ const ConnectionPopover: React.FC<{
       </div>
     );
   }
+  const [projectName] = database?.name.includes(':')
+    ? database?.name.split(':')
+    : [];
 
   if (isLogicDb) {
     return (
@@ -217,7 +221,7 @@ const ConnectionPopover: React.FC<{
                 id: 'src.component.ConnectionPopover.7A5FFB14',
                 defaultMessage: '项目: {databaseProjectName}'
               },
-              { databaseProjectName: database?.project?.name }
+              { databaseProjectName: projectName ?? '-' }
             )}
           </div>
           <div>
@@ -239,63 +243,63 @@ const ConnectionPopover: React.FC<{
     );
   }
 
-  let clusterAndTenant = (
-    <div className={styles.describe}>
-      <span className={styles.label}>
-        {
-          formatMessage({
-            id: 'odc.components.Header.ConnectionPopover.ClusterTenant',
-            defaultMessage: '集群/租户：'
-          })
+  // let clusterAndTenant = (
+  //   <div className={styles.describe}>
+  //     <span className={styles.label}>
+  //       {
+  //         formatMessage({
+  //           id: 'odc.components.Header.ConnectionPopover.ClusterTenant',
+  //           defaultMessage: '集群/租户：'
+  //         })
 
-          /*集群/租户：*/
-        }
-      </span>
-      <span className={styles.content}>
-        {connection?.clusterName || '- '}/{connection?.tenantName || ' -'}
-      </span>
-    </div>
-  );
+  //         /*集群/租户：*/
+  //       }
+  //     </span>
+  //     <span className={styles.content}>
+  //       {connection?.clusterName || '- '}/{connection?.tenantName || ' -'}
+  //     </span>
+  //   </div>
+  // );
 
-  if (haveOCP()) {
-    const isTenantInstance =
-      !!clusterStore.tenantListMap?.[connection?.tenantName];
-    if (isTenantInstance) {
-      clusterAndTenant = (
-        <div className={styles.describe}>
-          <span className={styles.label}>
-            {
-              formatMessage({
-                id: 'odc.component.ConnectionPopover.InstanceId',
-                defaultMessage: '实例 ID:'
-              })
+  // if (haveOCP()) {
+  //   const isTenantInstance =
+  //     !!clusterStore.tenantListMap?.[connection?.tenantName];
+  //   if (isTenantInstance) {
+  //     clusterAndTenant = (
+  //       <div className={styles.describe}>
+  //         <span className={styles.label}>
+  //           {
+  //             formatMessage({
+  //               id: 'odc.component.ConnectionPopover.InstanceId',
+  //               defaultMessage: '实例 ID:'
+  //             })
 
-              /*实例 ID:*/
-            }
-          </span>
-          <span className={styles.content}>{connection?.tenantName}</span>
-        </div>
-      );
-    } else {
-      clusterAndTenant = (
-        <div className={styles.describe}>
-          <span className={styles.label}>
-            {
-              formatMessage({
-                id: 'odc.component.ConnectionPopover.InstanceIdTenantId',
-                defaultMessage: '实例ID/租户ID:'
-              })
+  //             /*实例 ID:*/
+  //           }
+  //         </span>
+  //         <span className={styles.content}>{connection?.tenantName}</span>
+  //       </div>
+  //     );
+  //   } else {
+  //     clusterAndTenant = (
+  //       <div className={styles.describe}>
+  //         <span className={styles.label}>
+  //           {
+  //             formatMessage({
+  //               id: 'odc.component.ConnectionPopover.InstanceIdTenantId',
+  //               defaultMessage: '实例ID/租户ID:'
+  //             })
 
-              /*实例ID/租户ID:*/
-            }
-          </span>
-          <span className={styles.content}>
-            {connection?.clusterName}/{connection?.tenantName}
-          </span>
-        </div>
-      );
-    }
-  }
+  //             /*实例ID/租户ID:*/
+  //           }
+  //         </span>
+  //         <span className={styles.content}>
+  //           {connection?.clusterName}/{connection?.tenantName}
+  //         </span>
+  //       </div>
+  //     );
+  //   }
+  // }
   function renderConnectionMode() {
     if (isLogicDb) return;
     const { type } = connection;
@@ -392,7 +396,7 @@ const ConnectionPopover: React.FC<{
           </div>
         )}
 
-        {clusterAndTenant}
+        {/* {clusterAndTenant} */}
         <div className={styles.label}>
           {
             formatMessage(
