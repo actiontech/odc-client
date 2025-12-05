@@ -82,6 +82,19 @@ const ConnectionPopover: React.FC<{
     );
   }, [connection, database]);
 
+  const projectName = useMemo(() => {
+    const getProjectName = (dataSourceName: string) => {
+      const [projectName] = dataSourceName.includes(':')
+        ? dataSourceName.split(':')
+        : [];
+      return projectName;
+    };
+    if (connection) {
+      return getProjectName(connection?.name);
+    }
+    return getProjectName(database?.dataSource?.name);
+  }, [connection, database?.dataSource?.name]);
+
   const projectDescription = useMemo(() => {
     return (
       <div className={styles.describe}>
@@ -91,12 +104,10 @@ const ConnectionPopover: React.FC<{
             defaultMessage: '项目：'
           })}
         </span>
-        <div className={styles.content}>
-          {database?.project?.name || connection?.projectName || '-'}
-        </div>
+        <div className={styles.content}>{projectName || '-'}</div>
       </div>
     );
-  }, [database, connection]);
+  }, [projectName]);
 
   if (!connection && !isLogicDb) {
     return null;
@@ -160,9 +171,7 @@ const ConnectionPopover: React.FC<{
       </div>
     );
   }
-  const [projectName] = database?.dataSource?.name.includes(':')
-    ? database?.dataSource?.name.split(':')
-    : [];
+
   if (isLogicDb) {
     return (
       <div
