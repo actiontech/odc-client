@@ -114,6 +114,7 @@ interface ISQLPageState {
   baseOffset: number;
   status: EStatus;
   hasExecuted: boolean;
+  approvalRequired: boolean;
 }
 
 interface IProps {
@@ -173,7 +174,8 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
     baseOffset: 0,
     status: null,
     hasExecuted: false,
-    isSavingScript: false
+    isSavingScript: false,
+    approvalRequired: false
   };
 
   public editor: IEditor;
@@ -403,6 +405,9 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
       false,
       selectedSQL ? await utils.getCurrentSelectRange(this.editor) : null
     );
+    this.setState({
+      approvalRequired: !!result?.approvalRequired
+    });
     if (selectedSQL) {
       if (range.begin === range.end) {
         this.setState({
@@ -1064,7 +1069,7 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
             this.getSession()?.params?.delimiter
           )
         )?.sql;
-        let trimSQL = selectedSQL?.trim();
+        const trimSQL = selectedSQL?.trim();
         if (trimSQL?.endsWith(this.getSession()?.params?.delimiter)) {
           selectedSQL = trimSQL?.slice(
             0,
@@ -1294,6 +1299,7 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
                 unauthorizedSql={unauthorizedSql}
                 sqlChanged={sqlChanged}
                 hanldeCloseLintPage={this.hanldeCloseLintPage}
+                approvalRequired={this.state.approvalRequired}
               />
             </Spin>
           }
@@ -1376,7 +1382,6 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
       window.dispatchEvent(new Event('resize'));
     });
   }
-
   private executeSQL = async (
     sql: string,
     isSection?: boolean,

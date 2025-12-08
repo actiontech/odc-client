@@ -66,6 +66,7 @@ interface IProps {
   unauthorizedSql?: string;
   sqlChanged?: boolean;
   baseOffset: number;
+  approvalRequired: boolean;
 
   onCloseResultSet: (resultSetKey: string) => void;
   onChangeResultSetTab?: (tabKey: string) => void;
@@ -190,7 +191,8 @@ const SQLResultSet: React.FC<IProps> = function (props) {
     onUnLockResultSet,
     onCloseResultSet,
     hanldeCloseLintPage,
-    onUpdateEditing
+    onUpdateEditing,
+    approvalRequired
   } = props;
 
   const [showLockResultSetHint, setShowLockResultSetHint] = useState(false);
@@ -417,6 +419,7 @@ const SQLResultSet: React.FC<IProps> = function (props) {
                   lintResultSet={lintResultSet}
                   sqlChanged={sqlChanged}
                   baseOffset={baseOffset}
+                  approvalRequired={approvalRequired}
                 />
               )
             }
