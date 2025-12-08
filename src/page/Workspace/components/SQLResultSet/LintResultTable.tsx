@@ -22,6 +22,7 @@ import { groupByPropertyName } from '@/util/utils';
 import { useCallback, useEffect, useState } from 'react';
 import getColumns from './columns';
 import { BasicButton, BasicTable } from '@actiontech/dms-kit';
+import { compressToEncodedURIComponent } from 'lz-string';
 const LintResultTip = {
   default: formatMessage({
     id: 'odc.src.page.Workspace.components.SQLResultSet.CurrentSQLCanBeExecuted',
@@ -47,6 +48,7 @@ export interface ILintResultTableProps {
   baseOffset?: number;
   sqlChanged?: boolean;
   modalStore?: ModalStore;
+  approvalRequired?: boolean;
 }
 const LintResultTable: React.FC<ILintResultTableProps> = ({
   ctx,
@@ -58,10 +60,8 @@ const LintResultTable: React.FC<ILintResultTableProps> = ({
   lintResultSet,
   baseOffset = 0,
   sqlChanged,
-  modalStore
+  approvalRequired
 }) => {
-  const [disabled, setDisabled] = useState<boolean>(false);
-  const [tip, setTip] = useState<string>('');
   const [dataSource, setDataSource] = useState<any>([]);
   const CallbackTable = useCallback(() => {
     const columns = getColumns(showLocate, sqlChanged, ctx, baseOffset);
@@ -97,7 +97,15 @@ const LintResultTable: React.FC<ILintResultTableProps> = ({
         }
       />
     );
-  }, [lintResultSet, ctx, baseOffset, sqlChanged, dataSource, resultHeight]);
+  }, [
+    showLocate,
+    sqlChanged,
+    ctx,
+    baseOffset,
+    dataSource,
+    pageSize,
+    resultHeight
+  ]);
   useEffect(() => {
     if (Array.isArray(lintResultSet) && lintResultSet?.length) {
       const newDataSource = lintResultSet?.map((resultSet, index) => {
@@ -108,26 +116,27 @@ const LintResultTable: React.FC<ILintResultTableProps> = ({
         };
       });
       setDataSource(newDataSource);
-      const violations = lintResultSet.reduce((pre, cur) => {
-        if (cur?.violations?.length === 0) {
-          return pre;
-        }
-        return pre.concat(...cur?.violations);
-      }, []);
-      if (violations?.some((violation) => violation?.level === 2)) {
-        setDisabled(true);
-        setTip(LintResultTip.must);
-      } else if (violations?.every((violation) => violation?.level === 0)) {
-        setDisabled(true);
-        setTip(LintResultTip.default);
-      } else {
-        setDisabled(false);
-        setTip(LintResultTip.suggest);
-      }
-    } else {
-      setDisabled(true);
     }
   }, [lintResultSet]);
+
+  const onCreateWorkflowNavigate = () => {
+    const [projectName, instanceName] =
+      session?.connection?.name?.split(':') || [];
+
+    const schema = session?.database?.dbName;
+
+    const data = {
+      instanceName,
+      schema
+    };
+
+    window.open(
+      `/transit?from=odc_client&to=create_workflow&project_name=${projectName}&compression_data=${compressToEncodedURIComponent(
+        JSON.stringify(data)
+      )}`
+    );
+  };
+
   return (
     <div
       style={{
@@ -147,14 +156,8 @@ const LintResultTable: React.FC<ILintResultTableProps> = ({
           <div className="lintResultTableHeader">
             <BasicButton
               type="primary"
-              disabled={disabled}
-              onClick={() => {
-                modalStore.changeCreateAsyncTaskModal(true, {
-                  databaseId: session?.odcDatabase?.id,
-                  sql: ctx?.getSelectionContent() || ctx?.getValue(),
-                  rules: lintResultSet
-                });
-              }}
+              disabled={!approvalRequired}
+              onClick={onCreateWorkflowNavigate}
             >
               {
                 formatMessage({
@@ -165,7 +168,6 @@ const LintResultTable: React.FC<ILintResultTableProps> = ({
             */
               }
             </BasicButton>
-            <div className="tip">{tip}</div>
           </div>
         )}
 
