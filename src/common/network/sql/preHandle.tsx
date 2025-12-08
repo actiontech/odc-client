@@ -128,7 +128,8 @@ export function executeSQLPreHandle(
           executeResult: [],
           violatedRules,
           lintResultSet,
-          status: lintStatus
+          status: lintStatus,
+          approvalRequired: taskInfo?.approvalRequired
         },
         status: lintStatus,
         lintResultSet,

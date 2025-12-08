@@ -195,7 +195,7 @@ export default async function executeSQL(
     return preHandleData;
   }
   const requestId = taskInfo?.requestId;
-  let executeRes = await executeTaskManager.addAndWaitTask(
+  const executeRes = await executeTaskManager.addAndWaitTask(
     requestId,
     sessionId,
     taskInfo,

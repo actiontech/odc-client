@@ -58,8 +58,8 @@ import antd_en_US from 'antd/locale/en_US';
 import { theme } from './antdTheme';
 import useNotificationContext from '../hooks/useNotificationContext';
 import Watermark from '../component/Watermark';
-import { compressToBase64, decompressFromBase64 } from 'lz-string';
-
+import { decompressFromBase64 } from 'lz-string';
+import { DMSBaseService } from '../external_api';
 // // TODO：支持英文版
 // setLocale('zh-CN');
 
@@ -150,14 +150,6 @@ const AppContainer: React.FC<IBasicLayoutProps> = (
     return 'DMS Workbench';
   };
   useEffect(() => {
-    // LocalStorageWrapper.set(
-    //   StorageKey.Token,
-    //   'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTkwNDY1NTgsImlhdCI6MTc1OTAzOTM1OCwiaXNzIjoiYWN0aW9udGVjaCBkbXMiLCJ0eXAiOiJkbXMtdG9rZW4iLCJ1aWQiOiI3MDAyMDAifQ.9AiOmIEv1eJycibhtpbCQs2BNWvJD_OXZMj1VGNu26E'
-    // );
-    // LocalStorageWrapper.set(
-    //   StorageKey.DMS_CB_CHANNEL,
-    //   compressToBase64(JSON.stringify({ type: 'sqle_edition', data: 'ee' }))
-    // );
     async function asyncEffect() {
       const { userStore, settingStore } = props;
       const authority = undefined;
@@ -224,6 +216,32 @@ const AppContainer: React.FC<IBasicLayoutProps> = (
       });
     }
   }, [isReady, isServerReady, waitNumber, settingStore.settingLoadStatus]);
+
+  useEffect(() => {
+    const devServerAutoLogin = () => {
+      DMSBaseService.SessionService.AddSession({
+        session: {
+          username: 'admin',
+          password: 'admin'
+        }
+      }).then((res) => {
+        const token = res.data.data?.token;
+
+        if (token) {
+          LocalStorageWrapper.set(StorageKey.Token, `Bearer ${token}`);
+          document.cookie = `dms-token=${token}; path=/`;
+        }
+      });
+    };
+
+    if (
+      process.env.NODE_ENV === 'development' &&
+      document.cookie.includes('dms-token') &&
+      LocalStorageWrapper.get(StorageKey.Token)
+    ) {
+      devServerAutoLogin();
+    }
+  }, []);
   return (
     <React.Fragment>
       {/* {
