@@ -127,7 +127,8 @@ const LintResultTable: React.FC<ILintResultTableProps> = ({
 
     const data = {
       instanceName,
-      schema
+      schema,
+      sql: lintResultSet?.map((resultSet) => resultSet?.sql).join('\n\n')
     };
 
     window.open(
