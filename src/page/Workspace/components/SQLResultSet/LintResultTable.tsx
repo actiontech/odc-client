@@ -127,11 +127,12 @@ const LintResultTable: React.FC<ILintResultTableProps> = ({
 
     const data = {
       instanceName,
-      schema
+      schema,
+      sql: lintResultSet?.map((resultSet) => resultSet?.sql).join('\n\n')
     };
 
     window.open(
-      `/transit?from=odc_client&to=create_workflow&project_name=${projectName}&compression_data=${compressToEncodedURIComponent(
+      `http://10.186.64.13:10000/transit?from=odc_client&to=create_workflow&project_name=${projectName}&compression_data=${compressToEncodedURIComponent(
         JSON.stringify(data)
       )}`
     );
