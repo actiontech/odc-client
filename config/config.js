@@ -49,7 +49,7 @@ const config = {
       pathRewrite: { '^/external_api' : '' },
     },
     '/odc_query': {
-      target: 'http://192.168.21.47:8989',
+      target: 'http://10.186.64.13:10000/odc_query',
       pathRewrite: { '^/odc_query' : '' },
     },
     // 本地开发或者对内 Site 应用的开发环境的代理配置
