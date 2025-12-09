@@ -132,7 +132,7 @@ const LintResultTable: React.FC<ILintResultTableProps> = ({
     };
 
     window.open(
-      `http://10.186.64.13:10000/transit?from=odc_client&to=create_workflow&project_name=${projectName}&compression_data=${compressToEncodedURIComponent(
+      `/transit?from=odc_client&to=create_workflow&project_name=${projectName}&compression_data=${compressToEncodedURIComponent(
         JSON.stringify(data)
       )}`
     );
