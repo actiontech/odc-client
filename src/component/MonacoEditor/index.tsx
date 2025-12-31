@@ -138,16 +138,33 @@ const MonacoEditor: React.FC<IProps> = function (props) {
   }, [setting.configurations?.['odc.editor.style.fontSize']]);
 
   async function initPlugin() {
-    const module = await import('./plugins/ob-language/index');
     if (!editorRef.current?.getModel?.()) {
       return;
     }
-    const plugin = module.register(language);
+
+    // 根据 language 参数动态加载对应的插件
+    let pluginModule;
+    let getModelServiceFunc;
+
+    if (language === 'sqlserver') {
+      pluginModule = await import('./plugins/sqlserver-language/index');
+      const serviceModule = await import(
+        './plugins/sqlserver-language/service'
+      );
+      getModelServiceFunc = serviceModule.getModelService;
+    } else {
+      pluginModule = await import('./plugins/ob-language/index');
+      getModelServiceFunc = getModelService;
+    }
+
+    const plugin = pluginModule.register(language);
 
     groovy.registerGroovyLanguageForMonaco();
+
+    // 设置模型选项，使用对应的数据服务
     plugin.setModelOptions(
       editorRef.current.getModel().id,
-      getModelService(
+      getModelServiceFunc(
         {
           modelId: editorRef.current.getModel().id,
           delimiter() {
@@ -163,9 +180,12 @@ const MonacoEditor: React.FC<IProps> = function (props) {
   }
 
   async function initEditor() {
+    // SQL Server 使用 Monaco Editor 原生的 'sql' 语言支持
+    const monacoLanguage = language === 'sqlserver' ? 'sql' : language;
+
     editorRef.current = monaco.editor?.create(domRef.current, {
       value: innerValue,
-      language: language,
+      language: monacoLanguage,
       theme: themeValue,
       lineNumbers: showLineNumbers ? 'on' : 'off',
       lineNumbersMinChars: showLineNumbers ? 5 : 0,
@@ -223,7 +243,10 @@ const MonacoEditor: React.FC<IProps> = function (props) {
     if (!editorRef.current?.getModel?.()) {
       return;
     }
-    monaco.editor.setModelLanguage(editorRef.current.getModel(), language);
+    monaco.editor.setModelLanguage(
+      editorRef.current.getModel(),
+      monacoLanguage
+    );
     editorRef.current.onDidChangeModelContent((e) => {
       /**
        * editor value change
@@ -277,10 +300,23 @@ const MonacoEditor: React.FC<IProps> = function (props) {
       language &&
       language !== editorRef.current?.getModel().getLanguageId()
     ) {
-      monaco.editor.setModelLanguage(editorRef.current?.getModel(), language);
-      import('./plugins/ob-language/index').then((module) =>
-        module.register(language)
+      // SQL Server 使用 Monaco Editor 原生的 'sql' 语言支持
+      const monacoLanguage = language === 'sqlserver' ? 'sql' : language;
+      monaco.editor.setModelLanguage(
+        editorRef.current?.getModel(),
+        monacoLanguage
       );
+
+      // 根据 language 参数动态加载对应的插件
+      if (language === 'sqlserver') {
+        import('./plugins/sqlserver-language/index').then((module) =>
+          module.register(language)
+        );
+      } else {
+        import('./plugins/ob-language/index').then((module) =>
+          module.register(language)
+        );
+      }
     }
   }, [language]);
 
