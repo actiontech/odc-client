@@ -52,6 +52,16 @@ const oracleObjectType = [
   DbObjectType.materialized_view
 ];
 
+const sqlServerObjectType = [
+  DbObjectType.database,
+  DbObjectType.table,
+  DbObjectType.external_table,
+  DbObjectType.column,
+  DbObjectType.function,
+  DbObjectType.view,
+  DbObjectType.procedure
+];
+
 export const objectTypeConfig = {
   [ConnectType.OB_MYSQL]: mysqlObjectType,
   [ConnectType.MYSQL]: mysqlObjectType,
@@ -59,6 +69,7 @@ export const objectTypeConfig = {
   [ConnectType.PG]: pgObjectType,
   [ConnectType.OB_ORACLE]: oracleObjectType,
   [ConnectType.ORACLE]: oracleObjectType,
+  [ConnectType.SQL_SERVER]: sqlServerObjectType,
   SEARCH_OBJECT_FROM_ALL_DATABASE: oracleObjectType
 };
 
