@@ -33,6 +33,7 @@ import { apply as themeApply } from './plugins/theme';
 import PlaceholderContentWidget from './PlaceholderContentWidget';
 import { MonacoEditorContainerStyleWrapper } from './style';
 import { CUSTOM_DIFF_EDITOR_THEME_NAME } from './plugins/theme/dms';
+
 export interface IEditor extends monaco.editor.IStandaloneCodeEditor {
   doFormat: () => void;
   getSelectionContent: () => string;
@@ -83,10 +84,16 @@ const MonacoEditor: React.FC<IProps> = function (props) {
     placeholder
   } = props;
   const [innerValue, _setInnerValue] = useState<string>(defaultValue);
-  const settingTheme =
-    settingStore.theme.editorTheme?.[
-      settingStore.configurations['odc.editor.style.theme']
-    ];
+  const editorThemeConfigKey =
+    settingStore.configurations['odc.editor.style.theme'];
+  const settingTheme = useMemo(() => {
+    if (!editorThemeConfigKey) {
+      return CUSTOM_DIFF_EDITOR_THEME_NAME;
+    }
+    const theme = settingStore.theme.editorTheme?.[editorThemeConfigKey];
+    return theme === 'obwhite' ? CUSTOM_DIFF_EDITOR_THEME_NAME : theme;
+  }, [editorThemeConfigKey, settingStore.theme.editorTheme]);
+
   function setInnerValue(v: string) {
     if (readOnly) {
       return;
@@ -102,7 +109,6 @@ const MonacoEditor: React.FC<IProps> = function (props) {
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor>();
 
   const sessionRef = useRef<SessionStore>(sessionStore);
-  const themeValue = CUSTOM_DIFF_EDITOR_THEME_NAME;
 
   useEffect(() => {
     sessionRef.current = sessionStore;
@@ -121,12 +127,13 @@ const MonacoEditor: React.FC<IProps> = function (props) {
 
   useEffect(() => {
     if (editorRef.current) {
+      const currentTheme = theme || settingTheme;
       editorRef.current.updateOptions({
         readOnly,
-        theme: themeValue
+        theme: currentTheme
       });
     }
-  }, [readOnly, themeValue]);
+  }, [readOnly, theme, settingTheme]);
 
   useEffect(() => {
     const fontSize = setting.configurations['odc.editor.style.fontSize'];
@@ -182,11 +189,12 @@ const MonacoEditor: React.FC<IProps> = function (props) {
   async function initEditor() {
     // SQL Server 使用 Monaco Editor 原生的 'sql' 语言支持
     const monacoLanguage = language === 'sqlserver' ? 'sql' : language;
+    const currentTheme = theme || settingTheme;
 
     editorRef.current = monaco.editor?.create(domRef.current, {
       value: innerValue,
       language: monacoLanguage,
-      theme: themeValue,
+      theme: currentTheme,
       lineNumbers: showLineNumbers ? 'on' : 'off',
       lineNumbersMinChars: showLineNumbers ? 5 : 0,
       minimap: { enabled: false },
@@ -238,7 +246,7 @@ const MonacoEditor: React.FC<IProps> = function (props) {
     await initPlugin();
     editorRef.current.updateOptions({
       readOnly,
-      theme: themeValue
+      theme: currentTheme
     });
     if (!editorRef.current?.getModel?.()) {
       return;
