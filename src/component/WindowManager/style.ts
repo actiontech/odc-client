@@ -10,6 +10,7 @@ export const PageTitleStyleWrapper = styled('span')`
   gap: 6px;
   padding: 0 4px;
   position: relative;
+  overflow: hidden;
 
   &:hover {
     .extra-status-box {
@@ -27,8 +28,8 @@ export const PageTitleStyleWrapper = styled('span')`
 
 export const TitleTextStyleWrapper = styled('span')`
   display: inline-block;
-  flex: 1;
-  max-width: 120px;
+  flex: 1 1 0%;
+  max-width: 100px;
   margin-left: 4px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -207,6 +208,7 @@ export const ChromeStyleTabsWrapper = styled(DraggableTabs)`
         color: ${({ theme }) => theme.sharedTheme.uiToken.colorTextSecondary};
         font-size: 13px;
         font-weight: 500;
+        overflow: hidden;
 
         &::after {
           display: none;
