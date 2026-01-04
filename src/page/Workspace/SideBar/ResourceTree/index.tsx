@@ -37,6 +37,7 @@ import TreeNodeMenu from './TreeNodeMenu';
 import { ResourceNodeType, TreeDataNode } from './type';
 import tracert from '@/util/tracert';
 import Reload from '@/component/Button/Reload';
+import ThemeToggle from '@/component/Button/ThemeToggle';
 import DatasourceFilter from './DatasourceFilter';
 import { ConnectType } from '@/d.ts';
 import useTreeState from './hooks/useTreeState';
@@ -495,6 +496,7 @@ const ResourceTree: React.FC<IProps> = function ({
                 reload={reload}
                 databaseList={[...allDatabasesMap.values()]}
               /> */}
+              <ThemeToggle key="ResourceTreeThemeToggle" />
               <Reload
                 key="ResourceTreeReload"
                 onClick={() => {

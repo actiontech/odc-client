@@ -86,7 +86,7 @@ const themeConfig: { [key: string]: IThemeConfig } = {
     chartsTheme: 'dark'
   }
 };
-const defaultTheme = EThemeConfigKey.ODC_WHITE;
+const defaultTheme = EThemeConfigKey.ODC_DARK;
 
 export class SettingStore {
   @observable
@@ -96,7 +96,13 @@ export class SettingStore {
   public siderWidth: number = 260; // sidebar width
 
   @observable
-  public theme: IThemeConfig = themeConfig[defaultTheme];
+  public theme: IThemeConfig = (() => {
+    const savedTheme = localStorage.getItem(themeKey);
+    if (savedTheme && themeConfig[savedTheme]) {
+      return themeConfig[savedTheme];
+    }
+    return themeConfig[defaultTheme];
+  })();
 
   /**
    * 是否支持数据的导出，包括下载与结果集导出
