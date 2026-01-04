@@ -39,7 +39,7 @@ export const EditableTableStyleWrapper = styled(DataGrid)`
     color: ${({ theme }) => theme.sharedTheme.components.table.row.color};
     .rdg-cell {
       background-color: ${({ theme }) =>
-        theme.sharedTheme.basic.colorWhite} !important;
+        theme.sharedTheme.uiToken.colorBgBase} !important;
     }
 
     .rdg-cell-frozen {

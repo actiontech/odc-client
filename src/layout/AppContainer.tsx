@@ -25,7 +25,7 @@ import authStore, { AuthStore, AuthStoreContext } from '@/store/auth';
 import { ClusterStore } from '@/store/cluster';
 import { UserStore } from '@/store/login';
 import { PageStore } from '@/store/page';
-import { SettingStore } from '@/store/setting';
+import settingStore, { SettingStore, EThemeConfigKey } from '@/store/setting';
 import { SQLStore } from '@/store/sql';
 import { haveLockPwd, initClientService, isLock } from '@/util/client';
 import { isClient } from '@/util/env';
@@ -51,11 +51,12 @@ import {
   LocalStorageWrapper,
   SpinIndicator,
   StorageKey,
-  SupportLanguage
+  SupportLanguage,
+  SupportTheme
 } from '@actiontech/dms-kit';
 import antd_zh_CN from 'antd/locale/zh_CN';
 import antd_en_US from 'antd/locale/en_US';
-import { theme } from './antdTheme';
+import { getTheme } from './antdTheme';
 import useNotificationContext from '../hooks/useNotificationContext';
 import Watermark from '../component/Watermark';
 import { decompressFromBase64 } from 'lz-string';
@@ -286,26 +287,25 @@ const App = inject(
 
 Spin.setDefaultIndicator(<SpinIndicator />);
 
-// eslint-disable-next-line import/no-anonymous-default-export
-export default (props: any) => {
-  const locale = getLocale();
-  const currentLanguage =
-    locale === SupportLanguage.enUS
-      ? SupportLanguage.enUS
-      : SupportLanguage.zhCN;
-  const antdLanguage =
-    currentLanguage === SupportLanguage.enUS ? antd_en_US : antd_zh_CN;
+const ThemeProvider: React.FC<{ props: any; locale: string }> = observer(
+  ({ props, locale }) => {
+    const currentLanguage =
+      locale === SupportLanguage.enUS
+        ? SupportLanguage.enUS
+        : SupportLanguage.zhCN;
+    const antdLanguage =
+      currentLanguage === SupportLanguage.enUS ? antd_en_US : antd_zh_CN;
 
-  return (
-    <ErrorBoundary>
-      <DmsKitConfigProvider
-        language={
-          locale === SupportLanguage.enUS
-            ? SupportLanguage.enUS
-            : SupportLanguage.zhCN
-        }
-      >
-        <ConfigProvider locale={antdLanguage} theme={theme}>
+    const dmsKitTheme =
+      settingStore.theme.key === EThemeConfigKey.ODC_DARK
+        ? SupportTheme.DARK
+        : SupportTheme.LIGHT;
+
+    const antdThemeConfig = getTheme(dmsKitTheme);
+
+    return (
+      <DmsKitConfigProvider theme={dmsKitTheme} language={currentLanguage}>
+        <ConfigProvider locale={antdLanguage} theme={antdThemeConfig}>
           <StoreProvider>
             <AuthStoreContext.Provider value={authStore}>
               <App {...props} />
@@ -313,6 +313,17 @@ export default (props: any) => {
           </StoreProvider>
         </ConfigProvider>
       </DmsKitConfigProvider>
+    );
+  }
+);
+
+// eslint-disable-next-line import/no-anonymous-default-export
+export default (props: any) => {
+  const locale = getLocale();
+
+  return (
+    <ErrorBoundary>
+      <ThemeProvider props={props} locale={locale} />
     </ErrorBoundary>
   );
 };

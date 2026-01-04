@@ -28,7 +28,8 @@ import { getRoute } from './util/tracert/userRoutes';
 import { initIntl } from './util/intl';
 import { initSentry } from './util/sentry';
 import { ConfigProvider } from 'antd';
-import { theme } from './layout/antdTheme';
+import { getTheme } from './layout/antdTheme';
+import { SupportTheme } from '@actiontech/dms-kit';
 import { initDatasource } from './common/datasource';
 dayjs.extend(utc);
 dayjs.extend(duration);
@@ -68,7 +69,7 @@ export const qiankun = {
 
 export async function render(oldRender: () => void) {
   ConfigProvider.config({
-    theme: theme
+    theme: getTheme(SupportTheme.LIGHT)
   });
   registerPlugins();
   await initIntl();
