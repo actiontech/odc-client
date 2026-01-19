@@ -237,8 +237,8 @@ const AppContainer: React.FC<IBasicLayoutProps> = (
 
     if (
       process.env.NODE_ENV === 'development' &&
-      document.cookie.includes('dms-token') &&
-      LocalStorageWrapper.get(StorageKey.Token)
+      !document.cookie.includes('dms-token') &&
+      !LocalStorageWrapper.get(StorageKey.Token)
     ) {
       devServerAutoLogin();
     }

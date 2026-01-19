@@ -23,6 +23,10 @@ import SessionStore from '@/store/sessionManager/session';
 // SQL Server 数据服务接口，与 ob-language 的 IModelOptions 保持兼容
 export interface ISQLServerModelOptions {
   delimiter: string;
+  /**
+   * 自动提示下一个token,默认为true
+   */
+  autoNext?: boolean;
   getTableList(schemaName: string): Promise<string[] | undefined>;
   getTableColumns(
     tableName: string,
@@ -46,13 +50,14 @@ function hasConnect(session: SessionStore) {
 }
 
 export function getModelService(
-  { modelId, delimiter },
+  { modelId: _modelId, delimiter },
   sessionFunc: () => SessionStore
 ): ISQLServerModelOptions {
   return {
     get delimiter() {
       return delimiter();
     },
+    autoNext: true,
     async getTableList(schemaName: string) {
       const dbName = schemaName || sessionFunc()?.database?.dbName;
       if (!hasConnect(sessionFunc())) {

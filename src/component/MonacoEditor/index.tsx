@@ -187,8 +187,8 @@ const MonacoEditor: React.FC<IProps> = function (props) {
   }
 
   async function initEditor() {
-    // SQL Server 使用 Monaco Editor 原生的 'sql' 语言支持
-    const monacoLanguage = language === 'sqlserver' ? 'sql' : language;
+    // SQL Server 使用自定义的 'sqlserver' 语言支持
+    const monacoLanguage = language === 'sqlserver' ? 'sqlserver' : language;
     const currentTheme = theme || settingTheme;
 
     editorRef.current = monaco.editor?.create(domRef.current, {
@@ -308,8 +308,8 @@ const MonacoEditor: React.FC<IProps> = function (props) {
       language &&
       language !== editorRef.current?.getModel().getLanguageId()
     ) {
-      // SQL Server 使用 Monaco Editor 原生的 'sql' 语言支持
-      const monacoLanguage = language === 'sqlserver' ? 'sql' : language;
+      // SQL Server 使用自定义的 'sqlserver' 语言支持
+      const monacoLanguage = language === 'sqlserver' ? 'sqlserver' : language;
       monaco.editor.setModelLanguage(
         editorRef.current?.getModel(),
         monacoLanguage
@@ -317,9 +317,27 @@ const MonacoEditor: React.FC<IProps> = function (props) {
 
       // 根据 language 参数动态加载对应的插件
       if (language === 'sqlserver') {
-        import('./plugins/sqlserver-language/index').then((module) =>
-          module.register(language)
-        );
+        Promise.all([
+          import('./plugins/sqlserver-language/index'),
+          import('./plugins/sqlserver-language/service')
+        ]).then(([pluginModule, serviceModule]) => {
+          const plugin = pluginModule.register(language);
+          // 重新设置模型选项
+          if (editorRef.current?.getModel()) {
+            plugin.setModelOptions(
+              editorRef.current.getModel().id,
+              serviceModule.getModelService(
+                {
+                  modelId: editorRef.current.getModel().id,
+                  delimiter() {
+                    return sessionRef.current?.params?.delimiter;
+                  }
+                },
+                () => sessionRef.current
+              )
+            );
+          }
+        });
       } else {
         import('./plugins/ob-language/index').then((module) =>
           module.register(language)
