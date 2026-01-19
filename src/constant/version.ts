@@ -1,1 +1,1 @@
-export const UI_VERSION = 'feature/dark-theme   7bcd7dd0';
+export const UI_VERSION = 'feature/support-sqlserver-editor-v2   92ff02a4';
