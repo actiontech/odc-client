@@ -178,7 +178,8 @@ class DataTypes {
   public dataTypes: Partial<Record<ConnectionMode, IDataTypes>> = {
     [ConnectionMode.OB_MYSQL]: MySQLDataTypes,
     [ConnectionMode.MYSQL]: MySQLDataTypes,
-    [ConnectionMode.OB_ORACLE]: OracleDataTypes
+    [ConnectionMode.OB_ORACLE]: OracleDataTypes,
+    [ConnectionMode.SQL_SERVER]: MySQLDataTypes
   };
   public getParamsCount(mode: ConnectionMode, dataTypeName: string) {
     if (!dataTypeName) {
