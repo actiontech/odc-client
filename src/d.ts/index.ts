@@ -767,6 +767,7 @@ export enum ConnectionMode {
   ORACLE = 'ORACLE',
   OB_MYSQL = 'OB_MYSQL',
   OB_ORACLE = 'OB_ORACLE',
+  SQL_SERVER = 'SQL_SERVER',
   ALL = 'ALL',
   UNKNOWN = 'UNKNOWN'
 }
