@@ -463,6 +463,7 @@ class SQLConfirmPage extends Component<
           }
           initialSQL={sql}
           log={logEle}
+          showLog
           onSQLChange={this.handleSqlChange}
           toolbarActions={
             <Space>

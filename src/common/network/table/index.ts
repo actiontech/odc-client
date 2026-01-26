@@ -333,8 +333,8 @@ function wrapDataDML(
     if (isNil(nlsObject?.timestamp)) {
       return null;
     }
-    let time = dayjs(nlsObject.timestamp);
-    let nano = (
+    const time = dayjs(nlsObject.timestamp);
+    const nano = (
       time.millisecond() * 1000000 +
       (toInteger(nlsObject?.nano) || 0)
     )
@@ -346,7 +346,7 @@ function wrapDataDML(
      */
     switch (columnType) {
       case 'TIMESTAMP WITH TIME ZONE': {
-        let timeZone = nlsObject.timeZoneId;
+        const timeZone = nlsObject.timeZoneId;
         if (timeZone) {
           data = time
             .utcOffset(timeZone)

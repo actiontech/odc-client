@@ -45,11 +45,11 @@ const config = {
   theme: theme,
   proxy: {
     '/external_api': {
-      target: 'http://10.186.62.13:11000',
+      target: 'http://10.186.58.4:9999',
       pathRewrite: { '^/external_api' : '' },
     },
     '/odc_query': {
-      target: 'http://10.186.64.13:10000/odc_query',
+      target: 'http://10.186.58.4:9999/odc_query',
       pathRewrite: { '^/odc_query' : '' },
     },
     // 本地开发或者对内 Site 应用的开发环境的代理配置

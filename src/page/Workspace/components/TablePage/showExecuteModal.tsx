@@ -70,8 +70,8 @@ export default forwardRef<
     <ExecuteSQLModal
       sessionStore={session}
       visible={visible}
-      readonly
       sql={sql}
+      onChange={setSQL}
       tip={tip}
       status={status}
       lintResultSet={lintResultSet}
