@@ -60,24 +60,41 @@ export class SimpleSQLParser {
     );
 
     // 检查是否在对象访问符（.）之后
-    const dotMatch = textBeforeCursor.match(/([\w\[\]"]+)\s*\.\s*$/);
+    // 捕获完整的多级标识符路径，如 wmsda.dbo 或 dbo 或 schema.table
+    const dotMatch = textBeforeCursor.match(
+      /((?:[\w\[\]"]+\s*\.\s*)*[\w\[\]"]+)\s*\.\s*$/
+    );
     if (dotMatch) {
-      const objectName = this.unquoteIdentifier(dotMatch[1]);
-      // 检查是否是 schema.table 格式
-      const parts = objectName.split('.');
-      if (parts.length === 2) {
+      const objectName = dotMatch[1];
+      // 去除每个部分的引号，但保留点号
+      const parts = objectName
+        .split('.')
+        .map((part) => this.unquoteIdentifier(part.trim()));
+
+      if (parts.length === 3) {
+        // database.schema.table. → 提示字段
         return [
           {
             type: 'column',
-            schemaName: parts[0],
-            tableName: parts[1]
+            schemaName: parts[0] + '.' + parts[1],
+            tableName: parts[2]
           }
         ];
-      } else {
+      } else if (parts.length === 2) {
+        // database.schema. → 提示表名
+        // 或 schema.table. → 提示字段（需要在 objectAccess 中判断）
         return [
           {
             type: 'objectAccess',
-            objectName: objectName
+            objectName: parts.join('.')
+          }
+        ];
+      } else {
+        // schema. 或 table. → 需要判断
+        return [
+          {
+            type: 'objectAccess',
+            objectName: parts[0]
           }
         ];
       }

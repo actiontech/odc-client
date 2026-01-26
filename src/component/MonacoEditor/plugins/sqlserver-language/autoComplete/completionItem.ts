@@ -55,13 +55,25 @@ export function tableItem(
   tableName: string,
   schemaName: string = '',
   insertSchema: boolean = false,
-  range: monaco.languages.CompletionItemRanges | monaco.IRange
+  range: monaco.languages.CompletionItemRanges | monaco.IRange,
+  type: string = 'TABLE'
 ): monaco.languages.CompletionItem {
   const name = !insertSchema
     ? tableName
     : [schemaName, tableName].filter(Boolean).join('.');
+
+  // 根据类型显示不同的描述
+  let description = 'Table';
+  if (type === 'VIEW') {
+    description = 'View';
+  } else if (type === 'EXTERNAL_TABLE') {
+    description = 'External Table';
+  } else if (type === 'MATERIALIZED_VIEW') {
+    description = 'Materialized View';
+  }
+
   return {
-    label: { label: name, description: 'Table', detail: ' ' + schemaName },
+    label: { label: name, description, detail: ' ' + schemaName },
     range,
     insertText: name,
     kind: monaco.languages.CompletionItemKind.Class,
