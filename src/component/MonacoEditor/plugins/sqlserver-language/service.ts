@@ -27,7 +27,9 @@ export interface ISQLServerModelOptions {
    * 自动提示下一个token,默认为true
    */
   autoNext?: boolean;
-  getTableList(schemaName: string): Promise<string[] | undefined>;
+  getTableList(
+    schemaName: string
+  ): Promise<Array<{ name: string; type: string }> | undefined>;
   getTableColumns(
     tableName: string,
     dbName?: string
@@ -81,12 +83,18 @@ export function getModelService(
       if (!dbObj) {
         return [];
       }
-      // SQL Server 支持表、视图、外部表和物化视图
+      // SQL Server 支持表、视图、外部表和物化视图，返回时带上类型信息
       return [
-        ...(dbObj.tables || []),
-        ...(dbObj.views || []),
-        ...(dbObj.external_table || []),
-        ...(dbObj.materialized_view || [])
+        ...(dbObj.tables || []).map((name) => ({ name, type: 'TABLE' })),
+        ...(dbObj.views || []).map((name) => ({ name, type: 'VIEW' })),
+        ...(dbObj.external_table || []).map((name) => ({
+          name,
+          type: 'EXTERNAL_TABLE'
+        })),
+        ...(dbObj.materialized_view || []).map((name) => ({
+          name,
+          type: 'MATERIALIZED_VIEW'
+        }))
       ];
     },
     async getTableColumns(tableName: string, dbName?: string) {

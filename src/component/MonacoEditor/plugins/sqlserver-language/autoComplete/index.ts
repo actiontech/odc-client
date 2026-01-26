@@ -108,7 +108,10 @@ class SQLServerAutoComplete implements monaco.languages.CompletionItemProvider {
     const tables = await modelOptions?.getTableList?.(schema || '');
     if (tables && Array.isArray(tables) && tables.length > 0) {
       tables.forEach((table) => {
-        suggestions.push(tableItem(table, schema || '', false, range));
+        // table 现在是 { name: string, type: string } 格式
+        suggestions.push(
+          tableItem(table.name, schema || '', false, range, table.type)
+        );
       });
     }
     return suggestions;
@@ -230,34 +233,63 @@ class SQLServerAutoComplete implements monaco.languages.CompletionItemProvider {
           break;
         }
         case 'objectAccess': {
-          // 对象访问，可能是 schema 或 table.column
-          // 参考 mysql/autoComplete/index.ts 的处理方式
+          // 对象访问，可能是 database.schema、schema 或 table.column
+          // SQL Server 支持三层命名空间: database.schema.table
           const objectName = context.objectName;
           if (objectName) {
-            // 先获取所有 schema 列表，检查 objectName 是否是 schema
+            const parts = objectName.split('.');
             const schemaList = await modelOptions?.getSchemaList?.();
-            const schema = schemaList?.find((s) => s === objectName);
-            if (schema) {
-              // 如果是 schema，获取该 schema 下的表列表
-              const tableSuggestions = await this.getTableList(
-                model,
-                objectName,
-                range
+
+            if (parts.length === 2) {
+              // 两个部分：可能是 database.schema 或 schema.table
+              // 先检查是否是 database.schema 格式（完整路径在 schemaList 中）
+              const fullSchemaName = objectName;
+              const isSchema = schemaList?.find((s) => s === fullSchemaName);
+
+              if (isSchema) {
+                // 是 database.schema，获取该 schema 下的表列表
+                const tableSuggestions = await this.getTableList(
+                  model,
+                  fullSchemaName,
+                  range
+                );
+                suggestions.push(...tableSuggestions);
+              } else {
+                // 可能是 schema.table，尝试获取字段
+                const [schemaName, tableName] = parts;
+                const columnSuggestions = await this.getColumnList(
+                  model,
+                  { tableName, schemaName },
+                  range
+                );
+                if (columnSuggestions && columnSuggestions.length > 0) {
+                  suggestions.push(...columnSuggestions);
+                }
+              }
+            } else if (parts.length === 1) {
+              // 单个标识符，判断是 schema 还是 table
+              const schema = schemaList?.find(
+                (s) => s === objectName || s.endsWith('.' + objectName)
               );
-              suggestions.push(...tableSuggestions);
-              break;
-            }
-            // 如果不是 schema，尝试作为 table.column 或 table
-            const arr = objectName.split('.');
-            const tableName = arr.length > 1 ? arr[1] : arr[0];
-            const schemaName = arr.length > 1 ? arr[0] : undefined;
-            const columnSuggestions = await this.getColumnList(
-              model,
-              { tableName, schemaName },
-              range
-            );
-            if (columnSuggestions && columnSuggestions.length > 0) {
-              suggestions.push(...columnSuggestions);
+              if (schema) {
+                // 是 schema，获取该 schema 下的表列表
+                const tableSuggestions = await this.getTableList(
+                  model,
+                  objectName,
+                  range
+                );
+                suggestions.push(...tableSuggestions);
+              } else {
+                // 可能是 table，尝试获取字段
+                const columnSuggestions = await this.getColumnList(
+                  model,
+                  { tableName: objectName },
+                  range
+                );
+                if (columnSuggestions && columnSuggestions.length > 0) {
+                  suggestions.push(...columnSuggestions);
+                }
+              }
             }
           }
           break;
