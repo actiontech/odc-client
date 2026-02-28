@@ -14,14 +14,33 @@
  * limitations under the License.
  */
 
+import * as monaco from 'monaco-editor';
+import { conf, language } from './monarch/sqlserver';
+import { ISQLServerModelOptions } from './service';
+import SQLServerAutoComplete from './autoComplete';
+import SQLServerHover from './hover';
+
 // SQL Server 插件接口，提供与 ob-language 插件类似的 API
 export interface ISQLServerPlugin {
   setup(languages: string[]): void;
-  setModelOptions(modelId: string, options: any): void;
+  setModelOptions(
+    modelId: string,
+    options: ISQLServerModelOptions | null
+  ): void;
 }
+
+const LANGUAGE_ID = 'sqlserver';
 
 class SQLServerPlugin implements ISQLServerPlugin {
   private registeredLanguages: string[] = [];
+  private autoCompleteProvider: SQLServerAutoComplete;
+  private hoverProvider: SQLServerHover;
+  private isLanguageRegistered = false;
+
+  constructor() {
+    this.autoCompleteProvider = new SQLServerAutoComplete();
+    this.hoverProvider = new SQLServerHover();
+  }
 
   setup(languages: string[]): void {
     languages.forEach((lang) => {
@@ -29,16 +48,39 @@ class SQLServerPlugin implements ISQLServerPlugin {
         this.registeredLanguages.push(lang);
       }
     });
-    // SQL Server 使用 Monaco Editor 原生的 SQL 语言支持
-    // Monaco Editor 原生支持 'sql' 语言，提供基本的语法高亮和语言服务
-    // 这里主要是为了保持 API 一致性
+
+    // 只注册一次语言
+    if (!this.isLanguageRegistered) {
+      // 注册 SQL Server 语言
+      monaco.languages.register({
+        id: LANGUAGE_ID
+      });
+
+      // 设置 Monarch 语法高亮
+      monaco.languages.setMonarchTokensProvider(LANGUAGE_ID, language);
+
+      // 设置语言配置
+      monaco.languages.setLanguageConfiguration(LANGUAGE_ID, conf);
+
+      // 注册代码补全 Provider
+      monaco.languages.registerCompletionItemProvider(
+        LANGUAGE_ID,
+        this.autoCompleteProvider
+      );
+
+      // 注册悬停提示 Provider
+      monaco.languages.registerHoverProvider(LANGUAGE_ID, this.hoverProvider);
+
+      this.isLanguageRegistered = true;
+    }
   }
 
-  setModelOptions(modelId: string, options: any): void {
-    // SQL Server 插件使用 Monaco Editor 原生的 SQL 语言支持
-    // 数据服务接口将通过 Monaco Editor 的 completion provider 等方式提供
-    // 这里暂时保留接口，实际的数据服务将在 service.ts 中通过 Monaco API 注册
-    // 注意：由于不使用 @oceanbase-odc/monaco-plugin-ob，数据服务的注册方式可能不同
+  setModelOptions(
+    modelId: string,
+    options: ISQLServerModelOptions | null
+  ): void {
+    this.autoCompleteProvider.setModelOptions(modelId, options);
+    this.hoverProvider.setModelOptions(modelId, options);
   }
 
   getRegisteredLanguages(): string[] {

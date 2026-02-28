@@ -16,13 +16,13 @@
 
 import { ConnectType, TaskType } from '@/d.ts';
 import { IDataSourceModeConfig } from '../interface';
-import MySQLColumnExtra from '../oceanbase/MySQLColumnExtra';
+import SQLServerColumnExtra from './SQLserverColumnExtra';
 import { haveOCP } from '@/util/env';
 
 const tableConfig = {
   enableTableCharsetsAndCollations: true,
   enableConstraintOnUpdate: true,
-  ColumnExtraComponent: MySQLColumnExtra,
+  ColumnExtraComponent: SQLServerColumnExtra,
   paritionNameCaseSensitivity: true,
   enableIndexesFullTextType: true,
   enableAutoIncrement: true,
