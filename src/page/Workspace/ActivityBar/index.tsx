@@ -33,7 +33,6 @@ import { BasicToolTip } from '@actiontech/dms-kit';
 import MineItem from '@/layout/SpaceContainer/Sider/MineItem';
 import { formatMessage } from '@/util/intl';
 import MenuItem from '@/layout/SpaceContainer/Sider/MenuItem';
-import AvailabilityZoneSwitcher from './AvailabilityZoneSwitcher';
 
 interface IItem {
   title: string;
@@ -59,19 +58,19 @@ const ActivityBarNew: React.FC = () => {
         key: ActivityBarItemType.Script,
         icon: CodeSvg,
         isVisible: true
-      },
-      {
-        title: ActivityBarItemTypeText[ActivityBarItemType.Task],
-        key: ActivityBarItemType.Task,
-        icon: TaskSvg,
-        isVisible: true
-      },
-      {
-        title: ActivityBarItemTypeText[ActivityBarItemType.Manager],
-        key: ActivityBarItemType.Manager,
-        icon: ManagerSvg,
-        isVisible: true
       }
+      // {
+      //   title: ActivityBarItemTypeText[ActivityBarItemType.Task],
+      //   key: ActivityBarItemType.Task,
+      //   icon: TaskSvg,
+      //   isVisible: true
+      // },
+      // {
+      //   title: ActivityBarItemTypeText[ActivityBarItemType.Manager],
+      //   key: ActivityBarItemType.Manager,
+      //   icon: ManagerSvg,
+      //   isVisible: true
+      // }
     ],
     []
   );
@@ -99,7 +98,7 @@ const ActivityBarNew: React.FC = () => {
         <HeaderStyleWrapper>
           <Logo />
         </HeaderStyleWrapper>
-        <AvailabilityZoneSwitcher collapsed={collapsed} />
+        {/* <AvailabilityZoneSwitcher collapsed={collapsed} /> */}
         <ItemsWrapperStyleWrapper>
           <Space size={8} direction="vertical">
             {items
