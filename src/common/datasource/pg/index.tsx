@@ -20,16 +20,16 @@ import MySQLColumnExtra from '../oceanbase/MySQLColumnExtra';
 import { haveOCP } from '@/util/env';
 
 const tableConfig = {
-  enableTableCharsetsAndCollations: true,
+  enableTableCharsetsAndCollations: false,  // PG 字符集在数据库级别设置
   enableConstraintOnUpdate: true,
   ColumnExtraComponent: MySQLColumnExtra,
   paritionNameCaseSensitivity: true,
   enableIndexesFullTextType: true,
-  enableAutoIncrement: true,
+  enableAutoIncrement: false,  // PG 使用 SERIAL/IDENTITY
   type2ColumnType: {
     id: 'int',
     name: 'varchar',
-    date: 'datetime',
+    date: 'timestamp',
     time: 'timestamp'
   }
 };
@@ -67,14 +67,25 @@ const items: Record<ConnectType.PG, IDataSourceModeConfig> = {
       disableURLParse: true
     },
     features: {
-      task: [TaskType.DATA_ARCHIVE, TaskType.DATA_DELETE],
+      task: [
+        TaskType.ASYNC,
+        TaskType.SQL_PLAN,
+        TaskType.DATA_ARCHIVE,
+        TaskType.DATA_DELETE,
+        TaskType.IMPORT,
+        TaskType.EXPORT,
+        TaskType.EXPORT_RESULT_SET,
+        TaskType.STRUCTURE_COMPARISON,
+        TaskType.MULTIPLE_ASYNC
+      ],
       obclient: false,
-      recycleBin: false,
-      sessionManage: false,
-      sessionParams: false,
-      sqlExplain: false,
-      groupResourceTree: false,
-      sqlconsole: false,
+      recycleBin: false,  // PG 无回收站
+      sessionManage: true,
+      sessionParams: true,
+      sqlExplain: true,
+      plRun: true,
+      groupResourceTree: true,
+      sqlconsole: true,
       export: {
         fileLimit: false,
         snapshot: false
@@ -84,10 +95,10 @@ const items: Record<ConnectType.PG, IDataSourceModeConfig> = {
       table: tableConfig,
       func: functionConfig,
       proc: procedureConfig,
-      innerSchema: ['postgres']
+      innerSchema: ['postgres', 'information_schema', 'pg_catalog']
     },
     sql: {
-      language: 'mysql',
+      language: 'pg',
       escapeChar: '"',
       caseSensitivity: true
     }
