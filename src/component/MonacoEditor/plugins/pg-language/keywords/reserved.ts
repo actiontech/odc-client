@@ -98,7 +98,6 @@ const words: string[] = [
   // PostgreSQL 特有关键字
   'AUTHORIZATION',
   'BINARY',
-  'CASE',
   'CONCURRENTLY',
   'CROSS',
   'CURRENT_SCHEMA',
@@ -238,8 +237,6 @@ const words: string[] = [
   'ROW',
   'STATEMENT',
   'EXECUTE',
-  'PROCEDURE',
-  'FUNCTION',
   'REFERENCING',
   'OLD',
   'NEW',

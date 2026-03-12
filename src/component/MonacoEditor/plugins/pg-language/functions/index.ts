@@ -303,12 +303,7 @@ const dateTimeFunctions: IFunction[] = [
   {
     name: 'TO_TIMESTAMP',
     params: [{ name: 'string' }, { name: 'format' }],
-    desc: '将字符串转换为时间戳。'
-  },
-  {
-    name: 'TO_TIMESTAMP',
-    params: [{ name: 'epoch' }],
-    desc: '将 Unix 纪元时间转换为时间戳。'
+    desc: '将字符串转换为时间戳。支持多态：TO_TIMESTAMP(string, format) 将字符串按格式转换；TO_TIMESTAMP(epoch) 将 Unix 纪元时间（double precision）转换为时间戳。'
   },
   {
     name: 'MAKE_DATE',
