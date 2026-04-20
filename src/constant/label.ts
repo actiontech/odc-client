@@ -144,7 +144,12 @@ export const ConnectTypeText = (type: ConnectType) => {
       id: 'src.constant.8B363F77',
       defaultMessage: '华为云 OBS'
     }),
-    [ConnectType.S3A]: 'AWS S3'
+    [ConnectType.S3A]: 'AWS S3',
+    [ConnectType.SQL_SERVER]: 'SQL Server',
+    [ConnectType.DM]: formatMessage({
+      id: 'src.constant.DM_LABEL',
+      defaultMessage: '达梦(DM)'
+    })
   };
   return textMap?.[type];
 };

@@ -61,6 +61,7 @@ export enum DialectType {
   OB_ORACLE = 'OB_ORACLE',
   ORACLE = 'ORACLE',
   MYSQL = 'MYSQL',
+  DM = 'DM',
   UNKNOWN = 'UNKNOWN'
 }
 

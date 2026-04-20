@@ -54,5 +54,6 @@ export enum IDataSourceType {
   QCLOUD = 'QCLOUD',
   HUAWEI = 'HUAWEI',
   AWSS3 = 'AWSS3',
-  SQL_SERVER = 'SQL_SERVER'
+  SQL_SERVER = 'SQL_SERVER',
+  DM = 'DM'
 }
