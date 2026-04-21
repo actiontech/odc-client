@@ -70,6 +70,7 @@ export const objectTypeConfig = {
   [ConnectType.OB_ORACLE]: oracleObjectType,
   [ConnectType.ORACLE]: oracleObjectType,
   [ConnectType.SQL_SERVER]: sqlServerObjectType,
+  [ConnectType.DB2]: sqlServerObjectType,
   SEARCH_OBJECT_FROM_ALL_DATABASE: oracleObjectType
 };
 

@@ -179,7 +179,8 @@ class DataTypes {
     [ConnectionMode.OB_MYSQL]: MySQLDataTypes,
     [ConnectionMode.MYSQL]: MySQLDataTypes,
     [ConnectionMode.OB_ORACLE]: OracleDataTypes,
-    [ConnectionMode.SQL_SERVER]: MySQLDataTypes
+    [ConnectionMode.SQL_SERVER]: MySQLDataTypes,
+    [ConnectionMode.DB2]: MySQLDataTypes
   };
   public getParamsCount(mode: ConnectionMode, dataTypeName: string) {
     if (!dataTypeName) {

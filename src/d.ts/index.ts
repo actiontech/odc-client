@@ -700,6 +700,8 @@ export enum AuditEventDialectType {
   MYSQL = 'MYSQL',
   DORIS = 'DORIS',
   PG = 'POSTGRESQL',
+  SQL_SERVER = 'SQL_SERVER',
+  DB2 = 'DB2',
   UNKNOWN = 'UNKNOWN'
 }
 
@@ -768,6 +770,7 @@ export enum ConnectionMode {
   OB_MYSQL = 'OB_MYSQL',
   OB_ORACLE = 'OB_ORACLE',
   SQL_SERVER = 'SQL_SERVER',
+  DB2 = 'DB2',
   ALL = 'ALL',
   UNKNOWN = 'UNKNOWN'
 }
@@ -3555,7 +3558,8 @@ export enum ConnectType {
   COS = 'COS',
   OBS = 'OBS',
   S3A = 'S3A',
-  SQL_SERVER = 'SQL_SERVER'
+  SQL_SERVER = 'SQL_SERVER',
+  DB2 = 'DB2'
 }
 
 export enum DatasourceGroup {
