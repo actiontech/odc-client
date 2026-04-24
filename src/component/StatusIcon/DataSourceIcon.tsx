@@ -59,7 +59,7 @@ export default function StatusIcon({ item }: { item: IConnection }) {
           })}
         >
           <Icon
-            component={icon.component}
+            component={icon?.component}
             style={{ fontSize: 16, color: icon?.color }}
           />
         </Tooltip>

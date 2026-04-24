@@ -74,7 +74,7 @@ const ConnectionName: React.FC<IProps> = function ({
             })}
           >
             <Icon
-              style={{ color: DBIcon.color }}
+              style={{ color: DBIcon?.color }}
               component={DBIcon?.component}
               className={styles.activeStatus}
             />

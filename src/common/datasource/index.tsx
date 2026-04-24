@@ -24,6 +24,7 @@ import oracle from './oracle';
 import MySQL from './mysql';
 import Doris from './doris';
 import PG from './pg';
+import DM from './dm';
 import FileSystem from './fileSystem';
 import { ReactComponent as OBSvg } from '@/svgr/source_ob.svg';
 import { ReactComponent as DBOBSvg } from '@/svgr/database_oceanbase.svg';
@@ -46,6 +47,8 @@ import { ReactComponent as S3Svg } from '@/svgr/S3.svg';
 import { ReactComponent as DBS3Svg } from '@/svgr/S3_file.svg';
 import { ReactComponent as DBSqlServerSvg } from '@/svgr/database_sqlserver.svg';
 import { ReactComponent as SqlServerSvg } from '@/svgr/sqlserver.svg';
+import { ReactComponent as DMSvg } from '@/svgr/dm.svg';
+import { ReactComponent as DBDMSvg } from '@/svgr/database_dm.svg';
 import odc from '@/plugins/odc';
 
 export const _types: Map<
@@ -148,6 +151,15 @@ const _styles = {
     dbIcon: {
       component: DBCOSSvg
     }
+  },
+  [IDataSourceType.DM]: {
+    icon: {
+      component: DMSvg,
+      color: '#0078D4'
+    },
+    dbIcon: {
+      component: DBDMSvg
+    }
   }
 };
 
@@ -161,7 +173,8 @@ const _gruops = {
   [IDataSourceType.AWSS3]: DatasourceGroup.FileSystem,
   [IDataSourceType.HUAWEI]: DatasourceGroup.FileSystem,
   [IDataSourceType.QCLOUD]: DatasourceGroup.FileSystem,
-  [IDataSourceType.SQL_SERVER]: DatasourceGroup.OtherDatabase
+  [IDataSourceType.SQL_SERVER]: DatasourceGroup.OtherDatabase,
+  [IDataSourceType.DM]: DatasourceGroup.OtherDatabase
 };
 
 export const connectType2Ds: Map<ConnectType, IDataSourceType> = new Map();
@@ -218,6 +231,7 @@ function initDatasource() {
   register(IDataSourceType.HUAWEI, FileSystem.HUAWEI);
   register(IDataSourceType.QCLOUD, FileSystem.QCLOUD);
   register(IDataSourceType.SQL_SERVER, SqlServer);
+  register(IDataSourceType.DM, DM);
 }
 
 function getAllConnectTypes(ds?: IDataSourceType): ConnectType[] {
