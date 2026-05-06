@@ -55,5 +55,6 @@ export enum IDataSourceType {
   HUAWEI = 'HUAWEI',
   AWSS3 = 'AWSS3',
   SQL_SERVER = 'SQL_SERVER',
-  DM = 'DM'
+  DM = 'DM',
+  Redis = 'redis'
 }

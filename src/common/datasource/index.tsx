@@ -25,6 +25,7 @@ import MySQL from './mysql';
 import Doris from './doris';
 import PG from './pg';
 import DM from './dm';
+import Redis from './redis';
 import FileSystem from './fileSystem';
 import { ReactComponent as OBSvg } from '@/svgr/source_ob.svg';
 import { ReactComponent as DBOBSvg } from '@/svgr/database_oceanbase.svg';
@@ -160,6 +161,15 @@ const _styles = {
     dbIcon: {
       component: DBDMSvg
     }
+  },
+  [IDataSourceType.Redis]: {
+    icon: {
+      component: MySQLSvg,
+      color: '#DC382D'
+    },
+    dbIcon: {
+      component: DBMySQLSvg
+    }
   }
 };
 
@@ -174,7 +184,8 @@ const _gruops = {
   [IDataSourceType.HUAWEI]: DatasourceGroup.FileSystem,
   [IDataSourceType.QCLOUD]: DatasourceGroup.FileSystem,
   [IDataSourceType.SQL_SERVER]: DatasourceGroup.OtherDatabase,
-  [IDataSourceType.DM]: DatasourceGroup.OtherDatabase
+  [IDataSourceType.DM]: DatasourceGroup.OtherDatabase,
+  [IDataSourceType.Redis]: DatasourceGroup.OtherDatabase
 };
 
 export const connectType2Ds: Map<ConnectType, IDataSourceType> = new Map();
@@ -232,6 +243,7 @@ function initDatasource() {
   register(IDataSourceType.QCLOUD, FileSystem.QCLOUD);
   register(IDataSourceType.SQL_SERVER, SqlServer);
   register(IDataSourceType.DM, DM);
+  register(IDataSourceType.Redis, Redis);
 }
 
 function getAllConnectTypes(ds?: IDataSourceType): ConnectType[] {
