@@ -48,6 +48,7 @@ export enum IDataSourceType {
   OceanBase = 'ob',
   MySQL = 'mysql',
   Doris = 'doris',
+  TiDB = 'tidb',
   Oracle = 'oracle',
   PG = 'postgresql',
   ALIYUNOSS = 'ALIYUNOSS',

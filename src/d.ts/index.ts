@@ -699,6 +699,7 @@ export enum AuditEventDialectType {
   ORACLE = 'ORACLE',
   MYSQL = 'MYSQL',
   DORIS = 'DORIS',
+  TIDB = 'TIDB',
   PG = 'POSTGRESQL',
   UNKNOWN = 'UNKNOWN'
 }
@@ -763,6 +764,7 @@ export type ISQLScript = IScriptMeta;
 export enum ConnectionMode {
   MYSQL = 'MYSQL',
   DORIS = 'DORIS',
+  TIDB = 'TIDB',
   PG = 'POSTGRESQL',
   ORACLE = 'ORACLE',
   OB_MYSQL = 'OB_MYSQL',
@@ -3550,6 +3552,7 @@ export enum ConnectType {
   ODP_SHARDING_OB_MYSQL = 'ODP_SHARDING_OB_MYSQL',
   MYSQL = 'MYSQL',
   DORIS = 'DORIS',
+  TIDB = 'TIDB',
   PG = 'POSTGRESQL',
   ORACLE = 'ORACLE',
   OSS = 'OSS',

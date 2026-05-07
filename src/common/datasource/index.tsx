@@ -23,6 +23,7 @@ import SqlServer from './sqlserver';
 import oracle from './oracle';
 import MySQL from './mysql';
 import Doris from './doris';
+import TiDB from './tidb';
 import PG from './pg';
 import DM from './dm';
 import FileSystem from './fileSystem';
@@ -31,8 +32,10 @@ import { ReactComponent as DBOBSvg } from '@/svgr/database_oceanbase.svg';
 import { ReactComponent as MySQLSvg } from '@/svgr/mysql.svg';
 import { ReactComponent as DBMySQLSvg } from '@/svgr/database_mysql.svg';
 import { ReactComponent as DorisSvg } from '@/svgr/doris.svg';
+import { ReactComponent as TiDBSvg } from '@/svgr/tidb.svg';
 import { ReactComponent as PGSvg } from '@/svgr/pg.svg';
 import { ReactComponent as DBDorisSvg } from '@/svgr/database_doris.svg';
+import { ReactComponent as DBTiDBSvg } from '@/svgr/database_tidb.svg';
 import { ReactComponent as OracleSvg } from '@/svgr/oracle.svg';
 import { ReactComponent as DBOracleSvg } from '@/svgr/database_oracle.svg';
 import { DBType, BooleanOptionType } from '@/d.ts/database';
@@ -96,6 +99,15 @@ const _styles = {
     },
     dbIcon: {
       component: DBDorisSvg
+    }
+  },
+  [IDataSourceType.TiDB]: {
+    icon: {
+      component: TiDBSvg,
+      color: '#E4002B'
+    },
+    dbIcon: {
+      component: DBTiDBSvg
     }
   },
   [IDataSourceType.Oracle]: {
@@ -167,6 +179,7 @@ const _gruops = {
   [IDataSourceType.OceanBase]: DatasourceGroup.OceanBaseDatabase,
   [IDataSourceType.MySQL]: DatasourceGroup.OtherDatabase,
   [IDataSourceType.Doris]: DatasourceGroup.OtherDatabase,
+  [IDataSourceType.TiDB]: DatasourceGroup.OtherDatabase,
   [IDataSourceType.Oracle]: DatasourceGroup.OtherDatabase,
   [IDataSourceType.PG]: DatasourceGroup.OtherDatabase,
   [IDataSourceType.ALIYUNOSS]: DatasourceGroup.FileSystem,
@@ -224,6 +237,7 @@ function initDatasource() {
   register(IDataSourceType.OceanBase, obMySQL);
   register(IDataSourceType.MySQL, MySQL);
   register(IDataSourceType.Doris, Doris);
+  register(IDataSourceType.TiDB, TiDB);
   register(IDataSourceType.Oracle, oracle);
   register(IDataSourceType.PG, PG);
   register(IDataSourceType.ALIYUNOSS, FileSystem.ALIYUN);
