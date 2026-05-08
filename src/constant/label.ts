@@ -130,6 +130,7 @@ export const ConnectTypeText = (type: ConnectType) => {
     [ConnectType.ODP_SHARDING_OB_MYSQL]: 'OB Sharding MySQL',
     [ConnectType.MYSQL]: 'MySQL',
     [ConnectType.DORIS]: 'Doris',
+    [ConnectType.TIDB]: 'TiDB',
     [ConnectType.ORACLE]: 'Oracle',
     [ConnectType.PG]: 'PostgreSQL',
     [ConnectType.OSS]: formatMessage({
