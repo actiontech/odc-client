@@ -211,7 +211,7 @@ class TableData extends React.Component<
           type,
           row: wrapRow(row, resultSet.columns),
           initialRow: wrapRow(originRows[i], resultSet.columns),
-          enableRowId: type !== 'INSERT'
+          enableRowId: session.supportFeature?.enableRowId && type !== 'INSERT'
         };
       })
       .filter(Boolean);

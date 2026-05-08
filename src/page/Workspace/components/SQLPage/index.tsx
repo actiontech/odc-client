@@ -861,7 +861,9 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
             type,
             row: wrapRow(row, resultSet.columns),
             initialRow: wrapRow(resultSet.rows[i], resultSet.columns),
-            enableRowId: type !== 'INSERT'
+            enableRowId:
+              this.getSession()?.supportFeature?.enableRowId &&
+              type !== 'INSERT'
           };
         })
         .filter(Boolean);
