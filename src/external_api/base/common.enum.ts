@@ -1,3 +1,37 @@
+export enum AddSensitiveDataDiscoveryTaskExecutionPlanEnum {
+  'PERIODIC' = 'PERIODIC',
+
+  'ONE_TIME' = 'ONE_TIME'
+}
+
+export enum AddSensitiveDataDiscoveryTaskIdentificationMethodEnum {
+  'BY_FIELD_NAME' = 'BY_FIELD_NAME',
+
+  'BY_SAMPLE_DATA' = 'BY_SAMPLE_DATA'
+}
+
+export enum ColumnMaskingConfigConfidenceEnum {
+  'High' = 'High',
+
+  'Medium' = 'Medium',
+
+  'Low' = 'Low'
+}
+
+export enum ColumnMaskingConfigStatusEnum {
+  'PENDING_CONFIRM' = 'PENDING_CONFIRM',
+
+  'CONFIGURED' = 'CONFIGURED',
+
+  'SYSTEM_CONFIRMED' = 'SYSTEM_CONFIRMED'
+}
+
+export enum CreateUnmaskingWorkflowSourceTypeEnum {
+  'data_export' = 'data_export',
+
+  'sql_workbench' = 'sql_workbench'
+}
+
 export enum DBServiceIsConnectableReplyConnectionStatusEnum {
   'connect_success' = 'connect_success',
 
@@ -50,6 +84,40 @@ export enum GetUserSystemEnum {
   'WORKBENCH' = 'WORKBENCH',
 
   'MANAGEMENT' = 'MANAGEMENT'
+}
+
+export enum GlobalDataExportWorkflowStatusEnum {
+  'wait_for_approve' = 'wait_for_approve',
+
+  'wait_for_export' = 'wait_for_export',
+
+  'exporting' = 'exporting',
+
+  'rejected' = 'rejected',
+
+  'cancel' = 'cancel',
+
+  'failed' = 'failed',
+
+  'finish' = 'finish'
+}
+
+export enum LineageEdgeTypeEnum {
+  'direct' = 'direct',
+
+  'transform' = 'transform',
+
+  'aggregate' = 'aggregate'
+}
+
+export enum LineageNodeTypeEnum {
+  'source_column' = 'source_column',
+
+  'expression' = 'expression',
+
+  'result_column' = 'result_column',
+
+  'table' = 'table'
 }
 
 export enum ListDBServiceLastConnectionTestStatusEnum {
@@ -150,6 +218,52 @@ export enum ListRoleStatEnum {
   'Disabled' = 'Disabled',
 
   'Unknown' = 'Unknown'
+}
+
+export enum ListSensitiveDataDiscoveryTaskHistoriesDataStatusEnum {
+  'PENDING_CONFIRM' = 'PENDING_CONFIRM',
+
+  'NORMAL' = 'NORMAL',
+
+  'COMPLETED' = 'COMPLETED',
+
+  'RUNNING' = 'RUNNING',
+
+  'FAILED' = 'FAILED',
+
+  'STOPPED' = 'STOPPED'
+}
+
+export enum ListSensitiveDataDiscoveryTasksDataExecutionPlanEnum {
+  'PERIODIC' = 'PERIODIC',
+
+  'ONE_TIME' = 'ONE_TIME'
+}
+
+export enum ListSensitiveDataDiscoveryTasksDataIdentificationMethodEnum {
+  'BY_FIELD_NAME' = 'BY_FIELD_NAME',
+
+  'BY_SAMPLE_DATA' = 'BY_SAMPLE_DATA'
+}
+
+export enum ListSensitiveDataDiscoveryTasksDataStatusEnum {
+  'PENDING_CONFIRM' = 'PENDING_CONFIRM',
+
+  'NORMAL' = 'NORMAL',
+
+  'COMPLETED' = 'COMPLETED',
+
+  'RUNNING' = 'RUNNING',
+
+  'FAILED' = 'FAILED',
+
+  'STOPPED' = 'STOPPED'
+}
+
+export enum ListSensitiveDataDiscoveryTasksDataTaskTypeEnum {
+  'PERIODIC' = 'PERIODIC',
+
+  'ONE_TIME' = 'ONE_TIME'
 }
 
 export enum ListUserAuthenticationTypeEnum {
@@ -279,6 +393,8 @@ export enum OpPermissionItemOpPermissionTypeEnum {
 
   'desensitization' = 'desensitization',
 
+  'masking_audit' = 'masking_audit',
+
   'none' = 'none'
 }
 
@@ -294,6 +410,22 @@ export enum OpPermissionItemRangeTypeEnum {
 
 export enum OperationOperationTypeEnum {
   'SQL' = 'SQL'
+}
+
+export enum OperationRecordListItemStatusEnum {
+  'succeeded' = 'succeeded',
+
+  'failed' = 'failed'
+}
+
+export enum ProjectInfoProjectPriorityEnum {
+  'high' = 'high',
+
+  'medium' = 'medium',
+
+  'low' = 'low',
+
+  'unknown' = 'unknown'
 }
 
 export enum ProjectV1ProjectPriorityEnum {
@@ -326,10 +458,92 @@ export enum SQLQueryConfigAllowQueryWhenLessThanAuditLevelEnum {
   'error' = 'error'
 }
 
+export enum SensitiveFieldScanResultConfidenceEnum {
+  'HIGH' = 'HIGH',
+
+  'MEDIUM' = 'MEDIUM',
+
+  'LOW' = 'LOW'
+}
+
+export enum TableColumnMaskingDetailConfidenceEnum {
+  'HIGH' = 'HIGH',
+
+  'MEDIUM' = 'MEDIUM',
+
+  'LOW' = 'LOW'
+}
+
+export enum TableColumnMaskingDetailStatusEnum {
+  'CONFIGURED' = 'CONFIGURED',
+
+  'PENDING_CONFIRM' = 'PENDING_CONFIRM',
+
+  'SYSTEM_CONFIRMED' = 'SYSTEM_CONFIRMED'
+}
+
 export enum TestFeishuConfigurationAccountTypeEnum {
   'email' = 'email',
 
   'phone' = 'phone'
+}
+
+export enum UnmaskingOperationLogItemActionEnum {
+  'submit' = 'submit',
+
+  'approve' = 'approve',
+
+  'reject' = 'reject',
+
+  'view' = 'view',
+
+  'download' = 'download',
+
+  'cancel' = 'cancel'
+}
+
+export enum UnmaskingWorkflowDetailApprovalStatusEnum {
+  'pending' = 'pending',
+
+  'approved' = 'approved',
+
+  'rejected' = 'rejected',
+
+  'cancelled' = 'cancelled'
+}
+
+export enum UnmaskingWorkflowDetailSourceTypeEnum {
+  'data_export' = 'data_export',
+
+  'sql_workbench' = 'sql_workbench'
+}
+
+export enum UnmaskingWorkflowDetailUsageStatusEnum {
+  'unviewed' = 'unviewed',
+
+  'viewed' = 'viewed'
+}
+
+export enum UnmaskingWorkflowListItemApprovalStatusEnum {
+  'pending' = 'pending',
+
+  'approved' = 'approved',
+
+  'rejected' = 'rejected',
+
+  'cancelled' = 'cancelled'
+}
+
+export enum UnmaskingWorkflowListItemSourceTypeEnum {
+  'data_export' = 'data_export',
+
+  'sql_workbench' = 'sql_workbench'
+}
+
+export enum UnmaskingWorkflowListItemUsageStatusEnum {
+  'unviewed' = 'unviewed',
+
+  'viewed' = 'viewed'
 }
 
 export enum UpdateCurrentUserSystemEnum {
@@ -356,6 +570,26 @@ export enum UpdateProjectV2ProjectPriorityEnum {
   'low' = 'low',
 
   'unknown' = 'unknown'
+}
+
+export enum UpdateSensitiveDataDiscoveryTaskExecutionPlanEnum {
+  'PERIODIC' = 'PERIODIC',
+
+  'ONE_TIME' = 'ONE_TIME'
+}
+
+export enum UpdateSensitiveDataDiscoveryTaskIdentificationMethodEnum {
+  'BY_FIELD_NAME' = 'BY_FIELD_NAME',
+
+  'BY_SAMPLE_DATA' = 'BY_SAMPLE_DATA'
+}
+
+export enum UpdateSensitiveDataDiscoveryTaskReqActionEnum {
+  'ENABLE' = 'ENABLE',
+
+  'TERMINATE' = 'TERMINATE',
+
+  'UPDATE' = 'UPDATE'
 }
 
 export enum UpdateUserSystemEnum {

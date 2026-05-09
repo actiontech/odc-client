@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-import { ISQLLintReuslt } from '@/component/SQLLintResult/type';
 import type { ISqlExecuteResult, IExecutingInfo } from '@/d.ts';
-import { EStatus, ISqlExecuteResultStatus } from '@/d.ts';
+import { ISqlExecuteResultStatus } from '@/d.ts';
 import request from '@/util/request';
 import { generateDatabaseSid, generateSessionSid } from '../pathUtil';
 import {
@@ -25,6 +24,52 @@ import {
   IExecuteTaskResult,
   ISQLExecuteTask
 } from './preHandle';
+
+interface IGetMoreResultsOptions {
+  viewOriginalData?: boolean;
+  ignoreError?: boolean;
+}
+
+export async function getMoreResults(
+  sessionId: string,
+  requestId: string,
+  options: IGetMoreResultsOptions = {}
+): Promise<{
+  isError: boolean;
+  errCode?: string | number;
+  errMsg?: string;
+  data?: {
+    finished: boolean;
+    traceId: string;
+    results: ISqlExecuteResult[];
+    sql: string;
+    sqlId: string;
+  };
+}> {
+  const res = await request.get(
+    `/api/v2/datasource/sessions/${generateSessionSid(
+      sessionId
+    )}/sqls/getMoreResults`,
+    {
+      params: {
+        requestId,
+        view_original_data: options.viewOriginalData,
+        ignoreError: options.ignoreError
+      }
+    }
+  );
+  if (res?.isError) {
+    return {
+      isError: true,
+      errCode: res?.errCode,
+      errMsg: res?.errMsg
+    };
+  }
+  return {
+    isError: false,
+    data: res?.data
+  };
+}
 
 class Task {
   public result: ISqlExecuteResult[] = [];
@@ -39,18 +84,9 @@ class Task {
     private onUpdate: (info: IExecutingInfo) => void
   ) {}
   private fetchData = async () => {
-    const res = await request.get(
-      `/api/v2/datasource/sessions/${generateSessionSid(
-        this.sessionId
-      )}/sqls/getMoreResults`,
-      {
-        params: {
-          requestId: this.requestId
-        }
-      }
-    );
+    const res = await getMoreResults(this.sessionId, this.requestId);
     if (res?.isError) {
-      throw new Error(res?.errMsg);
+      throw new Error(res?.errMsg || 'get more results failed');
     }
     return res?.data;
   };
@@ -87,8 +123,10 @@ class Task {
       /**
        * merge result
        */
-      data?.results?.map((result) => {
-        result && this.result.push(result);
+      data?.results?.forEach((result) => {
+        if (result) {
+          this.result.push(result);
+        }
       });
       this.onUpdate?.({
         results: this.result || [],

@@ -7,6 +7,7 @@ import ServiceBase from '../Service.base';
 import { AxiosRequestConfig } from 'axios';
 
 import {
+  IGetGlobalDataExportWorkflowsReturn,
   IListAllDataExportWorkflowsParams,
   IListAllDataExportWorkflowsReturn,
   IListDataExportWorkflowsParams,
@@ -21,11 +22,20 @@ import {
   IApproveDataExportWorkflowReturn,
   IExportDataExportWorkflowParams,
   IExportDataExportWorkflowReturn,
+  IDownloadOriginalDataExportWorkflowParams,
   IRejectDataExportWorkflowParams,
   IRejectDataExportWorkflowReturn
 } from './index.type';
 
 class DataExportWorkflowsService extends ServiceBase {
+  public GetGlobalDataExportWorkflows(options?: AxiosRequestConfig) {
+    return this.get<IGetGlobalDataExportWorkflowsReturn>(
+      '/v1/dms/dashboard/data_export_workflows',
+      undefined,
+      options
+    );
+  }
+
   public ListAllDataExportWorkflows(
     params: IListAllDataExportWorkflowsParams,
     options?: AxiosRequestConfig
@@ -132,6 +142,24 @@ class DataExportWorkflowsService extends ServiceBase {
 
     return this.post<IExportDataExportWorkflowReturn>(
       `/v1/dms/projects/${project_uid}/data_export_workflows/${data_export_workflow_uid}/export`,
+      paramsData,
+      options
+    );
+  }
+
+  public DownloadOriginalDataExportWorkflow(
+    params: IDownloadOriginalDataExportWorkflowParams,
+    options?: AxiosRequestConfig
+  ) {
+    const paramsData = this.cloneDeep(params);
+    const project_uid = paramsData.project_uid;
+    delete paramsData.project_uid;
+
+    const data_export_workflow_uid = paramsData.data_export_workflow_uid;
+    delete paramsData.data_export_workflow_uid;
+
+    return this.get(
+      `/v1/dms/projects/${project_uid}/data_export_workflows/${data_export_workflow_uid}/original-export/download`,
       paramsData,
       options
     );

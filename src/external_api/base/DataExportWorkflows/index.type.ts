@@ -1,10 +1,6 @@
 // @ts-nocheck
 import {
-  ListAllDataExportWorkflowsFilterByStatusEnum,
-  ListDataExportWorkflowsFilterByStatusEnum
-} from './index.enum';
-
-import {
+  IGetGlobalDataExportWorkflowsReply,
   IListDataExportWorkflowsReply,
   IAddDataExportWorkflowReq,
   IAddDataExportWorkflowReply,
@@ -13,6 +9,14 @@ import {
   IGetDataExportWorkflowReply,
   IRejectDataExportWorkflowReq
 } from '../common.type';
+
+import {
+  ListAllDataExportWorkflowsFilterByStatusEnum,
+  ListDataExportWorkflowsFilterByStatusEnum
+} from './index.enum';
+
+export interface IGetGlobalDataExportWorkflowsReturn
+  extends IGetGlobalDataExportWorkflowsReply {}
 
 export interface IListAllDataExportWorkflowsParams {
   project_uid?: string;
@@ -103,6 +107,14 @@ export interface IExportDataExportWorkflowParams {
 }
 
 export interface IExportDataExportWorkflowReturn extends IGenericResp {}
+
+export interface IDownloadOriginalDataExportWorkflowParams {
+  project_uid: string;
+
+  data_export_workflow_uid: string;
+
+  unmasking_workflow_uid: string;
+}
 
 export interface IRejectDataExportWorkflowParams
   extends IRejectDataExportWorkflowReq {
