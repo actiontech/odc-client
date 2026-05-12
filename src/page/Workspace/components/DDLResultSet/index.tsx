@@ -316,6 +316,20 @@ const DDLResultSet: React.FC<IProps> = function (props) {
    */
   const gridRef = useRef<DataGridRef>(null);
   /**
+   * 当外部 rows 数据发生变化时（例如加载原文数据后），同步更新 DataGrid 内部的行状态。
+   * DataGrid 以 initialRows 作为初始态，不会自动响应 prop 变化，需要手动调用 setRows。
+   */
+  const isFirstRowsRender = useRef(true);
+  useEffect(() => {
+    if (isFirstRowsRender.current) {
+      isFirstRowsRender.current = false;
+      return;
+    }
+    if (!isEditing) {
+      gridRef.current?.setRows(originRows);
+    }
+  }, [originRows]);
+  /**
    * Editabletable
    */
   const _editableRef = useRef<{

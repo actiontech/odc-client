@@ -26,7 +26,12 @@ import { ProfileType } from '@/component/ExecuteSqlDetailModal/constant';
 import { LockResultSetHint } from '@/component/LockResultSetHint';
 import { ISQLLintReuslt } from '@/component/SQLLintResult/type';
 import { LOCK_RESULT_SET_COOKIE_KEY, TAB_HEADER_HEIGHT } from '@/constant';
-import { IResultSet, ISqlExecuteResultStatus, ITableColumn } from '@/d.ts';
+import {
+  IResultSet,
+  ISqlExecuteResult,
+  ISqlExecuteResultStatus,
+  ITableColumn
+} from '@/d.ts';
 import { IUnauthorizedDBResources } from '@/d.ts/table';
 import {
   DBServiceService,
@@ -376,7 +381,7 @@ const SQLResultSet: React.FC<IProps> = function (props) {
   }, [session, targetUnmaskResultSet, unmaskForm]);
 
   const updateResultSetWithOriginalData = useCallback(
-    (result: unknown) => {
+    (result: ISqlExecuteResult) => {
       if (!targetUnmaskResultSet?.uniqKey) {
         return;
       }
@@ -385,6 +390,7 @@ const SQLResultSet: React.FC<IProps> = function (props) {
         session?.connection?.dialectType,
         targetUnmaskResultSet.uniqKey
       )?.[0];
+
       if (!parsed) {
         return;
       }
