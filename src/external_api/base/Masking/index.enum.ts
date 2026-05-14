@@ -1,5 +1,19 @@
 /* tslint:disable no-duplicate-string */
 
+export enum GetMaskingOverviewTreeMaskingConfigStatusesEnum {
+  'CONFIGURED' = 'CONFIGURED',
+
+  'PENDING_CONFIRM' = 'PENDING_CONFIRM',
+
+  'SYSTEM_CONFIRMED' = 'SYSTEM_CONFIRMED'
+}
+
+export enum ListMaskingRulesSourceEnum {
+  'builtin' = 'builtin',
+
+  'custom' = 'custom'
+}
+
 export enum ListUnmaskingWorkflowsFilterByApprovalStatusEnum {
   'pending' = 'pending',
 
@@ -14,12 +28,4 @@ export enum ListUnmaskingWorkflowsFilterByUsageStatusEnum {
   'unviewed' = 'unviewed',
 
   'viewed' = 'viewed'
-}
-
-export enum GetMaskingOverviewTreeMaskingConfigStatusesEnum {
-  'CONFIGURED' = 'CONFIGURED',
-
-  'PENDING_CONFIRM' = 'PENDING_CONFIRM',
-
-  'SYSTEM_CONFIRMED' = 'SYSTEM_CONFIRMED'
 }

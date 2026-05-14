@@ -333,11 +333,11 @@ const SQLResultSet: React.FC<IProps> = function (props) {
       const sqlContent =
         targetUnmaskResultSet.originSql || targetUnmaskResultSet.executeSql;
       const response = await MaskingService.CreateUnmaskingWorkflow({
+        project_uid: projectUid,
         unmasking_workflow: {
           apply_reason: values.applyReason,
           datasource_uid: String(datasourceUid),
           default_schema: session?.database?.dbName,
-          project_uid: String(projectUid),
           source_type: CreateUnmaskingWorkflowSourceTypeEnum.sql_workbench,
           source_uid: session.sessionId,
           unmasking_sqls: sqlContent
