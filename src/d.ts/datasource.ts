@@ -49,6 +49,7 @@ export enum IDataSourceType {
   MySQL = 'mysql',
   Doris = 'doris',
   TiDB = 'tidb',
+  DB2 = 'DB2',
   Oracle = 'oracle',
   PG = 'postgresql',
   ALIYUNOSS = 'ALIYUNOSS',

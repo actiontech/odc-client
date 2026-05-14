@@ -131,6 +131,7 @@ export const ConnectTypeText = (type: ConnectType) => {
     [ConnectType.MYSQL]: 'MySQL',
     [ConnectType.DORIS]: 'Doris',
     [ConnectType.TIDB]: 'TiDB',
+    [ConnectType.DB2]: 'DB2',
     [ConnectType.ORACLE]: 'Oracle',
     [ConnectType.PG]: 'PostgreSQL',
     [ConnectType.OSS]: formatMessage({
