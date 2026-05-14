@@ -1,3 +1,4 @@
+/* eslint-disable */
 // @ts-nocheck
 import {
   IGetGlobalDataExportWorkflowsReply,
@@ -10,22 +11,17 @@ import {
   IRejectDataExportWorkflowReq
 } from '../common.type';
 
-import {
-  ListAllDataExportWorkflowsFilterByStatusEnum,
-  ListDataExportWorkflowsFilterByStatusEnum
-} from './index.enum';
+import { ListDataExportWorkflowsFilterByStatusEnum } from './index.enum';
 
 export interface IGetGlobalDataExportWorkflowsReturn
   extends IGetGlobalDataExportWorkflowsReply {}
 
 export interface IListAllDataExportWorkflowsParams {
-  project_uid?: string;
-
   page_size: number;
 
   page_index?: number;
 
-  filter_by_status?: ListAllDataExportWorkflowsFilterByStatusEnum;
+  filter_by_status?: string;
 
   filter_by_create_user_uid?: string;
 
@@ -107,14 +103,6 @@ export interface IExportDataExportWorkflowParams {
 }
 
 export interface IExportDataExportWorkflowReturn extends IGenericResp {}
-
-export interface IDownloadOriginalDataExportWorkflowParams {
-  project_uid: string;
-
-  data_export_workflow_uid: string;
-
-  unmasking_workflow_uid: string;
-}
 
 export interface IRejectDataExportWorkflowParams
   extends IRejectDataExportWorkflowReq {

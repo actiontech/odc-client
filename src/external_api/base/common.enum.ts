@@ -160,6 +160,12 @@ export enum ListGlobalDBServiceV2LastConnectionTestStatusEnum {
   'connect_failed' = 'connect_failed'
 }
 
+export enum ListMaskingRulesDataSourceEnum {
+  'builtin' = 'builtin',
+
+  'custom' = 'custom'
+}
+
 export enum ListMemberRoleWithOpRangeOpRangeTypeEnum {
   'unknown' = 'unknown',
 
@@ -310,6 +316,16 @@ export enum ListUserGroupStatEnum {
   'Unknown' = 'Unknown'
 }
 
+export enum MaskingAlgorithmConfigMaskTypeEnum {
+  'CHAR' = 'CHAR',
+
+  'TAG' = 'TAG',
+
+  'REPLACE' = 'REPLACE',
+
+  'ALGO' = 'ALGO'
+}
+
 export enum MemberRoleWithOpRangeOpRangeTypeEnum {
   'unknown' = 'unknown',
 
@@ -418,6 +434,12 @@ export enum OperationRecordListItemStatusEnum {
   'failed' = 'failed'
 }
 
+export enum ProcessApprovalRequestReqActionEnum {
+  'APPROVE' = 'APPROVE',
+
+  'REJECT' = 'REJECT'
+}
+
 export enum ProjectInfoProjectPriorityEnum {
   'high' = 'high',
 
@@ -466,12 +488,30 @@ export enum SensitiveFieldScanResultConfidenceEnum {
   'LOW' = 'LOW'
 }
 
+export enum SensitiveFieldScanResultRuleSourceEnum {
+  'builtin' = 'builtin',
+
+  'custom' = 'custom'
+}
+
+export enum SensitiveTypeDataSensitiveDataTypeSourceEnum {
+  'builtin' = 'builtin',
+
+  'custom' = 'custom'
+}
+
 export enum TableColumnMaskingDetailConfidenceEnum {
   'HIGH' = 'HIGH',
 
   'MEDIUM' = 'MEDIUM',
 
   'LOW' = 'LOW'
+}
+
+export enum TableColumnMaskingDetailMaskingRuleSourceEnum {
+  'builtin' = 'builtin',
+
+  'custom' = 'custom'
 }
 
 export enum TableColumnMaskingDetailStatusEnum {
@@ -495,9 +535,11 @@ export enum UnmaskingOperationLogItemActionEnum {
 
   'reject' = 'reject',
 
-  'view' = 'view',
+  'view_unmasking_workflow_detail' = 'view_unmasking_workflow_detail',
 
-  'download' = 'download',
+  'view_full_original_data' = 'view_full_original_data',
+
+  'download_full_original_data' = 'download_full_original_data',
 
   'cancel' = 'cancel'
 }

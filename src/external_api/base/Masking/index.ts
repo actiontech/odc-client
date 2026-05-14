@@ -7,7 +7,58 @@ import ServiceBase from '../Service.base';
 import { AxiosRequestConfig } from 'axios';
 
 import {
+  IGetMaskingOverviewTreeParams,
+  IGetMaskingOverviewTreeReturn,
+  IPreviewMaskingEffectParams,
+  IPreviewMaskingEffectReturn,
+  IConfigureMaskingRulesParams,
+  IConfigureMaskingRulesReturn,
+  IListMaskingRulesParams,
   IListMaskingRulesReturn,
+  IAddMaskingRuleParams,
+  IAddMaskingRuleReturn,
+  IGetMaskingRuleDetailParams,
+  IGetMaskingRuleDetailReturn,
+  IUpdateMaskingRuleParams,
+  IUpdateMaskingRuleReturn,
+  IDeleteMaskingRuleParams,
+  IDeleteMaskingRuleReturn,
+  IListSensitiveDataDiscoveryTasksParams,
+  IListSensitiveDataDiscoveryTasksReturn,
+  IAddSensitiveDataDiscoveryTaskParams,
+  IAddSensitiveDataDiscoveryTaskReturn,
+  IListCreatableDBServicesForMaskingTaskParams,
+  IListCreatableDBServicesForMaskingTaskReturn,
+  IListDBServiceSchemasForMaskingTaskParams,
+  IListDBServiceSchemasForMaskingTaskReturn,
+  IListDBServiceTablesForMaskingTaskParams,
+  IListDBServiceTablesForMaskingTaskReturn,
+  IUpdateSensitiveDataDiscoveryTaskParams,
+  IUpdateSensitiveDataDiscoveryTaskReturn,
+  IDeleteSensitiveDataDiscoveryTaskParams,
+  IDeleteSensitiveDataDiscoveryTaskReturn,
+  IListSensitiveDataDiscoveryTaskHistoriesParams,
+  IListSensitiveDataDiscoveryTaskHistoriesReturn,
+  IListSensitiveTypesParams,
+  IListSensitiveTypesReturn,
+  IAddSensitiveDataTypeParams,
+  IAddSensitiveDataTypeReturn,
+  ITestSensitiveDataTypeMatchParams,
+  ITestSensitiveDataTypeMatchReturn,
+  IUpdateSensitiveDataTypeParams,
+  IUpdateSensitiveDataTypeReturn,
+  IDeleteSensitiveDataTypeParams,
+  IDeleteSensitiveDataTypeReturn,
+  IGetTableColumnMaskingDetailsParams,
+  IGetTableColumnMaskingDetailsReturn,
+  IListMaskingTemplatesParams,
+  IListMaskingTemplatesReturn,
+  IAddMaskingTemplateParams,
+  IAddMaskingTemplateReturn,
+  IUpdateMaskingTemplateParams,
+  IUpdateMaskingTemplateReturn,
+  IDeleteMaskingTemplateParams,
+  IDeleteMaskingTemplateReturn,
   IListUnmaskingWorkflowsParams,
   IListUnmaskingWorkflowsReturn,
   ICreateUnmaskingWorkflowParams,
@@ -19,128 +70,10 @@ import {
   ICancelUnmaskingWorkflowParams,
   ICancelUnmaskingWorkflowReturn,
   IRejectUnmaskingWorkflowParams,
-  IRejectUnmaskingWorkflowReturn,
-  IGetMaskingOverviewTreeParams,
-  IGetMaskingOverviewTreeReturn,
-  IConfigureMaskingRulesParams,
-  IConfigureMaskingRulesReturn,
-  IListSensitiveDataDiscoveryTasksParams,
-  IListSensitiveDataDiscoveryTasksReturn,
-  IAddSensitiveDataDiscoveryTaskParams,
-  IAddSensitiveDataDiscoveryTaskReturn,
-  IListCreatableDBServicesForMaskingTaskParams,
-  IListCreatableDBServicesForMaskingTaskReturn,
-  IUpdateSensitiveDataDiscoveryTaskParams,
-  IUpdateSensitiveDataDiscoveryTaskReturn,
-  IDeleteSensitiveDataDiscoveryTaskParams,
-  IDeleteSensitiveDataDiscoveryTaskReturn,
-  IListSensitiveDataDiscoveryTaskHistoriesParams,
-  IListSensitiveDataDiscoveryTaskHistoriesReturn,
-  IGetTableColumnMaskingDetailsParams,
-  IGetTableColumnMaskingDetailsReturn,
-  IListMaskingTemplatesParams,
-  IListMaskingTemplatesReturn,
-  IAddMaskingTemplateParams,
-  IAddMaskingTemplateReturn,
-  IUpdateMaskingTemplateParams,
-  IUpdateMaskingTemplateReturn,
-  IDeleteMaskingTemplateParams,
-  IDeleteMaskingTemplateReturn
+  IRejectUnmaskingWorkflowReturn
 } from './index.type';
 
 class MaskingService extends ServiceBase {
-  public ListMaskingRules(options?: AxiosRequestConfig) {
-    return this.get<IListMaskingRulesReturn>(
-      '/v1/dms/masking/rules',
-      undefined,
-      options
-    );
-  }
-
-  public ListUnmaskingWorkflows(
-    params: IListUnmaskingWorkflowsParams,
-    options?: AxiosRequestConfig
-  ) {
-    const paramsData = this.cloneDeep(params);
-    return this.get<IListUnmaskingWorkflowsReturn>(
-      '/v1/dms/masking/unmasking-workflows',
-      paramsData,
-      options
-    );
-  }
-
-  public CreateUnmaskingWorkflow(
-    params: ICreateUnmaskingWorkflowParams,
-    options?: AxiosRequestConfig
-  ) {
-    const paramsData = this.cloneDeep(params);
-    return this.post<ICreateUnmaskingWorkflowReturn>(
-      '/v1/dms/masking/unmasking-workflows',
-      paramsData,
-      options
-    );
-  }
-
-  public GetUnmaskingWorkflow(
-    params: IGetUnmaskingWorkflowParams,
-    options?: AxiosRequestConfig
-  ) {
-    const paramsData = this.cloneDeep(params);
-    const workflow_id = paramsData.workflow_id;
-    delete paramsData.workflow_id;
-
-    return this.get<IGetUnmaskingWorkflowReturn>(
-      `/v1/dms/masking/unmasking-workflows/${workflow_id}`,
-      paramsData,
-      options
-    );
-  }
-
-  public ApproveUnmaskingWorkflow(
-    params: IApproveUnmaskingWorkflowParams,
-    options?: AxiosRequestConfig
-  ) {
-    const paramsData = this.cloneDeep(params);
-    const workflow_id = paramsData.workflow_id;
-    delete paramsData.workflow_id;
-
-    return this.post<IApproveUnmaskingWorkflowReturn>(
-      `/v1/dms/masking/unmasking-workflows/${workflow_id}/approve`,
-      paramsData,
-      options
-    );
-  }
-
-  public CancelUnmaskingWorkflow(
-    params: ICancelUnmaskingWorkflowParams,
-    options?: AxiosRequestConfig
-  ) {
-    const paramsData = this.cloneDeep(params);
-    const workflow_id = paramsData.workflow_id;
-    delete paramsData.workflow_id;
-
-    return this.post<ICancelUnmaskingWorkflowReturn>(
-      `/v1/dms/masking/unmasking-workflows/${workflow_id}/cancel`,
-      paramsData,
-      options
-    );
-  }
-
-  public RejectUnmaskingWorkflow(
-    params: IRejectUnmaskingWorkflowParams,
-    options?: AxiosRequestConfig
-  ) {
-    const paramsData = this.cloneDeep(params);
-    const workflow_id = paramsData.workflow_id;
-    delete paramsData.workflow_id;
-
-    return this.post<IRejectUnmaskingWorkflowReturn>(
-      `/v1/dms/masking/unmasking-workflows/${workflow_id}/reject`,
-      paramsData,
-      options
-    );
-  }
-
   public GetMaskingOverviewTree(
     params: IGetMaskingOverviewTreeParams,
     options?: AxiosRequestConfig
@@ -156,6 +89,21 @@ class MaskingService extends ServiceBase {
     );
   }
 
+  public PreviewMaskingEffect(
+    params: IPreviewMaskingEffectParams,
+    options?: AxiosRequestConfig
+  ) {
+    const paramsData = this.cloneDeep(params);
+    const project_uid = paramsData.project_uid;
+    delete paramsData.project_uid;
+
+    return this.post<IPreviewMaskingEffectReturn>(
+      `/v1/dms/projects/${project_uid}/masking/preview`,
+      paramsData,
+      options
+    );
+  }
+
   public ConfigureMaskingRules(
     params: IConfigureMaskingRulesParams,
     options?: AxiosRequestConfig
@@ -166,6 +114,90 @@ class MaskingService extends ServiceBase {
 
     return this.put<IConfigureMaskingRulesReturn>(
       `/v1/dms/projects/${project_uid}/masking/rule-configs`,
+      paramsData,
+      options
+    );
+  }
+
+  public ListMaskingRules(
+    params: IListMaskingRulesParams,
+    options?: AxiosRequestConfig
+  ) {
+    const paramsData = this.cloneDeep(params);
+    const project_uid = paramsData.project_uid;
+    delete paramsData.project_uid;
+
+    return this.get<IListMaskingRulesReturn>(
+      `/v1/dms/projects/${project_uid}/masking/rules`,
+      paramsData,
+      options
+    );
+  }
+
+  public AddMaskingRule(
+    params: IAddMaskingRuleParams,
+    options?: AxiosRequestConfig
+  ) {
+    const paramsData = this.cloneDeep(params);
+    const project_uid = paramsData.project_uid;
+    delete paramsData.project_uid;
+
+    return this.post<IAddMaskingRuleReturn>(
+      `/v1/dms/projects/${project_uid}/masking/rules`,
+      paramsData,
+      options
+    );
+  }
+
+  public GetMaskingRuleDetail(
+    params: IGetMaskingRuleDetailParams,
+    options?: AxiosRequestConfig
+  ) {
+    const paramsData = this.cloneDeep(params);
+    const project_uid = paramsData.project_uid;
+    delete paramsData.project_uid;
+
+    const rule_id = paramsData.rule_id;
+    delete paramsData.rule_id;
+
+    return this.get<IGetMaskingRuleDetailReturn>(
+      `/v1/dms/projects/${project_uid}/masking/rules/${rule_id}`,
+      paramsData,
+      options
+    );
+  }
+
+  public UpdateMaskingRule(
+    params: IUpdateMaskingRuleParams,
+    options?: AxiosRequestConfig
+  ) {
+    const paramsData = this.cloneDeep(params);
+    const project_uid = paramsData.project_uid;
+    delete paramsData.project_uid;
+
+    const rule_id = paramsData.rule_id;
+    delete paramsData.rule_id;
+
+    return this.put<IUpdateMaskingRuleReturn>(
+      `/v1/dms/projects/${project_uid}/masking/rules/${rule_id}`,
+      paramsData,
+      options
+    );
+  }
+
+  public DeleteMaskingRule(
+    params: IDeleteMaskingRuleParams,
+    options?: AxiosRequestConfig
+  ) {
+    const paramsData = this.cloneDeep(params);
+    const project_uid = paramsData.project_uid;
+    delete paramsData.project_uid;
+
+    const rule_id = paramsData.rule_id;
+    delete paramsData.rule_id;
+
+    return this.delete<IDeleteMaskingRuleReturn>(
+      `/v1/dms/projects/${project_uid}/masking/rules/${rule_id}`,
       paramsData,
       options
     );
@@ -211,6 +243,36 @@ class MaskingService extends ServiceBase {
 
     return this.get<IListCreatableDBServicesForMaskingTaskReturn>(
       `/v1/dms/projects/${project_uid}/masking/sensitive-data-discovery-tasks/creatable-db-services`,
+      paramsData,
+      options
+    );
+  }
+
+  public ListDBServiceSchemasForMaskingTask(
+    params: IListDBServiceSchemasForMaskingTaskParams,
+    options?: AxiosRequestConfig
+  ) {
+    const paramsData = this.cloneDeep(params);
+    const project_uid = paramsData.project_uid;
+    delete paramsData.project_uid;
+
+    return this.get<IListDBServiceSchemasForMaskingTaskReturn>(
+      `/v1/dms/projects/${project_uid}/masking/sensitive-data-discovery-tasks/db-service-schemas`,
+      paramsData,
+      options
+    );
+  }
+
+  public ListDBServiceTablesForMaskingTask(
+    params: IListDBServiceTablesForMaskingTaskParams,
+    options?: AxiosRequestConfig
+  ) {
+    const paramsData = this.cloneDeep(params);
+    const project_uid = paramsData.project_uid;
+    delete paramsData.project_uid;
+
+    return this.get<IListDBServiceTablesForMaskingTaskReturn>(
+      `/v1/dms/projects/${project_uid}/masking/sensitive-data-discovery-tasks/db-service-tables`,
       paramsData,
       options
     );
@@ -265,6 +327,87 @@ class MaskingService extends ServiceBase {
 
     return this.get<IListSensitiveDataDiscoveryTaskHistoriesReturn>(
       `/v1/dms/projects/${project_uid}/masking/sensitive-data-discovery-tasks/${task_id}/histories`,
+      paramsData,
+      options
+    );
+  }
+
+  public ListSensitiveTypes(
+    params: IListSensitiveTypesParams,
+    options?: AxiosRequestConfig
+  ) {
+    const paramsData = this.cloneDeep(params);
+    const project_uid = paramsData.project_uid;
+    delete paramsData.project_uid;
+
+    return this.get<IListSensitiveTypesReturn>(
+      `/v1/dms/projects/${project_uid}/masking/sensitive-types`,
+      paramsData,
+      options
+    );
+  }
+
+  public AddSensitiveDataType(
+    params: IAddSensitiveDataTypeParams,
+    options?: AxiosRequestConfig
+  ) {
+    const paramsData = this.cloneDeep(params);
+    const project_uid = paramsData.project_uid;
+    delete paramsData.project_uid;
+
+    return this.post<IAddSensitiveDataTypeReturn>(
+      `/v1/dms/projects/${project_uid}/masking/sensitive-types`,
+      paramsData,
+      options
+    );
+  }
+
+  public TestSensitiveDataTypeMatch(
+    params: ITestSensitiveDataTypeMatchParams,
+    options?: AxiosRequestConfig
+  ) {
+    const paramsData = this.cloneDeep(params);
+    const project_uid = paramsData.project_uid;
+    delete paramsData.project_uid;
+
+    return this.post<ITestSensitiveDataTypeMatchReturn>(
+      `/v1/dms/projects/${project_uid}/masking/sensitive-types/match-test`,
+      paramsData,
+      options
+    );
+  }
+
+  public UpdateSensitiveDataType(
+    params: IUpdateSensitiveDataTypeParams,
+    options?: AxiosRequestConfig
+  ) {
+    const paramsData = this.cloneDeep(params);
+    const project_uid = paramsData.project_uid;
+    delete paramsData.project_uid;
+
+    const sensitive_data_type_id = paramsData.sensitive_data_type_id;
+    delete paramsData.sensitive_data_type_id;
+
+    return this.put<IUpdateSensitiveDataTypeReturn>(
+      `/v1/dms/projects/${project_uid}/masking/sensitive-types/${sensitive_data_type_id}`,
+      paramsData,
+      options
+    );
+  }
+
+  public DeleteSensitiveDataType(
+    params: IDeleteSensitiveDataTypeParams,
+    options?: AxiosRequestConfig
+  ) {
+    const paramsData = this.cloneDeep(params);
+    const project_uid = paramsData.project_uid;
+    delete paramsData.project_uid;
+
+    const sensitive_data_type_id = paramsData.sensitive_data_type_id;
+    delete paramsData.sensitive_data_type_id;
+
+    return this.delete<IDeleteSensitiveDataTypeReturn>(
+      `/v1/dms/projects/${project_uid}/masking/sensitive-types/${sensitive_data_type_id}`,
       paramsData,
       options
     );
@@ -349,6 +492,108 @@ class MaskingService extends ServiceBase {
 
     return this.delete<IDeleteMaskingTemplateReturn>(
       `/v1/dms/projects/${project_uid}/masking/templates/${template_id}`,
+      paramsData,
+      options
+    );
+  }
+
+  public ListUnmaskingWorkflows(
+    params: IListUnmaskingWorkflowsParams,
+    options?: AxiosRequestConfig
+  ) {
+    const paramsData = this.cloneDeep(params);
+    const project_uid = paramsData.project_uid;
+    delete paramsData.project_uid;
+
+    return this.get<IListUnmaskingWorkflowsReturn>(
+      `/v1/dms/projects/${project_uid}/masking/unmasking-workflows`,
+      paramsData,
+      options
+    );
+  }
+
+  public CreateUnmaskingWorkflow(
+    params: ICreateUnmaskingWorkflowParams,
+    options?: AxiosRequestConfig
+  ) {
+    const paramsData = this.cloneDeep(params);
+    const project_uid = paramsData.project_uid;
+    delete paramsData.project_uid;
+
+    return this.post<ICreateUnmaskingWorkflowReturn>(
+      `/v1/dms/projects/${project_uid}/masking/unmasking-workflows`,
+      paramsData,
+      options
+    );
+  }
+
+  public GetUnmaskingWorkflow(
+    params: IGetUnmaskingWorkflowParams,
+    options?: AxiosRequestConfig
+  ) {
+    const paramsData = this.cloneDeep(params);
+    const project_uid = paramsData.project_uid;
+    delete paramsData.project_uid;
+
+    const workflow_id = paramsData.workflow_id;
+    delete paramsData.workflow_id;
+
+    return this.get<IGetUnmaskingWorkflowReturn>(
+      `/v1/dms/projects/${project_uid}/masking/unmasking-workflows/${workflow_id}`,
+      paramsData,
+      options
+    );
+  }
+
+  public ApproveUnmaskingWorkflow(
+    params: IApproveUnmaskingWorkflowParams,
+    options?: AxiosRequestConfig
+  ) {
+    const paramsData = this.cloneDeep(params);
+    const project_uid = paramsData.project_uid;
+    delete paramsData.project_uid;
+
+    const workflow_id = paramsData.workflow_id;
+    delete paramsData.workflow_id;
+
+    return this.post<IApproveUnmaskingWorkflowReturn>(
+      `/v1/dms/projects/${project_uid}/masking/unmasking-workflows/${workflow_id}/approve`,
+      paramsData,
+      options
+    );
+  }
+
+  public CancelUnmaskingWorkflow(
+    params: ICancelUnmaskingWorkflowParams,
+    options?: AxiosRequestConfig
+  ) {
+    const paramsData = this.cloneDeep(params);
+    const project_uid = paramsData.project_uid;
+    delete paramsData.project_uid;
+
+    const workflow_id = paramsData.workflow_id;
+    delete paramsData.workflow_id;
+
+    return this.post<ICancelUnmaskingWorkflowReturn>(
+      `/v1/dms/projects/${project_uid}/masking/unmasking-workflows/${workflow_id}/cancel`,
+      paramsData,
+      options
+    );
+  }
+
+  public RejectUnmaskingWorkflow(
+    params: IRejectUnmaskingWorkflowParams,
+    options?: AxiosRequestConfig
+  ) {
+    const paramsData = this.cloneDeep(params);
+    const project_uid = paramsData.project_uid;
+    delete paramsData.project_uid;
+
+    const workflow_id = paramsData.workflow_id;
+    delete paramsData.workflow_id;
+
+    return this.post<IRejectUnmaskingWorkflowReturn>(
+      `/v1/dms/projects/${project_uid}/masking/unmasking-workflows/${workflow_id}/reject`,
       paramsData,
       options
     );
