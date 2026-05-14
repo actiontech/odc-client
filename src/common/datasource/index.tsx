@@ -24,6 +24,7 @@ import oracle from './oracle';
 import MySQL from './mysql';
 import Doris from './doris';
 import TiDB from './tidb';
+import DB2 from './db2';
 import PG from './pg';
 import DM from './dm';
 import FileSystem from './fileSystem';
@@ -33,9 +34,11 @@ import { ReactComponent as MySQLSvg } from '@/svgr/mysql.svg';
 import { ReactComponent as DBMySQLSvg } from '@/svgr/database_mysql.svg';
 import { ReactComponent as DorisSvg } from '@/svgr/doris.svg';
 import { ReactComponent as TiDBSvg } from '@/svgr/tidb.svg';
+import { ReactComponent as DB2Svg } from '@/svgr/db2.svg';
 import { ReactComponent as PGSvg } from '@/svgr/pg.svg';
 import { ReactComponent as DBDorisSvg } from '@/svgr/database_doris.svg';
 import { ReactComponent as DBTiDBSvg } from '@/svgr/database_tidb.svg';
+import { ReactComponent as DBDB2Svg } from '@/svgr/database_db2.svg';
 import { ReactComponent as OracleSvg } from '@/svgr/oracle.svg';
 import { ReactComponent as DBOracleSvg } from '@/svgr/database_oracle.svg';
 import { DBType, BooleanOptionType } from '@/d.ts/database';
@@ -110,6 +113,15 @@ const _styles = {
       component: DBTiDBSvg
     }
   },
+  [IDataSourceType.DB2]: {
+    icon: {
+      component: DB2Svg,
+      color: '#326CE5'
+    },
+    dbIcon: {
+      component: DBDB2Svg
+    }
+  },
   [IDataSourceType.Oracle]: {
     icon: {
       component: OracleSvg,
@@ -180,6 +192,7 @@ const _gruops = {
   [IDataSourceType.MySQL]: DatasourceGroup.OtherDatabase,
   [IDataSourceType.Doris]: DatasourceGroup.OtherDatabase,
   [IDataSourceType.TiDB]: DatasourceGroup.OtherDatabase,
+  [IDataSourceType.DB2]: DatasourceGroup.OtherDatabase,
   [IDataSourceType.Oracle]: DatasourceGroup.OtherDatabase,
   [IDataSourceType.PG]: DatasourceGroup.OtherDatabase,
   [IDataSourceType.ALIYUNOSS]: DatasourceGroup.FileSystem,
@@ -238,6 +251,7 @@ function initDatasource() {
   register(IDataSourceType.MySQL, MySQL);
   register(IDataSourceType.Doris, Doris);
   register(IDataSourceType.TiDB, TiDB);
+  register(IDataSourceType.DB2, DB2);
   register(IDataSourceType.Oracle, oracle);
   register(IDataSourceType.PG, PG);
   register(IDataSourceType.ALIYUNOSS, FileSystem.ALIYUN);
