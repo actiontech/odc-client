@@ -60,7 +60,13 @@ const procedureConfig: IDataSourceModeConfig['schema']['proc'] = {
  *
  * - task=[]: 工作台 MVP 不开任何 task（Q-09 决议）
  * - sqlExplain=false: ob-sql-parser 不支持 DB2 EXPLAIN
- * - sqlconsole=false: ODC 内部 SqlConsole 审核规则关闭（前端互斥前置位 compat-RISK-12）
+ * - sqlconsole=true: 必须为 true，否则 SessionDropdown (SQL 编辑器顶部"请选择数据库"下拉)
+ *   会用 features.sqlconsole === false 作为门控把 DB2 schema 全部过滤掉，导致下拉
+ *   显示"暂无数据库"。详见 docs/dev/fix_report_T1-4.md §2.2 / fix_report_T1-5.md。
+ *   compat-RISK-12（CloudBeaver / ODC 工作台入口互斥）的真实互斥语义由
+ *   dms-ui-ee/src/page/CloudBeaver/index.tsx 入口路由控制（odcOnlyMode 等），
+ *   **与 odc-client features.sqlconsole 完全解耦**。dev T-004 commit `666356fa`
+ *   原把 sqlconsole=false 标注为"前端互斥前置位 compat-RISK-12"系误判，已在 T-1.5 纠正。
  * - sessionManage=true: 满足 R6 要求
  * - obclient=false / recycleBin=false / sessionParams=false / groupResourceTree=false: DB2 不支持
  */
@@ -82,7 +88,7 @@ const items: Record<ConnectType.DB2, IDataSourceModeConfig> = {
       sessionParams: false,
       sqlExplain: false,
       groupResourceTree: false,
-      sqlconsole: false,
+      sqlconsole: true,
       export: { fileLimit: false, snapshot: false }
     },
     schema: {

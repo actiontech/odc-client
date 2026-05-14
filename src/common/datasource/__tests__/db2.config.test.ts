@@ -18,7 +18,12 @@ import { ConnectType } from '@/d.ts';
 import DB2 from '@/common/datasource/db2';
 
 /**
- * compat-RISK-3 features 软降级 / compat-RISK-12 互斥前置位 / 表单字段断言.
+ * compat-RISK-3 features 软降级 / compat-RISK-12 互斥语义独立 / 表单字段断言.
+ *
+ * compat-RISK-12（CloudBeaver / ODC 工作台入口互斥）的真实语义由
+ * dms-ui-ee/src/page/CloudBeaver/index.tsx 入口路由控制（odcOnlyMode），与
+ * odc-client features.sqlconsole 完全解耦——后者是 SessionDropdown 下拉门控（T-1.5 纠正）。
+ *
  * 不调注册中心（避免引入 antd / svgr 等运行期依赖），直接对 DB2 数据源配置做静态断言.
  */
 describe('compat-RISK-3 / compat-RISK-12 DB2 datasource config', () => {
@@ -32,9 +37,13 @@ describe('compat-RISK-3 / compat-RISK-12 DB2 datasource config', () => {
         expected: false
       },
       {
-        name: 'sqlconsole disabled (audit gate)',
+        // T-1.5 反转语义：features.sqlconsole 是 SessionDropdown (SQL 编辑器顶部
+        // "请选择数据库"下拉) 的门控，必须为 true 才能让 DB2 schema 出现在下拉中。
+        // compat-RISK-12 真实互斥由 dms-ui-ee CloudBeaver/index.tsx 入口路由控制，
+        // 与本字段完全解耦；详见 docs/dev/fix_report_T1-5.md。
+        name: 'sqlconsole enabled (sql editor dropdown gate, decoupled from compat-RISK-12 mutex)',
         actual: config.features.sqlconsole,
-        expected: false
+        expected: true
       },
       {
         name: 'task list empty (no MVP task type)',
