@@ -150,7 +150,8 @@ export const ConnectTypeText = (type: ConnectType) => {
     [ConnectType.DM]: formatMessage({
       id: 'src.constant.DM_LABEL',
       defaultMessage: '达梦(DM)'
-    })
+    }),
+    [ConnectType.DB2]: 'DB2'
   };
   return textMap?.[type];
 };

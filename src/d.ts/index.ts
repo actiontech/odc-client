@@ -771,6 +771,7 @@ export enum ConnectionMode {
   OB_ORACLE = 'OB_ORACLE',
   SQL_SERVER = 'SQL_SERVER',
   DM = 'DM',
+  DB2 = 'DB2',
   ALL = 'ALL',
   UNKNOWN = 'UNKNOWN'
 }
@@ -3560,7 +3561,8 @@ export enum ConnectType {
   OBS = 'OBS',
   S3A = 'S3A',
   SQL_SERVER = 'SQL_SERVER',
-  DM = 'DM'
+  DM = 'DM',
+  DB2 = 'DB2'
 }
 
 export enum DatasourceGroup {
