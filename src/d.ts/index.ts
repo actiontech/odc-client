@@ -774,6 +774,7 @@ export enum ConnectionMode {
   SQL_SERVER = 'SQL_SERVER',
   DM = 'DM',
   HANA = 'HANA',
+  DB2 = 'DB2',
   ALL = 'ALL',
   UNKNOWN = 'UNKNOWN'
 }
@@ -3568,7 +3569,8 @@ export enum ConnectType {
   DM = 'DM',
   HANA = 'HANA',
   MONGODB = 'MONGODB',
-  HIVE = 'HIVE'
+  HIVE = 'HIVE',
+  DB2 = 'DB2'
 }
 
 export enum DatasourceGroup {

@@ -60,5 +60,6 @@ export enum IDataSourceType {
   DM = 'DM',
   HANA = 'HANA',
   MongoDB = 'mongodb',
-  HIVE = 'HIVE'
+  HIVE = 'HIVE',
+  DB2 = 'DB2'
 }
