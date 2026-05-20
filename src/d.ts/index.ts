@@ -3560,7 +3560,8 @@ export enum ConnectType {
   OBS = 'OBS',
   S3A = 'S3A',
   SQL_SERVER = 'SQL_SERVER',
-  DM = 'DM'
+  DM = 'DM',
+  HIVE = 'HIVE'
 }
 
 export enum DatasourceGroup {
