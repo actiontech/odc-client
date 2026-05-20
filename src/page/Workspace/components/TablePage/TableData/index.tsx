@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { getDataSourceModeConfig } from '@/common/datasource';
 import { executeSQL } from '@/common/network/sql';
 import {
   batchGetDataModifySQL,
@@ -419,6 +420,12 @@ class TableData extends React.Component<
       allowExport
     } = this.state;
 
+    // tableDataEditable 控制表数据是否可编辑（design §4.2.4 / compat-RISK-8）。
+    // 既有数据源未声明该字段时默认 true（向后兼容）。
+    const tableDataEditable =
+      getDataSourceModeConfig(session?.connection?.type)?.features
+        ?.tableDataEditable ?? true;
+
     return (
       <Spin wrapperClassName={styles.spin} spinning={dataLoading || !resultSet}>
         {resultSet && (
@@ -430,7 +437,9 @@ class TableData extends React.Component<
             showMock={settingStore.enableMockdata}
             isEditing={isEditing}
             disableEdit={
-              !resultSet.resultSetMetaData?.editable || isExternalTable
+              !resultSet.resultSetMetaData?.editable ||
+              isExternalTable ||
+              !tableDataEditable
             }
             table={{
               ...table,

@@ -34,6 +34,7 @@ import SessionStore from '@/store/sessionManager/session';
 import type { SQLStore } from '@/store/sql';
 import { inject, observer } from 'mobx-react';
 import type { MenuInfo } from 'rc-menu/lib/interface';
+import { getDataSourceModeConfig } from '@/common/datasource';
 import DDLResultSet from '../DDLResultSet';
 import { SqlExecuteResultStatusLabel } from './const';
 import DBPermissionTable from './DBPermissionTable';
@@ -478,7 +479,13 @@ const SQLResultSet: React.FC<IProps> = function (props) {
                     disableEdit={
                       !set.resultSetMetaData?.editable ||
                       !!set.resultSetMetaData?.columnList?.filter((c) => !c)
-                        ?.length
+                        ?.length ||
+                      // tableDataEditable=false 时（Hive 等只读数据源）禁用结果集编辑
+                      // （design §4.2.4 / compat-RISK-8）。
+                      !(
+                        getDataSourceModeConfig(session?.connection?.type)
+                          ?.features?.tableDataEditable ?? true
+                      )
                     }
                     rows={set.rows}
                     enableRowId={true}
