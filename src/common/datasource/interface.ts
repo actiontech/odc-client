@@ -150,6 +150,7 @@ export interface IDataSourceModeConfig {
     recycleBin?: boolean;
     sqlExplain?: boolean;
     sessionManage: boolean;
+    tableDataEditable?: boolean;
     compile?: boolean;
     plEdit?: boolean;
     anonymousBlock?: boolean;
