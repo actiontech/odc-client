@@ -20,12 +20,12 @@ import MySQLColumnExtra from '../oceanbase/MySQLColumnExtra';
 import { haveOCP } from '@/util/env';
 
 const tableConfig = {
-  enableTableCharsetsAndCollations: false,  // PG 字符集在数据库级别设置
+  enableTableCharsetsAndCollations: false, // PG 字符集在数据库级别设置
   enableConstraintOnUpdate: true,
   ColumnExtraComponent: MySQLColumnExtra,
   paritionNameCaseSensitivity: true,
   enableIndexesFullTextType: true,
-  enableAutoIncrement: false,  // PG 使用 SERIAL/IDENTITY
+  enableAutoIncrement: false, // PG 使用 SERIAL/IDENTITY
   type2ColumnType: {
     id: 'int',
     name: 'varchar',
@@ -67,19 +67,14 @@ const items: Record<ConnectType.PG, IDataSourceModeConfig> = {
       disableURLParse: true
     },
     features: {
-      task: [
-        TaskType.ASYNC,
-        TaskType.SQL_PLAN,
-        TaskType.DATA_ARCHIVE,
-        TaskType.DATA_DELETE,
-        TaskType.IMPORT,
-        TaskType.EXPORT,
-        TaskType.EXPORT_RESULT_SET,
-        TaskType.STRUCTURE_COMPARISON,
-        TaskType.MULTIPLE_ASYNC
-      ],
+      // Align with ODC backend PostgreSQLFeatures + odc_version_diff_config:
+      // PG 后端在本期仅承诺 ASYNC（数据库变更）任务；SQL_PLAN / DATA_ARCHIVE /
+      // DATA_DELETE / IMPORT / EXPORT / EXPORT_RESULT_SET / STRUCTURE_COMPARISON /
+      // MULTIPLE_ASYNC 均未在后端开放，前端入口同步收敛以避免点击后 unsupported。
+      // Refs: dms-ee#850, compat-RISK-3
+      task: [TaskType.ASYNC],
       obclient: false,
-      recycleBin: false,  // PG 无回收站
+      recycleBin: false, // PG 无回收站
       sessionManage: true,
       sessionParams: true,
       sqlExplain: true,
