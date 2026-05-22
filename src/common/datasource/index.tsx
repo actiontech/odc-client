@@ -25,6 +25,7 @@ import MySQL from './mysql';
 import Doris from './doris';
 import TiDB from './tidb';
 import PG from './pg';
+import GaussDB from './gaussdb';
 import DM from './dm';
 import FileSystem from './fileSystem';
 import { ReactComponent as OBSvg } from '@/svgr/source_ob.svg';
@@ -128,6 +129,20 @@ const _styles = {
       component: DBPGSvg
     }
   },
+  // GaussDB intentionally reuses the PG svg assets to avoid shipping
+  // binary additions (Task-D03 hard constraint: no new package.json
+  // dependencies and no new image binaries). The dedicated registry
+  // entry preserves CR-7 (independent enum) and CR-14 (visual grouping
+  // next to PG); future divergence can swap in a GaussDB-specific svg.
+  [IDataSourceType.GaussDB]: {
+    icon: {
+      component: PGSvg,
+      color: '#000000'
+    },
+    dbIcon: {
+      component: DBPGSvg
+    }
+  },
   [IDataSourceType.ALIYUNOSS]: {
     icon: {
       component: OSSSvg,
@@ -182,6 +197,7 @@ const _gruops = {
   [IDataSourceType.TiDB]: DatasourceGroup.OtherDatabase,
   [IDataSourceType.Oracle]: DatasourceGroup.OtherDatabase,
   [IDataSourceType.PG]: DatasourceGroup.OtherDatabase,
+  [IDataSourceType.GaussDB]: DatasourceGroup.OtherDatabase,
   [IDataSourceType.ALIYUNOSS]: DatasourceGroup.FileSystem,
   [IDataSourceType.AWSS3]: DatasourceGroup.FileSystem,
   [IDataSourceType.HUAWEI]: DatasourceGroup.FileSystem,
@@ -240,6 +256,7 @@ function initDatasource() {
   register(IDataSourceType.TiDB, TiDB);
   register(IDataSourceType.Oracle, oracle);
   register(IDataSourceType.PG, PG);
+  register(IDataSourceType.GaussDB, GaussDB);
   register(IDataSourceType.ALIYUNOSS, FileSystem.ALIYUN);
   register(IDataSourceType.AWSS3, FileSystem.AWSS3);
   register(IDataSourceType.HUAWEI, FileSystem.HUAWEI);

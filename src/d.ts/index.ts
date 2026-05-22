@@ -701,6 +701,7 @@ export enum AuditEventDialectType {
   DORIS = 'DORIS',
   TIDB = 'TIDB',
   PG = 'POSTGRESQL',
+  GAUSSDB = 'GAUSSDB',
   UNKNOWN = 'UNKNOWN'
 }
 
@@ -766,6 +767,7 @@ export enum ConnectionMode {
   DORIS = 'DORIS',
   TIDB = 'TIDB',
   PG = 'POSTGRESQL',
+  GAUSSDB = 'GAUSSDB',
   ORACLE = 'ORACLE',
   OB_MYSQL = 'OB_MYSQL',
   OB_ORACLE = 'OB_ORACLE',
@@ -3554,6 +3556,7 @@ export enum ConnectType {
   DORIS = 'DORIS',
   TIDB = 'TIDB',
   PG = 'POSTGRESQL',
+  GAUSSDB = 'GAUSSDB',
   ORACLE = 'ORACLE',
   OSS = 'OSS',
   COS = 'COS',
