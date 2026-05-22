@@ -86,7 +86,12 @@ const items: Record<ConnectType.GAUSSDB, IDataSourceModeConfig> = {
       sessionManage: false,
       sessionParams: false,
       sqlExplain: false,
-      groupResourceTree: false,
+      // groupResourceTree controls whether GaussDB physical databases appear in
+      // the ODC workbench left-side database tree. Must be true otherwise
+      // DatabaseTree filter (page/Workspace/SideBar/ResourceTree/DatabaseTree/
+      // index.tsx#L43-49) drops every GaussDB database row and the tree only
+      // shows the bare datasource node (Task-004-FIX root cause).
+      groupResourceTree: true,
       sqlconsole: false,
       export: {
         fileLimit: false,

@@ -93,14 +93,32 @@ describe('common/datasource/gaussdb', () => {
       expect(entry.features.sqlExplain).toBe(false);
     });
 
-    it('TestFeatures_GaussDB_equals_PostgreSQL', () => {
-      // CR-8 deep-equal contract: GaussDB and PG must share the same
-      // workbench-gating features object so we never silently diverge
-      // in production. A future GaussDB-only flip MUST come with a
-      // design doc update + this test failing on purpose.
+    it('TestFeatures_GaussDB_groupResourceTree_true', () => {
+      // Task-004-FIX root cause: DatabaseTree filter at
+      // page/Workspace/SideBar/ResourceTree/DatabaseTree/index.tsx:L43-49
+      // drops every physical database whose datasource type has
+      // features.groupResourceTree === false. GaussDB must therefore
+      // enable groupResourceTree so its databases appear in the ODC
+      // workbench left-side tree (REQ-2 EARS-2.1 / case 2.1.1, 2.2.1,
+      // 2.1.2, 2.2.2). Diverges from PG on purpose.
+      const entry = gaussdbItems[ConnectType.GAUSSDB];
+      expect(entry.features.groupResourceTree).toBe(true);
+    });
+
+    it('TestFeatures_GaussDB_diverges_from_PostgreSQL_on_groupResourceTree', () => {
+      // Documents the only intentional divergence between GaussDB and
+      // PG: GaussDB enables the workbench schema tree (Task-004-FIX),
+      // PG keeps it disabled because PG entry is owned by a different
+      // EARS contract. All other features must still match PG so that
+      // accidental flips on other gating flags surface immediately.
       const gauss = gaussdbItems[ConnectType.GAUSSDB];
       const pg = pgItems[ConnectType.PG];
-      expect(gauss.features).toEqual(pg.features);
+      expect(gauss.features.groupResourceTree).toBe(true);
+      expect(pg.features.groupResourceTree).toBe(false);
+      // Every feature except groupResourceTree must remain identical.
+      const { groupResourceTree: _g, ...gaussRest } = gauss.features;
+      const { groupResourceTree: _p, ...pgRest } = pg.features;
+      expect(gaussRest).toEqual(pgRest);
     });
 
     it('TestPg_entry_unchanged', () => {
@@ -116,7 +134,11 @@ describe('common/datasource/gaussdb', () => {
       expect(pg.connection.jdbcDoc).toBe(
         'https://jdbc.postgresql.org/documentation/use/'
       );
-      expect(pg.connection.address.items).toEqual(['ip', 'port', 'catalogName']);
+      expect(pg.connection.address.items).toEqual([
+        'ip',
+        'port',
+        'catalogName'
+      ]);
       expect(pg.features.sqlconsole).toBe(false);
       expect(pg.features.sessionManage).toBe(false);
       expect(pg.features.sqlExplain).toBe(false);
