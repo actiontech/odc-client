@@ -40,7 +40,7 @@ export function generateResultSetColumns(
             key: `${field.columnName}_${index}`,
             name: field.columnLabel,
             columnName: field.columnName,
-            columnType: field.columnTypeName.replace(/\s/g, '_'),
+            columnType: (field.columnTypeName ?? 'VARCHAR').replace(/\s/g, '_'),
             columnIndex: index,
             columnComment: field.columnComment,
             internal: field.internal,
@@ -63,7 +63,7 @@ export function generateResultSetColumns(
         columnList = r?.resultSetMetaData?.fieldMetaDataList?.map(
           ({ columnTypeName, ...rest }) => {
             return {
-              dataType: columnTypeName,
+              dataType: columnTypeName ?? 'VARCHAR',
               ...rest
             };
           }

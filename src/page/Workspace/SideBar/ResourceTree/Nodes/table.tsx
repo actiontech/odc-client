@@ -35,6 +35,8 @@ import { ReactComponent as IndexSvg } from '@/svgr/index.svg';
 import { ReactComponent as TableOutlined } from '@/svgr/menuTable.svg';
 import { ReactComponent as PartitionSvg } from '@/svgr/Partition.svg';
 import logger from '@/util/logger';
+import { isMongoConnectType } from '@/util/mongodb';
+import { ITableModel } from '@/page/Workspace/components/CreateTable/interface';
 
 export function TableTreeData(
   dbSession: SessionStore,
@@ -42,6 +44,7 @@ export function TableTreeData(
 ): TreeDataNode {
   const dbName = database.name;
   const tables = dbSession?.database?.tables;
+  const isMongoDB = isMongoConnectType(dbSession?.connection?.type);
   const treeData: TreeDataNode = {
     title: formatMessage({
       id: 'odc.ResourceTree.Nodes.table.Table',
@@ -113,7 +116,7 @@ export function TableTreeData(
           };
         }
         let indexRoot: TreeDataNode;
-        if (table.indexes?.length) {
+        if (!isMongoDB && table.indexes?.length) {
           indexRoot = {
             title: formatMessage({
               id: 'odc.ResourceTree.Nodes.table.Index',
@@ -153,217 +156,9 @@ export function TableTreeData(
           };
         }
 
-        let partitionRoot: TreeDataNode = {
-          title: formatMessage({
-            id: 'odc.ResourceTree.Nodes.table.Partition',
-            defaultMessage: '分区'
-          }), //分区
-          type: ResourceNodeType.TablePartitionRoot,
-          key: `${tableKey}-partition`,
-          data: table,
-          sessionId: dbSession?.sessionId,
-          icon: (
-            <FolderOpenFilled
-              style={{
-                color: '#3FA3FF'
-              }}
-            />
-          )
-        };
-
-        const subpartitionsDataHelper = (key, partitions, name) => {
-          if (!partitions) return [];
-          return partitions
-            ?.filter((_s) => _s?.parentName === name)
-            ?.map((s) => {
-              return {
-                title: s.name,
-                key: `${key}-${s.name}`,
-                isLeaf: true,
-                sessionId: dbSession?.sessionId,
-                icon: (
-                  <Icon
-                    component={PartitionSvg}
-                    style={{
-                      color: '#3FA3FF'
-                    }}
-                  />
-                ),
-                type: ResourceNodeType.TablePartition
-              };
-            });
-        };
-
-        /**
-         * 处理分区
-         */
-        switch (table.partitions?.partType) {
-          case IPartitionType.HASH: {
-            partitionRoot.children = table.partitions.partitions.map((p) => {
-              const key = `${tableKey}-partition-hash-${p.name}`;
-              return {
-                title: 'HASH',
-                key: key,
-                isLeaf: !table.subpartitions,
-                // @ts-ignore
-                sessionId: dbSession?.sessionId,
-                icon: (
-                  <Icon
-                    component={PartitionSvg}
-                    style={{
-                      color: '#3FA3FF'
-                    }}
-                  />
-                ),
-                type: ResourceNodeType.TablePartition,
-                children: subpartitionsDataHelper(
-                  key,
-                  table.subpartitions?.partitions,
-                  p.name
-                )
-              };
-            });
-            break;
-          }
-          case IPartitionType.KEY: {
-            partitionRoot.children = table.partitions.partitions.map((p) => {
-              const key = `${tableKey}-partition-key-${p.name}`;
-              return {
-                title: 'KEY',
-                key: key,
-                isLeaf: !table.subpartitions,
-                // @ts-ignore
-                sessionId: dbSession?.sessionId,
-                icon: (
-                  <Icon
-                    component={PartitionSvg}
-                    style={{
-                      color: '#3FA3FF'
-                    }}
-                  />
-                ),
-                type: ResourceNodeType.TablePartition,
-                children: subpartitionsDataHelper(
-                  key,
-                  table.subpartitions?.partitions,
-                  p.name
-                )
-              };
-            });
-            break;
-          }
-          case IPartitionType.LIST: {
-            partitionRoot.children = table.partitions.partitions.map((p) => {
-              const key = `${tableKey}-partition-list-${p.name}`;
-              return {
-                title: p.name,
-                key: key,
-                isLeaf: !table.subpartitions,
-                sessionId: dbSession?.sessionId,
-                icon: (
-                  <Icon
-                    component={PartitionSvg}
-                    style={{
-                      color: '#3FA3FF'
-                    }}
-                  />
-                ),
-
-                type: ResourceNodeType.TablePartition,
-                children: subpartitionsDataHelper(
-                  key,
-                  table.subpartitions?.partitions,
-                  p.name
-                )
-              };
-            });
-            break;
-          }
-          case IPartitionType.LIST_COLUMNS: {
-            partitionRoot.children = table.partitions.partitions.map((p) => {
-              const key = `${tableKey}-partition-list-${p.name}`;
-              return {
-                title: p.name,
-                key: key,
-                isLeaf: !table.subpartitions,
-                sessionId: dbSession?.sessionId,
-                icon: (
-                  <Icon
-                    component={PartitionSvg}
-                    style={{
-                      color: '#3FA3FF'
-                    }}
-                  />
-                ),
-
-                type: ResourceNodeType.TablePartition,
-                children: subpartitionsDataHelper(
-                  key,
-                  table.subpartitions?.partitions,
-                  p.name
-                )
-              };
-            });
-            break;
-          }
-          case IPartitionType.RANGE: {
-            partitionRoot.children = table.partitions.partitions.map((p) => {
-              const key = `${tableKey}-partition-list-${p.name}`;
-              return {
-                title: p.name,
-                key: key,
-                isLeaf: !table.subpartitions,
-                sessionId: dbSession?.sessionId,
-                icon: (
-                  <Icon
-                    component={PartitionSvg}
-                    style={{
-                      color: '#3FA3FF'
-                    }}
-                  />
-                ),
-
-                type: ResourceNodeType.TablePartition,
-                children: subpartitionsDataHelper(
-                  key,
-                  table.subpartitions?.partitions,
-                  p.name
-                )
-              };
-            });
-            break;
-          }
-          case IPartitionType.RANGE_COLUMNS: {
-            partitionRoot.children = table.partitions.partitions.map((p) => {
-              const key = `${tableKey}-partition-list-${p.name}`;
-              return {
-                title: p.name,
-                key: key,
-                isLeaf: !table.subpartitions,
-                sessionId: dbSession?.sessionId,
-                icon: (
-                  <Icon
-                    component={PartitionSvg}
-                    style={{
-                      color: '#3FA3FF'
-                    }}
-                  />
-                ),
-
-                type: ResourceNodeType.TablePartition,
-                children: subpartitionsDataHelper(
-                  key,
-                  table.subpartitions?.partitions,
-                  p.name
-                )
-              };
-            });
-            break;
-          }
-          default: {
-            partitionRoot = null;
-          }
-        }
+        const partitionRoot = isMongoDB
+          ? null
+          : buildTablePartitionRoot(table, tableKey, dbSession?.sessionId);
 
         let constraintRoot: TreeDataNode;
 
@@ -379,7 +174,7 @@ export function TableTreeData(
           .concat(table.primaryConstraints)
           .filter(Boolean);
 
-        if (constraint.length) {
+        if (!isMongoDB && constraint.length) {
           constraintRoot = {
             title: formatMessage({
               id: 'odc.ResourceTree.Nodes.table.Constraints',
@@ -429,7 +224,7 @@ export function TableTreeData(
             openTableViewPage(
               table.info.tableName,
               TopTab.PROPS,
-              PropsTab.DDL,
+              isMongoDB ? PropsTab.INFO : PropsTab.DDL,
               session?.odcDatabase?.id,
               node?.data?.info?.tableId
             );
@@ -455,4 +250,223 @@ export function TableTreeData(
   }
 
   return treeData;
+}
+
+function buildTablePartitionRoot(
+  table: Partial<ITableModel>,
+  tableKey: string,
+  sessionId?: string
+): TreeDataNode | null {
+  let partitionRoot: TreeDataNode = {
+    title: formatMessage({
+      id: 'odc.ResourceTree.Nodes.table.Partition',
+      defaultMessage: '分区'
+    }), //分区
+    type: ResourceNodeType.TablePartitionRoot,
+    key: `${tableKey}-partition`,
+    data: table,
+    sessionId,
+    icon: (
+      <FolderOpenFilled
+        style={{
+          color: '#3FA3FF'
+        }}
+      />
+    )
+  };
+
+  const subpartitionsDataHelper = (key, partitions, name) => {
+    if (!partitions) return [];
+    return partitions
+      ?.filter((_s) => _s?.parentName === name)
+      ?.map((s) => {
+        return {
+          title: s.name,
+          key: `${key}-${s.name}`,
+          isLeaf: true,
+          sessionId: sessionId,
+          icon: (
+            <Icon
+              component={PartitionSvg}
+              style={{
+                color: '#3FA3FF'
+              }}
+            />
+          ),
+          type: ResourceNodeType.TablePartition
+        };
+      });
+  };
+
+  /**
+   * 处理分区
+   */
+  switch (table.partitions?.partType) {
+    case IPartitionType.HASH: {
+      partitionRoot.children = table.partitions.partitions.map((p) => {
+        const key = `${tableKey}-partition-hash-${p.name}`;
+        return {
+          title: 'HASH',
+          key: key,
+          isLeaf: !table.subpartitions,
+          // @ts-ignore
+          sessionId: sessionId,
+          icon: (
+            <Icon
+              component={PartitionSvg}
+              style={{
+                color: '#3FA3FF'
+              }}
+            />
+          ),
+          type: ResourceNodeType.TablePartition,
+          children: subpartitionsDataHelper(
+            key,
+            table.subpartitions?.partitions,
+            p.name
+          )
+        };
+      });
+      break;
+    }
+    case IPartitionType.KEY: {
+      partitionRoot.children = table.partitions.partitions.map((p) => {
+        const key = `${tableKey}-partition-key-${p.name}`;
+        return {
+          title: 'KEY',
+          key: key,
+          isLeaf: !table.subpartitions,
+          // @ts-ignore
+          sessionId: sessionId,
+          icon: (
+            <Icon
+              component={PartitionSvg}
+              style={{
+                color: '#3FA3FF'
+              }}
+            />
+          ),
+          type: ResourceNodeType.TablePartition,
+          children: subpartitionsDataHelper(
+            key,
+            table.subpartitions?.partitions,
+            p.name
+          )
+        };
+      });
+      break;
+    }
+    case IPartitionType.LIST: {
+      partitionRoot.children = table.partitions.partitions.map((p) => {
+        const key = `${tableKey}-partition-list-${p.name}`;
+        return {
+          title: p.name,
+          key: key,
+          isLeaf: !table.subpartitions,
+          sessionId: sessionId,
+          icon: (
+            <Icon
+              component={PartitionSvg}
+              style={{
+                color: '#3FA3FF'
+              }}
+            />
+          ),
+
+          type: ResourceNodeType.TablePartition,
+          children: subpartitionsDataHelper(
+            key,
+            table.subpartitions?.partitions,
+            p.name
+          )
+        };
+      });
+      break;
+    }
+    case IPartitionType.LIST_COLUMNS: {
+      partitionRoot.children = table.partitions.partitions.map((p) => {
+        const key = `${tableKey}-partition-list-${p.name}`;
+        return {
+          title: p.name,
+          key: key,
+          isLeaf: !table.subpartitions,
+          sessionId: sessionId,
+          icon: (
+            <Icon
+              component={PartitionSvg}
+              style={{
+                color: '#3FA3FF'
+              }}
+            />
+          ),
+
+          type: ResourceNodeType.TablePartition,
+          children: subpartitionsDataHelper(
+            key,
+            table.subpartitions?.partitions,
+            p.name
+          )
+        };
+      });
+      break;
+    }
+    case IPartitionType.RANGE: {
+      partitionRoot.children = table.partitions.partitions.map((p) => {
+        const key = `${tableKey}-partition-list-${p.name}`;
+        return {
+          title: p.name,
+          key: key,
+          isLeaf: !table.subpartitions,
+          sessionId: sessionId,
+          icon: (
+            <Icon
+              component={PartitionSvg}
+              style={{
+                color: '#3FA3FF'
+              }}
+            />
+          ),
+
+          type: ResourceNodeType.TablePartition,
+          children: subpartitionsDataHelper(
+            key,
+            table.subpartitions?.partitions,
+            p.name
+          )
+        };
+      });
+      break;
+    }
+    case IPartitionType.RANGE_COLUMNS: {
+      partitionRoot.children = table.partitions.partitions.map((p) => {
+        const key = `${tableKey}-partition-list-${p.name}`;
+        return {
+          title: p.name,
+          key: key,
+          isLeaf: !table.subpartitions,
+          sessionId: sessionId,
+          icon: (
+            <Icon
+              component={PartitionSvg}
+              style={{
+                color: '#3FA3FF'
+              }}
+            />
+          ),
+
+          type: ResourceNodeType.TablePartition,
+          children: subpartitionsDataHelper(
+            key,
+            table.subpartitions?.partitions,
+            p.name
+          )
+        };
+      });
+      break;
+    }
+    default: {
+      partitionRoot = null;
+    }
+  }
+  return partitionRoot;
 }

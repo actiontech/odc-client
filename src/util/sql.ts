@@ -15,6 +15,7 @@
  */
 
 import { getDataSourceModeConfig } from '@/common/datasource';
+import { formatMongoCollectionRef, isMongoConnectType } from '@/util/mongodb';
 import { PLType } from '@/constant/plType';
 import {
   ConnectionMode,
@@ -245,6 +246,9 @@ export function generateSelectSql(
   type: ConnectType,
   tableName: string
 ) {
+  if (isMongoConnectType(type)) {
+    return `${formatMongoCollectionRef(tableName)}.find({})`;
+  }
   let column = '*';
   let table = tableName;
   const char = getDataSourceModeConfig(type)?.sql?.escapeChar;

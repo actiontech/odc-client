@@ -21,7 +21,13 @@ import {
 } from '@/common/network/table';
 import ExecuteSQLModal from '@/component/ExecuteSQLModal';
 import { ISQLLintReuslt } from '@/component/SQLLintResult/type';
-import { EStatus, IResultSet, ISqlExecuteResultStatus, ITable } from '@/d.ts';
+import {
+  EStatus,
+  IResultSet,
+  ISqlExecuteResultStatus,
+  ITable,
+  ConnectType
+} from '@/d.ts';
 import { generateResultSetColumns } from '@/store/helper';
 import modal, { ModalStore } from '@/store/modal';
 import { PageStore } from '@/store/page';
@@ -430,7 +436,9 @@ class TableData extends React.Component<
             showMock={settingStore.enableMockdata}
             isEditing={isEditing}
             disableEdit={
-              !resultSet.resultSetMetaData?.editable || isExternalTable
+              !resultSet.resultSetMetaData?.editable ||
+              isExternalTable ||
+              session?.connection?.type === ConnectType.MONGODB
             }
             table={{
               ...table,

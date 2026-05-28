@@ -15,7 +15,7 @@
  */
 
 import { getTableInfo, getLogicTableInfo } from '@/common/network/table';
-import { DbObjectType, TaskType } from '@/d.ts';
+import { ConnectType, TaskType } from '@/d.ts';
 import { PageStore } from '@/store/page';
 import { SettingStore } from '@/store/setting';
 import { formatMessage } from '@/util/intl';
@@ -102,8 +102,10 @@ const TablePage: React.FC<IProps> = function ({
   const { session } = useContext(SessionContext);
   const dbType = session?.odcDatabase?.type;
   const dbName = session?.database?.dbName;
+  const isMongoDB = session?.connection?.type === ConnectType.MONGODB;
   const showPartition = !!table?.partitions?.partType;
-  const enableConstraint = session?.supportFeature?.enableConstraint;
+  const enableConstraint =
+    !isMongoDB && !!session?.supportFeature?.enableConstraint;
   const callbackRef = useRef<any>();
   async function fetchTable() {
     if (table?.info?.tableName === params.tableName) {
@@ -179,9 +181,21 @@ const TablePage: React.FC<IProps> = function ({
       setTopTab(params.topTab);
     }
     if (params.propsTab) {
-      setPropsTab(params.propsTab);
+      let nextPropsTab = params.propsTab;
+      if (
+        isMongoDB &&
+        [
+          PropsTab.DDL,
+          PropsTab.INDEX,
+          PropsTab.CONSTRAINT,
+          PropsTab.PARTITION
+        ].includes(nextPropsTab)
+      ) {
+        nextPropsTab = PropsTab.INFO;
+      }
+      setPropsTab(nextPropsTab);
     }
-  }, [params.propsTab, params.topTab]);
+  }, [params.propsTab, params.topTab, isMongoDB]);
 
   const handleTopTabChanged: BasicSegmentedProps['onChange'] = (v) => {
     const topTab = v;
@@ -294,14 +308,15 @@ const TablePage: React.FC<IProps> = function ({
                         )
                       },
                       // 外表不展示索引
-                      !isExternalTable && {
-                        key: PropsTab.INDEX,
-                        label: formatMessage({
-                          id: 'workspace.window.table.propstab.index',
-                          defaultMessage: '索引'
-                        }),
-                        children: <TableIndexes />
-                      },
+                      !isExternalTable &&
+                        !isMongoDB && {
+                          key: PropsTab.INDEX,
+                          label: formatMessage({
+                            id: 'workspace.window.table.propstab.index',
+                            defaultMessage: '索引'
+                          }),
+                          children: <TableIndexes />
+                        },
                       // 外表不展示约束
                       enableConstraint &&
                         !isExternalTable && {
@@ -314,7 +329,7 @@ const TablePage: React.FC<IProps> = function ({
                           })
                         },
 
-                      showPartition
+                      showPartition && !isMongoDB
                         ? {
                             key: PropsTab.PARTITION,
                             label: formatMessage({
@@ -324,7 +339,7 @@ const TablePage: React.FC<IProps> = function ({
                             children: <TablePartitions />
                           }
                         : null,
-                      {
+                      !isMongoDB && {
                         key: PropsTab.DDL,
                         label: formatMessage({
                           id: 'workspace.window.table.propstab.ddl',
