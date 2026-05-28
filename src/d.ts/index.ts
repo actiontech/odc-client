@@ -3565,7 +3565,8 @@ export enum ConnectType {
   S3A = 'S3A',
   SQL_SERVER = 'SQL_SERVER',
   DM = 'DM',
-  MONGODB = 'MONGODB'
+  MONGODB = 'MONGODB',
+  HIVE = 'HIVE'
 }
 
 export enum DatasourceGroup {
