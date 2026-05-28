@@ -18,6 +18,7 @@ import { getTableInfo } from '@/common/network/table';
 import { getView } from '@/common/network/view';
 import { DragInsertTypeText } from '@/constant/label';
 import { DbObjectType, DragInsertType } from '@/d.ts/index';
+import { generateMongoCopyText, isMongoConnectType } from '@/util/mongodb';
 import type { ModalStore } from '@/store/modal';
 import sessionManager from '@/store/sessionManager';
 import SessionStore from '@/store/sessionManager/session';
@@ -205,37 +206,27 @@ export default inject(
   'modalStore'
 )(observer(TemplateInsertModal));
 
-async function getColumns(
+async function getColumnNames(
   type: DbObjectType,
   name: string,
   sessionId: string,
   isExternalTable?: boolean
-) {
+): Promise<string[]> {
   const dbSession = sessionManager.sessionMap.get(sessionId);
   const dbName = dbSession?.database?.dbName;
   switch (type) {
     case DbObjectType.table: {
       return (
         (await getTableInfo(name, dbName, sessionId, isExternalTable))?.columns
-          ?.map((column) => {
-            return getQuoteTableName(
-              column.name,
-              dbSession?.connection?.dialectType
-            );
-          })
-          .join(', ') || ''
+          ?.map((column) => column.name)
+          .filter(Boolean) || []
       );
     }
     case DbObjectType.view: {
       return (
         (await getView(name, sessionId, dbName))?.columns
-          ?.map((column) => {
-            return getQuoteTableName(
-              column.columnName,
-              dbSession?.connection?.dialectType
-            );
-          })
-          .join(', ') || ''
+          ?.map((column) => column.columnName)
+          .filter(Boolean) || []
       );
     }
     case DbObjectType.materialized_view: {
@@ -247,18 +238,33 @@ async function getColumns(
             dbName
           })
         )?.columns
-          ?.map((column) => {
-            return getQuoteTableName(
-              column.name,
-              dbSession?.connection?.dialectType
-            );
-          })
-          .join(', ') || ''
+          ?.map((column) => column.name)
+          .filter(Boolean) || []
       );
     }
+    default:
+      return [];
   }
+}
 
-  return '';
+async function getColumns(
+  type: DbObjectType,
+  name: string,
+  sessionId: string,
+  isExternalTable?: boolean
+) {
+  const dbSession = sessionManager.sessionMap.get(sessionId);
+  const columnNames = await getColumnNames(
+    type,
+    name,
+    sessionId,
+    isExternalTable
+  );
+  return columnNames
+    .map((columnName) =>
+      getQuoteTableName(columnName, dbSession?.connection?.dialectType)
+    )
+    .join(', ');
 }
 
 export async function getCopyText(
@@ -278,6 +284,16 @@ export async function getCopyText(
     : function (b) {
         return b;
       };
+
+  if (isMongoConnectType(dbSession?.connection?.type)) {
+    const columnNames = await getColumnNames(
+      objType,
+      name,
+      sessionId,
+      isExternalTable
+    );
+    return _escape(generateMongoCopyText(name, copyType, columnNames));
+  }
 
   switch (copyType) {
     case DragInsertType.NAME: {

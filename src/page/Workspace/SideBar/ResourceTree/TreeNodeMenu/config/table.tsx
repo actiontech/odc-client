@@ -51,6 +51,7 @@ import { isSupportExport } from './helper';
 import { isLogicalDatabase } from '@/util/database';
 import { DatabasePermissionType } from '@/d.ts/database';
 import { generateDMSExportUrl } from '@/util/dms/export';
+import { isMongoDBSession } from '@/util/mongodb';
 
 export const tableMenusConfig: Partial<
   Record<ResourceNodeType, IMenuItemConfig[]>
@@ -75,6 +76,9 @@ export const tableMenusConfig: Partial<
         openCreateTablePage(session?.odcDatabase?.id);
       },
       isHide(session, node) {
+        if (isMongoDBSession(session)) {
+          return true;
+        }
         if (isLogicalDatabase(node.data)) {
           return !session?.odcDatabase?.authorizedPermissionTypes?.includes(
             DatabasePermissionType.CHANGE
@@ -119,7 +123,7 @@ export const tableMenusConfig: Partial<
         openTableViewPage(
           (node.data as ITableModel)?.info?.tableName,
           TopTab.PROPS,
-          PropsTab.DDL,
+          isMongoDBSession(session) ? PropsTab.INFO : PropsTab.DDL,
           session?.odcDatabase?.id,
           node?.data?.info?.tableId
         );
@@ -205,7 +209,9 @@ export const tableMenusConfig: Partial<
       },
       isHide: (session) => {
         return (
-          !isSupportExport(session) || isLogicalDatabase(session?.odcDatabase)
+          isMongoDBSession(session) ||
+          !isSupportExport(session) ||
+          isLogicalDatabase(session?.odcDatabase)
         );
       },
       run(session, node) {
@@ -233,7 +239,9 @@ export const tableMenusConfig: Partial<
       //下载
       ellipsis: true,
       isHide: (session) => {
-        return isLogicalDatabase(session?.odcDatabase);
+        return (
+          isMongoDBSession(session) || isLogicalDatabase(session?.odcDatabase)
+        );
       },
       async run(session, node) {
         const tableName = (node.data as ITableModel)?.info?.tableName;
@@ -556,6 +564,7 @@ export const tableMenusConfig: Partial<
       ],
 
       ellipsis: true,
+      isHide: (session) => isMongoDBSession(session),
       run(session, node) {
         const table = node.data as ITableModel;
         const tableName = table?.info?.tableName;
@@ -578,6 +587,7 @@ export const tableMenusConfig: Partial<
       ],
 
       ellipsis: true,
+      isHide: (session) => isMongoDBSession(session),
       async run(session, node) {
         const table = node.data as ITableModel;
         await session.database.loadTable(table.info);
@@ -596,6 +606,7 @@ export const tableMenusConfig: Partial<
       ],
 
       ellipsis: true,
+      isHide: (session) => isMongoDBSession(session),
       run(session, node) {
         const table = node.data as ITableModel;
         const tableName = table?.info?.tableName;
@@ -618,6 +629,7 @@ export const tableMenusConfig: Partial<
       ],
 
       ellipsis: true,
+      isHide: (session) => isMongoDBSession(session),
       async run(session, node) {
         const table = node.data as ITableModel;
         await session.database.loadTable(table.info);
@@ -636,6 +648,7 @@ export const tableMenusConfig: Partial<
       ],
 
       ellipsis: true,
+      isHide: (session) => isMongoDBSession(session),
       run(session, node) {
         const table = node.data as ITableModel;
         const tableName = table?.info?.tableName;

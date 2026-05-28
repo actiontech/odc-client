@@ -73,7 +73,7 @@ const Columns: React.FC<IProps> = function ({ isExternalTable }) {
   const config = useTableConfig(session.connection.dialectType);
   // const config = useTableConfig(session?.connection?.dialectType || 'OB_MYSQL');
   const [editColumns, setEditColumns] = useState(null);
-  const displayColumns = editColumns || columns;
+  const displayColumns = editColumns || columns || [];
 
   const rows = useMemo(() => {
     return displayColumns.map((column, idx) => {

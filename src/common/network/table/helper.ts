@@ -290,7 +290,7 @@ export function convertServerTableToTable(
     databaseId: logicalDbTableParams?.databaseId
   };
   // column
-  table.columns = data.columns.map((column) => {
+  table.columns = (data.columns ?? []).map((column) => {
     return {
       name: column.name,
       type: column.typeName,
@@ -321,22 +321,25 @@ export function convertServerTableToTable(
     };
   });
   // index
-  table.indexes = data?.indexes?.map((index) => {
-    return {
-      name: index.name,
-      type: index.type as TableIndexType,
-      scope: index.global ? TableIndexScope.GLOBAL : TableIndexScope.LOCAL,
-      visible: index.visible,
-      columns: index.columnNames,
-      method: index.algorithm as any,
-      ordinalPosition: index.ordinalPosition,
-      available: index.available,
-      columnGroups:
-        index.columnGroups?.map((item) => {
-          return item.allColumns ? ColumnStoreType.ROW : ColumnStoreType.COLUMN;
-        }) || []
-    };
-  });
+  table.indexes =
+    data?.indexes?.map((index) => {
+      return {
+        name: index.name,
+        type: index.type as TableIndexType,
+        scope: index.global ? TableIndexScope.GLOBAL : TableIndexScope.LOCAL,
+        visible: index.visible,
+        columns: index.columnNames,
+        method: index.algorithm as any,
+        ordinalPosition: index.ordinalPosition,
+        available: index.available,
+        columnGroups:
+          index.columnGroups?.map((item) => {
+            return item.allColumns
+              ? ColumnStoreType.ROW
+              : ColumnStoreType.COLUMN;
+          }) || []
+      };
+    }) ?? [];
   // constraint
   table.primaryConstraints = [];
   table.uniqueConstraints = [];
