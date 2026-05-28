@@ -67,6 +67,11 @@ export const objectTypeConfig = {
   [ConnectType.MYSQL]: mysqlObjectType,
   [ConnectType.DORIS]: mysqlObjectType,
   [ConnectType.PG]: pgObjectType,
+  // GaussDB / openGauss expose the same searchable objects as native PostgreSQL
+  // (table / column / function / view / trigger). Without this entry the search
+  // modal renders no type tabs and ObjectList.tsx receives `undefined`,
+  // which silently filters every search hit out of the result panel.
+  [ConnectType.GAUSSDB]: pgObjectType,
   [ConnectType.OB_ORACLE]: oracleObjectType,
   [ConnectType.ORACLE]: oracleObjectType,
   [ConnectType.SQL_SERVER]: sqlServerObjectType,

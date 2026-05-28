@@ -83,16 +83,28 @@ const items: Record<ConnectType.GAUSSDB, IDataSourceModeConfig> = {
       task: [TaskType.DATA_ARCHIVE, TaskType.DATA_DELETE],
       obclient: false,
       recycleBin: false,
-      sessionManage: false,
+      // GaussDBSessionExtension (server/plugins/connect-plugin-gaussdb) exposes
+      // `pg_terminate_backend` / `pg_cancel_backend`. Backend session management
+      // works end-to-end (case-4-6-1 in report_index.md proves pg_stat_activity is
+      // queryable), so the workbench session-management tab can be enabled.
+      sessionManage: true,
       sessionParams: false,
-      sqlExplain: false,
+      // GaussDB / openGauss support EXPLAIN / EXPLAIN ANALYZE with PG semantics.
+      // The ODC backend SqlCommentProcessor was patched in Task-005-FIX (odc
+      // de8e287) to take the PG-family split path, which is the same path
+      // EXPLAIN flows through, so the UI can safely enable the explain entry.
+      sqlExplain: true,
       // groupResourceTree controls whether GaussDB physical databases appear in
       // the ODC workbench left-side database tree. Must be true otherwise
       // DatabaseTree filter (page/Workspace/SideBar/ResourceTree/DatabaseTree/
       // index.tsx#L43-49) drops every GaussDB database row and the tree only
       // shows the bare datasource node (Task-004-FIX root cause).
       groupResourceTree: true,
-      sqlconsole: false,
+      // SQL Console is the primary GaussDB execution surface. Multiple
+      // case-3-x / case-4-x regression rounds (case-4-1-1, case-4-2-1,
+      // case-3-3-1..5 in report_index.md) have validated DML / DDL / friendly
+      // error rendering on the OG SQL Console path via Task-005-FIX.
+      sqlconsole: true,
       export: {
         fileLimit: false,
         snapshot: false

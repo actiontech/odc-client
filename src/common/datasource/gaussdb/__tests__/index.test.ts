@@ -73,24 +73,31 @@ describe('common/datasource/gaussdb', () => {
       expect(entry).not.toBeNull();
     });
 
-    it('TestFeatures_GaussDB_sqlconsole_false', () => {
-      // CR-8 - workbench SQL console is gated off until distributed SQL
-      // parsing parity is verified. Identical to PG.
+    it('TestFeatures_GaussDB_sqlconsole_true_post_fix_20260528', () => {
+      // Fix-Session-20260528-090430: enable SQL Console for GaussDB after
+      // case-4-1-1 / case-4-2-1 / case-3-3-x / case-4-x web regression
+      // already proved the OG Console path end-to-end (report_index.md).
+      // Intentional divergence from PG.
       const entry = gaussdbItems[ConnectType.GAUSSDB];
-      expect(entry.features.sqlconsole).toBe(false);
+      expect(entry.features.sqlconsole).toBe(true);
     });
 
-    it('TestFeatures_GaussDB_sessionManage_false', () => {
-      // CR-8 - session manage tab disabled; identical to PG.
+    it('TestFeatures_GaussDB_sessionManage_true_post_fix_20260528', () => {
+      // Fix-Session-20260528-090430: GaussDBSessionExtension exposes
+      // pg_cancel_backend / pg_terminate_backend; backend is ready, so the
+      // workbench session-management tab can be enabled. case-4-6-1 in
+      // report_index.md proves pg_stat_activity is queryable.
       const entry = gaussdbItems[ConnectType.GAUSSDB];
-      expect(entry.features.sessionManage).toBe(false);
+      expect(entry.features.sessionManage).toBe(true);
     });
 
-    it('TestFeatures_GaussDB_sqlExplain_false', () => {
-      // CR-8 - SQL Explain disabled (GaussDB explain plan format diverges
-      // from PG). Identical to PG.
+    it('TestFeatures_GaussDB_sqlExplain_true_post_fix_20260528', () => {
+      // Fix-Session-20260528-090430: GaussDB / openGauss support PG-style
+      // EXPLAIN / EXPLAIN ANALYZE; Task-005-FIX (odc de8e287) already routes
+      // PG-family through the right SqlCommentProcessor split path used
+      // by the explain action.
       const entry = gaussdbItems[ConnectType.GAUSSDB];
-      expect(entry.features.sqlExplain).toBe(false);
+      expect(entry.features.sqlExplain).toBe(true);
     });
 
     it('TestFeatures_GaussDB_groupResourceTree_true', () => {
@@ -105,19 +112,37 @@ describe('common/datasource/gaussdb', () => {
       expect(entry.features.groupResourceTree).toBe(true);
     });
 
-    it('TestFeatures_GaussDB_diverges_from_PostgreSQL_on_groupResourceTree', () => {
-      // Documents the only intentional divergence between GaussDB and
-      // PG: GaussDB enables the workbench schema tree (Task-004-FIX),
-      // PG keeps it disabled because PG entry is owned by a different
-      // EARS contract. All other features must still match PG so that
-      // accidental flips on other gating flags surface immediately.
+    it('TestFeatures_GaussDB_diverges_from_PostgreSQL_on_multiple_flags', () => {
+      // After Fix-Session-20260528-090430 the GaussDB entry intentionally
+      // diverges from PG on FOUR flags: groupResourceTree (Task-004-FIX)
+      // plus sqlconsole / sessionManage / sqlExplain (Fix-20260528-090430).
+      // The remaining features must still match PG so accidental flips
+      // surface immediately in CI.
       const gauss = gaussdbItems[ConnectType.GAUSSDB];
       const pg = pgItems[ConnectType.PG];
       expect(gauss.features.groupResourceTree).toBe(true);
       expect(pg.features.groupResourceTree).toBe(false);
-      // Every feature except groupResourceTree must remain identical.
-      const { groupResourceTree: _g, ...gaussRest } = gauss.features;
-      const { groupResourceTree: _p, ...pgRest } = pg.features;
+      expect(gauss.features.sqlconsole).toBe(true);
+      expect(pg.features.sqlconsole).toBe(false);
+      expect(gauss.features.sessionManage).toBe(true);
+      expect(pg.features.sessionManage).toBe(false);
+      expect(gauss.features.sqlExplain).toBe(true);
+      expect(pg.features.sqlExplain).toBe(false);
+      // Every feature except the four divergence flags must remain identical.
+      const {
+        groupResourceTree: _g,
+        sqlconsole: _sc,
+        sessionManage: _sm,
+        sqlExplain: _se,
+        ...gaussRest
+      } = gauss.features;
+      const {
+        groupResourceTree: _gp,
+        sqlconsole: _scp,
+        sessionManage: _smp,
+        sqlExplain: _sep,
+        ...pgRest
+      } = pg.features;
       expect(gaussRest).toEqual(pgRest);
     });
 
