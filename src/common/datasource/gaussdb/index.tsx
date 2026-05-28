@@ -33,17 +33,30 @@ import { haveOCP } from '@/util/env';
  */
 
 const tableConfig = {
-  enableTableCharsetsAndCollations: true,
+  // GaussDB / openGauss do not expose MySQL-style table-level charset/collation
+  // (PG family stores encoding on database creation, not per-table).
+  enableTableCharsetsAndCollations: false,
   enableConstraintOnUpdate: true,
+  // MySQLColumnExtra renders DefaultValue / Comment / charset blocks. After
+  // ConnectionMode.GAUSSDB is registered in util/dataType/index.ts, getDataType
+  // returns a valid entry and the panel renders the generic DefaultValue/Comment
+  // fields. A PG-specific column extra component can replace this later if
+  // PG-only attributes are needed (e.g. GENERATED ALWAYS AS IDENTITY).
   ColumnExtraComponent: MySQLColumnExtra,
   paritionNameCaseSensitivity: true,
-  enableIndexesFullTextType: true,
-  enableAutoIncrement: true,
+  // GaussDB / openGauss do not support MySQL FULLTEXT index syntax; their
+  // full-text indexing is exposed via tsvector + GIN / GiST instead.
+  enableIndexesFullTextType: false,
+  // GaussDB / openGauss use SERIAL / GENERATED ... AS IDENTITY instead of the
+  // MySQL AUTO_INCREMENT keyword. Showing the AUTO_INCREMENT checkbox here
+  // would emit invalid DDL.
+  enableAutoIncrement: false,
   type2ColumnType: {
     id: 'int',
     name: 'varchar',
-    date: 'datetime',
-    time: 'timestamp'
+    // PG family uses TIMESTAMP, not the MySQL-specific DATETIME alias.
+    date: 'timestamp',
+    time: 'time'
   }
 };
 

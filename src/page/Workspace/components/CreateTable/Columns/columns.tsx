@@ -206,7 +206,8 @@ export function useColumns(
           defaultMessage: '类型'
         }), //类型
         resizable: true,
-        editable: (row) => !pageContext?.editMode || isNil(row.ordinalPosition),
+        editable: (row) =>
+          !pageContext?.editMode || isNil(row?.ordinalPosition),
         editor: DataTypeSelect,
         width: 100
       },
@@ -221,7 +222,7 @@ export function useColumns(
         filterable: false,
         editor: TextEditor,
         editable: (row) =>
-          dataTypesIns.getParamsCount(dialectType, row.type) > 0,
+          row != null && dataTypesIns.getParamsCount(dialectType, row.type) > 0,
         formatter: WidthDisableFormatter,
         width: 80
       },
@@ -236,7 +237,7 @@ export function useColumns(
         filterable: false,
         editor: InputNumberEditor,
         editable: (row) =>
-          dataTypesIns.getParamsCount(dialectType, row.type) > 1,
+          row != null && dataTypesIns.getParamsCount(dialectType, row.type) > 1,
         formatter: ScaleDisableFormatter,
         width: 80
       },

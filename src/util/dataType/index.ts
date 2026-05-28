@@ -179,7 +179,11 @@ class DataTypes {
     [ConnectionMode.OB_MYSQL]: MySQLDataTypes,
     [ConnectionMode.MYSQL]: MySQLDataTypes,
     [ConnectionMode.OB_ORACLE]: OracleDataTypes,
-    [ConnectionMode.SQL_SERVER]: MySQLDataTypes
+    [ConnectionMode.SQL_SERVER]: MySQLDataTypes,
+    // GaussDB / openGauss approximate to MySQL standard SQL data types so the
+    // column extra panel (default value, character set, etc.) can resolve a
+    // valid IDataTypes entry instead of returning undefined and rendering null.
+    [ConnectionMode.GAUSSDB]: MySQLDataTypes
   };
   public getParamsCount(mode: ConnectionMode, dataTypeName: string) {
     if (!dataTypeName) {
