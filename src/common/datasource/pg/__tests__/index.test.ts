@@ -100,13 +100,19 @@ describe('datasource/pg/index other features unchanged (compat-RISK-3)', () => {
         key: 'sessionManage',
         expected: true
       },
+      // PG 无 MySQL 风格的 session variables 管理页面
       {
-        name: 'sessionParams stays true',
+        name: 'sessionParams collapses to false (PG has no MySQL session variables page)',
         key: 'sessionParams',
-        expected: true
+        expected: false
       },
       { name: 'sqlExplain stays true', key: 'sqlExplain', expected: true },
-      { name: 'plRun stays true', key: 'plRun', expected: true },
+      // PG PL/pgSQL 函数不能像 OB PL 在 ODC 内独立运行调试
+      {
+        name: 'plRun collapses to false (PG PL/pgSQL not independently runnable)',
+        key: 'plRun',
+        expected: false
+      },
       {
         name: 'groupResourceTree stays true',
         key: 'groupResourceTree',

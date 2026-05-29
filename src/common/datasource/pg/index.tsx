@@ -21,13 +21,13 @@ import { haveOCP } from '@/util/env';
 
 const tableConfig = {
   enableTableCharsetsAndCollations: false, // PG 字符集在数据库级别设置
-  enableConstraintOnUpdate: true,
+  enableConstraintOnUpdate: false, // PG 建表 UI 暂不支持约束在线修改
   ColumnExtraComponent: MySQLColumnExtra,
-  paritionNameCaseSensitivity: true,
-  enableIndexesFullTextType: true,
+  paritionNameCaseSensitivity: false, // PG 标识符默认转小写，未引用时不区分大小写
+  enableIndexesFullTextType: false, // PG 没有 MySQL 风格的 FULLTEXT 索引类型
   enableAutoIncrement: false, // PG 使用 SERIAL/IDENTITY
   type2ColumnType: {
-    id: 'int',
+    id: 'bigint', // 主键默认列类型用 bigint，匹配 PG bigserial 习惯
     name: 'varchar',
     date: 'timestamp',
     time: 'timestamp'
@@ -76,9 +76,9 @@ const items: Record<ConnectType.PG, IDataSourceModeConfig> = {
       obclient: false,
       recycleBin: false, // PG 无回收站
       sessionManage: true,
-      sessionParams: true,
+      sessionParams: false, // PG 无 MySQL 风格的 session variables 管理页面
       sqlExplain: true,
-      plRun: true,
+      plRun: false, // PG PL/pgSQL 函数不能像 OB PL 在 ODC 内独立运行调试
       groupResourceTree: true,
       sqlconsole: true,
       export: {
