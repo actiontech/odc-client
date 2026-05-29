@@ -18,8 +18,12 @@ import { ConnectType, TaskType } from '@/d.ts';
 import { IDataSourceModeConfig } from '../interface';
 import { haveOCP } from '@/util/env';
 
+// fix_report_20260529_100416 issue (Issue dms-ee#839): DB2 LUW expresses identity columns via
+// `GENERATED ALWAYS AS IDENTITY` rather than MySQL's AUTO_INCREMENT keyword. Leaving
+// enableAutoIncrement=true causes the table designer to surface an "自增" checkbox that the
+// backend has no way to round-trip into DB2 grammar — the front-end now hides the affordance.
 const tableConfig = {
-  enableAutoIncrement: true,
+  enableAutoIncrement: false,
   type2ColumnType: {
     id: 'integer',
     name: 'varchar',
@@ -96,7 +100,13 @@ const items: Record<ConnectType.DB2, IDataSourceModeConfig> = {
     sql: {
       language: 'mysql',
       escapeChar: '"',
-      caseSensitivity: true
+      // fix_report_20260529_100416 issue (Issue dms-ee#839): DB2 LUW upper-cases unquoted
+      // identifiers automatically (same default as Oracle / HANA). The expand_odc_db2.md §10.3
+      // table classifies that as `caseSensitivity=false`. The previous `true` setting caused the
+      // workbench's identifier quoter to wrap every column in double quotes on every keystroke,
+      // breaking the SQL editor auto-complete UX (search for "TEST_ORDERS" failed because the
+      // ODC index stored "TEST_ORDERS" uppercase while the typed query was lower).
+      caseSensitivity: false
     }
   }
 };
