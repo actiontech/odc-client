@@ -68,7 +68,9 @@ const hanaObjectType = [
   DbObjectType.column,
   DbObjectType.function,
   DbObjectType.view,
-  DbObjectType.procedure
+  DbObjectType.procedure,
+  DbObjectType.trigger,
+  DbObjectType.sequence
 ];
 
 export const objectTypeConfig = {
