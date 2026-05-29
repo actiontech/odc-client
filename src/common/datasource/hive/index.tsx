@@ -69,7 +69,8 @@ const items: Record<ConnectType.HIVE, IDataSourceModeConfig> = {
     },
     sql: {
       language: 'sql',
-      escapeChar: '`'
+      escapeChar: '`',
+      caseSensitivity: true
     }
   }
 };
