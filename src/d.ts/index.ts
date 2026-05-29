@@ -773,6 +773,7 @@ export enum ConnectionMode {
   OB_ORACLE = 'OB_ORACLE',
   SQL_SERVER = 'SQL_SERVER',
   DM = 'DM',
+  HANA = 'HANA',
   ALL = 'ALL',
   UNKNOWN = 'UNKNOWN'
 }
@@ -3565,6 +3566,7 @@ export enum ConnectType {
   S3A = 'S3A',
   SQL_SERVER = 'SQL_SERVER',
   DM = 'DM',
+  HANA = 'HANA',
   MONGODB = 'MONGODB',
   HIVE = 'HIVE'
 }

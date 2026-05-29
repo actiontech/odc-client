@@ -180,6 +180,7 @@ class DataTypes {
     [ConnectionMode.MYSQL]: MySQLDataTypes,
     [ConnectionMode.OB_ORACLE]: OracleDataTypes,
     [ConnectionMode.SQL_SERVER]: MySQLDataTypes,
+    [ConnectionMode.HANA]: OracleDataTypes,
     // GaussDB / openGauss approximate to MySQL standard SQL data types so the
     // column extra panel (default value, character set, etc.) can resolve a
     // valid IDataTypes entry instead of returning undefined and rendering null.

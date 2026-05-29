@@ -58,6 +58,7 @@ export enum IDataSourceType {
   AWSS3 = 'AWSS3',
   SQL_SERVER = 'SQL_SERVER',
   DM = 'DM',
+  HANA = 'HANA',
   MongoDB = 'mongodb',
   HIVE = 'HIVE'
 }

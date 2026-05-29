@@ -62,6 +62,15 @@ const sqlServerObjectType = [
   DbObjectType.procedure
 ];
 
+const hanaObjectType = [
+  DbObjectType.database,
+  DbObjectType.table,
+  DbObjectType.column,
+  DbObjectType.function,
+  DbObjectType.view,
+  DbObjectType.procedure
+];
+
 export const objectTypeConfig = {
   [ConnectType.OB_MYSQL]: mysqlObjectType,
   [ConnectType.MYSQL]: mysqlObjectType,
@@ -75,6 +84,7 @@ export const objectTypeConfig = {
   [ConnectType.OB_ORACLE]: oracleObjectType,
   [ConnectType.ORACLE]: oracleObjectType,
   [ConnectType.SQL_SERVER]: sqlServerObjectType,
+  [ConnectType.HANA]: hanaObjectType,
   [ConnectType.HIVE]: [DbObjectType.table, DbObjectType.column],
   SEARCH_OBJECT_FROM_ALL_DATABASE: oracleObjectType
 };

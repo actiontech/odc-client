@@ -27,6 +27,7 @@ import TiDB from './tidb';
 import PG from './pg';
 import GaussDB from './gaussdb';
 import DM from './dm';
+import Hana from './hana';
 import MongoDB from './mongodb';
 import Hive from './hive';
 import FileSystem from './fileSystem';
@@ -192,6 +193,15 @@ const _styles = {
       component: DBDMSvg
     }
   },
+  [IDataSourceType.HANA]: {
+    icon: {
+      component: SqlServerSvg,
+      color: '#0078D4'
+    },
+    dbIcon: {
+      component: DBSqlServerSvg
+    }
+  },
   [IDataSourceType.MongoDB]: {
     icon: {
       component: MongoDBSvg,
@@ -228,6 +238,7 @@ const _gruops = {
   [IDataSourceType.QCLOUD]: DatasourceGroup.FileSystem,
   [IDataSourceType.SQL_SERVER]: DatasourceGroup.OtherDatabase,
   [IDataSourceType.DM]: DatasourceGroup.OtherDatabase,
+  [IDataSourceType.HANA]: DatasourceGroup.OtherDatabase,
   [IDataSourceType.MongoDB]: DatasourceGroup.OtherDatabase,
   [IDataSourceType.HIVE]: DatasourceGroup.OtherDatabase
 };
@@ -289,6 +300,7 @@ function initDatasource() {
   register(IDataSourceType.QCLOUD, FileSystem.QCLOUD);
   register(IDataSourceType.SQL_SERVER, SqlServer);
   register(IDataSourceType.DM, DM);
+  register(IDataSourceType.HANA, Hana);
   register(IDataSourceType.MongoDB, MongoDB);
   register(IDataSourceType.HIVE, Hive);
 }
