@@ -91,7 +91,13 @@ const items: Record<ConnectType.TIDB, IDataSourceModeConfig> = {
       table: tableConfig,
       func: functionConfig,
       proc: procedureConfig,
-      innerSchema: ['information_schema', 'mysql', 'performance_schema', 'metrics_schema', 'sys']
+      innerSchema: [
+        'information_schema',
+        'mysql',
+        'performance_schema',
+        'metrics_schema',
+        'sys'
+      ]
     },
     sql: {
       language: 'mysql',

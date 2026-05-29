@@ -28,6 +28,7 @@ import PG from './pg';
 import GaussDB from './gaussdb';
 import DM from './dm';
 import MongoDB from './mongodb';
+import Hive from './hive';
 import FileSystem from './fileSystem';
 import { ReactComponent as OBSvg } from '@/svgr/source_ob.svg';
 import { ReactComponent as DBOBSvg } from '@/svgr/database_oceanbase.svg';
@@ -199,6 +200,17 @@ const _styles = {
     dbIcon: {
       component: DBMongoDBSvg
     }
+  },
+  // Hive reuses the generic database SVG assets to avoid shipping new
+  // image binaries, following the same pattern as GaussDB reusing PG icons.
+  [IDataSourceType.HIVE]: {
+    icon: {
+      component: MongoDBSvg,
+      color: '#FDEE21'
+    },
+    dbIcon: {
+      component: DBMongoDBSvg
+    }
   }
 };
 
@@ -216,7 +228,8 @@ const _gruops = {
   [IDataSourceType.QCLOUD]: DatasourceGroup.FileSystem,
   [IDataSourceType.SQL_SERVER]: DatasourceGroup.OtherDatabase,
   [IDataSourceType.DM]: DatasourceGroup.OtherDatabase,
-  [IDataSourceType.MongoDB]: DatasourceGroup.OtherDatabase
+  [IDataSourceType.MongoDB]: DatasourceGroup.OtherDatabase,
+  [IDataSourceType.HIVE]: DatasourceGroup.OtherDatabase
 };
 
 export const connectType2Ds: Map<ConnectType, IDataSourceType> = new Map();
@@ -277,6 +290,7 @@ function initDatasource() {
   register(IDataSourceType.SQL_SERVER, SqlServer);
   register(IDataSourceType.DM, DM);
   register(IDataSourceType.MongoDB, MongoDB);
+  register(IDataSourceType.HIVE, Hive);
 }
 
 function getAllConnectTypes(ds?: IDataSourceType): ConnectType[] {
