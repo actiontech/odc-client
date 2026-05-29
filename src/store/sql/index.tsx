@@ -253,13 +253,18 @@ export class SQLStore {
           const resultSet = this.resultSets.get(pageKey);
           if (resultSet) {
             const lockedResultSets = resultSet.filter((r) => r.locked); // @ts-ignore
+            const generatedResultSets = generateResultSetColumns(
+              info.results,
+              session?.connection?.dialectType
+            )?.map((set) => ({
+              ...set,
+              sessionId,
+              requestId: set.requestId || info?.task?.requestId
+            }));
             this.resultSets.set(pageKey, [
               ...lockedResultSets,
               this.getLogTab(info),
-              ...generateResultSetColumns(
-                info.results,
-                session?.connection?.dialectType
-              )
+              ...(generatedResultSets || [])
             ]);
           }
         });

@@ -1,5 +1,4 @@
 /* tslint:disable no-duplicate-string */
-
 export enum ListAllDataExportWorkflowsFilterByStatusEnum {
   'wait_for_approve' = 'wait_for_approve',
 

@@ -1,6 +1,11 @@
 /* eslint-disable */
 // @ts-nocheck
-import { ListUsersOrderByEnum } from './index.enum';
+import {
+  ListUsersOrderByEnum,
+  ListUsersFilterByStatEnum,
+  ListUsersFilterByAuthenticationTypeEnum,
+  ListUsersFilterBySystemEnum
+} from './index.enum';
 
 import {
   IListUserReply,
@@ -32,6 +37,16 @@ export interface IListUsersParams {
   filter_del_user?: boolean;
 
   fuzzy_keyword?: string;
+
+  filter_by_email?: string;
+
+  filter_by_phone?: string;
+
+  filter_by_stat?: ListUsersFilterByStatEnum;
+
+  filter_by_authentication_type?: ListUsersFilterByAuthenticationTypeEnum;
+
+  filter_by_system?: ListUsersFilterBySystemEnum;
 }
 
 export interface IListUsersReturn extends IListUserReply {}

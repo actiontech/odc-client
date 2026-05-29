@@ -3,6 +3,7 @@
 import {
   ListGlobalDBServicesOrderByEnum,
   ListGlobalDBServicesFilterLastConnectionTestStatusEnum,
+  ListGlobalDBServicesTipsFunctionSupportEnum,
   ListDBServicesOrderByEnum,
   ListDBServicesFilterLastConnectionTestStatusEnum,
   ListDBServiceTipsFunctionalModuleEnum,
@@ -69,6 +70,10 @@ export interface IListGlobalDBServicesReturn
 
 export interface IListDBServiceDriverOptionReturn
   extends IListDBServiceDriverOptionReply {}
+
+export interface IListGlobalDBServicesTipsParams {
+  function_support?: ListGlobalDBServicesTipsFunctionSupportEnum;
+}
 
 export interface IListGlobalDBServicesTipsReturn
   extends IListGlobalDBServicesTipsReply {}

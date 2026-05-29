@@ -28,6 +28,8 @@ import {
   IGetProjectTipsReply,
   IUpdateProjectReq,
   IListEnvironmentTagsReply,
+  ICreateEnvironmentTagReq,
+  IUpdateEnvironmentTagReq,
   IListProjectReplyV2,
   IAddProjectReqV2,
   IAddProjectReplyV2,
@@ -166,20 +168,16 @@ export interface IListEnvironmentTagsParams {
 
 export interface IListEnvironmentTagsReturn extends IListEnvironmentTagsReply {}
 
-export interface ICreateEnvironmentTagParams {
+export interface ICreateEnvironmentTagParams extends ICreateEnvironmentTagReq {
   project_uid: string;
-
-  environment_name: string;
 }
 
 export interface ICreateEnvironmentTagReturn extends IGenericResp {}
 
-export interface IUpdateEnvironmentTagParams {
+export interface IUpdateEnvironmentTagParams extends IUpdateEnvironmentTagReq {
   project_uid: string;
 
   environment_tag_uid: string;
-
-  environment_name: string;
 }
 
 export interface IUpdateEnvironmentTagReturn extends IGenericResp {}

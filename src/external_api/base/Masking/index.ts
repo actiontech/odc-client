@@ -6,13 +6,595 @@
 import ServiceBase from '../Service.base';
 import { AxiosRequestConfig } from 'axios';
 
-import { IListMaskingRulesReturn } from './index.type';
+import {
+  IGetMaskingOverviewTreeParams,
+  IGetMaskingOverviewTreeReturn,
+  IPreviewMaskingEffectParams,
+  IPreviewMaskingEffectReturn,
+  IConfigureMaskingRulesParams,
+  IConfigureMaskingRulesReturn,
+  IListMaskingRulesParams,
+  IListMaskingRulesReturn,
+  IAddMaskingRuleParams,
+  IAddMaskingRuleReturn,
+  IGetMaskingRuleDetailParams,
+  IGetMaskingRuleDetailReturn,
+  IUpdateMaskingRuleParams,
+  IUpdateMaskingRuleReturn,
+  IDeleteMaskingRuleParams,
+  IDeleteMaskingRuleReturn,
+  IListSensitiveDataDiscoveryTasksParams,
+  IListSensitiveDataDiscoveryTasksReturn,
+  IAddSensitiveDataDiscoveryTaskParams,
+  IAddSensitiveDataDiscoveryTaskReturn,
+  IListCreatableDBServicesForMaskingTaskParams,
+  IListCreatableDBServicesForMaskingTaskReturn,
+  IListDBServiceSchemasForMaskingTaskParams,
+  IListDBServiceSchemasForMaskingTaskReturn,
+  IListDBServiceTablesForMaskingTaskParams,
+  IListDBServiceTablesForMaskingTaskReturn,
+  IUpdateSensitiveDataDiscoveryTaskParams,
+  IUpdateSensitiveDataDiscoveryTaskReturn,
+  IDeleteSensitiveDataDiscoveryTaskParams,
+  IDeleteSensitiveDataDiscoveryTaskReturn,
+  IListSensitiveDataDiscoveryTaskHistoriesParams,
+  IListSensitiveDataDiscoveryTaskHistoriesReturn,
+  IListSensitiveTypesParams,
+  IListSensitiveTypesReturn,
+  IAddSensitiveDataTypeParams,
+  IAddSensitiveDataTypeReturn,
+  ITestSensitiveDataTypeMatchParams,
+  ITestSensitiveDataTypeMatchReturn,
+  IUpdateSensitiveDataTypeParams,
+  IUpdateSensitiveDataTypeReturn,
+  IDeleteSensitiveDataTypeParams,
+  IDeleteSensitiveDataTypeReturn,
+  IGetTableColumnMaskingDetailsParams,
+  IGetTableColumnMaskingDetailsReturn,
+  IListMaskingTemplatesParams,
+  IListMaskingTemplatesReturn,
+  IAddMaskingTemplateParams,
+  IAddMaskingTemplateReturn,
+  IUpdateMaskingTemplateParams,
+  IUpdateMaskingTemplateReturn,
+  IDeleteMaskingTemplateParams,
+  IDeleteMaskingTemplateReturn,
+  IListUnmaskingWorkflowsParams,
+  IListUnmaskingWorkflowsReturn,
+  ICreateUnmaskingWorkflowParams,
+  ICreateUnmaskingWorkflowReturn,
+  IGetUnmaskingWorkflowParams,
+  IGetUnmaskingWorkflowReturn,
+  IApproveUnmaskingWorkflowParams,
+  IApproveUnmaskingWorkflowReturn,
+  ICancelUnmaskingWorkflowParams,
+  ICancelUnmaskingWorkflowReturn,
+  IRejectUnmaskingWorkflowParams,
+  IRejectUnmaskingWorkflowReturn
+} from './index.type';
 
 class MaskingService extends ServiceBase {
-  public ListMaskingRules(options?: AxiosRequestConfig) {
+  public GetMaskingOverviewTree(
+    params: IGetMaskingOverviewTreeParams,
+    options?: AxiosRequestConfig
+  ) {
+    const paramsData = this.cloneDeep(params);
+    const project_uid = paramsData.project_uid;
+    delete paramsData.project_uid;
+
+    return this.get<IGetMaskingOverviewTreeReturn>(
+      `/v1/dms/projects/${project_uid}/masking/overview`,
+      paramsData,
+      options
+    );
+  }
+
+  public PreviewMaskingEffect(
+    params: IPreviewMaskingEffectParams,
+    options?: AxiosRequestConfig
+  ) {
+    const paramsData = this.cloneDeep(params);
+    const project_uid = paramsData.project_uid;
+    delete paramsData.project_uid;
+
+    return this.post<IPreviewMaskingEffectReturn>(
+      `/v1/dms/projects/${project_uid}/masking/preview`,
+      paramsData,
+      options
+    );
+  }
+
+  public ConfigureMaskingRules(
+    params: IConfigureMaskingRulesParams,
+    options?: AxiosRequestConfig
+  ) {
+    const paramsData = this.cloneDeep(params);
+    const project_uid = paramsData.project_uid;
+    delete paramsData.project_uid;
+
+    return this.put<IConfigureMaskingRulesReturn>(
+      `/v1/dms/projects/${project_uid}/masking/rule-configs`,
+      paramsData,
+      options
+    );
+  }
+
+  public ListMaskingRules(
+    params: IListMaskingRulesParams,
+    options?: AxiosRequestConfig
+  ) {
+    const paramsData = this.cloneDeep(params);
+    const project_uid = paramsData.project_uid;
+    delete paramsData.project_uid;
+
     return this.get<IListMaskingRulesReturn>(
-      '/v1/dms/masking/rules',
-      undefined,
+      `/v1/dms/projects/${project_uid}/masking/rules`,
+      paramsData,
+      options
+    );
+  }
+
+  public AddMaskingRule(
+    params: IAddMaskingRuleParams,
+    options?: AxiosRequestConfig
+  ) {
+    const paramsData = this.cloneDeep(params);
+    const project_uid = paramsData.project_uid;
+    delete paramsData.project_uid;
+
+    return this.post<IAddMaskingRuleReturn>(
+      `/v1/dms/projects/${project_uid}/masking/rules`,
+      paramsData,
+      options
+    );
+  }
+
+  public GetMaskingRuleDetail(
+    params: IGetMaskingRuleDetailParams,
+    options?: AxiosRequestConfig
+  ) {
+    const paramsData = this.cloneDeep(params);
+    const project_uid = paramsData.project_uid;
+    delete paramsData.project_uid;
+
+    const rule_id = paramsData.rule_id;
+    delete paramsData.rule_id;
+
+    return this.get<IGetMaskingRuleDetailReturn>(
+      `/v1/dms/projects/${project_uid}/masking/rules/${rule_id}`,
+      paramsData,
+      options
+    );
+  }
+
+  public UpdateMaskingRule(
+    params: IUpdateMaskingRuleParams,
+    options?: AxiosRequestConfig
+  ) {
+    const paramsData = this.cloneDeep(params);
+    const project_uid = paramsData.project_uid;
+    delete paramsData.project_uid;
+
+    const rule_id = paramsData.rule_id;
+    delete paramsData.rule_id;
+
+    return this.put<IUpdateMaskingRuleReturn>(
+      `/v1/dms/projects/${project_uid}/masking/rules/${rule_id}`,
+      paramsData,
+      options
+    );
+  }
+
+  public DeleteMaskingRule(
+    params: IDeleteMaskingRuleParams,
+    options?: AxiosRequestConfig
+  ) {
+    const paramsData = this.cloneDeep(params);
+    const project_uid = paramsData.project_uid;
+    delete paramsData.project_uid;
+
+    const rule_id = paramsData.rule_id;
+    delete paramsData.rule_id;
+
+    return this.delete<IDeleteMaskingRuleReturn>(
+      `/v1/dms/projects/${project_uid}/masking/rules/${rule_id}`,
+      paramsData,
+      options
+    );
+  }
+
+  public ListSensitiveDataDiscoveryTasks(
+    params: IListSensitiveDataDiscoveryTasksParams,
+    options?: AxiosRequestConfig
+  ) {
+    const paramsData = this.cloneDeep(params);
+    const project_uid = paramsData.project_uid;
+    delete paramsData.project_uid;
+
+    return this.get<IListSensitiveDataDiscoveryTasksReturn>(
+      `/v1/dms/projects/${project_uid}/masking/sensitive-data-discovery-tasks`,
+      paramsData,
+      options
+    );
+  }
+
+  public AddSensitiveDataDiscoveryTask(
+    params: IAddSensitiveDataDiscoveryTaskParams,
+    options?: AxiosRequestConfig
+  ) {
+    const paramsData = this.cloneDeep(params);
+    const project_uid = paramsData.project_uid;
+    delete paramsData.project_uid;
+
+    return this.post<IAddSensitiveDataDiscoveryTaskReturn>(
+      `/v1/dms/projects/${project_uid}/masking/sensitive-data-discovery-tasks`,
+      paramsData,
+      options
+    );
+  }
+
+  public ListCreatableDBServicesForMaskingTask(
+    params: IListCreatableDBServicesForMaskingTaskParams,
+    options?: AxiosRequestConfig
+  ) {
+    const paramsData = this.cloneDeep(params);
+    const project_uid = paramsData.project_uid;
+    delete paramsData.project_uid;
+
+    return this.get<IListCreatableDBServicesForMaskingTaskReturn>(
+      `/v1/dms/projects/${project_uid}/masking/sensitive-data-discovery-tasks/creatable-db-services`,
+      paramsData,
+      options
+    );
+  }
+
+  public ListDBServiceSchemasForMaskingTask(
+    params: IListDBServiceSchemasForMaskingTaskParams,
+    options?: AxiosRequestConfig
+  ) {
+    const paramsData = this.cloneDeep(params);
+    const project_uid = paramsData.project_uid;
+    delete paramsData.project_uid;
+
+    return this.get<IListDBServiceSchemasForMaskingTaskReturn>(
+      `/v1/dms/projects/${project_uid}/masking/sensitive-data-discovery-tasks/db-service-schemas`,
+      paramsData,
+      options
+    );
+  }
+
+  public ListDBServiceTablesForMaskingTask(
+    params: IListDBServiceTablesForMaskingTaskParams,
+    options?: AxiosRequestConfig
+  ) {
+    const paramsData = this.cloneDeep(params);
+    const project_uid = paramsData.project_uid;
+    delete paramsData.project_uid;
+
+    return this.get<IListDBServiceTablesForMaskingTaskReturn>(
+      `/v1/dms/projects/${project_uid}/masking/sensitive-data-discovery-tasks/db-service-tables`,
+      paramsData,
+      options
+    );
+  }
+
+  public UpdateSensitiveDataDiscoveryTask(
+    params: IUpdateSensitiveDataDiscoveryTaskParams,
+    options?: AxiosRequestConfig
+  ) {
+    const paramsData = this.cloneDeep(params);
+    const project_uid = paramsData.project_uid;
+    delete paramsData.project_uid;
+
+    const task_id = paramsData.task_id;
+    delete paramsData.task_id;
+
+    return this.put<IUpdateSensitiveDataDiscoveryTaskReturn>(
+      `/v1/dms/projects/${project_uid}/masking/sensitive-data-discovery-tasks/${task_id}`,
+      paramsData,
+      options
+    );
+  }
+
+  public DeleteSensitiveDataDiscoveryTask(
+    params: IDeleteSensitiveDataDiscoveryTaskParams,
+    options?: AxiosRequestConfig
+  ) {
+    const paramsData = this.cloneDeep(params);
+    const project_uid = paramsData.project_uid;
+    delete paramsData.project_uid;
+
+    const task_id = paramsData.task_id;
+    delete paramsData.task_id;
+
+    return this.delete<IDeleteSensitiveDataDiscoveryTaskReturn>(
+      `/v1/dms/projects/${project_uid}/masking/sensitive-data-discovery-tasks/${task_id}`,
+      paramsData,
+      options
+    );
+  }
+
+  public ListSensitiveDataDiscoveryTaskHistories(
+    params: IListSensitiveDataDiscoveryTaskHistoriesParams,
+    options?: AxiosRequestConfig
+  ) {
+    const paramsData = this.cloneDeep(params);
+    const project_uid = paramsData.project_uid;
+    delete paramsData.project_uid;
+
+    const task_id = paramsData.task_id;
+    delete paramsData.task_id;
+
+    return this.get<IListSensitiveDataDiscoveryTaskHistoriesReturn>(
+      `/v1/dms/projects/${project_uid}/masking/sensitive-data-discovery-tasks/${task_id}/histories`,
+      paramsData,
+      options
+    );
+  }
+
+  public ListSensitiveTypes(
+    params: IListSensitiveTypesParams,
+    options?: AxiosRequestConfig
+  ) {
+    const paramsData = this.cloneDeep(params);
+    const project_uid = paramsData.project_uid;
+    delete paramsData.project_uid;
+
+    return this.get<IListSensitiveTypesReturn>(
+      `/v1/dms/projects/${project_uid}/masking/sensitive-types`,
+      paramsData,
+      options
+    );
+  }
+
+  public AddSensitiveDataType(
+    params: IAddSensitiveDataTypeParams,
+    options?: AxiosRequestConfig
+  ) {
+    const paramsData = this.cloneDeep(params);
+    const project_uid = paramsData.project_uid;
+    delete paramsData.project_uid;
+
+    return this.post<IAddSensitiveDataTypeReturn>(
+      `/v1/dms/projects/${project_uid}/masking/sensitive-types`,
+      paramsData,
+      options
+    );
+  }
+
+  public TestSensitiveDataTypeMatch(
+    params: ITestSensitiveDataTypeMatchParams,
+    options?: AxiosRequestConfig
+  ) {
+    const paramsData = this.cloneDeep(params);
+    const project_uid = paramsData.project_uid;
+    delete paramsData.project_uid;
+
+    return this.post<ITestSensitiveDataTypeMatchReturn>(
+      `/v1/dms/projects/${project_uid}/masking/sensitive-types/match-test`,
+      paramsData,
+      options
+    );
+  }
+
+  public UpdateSensitiveDataType(
+    params: IUpdateSensitiveDataTypeParams,
+    options?: AxiosRequestConfig
+  ) {
+    const paramsData = this.cloneDeep(params);
+    const project_uid = paramsData.project_uid;
+    delete paramsData.project_uid;
+
+    const sensitive_data_type_id = paramsData.sensitive_data_type_id;
+    delete paramsData.sensitive_data_type_id;
+
+    return this.put<IUpdateSensitiveDataTypeReturn>(
+      `/v1/dms/projects/${project_uid}/masking/sensitive-types/${sensitive_data_type_id}`,
+      paramsData,
+      options
+    );
+  }
+
+  public DeleteSensitiveDataType(
+    params: IDeleteSensitiveDataTypeParams,
+    options?: AxiosRequestConfig
+  ) {
+    const paramsData = this.cloneDeep(params);
+    const project_uid = paramsData.project_uid;
+    delete paramsData.project_uid;
+
+    const sensitive_data_type_id = paramsData.sensitive_data_type_id;
+    delete paramsData.sensitive_data_type_id;
+
+    return this.delete<IDeleteSensitiveDataTypeReturn>(
+      `/v1/dms/projects/${project_uid}/masking/sensitive-types/${sensitive_data_type_id}`,
+      paramsData,
+      options
+    );
+  }
+
+  public GetTableColumnMaskingDetails(
+    params: IGetTableColumnMaskingDetailsParams,
+    options?: AxiosRequestConfig
+  ) {
+    const paramsData = this.cloneDeep(params);
+    const project_uid = paramsData.project_uid;
+    delete paramsData.project_uid;
+
+    const table_id = paramsData.table_id;
+    delete paramsData.table_id;
+
+    return this.get<IGetTableColumnMaskingDetailsReturn>(
+      `/v1/dms/projects/${project_uid}/masking/tables/${table_id}/column-masking-details`,
+      paramsData,
+      options
+    );
+  }
+
+  public ListMaskingTemplates(
+    params: IListMaskingTemplatesParams,
+    options?: AxiosRequestConfig
+  ) {
+    const paramsData = this.cloneDeep(params);
+    const project_uid = paramsData.project_uid;
+    delete paramsData.project_uid;
+
+    return this.get<IListMaskingTemplatesReturn>(
+      `/v1/dms/projects/${project_uid}/masking/templates`,
+      paramsData,
+      options
+    );
+  }
+
+  public AddMaskingTemplate(
+    params: IAddMaskingTemplateParams,
+    options?: AxiosRequestConfig
+  ) {
+    const paramsData = this.cloneDeep(params);
+    const project_uid = paramsData.project_uid;
+    delete paramsData.project_uid;
+
+    return this.post<IAddMaskingTemplateReturn>(
+      `/v1/dms/projects/${project_uid}/masking/templates`,
+      paramsData,
+      options
+    );
+  }
+
+  public UpdateMaskingTemplate(
+    params: IUpdateMaskingTemplateParams,
+    options?: AxiosRequestConfig
+  ) {
+    const paramsData = this.cloneDeep(params);
+    const project_uid = paramsData.project_uid;
+    delete paramsData.project_uid;
+
+    const template_id = paramsData.template_id;
+    delete paramsData.template_id;
+
+    return this.put<IUpdateMaskingTemplateReturn>(
+      `/v1/dms/projects/${project_uid}/masking/templates/${template_id}`,
+      paramsData,
+      options
+    );
+  }
+
+  public DeleteMaskingTemplate(
+    params: IDeleteMaskingTemplateParams,
+    options?: AxiosRequestConfig
+  ) {
+    const paramsData = this.cloneDeep(params);
+    const project_uid = paramsData.project_uid;
+    delete paramsData.project_uid;
+
+    const template_id = paramsData.template_id;
+    delete paramsData.template_id;
+
+    return this.delete<IDeleteMaskingTemplateReturn>(
+      `/v1/dms/projects/${project_uid}/masking/templates/${template_id}`,
+      paramsData,
+      options
+    );
+  }
+
+  public ListUnmaskingWorkflows(
+    params: IListUnmaskingWorkflowsParams,
+    options?: AxiosRequestConfig
+  ) {
+    const paramsData = this.cloneDeep(params);
+    const project_uid = paramsData.project_uid;
+    delete paramsData.project_uid;
+
+    return this.get<IListUnmaskingWorkflowsReturn>(
+      `/v1/dms/projects/${project_uid}/masking/unmasking-workflows`,
+      paramsData,
+      options
+    );
+  }
+
+  public CreateUnmaskingWorkflow(
+    params: ICreateUnmaskingWorkflowParams,
+    options?: AxiosRequestConfig
+  ) {
+    const paramsData = this.cloneDeep(params);
+    const project_uid = paramsData.project_uid;
+    delete paramsData.project_uid;
+
+    return this.post<ICreateUnmaskingWorkflowReturn>(
+      `/v1/dms/projects/${project_uid}/masking/unmasking-workflows`,
+      paramsData,
+      options
+    );
+  }
+
+  public GetUnmaskingWorkflow(
+    params: IGetUnmaskingWorkflowParams,
+    options?: AxiosRequestConfig
+  ) {
+    const paramsData = this.cloneDeep(params);
+    const project_uid = paramsData.project_uid;
+    delete paramsData.project_uid;
+
+    const workflow_id = paramsData.workflow_id;
+    delete paramsData.workflow_id;
+
+    return this.get<IGetUnmaskingWorkflowReturn>(
+      `/v1/dms/projects/${project_uid}/masking/unmasking-workflows/${workflow_id}`,
+      paramsData,
+      options
+    );
+  }
+
+  public ApproveUnmaskingWorkflow(
+    params: IApproveUnmaskingWorkflowParams,
+    options?: AxiosRequestConfig
+  ) {
+    const paramsData = this.cloneDeep(params);
+    const project_uid = paramsData.project_uid;
+    delete paramsData.project_uid;
+
+    const workflow_id = paramsData.workflow_id;
+    delete paramsData.workflow_id;
+
+    return this.post<IApproveUnmaskingWorkflowReturn>(
+      `/v1/dms/projects/${project_uid}/masking/unmasking-workflows/${workflow_id}/approve`,
+      paramsData,
+      options
+    );
+  }
+
+  public CancelUnmaskingWorkflow(
+    params: ICancelUnmaskingWorkflowParams,
+    options?: AxiosRequestConfig
+  ) {
+    const paramsData = this.cloneDeep(params);
+    const project_uid = paramsData.project_uid;
+    delete paramsData.project_uid;
+
+    const workflow_id = paramsData.workflow_id;
+    delete paramsData.workflow_id;
+
+    return this.post<ICancelUnmaskingWorkflowReturn>(
+      `/v1/dms/projects/${project_uid}/masking/unmasking-workflows/${workflow_id}/cancel`,
+      paramsData,
+      options
+    );
+  }
+
+  public RejectUnmaskingWorkflow(
+    params: IRejectUnmaskingWorkflowParams,
+    options?: AxiosRequestConfig
+  ) {
+    const paramsData = this.cloneDeep(params);
+    const project_uid = paramsData.project_uid;
+    delete paramsData.project_uid;
+
+    const workflow_id = paramsData.workflow_id;
+    delete paramsData.workflow_id;
+
+    return this.post<IRejectUnmaskingWorkflowReturn>(
+      `/v1/dms/projects/${project_uid}/masking/unmasking-workflows/${workflow_id}/reject`,
+      paramsData,
       options
     );
   }

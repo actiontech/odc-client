@@ -1744,6 +1744,7 @@ export interface ISqlExecuteResult {
 
   id?: string;
   requestId?: string | number;
+  sessionId?: string;
   sqlId?: string;
   types?: {
     [key: string]: string | number;
