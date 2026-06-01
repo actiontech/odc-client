@@ -100,13 +100,18 @@ const items: Record<ConnectType.DB2, IDataSourceModeConfig> = {
     sql: {
       language: 'mysql',
       escapeChar: '"',
-      // fix_report_20260529_100416 issue (Issue dms-ee#839): DB2 LUW upper-cases unquoted
-      // identifiers automatically (same default as Oracle / HANA). The expand_odc_db2.md §10.3
-      // table classifies that as `caseSensitivity=false`. The previous `true` setting caused the
-      // workbench's identifier quoter to wrap every column in double quotes on every keystroke,
-      // breaking the SQL editor auto-complete UX (search for "TEST_ORDERS" failed because the
-      // ODC index stored "TEST_ORDERS" uppercase while the typed query was lower).
-      caseSensitivity: false
+      // fix_report_20260601_031142 (Issue dms-ee#839, P0-1): caseSensitivity drives the
+      // CaseInput/CaseTextEditor force-upper-case behavior on the table designer. Setting it to
+      // false made the column-name input mutate "my_col" into "MY_COL" on every keystroke,
+      // making lower-case column names impossible to enter (DB2 will still upper-case the
+      // identifier server-side if the user submits without double quotes — that semantic is
+      // unchanged). Aligning with SQL Server (also `"` quoted, also `true`): the workbench's
+      // table designer accepts the user's input verbatim; users who need to preserve mixed
+      // case can wrap the identifier in "..." themselves, which the editor already supports.
+      // The previous comment blaming SQL-editor auto-complete was incorrect: caseSensitivity
+      // is only consumed by CaseInput / CaseTextEditor and does not flow into the SQL editor
+      // completion pipeline.
+      caseSensitivity: true
     }
   }
 };
