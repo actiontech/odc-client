@@ -56,11 +56,12 @@ const items: Record<ConnectType.HANA, IDataSourceModeConfig> = {
   [ConnectType.HANA]: {
     connection: {
       address: {
-        items: ['ip', 'port']
+        items: ['ip', 'port', 'catalogName']
       },
       account: true,
       sys: false,
       ssl: false,
+      defaultSchema: true,
       jdbcDoc:
         'https://help.sap.com/docs/SAP_HANA_PLATFORM/0eec0d68141541d1b07893a39944924e/',
       disableURLParse: true
@@ -93,9 +94,9 @@ const items: Record<ConnectType.HANA, IDataSourceModeConfig> = {
       innerSchema: []
     },
     sql: {
-      language: 'sql',
+      language: 'hana',
       escapeChar: '"',
-      caseSensitivity: false
+      caseSensitivity: true
     }
   }
 };
