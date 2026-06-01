@@ -61,11 +61,14 @@ export function getModelService(
       if (!hasConnect(sessionFunc())) {
         return;
       }
+      // HANA connections may have higher latency than local databases.
+      // Use a generous timeout (5s) so queryIdentities completes on the first call,
+      // ensuring schema/table/view completions are available immediately.
       await Promise.race([
         new Promise((resolve) => {
           setTimeout(() => {
             resolve([]);
-          }, 300);
+          }, 5000);
         }),
         sessionFunc()?.queryIdentities()
       ]);

@@ -96,7 +96,7 @@ const items: Record<ConnectType.HANA, IDataSourceModeConfig> = {
     sql: {
       language: 'hana',
       escapeChar: '"',
-      caseSensitivity: false
+      caseSensitivity: true
     }
   }
 };
