@@ -28,12 +28,14 @@ const mysqlObjectType = [
   DbObjectType.materialized_view
 ];
 
+// PG 资源搜索对象类型与 ODC 后端 odc_version_diff_config 中 PG 的能力对齐：
+// support_trigger=false，因此前端资源搜索不再暴露 trigger 入口。
+// Refs: dms-ee#850, compat-RISK-3
 const pgObjectType = [
   DbObjectType.table,
   DbObjectType.column,
   DbObjectType.function,
-  DbObjectType.view,
-  DbObjectType.trigger
+  DbObjectType.view
 ];
 
 const oracleObjectType = [

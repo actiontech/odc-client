@@ -20,16 +20,16 @@ import MySQLColumnExtra from '../oceanbase/MySQLColumnExtra';
 import { haveOCP } from '@/util/env';
 
 const tableConfig = {
-  enableTableCharsetsAndCollations: true,
-  enableConstraintOnUpdate: true,
+  enableTableCharsetsAndCollations: false, // PG 字符集在数据库级别设置
+  enableConstraintOnUpdate: false, // PG 建表 UI 暂不支持约束在线修改
   ColumnExtraComponent: MySQLColumnExtra,
-  paritionNameCaseSensitivity: true,
-  enableIndexesFullTextType: true,
-  enableAutoIncrement: true,
+  paritionNameCaseSensitivity: false, // PG 标识符默认转小写，未引用时不区分大小写
+  enableIndexesFullTextType: false, // PG 没有 MySQL 风格的 FULLTEXT 索引类型
+  enableAutoIncrement: false, // PG 使用 SERIAL/IDENTITY
   type2ColumnType: {
-    id: 'int',
+    id: 'bigint', // 主键默认列类型用 bigint，匹配 PG bigserial 习惯
     name: 'varchar',
-    date: 'datetime',
+    date: 'timestamp',
     time: 'timestamp'
   }
 };
@@ -67,14 +67,20 @@ const items: Record<ConnectType.PG, IDataSourceModeConfig> = {
       disableURLParse: true
     },
     features: {
-      task: [TaskType.DATA_ARCHIVE, TaskType.DATA_DELETE],
+      // Align with ODC backend PostgreSQLFeatures + odc_version_diff_config:
+      // PG 后端在本期仅承诺 ASYNC（数据库变更）任务；SQL_PLAN / DATA_ARCHIVE /
+      // DATA_DELETE / IMPORT / EXPORT / EXPORT_RESULT_SET / STRUCTURE_COMPARISON /
+      // MULTIPLE_ASYNC 均未在后端开放，前端入口同步收敛以避免点击后 unsupported。
+      // Refs: dms-ee#850, compat-RISK-3
+      task: [TaskType.ASYNC],
       obclient: false,
-      recycleBin: false,
-      sessionManage: false,
-      sessionParams: false,
-      sqlExplain: false,
-      groupResourceTree: false,
-      sqlconsole: false,
+      recycleBin: false, // PG 无回收站
+      sessionManage: true,
+      sessionParams: false, // PG 无 MySQL 风格的 session variables 管理页面
+      sqlExplain: true,
+      plRun: false, // PG PL/pgSQL 函数不能像 OB PL 在 ODC 内独立运行调试
+      groupResourceTree: true,
+      sqlconsole: true,
       export: {
         fileLimit: false,
         snapshot: false
@@ -84,10 +90,10 @@ const items: Record<ConnectType.PG, IDataSourceModeConfig> = {
       table: tableConfig,
       func: functionConfig,
       proc: procedureConfig,
-      innerSchema: ['postgres']
+      innerSchema: ['postgres', 'information_schema', 'pg_catalog']
     },
     sql: {
-      language: 'mysql',
+      language: 'pg',
       escapeChar: '"',
       caseSensitivity: true
     }
