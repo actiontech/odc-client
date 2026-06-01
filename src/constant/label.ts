@@ -151,7 +151,8 @@ export const ConnectTypeText = (type: ConnectType) => {
       id: 'src.constant.DM_LABEL',
       defaultMessage: '达梦(DM)'
     }),
-    [ConnectType.HANA]: 'SAP HANA'
+    [ConnectType.HANA]: 'SAP HANA',
+    [ConnectType.DB2]: 'DB2'
   };
   return textMap?.[type];
 };
