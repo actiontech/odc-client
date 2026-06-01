@@ -163,6 +163,10 @@ const MonacoEditor: React.FC<IProps> = function (props) {
       pluginModule = await import('./plugins/pg-language/index');
       const serviceModule = await import('./plugins/pg-language/service');
       getModelServiceFunc = serviceModule.getModelService;
+    } else if (language === 'hana') {
+      pluginModule = await import('./plugins/hana-language/index');
+      const serviceModule = await import('./plugins/hana-language/service');
+      getModelServiceFunc = serviceModule.getModelService;
     } else {
       pluginModule = await import('./plugins/ob-language/index');
       getModelServiceFunc = getModelService;
@@ -191,8 +195,8 @@ const MonacoEditor: React.FC<IProps> = function (props) {
   }
 
   async function initEditor() {
-    // SQL Server 使用自定义的 'sqlserver' 语言支持, PostgreSQL 使用 'pg'
-    const monacoLanguage = language === 'sqlserver' ? 'sqlserver' : language === 'pg' ? 'pg' : language;
+    // SQL Server, PostgreSQL and HANA use custom language support
+    const monacoLanguage = language === 'sqlserver' || language === 'pg' || language === 'hana' ? language : language;
     const currentTheme = theme || settingTheme;
 
     editorRef.current = monaco.editor?.create(domRef.current, {
