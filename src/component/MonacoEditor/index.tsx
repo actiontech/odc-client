@@ -196,7 +196,10 @@ const MonacoEditor: React.FC<IProps> = function (props) {
 
   async function initEditor() {
     // SQL Server, PostgreSQL and HANA use custom language support
-    const monacoLanguage = language === 'sqlserver' || language === 'pg' || language === 'hana' ? language : language;
+    const monacoLanguage =
+      language === 'sqlserver' || language === 'pg' || language === 'hana'
+        ? language
+        : language;
     const currentTheme = theme || settingTheme;
 
     editorRef.current = monaco.editor?.create(domRef.current, {
@@ -317,7 +320,12 @@ const MonacoEditor: React.FC<IProps> = function (props) {
       language !== editorRef.current?.getModel().getLanguageId()
     ) {
       // SQL Server 使用自定义的 'sqlserver' 语言支持, PostgreSQL 使用 'pg'
-      const monacoLanguage = language === 'sqlserver' ? 'sqlserver' : language === 'pg' ? 'pg' : language;
+      const monacoLanguage =
+        language === 'sqlserver'
+          ? 'sqlserver'
+          : language === 'pg'
+          ? 'pg'
+          : language;
       monaco.editor.setModelLanguage(
         editorRef.current?.getModel(),
         monacoLanguage
@@ -350,6 +358,28 @@ const MonacoEditor: React.FC<IProps> = function (props) {
         Promise.all([
           import('./plugins/pg-language/index'),
           import('./plugins/pg-language/service')
+        ]).then(([pluginModule, serviceModule]) => {
+          const plugin = pluginModule.register(language);
+          // 重新设置模型选项
+          if (editorRef.current?.getModel()) {
+            plugin.setModelOptions(
+              editorRef.current.getModel().id,
+              serviceModule.getModelService(
+                {
+                  modelId: editorRef.current.getModel().id,
+                  delimiter() {
+                    return sessionRef.current?.params?.delimiter;
+                  }
+                },
+                () => sessionRef.current
+              )
+            );
+          }
+        });
+      } else if (language === 'hana') {
+        Promise.all([
+          import('./plugins/hana-language/index'),
+          import('./plugins/hana-language/service')
         ]).then(([pluginModule, serviceModule]) => {
           const plugin = pluginModule.register(language);
           // 重新设置模型选项
