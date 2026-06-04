@@ -3569,6 +3569,7 @@ export enum ConnectType {
   DM = 'DM',
   HANA = 'HANA',
   MONGODB = 'MONGODB',
+  REDIS = 'REDIS',
   HIVE = 'HIVE',
   DB2 = 'DB2'
 }
