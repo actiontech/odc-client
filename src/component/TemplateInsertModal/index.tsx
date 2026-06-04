@@ -19,6 +19,7 @@ import { getView } from '@/common/network/view';
 import { DragInsertTypeText } from '@/constant/label';
 import { DbObjectType, DragInsertType } from '@/d.ts/index';
 import { generateMongoCopyText, isMongoConnectType } from '@/util/mongodb';
+import { generateRedisCopyText, isRedisConnectType } from '@/util/redis';
 import type { ModalStore } from '@/store/modal';
 import sessionManager from '@/store/sessionManager';
 import SessionStore from '@/store/sessionManager/session';
@@ -293,6 +294,10 @@ export async function getCopyText(
       isExternalTable
     );
     return _escape(generateMongoCopyText(name, copyType, columnNames));
+  }
+
+  if (isRedisConnectType(dbSession?.connection?.type)) {
+    return _escape(generateRedisCopyText(name, copyType));
   }
 
   switch (copyType) {
