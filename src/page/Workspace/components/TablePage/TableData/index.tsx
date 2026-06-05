@@ -21,13 +21,7 @@ import {
 } from '@/common/network/table';
 import ExecuteSQLModal from '@/component/ExecuteSQLModal';
 import { ISQLLintReuslt } from '@/component/SQLLintResult/type';
-import {
-  EStatus,
-  IResultSet,
-  ISqlExecuteResultStatus,
-  ITable,
-  ConnectType
-} from '@/d.ts';
+import { EStatus, IResultSet, ISqlExecuteResultStatus, ITable } from '@/d.ts';
 import { generateResultSetColumns } from '@/store/helper';
 import modal, { ModalStore } from '@/store/modal';
 import { PageStore } from '@/store/page';
@@ -37,6 +31,7 @@ import { SettingStore } from '@/store/setting';
 import type { SQLStore } from '@/store/sql';
 import { formatMessage } from '@/util/intl';
 import notification from '@/util/notification';
+import { isDocumentOrKeyValueSession } from '@/util/mongodb';
 import { generateSelectSql } from '@/util/sql';
 import { generateUniqKey } from '@/util/utils';
 import { message, Spin } from 'antd';
@@ -438,7 +433,7 @@ class TableData extends React.Component<
             disableEdit={
               !resultSet.resultSetMetaData?.editable ||
               isExternalTable ||
-              session?.connection?.type === ConnectType.MONGODB
+              isDocumentOrKeyValueSession(session)
             }
             table={{
               ...table,
