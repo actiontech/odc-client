@@ -15,7 +15,7 @@
  */
 
 import { getTableInfo, getLogicTableInfo } from '@/common/network/table';
-import { ConnectType, TaskType } from '@/d.ts';
+import { TaskType } from '@/d.ts';
 import { PageStore } from '@/store/page';
 import { SettingStore } from '@/store/setting';
 import { formatMessage } from '@/util/intl';
@@ -52,6 +52,7 @@ import SessionContext from '../SessionContextWrap/context';
 import WrapSessionPage from '../SessionContextWrap/SessionPageWrap';
 import styles from './index.less';
 import { isLogicalDatabase } from '@/util/database';
+import { isDocumentOrKeyValueSession } from '@/util/mongodb';
 import { BasicSegmented, BasicSegmentedProps } from '@actiontech/dms-kit';
 import { TableDetailInfoPageStyleWrapper } from './style';
 
@@ -102,10 +103,10 @@ const TablePage: React.FC<IProps> = function ({
   const { session } = useContext(SessionContext);
   const dbType = session?.odcDatabase?.type;
   const dbName = session?.database?.dbName;
-  const isMongoDB = session?.connection?.type === ConnectType.MONGODB;
+  const isDocumentOrKeyValue = isDocumentOrKeyValueSession(session);
   const showPartition = !!table?.partitions?.partType;
   const enableConstraint =
-    !isMongoDB && !!session?.supportFeature?.enableConstraint;
+    !isDocumentOrKeyValue && !!session?.supportFeature?.enableConstraint;
   const callbackRef = useRef<any>();
   async function fetchTable() {
     if (table?.info?.tableName === params.tableName) {
@@ -183,7 +184,7 @@ const TablePage: React.FC<IProps> = function ({
     if (params.propsTab) {
       let nextPropsTab = params.propsTab;
       if (
-        isMongoDB &&
+        isDocumentOrKeyValue &&
         [
           PropsTab.DDL,
           PropsTab.INDEX,
@@ -195,7 +196,7 @@ const TablePage: React.FC<IProps> = function ({
       }
       setPropsTab(nextPropsTab);
     }
-  }, [params.propsTab, params.topTab, isMongoDB]);
+  }, [params.propsTab, params.topTab, isDocumentOrKeyValue]);
 
   const handleTopTabChanged: BasicSegmentedProps['onChange'] = (v) => {
     const topTab = v;
@@ -309,7 +310,7 @@ const TablePage: React.FC<IProps> = function ({
                       },
                       // 外表不展示索引
                       !isExternalTable &&
-                        !isMongoDB && {
+                        !isDocumentOrKeyValue && {
                           key: PropsTab.INDEX,
                           label: formatMessage({
                             id: 'workspace.window.table.propstab.index',
@@ -329,7 +330,7 @@ const TablePage: React.FC<IProps> = function ({
                           })
                         },
 
-                      showPartition && !isMongoDB
+                      showPartition && !isDocumentOrKeyValue
                         ? {
                             key: PropsTab.PARTITION,
                             label: formatMessage({
@@ -339,7 +340,7 @@ const TablePage: React.FC<IProps> = function ({
                             children: <TablePartitions />
                           }
                         : null,
-                      !isMongoDB && {
+                      !isDocumentOrKeyValue && {
                         key: PropsTab.DDL,
                         label: formatMessage({
                           id: 'workspace.window.table.propstab.ddl',

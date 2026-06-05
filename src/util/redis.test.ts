@@ -8,6 +8,12 @@ describe('redis copy text', () => {
     );
   });
 
+  test('generates get statement for concrete key', () => {
+    expect(generateRedisCopyText('user:1', DragInsertType.SELECT)).toBe(
+      'GET user:1'
+    );
+  });
+
   test('generates write statements', () => {
     expect(generateRedisCopyText('user:1', DragInsertType.INSERT)).toBe(
       'SET user:1 ${1:value}'

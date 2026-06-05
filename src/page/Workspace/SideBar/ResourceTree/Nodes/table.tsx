@@ -74,7 +74,7 @@ export function TableTreeData(
         visited.add(table.info?.tableName);
         const tableKey = `${database.id}-${dbName}-table-${table?.info?.tableName}`;
         let columnRoot: TreeDataNode;
-        if (table.columns) {
+        if (!isMongoDB && table.columns) {
           columnRoot = {
             title: formatMessage({
               id: 'odc.ResourceTree.Nodes.table.Column',
@@ -238,12 +238,13 @@ export function TableTreeData(
           ),
 
           sessionId: dbSession?.sessionId,
-          isLeaf: false,
-          children: table.columns
-            ? [columnRoot, indexRoot, partitionRoot, constraintRoot].filter(
-                Boolean
-              )
-            : null
+          isLeaf: isMongoDB,
+          children:
+            !isMongoDB && table.columns
+              ? [columnRoot, indexRoot, partitionRoot, constraintRoot].filter(
+                  Boolean
+                )
+              : null
         };
       })
       .filter(Boolean);

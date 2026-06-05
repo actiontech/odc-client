@@ -34,7 +34,6 @@ import { cloneDeep } from 'lodash';
 import TableContext from '../../CreateTable/TableContext';
 import TablePageContext from '../context';
 import { DBType } from '@/d.ts/database';
-import { ConnectType } from '@/d.ts';
 import LogicTableBaseInfo from './LogicTableBaseInfo';
 import {
   PropsTab as TablePropsTab,
@@ -42,6 +41,7 @@ import {
 } from '@/page/Workspace/components/TablePage';
 import { TableBaseInfoFormStyleWrapper } from './style';
 import { BasicButton } from '@actiontech/dms-kit';
+import { isDocumentOrKeyValueSession } from '@/util/mongodb';
 
 interface IProps {
   pageKey?: string;
@@ -59,7 +59,7 @@ const ShowTableBaseInfoForm: React.FC<IProps> = ({
   const table = tableContext?.table;
   const [isEditing, setIsEditing] = useState(false);
   const formRef = useRef<FormInstance<any>>();
-  const isMongoDB = session?.connection?.type === ConnectType.MONGODB;
+  const isDocumentOrKeyValue = isDocumentOrKeyValueSession(session);
 
   return (
     <TableBaseInfoFormStyleWrapper>
@@ -164,7 +164,7 @@ const ShowTableBaseInfoForm: React.FC<IProps> = ({
           ) : (
             <Toolbar>
               {/* 外表与 MongoDB 集合不支持编辑 */}
-              {isExternalTable || isMongoDB ? null : (
+              {isExternalTable || isDocumentOrKeyValue ? null : (
                 <Toolbar.Button
                   icon={<EditOutlined />}
                   text={formatMessage({

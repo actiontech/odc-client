@@ -4,6 +4,10 @@ function keyPattern(keyName: string): string {
   return keyName ? `${keyName}:*` : '*';
 }
 
+function isConcreteKey(keyName: string): boolean {
+  return keyName.includes(':');
+}
+
 export function generateRedisCopyText(
   keyName: string,
   copyType: DragInsertType
@@ -12,6 +16,9 @@ export function generateRedisCopyText(
     case DragInsertType.NAME:
       return keyName;
     case DragInsertType.SELECT:
+      if (keyName && isConcreteKey(keyName)) {
+        return `GET ${keyName}`;
+      }
       return `SCAN 0 MATCH ${keyPattern(keyName)} COUNT 100`;
     case DragInsertType.INSERT:
       return `SET ${keyName || '${1:key}'} ${
