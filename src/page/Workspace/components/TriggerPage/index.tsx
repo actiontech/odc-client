@@ -544,14 +544,16 @@ class TriggerPage extends Component<
                   children: (
                     <>
                       <Toolbar>
-                        <ToolbarButton
-                          text={formatMessage({
-                            id: 'workspace.window.session.button.edit',
-                            defaultMessage: '编辑'
-                          })}
-                          icon={<EditOutlined />}
-                          onClick={this.editTrigger}
-                        />
+                        {session?.supportFeature?.enableTriggerDDL && (
+                          <ToolbarButton
+                            text={formatMessage({
+                              id: 'workspace.window.session.button.edit',
+                              defaultMessage: '编辑'
+                            })}
+                            icon={<EditOutlined />}
+                            onClick={this.editTrigger}
+                          />
+                        )}
 
                         <ToolbarButton
                           text={

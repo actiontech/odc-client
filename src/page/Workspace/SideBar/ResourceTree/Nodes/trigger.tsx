@@ -48,25 +48,24 @@ export function TriggerTreeData(
   };
   if (triggers) {
     treeData.children = triggers.map((trigger) => {
-      const title =
-        trigger.enableState === TriggerState.enabled
-          ? formatMessage({
-              id: 'odc.ResourceTree.config.procedure.Enable',
-              defaultMessage: '启用'
-            }) // 启用
-          : formatMessage({
-              id: 'odc.ResourceTree.config.procedure.Disable',
-              defaultMessage: '禁用'
-            }); // 禁用
+      const enabled =
+        trigger.enableState === TriggerState.enabled ||
+        trigger.enableState == null;
+      const title = enabled
+        ? formatMessage({
+            id: 'odc.ResourceTree.config.procedure.Enable',
+            defaultMessage: '启用'
+          }) // 启用
+        : formatMessage({
+            id: 'odc.ResourceTree.config.procedure.Disable',
+            defaultMessage: '禁用'
+          }); // 禁用
       const icon = (
         <Tooltip placement="right" title={title}>
           <Icon
             component={TriggerSvg}
             style={{
-              color:
-                trigger.enableState === TriggerState.enabled
-                  ? THEME.TRIGGER_ENABLE
-                  : THEME.TRIGGER_DISABLE
+              color: enabled ? THEME.TRIGGER_ENABLE : THEME.TRIGGER_DISABLE
             }}
           />
         </Tooltip>
@@ -80,7 +79,7 @@ export function TriggerTreeData(
           openTriggerViewPage(
             trigger.triggerName,
             undefined,
-            trigger.enableState,
+            enabled ? TriggerState.enabled : TriggerState.disabled,
             undefined,
             session?.database?.databaseId
           );
