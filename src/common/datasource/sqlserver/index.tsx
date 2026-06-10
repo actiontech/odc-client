@@ -88,6 +88,7 @@ const items: Record<ConnectType.SQL_SERVER, IDataSourceModeConfig> = {
       sessionParams: true,
       groupResourceTree: true,
       sqlconsole: true,
+      disableTriggerSwitch: true,
       export: {
         fileLimit: false,
         snapshot: false
