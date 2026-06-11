@@ -90,6 +90,9 @@ export const triggerMenusConfig: Partial<
       ],
       actionType: actionTypes.create,
       icon: PlusOutlined,
+      isHide(session) {
+        return !session?.supportFeature?.enableTriggerDDL;
+      },
       run(session, node) {
         openCreateTriggerPage(
           null,
