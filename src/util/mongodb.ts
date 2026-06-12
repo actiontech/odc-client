@@ -68,3 +68,12 @@ export function isMongoDBSession(session?: {
 }): boolean {
   return isMongoConnectType(session?.connection?.type);
 }
+
+export function isDocumentOrKeyValueSession(session?: {
+  connection?: { type?: ConnectType };
+}): boolean {
+  return (
+    session?.connection?.type === ConnectType.MONGODB ||
+    session?.connection?.type === ConnectType.REDIS
+  );
+}

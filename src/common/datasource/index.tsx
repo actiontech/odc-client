@@ -29,6 +29,7 @@ import GaussDB from './gaussdb';
 import DM from './dm';
 import Hana from './hana';
 import MongoDB from './mongodb';
+import Redis from './redis';
 import Hive from './hive';
 import DB2 from './db2';
 import FileSystem from './fileSystem';
@@ -214,6 +215,15 @@ const _styles = {
       component: DBMongoDBSvg
     }
   },
+  [IDataSourceType.Redis]: {
+    icon: {
+      component: MongoDBSvg,
+      color: '#d82c20'
+    },
+    dbIcon: {
+      component: DBMongoDBSvg
+    }
+  },
   // Hive reuses the generic database SVG assets to avoid shipping new
   // image binaries, following the same pattern as GaussDB reusing PG icons.
   [IDataSourceType.HIVE]: {
@@ -252,6 +262,7 @@ const _gruops = {
   [IDataSourceType.DM]: DatasourceGroup.OtherDatabase,
   [IDataSourceType.HANA]: DatasourceGroup.OtherDatabase,
   [IDataSourceType.MongoDB]: DatasourceGroup.OtherDatabase,
+  [IDataSourceType.Redis]: DatasourceGroup.OtherDatabase,
   [IDataSourceType.HIVE]: DatasourceGroup.OtherDatabase,
   [IDataSourceType.DB2]: DatasourceGroup.OtherDatabase
 };
@@ -315,6 +326,7 @@ function initDatasource() {
   register(IDataSourceType.DM, DM);
   register(IDataSourceType.HANA, Hana);
   register(IDataSourceType.MongoDB, MongoDB);
+  register(IDataSourceType.Redis, Redis);
   register(IDataSourceType.HIVE, Hive);
   register(IDataSourceType.DB2, DB2);
 }

@@ -35,7 +35,7 @@ import { ReactComponent as IndexSvg } from '@/svgr/index.svg';
 import { ReactComponent as TableOutlined } from '@/svgr/menuTable.svg';
 import { ReactComponent as PartitionSvg } from '@/svgr/Partition.svg';
 import logger from '@/util/logger';
-import { isMongoConnectType } from '@/util/mongodb';
+import { isDocumentOrKeyValueSession } from '@/util/mongodb';
 import { ITableModel } from '@/page/Workspace/components/CreateTable/interface';
 
 export function TableTreeData(
@@ -44,7 +44,7 @@ export function TableTreeData(
 ): TreeDataNode {
   const dbName = database.name;
   const tables = dbSession?.database?.tables;
-  const isMongoDB = isMongoConnectType(dbSession?.connection?.type);
+  const isMongoDB = isDocumentOrKeyValueSession(dbSession);
   const treeData: TreeDataNode = {
     title: formatMessage({
       id: 'odc.ResourceTree.Nodes.table.Table',
@@ -74,7 +74,7 @@ export function TableTreeData(
         visited.add(table.info?.tableName);
         const tableKey = `${database.id}-${dbName}-table-${table?.info?.tableName}`;
         let columnRoot: TreeDataNode;
-        if (table.columns) {
+        if (!isMongoDB && table.columns) {
           columnRoot = {
             title: formatMessage({
               id: 'odc.ResourceTree.Nodes.table.Column',
@@ -238,12 +238,13 @@ export function TableTreeData(
           ),
 
           sessionId: dbSession?.sessionId,
-          isLeaf: false,
-          children: table.columns
-            ? [columnRoot, indexRoot, partitionRoot, constraintRoot].filter(
-                Boolean
-              )
-            : null
+          isLeaf: isMongoDB,
+          children:
+            !isMongoDB && table.columns
+              ? [columnRoot, indexRoot, partitionRoot, constraintRoot].filter(
+                  Boolean
+                )
+              : null
         };
       })
       .filter(Boolean);
