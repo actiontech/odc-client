@@ -26,6 +26,47 @@ function hasConnect(session: SessionStore) {
   return session?.sessionId && session?.database?.dbName;
 }
 
+function withTimeout<T>(promise?: Promise<T>, timeout = 300): Promise<T | []> {
+  if (!promise) {
+    return Promise.resolve([]);
+  }
+  return Promise.race([
+    new Promise<[]>((resolve) => {
+      setTimeout(() => {
+        resolve([]);
+      }, timeout);
+    }),
+    promise
+  ]);
+}
+
+function matchesPrefix(name: string, prefix?: string) {
+  if (!prefix) {
+    return true;
+  }
+  return name?.toLowerCase?.().startsWith(prefix.toLowerCase());
+}
+
+function getIdentityNames(
+  dbObj?: {
+    tables?: string[];
+    views?: string[];
+    external_table?: string[];
+    materialized_view?: string[];
+  },
+  namePrefix?: string
+) {
+  if (!dbObj) {
+    return [];
+  }
+  return [
+    ...(dbObj.tables || []),
+    ...(dbObj.views || []),
+    ...(dbObj.external_table || []),
+    ...(dbObj.materialized_view || [])
+  ].filter((name) => matchesPrefix(name, namePrefix));
+}
+
 export function getModelService(
   { modelId, delimiter },
   sessionFunc: () => SessionStore
@@ -34,35 +75,18 @@ export function getModelService(
     get delimiter() {
       return delimiter();
     },
-    async getTableList(schemaName: string) {
-      const dbName = schemaName || sessionFunc()?.database?.dbName;
-      if (!hasConnect(sessionFunc())) {
+    async getTableList(schemaName?: string, namePrefix?: string) {
+      const session = sessionFunc();
+      const dbName = schemaName || session?.database?.dbName;
+      if (!hasConnect(session)) {
         return;
       }
-      /**
-       * 保证200ms内返回，不返回就用上一次的值
-       */
-      await Promise.race([
-        new Promise((resolve) => {
-          setTimeout(() => {
-            resolve([]);
-          }, 300);
-        }),
-        sessionFunc()?.queryIdentities()
-      ]);
+      await withTimeout(session?.queryIdentities(namePrefix));
 
       const dbObj =
-        sessionFunc()?.allIdentities[dbName] ||
-        sessionFunc()?.allIdentities[dbName?.toUpperCase()];
-      if (!dbObj) {
-        return [];
-      }
-      return [
-        ...dbObj.tables,
-        ...dbObj.views,
-        ...dbObj.external_table,
-        ...dbObj.materialized_view
-      ];
+        session?.allIdentities[dbName] ||
+        session?.allIdentities[dbName?.toUpperCase()];
+      return getIdentityNames(dbObj, namePrefix);
     },
     async getTableColumns(tableName: string, dbName?: string) {
       const realTableName = getRealNameInDatabase(
@@ -136,11 +160,14 @@ export function getModelService(
       }
       return [];
     },
-    async getSchemaList() {
-      if (!Object.keys(sessionFunc()?.allIdentities).length) {
-        sessionFunc()?.queryIdentities();
+    async getSchemaList(prefix?: string) {
+      const session = sessionFunc();
+      if (!Object.keys(session?.allIdentities || {}).length || prefix) {
+        await withTimeout(session?.queryIdentities(prefix));
       }
-      return Object.keys(sessionFunc()?.allIdentities);
+      return Object.keys(session?.allIdentities || {}).filter((schema) =>
+        matchesPrefix(schema, prefix)
+      );
     },
     async getFunctions() {
       if (!sessionFunc()?.database.functions) {

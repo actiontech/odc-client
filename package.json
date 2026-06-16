@@ -21,7 +21,7 @@
     "cov": "max test --coverage",
     "dev": "node scripts/plugin/initPlugins.js && cross-env NODE_OPTIONS=--max_old_space_size=8192 max dev",
     "dev:client": "concurrently \"UMI_ENV=client npm run dev\" \"npm run build-main-dev\"",
-    "postinstall": "node scripts/plugin/initPlugins.js && max setup",
+    "postinstall": "node scripts/patches/patch-monaco-plugin-ob.cjs && node scripts/plugin/initPlugins.js && max setup",
     "oic:clear": "oic --configPath ./scripts/must.js --clear",
     "oic:extract": "oic --configPath ./scripts/must.js --extract all",
     "oic:migrate": "oic --configPath ./scripts/must.js --migrate",
@@ -43,7 +43,8 @@
     "updateDoc": "node ./scripts/pulldoc.js",
     "api_client:g": "actionsky-cli api-client -y",
     "checker": "concurrently \"pnpm type-check\" \"pnpm eslint\" \"pnpm prettier:c\"",
-    "ai-doc": "actionsky-cli ai-doc"
+    "ai-doc": "actionsky-cli ai-doc",
+    "test:monaco-left-join": "node scripts/tests/monaco-left-join-completion.cjs"
   },
   "lint-staged": {
     "*.{js,jsx,less,md,json}": [
