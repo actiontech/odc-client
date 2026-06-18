@@ -1,11 +1,14 @@
-import { UnauthorizedPermissionTypeInSQLExecute } from '@/d.ts/table';
+import {
+  IUnauthorizedDBResources,
+  UnauthorizedPermissionTypeInSQLExecute
+} from '@/d.ts/table';
 import { buildRequestedPermissions, digestSql } from '../utils';
 
 describe('PrivilegeElevationDrawer utils', () => {
   it('maps unauthorized resources to requested permissions', () => {
     expect(
       buildRequestedPermissions([
-        {
+        ({
           unauthorizedPermissionTypes: ['QUERY' as any],
           dataSourceId: 1,
           projectId: 1,
@@ -16,7 +19,7 @@ describe('PrivilegeElevationDrawer utils', () => {
           tableId: 1,
           applicable: true,
           type: UnauthorizedPermissionTypeInSQLExecute.ODC_TABLE
-        }
+        } as unknown as IUnauthorizedDBResources)
       ])
     ).toEqual([
       {

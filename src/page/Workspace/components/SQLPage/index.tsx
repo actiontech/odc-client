@@ -41,7 +41,11 @@ import {
   ITableColumn,
   IUserConfig
 } from '@/d.ts';
-import { IUnauthorizedDBResources } from '@/d.ts/table';
+import {
+  IUnauthorizedDBResources,
+  TablePermissionType,
+  UnauthorizedPermissionTypeInSQLExecute
+} from '@/d.ts/table';
 import {
   debounceUpdatePageScriptText,
   ISQLPageParams,
@@ -78,6 +82,34 @@ import Trace from '../Trace';
 import ExecDetail from './ExecDetail';
 import ExecPlan from './ExecPlan';
 import styles from './index.less';
+
+const isDBPermissionDeniedResult = (result?: ISqlExecuteResult) => {
+  const errorCode = String(result?.errorCode ?? '');
+  const errorText = [
+    errorCode,
+    result?.track,
+    result?.messages,
+    result?.statementWarnings
+  ]
+    .filter(Boolean)
+    .join('\n');
+
+  return (
+    result?.status === ISqlExecuteResultStatus.FAILED &&
+    (errorCode === '1142' ||
+      /\b1142\b|command denied|access denied|permission denied|权限不足|拒绝访问/i.test(
+        errorText
+      ))
+  );
+};
+
+const parseDeniedTableName = (sql?: string) => {
+  const normalizedSql = sql?.replace(/`/g, '').trim();
+  const matched = normalizedSql?.match(
+    /\b(?:from|join|update|into|table)\s+([\w$]+(?:\.[\w$]+)?)/i
+  );
+  return matched?.[1]?.split('.').pop() || '';
+};
 
 interface ISQLPageState {
   resultHeight: number;
@@ -777,9 +809,31 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
   };
 
   public handleCheckDatabasePermission = (result: IExecuteTaskResult) => {
+    const deniedResult = result?.executeResult?.find(isDBPermissionDeniedResult);
+    const deniedSql = deniedResult?.executeSql || deniedResult?.originSql;
+    const session = this.getSession();
+    const fallbackResource: IUnauthorizedDBResources[] = deniedResult
+      ? [
+          {
+            unauthorizedPermissionTypes: [TablePermissionType.QUERY] as any,
+            dataSourceId: session?.connection?.id,
+            projectId: null,
+            projectName: '',
+            databaseId: session?.odcDatabase?.id,
+            databaseName: session?.odcDatabase?.name,
+            tableName: parseDeniedTableName(deniedSql),
+            tableId: null,
+            applicable: false,
+            type: UnauthorizedPermissionTypeInSQLExecute.ODC_TABLE
+          }
+        ]
+      : null;
+
     this.setState({
-      unauthorizedResource: result?.unauthorizedDBResources,
-      unauthorizedSql: result?.unauthorizedSql
+      unauthorizedResource: result?.unauthorizedDBResources?.length
+        ? result.unauthorizedDBResources
+        : fallbackResource,
+      unauthorizedSql: result?.unauthorizedSql || deniedSql
     });
   };
 
