@@ -1,0 +1,2 @@
+patchedDependencies:
+  '@oceanbase-odc/ob-parser-js@3.0.5': patches/@oceanbase-odc__ob-parser-js@3.0.5.patch
