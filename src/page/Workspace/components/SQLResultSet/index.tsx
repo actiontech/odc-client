@@ -49,6 +49,7 @@ import type { MenuInfo } from 'rc-menu/lib/interface';
 import DDLResultSet from '../DDLResultSet';
 import { SqlExecuteResultStatusLabel } from './const';
 import DBPermissionTable from './DBPermissionTable';
+import PrivilegeElevationDrawer from './PrivilegeElevationDrawer';
 import ExecuteHistory from './ExecuteHistory';
 import LintResultTable from './LintResultTable';
 import SQLResultLog from './SQLResultLog';
@@ -217,6 +218,8 @@ const SQLResultSet: React.FC<IProps> = function (props) {
 
   const [showLockResultSetHint, setShowLockResultSetHint] = useState(false);
   const [unmaskDrawerVisible, setUnmaskDrawerVisible] = useState(false);
+  const [privilegeElevationDrawerVisible, setPrivilegeElevationDrawerVisible] =
+    useState(false);
   const [submitLoading, setSubmitLoading] = useState(false);
   const [viewOriginalLoading, setViewOriginalLoading] = useState(false);
   const [appliedResultSetMap, setAppliedResultSetMap] = useState<
@@ -575,10 +578,23 @@ const SQLResultSet: React.FC<IProps> = function (props) {
   let resultTabCount = 0;
   if (unauthorizedResource?.length) {
     return (
-      <DBPermissionTable
-        sql={unauthorizedSql}
-        dataSource={unauthorizedResource}
-      />
+      <>
+        <DBPermissionTable
+          sql={unauthorizedSql}
+          dataSource={unauthorizedResource}
+          showPrivilegeElevation
+          onApplyPrivilegeElevation={() =>
+            setPrivilegeElevationDrawerVisible(true)
+          }
+        />
+        <PrivilegeElevationDrawer
+          open={privilegeElevationDrawerVisible}
+          session={session}
+          sql={unauthorizedSql}
+          unauthorizedResources={unauthorizedResource}
+          onClose={() => setPrivilegeElevationDrawerVisible(false)}
+        />
+      </>
     );
   }
   const stopRunning = () => {
