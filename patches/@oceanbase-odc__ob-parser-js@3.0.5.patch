@@ -1,0 +1,70 @@
+diff --git a/esm/formatter/core/Tokenizer.js b/esm/formatter/core/Tokenizer.js
+index 756c580bd34cb81f9ba4c6ef8467c26bff084f19..5a5dd790be069608864787b8f3c73591d6e8ba57 100644
+--- a/esm/formatter/core/Tokenizer.js
++++ b/esm/formatter/core/Tokenizer.js
+@@ -18,6 +18,7 @@ var Tokenizer = /** @class */ (function () {
+     function Tokenizer(cfg) {
+         this.WHITESPACE_REGEX = /^(\s+)/;
+         this.NUMBER_REGEX = /^((-\s*)?[0-9]+(\.[0-9]+)?|0x[0-9a-fA-F]+|0b[01]+)\b/;
++        this.BIT_HEX_LITERAL_REGEX = /^([xXbB]'[^']*')/;
+         this.OPERATOR_REGEX = /^(!=|<=>|<>|==|=>|<=|>=|:=|!<|!>|\|\||::|->>|->|~~\*|~~|!~~\*|!~~|~\*|!~\*|!~|<<|>>|.)/;
+         this.BLOCK_COMMENT_REGEX = /^(\/\*[^]*?(?:\*\/|$))/;
+         this.LINE_COMMENT_REGEX = this.createLineCommentRegex(cfg.lineCommentTypes);
+@@ -117,6 +118,7 @@ var Tokenizer = /** @class */ (function () {
+     Tokenizer.prototype.getNextToken = function (input, previousToken) {
+         return this.getWhitespaceToken(input) ||
+             this.getCommentToken(input) ||
++            this.getBitHexLiteralToken(input) ||
+             this.getStringToken(input) ||
+             this.getOpenParenToken(input) ||
+             this.getCloseParenToken(input) ||
+@@ -211,6 +213,14 @@ var Tokenizer = /** @class */ (function () {
+         var key = _a.key, quoteChar = _a.quoteChar;
+         return key.replace(new RegExp(escapeRegExp("\\") + quoteChar, "g"), quoteChar);
+     };
++    // MySQL/OB bit and hex string literals: b'0', B'1', x'1A', X'FF'
++    Tokenizer.prototype.getBitHexLiteralToken = function (input) {
++        return this.getTokenOnFirstMatch({
++            input: input,
++            type: tokenTypes.NUMBER,
++            regex: this.BIT_HEX_LITERAL_REGEX
++        });
++    };
+     // Decimal, binary, or hex numbers
+     Tokenizer.prototype.getNumberToken = function (input) {
+         return this.getTokenOnFirstMatch({
+diff --git a/lib/formatter/core/Tokenizer.js b/lib/formatter/core/Tokenizer.js
+index bc63503c5c602baa9387dfd50b9636682bed7eda..33a94b68d96601919bb55ba3bde7393f026d38e3 100644
+--- a/lib/formatter/core/Tokenizer.js
++++ b/lib/formatter/core/Tokenizer.js
+@@ -23,6 +23,7 @@ var Tokenizer = /** @class */ (function () {
+     function Tokenizer(cfg) {
+         this.WHITESPACE_REGEX = /^(\s+)/;
+         this.NUMBER_REGEX = /^((-\s*)?[0-9]+(\.[0-9]+)?|0x[0-9a-fA-F]+|0b[01]+)\b/;
++        this.BIT_HEX_LITERAL_REGEX = /^([xXbB]'[^']*')/;
+         this.OPERATOR_REGEX = /^(!=|<=>|<>|==|=>|<=|>=|:=|!<|!>|\|\||::|->>|->|~~\*|~~|!~~\*|!~~|~\*|!~\*|!~|<<|>>|.)/;
+         this.BLOCK_COMMENT_REGEX = /^(\/\*[^]*?(?:\*\/|$))/;
+         this.LINE_COMMENT_REGEX = this.createLineCommentRegex(cfg.lineCommentTypes);
+@@ -122,6 +123,7 @@ var Tokenizer = /** @class */ (function () {
+     Tokenizer.prototype.getNextToken = function (input, previousToken) {
+         return this.getWhitespaceToken(input) ||
+             this.getCommentToken(input) ||
++            this.getBitHexLiteralToken(input) ||
+             this.getStringToken(input) ||
+             this.getOpenParenToken(input) ||
+             this.getCloseParenToken(input) ||
+@@ -216,6 +218,14 @@ var Tokenizer = /** @class */ (function () {
+         var key = _a.key, quoteChar = _a.quoteChar;
+         return key.replace(new RegExp((0, escapeRegExp_1.default)("\\") + quoteChar, "g"), quoteChar);
+     };
++    // MySQL/OB bit and hex string literals: b'0', B'1', x'1A', X'FF'
++    Tokenizer.prototype.getBitHexLiteralToken = function (input) {
++        return this.getTokenOnFirstMatch({
++            input: input,
++            type: tokenTypes_1.default.NUMBER,
++            regex: this.BIT_HEX_LITERAL_REGEX
++        });
++    };
+     // Decimal, binary, or hex numbers
+     Tokenizer.prototype.getNumberToken = function (input) {
+         return this.getTokenOnFirstMatch({
