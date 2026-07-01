@@ -84,6 +84,28 @@ const createUrlParams = (params: {
   }
 };
 
+export const generateDMSSqlWorkflowDetailUrl = (params: {
+  projectName: string;
+  workflowId: string;
+}) => {
+  const { projectName, workflowId } = params;
+  const baseUrl = `${ROUTE_PATHS.BASE.TRANSIT.index.path}?from=${
+    TRANSIT_FROM_CONSTANT.odc_client
+  }&project_name=${encodeURIComponent(
+    projectName
+  )}&to=workflow_detail&workflow_id=${encodeURIComponent(workflowId)}`;
+  return new URL(baseUrl, window.location.origin).toString();
+};
+
+export const openDMSSqlWorkflowDetail = (params: {
+  projectName: string;
+  workflowId: string;
+}) => {
+  const url = generateDMSSqlWorkflowDetailUrl(params);
+  const targetWindow = window.top ?? window;
+  targetWindow.open(url, '_blank');
+};
+
 export const generateDMSSqlWorkflowUrl = (params: Params) => {
   const { instanceName, schema, sql, projectName, desc } = params;
   const taskName = `${schema || 'unknown'}_from_workbench_${dayjs().format(

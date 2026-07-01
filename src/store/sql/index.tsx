@@ -193,7 +193,8 @@ export class SQLStore {
     isSection: boolean,
     sessionId: string,
     dbName: string,
-    needModal: boolean = true
+    needModal: boolean = true,
+    isExecuteAnyway: boolean = false
   ): Promise<any> {
     if (!this.resultSets.has(pageKey)) {
       this.resultSets.set(pageKey, []);
@@ -324,7 +325,8 @@ export class SQLStore {
           addROWID:
             setting.configurations?.[
               'odc.sqlexecute.default.addInternalRowId'
-            ] === 'true' && session.supportFeature?.enableRowId
+            ] === 'true' && session.supportFeature?.enableRowId,
+          isExecuteAnyway: isExecuteAnyway || undefined
         },
         sessionId,
         dbName,

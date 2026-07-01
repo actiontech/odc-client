@@ -28,6 +28,7 @@ import SaveSQLModal from '@/component/SaveSQLModal';
 import ScriptPage from '@/component/ScriptPage';
 import SQLConfigContext from '@/component/SQLConfig/SQLConfigContext';
 import { ISQLLintReuslt } from '@/component/SQLLintResult/type';
+import { IWorkflowExecuteInfo } from '@/common/network/sql/preHandle';
 import { getPageTitleText } from '@/component/WindowManager/helper';
 import { SQL_PAGE_RESULT_HEIGHT } from '@/constant';
 import {
@@ -115,6 +116,8 @@ interface ISQLPageState {
   status: EStatus;
   hasExecuted: boolean;
   approvalRequired: boolean;
+  workflowInfo?: IWorkflowExecuteInfo;
+  errorMessage?: string;
 }
 
 interface IProps {
@@ -175,7 +178,9 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
     status: null,
     hasExecuted: false,
     isSavingScript: false,
-    approvalRequired: false
+    approvalRequired: false,
+    workflowInfo: null,
+    errorMessage: null
   };
 
   public editor: IEditor;
@@ -405,8 +410,55 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
       false,
       selectedSQL ? await utils.getCurrentSelectRange(this.editor) : null
     );
+    this.handleExecuteSQLResult(result, sqlToExecute, selectedSQL, range);
+  };
+
+  public handleExecuteAnyway = async () => {
+    const { sqlStore, pageKey } = this.props;
+    const sqlToExecute = this.state.executeOrPreCheckSql;
+    if (!sqlToExecute) {
+      return;
+    }
+    const result = await this.executeSQL(sqlToExecute, false, null, true);
+    this.handleExecuteSQLResult(result, sqlToExecute, false, null);
+  };
+
+  private handleExecuteSQLResult = async (
+    result: IExecuteTaskResult | undefined,
+    sqlToExecute: string,
+    selectedSQL: string | false,
+    range: { begin: number; end: number } | null
+  ) => {
+    const { sqlStore, pageKey } = this.props;
+
+    if (result?.errorMessage) {
+      this.setState({
+        errorMessage: result.errorMessage,
+        workflowInfo: null,
+        lintResultSet: null,
+        approvalRequired: false
+      });
+      sqlStore.setActiveTab(pageKey, recordsTabKey);
+      return;
+    }
+
+    if (result?.workflowInfo) {
+      this.setState({
+        approvalRequired: false,
+        workflowInfo: result.workflowInfo,
+        lintResultSet: null,
+        executeOrPreCheckSql: sqlToExecute,
+        sqlChanged: false,
+        baseOffset: 0,
+        errorMessage: null
+      });
+      sqlStore.setActiveTab(pageKey, recordsTabKey);
+      return;
+    }
     this.setState({
-      approvalRequired: !!result?.approvalRequired
+      approvalRequired: !!result?.approvalRequired,
+      workflowInfo: null,
+      errorMessage: null
     });
     if (selectedSQL) {
       if (range.begin === range.end) {
@@ -444,14 +496,16 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
       this.setState({
         lintResultSet: result?.lintResultSet,
         executeOrPreCheckSql: sqlToExecute,
-        sqlChanged: false
+        sqlChanged: false,
+        errorMessage: null
       });
     } else {
       this.setState({
         baseOffset: 0,
         lintResultSet: null,
         executeOrPreCheckSql: sqlToExecute,
-        sqlChanged: false
+        sqlChanged: false,
+        errorMessage: null
       });
     }
   };
@@ -493,6 +547,29 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
       return;
     }
     const results = await this.executeSQL(selectedSQL, true, { begin, end });
+    if (results?.errorMessage) {
+      this.setState({
+        errorMessage: results.errorMessage,
+        workflowInfo: null,
+        lintResultSet: null,
+        approvalRequired: false
+      });
+      sqlStore.setActiveTab(pageKey, recordsTabKey);
+      return;
+    }
+    if (results?.workflowInfo) {
+      this.setState({
+        approvalRequired: false,
+        workflowInfo: results.workflowInfo,
+        lintResultSet: null,
+        executeOrPreCheckSql: selectedSQL,
+        sqlChanged: false,
+        baseOffset: 0,
+        errorMessage: null
+      });
+      sqlStore.setActiveTab(pageKey, recordsTabKey);
+      return;
+    }
     const range = await utils.getCurrentSelectRange(this.editor);
     if (range.begin === range.end) {
       this.setState({
@@ -523,14 +600,16 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
       this.setState({
         lintResultSet: results?.lintResultSet,
         executeOrPreCheckSql: selectedSQL,
-        sqlChanged: false
+        sqlChanged: false,
+        errorMessage: null
       });
     } else {
       this.setState({
         baseOffset: 0,
         lintResultSet: null,
         executeOrPreCheckSql: selectedSQL,
-        sqlChanged: false
+        sqlChanged: false,
+        errorMessage: null
       });
     }
   };
@@ -736,6 +815,18 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
             : sqlStore.activeTab[pageKey]
         )
     );
+  };
+
+  public handleCloseWorkflowResult = () => {
+    this.setState({
+      workflowInfo: null
+    });
+  };
+
+  public handleCloseWorkflowError = () => {
+    this.setState({
+      errorMessage: null
+    });
   };
 
   public handleCloseResultSet = (resultSetKey: string) => {
@@ -1302,6 +1393,11 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
                 sqlChanged={sqlChanged}
                 hanldeCloseLintPage={this.hanldeCloseLintPage}
                 approvalRequired={this.state.approvalRequired}
+                workflowInfo={this.state.workflowInfo}
+                onCloseWorkflowResult={this.handleCloseWorkflowResult}
+                errorMessage={this.state.errorMessage}
+                onCloseError={this.handleCloseWorkflowError}
+                onExecuteAnyway={this.handleExecuteAnyway}
               />
             </Spin>
           }
@@ -1387,7 +1483,8 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
   private executeSQL = async (
     sql: string,
     isSection?: boolean,
-    sectionRange?: { begin: number; end: number }
+    sectionRange?: { begin: number; end: number },
+    isExecuteAnyway?: boolean
   ) => {
     if (!this.getSession()) {
       return;
@@ -1405,11 +1502,18 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
       isSection,
       this.getSession()?.sessionId,
       this.getSession()?.database?.dbName,
-      false
+      false,
+      isExecuteAnyway
     );
     this.handleCheckDatabasePermission(results);
+    if (results?.errorMessage) {
+      return results;
+    }
     if ((!results || results?.invalid) && !results?.hasLintResults) {
       return;
+    }
+    if (results?.workflowInfo) {
+      return results;
     }
     this.getSession()?.initSessionStatus();
     if (!results?.executeResult) {

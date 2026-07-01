@@ -41,6 +41,7 @@ type PickDataGridProps<R, SR> = Pick<
   | 'contextMenuRender'
   | 'pasteFormatter'
   | 'getContextMenuConfig'
+  | 'onCopy'
 >;
 
 interface IProps<R extends RowType<R>, SR> extends PickDataGridProps<R, SR> {
@@ -93,7 +94,8 @@ export default inject('settingStore')(
         contextMenuRender,
         pasteFormatter,
         getContextMenuConfig,
-        onSelectChange
+        onSelectChange,
+        onCopy
       } = props;
       const innerGridRef = useRef<DataGridRef>(null);
 
@@ -130,6 +132,7 @@ export default inject('settingStore')(
           contextMenuRender={contextMenuRender}
           getContextMenuConfig={getContextMenuConfig}
           pasteFormatter={pasteFormatter}
+          onCopy={onCopy}
         />
       );
     })

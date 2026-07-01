@@ -49,6 +49,7 @@ export interface ILintResultTableProps {
   sqlChanged?: boolean;
   modalStore?: ModalStore;
   approvalRequired?: boolean;
+  onExecuteAnyway?: () => void;
 }
 const LintResultTable: React.FC<ILintResultTableProps> = ({
   ctx,
@@ -60,7 +61,8 @@ const LintResultTable: React.FC<ILintResultTableProps> = ({
   lintResultSet,
   baseOffset = 0,
   sqlChanged,
-  approvalRequired
+  approvalRequired,
+  onExecuteAnyway
 }) => {
   const [dataSource, setDataSource] = useState<any>([]);
   const CallbackTable = useCallback(() => {
@@ -168,6 +170,16 @@ const LintResultTable: React.FC<ILintResultTableProps> = ({
             发起审批
             */
               }
+            </BasicButton>
+            <BasicButton
+              disabled={!approvalRequired}
+              onClick={onExecuteAnyway}
+              style={{ marginLeft: 8 }}
+            >
+              {formatMessage({
+                id: 'odc.src.page.Workspace.components.SQLResultSet.ExecuteAnyway',
+                defaultMessage: '仍要执行'
+              })}
             </BasicButton>
           </div>
         )}

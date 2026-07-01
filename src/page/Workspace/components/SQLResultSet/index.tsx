@@ -51,6 +51,9 @@ import { SqlExecuteResultStatusLabel } from './const';
 import DBPermissionTable from './DBPermissionTable';
 import ExecuteHistory from './ExecuteHistory';
 import LintResultTable from './LintResultTable';
+import WorkflowExecuteResult from './WorkflowExecuteResult';
+import WorkflowExecuteError from './WorkflowExecuteError';
+import { IWorkflowExecuteInfo } from '@/common/network/sql/preHandle';
 import SQLResultLog from './SQLResultLog';
 import { ResultTabsStyleWrapper } from './style';
 import {
@@ -87,6 +90,12 @@ interface IProps {
   sqlChanged?: boolean;
   baseOffset: number;
   approvalRequired: boolean;
+  workflowInfo?: IWorkflowExecuteInfo;
+  errorMessage?: string;
+  onExecuteAnyway?: () => void;
+
+  onCloseWorkflowResult?: () => void;
+  onCloseError?: () => void;
 
   onCloseResultSet: (resultSetKey: string) => void;
   onChangeResultSetTab?: (tabKey: string) => void;
@@ -212,7 +221,12 @@ const SQLResultSet: React.FC<IProps> = function (props) {
     onCloseResultSet,
     hanldeCloseLintPage,
     onUpdateEditing,
-    approvalRequired
+    approvalRequired,
+    workflowInfo,
+    onCloseWorkflowResult,
+    errorMessage,
+    onCloseError,
+    onExecuteAnyway
   } = props;
 
   const [showLockResultSetHint, setShowLockResultSetHint] = useState(false);
@@ -608,6 +622,14 @@ const SQLResultSet: React.FC<IProps> = function (props) {
 
   return (
     <>
+      <WorkflowExecuteResult
+        workflowInfo={workflowInfo}
+        onClose={onCloseWorkflowResult}
+      />
+      <WorkflowExecuteError
+        errorMessage={errorMessage}
+        onClose={onCloseError}
+      />
       <ResultTabsStyleWrapper
         className="tabs"
         activeKey={activeKey}
@@ -685,6 +707,7 @@ const SQLResultSet: React.FC<IProps> = function (props) {
                     sqlChanged={sqlChanged}
                     baseOffset={baseOffset}
                     approvalRequired={approvalRequired}
+                    onExecuteAnyway={onExecuteAnyway}
                   />
                 )
               }
