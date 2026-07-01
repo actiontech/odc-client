@@ -13,6 +13,7 @@ export interface IExecuteSQLParams {
   continueExecutionOnError?: boolean;
   fullLinkTraceEnabled?: boolean;
   tag?: string;
+  isExecuteAnyway?: boolean;
   /**
    * 是否拆分执行，传空的话像等于true
    */
@@ -154,7 +155,8 @@ export function executeSQLPreHandle(
           violatedRules,
           lintResultSet,
           status: lintStatus,
-          approvalRequired: taskInfo?.approvalRequired
+          approvalRequired: taskInfo?.approvalRequired,
+          errorMessage: taskInfo?.errorMessage
         },
         status: lintStatus,
         lintResultSet,

@@ -408,6 +408,32 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
       false,
       selectedSQL ? await utils.getCurrentSelectRange(this.editor) : null
     );
+    this.handleExecuteSQLResult(result, sqlToExecute, selectedSQL, range);
+  };
+
+  public handleExecuteAnyway = async () => {
+    const { sqlStore, pageKey } = this.props;
+    const sqlToExecute = this.state.executeOrPreCheckSql;
+    if (!sqlToExecute) {
+      return;
+    }
+    const result = await this.executeSQL(sqlToExecute, false, null, true);
+    this.handleExecuteSQLResult(result, sqlToExecute, false, null);
+  };
+
+  private handleExecuteSQLResult = async (
+    result: IExecuteTaskResult | undefined,
+    sqlToExecute: string,
+    selectedSQL: string | false,
+    range: { begin: number; end: number } | null
+  ) => {
+    const { sqlStore, pageKey } = this.props;
+
+    if (result?.errorMessage) {
+      notification.error({ track: result.errorMessage });
+      return;
+    }
+
     if (result?.workflowInfo) {
       this.setState({
         approvalRequired: false,
@@ -1338,6 +1364,7 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
                 approvalRequired={this.state.approvalRequired}
                 workflowInfo={this.state.workflowInfo}
                 onCloseWorkflowResult={this.handleCloseWorkflowResult}
+                onExecuteAnyway={this.handleExecuteAnyway}
               />
             </Spin>
           }
@@ -1423,7 +1450,8 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
   private executeSQL = async (
     sql: string,
     isSection?: boolean,
-    sectionRange?: { begin: number; end: number }
+    sectionRange?: { begin: number; end: number },
+    isExecuteAnyway?: boolean
   ) => {
     if (!this.getSession()) {
       return;
@@ -1441,7 +1469,8 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
       isSection,
       this.getSession()?.sessionId,
       this.getSession()?.database?.dbName,
-      false
+      false,
+      isExecuteAnyway
     );
     this.handleCheckDatabasePermission(results);
     if ((!results || results?.invalid) && !results?.hasLintResults) {

@@ -90,6 +90,7 @@ interface IProps {
   baseOffset: number;
   approvalRequired: boolean;
   workflowInfo?: IWorkflowExecuteInfo;
+  onExecuteAnyway?: () => void;
 
   onCloseWorkflowResult?: () => void;
 
@@ -219,7 +220,8 @@ const SQLResultSet: React.FC<IProps> = function (props) {
     onUpdateEditing,
     approvalRequired,
     workflowInfo,
-    onCloseWorkflowResult
+    onCloseWorkflowResult,
+    onExecuteAnyway
   } = props;
 
   const [showLockResultSetHint, setShowLockResultSetHint] = useState(false);
@@ -696,6 +698,7 @@ const SQLResultSet: React.FC<IProps> = function (props) {
                     sqlChanged={sqlChanged}
                     baseOffset={baseOffset}
                     approvalRequired={approvalRequired}
+                    onExecuteAnyway={onExecuteAnyway}
                   />
                 )
               }
