@@ -52,6 +52,7 @@ import DBPermissionTable from './DBPermissionTable';
 import ExecuteHistory from './ExecuteHistory';
 import LintResultTable from './LintResultTable';
 import WorkflowExecuteResult from './WorkflowExecuteResult';
+import WorkflowExecuteError from './WorkflowExecuteError';
 import { IWorkflowExecuteInfo } from '@/common/network/sql/preHandle';
 import SQLResultLog from './SQLResultLog';
 import { ResultTabsStyleWrapper } from './style';
@@ -90,9 +91,11 @@ interface IProps {
   baseOffset: number;
   approvalRequired: boolean;
   workflowInfo?: IWorkflowExecuteInfo;
+  errorMessage?: string;
   onExecuteAnyway?: () => void;
 
   onCloseWorkflowResult?: () => void;
+  onCloseError?: () => void;
 
   onCloseResultSet: (resultSetKey: string) => void;
   onChangeResultSetTab?: (tabKey: string) => void;
@@ -221,6 +224,8 @@ const SQLResultSet: React.FC<IProps> = function (props) {
     approvalRequired,
     workflowInfo,
     onCloseWorkflowResult,
+    errorMessage,
+    onCloseError,
     onExecuteAnyway
   } = props;
 
@@ -620,6 +625,10 @@ const SQLResultSet: React.FC<IProps> = function (props) {
       <WorkflowExecuteResult
         workflowInfo={workflowInfo}
         onClose={onCloseWorkflowResult}
+      />
+      <WorkflowExecuteError
+        errorMessage={errorMessage}
+        onClose={onCloseError}
       />
       <ResultTabsStyleWrapper
         className="tabs"

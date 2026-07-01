@@ -142,6 +142,21 @@ export function executeSQLPreHandle(
     };
   }
 
+  if (taskInfo?.errorMessage) {
+    return {
+      data: {
+        invalid: true,
+        executeSuccess: false,
+        executeResult: [],
+        violatedRules: [],
+        lintResultSet: [],
+        errorMessage: taskInfo.errorMessage
+      },
+      lintResultSet: [],
+      pass: false
+    };
+  }
+
   // 没有requestId，即是被拦截了
   if (!taskInfo?.requestId) {
     // 一些场景下不需要弹出SQL确认弹窗

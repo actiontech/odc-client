@@ -117,6 +117,7 @@ interface ISQLPageState {
   hasExecuted: boolean;
   approvalRequired: boolean;
   workflowInfo?: IWorkflowExecuteInfo;
+  errorMessage?: string;
 }
 
 interface IProps {
@@ -178,7 +179,8 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
     hasExecuted: false,
     isSavingScript: false,
     approvalRequired: false,
-    workflowInfo: null
+    workflowInfo: null,
+    errorMessage: null
   };
 
   public editor: IEditor;
@@ -430,7 +432,13 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
     const { sqlStore, pageKey } = this.props;
 
     if (result?.errorMessage) {
-      notification.error({ track: result.errorMessage });
+      this.setState({
+        errorMessage: result.errorMessage,
+        workflowInfo: null,
+        lintResultSet: null,
+        approvalRequired: false
+      });
+      sqlStore.setActiveTab(pageKey, recordsTabKey);
       return;
     }
 
@@ -441,14 +449,16 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
         lintResultSet: null,
         executeOrPreCheckSql: sqlToExecute,
         sqlChanged: false,
-        baseOffset: 0
+        baseOffset: 0,
+        errorMessage: null
       });
       sqlStore.setActiveTab(pageKey, recordsTabKey);
       return;
     }
     this.setState({
       approvalRequired: !!result?.approvalRequired,
-      workflowInfo: null
+      workflowInfo: null,
+      errorMessage: null
     });
     if (selectedSQL) {
       if (range.begin === range.end) {
@@ -486,14 +496,16 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
       this.setState({
         lintResultSet: result?.lintResultSet,
         executeOrPreCheckSql: sqlToExecute,
-        sqlChanged: false
+        sqlChanged: false,
+        errorMessage: null
       });
     } else {
       this.setState({
         baseOffset: 0,
         lintResultSet: null,
         executeOrPreCheckSql: sqlToExecute,
-        sqlChanged: false
+        sqlChanged: false,
+        errorMessage: null
       });
     }
   };
@@ -535,6 +547,16 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
       return;
     }
     const results = await this.executeSQL(selectedSQL, true, { begin, end });
+    if (results?.errorMessage) {
+      this.setState({
+        errorMessage: results.errorMessage,
+        workflowInfo: null,
+        lintResultSet: null,
+        approvalRequired: false
+      });
+      sqlStore.setActiveTab(pageKey, recordsTabKey);
+      return;
+    }
     if (results?.workflowInfo) {
       this.setState({
         approvalRequired: false,
@@ -542,7 +564,8 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
         lintResultSet: null,
         executeOrPreCheckSql: selectedSQL,
         sqlChanged: false,
-        baseOffset: 0
+        baseOffset: 0,
+        errorMessage: null
       });
       sqlStore.setActiveTab(pageKey, recordsTabKey);
       return;
@@ -577,14 +600,16 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
       this.setState({
         lintResultSet: results?.lintResultSet,
         executeOrPreCheckSql: selectedSQL,
-        sqlChanged: false
+        sqlChanged: false,
+        errorMessage: null
       });
     } else {
       this.setState({
         baseOffset: 0,
         lintResultSet: null,
         executeOrPreCheckSql: selectedSQL,
-        sqlChanged: false
+        sqlChanged: false,
+        errorMessage: null
       });
     }
   };
@@ -795,6 +820,12 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
   public handleCloseWorkflowResult = () => {
     this.setState({
       workflowInfo: null
+    });
+  };
+
+  public handleCloseWorkflowError = () => {
+    this.setState({
+      errorMessage: null
     });
   };
 
@@ -1364,6 +1395,8 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
                 approvalRequired={this.state.approvalRequired}
                 workflowInfo={this.state.workflowInfo}
                 onCloseWorkflowResult={this.handleCloseWorkflowResult}
+                errorMessage={this.state.errorMessage}
+                onCloseError={this.handleCloseWorkflowError}
                 onExecuteAnyway={this.handleExecuteAnyway}
               />
             </Spin>
@@ -1473,6 +1506,9 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
       isExecuteAnyway
     );
     this.handleCheckDatabasePermission(results);
+    if (results?.errorMessage) {
+      return results;
+    }
     if ((!results || results?.invalid) && !results?.hasLintResults) {
       return;
     }
