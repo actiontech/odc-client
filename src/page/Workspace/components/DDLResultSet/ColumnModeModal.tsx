@@ -15,8 +15,14 @@
  */
 
 import { formatMessage } from '@/util/intl';
-import { Button, Modal } from 'antd';
-import React, { useContext, useEffect, useMemo, useRef } from 'react';
+import { Button, message, Modal } from 'antd';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef
+} from 'react';
 
 import type { ResultSetColumn } from '@/d.ts';
 import { LeftSquareOutlined, RightSquareOutlined } from '@ant-design/icons';
@@ -78,6 +84,16 @@ const ColumnModeModal: React.FC<IProps> = function (props) {
 
   const resultContext = useContext(ResultContext);
   const gridRef = useRef<DataGridRef>();
+
+  const handleForbidCopy = useCallback(() => {
+    message.warning(
+      formatMessage({
+        id: 'odc.components.DDLResultSet.CopyForbidden',
+        defaultMessage:
+          '根据数据安全策略，已禁止从结果集直接复制数据。如需获取数据，请通过「导出」创建数据导出工单。'
+      })
+    );
+  }, []);
 
   const tableColumns = useMemo(() => {
     return [
@@ -173,6 +189,7 @@ const ColumnModeModal: React.FC<IProps> = function (props) {
           enableColumnRecord={false}
           enableRowRecord={false}
           readonly={true}
+          onCopy={handleForbidCopy}
         />
       </ResultContext.Provider>
 

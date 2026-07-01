@@ -67,10 +67,6 @@ import Icon, {
   VerticalRightOutlined
 } from '@ant-design/icons';
 import type { DataGridRef } from '@oceanbase-odc/ob-react-data-grid';
-import {
-  defaultOnCopy,
-  defaultOnCopyCsv
-} from '@oceanbase-odc/ob-react-data-grid';
 import type { CalculatedColumn } from '@oceanbase-odc/ob-react-data-grid/lib/types';
 import { useControllableValue, useUpdate } from 'ahooks';
 import {
@@ -107,7 +103,6 @@ import useColumns, { isNumberType } from './hooks/useColumns';
 import styles from './index.less';
 import ResultContext from './ResultContext';
 import StatusBar from './StatusBar';
-import { copyToSQL, getColumnNameByColumnKey } from './util';
 import Sync from './Sync';
 import {
   BasicInputNumber,
@@ -484,6 +479,16 @@ const DDLResultSet: React.FC<IProps> = function (props) {
       session?.database?.dbName
     );
   };
+  const handleForbidCopy = useCallback(() => {
+    message.warning(
+      formatMessage({
+        id: 'odc.components.DDLResultSet.CopyForbidden',
+        defaultMessage:
+          '根据数据安全策略，已禁止从结果集直接复制数据。如需获取数据，请通过「导出」创建数据导出工单。'
+      })
+    );
+  }, []);
+
   const getMenus = useCallback(
     (row: any, rowColumn: CalculatedColumn<any, any>) => {
       if (!row) {
@@ -495,75 +500,16 @@ const DDLResultSet: React.FC<IProps> = function (props) {
         selectedRange?.columnIdx === selectedRange?.endColumnIdx &&
         selectedRange?.rowIdx === selectedRange?.endRowIdx;
       const tableColumns: Partial<ITableColumn>[] = table?.columns;
-      const columnName = getColumnNameByColumnKey(columnKey, columns);
       const column: Partial<ResultSetColumn> = columns?.find((column) => {
         return column?.key === columnKey;
       });
       const isMasked = column?.masked;
       const isSelectedRow = !!gridRef.current?.selectedRows?.size;
-      const clipMenu = {
-        key: 'clip',
-        text: formatMessage({
-          id: 'odc.components.DDLResultSet.OutputToShearPlate',
-          defaultMessage: '输出到剪切板'
-        }),
-        isShowRowSelected: true,
-        // 输出到剪切板
-        children: [
-          {
-            key: 'clip-sql',
-            text: 'SQL',
-            // SQL 文件
-            onClick: clipSQL
-          },
-          {
-            key: 'clip-csv',
-            text: 'CSV',
-            // CSV 文件
-            onClick: clipCsv
-          }
-        ]
-      };
-      function copy() {
-        defaultOnCopy(gridRef.current);
-      }
-      function clipSQL() {
-        if (!tableColumns || (!columnName && !isSelectedRow)) {
-          copyToSQL(
-            gridRef.current,
-            columns,
-            undefined,
-            session?.connection?.dialectType,
-            rows
-          );
-        } else {
-          copyToSQL(
-            gridRef.current,
-            columns,
-            table?.tableName,
-            session?.connection?.dialectType,
-            rows
-          );
-        }
-      }
-      function clipCsv() {
-        defaultOnCopyCsv(gridRef.current);
-      }
       if (isSelectedRow) {
-        return [clipMenu];
+        return [];
       }
       if (!tableColumns) {
-        return [
-          {
-            key: 'copy',
-            text: formatMessage({
-              id: 'odc.components.ConnectionCardList.Copy',
-              defaultMessage: '复制'
-            }),
-            onClick: copy
-          },
-          clipMenu
-        ];
+        return [];
       }
       if (!column) {
         return [];
@@ -576,15 +522,6 @@ const DDLResultSet: React.FC<IProps> = function (props) {
         settingStore.enableDataExport &&
         !isMasked;
       return [
-        {
-          key: 'copy',
-          text: formatMessage({
-            id: 'odc.components.ConnectionCardList.Copy',
-            defaultMessage: '复制'
-          }),
-          onClick: copy
-        },
-        clipMenu,
         isEditing &&
           isSingleSelected && {
             key: 'setnull',
@@ -1474,6 +1411,7 @@ const DDLResultSet: React.FC<IProps> = function (props) {
             getContextMenuConfig={getContextMenuConfig}
             enableFrozenRow={true}
             pasteFormatter={pasteFormatter}
+            onCopy={handleForbidCopy}
           />
           <ColumnModeModal
             visible={showColumnMode}

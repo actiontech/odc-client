@@ -1044,6 +1044,7 @@
   "odc.EditableTable.Editors.TextEditor.Submitted": "Submit",
   "odc.components.PackagePage.Unformat": "Cancel Formatting",
   "odc.components.DDLResultSet.SetToNull": "Set to Null",
+  "odc.components.DDLResultSet.CopyForbidden": "Copying data directly from the result set is disabled by the data security policy. To obtain data, create a data export ticket via Export.",
   "odc.components.ProcedurePage.Unformat": "Cancel Formatting",
   "odc.components.DDLResultSet.ColumnModeModal.ColumnName": "Column Name",
   "odc.components.TriggerPage.Unformat": "Cancel Formatting",

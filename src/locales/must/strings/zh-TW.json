@@ -1044,6 +1044,7 @@
   "odc.EditableTable.Editors.TextEditor.Submitted": "提交",
   "odc.components.PackagePage.Unformat": "取消格式化",
   "odc.components.DDLResultSet.SetToNull": "設定為 Null",
+  "odc.components.DDLResultSet.CopyForbidden": "根據資料安全策略，已禁止從結果集直接複製資料。如需取得資料，請透過「匯出」建立資料匯出工單。",
   "odc.components.ProcedurePage.Unformat": "取消格式化",
   "odc.components.DDLResultSet.ColumnModeModal.ColumnName": "列名",
   "odc.components.TriggerPage.Unformat": "取消格式化",
