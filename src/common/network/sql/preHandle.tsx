@@ -24,6 +24,13 @@ export interface IExecutePLForMysqlParams extends IExecuteSQLParams {
   wrappedSql?: string;
 }
 
+export interface IWorkflowExecuteInfo {
+  workflowId: string;
+  workflowStatus: string;
+  projectName: string;
+  execSuccess: boolean;
+}
+
 export interface ISQLExecuteTaskSQL {
   sqlTuple: {
     sqlId: string;
@@ -39,6 +46,7 @@ export interface ISQLExecuteTask {
   unauthorizedDBResources: IUnauthorizedDBResources[];
   errorMessage?: string;
   approvalRequired?: boolean;
+  workflowInfo?: IWorkflowExecuteInfo;
 }
 
 /**
@@ -56,6 +64,7 @@ export interface IExecuteTaskResult {
   unauthorizedSql?: string;
   errorMessage?: string;
   approvalRequired?: boolean;
+  workflowInfo?: IWorkflowExecuteInfo;
 }
 
 export function executeSQLPreHandle(
@@ -116,6 +125,22 @@ export function executeSQLPreHandle(
    * lintResultSet为空数组时，返回的lintStatus默认为submit
    */
   const lintStatus = getLintStatus(lintResultSet);
+
+  if (taskInfo?.workflowInfo) {
+    return {
+      data: {
+        invalid: false,
+        executeSuccess: taskInfo.workflowInfo.execSuccess,
+        executeResult: [],
+        violatedRules: [],
+        lintResultSet: [],
+        workflowInfo: taskInfo.workflowInfo
+      },
+      lintResultSet: [],
+      pass: false
+    };
+  }
+
   // 没有requestId，即是被拦截了
   if (!taskInfo?.requestId) {
     // 一些场景下不需要弹出SQL确认弹窗
