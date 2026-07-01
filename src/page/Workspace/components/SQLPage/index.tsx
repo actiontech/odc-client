@@ -28,6 +28,7 @@ import SaveSQLModal from '@/component/SaveSQLModal';
 import ScriptPage from '@/component/ScriptPage';
 import SQLConfigContext from '@/component/SQLConfig/SQLConfigContext';
 import { ISQLLintReuslt } from '@/component/SQLLintResult/type';
+import { IWorkflowExecuteInfo } from '@/common/network/sql/preHandle';
 import { getPageTitleText } from '@/component/WindowManager/helper';
 import { SQL_PAGE_RESULT_HEIGHT } from '@/constant';
 import {
@@ -115,6 +116,7 @@ interface ISQLPageState {
   status: EStatus;
   hasExecuted: boolean;
   approvalRequired: boolean;
+  workflowInfo?: IWorkflowExecuteInfo;
 }
 
 interface IProps {
@@ -175,7 +177,8 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
     status: null,
     hasExecuted: false,
     isSavingScript: false,
-    approvalRequired: false
+    approvalRequired: false,
+    workflowInfo: null
   };
 
   public editor: IEditor;
@@ -405,8 +408,21 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
       false,
       selectedSQL ? await utils.getCurrentSelectRange(this.editor) : null
     );
+    if (result?.workflowInfo) {
+      this.setState({
+        approvalRequired: false,
+        workflowInfo: result.workflowInfo,
+        lintResultSet: null,
+        executeOrPreCheckSql: sqlToExecute,
+        sqlChanged: false,
+        baseOffset: 0
+      });
+      sqlStore.setActiveTab(pageKey, recordsTabKey);
+      return;
+    }
     this.setState({
-      approvalRequired: !!result?.approvalRequired
+      approvalRequired: !!result?.approvalRequired,
+      workflowInfo: null
     });
     if (selectedSQL) {
       if (range.begin === range.end) {
@@ -493,6 +509,18 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
       return;
     }
     const results = await this.executeSQL(selectedSQL, true, { begin, end });
+    if (results?.workflowInfo) {
+      this.setState({
+        approvalRequired: false,
+        workflowInfo: results.workflowInfo,
+        lintResultSet: null,
+        executeOrPreCheckSql: selectedSQL,
+        sqlChanged: false,
+        baseOffset: 0
+      });
+      sqlStore.setActiveTab(pageKey, recordsTabKey);
+      return;
+    }
     const range = await utils.getCurrentSelectRange(this.editor);
     if (range.begin === range.end) {
       this.setState({
@@ -736,6 +764,12 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
             : sqlStore.activeTab[pageKey]
         )
     );
+  };
+
+  public handleCloseWorkflowResult = () => {
+    this.setState({
+      workflowInfo: null
+    });
   };
 
   public handleCloseResultSet = (resultSetKey: string) => {
@@ -1302,6 +1336,8 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
                 sqlChanged={sqlChanged}
                 hanldeCloseLintPage={this.hanldeCloseLintPage}
                 approvalRequired={this.state.approvalRequired}
+                workflowInfo={this.state.workflowInfo}
+                onCloseWorkflowResult={this.handleCloseWorkflowResult}
               />
             </Spin>
           }
@@ -1410,6 +1446,9 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
     this.handleCheckDatabasePermission(results);
     if ((!results || results?.invalid) && !results?.hasLintResults) {
       return;
+    }
+    if (results?.workflowInfo) {
+      return results;
     }
     this.getSession()?.initSessionStatus();
     if (!results?.executeResult) {
