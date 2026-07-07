@@ -40,22 +40,12 @@ function withTimeout<T>(promise?: Promise<T>, timeout = 300): Promise<T | []> {
   ]);
 }
 
-function matchesPrefix(name: string, prefix?: string) {
-  if (!prefix) {
-    return true;
-  }
-  return name?.toLowerCase?.().startsWith(prefix.toLowerCase());
-}
-
-function getIdentityNames(
-  dbObj?: {
-    tables?: string[];
-    views?: string[];
-    external_table?: string[];
-    materialized_view?: string[];
-  },
-  namePrefix?: string
-) {
+function getIdentityNames(dbObj?: {
+  tables?: string[];
+  views?: string[];
+  external_table?: string[];
+  materialized_view?: string[];
+}) {
   if (!dbObj) {
     return [];
   }
@@ -64,7 +54,7 @@ function getIdentityNames(
     ...(dbObj.views || []),
     ...(dbObj.external_table || []),
     ...(dbObj.materialized_view || [])
-  ].filter((name) => matchesPrefix(name, namePrefix));
+  ];
 }
 
 export function getModelService(
@@ -75,18 +65,18 @@ export function getModelService(
     get delimiter() {
       return delimiter();
     },
-    async getTableList(schemaName?: string, namePrefix?: string) {
+    async getTableList(schemaName?: string) {
       const session = sessionFunc();
       const dbName = schemaName || session?.database?.dbName;
       if (!hasConnect(session)) {
         return;
       }
-      await withTimeout(session?.queryIdentities(namePrefix));
+      await withTimeout(session?.queryIdentities());
 
       const dbObj =
         session?.allIdentities[dbName] ||
         session?.allIdentities[dbName?.toUpperCase()];
-      return getIdentityNames(dbObj, namePrefix);
+      return getIdentityNames(dbObj);
     },
     async getTableColumns(tableName: string, dbName?: string) {
       const realTableName = getRealNameInDatabase(
@@ -160,14 +150,12 @@ export function getModelService(
       }
       return [];
     },
-    async getSchemaList(prefix?: string) {
+    async getSchemaList() {
       const session = sessionFunc();
-      if (!Object.keys(session?.allIdentities || {}).length || prefix) {
-        await withTimeout(session?.queryIdentities(prefix));
+      if (!Object.keys(session?.allIdentities || {}).length) {
+        await withTimeout(session?.queryIdentities());
       }
-      return Object.keys(session?.allIdentities || {}).filter((schema) =>
-        matchesPrefix(schema, prefix)
-      );
+      return Object.keys(session?.allIdentities || {});
     },
     async getFunctions() {
       if (!sessionFunc()?.database.functions) {
