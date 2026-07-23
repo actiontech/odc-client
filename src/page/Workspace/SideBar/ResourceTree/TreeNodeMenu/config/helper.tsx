@@ -32,3 +32,11 @@ export function isSupportPLEdit(session: SessionStore) {
   return getDataSourceModeConfig(session?.odcDatabase?.dataSource?.type)
     ?.features?.plEdit;
 }
+
+/**
+ * CSVW: always hide — non-table objects must not expose ODC-native export
+ * workflow, drop, or DDL-download menu entries (align with table baseline).
+ */
+export function isHiddenForCsvwNonTable(): boolean {
+  return true;
+}

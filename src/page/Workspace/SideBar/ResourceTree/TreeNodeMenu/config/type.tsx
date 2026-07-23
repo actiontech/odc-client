@@ -33,7 +33,7 @@ import { message, Modal } from 'antd';
 import { ResourceNodeType } from '../../type';
 import { hasChangePermission, hasExportPermission } from '../index';
 import { IMenuItemConfig } from '../type';
-import { isSupportExport } from './helper';
+import { isHiddenForCsvwNonTable } from './helper';
 export const typeMenusConfig: Partial<
   Record<ResourceNodeType, IMenuItemConfig[]>
 > = {
@@ -97,6 +97,7 @@ export const typeMenusConfig: Partial<
     },
     {
       key: 'EXPORT',
+      isHide: () => isHiddenForCsvwNonTable(),
       text: formatMessage({
         id: 'odc.src.page.Workspace.SideBar.ResourceTree.TreeNodeMenu.config.Export',
         defaultMessage: '导出'
@@ -104,9 +105,6 @@ export const typeMenusConfig: Partial<
       ellipsis: true,
       disabled: (session) => {
         return !hasExportPermission(session);
-      },
-      isHide: (session) => {
-        return !isSupportExport(session);
       },
       run(session, node) {
         const type: IType = node.data;
@@ -119,6 +117,7 @@ export const typeMenusConfig: Partial<
     },
     {
       key: 'DOWNLOAD',
+      isHide: () => isHiddenForCsvwNonTable(),
       ellipsis: true,
       text: [
         formatMessage({
@@ -149,6 +148,7 @@ export const typeMenusConfig: Partial<
     },
     {
       key: 'DELETE',
+      isHide: () => isHiddenForCsvwNonTable(),
       ellipsis: true,
       text: [
         formatMessage({
@@ -231,5 +231,8 @@ export const typeMenusConfig: Partial<
         await session.database.getTypeList();
       }
     }
-  ]
+  ],
+  // CSVW: explicit empty menus — prevent fallthrough to Function/Procedure (export/delete/download)
+  [ResourceNodeType.TypeFunction]: [],
+  [ResourceNodeType.TypeProcedure]: []
 };

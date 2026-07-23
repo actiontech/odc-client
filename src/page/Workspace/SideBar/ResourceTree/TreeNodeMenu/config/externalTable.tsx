@@ -48,7 +48,7 @@ import { message, Modal } from 'antd';
 import { ResourceNodeType } from '../../type';
 import { hasTableChangePermission, hasTableExportPermission } from '../index';
 import { IMenuItemConfig } from '../type';
-import { isSupportExport } from './helper';
+import { isHiddenForCsvwNonTable } from './helper';
 import { isLogicalDatabase } from '@/util/database';
 import { DatabasePermissionType } from '@/d.ts/database';
 import request from '@/util/request';
@@ -179,9 +179,7 @@ export const externalTableMenusConfig: Partial<
       }),
       //下载
       ellipsis: true,
-      isHide: (session) => {
-        return isLogicalDatabase(session?.odcDatabase);
-      },
+      isHide: () => isHiddenForCsvwNonTable(),
       async run(session, node) {
         const tableName = (node.data as ITableModel)?.info?.tableName;
         const table = await getTableInfo(
@@ -278,6 +276,7 @@ export const externalTableMenusConfig: Partial<
     },
     {
       key: ResourceTreeNodeMenuKeys.DELETE_TABLE,
+      isHide: () => isHiddenForCsvwNonTable(),
       text: [
         formatMessage({
           id: 'odc.TreeNodeMenu.config.table.Delete',

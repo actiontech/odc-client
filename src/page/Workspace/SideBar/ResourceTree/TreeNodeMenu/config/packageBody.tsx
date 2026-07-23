@@ -33,6 +33,7 @@ import { message, Modal } from 'antd';
 import { ResourceNodeType } from '../../type';
 import { hasChangePermission } from '../index';
 import { IMenuItemConfig } from '../type';
+import { isHiddenForCsvwNonTable } from './helper';
 
 export const packageBodyMenusConfig: Partial<
   Record<ResourceNodeType, IMenuItemConfig[]>
@@ -108,6 +109,7 @@ export const packageBodyMenusConfig: Partial<
     },
     {
       key: 'DOWNLOAD',
+      isHide: () => isHiddenForCsvwNonTable(),
       ellipsis: true,
       text: [
         formatMessage({
@@ -131,6 +133,7 @@ export const packageBodyMenusConfig: Partial<
 
     {
       key: 'DELETE',
+      isHide: () => isHiddenForCsvwNonTable(),
       ellipsis: true,
       text: [
         formatMessage({

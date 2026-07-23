@@ -38,7 +38,7 @@ import { message, Modal } from 'antd';
 import { ResourceNodeType } from '../../type';
 import { hasChangePermission, hasExportPermission } from '../index';
 import { IMenuItemConfig } from '../type';
-import { isSupportExport } from './helper';
+import { isHiddenForCsvwNonTable } from './helper';
 function getMenu(synonymType: SynonymType): IMenuItemConfig[] {
   return [
     {
@@ -63,6 +63,7 @@ function getMenu(synonymType: SynonymType): IMenuItemConfig[] {
 
     {
       key: ResourceTreeNodeMenuKeys.DELETE_SYNONYM,
+      isHide: () => isHiddenForCsvwNonTable(),
       ellipsis: true,
       text: [
         formatMessage({
@@ -141,6 +142,7 @@ function getMenu(synonymType: SynonymType): IMenuItemConfig[] {
 
     {
       key: ResourceTreeNodeMenuKeys.EXPORT_TABLE,
+      isHide: () => isHiddenForCsvwNonTable(),
       text: formatMessage({
         id: 'odc.TreeNodeMenu.config.synonym.Export',
         defaultMessage: '导出'
@@ -148,9 +150,6 @@ function getMenu(synonymType: SynonymType): IMenuItemConfig[] {
       ellipsis: true,
       disabled: (session) => {
         return !hasExportPermission(session);
-      },
-      isHide: (session) => {
-        return !isSupportExport(session);
       },
       run(session, node) {
         const synonym: Partial<ISynonym> = node.data;
@@ -166,6 +165,7 @@ function getMenu(synonymType: SynonymType): IMenuItemConfig[] {
     },
     {
       key: ResourceTreeNodeMenuKeys.DOWNLOAD,
+      isHide: () => isHiddenForCsvwNonTable(),
       text: formatMessage({
         id: 'odc.TreeNodeMenu.config.synonym.Download',
         defaultMessage: '下载'
