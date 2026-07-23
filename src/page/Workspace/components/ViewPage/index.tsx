@@ -31,9 +31,8 @@ import SessionStore from '@/store/sessionManager/session';
 import type { SQLStore } from '@/store/sql';
 import { formatMessage } from '@/util/intl';
 import notification from '@/util/notification';
-import { downloadPLDDL } from '@/util/sqlExport';
 import { generateUniqKey } from '@/util/utils';
-import { AlignLeftOutlined, CloudDownloadOutlined } from '@ant-design/icons';
+import { AlignLeftOutlined } from '@ant-design/icons';
 import { Layout, message, Radio, Spin, Tabs } from 'antd';
 import { inject, observer } from 'mobx-react';
 import { Component } from 'react';
@@ -461,24 +460,6 @@ class ViewPage extends Component<
                           children: (
                             <>
                               <Toolbar>
-                                <ToolbarButton
-                                  text={
-                                    formatMessage({
-                                      id: 'odc.components.ViewPage.Download',
-                                      defaultMessage: '下载'
-                                    }) //下载
-                                  }
-                                  icon={<CloudDownloadOutlined />}
-                                  onClick={() => {
-                                    downloadPLDDL(
-                                      view?.viewName,
-                                      'VIEW',
-                                      view?.ddl,
-                                      this.props.session?.odcDatabase?.name
-                                    );
-                                  }}
-                                />
-
                                 <ToolbarButton
                                   text={
                                     formated

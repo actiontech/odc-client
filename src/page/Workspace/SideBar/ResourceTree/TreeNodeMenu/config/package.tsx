@@ -42,7 +42,7 @@ import { message, Modal } from 'antd';
 import { ResourceNodeType } from '../../type';
 import { hasChangePermission, hasExportPermission } from '../index';
 import { IMenuItemConfig } from '../type';
-import { isSupportExport } from './helper';
+import { isHiddenForCsvwNonTable } from './helper';
 
 export const packageMenusConfig: Partial<
   Record<ResourceNodeType, IMenuItemConfig[]>
@@ -172,6 +172,7 @@ export const packageMenusConfig: Partial<
 
     {
       key: 'EXPORT',
+      isHide: () => isHiddenForCsvwNonTable(),
       text: [
         formatMessage({
           id: 'odc.ResourceTree.actions.Export',
@@ -182,9 +183,6 @@ export const packageMenusConfig: Partial<
       hasDivider: true,
       disabled: (session) => {
         return !hasExportPermission(session);
-      },
-      isHide: (session) => {
-        return !isSupportExport(session);
       },
       async run(session, node) {
         const pkgInfo: IPackage = node.data;
@@ -206,6 +204,7 @@ export const packageMenusConfig: Partial<
 
     {
       key: 'DELETE',
+      isHide: () => isHiddenForCsvwNonTable(),
       text: [
         formatMessage({
           id: 'odc.ResourceTree.config.treeNodesActions.Delete',
@@ -342,6 +341,7 @@ export const packageMenusConfig: Partial<
 
     {
       key: 'DOWNLOAD',
+      isHide: () => isHiddenForCsvwNonTable(),
       text: [
         formatMessage({
           id: 'odc.ResourceTree.actions.Download',
@@ -363,6 +363,7 @@ export const packageMenusConfig: Partial<
 
     {
       key: 'DELETE',
+      isHide: () => isHiddenForCsvwNonTable(),
       text: [
         formatMessage({
           id: 'odc.ResourceTree.config.treeNodesActions.Delete',
@@ -396,5 +397,7 @@ export const packageMenusConfig: Partial<
         await session.database.loadPackage(pkg.packageName);
       }
     }
-  ]
+  ],
+  // CSVW: explicit empty menu — prevent fallthrough to Function (export/delete/download)
+  [ResourceNodeType.PackageHeadFunction]: []
 };

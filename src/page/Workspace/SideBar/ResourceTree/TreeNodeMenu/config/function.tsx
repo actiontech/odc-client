@@ -41,7 +41,7 @@ import { message, Modal } from 'antd';
 import { ResourceNodeType } from '../../type';
 import { hasChangePermission, hasExportPermission } from '../index';
 import { IMenuItemConfig } from '../type';
-import { isSupportExport, isSupportPLEdit } from './helper';
+import { isSupportPLEdit, isHiddenForCsvwNonTable } from './helper';
 
 export const functionMenusConfig: Partial<
   Record<ResourceNodeType, IMenuItemConfig[]>
@@ -244,6 +244,7 @@ export const functionMenusConfig: Partial<
 
     {
       key: 'EXPORT',
+      isHide: () => isHiddenForCsvwNonTable(),
       text: [
         formatMessage({
           id: 'odc.ResourceTree.actions.Export',
@@ -253,9 +254,6 @@ export const functionMenusConfig: Partial<
       ellipsis: true,
       disabled: (session) => {
         return !hasExportPermission(session);
-      },
-      isHide: (session) => {
-        return !isSupportExport(session);
       },
       run(session, node) {
         const func: IFunction = node.data;
@@ -268,6 +266,7 @@ export const functionMenusConfig: Partial<
     },
     {
       key: 'DOWNLOAD',
+      isHide: () => isHiddenForCsvwNonTable(),
       text: [
         formatMessage({
           id: 'odc.ResourceTree.actions.Download',
@@ -298,6 +297,7 @@ export const functionMenusConfig: Partial<
 
     {
       key: 'DELETE',
+      isHide: () => isHiddenForCsvwNonTable(),
       text: [
         formatMessage({
           id: 'odc.ResourceTree.actions.Delete',

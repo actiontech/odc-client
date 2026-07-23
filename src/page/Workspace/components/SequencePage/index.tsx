@@ -29,10 +29,8 @@ import { SessionManagerStore } from '@/store/sessionManager';
 import SessionStore from '@/store/sessionManager/session';
 import type { SQLStore } from '@/store/sql';
 import { formatMessage } from '@/util/intl';
-import { downloadPLDDL } from '@/util/sqlExport';
 import {
   AlignLeftOutlined,
-  CloudDownloadOutlined,
   EditOutlined,
   SyncOutlined
 } from '@ant-design/icons';
@@ -310,24 +308,6 @@ class SequencePage extends Component<
                 children: (
                   <>
                     <Toolbar>
-                      <ToolbarButton
-                        text={
-                          formatMessage({
-                            id: 'odc.components.SequencePage.Download',
-                            defaultMessage: '下载'
-                          }) //下载
-                        }
-                        icon={<CloudDownloadOutlined />}
-                        onClick={() => {
-                          downloadPLDDL(
-                            sequence?.name,
-                            'SEQUENCE',
-                            sequence?.ddl,
-                            this.props.session?.odcDatabase?.name
-                          );
-                        }}
-                      />
-
                       <ToolbarButton
                         text={
                           formated

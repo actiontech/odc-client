@@ -31,11 +31,9 @@ import { SessionManagerStore } from '@/store/sessionManager';
 import SessionStore from '@/store/sessionManager/session';
 import type { SQLStore } from '@/store/sql';
 import { formatMessage } from '@/util/intl';
-import { downloadPLDDL } from '@/util/sqlExport';
 import { getLocalFormatDateTime } from '@/util/utils';
 import {
   AlignLeftOutlined,
-  CloudDownloadOutlined,
   EditOutlined,
   FileSearchOutlined,
   SyncOutlined
@@ -304,24 +302,6 @@ class TypePage extends Component<
                             onClick={this.handleEditType}
                           />
                         )}
-
-                        <ToolbarButton
-                          text={
-                            formatMessage({
-                              id: 'odc.components.TypePage.Download',
-                              defaultMessage: '下载'
-                            }) //下载
-                          }
-                          icon={<CloudDownloadOutlined />}
-                          onClick={() => {
-                            downloadPLDDL(
-                              type?.typeName,
-                              PLType.TYPE,
-                              type?.ddl,
-                              session?.odcDatabase?.name
-                            );
-                          }}
-                        />
 
                         <ToolbarButton
                           text={formatMessage({

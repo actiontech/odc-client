@@ -32,7 +32,7 @@ import { message, Modal } from 'antd';
 import { ResourceNodeType } from '../../type';
 import { hasChangePermission, hasExportPermission } from '../index';
 import { IMenuItemConfig } from '../type';
-import { isSupportExport } from './helper';
+import { isHiddenForCsvwNonTable } from './helper';
 
 export const sequenceMenusConfig: Partial<
   Record<ResourceNodeType, IMenuItemConfig[]>
@@ -123,6 +123,7 @@ export const sequenceMenusConfig: Partial<
 
     {
       key: ResourceTreeNodeMenuKeys.DELETE_SEQUENCE,
+      isHide: () => isHiddenForCsvwNonTable(),
       ellipsis: true,
       text: [
         formatMessage({
@@ -186,6 +187,7 @@ export const sequenceMenusConfig: Partial<
 
     {
       key: ResourceTreeNodeMenuKeys.EXPORT_TABLE,
+      isHide: () => isHiddenForCsvwNonTable(),
       ellipsis: true,
       text: formatMessage({
         id: 'odc.TreeNodeMenu.config.sequence.Export',
@@ -193,9 +195,6 @@ export const sequenceMenusConfig: Partial<
       }), //导出
       disabled: (session) => {
         return !hasExportPermission(session);
-      },
-      isHide: (session) => {
-        return !isSupportExport(session);
       },
       run(session, node) {
         const sequenceInfo: ISequence = node.data;
@@ -208,6 +207,7 @@ export const sequenceMenusConfig: Partial<
     },
     {
       key: ResourceTreeNodeMenuKeys.DOWNLOAD,
+      isHide: () => isHiddenForCsvwNonTable(),
       ellipsis: true,
       text: formatMessage({
         id: 'odc.TreeNodeMenu.config.sequence.Download',

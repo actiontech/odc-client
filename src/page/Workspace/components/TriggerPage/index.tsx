@@ -30,10 +30,8 @@ import { SessionManagerStore } from '@/store/sessionManager';
 import SessionStore from '@/store/sessionManager/session';
 import type { SQLStore } from '@/store/sql';
 import { formatMessage } from '@/util/intl';
-import { downloadPLDDL } from '@/util/sqlExport';
 import {
   AlignLeftOutlined,
-  CloudDownloadOutlined,
   EditOutlined,
   FileSearchOutlined,
   SyncOutlined
@@ -554,24 +552,6 @@ class TriggerPage extends Component<
                             onClick={this.editTrigger}
                           />
                         )}
-
-                        <ToolbarButton
-                          text={
-                            formatMessage({
-                              id: 'odc.components.TriggerPage.Download',
-                              defaultMessage: '下载'
-                            }) //下载
-                          }
-                          icon={<CloudDownloadOutlined />}
-                          onClick={() => {
-                            downloadPLDDL(
-                              trigger?.triggerName,
-                              PLType.TRIGGER,
-                              trigger?.ddl,
-                              session?.odcDatabase?.name
-                            );
-                          }}
-                        />
 
                         <ToolbarButton
                           text={formatMessage({

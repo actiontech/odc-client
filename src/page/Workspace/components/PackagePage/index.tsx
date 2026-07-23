@@ -21,7 +21,6 @@ import type { SQLStore } from '@/store/sql';
 import { formatMessage } from '@/util/intl';
 import {
   AlignLeftOutlined,
-  CloudDownloadOutlined,
   EditOutlined,
   FileSearchOutlined,
   SyncOutlined
@@ -46,7 +45,6 @@ import {
 } from '@/store/helper/page';
 import { SessionManagerStore } from '@/store/sessionManager';
 import SessionStore from '@/store/sessionManager/session';
-import { downloadPLDDL } from '@/util/sqlExport';
 import { throttle } from 'lodash';
 import SessionContext from '../SessionContextWrap/context';
 import WrapSessionPage from '../SessionContextWrap/SessionPageWrap';
@@ -416,24 +414,6 @@ class PackagePage extends Component<IProps, IFunctionPageState> {
                                   />
 
                                   <ToolbarButton
-                                    text={
-                                      formatMessage({
-                                        id: 'odc.components.PackagePage.Download',
-                                        defaultMessage: '下载'
-                                      }) //下载
-                                    }
-                                    icon={<CloudDownloadOutlined />}
-                                    onClick={() => {
-                                      downloadPLDDL(
-                                        packageName + '.head',
-                                        PLType.PKG_HEAD,
-                                        pkg?.packageHead?.basicInfo?.ddl,
-                                        dbName
-                                      );
-                                    }}
-                                  />
-
-                                  <ToolbarButton
                                     text={formatMessage({
                                       id: 'workspace.window.sql.button.search',
                                       defaultMessage: '查找'
@@ -591,24 +571,6 @@ class PackagePage extends Component<IProps, IFunctionPageState> {
                                       pkg.packageName,
                                       PropsTab.PACKAGE_BODY_CODE
                                     )}
-                                  />
-
-                                  <ToolbarButton
-                                    text={
-                                      formatMessage({
-                                        id: 'odc.components.PackagePage.Download',
-                                        defaultMessage: '下载'
-                                      }) //下载
-                                    }
-                                    icon={<CloudDownloadOutlined />}
-                                    onClick={() => {
-                                      downloadPLDDL(
-                                        packageName + '.body',
-                                        PLType.PKG_BODY,
-                                        pkg.packageBody.basicInfo.ddl,
-                                        dbName
-                                      );
-                                    }}
                                   />
 
                                   <ToolbarButton

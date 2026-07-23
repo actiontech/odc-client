@@ -21,7 +21,6 @@ import type { PageStore } from '@/store/page';
 import type { SQLStore } from '@/store/sql';
 import {
   AlignLeftOutlined,
-  CloudDownloadOutlined,
   EditOutlined,
   FileSearchOutlined,
   SyncOutlined
@@ -43,7 +42,6 @@ import SessionStore from '@/store/sessionManager/session';
 import { isConnectionModeBeMySQLType } from '@/util/connection';
 import { parseDataType } from '@/util/dataType';
 import { formatMessage } from '@/util/intl';
-import { downloadPLDDL } from '@/util/sqlExport';
 import EditableTable from '../EditableTable';
 import SessionContext from '../SessionContextWrap/context';
 import WrapSessionPage from '../SessionContextWrap/SessionPageWrap';
@@ -331,24 +329,6 @@ class FunctionPage extends Component<
                             onClick={this.editFunction.bind(this, func.funName)}
                           />
                         )}
-
-                        <ToolbarButton
-                          text={
-                            formatMessage({
-                              id: 'odc.components.FunctionPage.Download',
-                              defaultMessage: '下载'
-                            }) //下载
-                          }
-                          icon={<CloudDownloadOutlined />}
-                          onClick={() => {
-                            downloadPLDDL(
-                              funName,
-                              PLType.FUNCTION,
-                              func?.ddl,
-                              session?.database?.dbName
-                            );
-                          }}
-                        />
 
                         <ToolbarButton
                           text={formatMessage({

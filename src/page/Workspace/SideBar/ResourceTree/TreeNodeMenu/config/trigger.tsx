@@ -47,7 +47,7 @@ import {
   ReloadOutlined
 } from '@ant-design/icons';
 import { message, Modal } from 'antd';
-import { isSupportExport, isSupportPLEdit } from './helper';
+import { isSupportPLEdit, isHiddenForCsvwNonTable } from './helper';
 
 export const triggerMenusConfig: Partial<
   Record<ResourceNodeType, IMenuItemConfig[]>
@@ -264,6 +264,7 @@ export const triggerMenusConfig: Partial<
 
     {
       key: 'EXPORT',
+      isHide: () => isHiddenForCsvwNonTable(),
       ellipsis: true,
       text: [
         formatMessage({
@@ -273,9 +274,6 @@ export const triggerMenusConfig: Partial<
       ],
       disabled: (session) => {
         return !hasExportPermission(session);
-      },
-      isHide: (session) => {
-        return !isSupportExport(session);
       },
       run(session, node) {
         const trigger: ITrigger = node.data || {};
@@ -288,6 +286,7 @@ export const triggerMenusConfig: Partial<
     },
     {
       key: 'DOWNLOAD',
+      isHide: () => isHiddenForCsvwNonTable(),
       ellipsis: true,
       text: [
         formatMessage({
@@ -317,6 +316,7 @@ export const triggerMenusConfig: Partial<
 
     {
       key: 'DELETE_TRIGGER',
+      isHide: () => isHiddenForCsvwNonTable(),
       ellipsis: true,
       text: [
         formatMessage({

@@ -20,7 +20,6 @@ import type { PageStore } from '@/store/page';
 import type { SQLStore } from '@/store/sql';
 import {
   AlignLeftOutlined,
-  CloudDownloadOutlined,
   EditOutlined,
   FileSearchOutlined,
   SyncOutlined
@@ -47,7 +46,6 @@ import SessionStore from '@/store/sessionManager/session';
 import { isConnectionModeBeMySQLType } from '@/util/connection';
 import { parseDataType } from '@/util/dataType';
 import { formatMessage } from '@/util/intl';
-import { downloadPLDDL } from '@/util/sqlExport';
 import EditableTable from '../EditableTable';
 import SessionContext from '../SessionContextWrap/context';
 import WrapSessionPage from '../SessionContextWrap/SessionPageWrap';
@@ -339,24 +337,6 @@ class ProcedurePage extends Component<
                             this,
                             procedure.proName
                           )}
-                        />
-
-                        <ToolbarButton
-                          text={
-                            formatMessage({
-                              id: 'odc.components.ProcedurePage.Download',
-                              defaultMessage: '下载'
-                            }) //下载
-                          }
-                          icon={<CloudDownloadOutlined />}
-                          onClick={() => {
-                            downloadPLDDL(
-                              proName,
-                              PLType.PROCEDURE,
-                              procedure?.ddl,
-                              session?.odcDatabase.name
-                            );
-                          }}
                         />
 
                         <ToolbarButton

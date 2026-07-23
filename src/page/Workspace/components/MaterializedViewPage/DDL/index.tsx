@@ -5,13 +5,8 @@ import { IEditor } from '@/component/MonacoEditor';
 import { getDataSourceModeConfig } from '@/common/datasource';
 import Toolbar from '@/component/Toolbar';
 import { IConStatus } from '@/component/Toolbar/statefulIcon';
-import {
-  AlignLeftOutlined,
-  CloudDownloadOutlined,
-  SyncOutlined
-} from '@ant-design/icons';
+import { AlignLeftOutlined, SyncOutlined } from '@ant-design/icons';
 import { formatMessage } from '@/util/intl';
-import { downloadPLDDL } from '@/util/sqlExport';
 
 const ToolbarButton = Toolbar.Button;
 
@@ -49,23 +44,6 @@ const MvViewDDL: React.FC<IProps> = () => {
           icon={<AlignLeftOutlined />}
           onClick={handleFormat}
           status={formated ? IConStatus.ACTIVE : IConStatus.INIT}
-        />
-        <ToolbarButton
-          text={
-            formatMessage({
-              id: 'odc.components.ViewPage.Download',
-              defaultMessage: '下载'
-            }) //下载
-          }
-          icon={<CloudDownloadOutlined />}
-          onClick={() => {
-            downloadPLDDL(
-              materializedView?.info?.name,
-              'MATERIALIZED_VIEW',
-              materializedView?.info?.ddl,
-              session.database.dbName
-            );
-          }}
         />
         <Toolbar.Button
           icon={<SyncOutlined />}

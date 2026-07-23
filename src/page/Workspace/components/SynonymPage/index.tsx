@@ -27,8 +27,7 @@ import type { PageStore } from '@/store/page';
 import { SessionManagerStore } from '@/store/sessionManager';
 import SessionStore from '@/store/sessionManager/session';
 import { formatMessage } from '@/util/intl';
-import { downloadPLDDL } from '@/util/sqlExport';
-import { AlignLeftOutlined, CloudDownloadOutlined } from '@ant-design/icons';
+import { AlignLeftOutlined } from '@ant-design/icons';
 import { Layout, message } from 'antd';
 import { inject, observer } from 'mobx-react';
 import dayjs from 'dayjs';
@@ -255,24 +254,6 @@ class SynonymPage extends Component<
                   children: (
                     <>
                       <Toolbar>
-                        <ToolbarButton
-                          text={
-                            formatMessage({
-                              id: 'odc.components.SynonymPage.Download',
-                              defaultMessage: '下载'
-                            }) //下载
-                          }
-                          icon={<CloudDownloadOutlined />}
-                          onClick={() => {
-                            downloadPLDDL(
-                              synonym?.synonymName,
-                              PLType.SYNONYM,
-                              synonym?.ddl,
-                              session?.odcDatabase?.name
-                            );
-                          }}
-                        />
-
                         <ToolbarButton
                           text={
                             formated

@@ -23,7 +23,7 @@ import {
 import { ResourceNodeType } from '../../type';
 import { hasTableChangePermission, hasTableExportPermission } from '../index';
 import { IMenuItemConfig } from '../type';
-import { isSupportExport } from './helper';
+import { isHiddenForCsvwNonTable } from './helper';
 import {
   openMaterializedViewViewPage,
   openCreateMaterializedViewPage
@@ -103,6 +103,7 @@ export const materializedViewConfig: Partial<
     },
     {
       key: ResourceTreeNodeMenuKeys.DOWNLOAD,
+      isHide: () => isHiddenForCsvwNonTable(),
       text: formatMessage({
         id: 'odc.TreeNodeMenu.config.view.Download',
         defaultMessage: '下载'
@@ -251,6 +252,7 @@ export const materializedViewConfig: Partial<
     },
     {
       key: ResourceTreeNodeMenuKeys.DELETE_TABLE,
+      isHide: () => isHiddenForCsvwNonTable(),
       text: [
         formatMessage({
           id: 'odc.TreeNodeMenu.config.view.Delete',

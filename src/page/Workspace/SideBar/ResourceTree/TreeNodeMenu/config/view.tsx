@@ -39,7 +39,7 @@ import { message, Modal } from 'antd';
 import { ResourceNodeType } from '../../type';
 import { hasTableChangePermission, hasTableExportPermission } from '../index';
 import { IMenuItemConfig } from '../type';
-import { isSupportExport } from './helper';
+import { isHiddenForCsvwNonTable } from './helper';
 
 export const viewMenusConfig: Partial<
   Record<ResourceNodeType, IMenuItemConfig[]>
@@ -121,6 +121,7 @@ export const viewMenusConfig: Partial<
 
     {
       key: ResourceTreeNodeMenuKeys.EXPORT_TABLE,
+      isHide: () => isHiddenForCsvwNonTable(),
       text: formatMessage({
         id: 'odc.TreeNodeMenu.config.view.Export',
         defaultMessage: '导出'
@@ -128,9 +129,6 @@ export const viewMenusConfig: Partial<
       ellipsis: true,
       disabled: (session, node) => {
         return !hasTableExportPermission(session, node);
-      },
-      isHide: (session) => {
-        return !isSupportExport(session);
       },
       run(session, node) {
         const view = node.data as IView;
@@ -143,6 +141,7 @@ export const viewMenusConfig: Partial<
     },
     {
       key: ResourceTreeNodeMenuKeys.DOWNLOAD,
+      isHide: () => isHiddenForCsvwNonTable(),
       text: formatMessage({
         id: 'odc.TreeNodeMenu.config.view.Download',
         defaultMessage: '下载'
@@ -283,6 +282,7 @@ export const viewMenusConfig: Partial<
 
     {
       key: ResourceTreeNodeMenuKeys.DELETE_TABLE,
+      isHide: () => isHiddenForCsvwNonTable(),
       text: [
         formatMessage({
           id: 'odc.TreeNodeMenu.config.view.Delete',
