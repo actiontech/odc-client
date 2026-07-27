@@ -30,6 +30,7 @@ import { SessionManagerStore } from '@/store/sessionManager';
 import SessionStore from '@/store/sessionManager/session';
 import type { SQLStore } from '@/store/sql';
 import { formatMessage } from '@/util/intl';
+import { isCsvwNonTableDetailReadonly } from '@/page/Workspace/SideBar/ResourceTree/TreeNodeMenu/config/helper';
 import {
   AlignLeftOutlined,
   EditOutlined,
@@ -285,7 +286,8 @@ class TriggerPage extends Component<
                   }),
                   children: (
                     <>
-                      {session?.supportFeature?.enableTriggerAlterStatus && (
+                      {!isCsvwNonTableDetailReadonly() &&
+                      session?.supportFeature?.enableTriggerAlterStatus && (
                         <Toolbar>
                           {isEditStatus ? (
                             <div className={styles.toolbarCustomize}>
@@ -542,7 +544,8 @@ class TriggerPage extends Component<
                   children: (
                     <>
                       <Toolbar>
-                        {session?.supportFeature?.enableTriggerDDL && (
+                        {!isCsvwNonTableDetailReadonly() &&
+                          session?.supportFeature?.enableTriggerDDL && (
                           <ToolbarButton
                             text={formatMessage({
                               id: 'workspace.window.session.button.edit',

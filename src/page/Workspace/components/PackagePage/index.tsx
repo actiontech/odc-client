@@ -19,6 +19,7 @@ import type { IPackage } from '@/d.ts';
 import type { PageStore } from '@/store/page';
 import type { SQLStore } from '@/store/sql';
 import { formatMessage } from '@/util/intl';
+import { isCsvwNonTableDetailReadonly } from '@/page/Workspace/SideBar/ResourceTree/TreeNodeMenu/config/helper';
 import {
   AlignLeftOutlined,
   EditOutlined,
@@ -400,18 +401,20 @@ class PackagePage extends Component<IProps, IFunctionPageState> {
                             children: (
                               <>
                                 <Toolbar>
-                                  <ToolbarButton
-                                    text={formatMessage({
-                                      id: 'workspace.window.session.button.edit',
-                                      defaultMessage: '编辑'
-                                    })}
-                                    icon={<EditOutlined />}
-                                    onClick={this.handleEditPackage.bind(
-                                      this,
-                                      pkg.packageName,
-                                      PropsTab.PACKAGE_HEAD_CODE
-                                    )}
-                                  />
+                                  {!isCsvwNonTableDetailReadonly() && (
+                                    <ToolbarButton
+                                      text={formatMessage({
+                                        id: 'workspace.window.session.button.edit',
+                                        defaultMessage: '编辑'
+                                      })}
+                                      icon={<EditOutlined />}
+                                      onClick={this.handleEditPackage.bind(
+                                        this,
+                                        pkg.packageName,
+                                        PropsTab.PACKAGE_HEAD_CODE
+                                      )}
+                                    />
+                                  )}
 
                                   <ToolbarButton
                                     text={formatMessage({
@@ -560,18 +563,20 @@ class PackagePage extends Component<IProps, IFunctionPageState> {
                             children: (
                               <>
                                 <Toolbar>
-                                  <ToolbarButton
-                                    text={formatMessage({
-                                      id: 'workspace.window.session.button.edit',
-                                      defaultMessage: '编辑'
-                                    })}
-                                    icon={<EditOutlined />}
-                                    onClick={this.handleEditPackage.bind(
-                                      this,
-                                      pkg.packageName,
-                                      PropsTab.PACKAGE_BODY_CODE
-                                    )}
-                                  />
+                                  {!isCsvwNonTableDetailReadonly() && (
+                                    <ToolbarButton
+                                      text={formatMessage({
+                                        id: 'workspace.window.session.button.edit',
+                                        defaultMessage: '编辑'
+                                      })}
+                                      icon={<EditOutlined />}
+                                      onClick={this.handleEditPackage.bind(
+                                        this,
+                                        pkg.packageName,
+                                        PropsTab.PACKAGE_BODY_CODE
+                                      )}
+                                    />
+                                  )}
 
                                   <ToolbarButton
                                     text={formatMessage({

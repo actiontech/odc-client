@@ -24,6 +24,10 @@ import ConnectionPopover from '@/component/ConnectionPopover';
 import treeStyles from '../index.less';
 import { ResourceNodeType, TreeDataNode } from '../type';
 import MenuConfig from './config';
+import {
+  isCsvwNonTableMenuAllowed,
+  isCsvwNonTableMenuType
+} from './config/helper';
 import styles from './index.less';
 import { IMenuItemConfig, IProps } from './type';
 import { EnvColorMap } from '@/constant';
@@ -81,8 +85,10 @@ const TreeNodeMenu = (props: IProps) => {
 
   // menuKey 用来定制menu
   const menuKey = node?.menuKey;
+  const effectiveMenuType = menuKey || type;
+  const csvwViewRefreshOnly = isCsvwNonTableMenuType(effectiveMenuType);
 
-  const menuItems: IMenuItemConfig[] = MenuConfig[menuKey || type];
+  const menuItems: IMenuItemConfig[] = MenuConfig[effectiveMenuType];
   /**
    * 非database的情况下，必须存在session
    */
@@ -190,38 +196,49 @@ const TreeNodeMenu = (props: IProps) => {
       const disabledItem = item.disabled
         ? item.disabled(dbSession, node)
         : false;
-      const isHideItem = item.isHide ? item.isHide(dbSession, node) : false;
+      const isHideItem =
+        (item.isHide ? item.isHide(dbSession, node) : false) ||
+        (csvwViewRefreshOnly && !isCsvwNonTableMenuAllowed(item.key));
       let menuItem: ItemType;
       if (isHideItem) {
         return;
       }
       clickMap[item.key] = item;
       if (item.children?.length) {
+        // CSVW non-table: drop whole submenu (e.g. COPY) — not view/refresh
+        if (csvwViewRefreshOnly && !isCsvwNonTableMenuAllowed(item.key)) {
+          return;
+        }
+        const childItems = item.children
+          .map((child) => {
+            const isHideChild =
+              (child.isHide ? child.isHide(dbSession, node) : false) ||
+              (csvwViewRefreshOnly && !isCsvwNonTableMenuAllowed(child.key));
+            if (isHideChild) {
+              return null;
+            }
+            clickMap[child.key] = child;
+            return {
+              key: child.key,
+              className: styles.ellipsis,
+              label: menuAccessWrap(
+                child?.needAccessTypeList,
+                node?.data?.authorizedPermissionTypes,
+                child.text as ReactNode
+              )
+            };
+          })
+          ?.filter(Boolean);
+        // empty submenu after CSVW filter — skip
+        if (csvwViewRefreshOnly && childItems.length === 0) {
+          return;
+        }
         menuItem = {
           label: item.text,
           key: item.key || index,
           className: styles.ellipsis,
           disabled: disabledItem,
-          children: item.children
-            .map((child) => {
-              const isHideChild = child.isHide
-                ? child.isHide(dbSession, node)
-                : false;
-              if (isHideChild) {
-                return null;
-              }
-              clickMap[child.key] = child;
-              return {
-                key: child.key,
-                className: styles.ellipsis,
-                label: menuAccessWrap(
-                  child?.needAccessTypeList,
-                  node?.data?.authorizedPermissionTypes,
-                  child.text as ReactNode
-                )
-              };
-            })
-            ?.filter(Boolean)
+          children: childItems
         };
       } else {
         menuItem = {

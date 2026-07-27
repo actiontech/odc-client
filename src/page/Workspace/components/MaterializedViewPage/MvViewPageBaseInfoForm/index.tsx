@@ -1,6 +1,7 @@
 import React, { useContext, useMemo } from 'react';
 import Toolbar from '@/component/Toolbar';
 import { EditOutlined, SyncOutlined } from '@ant-design/icons';
+import { isCsvwNonTableDetailReadonly } from '@/page/Workspace/SideBar/ResourceTree/TreeNodeMenu/config/helper';
 import { formatMessage } from '@/util/intl';
 import ObjectInfoView from '@/component/ObjectInfoView';
 import MaterializedViewPageContext from '../context';
@@ -165,6 +166,7 @@ const MvViewPageBaseInfoForm: React.FC<IProps> = (props) => {
   return (
     <div>
       <Toolbar>
+        {!isCsvwNonTableDetailReadonly() && (
         <Toolbar.Button
           icon={<EditOutlined />}
           text={formatMessage({
@@ -173,6 +175,7 @@ const MvViewPageBaseInfoForm: React.FC<IProps> = (props) => {
           })}
           disabled
         />
+        )}
         <Toolbar.Button
           icon={<SyncOutlined />}
           text={formatMessage({
