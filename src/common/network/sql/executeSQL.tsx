@@ -136,7 +136,14 @@ class Task {
         executingSQL: data.sql,
         executingSQLId: data.sqlId
       });
-      if (data?.finished) {
+      const hasTerminalResult = data?.results?.some((result) =>
+        [
+          ISqlExecuteResultStatus.FAILED,
+          ISqlExecuteResultStatus.CANCELED,
+          ISqlExecuteResultStatus.SUCCESS
+        ].includes(result?.status)
+      );
+      if (data?.finished || hasTerminalResult) {
         callback(this.result);
         return;
       } else {

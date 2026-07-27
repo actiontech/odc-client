@@ -18,7 +18,7 @@ import { formatMessage } from '@/util/intl';
 import MultiLineOverflowText from '@/component/MultiLineOverflowText';
 import { IUnauthorizedDBResources, TablePermissionType } from '@/d.ts/table';
 import { CloseCircleFilled } from '@ant-design/icons';
-import { Space, Tabs, Typography } from 'antd';
+import { Button, Space, Tabs, Typography } from 'antd';
 import styles from './index.less';
 import DBPermissionTableContent from '../DBPermissionTableContent';
 
@@ -29,9 +29,12 @@ const PERMISSION_TAB_KEY = 'LOG';
 interface IProps {
   sql?: string;
   dataSource: IUnauthorizedDBResources[];
+  showPrivilegeElevation?: boolean;
+  onApplyPrivilegeElevation?: () => void;
 }
 const DBPermissionTable: React.FC<IProps> = (props) => {
-  const { sql, dataSource } = props;
+  const { sql, dataSource, showPrivilegeElevation, onApplyPrivilegeElevation } =
+    props;
 
   return (
     <Tabs
@@ -75,6 +78,16 @@ const DBPermissionTable: React.FC<IProps> = (props) => {
                   })}
                 </Text>
               </Space>
+              {showPrivilegeElevation && (
+                <div style={{ marginTop: 16 }}>
+                  <Button type="primary" onClick={onApplyPrivilegeElevation}>
+                    {formatMessage({
+                      id: 'odc.privilegeElevation.applyButton',
+                      defaultMessage: '申请权限'
+                    })}
+                  </Button>
+                </div>
+              )}
               <div className={styles.track}>
                 <DBPermissionTableContent showAction dataSource={dataSource} />
               </div>
