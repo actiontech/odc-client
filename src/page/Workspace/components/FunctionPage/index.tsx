@@ -42,6 +42,7 @@ import SessionStore from '@/store/sessionManager/session';
 import { isConnectionModeBeMySQLType } from '@/util/connection';
 import { parseDataType } from '@/util/dataType';
 import { formatMessage } from '@/util/intl';
+import { isCsvwNonTableDetailReadonly } from '@/page/Workspace/SideBar/ResourceTree/TreeNodeMenu/config/helper';
 import EditableTable from '../EditableTable';
 import SessionContext from '../SessionContextWrap/context';
 import WrapSessionPage from '../SessionContextWrap/SessionPageWrap';
@@ -318,17 +319,21 @@ class FunctionPage extends Component<
                   children: (
                     <>
                       <Toolbar>
-                        {getDataSourceModeConfig(session?.connection?.type)
-                          ?.features?.plEdit && (
-                          <ToolbarButton
-                            text={formatMessage({
-                              id: 'workspace.window.session.button.edit',
-                              defaultMessage: '编辑'
-                            })}
-                            icon={<EditOutlined />}
-                            onClick={this.editFunction.bind(this, func.funName)}
-                          />
-                        )}
+                        {!isCsvwNonTableDetailReadonly() &&
+                          getDataSourceModeConfig(session?.connection?.type)
+                            ?.features?.plEdit && (
+                            <ToolbarButton
+                              text={formatMessage({
+                                id: 'workspace.window.session.button.edit',
+                                defaultMessage: '编辑'
+                              })}
+                              icon={<EditOutlined />}
+                              onClick={this.editFunction.bind(
+                                this,
+                                func.funName
+                              )}
+                            />
+                          )}
 
                         <ToolbarButton
                           text={formatMessage({

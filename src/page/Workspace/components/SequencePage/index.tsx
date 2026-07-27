@@ -29,6 +29,7 @@ import { SessionManagerStore } from '@/store/sessionManager';
 import SessionStore from '@/store/sessionManager/session';
 import type { SQLStore } from '@/store/sql';
 import { formatMessage } from '@/util/intl';
+import { isCsvwNonTableDetailReadonly } from '@/page/Workspace/SideBar/ResourceTree/TreeNodeMenu/config/helper';
 import {
   AlignLeftOutlined,
   EditOutlined,
@@ -179,14 +180,16 @@ class SequencePage extends Component<
                 children: (
                   <>
                     <Toolbar>
-                      <Toolbar.Button
-                        text={formatMessage({
-                          id: 'workspace.window.session.button.edit',
-                          defaultMessage: '编辑'
-                        })}
-                        icon={<EditOutlined />}
-                        onClick={this.showSequenceEditModal}
-                      />
+                      {!isCsvwNonTableDetailReadonly() && (
+                        <Toolbar.Button
+                          text={formatMessage({
+                            id: 'workspace.window.session.button.edit',
+                            defaultMessage: '编辑'
+                          })}
+                          icon={<EditOutlined />}
+                          onClick={this.showSequenceEditModal}
+                        />
+                      )}
 
                       <ToolbarButton
                         text={formatMessage({

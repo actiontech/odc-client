@@ -46,6 +46,7 @@ import SessionStore from '@/store/sessionManager/session';
 import { isConnectionModeBeMySQLType } from '@/util/connection';
 import { parseDataType } from '@/util/dataType';
 import { formatMessage } from '@/util/intl';
+import { isCsvwNonTableDetailReadonly } from '@/page/Workspace/SideBar/ResourceTree/TreeNodeMenu/config/helper';
 import EditableTable from '../EditableTable';
 import SessionContext from '../SessionContextWrap/context';
 import WrapSessionPage from '../SessionContextWrap/SessionPageWrap';
@@ -323,21 +324,24 @@ class ProcedurePage extends Component<
                   children: (
                     <>
                       <Toolbar>
-                        <ToolbarButton
-                          disabled={
-                            !getDataSourceModeConfig(session?.connection?.type)
-                              ?.features?.plEdit
-                          }
-                          text={formatMessage({
-                            id: 'workspace.window.session.button.edit',
-                            defaultMessage: '编辑'
-                          })}
-                          icon={<EditOutlined />}
-                          onClick={this.editProcedure.bind(
-                            this,
-                            procedure.proName
-                          )}
-                        />
+                        {!isCsvwNonTableDetailReadonly() && (
+                          <ToolbarButton
+                            disabled={
+                              !getDataSourceModeConfig(
+                                session?.connection?.type
+                              )?.features?.plEdit
+                            }
+                            text={formatMessage({
+                              id: 'workspace.window.session.button.edit',
+                              defaultMessage: '编辑'
+                            })}
+                            icon={<EditOutlined />}
+                            onClick={this.editProcedure.bind(
+                              this,
+                              procedure.proName
+                            )}
+                          />
+                        )}
 
                         <ToolbarButton
                           text={formatMessage({

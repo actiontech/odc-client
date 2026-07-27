@@ -31,6 +31,7 @@ import { SessionManagerStore } from '@/store/sessionManager';
 import SessionStore from '@/store/sessionManager/session';
 import type { SQLStore } from '@/store/sql';
 import { formatMessage } from '@/util/intl';
+import { isCsvwNonTableDetailReadonly } from '@/page/Workspace/SideBar/ResourceTree/TreeNodeMenu/config/helper';
 import { getLocalFormatDateTime } from '@/util/utils';
 import {
   AlignLeftOutlined,
@@ -292,7 +293,7 @@ class TypePage extends Component<
                   children: (
                     <>
                       <Toolbar>
-                        {enableTypeEdit && (
+                        {!isCsvwNonTableDetailReadonly() && enableTypeEdit && (
                           <ToolbarButton
                             text={formatMessage({
                               id: 'workspace.window.session.button.edit',
