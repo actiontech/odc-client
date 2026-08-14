@@ -114,6 +114,9 @@ const AppContainer: React.FC<IBasicLayoutProps> = (
   const location = useLocation();
   const { pathname } = location;
   const isReady = settingStore.settingLoadStatus === 'done' && isServerReady;
+  // Read theme at observer top-level (same source as ThemeProvider); avoid ContainerQuery callback.
+  const watermarkTheme =
+    settingStore.theme.key === EThemeConfigKey.ODC_DARK ? 'dark' : 'light';
   const checkSerevrStatus = () => {
     const { settingStore } = props;
     if (!settingStore.serverSystemInfo?.sessionLimitEnabled) {
@@ -265,7 +268,11 @@ const AppContainer: React.FC<IBasicLayoutProps> = (
               >
                 {notificationContextHolder}
                 {userStore?.user?.name && edition === 'ee' && (
-                  <Watermark text={userStore?.user?.name} />
+                  <Watermark
+                    key={watermarkTheme}
+                    text={userStore?.user?.name}
+                    theme={watermarkTheme}
+                  />
                 )}
                 <Outlet />
               </div>

@@ -95,7 +95,16 @@ const DatabaseTree = function () {
       DatabaseGroup.environment,
       DatabaseGroup.connectType
     ].forEach((item) => {
-      const group = DatabaseGroupMap?.[item]?.entries()?.next()?.value?.[1];
+      let group = DatabaseGroupMap?.[item]?.entries()?.next()?.value?.[1];
+      // 按数据源分组：跳过逻辑库伪分组（mapId===0），展开首个真实数据源
+      if (item === DatabaseGroup.dataSource && group?.mapId === 0) {
+        for (const [, g] of DatabaseGroupMap[item] || []) {
+          if (g?.mapId !== 0) {
+            group = g;
+            break;
+          }
+        }
+      }
       defaultExpandedKeys.push(getGroupKey(group?.mapId, item));
       if (
         [

@@ -12,11 +12,14 @@ interface WatermarkProps {
   density?: number;
 }
 
+const DEFAULT_LIGHT_TEXT_COLOR = 'rgba(0, 0, 0, 0.1)';
+const DEFAULT_DARK_TEXT_COLOR = 'rgba(255, 255, 255, 0.1)';
+
 const Watermark: React.FC<WatermarkProps> = ({
   text,
   fontSize = 20,
   fontFamily = 'PlusJakartaSans Medium',
-  textColor = 'rgba(0, 0, 0, 0.1)',
+  textColor,
   rotate = -45,
   zIndex = 9999,
   theme = 'light',
@@ -51,8 +54,10 @@ const Watermark: React.FC<WatermarkProps> = ({
       context.scale(scale, scale);
 
       context.font = `${fontWeight} ${fontSize}px ${fontFamily}`;
+      // Prefer explicit textColor for both themes; otherwise follow theme defaults.
       context.fillStyle =
-        theme === 'light' ? textColor : 'rgba(255, 255, 255, 0.1)';
+        textColor ??
+        (theme === 'dark' ? DEFAULT_DARK_TEXT_COLOR : DEFAULT_LIGHT_TEXT_COLOR);
       context.rotate((rotate * Math.PI) / 180);
       context.fillText(text, 0, 100);
 
