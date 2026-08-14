@@ -278,9 +278,37 @@ const useGroupData = (props: IProps) => {
         clusterGroup.set(mapId, clusterDatabases);
       }
     });
+    // 按数据源分组：逻辑库伪分组置顶，其余按名称升序（numeric + base）
+    const sortedDatasourceGroup: Map<
+      number,
+      GroupWithDatabases[DatabaseGroup.dataSource]
+    > = new Map();
+    let logicalGroup: GroupWithDatabases[DatabaseGroup.dataSource] | undefined;
+    const realDatasourceEntries: Array<
+      [number, GroupWithDatabases[DatabaseGroup.dataSource]]
+    > = [];
+    datasourceGruop.forEach((value, key) => {
+      if (key === 0) {
+        logicalGroup = value;
+      } else {
+        realDatasourceEntries.push([key, value]);
+      }
+    });
+    realDatasourceEntries.sort((a, b) =>
+      (a[1].groupName || '').localeCompare(b[1].groupName || '', 'zh-Hans-CN', {
+        numeric: true,
+        sensitivity: 'base'
+      })
+    );
+    if (logicalGroup) {
+      sortedDatasourceGroup.set(0, logicalGroup);
+    }
+    realDatasourceEntries.forEach(([key, value]) => {
+      sortedDatasourceGroup.set(key, value);
+    });
     return {
       environmentGroup,
-      datasourceGruop,
+      datasourceGruop: sortedDatasourceGroup,
       connectTypeGruop,
       clusterGroup,
       projectGroup,
