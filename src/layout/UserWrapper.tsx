@@ -133,6 +133,7 @@ const UserWrapper: React.FC<IProps> = function ({
        */
       await toDefaultProjectPage();
     }
+    await userStore.fetchCanOpGlobal();
     setStatus(STATUS_TYPE.DONE);
   }
   useEffect(() => {

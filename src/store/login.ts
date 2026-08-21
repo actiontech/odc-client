@@ -19,6 +19,7 @@ import { getOrganizationList } from '@/common/network/organization';
 import { odcServerLoginUrl, odcServerLogoutUrl } from '@/common/network/other';
 import type { IOrganization, ISQLScript, IUser } from '@/d.ts';
 import { SpaceType } from '@/d.ts/_index';
+import { SessionService } from '@/external_api/base';
 import logger from '@/util/logger';
 import request from '@/util/request';
 import tracert, { initTracert } from '@/util/tracert';
@@ -63,6 +64,12 @@ export class UserStore {
 
   @observable
   public scriptStore: ScriptStore = new ScriptStore();
+
+  /**
+   * DMS sessions/user.can_op_global；缺省/失败为 false（不渲染超级管理员开关）
+   */
+  @observable
+  public canOpGlobal: boolean = false;
 
   @action
   public async getOrganizations() {
@@ -164,6 +171,7 @@ export class UserStore {
     this.organizations = [];
     this.organizationId = null;
     this.isSwitchingOrganization = false;
+    this.canOpGlobal = false;
     sessionStorage.removeItem(sessionKey);
     tracert.setUser(null);
     this.scriptStore = new ScriptStore();
@@ -403,6 +411,18 @@ export class UserStore {
   @action
   public haveUserInfo() {
     return !isNil(this?.user?.id);
+  }
+
+  @action
+  public async fetchCanOpGlobal() {
+    try {
+      const res = await SessionService.GetUserBySession({});
+      this.canOpGlobal = !!res?.data?.data?.can_op_global;
+    } catch (e) {
+      logger.debug('fetchCanOpGlobal failed', e);
+      this.canOpGlobal = false;
+    }
+    return this.canOpGlobal;
   }
 }
 

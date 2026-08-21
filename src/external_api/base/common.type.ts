@@ -1071,6 +1071,9 @@ export interface IGetUserBySessionReply {
     name?: string;
 
     user_uid?: string;
+
+    /** DMS CanOpGlobal：全局管理才可展示超级管理员旁路开关 */
+    can_op_global?: boolean;
   };
 
   message?: string;
