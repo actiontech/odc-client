@@ -26,6 +26,18 @@ import {
   ISQLExecuteTask
 } from './preHandle';
 
+/** DMS 超级管理员本窗口旁路头（与切片 §11.3 / §12.4 D 对齐） */
+export const SUPER_ADMIN_BYPASS_HEADER = 'X-DMS-Super-Admin-Bypass';
+
+function buildSuperAdminBypassHeaders(enabled?: boolean) {
+  if (!enabled) {
+    return undefined;
+  }
+  return {
+    [SUPER_ADMIN_BYPASS_HEADER]: 'true'
+  };
+}
+
 class Task {
   public result: ISqlExecuteResult[] = [];
   public isFinish: boolean;
@@ -36,7 +48,8 @@ class Task {
     public requestId: string,
     public sessionId: string,
     private taskInfo: ISQLExecuteTask,
-    private onUpdate: (info: IExecutingInfo) => void
+    private onUpdate: (info: IExecutingInfo) => void,
+    private superAdminBypass: boolean = false
   ) {}
   private fetchData = async () => {
     const res = await request.get(
@@ -46,7 +59,8 @@ class Task {
       {
         params: {
           requestId: this.requestId
-        }
+        },
+        headers: buildSuperAdminBypassHeaders(this.superAdminBypass)
       }
     );
     if (res?.isError) {
@@ -137,9 +151,16 @@ class TaskManager {
     requestId: string,
     sessionId: string,
     taskInfo: ISQLExecuteTask,
-    onUpdate: (info: IExecutingInfo) => void
+    onUpdate: (info: IExecutingInfo) => void,
+    superAdminBypass: boolean = false
   ): Promise<ISqlExecuteResult[]> {
-    const task = new Task(requestId, sessionId, taskInfo, onUpdate);
+    const task = new Task(
+      requestId,
+      sessionId,
+      taskInfo,
+      onUpdate,
+      superAdminBypass
+    );
     this.tasks.push(task);
     try {
       const result = await task.getResult();
@@ -157,6 +178,8 @@ export const executeTaskManager = new TaskManager();
  * @param sessionId 会话ID
  * @param dbName 数据库名称
  * @param needModal SQL确认弹窗，默认需要弹出
+ * @param onUpdate 执行进度回调
+ * @param superAdminBypass 本窗口已确认开启超级管理员旁路时注入请求头
  * @returns
  */
 export default async function executeSQL(
@@ -164,7 +187,8 @@ export default async function executeSQL(
   sessionId: string,
   dbName: string,
   needModal: boolean = true,
-  onUpdate: (info: IExecutingInfo) => void = () => {}
+  onUpdate: (info: IExecutingInfo) => void = () => {},
+  superAdminBypass: boolean = false
 ): Promise<IExecuteTaskResult> {
   const sid = generateDatabaseSid(dbName, sessionId);
   const serverParams =
@@ -177,10 +201,12 @@ export default async function executeSQL(
           sid,
           ...params
         };
+  const bypassHeaders = buildSuperAdminBypassHeaders(superAdminBypass);
   const res = await request.post(
     `/api/v2/datasource/sessions/${sid}/sqls/streamExecute`,
     {
-      data: serverParams
+      data: serverParams,
+      headers: bypassHeaders
     }
   );
   const taskInfo: ISQLExecuteTask = res?.data;
@@ -199,7 +225,8 @@ export default async function executeSQL(
     requestId,
     sessionId,
     taskInfo,
-    onUpdate
+    onUpdate,
+    superAdminBypass
   );
   let results = executeRes;
   results = results?.map((result) => {

@@ -193,7 +193,8 @@ export class SQLStore {
     isSection: boolean,
     sessionId: string,
     dbName: string,
-    needModal: boolean = true
+    needModal: boolean = true,
+    superAdminBypass: boolean = false
   ): Promise<any> {
     if (!this.resultSets.has(pageKey)) {
       this.resultSets.set(pageKey, []);
@@ -331,7 +332,8 @@ export class SQLStore {
           } else {
             handleResult(info);
           }
-        }
+        },
+        superAdminBypass
       );
       return res;
     } catch (e) {

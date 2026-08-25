@@ -17,6 +17,7 @@
 import DelimiterSelect from '@/component/DelimiterSelect';
 import { getKeyCodeText } from '@/component/Input/Keymap/keycodemap';
 import SQLConfig from '@/component/SQLConfig';
+import SuperAdminBypassSwitch from '@/component/SuperAdminBypassSwitch';
 import { IConStatus } from '@/component/Toolbar/statefulIcon';
 import { TransState } from '@/d.ts';
 import { SQLPage } from '@/page/Workspace/components/SQLPage';
@@ -412,6 +413,13 @@ const sqlActions: ToolBarActions = {
     },
     async action(ctx: any) {
       await ctx.doSQLLint();
+    }
+  },
+
+  SQL_SUPER_ADMIN_BYPASS: {
+    Component: SuperAdminBypassSwitch,
+    isVisible() {
+      return login.canOpGlobal === true;
     }
   }
 };
