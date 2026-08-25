@@ -51,6 +51,7 @@ export const ACTION_GROUPS = {
         'SQL_EXEC_SECTION',
         'SQL_STOP',
         'SQL_LINT',
+        'SQL_SUPER_ADMIN_BYPASS',
         'SQL_PLAN',
         'SQL_IMPORT_FILE'
       ],

@@ -115,6 +115,11 @@ interface ISQLPageState {
   status: EStatus;
   hasExecuted: boolean;
   approvalRequired: boolean;
+  /**
+   * 本窗口超级管理员旁路开关（默认关）。
+   * 挂本 SQLPage 实例（pageKey）；不写偏好 / localStorage / sessionStorage / 全局 store（AC-005/006）。
+   */
+  superAdminBypassEnabled: boolean;
 }
 
 interface IProps {
@@ -175,7 +180,8 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
     status: null,
     hasExecuted: false,
     isSavingScript: false,
-    approvalRequired: false
+    approvalRequired: false,
+    superAdminBypassEnabled: false
   };
 
   public editor: IEditor;
@@ -246,6 +252,14 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
     return this.props.sessionManagerStore?.sessionMap?.get(
       this.props.sessionId
     );
+  }
+
+  public setSuperAdminBypassEnabled(enabled: boolean) {
+    this.setState({ superAdminBypassEnabled: !!enabled });
+  }
+
+  public getSuperAdminBypassEnabled() {
+    return !!this.state.superAdminBypassEnabled;
   }
 
   public async UNSAFE_componentWillReceiveProps(nextProps) {
@@ -933,7 +947,9 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
         updateDataDML,
         this.getSession()?.sessionId,
         this.getSession()?.database?.dbName,
-        false
+        false,
+        () => {},
+        this.getSuperAdminBypassEnabled()
       );
       if (!result) {
         return;
@@ -1256,6 +1272,8 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
           toolbar={{
             loading: pageLoading,
             actionGroupKey: 'SQL_DEFAULT_ACTION_GROUP',
+            /** 旁路开关挂 React state；写入 toolbar 以便 ScriptPage/ToolBar 随开关重渲染 */
+            superAdminBypassEnabled: this.state.superAdminBypassEnabled,
             query: {
               isHideText: {
                 maxWidth: 780
@@ -1300,6 +1318,7 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
                 sqlChanged={sqlChanged}
                 hanldeCloseLintPage={this.hanldeCloseLintPage}
                 approvalRequired={this.state.approvalRequired}
+                superAdminBypassEnabled={this.state.superAdminBypassEnabled}
               />
             </Spin>
           }
@@ -1403,7 +1422,8 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
       isSection,
       this.getSession()?.sessionId,
       this.getSession()?.database?.dbName,
-      false
+      false,
+      this.getSuperAdminBypassEnabled()
     );
     this.handleCheckDatabasePermission(results);
     if ((!results || results?.invalid) && !results?.hasLintResults) {

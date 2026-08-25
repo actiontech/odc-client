@@ -44,6 +44,7 @@ import { ResultTabsStyleWrapper } from './style';
 import { BasicToolTip } from '@actiontech/dms-kit';
 import { generateDMSExportUrl } from '@/util/dms/export';
 import { getDMSProjectNameByDatasourceName } from '../../../../util/dms/project';
+import SuperAdminBypassBanner from '@/component/SuperAdminBypassBanner';
 
 export const recordsTabKey = 'records';
 export const sqlLintTabKey = 'sqlLint';
@@ -67,6 +68,8 @@ interface IProps {
   sqlChanged?: boolean;
   baseOffset: number;
   approvalRequired: boolean;
+  /** 本窗口超级管理员旁路已确认开启时展示结果区警告条 */
+  superAdminBypassEnabled?: boolean;
 
   onCloseResultSet: (resultSetKey: string) => void;
   onChangeResultSetTab?: (tabKey: string) => void;
@@ -192,7 +195,8 @@ const SQLResultSet: React.FC<IProps> = function (props) {
     onCloseResultSet,
     hanldeCloseLintPage,
     onUpdateEditing,
-    approvalRequired
+    approvalRequired,
+    superAdminBypassEnabled
   } = props;
 
   const [showLockResultSetHint, setShowLockResultSetHint] = useState(false);
@@ -364,7 +368,9 @@ const SQLResultSet: React.FC<IProps> = function (props) {
   const isSupportProfile = session?.supportFeature.enableProfile;
 
   return (
-    <ResultTabsStyleWrapper
+    <>
+      {superAdminBypassEnabled ? <SuperAdminBypassBanner /> : null}
+      <ResultTabsStyleWrapper
       className="tabs"
       activeKey={activeKey}
       tabBarGutter={0}
@@ -626,6 +632,7 @@ const SQLResultSet: React.FC<IProps> = function (props) {
         )
         .filter(Boolean)}
     />
+    </>
   );
 };
 

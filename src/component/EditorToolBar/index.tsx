@@ -143,7 +143,7 @@ export default class EditorToolBar extends Component<IProps, IState> {
 
       if (isCustomAction(actionItem)) {
         const { Component: CustomComponent } = actionItem;
-        return <CustomComponent key={actionKey} />;
+        return <CustomComponent key={actionKey} ctx={ctx} />;
       } else if (isMenuAction(actionItem)) {
         /**
          * 下拉菜单类型
