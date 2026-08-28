@@ -22,6 +22,7 @@ import { DataGridRef } from '@oceanbase-odc/ob-react-data-grid';
 import { clone } from 'lodash';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import EditableTable from '../../../EditableTable';
+import { isCsvwEditHidden } from '@/page/Workspace/SideBar/ResourceTree/TreeNodeMenu/config/helper';
 import TablePageContext from '../../../TablePage/context';
 import EditToolbar from '../../EditToolbar';
 import { removeGridParams } from '../../helper';
@@ -44,6 +45,7 @@ interface IProps {
 const PrimaryConstaint: React.FC<IProps> = function ({ modified }) {
   const tableContext = useContext(TableContext);
   const pageContext = useContext(TablePageContext);
+  const hideEdit = pageContext?.editMode && isCsvwEditHidden();
   const [selectedRowsIdx, setSelectedRowIdx] = useState<number[]>([]);
   const gridColumns: any[] = useColumns(
     tableContext.columns,
@@ -72,38 +74,44 @@ const PrimaryConstaint: React.FC<IProps> = function ({ modified }) {
       toolbar={
         <EditToolbar modified={modified}>
           <Toolbar>
-            <Toolbar.Button
-              disabled={pageContext?.editMode}
-              text={formatMessage({
-                id: 'workspace.header.create',
-                defaultMessage: '新建'
-              })}
-              icon={PlusOutlined}
-              onClick={() => {
-                tableContext.setPrimaryConstraints(
-                  tableContext.primaryConstraints.concat(
-                    defaultPrimaryConstraint
-                  )
-                );
-              }}
-            />
+            {!hideEdit && (
+              <>
+                <Toolbar.Button
+                  disabled={pageContext?.editMode}
+                  text={formatMessage({
+                    id: 'workspace.header.create',
+                    defaultMessage: '新建'
+                  })}
+                  icon={PlusOutlined}
+                  onClick={() => {
+                    tableContext.setPrimaryConstraints(
+                      tableContext.primaryConstraints.concat(
+                        defaultPrimaryConstraint
+                      )
+                    );
+                  }}
+                />
 
-            <Toolbar.Button
-              disabled={pageContext?.editMode}
-              text={
-                formatMessage({
-                  id: 'odc.TableConstraint.Primary.Delete',
-                  defaultMessage: '删除'
-                }) //删除
-              }
-              icon={DeleteOutlined}
-              onClick={() => {
-                let newRows = [...rows]?.filter((row, index) => {
-                  return !selectedRowsIdx?.includes(index);
-                });
-                tableContext.setPrimaryConstraints(removeGridParams(newRows));
-              }}
-            />
+                <Toolbar.Button
+                  disabled={pageContext?.editMode}
+                  text={
+                    formatMessage({
+                      id: 'odc.TableConstraint.Primary.Delete',
+                      defaultMessage: '删除'
+                    }) //删除
+                  }
+                  icon={DeleteOutlined}
+                  onClick={() => {
+                    let newRows = [...rows]?.filter((row, index) => {
+                      return !selectedRowsIdx?.includes(index);
+                    });
+                    tableContext.setPrimaryConstraints(
+                      removeGridParams(newRows)
+                    );
+                  }}
+                />
+              </>
+            )}
           </Toolbar>
         </EditToolbar>
       }

@@ -22,6 +22,7 @@ import { DataGridRef } from '@oceanbase-odc/ob-react-data-grid';
 import { Space, Typography } from 'antd';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { partitionNameMap } from '../../CreateTable/Partition/CreateTablePartitionRuleForm';
+import { isCsvwEditHidden } from '@/page/Workspace/SideBar/ResourceTree/TreeNodeMenu/config/helper';
 import TablePageContext from '../context';
 
 import { generateUpdateTableDDL } from '@/common/network/table';
@@ -72,6 +73,7 @@ interface IProps {}
 
 const TablePartitions: React.FC<IProps> = function ({}) {
   const tableContext = useContext(TablePageContext);
+  const hideEdit = isCsvwEditHidden();
   const session = tableContext.session;
   const [selectedRowsIdx, setSelectedRowIdx] = useState<number[]>([]);
   const [editPartitions, setEditPartitions] =
@@ -362,7 +364,8 @@ const TablePartitions: React.FC<IProps> = function ({}) {
                 }}
               >
                 <Toolbar>
-                  {![IPartitionType.HASH, IPartitionType.KEY]?.includes(
+                  {!hideEdit &&
+                  ![IPartitionType.HASH, IPartitionType.KEY]?.includes(
                     partType
                   ) ? (
                     <>
@@ -440,6 +443,7 @@ const TablePartitions: React.FC<IProps> = function ({}) {
               initialColumns={rdgColumns}
               initialRows={rows as any}
               onSelectChange={handleSelectCell}
+              readonly={hideEdit}
             />
 
             {subpartitionsRows?.length > 0 ? (

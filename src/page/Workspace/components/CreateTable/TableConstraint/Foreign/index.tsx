@@ -32,7 +32,9 @@ import {
 import { DataGridRef } from '@oceanbase-odc/ob-react-data-grid';
 import { useRequest } from 'ahooks';
 import { clone } from 'lodash';
+import { isCsvwEditHidden } from '@/page/Workspace/SideBar/ResourceTree/TreeNodeMenu/config/helper';
 import EditableTable from '../../../EditableTable';
+import TablePageContext from '../../../TablePage/context';
 import EditToolbar from '../../EditToolbar';
 import { removeGridParams } from '../../helper';
 import { useColumns } from './columns';
@@ -55,6 +57,8 @@ interface IProps {
 
 const ForeignConstraint: React.FC<IProps> = function ({ modified }) {
   const tableContext = useContext(TableContext);
+  const pageContext = useContext(TablePageContext);
+  const hideEdit = pageContext?.editMode && isCsvwEditHidden();
   const [selectedRowsIdx, setSelectedRowIdx] = useState<number[]>([]);
   const { data, run } = useRequest(listDatabases, {
     manual: true
@@ -99,37 +103,42 @@ const ForeignConstraint: React.FC<IProps> = function ({ modified }) {
       toolbar={
         <EditToolbar modified={modified}>
           <Toolbar>
-            <Toolbar.Button
-              text={formatMessage({
-                id: 'workspace.header.create',
-                defaultMessage: '新建'
-              })}
-              icon={PlusOutlined}
-              onClick={() => {
-                const row = {
-                  ...defaultForeignConstraint,
-                  key: generateUniqKey()
-                };
-                gridRef.current?.addRows([row]);
-              }}
-            />
+            {!hideEdit && (
+              <>
+                <Toolbar.Button
+                  text={formatMessage({
+                    id: 'workspace.header.create',
+                    defaultMessage: '新建'
+                  })}
+                  icon={PlusOutlined}
+                  onClick={() => {
+                    const row = {
+                      ...defaultForeignConstraint,
+                      key: generateUniqKey()
+                    };
+                    gridRef.current?.addRows([row]);
+                  }}
+                />
 
-            <Toolbar.Button
-              text={formatMessage({
-                id: 'odc.TableConstraint.Primary.Delete',
-                defaultMessage: '删除'
-              })}
-              icon={DeleteOutlined}
-              disabled={!selectedRowsIdx?.length}
-              onClick={() => {
-                gridRef.current?.deleteRows();
-              }}
-            />
+                <Toolbar.Button
+                  text={formatMessage({
+                    id: 'odc.TableConstraint.Primary.Delete',
+                    defaultMessage: '删除'
+                  })}
+                  icon={DeleteOutlined}
+                  disabled={!selectedRowsIdx?.length}
+                  onClick={() => {
+                    gridRef.current?.deleteRows();
+                  }}
+                />
+              </>
+            )}
           </Toolbar>
         </EditToolbar>
       }
     >
       <EditableTable
+        readonly={!!hideEdit}
         rowKey="key"
         bordered={false}
         minHeight="100%"

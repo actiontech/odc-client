@@ -22,7 +22,9 @@ import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { DataGridRef } from '@oceanbase-odc/ob-react-data-grid';
 import { clone } from 'lodash';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { isCsvwEditHidden } from '@/page/Workspace/SideBar/ResourceTree/TreeNodeMenu/config/helper';
 import EditableTable from '../../../EditableTable';
+import TablePageContext from '../../../TablePage/context';
 import EditToolbar from '../../EditToolbar';
 import { removeGridParams } from '../../helper';
 import { TableUniqueConstraint } from '../../interface';
@@ -43,6 +45,8 @@ interface IProps {
 
 const UniqueConstraints: React.FC<IProps> = function ({ modified }) {
   const tableContext = useContext(TableContext);
+  const pageContext = useContext(TablePageContext);
+  const hideEdit = pageContext?.editMode && isCsvwEditHidden();
   const [selectedRowsIdx, setSelectedRowIdx] = useState<number[]>([]);
   const gridColumns: any[] = useColumns(
     tableContext.columns,
@@ -71,39 +75,44 @@ const UniqueConstraints: React.FC<IProps> = function ({ modified }) {
       toolbar={
         <EditToolbar modified={modified}>
           <Toolbar>
-            <Toolbar.Button
-              text={formatMessage({
-                id: 'workspace.header.create',
-                defaultMessage: '新建'
-              })}
-              icon={PlusOutlined}
-              onClick={() => {
-                const row = {
-                  ...defaultUniqueConstraints,
-                  key: generateUniqKey()
-                };
-                gridRef.current?.addRows([row]);
-              }}
-            />
+            {!hideEdit && (
+              <>
+                <Toolbar.Button
+                  text={formatMessage({
+                    id: 'workspace.header.create',
+                    defaultMessage: '新建'
+                  })}
+                  icon={PlusOutlined}
+                  onClick={() => {
+                    const row = {
+                      ...defaultUniqueConstraints,
+                      key: generateUniqKey()
+                    };
+                    gridRef.current?.addRows([row]);
+                  }}
+                />
 
-            <Toolbar.Button
-              text={
-                formatMessage({
-                  id: 'odc.TableConstraint.Unique.Delete',
-                  defaultMessage: '删除'
-                }) //删除
-              }
-              icon={DeleteOutlined}
-              disabled={!selectedRowsIdx?.length}
-              onClick={() => {
-                gridRef.current?.deleteRows();
-              }}
-            />
+                <Toolbar.Button
+                  text={
+                    formatMessage({
+                      id: 'odc.TableConstraint.Unique.Delete',
+                      defaultMessage: '删除'
+                    }) //删除
+                  }
+                  icon={DeleteOutlined}
+                  disabled={!selectedRowsIdx?.length}
+                  onClick={() => {
+                    gridRef.current?.deleteRows();
+                  }}
+                />
+              </>
+            )}
           </Toolbar>
         </EditToolbar>
       }
     >
       <EditableTable
+        readonly={!!hideEdit}
         rowKey="key"
         bordered={false}
         minHeight="100%"
