@@ -35,6 +35,7 @@ import { inject, observer } from 'mobx-react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import EditableTable, { RowType } from '../EditableTable';
 import SessionSelect from '../SessionContextWrap/SessionSelect';
+import { isCsvwEditHidden } from '@/page/Workspace/SideBar/ResourceTree/TreeNodeMenu/config/helper';
 import styles from './index.less';
 const ToolbarButton = Toolbar.Button;
 const Search = Input.Search;
@@ -181,16 +182,18 @@ function SessionParamsTable(props: {
         >
           <Toolbar>
             <div className="tools-left">
-              <ToolbarButton
-                isShowText
-                text={formatMessage({
-                  id: 'workspace.window.session.button.edit',
-                  defaultMessage: '编辑'
-                })}
-                icon={<EditOutlined />}
-                onClick={handleOpenEditModal}
-                // disabled={connectionPropertyType === ConnectionPropertyType.GLOBAL}
-              />
+              {!isCsvwEditHidden() && (
+                <ToolbarButton
+                  isShowText
+                  text={formatMessage({
+                    id: 'workspace.window.session.button.edit',
+                    defaultMessage: '编辑'
+                  })}
+                  icon={<EditOutlined />}
+                  onClick={handleOpenEditModal}
+                  // disabled={connectionPropertyType === ConnectionPropertyType.GLOBAL}
+                />
+              )}
             </div>
             <div className="tools-right">
               <Search

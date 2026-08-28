@@ -19,6 +19,7 @@ import {
   batchGetDataModifySQL,
   queryTableOrViewData
 } from '@/common/network/table';
+import { isCsvwEditHidden } from '@/page/Workspace/SideBar/ResourceTree/TreeNodeMenu/config/helper';
 import ExecuteSQLModal from '@/component/ExecuteSQLModal';
 import { ISQLLintReuslt } from '@/component/SQLLintResult/type';
 import { EStatus, IResultSet, ISqlExecuteResultStatus, ITable } from '@/d.ts';
@@ -430,7 +431,9 @@ class TableData extends React.Component<
             showMock={settingStore.enableMockdata}
             isEditing={isEditing}
             disableEdit={
-              !resultSet.resultSetMetaData?.editable || isExternalTable
+              isCsvwEditHidden() ||
+              !resultSet.resultSetMetaData?.editable ||
+              isExternalTable
             }
             table={{
               ...table,

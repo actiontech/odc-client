@@ -25,6 +25,7 @@ import { DataGridRef } from '@oceanbase-odc/ob-react-data-grid';
 import { clone, cloneDeep } from 'lodash';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import EditableTable from '../../EditableTable';
+import { isCsvwEditHidden } from '@/page/Workspace/SideBar/ResourceTree/TreeNodeMenu/config/helper';
 import TablePageContext from '../../TablePage/context';
 import EditToolbar from '../EditToolbar';
 import { removeGridParams } from '../helper';
@@ -75,6 +76,7 @@ interface IProps {
 const TableIndex: React.FC<IProps> = function ({ modified }) {
   const tableContext = useContext(TableContext);
   const pageContext = useContext(TablePageContext);
+  const hideEdit = pageContext?.editMode && isCsvwEditHidden();
   const session = tableContext.session;
   const [selectedRowsIdx, setSelectedRowIdx] = useState<number[]>([]);
   const gridColumns: any[] = useColumns(tableContext.columns, session);
@@ -137,34 +139,38 @@ const TableIndex: React.FC<IProps> = function ({ modified }) {
           }}
         >
           <Toolbar>
-            <Toolbar.Button
-              text={formatMessage({
-                id: 'workspace.header.create',
-                defaultMessage: '新建'
-              })}
-              icon={PlusOutlined}
-              onClick={() => {
-                const row = {
-                  ...defaultIndex,
-                  columnGroups: getDefaultColumnGroups(session),
-                  key: generateUniqKey()
-                };
-                gridRef.current?.addRows([row]);
-              }}
-            />
+            {!hideEdit && (
+              <>
+                <Toolbar.Button
+                  text={formatMessage({
+                    id: 'workspace.header.create',
+                    defaultMessage: '新建'
+                  })}
+                  icon={PlusOutlined}
+                  onClick={() => {
+                    const row = {
+                      ...defaultIndex,
+                      columnGroups: getDefaultColumnGroups(session),
+                      key: generateUniqKey()
+                    };
+                    gridRef.current?.addRows([row]);
+                  }}
+                />
 
-            <Toolbar.Button
-              text={
-                formatMessage({
-                  id: 'odc.CreateTable.TableIndex.Delete',
-                  defaultMessage: '删除'
-                }) //删除
-              }
-              icon={DeleteOutlined}
-              onClick={() => {
-                gridRef.current?.deleteRows();
-              }}
-            />
+                <Toolbar.Button
+                  text={
+                    formatMessage({
+                      id: 'odc.CreateTable.TableIndex.Delete',
+                      defaultMessage: '删除'
+                    }) //删除
+                  }
+                  icon={DeleteOutlined}
+                  onClick={() => {
+                    gridRef.current?.deleteRows();
+                  }}
+                />
+              </>
+            )}
 
             {pageContext?.editMode && (
               <Toolbar.Button
@@ -181,6 +187,7 @@ const TableIndex: React.FC<IProps> = function ({ modified }) {
       }
     >
       <EditableTable
+        readonly={!!hideEdit}
         rowKey="key"
         bordered={false}
         minHeight="100%"

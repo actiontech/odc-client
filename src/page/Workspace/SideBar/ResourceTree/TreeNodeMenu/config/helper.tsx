@@ -156,3 +156,11 @@ export function isHiddenForCsvwNonTableAction(key: string): boolean {
 export function isCsvwNonTableDetailReadonly(): boolean {
   return true;
 }
+
+/**
+ * CSVW: hide outermost edit entries on table data, SQL result set,
+ * table structure tabs, and session params.
+ */
+export function isCsvwEditHidden(): boolean {
+  return true;
+}

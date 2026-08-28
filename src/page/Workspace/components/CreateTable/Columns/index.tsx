@@ -35,6 +35,7 @@ import classnames from 'classnames';
 import { cloneDeep, isNil } from 'lodash';
 import TablePageContext from '../../TablePage/context';
 import { useTableConfig } from '../config';
+import { isCsvwEditHidden } from '@/page/Workspace/SideBar/ResourceTree/TreeNodeMenu/config/helper';
 import EditToolbar from '../EditToolbar';
 import { removeGridParams } from '../helper';
 import { TableColumn } from '../interface';
@@ -66,6 +67,7 @@ const Columns: React.FC<IProps> = function ({ isExternalTable }) {
   const pageContext = useContext(TablePageContext);
   const session = tableContext.session;
   const editMode = pageContext?.editMode;
+  const hideEdit = editMode && isCsvwEditHidden();
   const columns = tableContext?.columns;
   const [selectedRowsIdx, setSelectedRowIdx] = useState<number[]>([]);
   const gridColumns = useColumns({ session }, columns);
@@ -168,7 +170,7 @@ const Columns: React.FC<IProps> = function ({ isExternalTable }) {
               }}
             >
               <Toolbar>
-                {!isExternalTable && (
+                {!isExternalTable && !hideEdit && (
                   <>
                     <Toolbar.Button
                       text={formatMessage({
@@ -241,7 +243,7 @@ const Columns: React.FC<IProps> = function ({ isExternalTable }) {
             onSelectChange={onSelectChange}
             gridRef={gridRef}
             onRowsChange={onRowsChange}
-            readonly={isExternalTable}
+            readonly={isExternalTable || hideEdit}
           />
         </TableCardLayout>
       </div>
