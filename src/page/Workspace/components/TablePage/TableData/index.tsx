@@ -24,7 +24,7 @@ import ExecuteSQLModal from '@/component/ExecuteSQLModal';
 import { ISQLLintReuslt } from '@/component/SQLLintResult/type';
 import { EStatus, IResultSet, ISqlExecuteResultStatus, ITable } from '@/d.ts';
 import { generateResultSetColumns } from '@/store/helper';
-import modal, { ModalStore } from '@/store/modal';
+import modal from '@/store/modal';
 import { PageStore } from '@/store/page';
 import sessionManager from '@/store/sessionManager';
 import SessionStore from '@/store/sessionManager/session';
@@ -32,6 +32,8 @@ import { SettingStore } from '@/store/setting';
 import type { SQLStore } from '@/store/sql';
 import { formatMessage } from '@/util/intl';
 import notification from '@/util/notification';
+import { generateDMSExportUrl } from '@/util/dms/export';
+import { getDMSProjectNameByDatasourceName } from '@/util/dms/project';
 import { generateSelectSql } from '@/util/sql';
 import { generateUniqKey } from '@/util/utils';
 import { message, Spin } from 'antd';
@@ -45,7 +47,6 @@ interface ITableDataProps {
   sqlStore?: SQLStore;
   pageStore?: PageStore;
   settingStore?: SettingStore;
-  modalStore?: ModalStore;
   table: Partial<ITable>;
   tableName: string;
   pageKey: string;
@@ -53,7 +54,7 @@ interface ITableDataProps {
   isExternalTable?: boolean;
 }
 
-@inject('sqlStore', 'pageStore', 'settingStore', 'modalStore')
+@inject('sqlStore', 'pageStore', 'settingStore')
 @observer
 class TableData extends React.Component<
   ITableDataProps,
@@ -68,7 +69,6 @@ class TableData extends React.Component<
 
     isEditing: boolean;
     resultSet: IResultSet;
-    limitToExport: number;
     showDataExecuteSQLModal: boolean;
     updateDataDML: string;
     tipToShow: string;
@@ -84,7 +84,6 @@ class TableData extends React.Component<
       dataLoading: false,
       isEditing: false,
       showDataExecuteSQLModal: false,
-      limitToExport: 0,
       updateDataDML: '',
       tipToShow: '',
       resultSet: null,
@@ -391,13 +390,17 @@ class TableData extends React.Component<
   };
 
   showExportResuleSetModal = () => {
-    const { modalStore, session, tableName } = this.props;
+    const { session, tableName } = this.props;
     const sql = generateSelectSql(false, session.connection?.type, tableName);
-    modalStore.changeCreateResultSetExportTaskModal(true, {
+    const url = generateDMSExportUrl({
       sql,
-      databaseId: session?.database.databaseId,
-      tableName
+      instanceName: session.odcDatabase.dataSource.name,
+      schemaName: session.database.dbName,
+      projectName: getDMSProjectNameByDatasourceName(
+        session.odcDatabase.dataSource.name
+      )
     });
+    window.open(url);
   };
 
   render() {
@@ -455,10 +458,7 @@ class TableData extends React.Component<
             rows={resultSet.rows}
             resultHeight={`100%`}
             onRefresh={(limit) => this.reloadTableData(tableName, false, limit)}
-            onExport={(limitToExport) => {
-              this.setState({
-                limitToExport
-              });
+            onExport={() => {
               this.showExportResuleSetModal();
             }}
           />
