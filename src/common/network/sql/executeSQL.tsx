@@ -14,7 +14,11 @@
  * limitations under the License.
  */
 
-import type { ISqlExecuteResult, IExecutingInfo } from '@/d.ts';
+import type {
+  IPrivilegeDeniedContext,
+  ISqlExecuteResult,
+  IExecutingInfo
+} from '@/d.ts';
 import { ISqlExecuteResultStatus } from '@/d.ts';
 import request from '@/util/request';
 import { generateDatabaseSid, generateSessionSid } from '../pathUtil';
@@ -30,6 +34,48 @@ interface IGetMoreResultsOptions {
   ignoreError?: boolean;
 }
 
+interface IGetMoreResultsData {
+  finished: boolean;
+  traceId: string;
+  results: ISqlExecuteResult[];
+  sql: string;
+  sqlId: string;
+  privilege_denied?: boolean;
+  project_uid?: string;
+  db_service_uid?: string;
+  db_service_name?: string;
+  db_account_uid?: string;
+  db_account_name?: string;
+  raw_sql?: string;
+  error_message?: string;
+  vendor_code?: string | null;
+  sql_state?: string | null;
+  requested_objects?: IPrivilegeDeniedContext['requested_objects'];
+  requested_actions?: string[];
+}
+
+export function extractPrivilegeDeniedContext(
+  data?: IGetMoreResultsData | null
+): IPrivilegeDeniedContext | undefined {
+  if (!data || data.privilege_denied !== true) {
+    return undefined;
+  }
+  return {
+    privilege_denied: true,
+    project_uid: data.project_uid || '',
+    db_service_uid: data.db_service_uid || '',
+    db_service_name: data.db_service_name,
+    db_account_uid: data.db_account_uid || '',
+    db_account_name: data.db_account_name || '',
+    raw_sql: data.raw_sql || data.sql || '',
+    error_message: data.error_message || '',
+    vendor_code: data.vendor_code ?? null,
+    sql_state: data.sql_state ?? null,
+    requested_objects: data.requested_objects || [],
+    requested_actions: data.requested_actions || []
+  };
+}
+
 export async function getMoreResults(
   sessionId: string,
   requestId: string,
@@ -38,13 +84,7 @@ export async function getMoreResults(
   isError: boolean;
   errCode?: string | number;
   errMsg?: string;
-  data?: {
-    finished: boolean;
-    traceId: string;
-    results: ISqlExecuteResult[];
-    sql: string;
-    sqlId: string;
-  };
+  data?: IGetMoreResultsData;
 }> {
   const res = await request.get(
     `/api/v2/datasource/sessions/${generateSessionSid(
@@ -75,6 +115,7 @@ class Task {
   public result: ISqlExecuteResult[] = [];
   public isFinish: boolean;
   public taskLoopInterval = 200;
+  public privilegeDeniedContext?: IPrivilegeDeniedContext;
   private timer = null;
   private isStop = false;
   constructor(
@@ -109,13 +150,7 @@ class Task {
       return;
     }
     try {
-      const data: {
-        finished: boolean;
-        traceId: string;
-        results: ISqlExecuteResult[];
-        sql: string;
-        sqlId: string;
-      } = await this.fetchData();
+      const data: IGetMoreResultsData = await this.fetchData();
       if (this.isStop) {
         callback(null);
         return;
@@ -128,13 +163,19 @@ class Task {
           this.result.push(result);
         }
       });
+      const privilegeDeniedContext =
+        extractPrivilegeDeniedContext(data) || this.privilegeDeniedContext;
+      if (privilegeDeniedContext) {
+        this.privilegeDeniedContext = privilegeDeniedContext;
+      }
       this.onUpdate?.({
         results: this.result || [],
         finished: data.finished,
         task: this.taskInfo,
         traceId: data.traceId,
         executingSQL: data.sql,
-        executingSQLId: data.sqlId
+        executingSQLId: data.sqlId,
+        privilegeDeniedContext: this.privilegeDeniedContext
       });
       if (data?.finished) {
         callback(this.result);
@@ -176,15 +217,22 @@ class TaskManager {
     sessionId: string,
     taskInfo: ISQLExecuteTask,
     onUpdate: (info: IExecutingInfo) => void
-  ): Promise<ISqlExecuteResult[]> {
+  ): Promise<{
+    results: ISqlExecuteResult[];
+    privilegeDeniedContext?: IPrivilegeDeniedContext;
+  }> {
     const task = new Task(requestId, sessionId, taskInfo, onUpdate);
     this.tasks.push(task);
     try {
       const result = await task.getResult();
       this.tasks = this.tasks.filter((_task) => _task !== task);
-      return result;
+      return {
+        results: result,
+        privilegeDeniedContext: task.privilegeDeniedContext
+      };
     } catch (e) {
       console.trace('sql task error', e);
+      return { results: null };
     }
   }
 }
@@ -233,13 +281,13 @@ export default async function executeSQL(
     return preHandleData;
   }
   const requestId = taskInfo?.requestId;
-  const executeRes = await executeTaskManager.addAndWaitTask(
+  const taskOutcome = await executeTaskManager.addAndWaitTask(
     requestId,
     sessionId,
     taskInfo,
     onUpdate
   );
-  let results = executeRes;
+  let results = taskOutcome?.results;
   results = results?.map((result) => {
     if (!result.requestId) {
       result.requestId = requestId;
@@ -257,6 +305,7 @@ export default async function executeSQL(
     violatedRules: [],
     lintResultSet,
     hasLintResults: lintResultSet?.length > 0,
-    status
+    status,
+    privilegeDeniedContext: taskOutcome?.privilegeDeniedContext
   };
 }
