@@ -1787,6 +1787,28 @@ export interface ISqlExecuteResultTimer {
   totalDurationMicroseconds: number; // 总耗时
 }
 
+/** DMS 代理注入的库账号缺权上下文（getMoreResults data 旁路） */
+export interface IPrivilegeObject {
+  schema?: string;
+  object_name?: string;
+  object_type?: string;
+}
+
+export interface IPrivilegeDeniedContext {
+  privilege_denied: boolean;
+  project_uid: string;
+  db_service_uid: string;
+  db_service_name?: string;
+  db_account_uid: string;
+  db_account_name: string;
+  raw_sql: string;
+  error_message: string;
+  vendor_code?: string | null;
+  sql_state?: string | null;
+  requested_objects?: IPrivilegeObject[];
+  requested_actions?: string[];
+}
+
 export interface IExecutingInfo {
   finished?: boolean;
   traceId?: string;
@@ -1794,6 +1816,7 @@ export interface IExecutingInfo {
   executingSQLId?: string;
   results?: ISqlExecuteResult[];
   task: ISQLExecuteTask;
+  privilegeDeniedContext?: IPrivilegeDeniedContext;
 }
 
 export enum ISqlExecuteResultStatus {

@@ -12,6 +12,7 @@ export { default as DataExportTaskService } from './DataExportTask';
 export { default as DataExportWorkflowsService } from './DataExportWorkflows';
 export { default as GatewayService } from './Gateway';
 export { default as MaskingService } from './Masking';
+export { default as PrivilegeApplyService } from './PrivilegeApply';
 export { default as MemberService } from './Member';
 export { default as MemberGroupService } from './MemberGroup';
 export { default as NotificationService } from './Notification';
