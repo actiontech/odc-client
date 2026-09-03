@@ -4781,7 +4781,7 @@
   "src.component.Task.MutipleAsyncTask.components.Template.249655CE": "Template saved successfully",
   "src.component.Task.MutipleAsyncTask.components.Template.4ACCCD33": "The template is invalid.",
   "src.constant.6161DC9D": "Database Change Order Template Management",
-  "src.page.Workspace.SideBar.ResourceTree.DatabaseSearch.86200ED0": "Search",
+  "src.page.Workspace.SideBar.ResourceTree.DatabaseSearch.86200ED0": "Filter data sources",
   "src.constant.311737C9": "Delete Database Change Order Template",
   "src.constant.B8039A65": "Batch Change Database",
   "src.constant.A44EAEF4": "Stop Batch Database Change Task",
@@ -6006,5 +6006,7 @@
   "src.page.Console.8F636FA5": "Explore ODC team workspaces",
   "src.component.helpDoc.7F2FDC2E": "Number of automatic retry attempts on lock failure",
   "src.component.Task.AlterDdlTask.CreateModal.1A8336C1": "Retry Attempts on Lock Failure",
-  "src.component.Task.AlterDdlTask.CreateModal.A56878AD": "Enter the number of retry attempts on lock failure"
+  "src.component.Task.AlterDdlTask.CreateModal.A56878AD": "Enter the number of retry attempts on lock failure",
+  "src.page.Workspace.SideBar.ResourceTree.NoMatchingDataSource": "No matching data sources",
+  "src.page.Workspace.SideBar.ResourceTree.DatabaseSearch.EnterLocateFirst": "Jump to first matching data source"
 }

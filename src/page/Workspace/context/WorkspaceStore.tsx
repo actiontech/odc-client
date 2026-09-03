@@ -72,6 +72,8 @@ export default function WorkspaceStore({ children }) {
   const [datasourceList, setDatasourceList] = useState<IDatasource[]>([]);
   const [projectList, setProjectList] = useState<IProject[]>([]);
   const [databaseList, setDatabaseList] = useState<IDatabase[]>([]);
+  /** S3 AC-012：弹窗定位需可读/清侧栏名称过滤；提升到 context */
+  const [dsNameFilterKeyword, setDsNameFilterKeyword] = useState<string>(null);
 
   function setSelectProjectId(v: number) {
     _setSelectProjectId(v);
@@ -163,7 +165,9 @@ export default function WorkspaceStore({ children }) {
         reloadDatabaseList,
         pollingDatabase,
         groupMode,
-        setGroupMode
+        setGroupMode,
+        dsNameFilterKeyword,
+        setDsNameFilterKeyword
       }}
     >
       <ActivityBarContext.Provider

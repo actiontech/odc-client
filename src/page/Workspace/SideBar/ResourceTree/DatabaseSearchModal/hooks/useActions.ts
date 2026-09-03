@@ -19,13 +19,42 @@ const useActions = (params: { modalStore: ModalStore; project: IProject }) => {
   const { modalStore, project } = params;
   const activituContext = useContext(ActivityBarContext);
   const context = useContext(ResourceTreeContext);
-  const { groupMode, setCurrentObject, setShouldExpandedKeys, setGroupMode } =
-    context || {};
+  const {
+    groupMode,
+    setCurrentObject,
+    setShouldExpandedKeys,
+    setGroupMode,
+    dsNameFilterKeyword,
+    setDsNameFilterKeyword
+  } = context || {};
+
+  /**
+   * S3 AC-012：弹窗定位目标不在当前数据源名过滤结果内时，先清空侧栏关键词再定位。
+   * 匹配口径与 S1 一致：一级节点名 includes(keyword)（大小写不敏感）。
+   */
+  const clearDsNameFilterIfTargetBlocked = (targetGroupName?: string) => {
+    if (groupMode !== DatabaseGroup.dataSource) {
+      return;
+    }
+    const kw = (dsNameFilterKeyword || '').trim();
+    if (!kw) {
+      return;
+    }
+    const name = (targetGroupName || '').toLowerCase();
+    if (!name.includes(kw.toLowerCase())) {
+      setDsNameFilterKeyword?.(null);
+    }
+  };
+
+  /** 先关弹窗再改树状态，避免清过滤触发的父级重渲染冲掉 visible=false */
+  const closeSearchModal = () => {
+    modalStore?.changeDatabaseSearchModalVisible(false);
+  };
 
   /** 打开SQL窗口 */
   const openSql = (e, db) => {
     e.stopPropagation();
-    modalStore?.changeDatabaseSearchModalVisible(false);
+    closeSearchModal();
     db.id && openNewSQLPage(db.id);
   };
 
@@ -104,6 +133,10 @@ const useActions = (params: { modalStore: ModalStore; project: IProject }) => {
   }) => {
     activituContext.setActiveKey(ActivityBarItemType.Database);
     const { type, database, name, objectName } = parmas;
+    // 先关弹窗，再清过滤/展开，避免父级 setState 批更新冲掉关闭
+    closeSearchModal();
+    // 一级过滤节点是数据源名；对象/库定位时按所属数据源判断是否被挡住
+    clearDsNameFilterIfTargetBlocked(database?.dataSource?.name);
     const keyObject = getShouldExpandedKeysByObject({
       type,
       database,
@@ -116,7 +149,6 @@ const useActions = (params: { modalStore: ModalStore; project: IProject }) => {
       type: keyObject.currentResourceNodeType
     });
     setShouldExpandedKeys(keyObject.shouldExpandedKeys as React.Key[]);
-    modalStore?.changeDatabaseSearchModalVisible(false);
   };
 
   /** 打开并定位资源树上的项目/数据源 */
@@ -126,9 +158,11 @@ const useActions = (params: { modalStore: ModalStore; project: IProject }) => {
   }) => {
     activituContext.setActiveKey(ActivityBarItemType.Database);
     const { status, object } = params;
+    closeSearchModal();
     switch (status) {
       case SearchStatus.forDataSource:
       case SearchStatus.dataSourceforObject: {
+        clearDsNameFilterIfTargetBlocked(object?.name);
         setCurrentObject({
           value: getGroupKey(object.id, DatabaseGroup.dataSource),
           type: ResourceNodeType.GroupNodeDataSource
@@ -149,7 +183,6 @@ const useActions = (params: { modalStore: ModalStore; project: IProject }) => {
         setShouldExpandedKeys([getGroupKey(object.id, DatabaseGroup.project)]);
       }
     }
-    modalStore?.changeDatabaseSearchModalVisible(false);
   };
 
   return {

@@ -18,7 +18,7 @@ import { formatMessage } from '@/util/intl';
 import { IDatabase, DatabaseGroup } from '@/d.ts/database';
 import { UserStore } from '@/store/login';
 import { SessionManagerStore } from '@/store/sessionManager';
-import { Space, Tree, Spin } from 'antd';
+import { Space, Tree, Spin, Empty } from 'antd';
 import { EventDataNode } from 'antd/lib/tree';
 import { throttle } from 'lodash';
 import { useUpdate } from 'ahooks';
@@ -117,14 +117,18 @@ const ResourceTree: React.FC<IProps> = function ({
     groupMode,
     selectProjectId,
     selectDatasourceId,
+    setSelectDatasourceId,
     shouldExpandedKeys,
     setShouldExpandedKeys,
     setGroupMode,
     datasourceList,
     currentObject,
+    setCurrentObject,
     databaseList,
     reloadDatasourceList,
-    reloadDatabaseList
+    reloadDatabaseList,
+    dsNameFilterKeyword,
+    setDsNameFilterKeyword
   } = treeContext;
   const [wrapperHeight, setWrapperHeight] = useState(0);
   const clockRef = useRef(null);
@@ -134,7 +138,11 @@ const ResourceTree: React.FC<IProps> = function ({
   const treeWrapperRef = useRef<HTMLDivElement>();
   const treeRef = useRef(null);
   const update = useUpdate();
-  const [searchValue, setSearchValue] = useState<string>(null);
+  const searchValue = dsNameFilterKeyword;
+  const setSearchValue = setDsNameFilterKeyword;
+  const dsNameKeyword =
+    groupMode === DatabaseGroup.dataSource ? (searchValue || '').trim() : '';
+  const isDsNameFiltering = !!dsNameKeyword;
   useEffect(() => {
     tracert.expo('a3112.b41896.c330992');
     // 从外部跳转至sqlworkspace的定位
@@ -290,48 +298,58 @@ const ResourceTree: React.FC<IProps> = function ({
       case DatabaseGroup.project:
       case DatabaseGroup.dataSource:
       case DatabaseGroup.tenant: {
-        return databases.map((groupItem) => {
-          const groupKey = getGroupKey(groupItem.mapId, groupMode);
-          let data, icon;
-          if (groupMode === DatabaseGroup.dataSource) {
-            data = datasourceList.find((d) => d.id === groupItem.mapId);
-            icon = data && <StatusIcon item={data} />;
-          } else if (groupMode === DatabaseGroup.project) {
-            icon = <Icon component={ProjectSvg} />;
-          }
-          return {
-            title: groupItem.groupName,
-            tip: groupItem.tip,
-            key: groupKey,
-            type: GroupNodeToResourceNodeType[groupMode],
-            data: data ?? null,
-            icon: icon ?? null,
-            isLeaf: groupItem.databases.length ? false : true,
-            children: groupItem.databases
-              ?.filter((db: IDatabase) => {
-                return (
-                  !(envs?.length && !envs.includes(db.environment?.id)) &&
-                  !(
-                    connectTypes?.length &&
-                    !connectTypes.includes(db.dataSource?.type)
-                  )
-                );
-              })
-              ?.map((database: IDatabase) => {
-                if (loadedKeys.includes(database.id)) {
-                  const dbId = database.id;
-                  const dbSessionId = sessionIds[dbId];
-                  const dbSession =
-                    sessionManagerStore.sessionMap.get(dbSessionId);
-                  DatabaseDataNodeMap.set(
-                    database.id,
-                    DataBaseTreeData(dbSession, database, database?.id, true)
+        return databases
+          .filter((groupItem) => {
+            // S1 §3 / AC-011：名称过滤仅「按数据源分组」；项目/租户等不过滤一级节点
+            if (groupMode !== DatabaseGroup.dataSource || !dsNameKeyword) {
+              return true;
+            }
+            return (groupItem.groupName || '')
+              .toLowerCase()
+              .includes(dsNameKeyword.toLowerCase());
+          })
+          .map((groupItem) => {
+            const groupKey = getGroupKey(groupItem.mapId, groupMode);
+            let data, icon;
+            if (groupMode === DatabaseGroup.dataSource) {
+              data = datasourceList.find((d) => d.id === groupItem.mapId);
+              icon = data && <StatusIcon item={data} />;
+            } else if (groupMode === DatabaseGroup.project) {
+              icon = <Icon component={ProjectSvg} />;
+            }
+            return {
+              title: groupItem.groupName,
+              tip: groupItem.tip,
+              key: groupKey,
+              type: GroupNodeToResourceNodeType[groupMode],
+              data: data ?? null,
+              icon: icon ?? null,
+              isLeaf: groupItem.databases.length ? false : true,
+              children: groupItem.databases
+                ?.filter((db: IDatabase) => {
+                  return (
+                    !(envs?.length && !envs.includes(db.environment?.id)) &&
+                    !(
+                      connectTypes?.length &&
+                      !connectTypes.includes(db.dataSource?.type)
+                    )
                   );
-                }
-                return DatabaseDataNodeMap.get(database.id);
-              })
-          };
-        });
+                })
+                ?.map((database: IDatabase) => {
+                  if (loadedKeys.includes(database.id)) {
+                    const dbId = database.id;
+                    const dbSessionId = sessionIds[dbId];
+                    const dbSession =
+                      sessionManagerStore.sessionMap.get(dbSessionId);
+                    DatabaseDataNodeMap.set(
+                      database.id,
+                      DataBaseTreeData(dbSession, database, database?.id, true)
+                    );
+                  }
+                  return DatabaseDataNodeMap.get(database.id);
+                })
+            };
+          });
       }
       case DatabaseGroup.cluster:
       case DatabaseGroup.environment:
@@ -392,6 +410,42 @@ const ResourceTree: React.FC<IProps> = function ({
       }
     }
   })();
+
+  const showEnterHint =
+    groupMode === DatabaseGroup.dataSource &&
+    isDsNameFiltering &&
+    treeData?.length > 0;
+
+  /** S2：Enter 定位过滤后第一个可见数据源；空词/无匹配/非数据源分组静默 */
+  const locateFirstMatch = useCallback(() => {
+    if (groupMode !== DatabaseGroup.dataSource) {
+      return;
+    }
+    if (!dsNameKeyword) {
+      return;
+    }
+    const first = treeData?.[0] as TreeDataNode | undefined;
+    if (!first?.key) {
+      return;
+    }
+    setCurrentObject?.({
+      value: first.key,
+      type: first.type
+    });
+    if (first.data?.id != null) {
+      setSelectDatasourceId?.(first.data.id);
+    }
+    setExpandedKeys(Array.from(new Set([...expandedKeys, first.key])));
+    positionResourceByKey(first.key, 100);
+  }, [
+    groupMode,
+    dsNameKeyword,
+    treeData,
+    expandedKeys,
+    setCurrentObject,
+    setSelectDatasourceId,
+    setExpandedKeys
+  ]);
 
   const loadData = useCallback(
     async (treeNode: EventDataNode<any> & TreeDataNode) => {
@@ -506,6 +560,8 @@ const ResourceTree: React.FC<IProps> = function ({
           <DatabaseSearch
             searchValue={searchValue}
             setSearchValue={setSearchValue}
+            showEnterHint={showEnterHint}
+            onEnterLocate={locateFirstMatch}
           />
           {/* {userStore.isPrivateSpace() ? (
             <NewDatasourceButton onSuccess={dataSourceChangeReload}>
@@ -542,6 +598,14 @@ const ResourceTree: React.FC<IProps> = function ({
                 height={wrapperHeight || 1000}
                 selectable={true}
                 selectedKeys={[currentObject?.value].filter(Boolean)}
+              />
+            ) : isDsNameFiltering ? (
+              <Empty
+                image={Empty.PRESENTED_IMAGE_SIMPLE}
+                description={formatMessage({
+                  id: 'src.page.Workspace.SideBar.ResourceTree.NoMatchingDataSource',
+                  defaultMessage: '无匹配数据源'
+                })}
               />
             ) : (
               <DatabaseSelectEmpty showIcon />

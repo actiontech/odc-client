@@ -4784,7 +4784,7 @@
   "src.component.Task.MutipleAsyncTask.components.Template.249655CE": "模版保存成功",
   "src.component.Task.MutipleAsyncTask.components.Template.4ACCCD33": "模版已失效",
   "src.constant.6161DC9D": "数据库变更顺序模板管理",
-  "src.page.Workspace.SideBar.ResourceTree.DatabaseSearch.86200ED0": "搜索",
+  "src.page.Workspace.SideBar.ResourceTree.DatabaseSearch.86200ED0": "过滤数据源",
   "src.constant.311737C9": "删除数据库变更顺序模板\t",
   "src.constant.B8039A65": "多库变更",
   "src.constant.A44EAEF4": "停止多库变更任务",
@@ -6052,5 +6052,7 @@
   "odc.EditorToolBar.actions.sql.ImportFile": "导入文件",
   "odc.EditorToolBar.actions.sql.FileSizeErrorContent": "文件大小不能超过 10MB",
   "odc.EditorToolBar.actions.sql.FileTypeErrorContent": "仅支持 .sql 和 .txt 文件",
-  "odc.EditorToolBar.actions.sql.ReadFileErrorContent": "无法读取文件内容，请检查文件是否损坏"
+  "odc.EditorToolBar.actions.sql.ReadFileErrorContent": "无法读取文件内容，请检查文件是否损坏",
+  "src.page.Workspace.SideBar.ResourceTree.NoMatchingDataSource": "无匹配数据源",
+  "src.page.Workspace.SideBar.ResourceTree.DatabaseSearch.EnterLocateFirst": "定位到第一个匹配的数据源"
 }
