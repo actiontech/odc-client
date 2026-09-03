@@ -15,7 +15,7 @@ interface IProps {
 }
 
 const DatabaseSearch: React.FC<IProps> = (props) => {
-  const { modalStore, setSearchValue, searchValue, settingStore } = props;
+  const { modalStore, setSearchValue, searchValue } = props;
 
   const getShortcut = useMemo(() => {
     let str = '';
@@ -32,14 +32,16 @@ const DatabaseSearch: React.FC<IProps> = (props) => {
       className={styles.searchInput}
       placeholder={formatMessage({
         id: 'src.page.Workspace.SideBar.ResourceTree.DatabaseSearch.86200ED0',
-        defaultMessage: '搜索'
+        defaultMessage: '过滤数据源'
       })}
       size="small"
+      value={searchValue ?? ''}
       onChange={(e) => {
         setSearchValue(e);
       }}
       suffix={getShortcut}
       onSearch={() => {
+        // S1 过渡：Enter 仍开弹窗；S2 再改为定位
         modalStore.changeDatabaseSearchModalVisible(true, {
           initStatus: SearchStatus.forDataSource,
           initSearchKey: searchValue

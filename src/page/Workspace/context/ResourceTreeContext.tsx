@@ -44,6 +44,9 @@ interface IResourceTreeContext {
   pollingDatabase?: () => void;
   groupMode?: DatabaseGroup;
   setGroupMode?: React.Dispatch<React.SetStateAction<DatabaseGroup>>;
+  /** S1/S3：侧栏数据源名过滤词（按数据源分组时生效）；弹窗定位挡住目标时可清空 */
+  dsNameFilterKeyword?: string;
+  setDsNameFilterKeyword?: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const ResourceTreeContext = React.createContext<IResourceTreeContext>({

@@ -131,6 +131,7 @@ const DatabaseTree = function () {
       pollingDatabase={pollingDatabase}
       defaultExpandedKeys={defaultExpandedKeys}
       DatabaseDataNodeMap={allDatabaseDataNodeMap}
+      enableFilter
     />
   );
 };
