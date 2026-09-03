@@ -41,10 +41,14 @@
     }
   }
   .search {
+    /* AC-013：侧栏变窄时整行可收缩，避免输入+⏎+快捷键+放大镜挤爆溢出 */
     flex: 0;
     display: flex;
     padding: 0px 6px 4px 6px;
     align-items: center;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
     .newDataSourceButton {
       flex-shrink: 0;
       flex-grow: 0;
@@ -53,16 +57,35 @@
       width: 23px;
     }
     .searchInput {
-      flex: 1;
+      flex: 1 1 auto;
+      min-width: 0;
+      max-width: 100%;
       height: 25px;
       :global {
         .ant-input-wrapper {
           height: 100%;
+          max-width: 100%;
           .ant-input {
             height: 100%;
+            min-width: 0;
           }
           .ant-input-affix-wrapper {
             height: 100%;
+            display: inline-flex;
+            align-items: center;
+            max-width: 100%;
+            overflow: hidden;
+            .ant-input {
+              flex: 1 1 auto;
+              min-width: 0;
+            }
+            .ant-input-suffix {
+              display: inline-flex;
+              align-items: center;
+              flex-shrink: 0;
+              margin-inline-start: 4px;
+              max-width: none;
+            }
           }
           .ant-input-group-addon {
             height: 100%;
@@ -95,6 +118,19 @@
       border: 1px solid transparent;
       border-radius: 3px;
       font-size: 10px;
+      line-height: 1.4;
+      cursor: default;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .searchMagnifier {
+      cursor: pointer;
+      font-size: 14px;
+      color: var(--icon-color-normal);
+      flex-shrink: 0;
+      &:hover {
+        color: var(--icon-color-focus, var(--text-color-primary));
+      }
     }
   }
   .tree {
