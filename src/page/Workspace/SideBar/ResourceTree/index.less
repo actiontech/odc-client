@@ -41,8 +41,9 @@
     }
   }
   .search {
-    /* AC-013：侧栏变窄时整行可收缩，避免输入+⏎+快捷键+放大镜挤爆溢出 */
-    flex: 0;
+    /* AC-013：横向溢出靠 max-width + overflow 裁剪。basis 必须为 auto：
+       overflow: hidden 会把 min-height: auto 归零，flex-basis: 0% 时整行塌高 */
+    flex: 0 0 auto;
     display: flex;
     padding: 0px 6px 4px 6px;
     align-items: center;
