@@ -6007,5 +6007,6 @@
   "src.component.helpDoc.7F2FDC2E": "Number of automatic retry attempts on lock failure",
   "src.component.Task.AlterDdlTask.CreateModal.1A8336C1": "Retry Attempts on Lock Failure",
   "src.component.Task.AlterDdlTask.CreateModal.A56878AD": "Enter the number of retry attempts on lock failure",
-  "src.page.Workspace.SideBar.ResourceTree.NoMatchingDataSource": "No matching data sources"
+  "src.page.Workspace.SideBar.ResourceTree.NoMatchingDataSource": "No matching data sources",
+  "src.page.Workspace.SideBar.ResourceTree.DatabaseSearch.EnterLocateFirst": "Jump to first matching data source"
 }

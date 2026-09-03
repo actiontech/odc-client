@@ -117,11 +117,13 @@ const ResourceTree: React.FC<IProps> = function ({
     groupMode,
     selectProjectId,
     selectDatasourceId,
+    setSelectDatasourceId,
     shouldExpandedKeys,
     setShouldExpandedKeys,
     setGroupMode,
     datasourceList,
     currentObject,
+    setCurrentObject,
     databaseList,
     reloadDatasourceList,
     reloadDatabaseList,
@@ -409,6 +411,42 @@ const ResourceTree: React.FC<IProps> = function ({
     }
   })();
 
+  const showEnterHint =
+    groupMode === DatabaseGroup.dataSource &&
+    isDsNameFiltering &&
+    treeData?.length > 0;
+
+  /** S2：Enter 定位过滤后第一个可见数据源；空词/无匹配/非数据源分组静默 */
+  const locateFirstMatch = useCallback(() => {
+    if (groupMode !== DatabaseGroup.dataSource) {
+      return;
+    }
+    if (!dsNameKeyword) {
+      return;
+    }
+    const first = treeData?.[0] as TreeDataNode | undefined;
+    if (!first?.key) {
+      return;
+    }
+    setCurrentObject?.({
+      value: first.key,
+      type: first.type
+    });
+    if (first.data?.id != null) {
+      setSelectDatasourceId?.(first.data.id);
+    }
+    setExpandedKeys(Array.from(new Set([...expandedKeys, first.key])));
+    positionResourceByKey(first.key, 100);
+  }, [
+    groupMode,
+    dsNameKeyword,
+    treeData,
+    expandedKeys,
+    setCurrentObject,
+    setSelectDatasourceId,
+    setExpandedKeys
+  ]);
+
   const loadData = useCallback(
     async (treeNode: EventDataNode<any> & TreeDataNode) => {
       const { type, data } = treeNode;
@@ -522,6 +560,8 @@ const ResourceTree: React.FC<IProps> = function ({
           <DatabaseSearch
             searchValue={searchValue}
             setSearchValue={setSearchValue}
+            showEnterHint={showEnterHint}
+            onEnterLocate={locateFirstMatch}
           />
           {/* {userStore.isPrivateSpace() ? (
             <NewDatasourceButton onSuccess={dataSourceChangeReload}>

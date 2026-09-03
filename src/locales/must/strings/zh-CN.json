@@ -6053,5 +6053,6 @@
   "odc.EditorToolBar.actions.sql.FileSizeErrorContent": "文件大小不能超过 10MB",
   "odc.EditorToolBar.actions.sql.FileTypeErrorContent": "仅支持 .sql 和 .txt 文件",
   "odc.EditorToolBar.actions.sql.ReadFileErrorContent": "无法读取文件内容，请检查文件是否损坏",
-  "src.page.Workspace.SideBar.ResourceTree.NoMatchingDataSource": "无匹配数据源"
+  "src.page.Workspace.SideBar.ResourceTree.NoMatchingDataSource": "无匹配数据源",
+  "src.page.Workspace.SideBar.ResourceTree.DatabaseSearch.EnterLocateFirst": "定位到第一个匹配的数据源"
 }
