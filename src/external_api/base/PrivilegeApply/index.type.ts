@@ -25,7 +25,7 @@ export interface IGetPrivilegeApplyAssigneesReply {
 
 export interface ICreatePrivilegeApplyWorkflow {
   db_service_uid: string;
-  source_db_account_uid: string;
+  source_db_account_uid?: string;
   raw_sql: string;
   error_message: string;
   requested_objects?: IPrivilegeObject[];
