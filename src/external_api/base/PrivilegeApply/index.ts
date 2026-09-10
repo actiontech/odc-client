@@ -6,7 +6,7 @@ import {
 } from './index.type';
 
 /**
- * ODC 侧仅保留换发状态查询（S2 Banner）；预检/创建仅由 dms-ui-ee 申请页消费。
+ * ODC 侧仅保留换发状态查询（S2 Banner）；工单在 provision。预检/创建由 dms-ui-ee 申请页消费。
  */
 class PrivilegeApplyService extends ServiceBase {
   public GetPrivilegeApplyWorkflow(
@@ -20,7 +20,7 @@ class PrivilegeApplyService extends ServiceBase {
     delete paramsData.workflow_id;
 
     return this.get<IGetPrivilegeApplyWorkflowReply>(
-      `/v1/dms/projects/${project_uid}/privilege-apply-workflows/${workflow_id}`,
+      `/provision/v1/auth/projects/${project_uid}/privilege_apply_workflows/${workflow_id}`,
       paramsData,
       options
     );
