@@ -53,6 +53,10 @@ import ExecuteHistory from './ExecuteHistory';
 import LintResultTable from './LintResultTable';
 import WorkflowExecuteResult from './WorkflowExecuteResult';
 import WorkflowExecuteError from './WorkflowExecuteError';
+import {
+  PrivilegeApplyEntry,
+  PrivilegeReissueReconnectBanner
+} from './PrivilegeApply';
 import { IWorkflowExecuteInfo } from '@/common/network/sql/preHandle';
 import SQLResultLog from './SQLResultLog';
 import { ResultTabsStyleWrapper } from './style';
@@ -66,6 +70,7 @@ import {
 } from '@actiontech/dms-kit';
 import { getMoreResults } from '@/common/network/sql/executeSQL';
 import { openDMSExportWorkflow } from '@/util/dms/export';
+import type { IPrivilegeDeniedContext } from '@/d.ts';
 
 export const recordsTabKey = 'records';
 export const sqlLintTabKey = 'sqlLint';
@@ -239,6 +244,9 @@ const SQLResultSet: React.FC<IProps> = function (props) {
   const { resultSets: r } = sqlStore;
   const resultSets = r.get(pageKey);
   const currentResultSet = resultSets?.find((set) => set.uniqKey === activeKey);
+  const privilegeDeniedContext: IPrivilegeDeniedContext | undefined =
+    resultSets?.find((set) => set.type === 'LOG')?.currentExecuteInfo
+      ?.privilegeDeniedContext;
   const firstMaskedResultSet = resultSets?.find(
     (set) =>
       set.type !== 'LOG' &&
@@ -629,6 +637,11 @@ const SQLResultSet: React.FC<IProps> = function (props) {
         errorMessage={errorMessage}
         onClose={onCloseError}
       />
+      <PrivilegeApplyEntry
+        context={privilegeDeniedContext}
+        dataSourceName={session?.odcDatabase?.dataSource?.name}
+      />
+      <PrivilegeReissueReconnectBanner context={privilegeDeniedContext} />
       <ResultTabsStyleWrapper
         className="tabs"
         activeKey={activeKey}
