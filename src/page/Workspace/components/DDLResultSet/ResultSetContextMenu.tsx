@@ -18,6 +18,7 @@ import type {
   ContextMenuConfig,
   ContextMenuRenderProps
 } from '@oceanbase-odc/ob-react-data-grid/lib/types';
+import settingStore from '@/store/setting';
 import { Menu } from 'antd';
 import React, { useContext, useEffect, useMemo } from 'react';
 import ResultContext from './ResultContext';
@@ -79,15 +80,25 @@ function ResultSetContextMenu<R>(props: ContextMenuRenderProps<R>) {
     setContextMenuVisible(false);
   };
 
+  // 与格子复制共用 enableResultSetCopy：开态允许行选中/多行渲染 isShowRowSelected（clipMenu）
+  const enableResultSetCopy = settingStore.enableResultSetCopy;
+
   const menuItems = useMemo(() => {
-    if (isSelectMultiRow) {
-      return [];
-    }
-    if (isRowSelected && !isEditing) {
+    if (
+      !enableResultSetCopy &&
+      (isSelectMultiRow || (isRowSelected && !isEditing))
+    ) {
       return [];
     }
     return renderConfigMenuItems(visibleConfig, row, closeMenu);
-  }, [isSelectMultiRow, isRowSelected, isEditing, visibleConfig, row]);
+  }, [
+    enableResultSetCopy,
+    isSelectMultiRow,
+    isRowSelected,
+    isEditing,
+    visibleConfig,
+    row
+  ]);
 
   useEffect(() => {
     if (!menuItems.length) {
