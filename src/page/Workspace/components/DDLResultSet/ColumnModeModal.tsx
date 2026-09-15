@@ -23,8 +23,10 @@ import React, {
   useMemo,
   useRef
 } from 'react';
+import { inject, observer } from 'mobx-react';
 
 import type { ResultSetColumn } from '@/d.ts';
+import type { SettingStore } from '@/store/setting';
 import { LeftSquareOutlined, RightSquareOutlined } from '@ant-design/icons';
 import type {
   DataGridRef,
@@ -47,6 +49,7 @@ interface IProps {
   total: number;
   onClose: () => void;
   setSelectedRowIndex: (rowIdx: number) => void;
+  settingStore?: SettingStore;
 }
 
 interface DataInColumnMode extends RowType {
@@ -80,7 +83,8 @@ const ColumnModeModal: React.FC<IProps> = function (props) {
     total,
     currentIdx,
     setSelectedRowIndex,
-    onClose
+    onClose,
+    settingStore
   } = props;
 
   const resultContext = useContext(ResultContext);
@@ -190,7 +194,9 @@ const ColumnModeModal: React.FC<IProps> = function (props) {
           enableColumnRecord={false}
           enableRowRecord={false}
           readonly={true}
-          onCopy={handleForbidCopy}
+          onCopy={
+            settingStore?.enableResultSetCopy ? undefined : handleForbidCopy
+          }
           contextMenuRender={ResultSetContextMenu}
         />
       </ResultContext.Provider>
@@ -246,4 +252,4 @@ const ColumnModeModal: React.FC<IProps> = function (props) {
   );
 };
 
-export default ColumnModeModal;
+export default inject('settingStore')(observer(ColumnModeModal));
