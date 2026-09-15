@@ -24,6 +24,16 @@ import { addFailedRequest } from './authManage';
 
 const doNotAddAuthRequest = ['v1/dms/sessions'];
 
+declare module 'axios' {
+  interface AxiosRequestConfig {
+    hideErrorNotification?: boolean;
+  }
+}
+
+function shouldHideErrorNotification(config?: AxiosRequestConfig) {
+  return Boolean(config?.hideErrorNotification);
+}
+
 class ApiBase {
   constructor(baseUrl: string = '') {
     let externalApiPrefix = '';
@@ -67,10 +77,11 @@ class ApiBase {
       }
       Download.downloadByCreateElementA(res.data, filename);
     } else if (
-      (res.status === 200 &&
+      !shouldHideErrorNotification(res.config) &&
+      ((res.status === 200 &&
         code !== ResponseCode.SUCCESS &&
         !isFileStreamResponse(res)) ||
-      res.status !== 200
+        res.status !== 200)
     ) {
       const message = await getResponseErrorMessage(res);
       eventEmitter.emit<[NotificationInstanceKeyType, ArgsProps]>(
@@ -96,7 +107,10 @@ class ApiBase {
   private async errorHandle(error: any) {
     if (error?.response?.status === 401) {
       return await this.authInvalid(error.config);
-    } else if (error?.response?.status !== 200) {
+    } else if (
+      error?.response?.status !== 200 &&
+      !shouldHideErrorNotification(error?.config)
+    ) {
       const message = await getResponseErrorMessage(error.response);
       eventEmitter.emit<[NotificationInstanceKeyType, ArgsProps]>(
         EmitterKey.OPEN_GLOBAL_NOTIFICATION,

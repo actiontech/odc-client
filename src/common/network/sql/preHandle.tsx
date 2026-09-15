@@ -3,7 +3,7 @@ import modal from '@/store/modal';
 import sessionManager from '@/store/sessionManager';
 import { IRule } from '@/d.ts/rule';
 import { IUnauthorizedDBResources } from '@/d.ts/table';
-import type { ISqlExecuteResult } from '@/d.ts';
+import type { IPrivilegeDeniedContext, ISqlExecuteResult } from '@/d.ts';
 import { EStatus } from '@/d.ts';
 
 export interface IExecuteSQLParams {
@@ -66,6 +66,7 @@ export interface IExecuteTaskResult {
   errorMessage?: string;
   approvalRequired?: boolean;
   workflowInfo?: IWorkflowExecuteInfo;
+  privilegeDeniedContext?: IPrivilegeDeniedContext;
 }
 
 export function executeSQLPreHandle(
