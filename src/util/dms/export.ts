@@ -145,9 +145,9 @@ export const openDMSExportFromResultSet = (context: {
 
 export const openDMSUrl = (url: string) => {
   const targetWindow = window.top ?? window;
-  const newWindow = targetWindow.open(url, '_blank', 'noopener,noreferrer');
-  if (!newWindow) {
-    targetWindow.location.href = url;
+  const newWindow = targetWindow.open(url, '_blank');
+  if (newWindow) {
+    newWindow.opener = null;
   }
 };
 
