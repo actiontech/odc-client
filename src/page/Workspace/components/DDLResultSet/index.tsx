@@ -68,6 +68,10 @@ import Icon, {
   VerticalRightOutlined
 } from '@ant-design/icons';
 import type { DataGridRef } from '@oceanbase-odc/ob-react-data-grid';
+import {
+  defaultOnCopy,
+  defaultOnCopyCsv
+} from '@oceanbase-odc/ob-react-data-grid';
 import type { CalculatedColumn } from '@oceanbase-odc/ob-react-data-grid/lib/types';
 import { useControllableValue, useUpdate } from 'ahooks';
 import {
@@ -105,6 +109,7 @@ import styles from './index.less';
 import ResultContext from './ResultContext';
 import ResultSetContextMenu from './ResultSetContextMenu';
 import StatusBar from './StatusBar';
+import { copyToSQL, getColumnNameByColumnKey } from './util';
 import Sync from './Sync';
 import {
   BasicInputNumber,
@@ -512,16 +517,80 @@ const DDLResultSet: React.FC<IProps> = function (props) {
         selectedRange?.columnIdx === selectedRange?.endColumnIdx &&
         selectedRange?.rowIdx === selectedRange?.endRowIdx;
       const tableColumns: Partial<ITableColumn>[] = table?.columns;
+      const columnName = getColumnNameByColumnKey(columnKey, columns);
       const column: Partial<ResultSetColumn> = columns?.find((column) => {
         return column?.key === columnKey;
       });
       const isMasked = column?.masked;
       const isSelectedRow = !!gridRef.current?.selectedRows?.size;
+      const enableCopy = settingStore.enableResultSetCopy;
+      const clipMenu = enableCopy
+        ? {
+            key: 'clip',
+            text: formatMessage({
+              id: 'odc.components.DDLResultSet.OutputToShearPlate',
+              defaultMessage: '输出到剪切板'
+            }),
+            isShowRowSelected: true,
+            // 输出到剪切板
+            children: [
+              {
+                key: 'clip-sql',
+                text: 'SQL',
+                // SQL 文件
+                onClick: clipSQL
+              },
+              {
+                key: 'clip-csv',
+                text: 'CSV',
+                // CSV 文件
+                onClick: clipCsv
+              }
+            ]
+          }
+        : null;
+      function copy() {
+        defaultOnCopy(gridRef.current);
+      }
+      function clipSQL() {
+        if (!tableColumns || (!columnName && !isSelectedRow)) {
+          copyToSQL(
+            gridRef.current,
+            columns,
+            undefined,
+            session?.connection?.dialectType,
+            rows
+          );
+        } else {
+          copyToSQL(
+            gridRef.current,
+            columns,
+            table?.tableName,
+            session?.connection?.dialectType,
+            rows
+          );
+        }
+      }
+      function clipCsv() {
+        defaultOnCopyCsv(gridRef.current);
+      }
       if (isSelectedRow) {
-        return [];
+        return [clipMenu].filter(Boolean);
       }
       if (!tableColumns) {
-        return [];
+        return enableCopy
+          ? [
+              {
+                key: 'copy',
+                text: formatMessage({
+                  id: 'odc.components.ConnectionCardList.Copy',
+                  defaultMessage: '复制'
+                }),
+                onClick: copy
+              },
+              clipMenu
+            ].filter(Boolean)
+          : [];
       }
       if (!column) {
         return [];
@@ -534,6 +603,15 @@ const DDLResultSet: React.FC<IProps> = function (props) {
         settingStore.enableDataExport &&
         !isMasked;
       return [
+        enableCopy && {
+          key: 'copy',
+          text: formatMessage({
+            id: 'odc.components.ConnectionCardList.Copy',
+            defaultMessage: '复制'
+          }),
+          onClick: copy
+        },
+        clipMenu,
         isEditing &&
           isSingleSelected && {
             key: 'setnull',
@@ -642,7 +720,7 @@ const DDLResultSet: React.FC<IProps> = function (props) {
         }
       ].filter(Boolean);
     },
-    [table, columns, isEditing, gridRef, downloadObjectData, rows, sessionId]
+    [table, columns, isEditing, gridRef, downloadObjectData, rows, sessionId, session, settingStore]
   );
   const getContextMenuConfig = useCallback(
     function (row: any, column: CalculatedColumn<any, any>) {
@@ -1425,7 +1503,9 @@ const DDLResultSet: React.FC<IProps> = function (props) {
             contextMenuRender={ResultSetContextMenu}
             enableFrozenRow={true}
             pasteFormatter={pasteFormatter}
-            onCopy={handleForbidCopy}
+            onCopy={
+              settingStore.enableResultSetCopy ? undefined : handleForbidCopy
+            }
           />
           <ColumnModeModal
             visible={showColumnMode}

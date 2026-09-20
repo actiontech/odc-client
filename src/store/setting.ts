@@ -111,6 +111,12 @@ export class SettingStore {
   public enableDataExport: boolean = false;
 
   /**
+   * 是否允许 SQL 工作台结果集直接复制及输出为 INSERT/CSV
+   */
+  @observable
+  public enableResultSetCopy: boolean = false;
+
+  /**
    * 多库变更
    */
   @observable
@@ -411,6 +417,8 @@ export class SettingStore {
       Number.MAX_SAFE_INTEGER;
     this.enableDataExport =
       res?.['odc.data.export.enabled'] === 'true' || false;
+    this.enableResultSetCopy =
+      res?.['odc.data.result-set.copy.enabled'] === 'true' || false;
     this.enableOBClient =
       res?.['odc.features.obclient.enabled'] === 'true' && !isMacClient;
     this.maxResultSetRows =

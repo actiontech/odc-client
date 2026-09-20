@@ -120,6 +120,7 @@ export interface IUserConfig {
 // 系统配置
 export interface ISystemConfig {
   'odc.data.export.enabled': string;
+  'odc.data.result-set.copy.enabled': string;
   [key: string]: string;
 }
 
