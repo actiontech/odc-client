@@ -73,7 +73,8 @@ const parser = fs.readFileSync(path.join(packageRoot, 'dist/obmysql/worker/parse
 assertIncludes(parser, 'function getTableReferenceTrigger(text, offset)', 'V1/V2/V3: JOIN table fallback is missing');
 assertIncludes(parser, 'function getJoinAliasColumnCompletion(text, offset, objectName)', 'V9: JOIN alias column fallback is missing');
 assertIncludes(parser, 'String.fromCharCode(10)', 'V9: JOIN alias fallback should avoid newline-sensitive regex source');
-assertIncludes(parser, "tail.replaceAll(',', ' ')", 'V9: JOIN alias fallback token scanner is missing');
+assertIncludes(parser, "scan[cursor] === ','", 'V9/comma: JOIN alias fallback must walk comma-separated FROM tables');
+assertIncludes(parser, 'match = tail.match(/,\\s*', 'V9/comma: table reference trigger must accept comma-after schema.prefix');
 if (parser.match(/function getTableReferenceTrigger\(text, offset\)/g).length !== 1) {
   throw new Error('V1/V2/V3: JOIN table fallback patch is not idempotent');
 }
