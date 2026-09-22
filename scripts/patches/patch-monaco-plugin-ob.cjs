@@ -20,6 +20,27 @@ function write(file, content) {
   fs.writeFileSync(path.join(packageRoot, file), content);
 }
 
+const tableReferenceTrigger = `function getTableReferenceTrigger(text, offset) {
+    const leftText = text.substring(0, offset);
+    const tail = leftText.split(/;|\\n/).pop() || '';
+    if (!/\\b(?:from|(?:left|right|inner|full|cross|straight_join)(?:\\s+outer)?\\s+join|join)\\b/i.test(tail)) {
+        return null;
+    }
+    let match = tail.match(/(?:^|\\s)(?:from|(?:left|right|inner|full|cross|straight_join)(?:\\s+outer)?\\s+join|join)\\s+([\`\\w$]*(?:\\.[\`\\w$]*)?)?$/i);
+    if (!match) {
+        match = tail.match(/,\\s*([\`\\w$]*(?:\\.[\`\\w$]*)?)?$/i);
+    }
+    if (!match) {
+        return null;
+    }
+    const word = (match[1] || '').replace(/\`/g, '');
+    const dotIndex = word.indexOf('.');
+    if (dotIndex > -1) {
+        return { schema: word.substring(0, dotIndex), namePrefix: word.substring(dotIndex + 1) };
+    }
+    return { namePrefix: word };
+}`;
+
 const joinAliasColumnCompletion = `function getJoinAliasColumnCompletion(text, offset, objectName) {
     if (!objectName) {
         return null;
@@ -81,69 +102,94 @@ const joinAliasColumnCompletion = `function getJoinAliasColumnCompletion(text, o
     const fromJoinRe = /(?:^|[^A-Za-z0-9_\`$])((?:FROM|JOIN|UPDATE))\\s+/gi;
     let match;
     let found = null;
+    const stopRe = /^(WHERE|JOIN|LEFT|RIGHT|INNER|FULL|CROSS|STRAIGHT_JOIN|ON|ORDER|GROUP|LIMIT|UNION|HAVING|SET|SELECT)\\b/i;
     while ((match = fromJoinRe.exec(scan)) !== null) {
         let cursor = match.index + match[0].length;
-        while (cursor < scan.length && /\\s/.test(scan[cursor])) {
-            cursor += 1;
-        }
-        if (scan[cursor] === '(') {
-            let depth = 0;
-            const subqueryStart = cursor;
-            for (; cursor < scan.length; cursor += 1) {
-                if (scan[cursor] === '(') {
-                    depth += 1;
-                }
-                else if (scan[cursor] === ')') {
-                    depth -= 1;
-                    if (depth === 0) {
-                        cursor += 1;
-                        break;
-                    }
-                }
-            }
+        while (cursor < scan.length) {
             while (cursor < scan.length && /\\s/.test(scan[cursor])) {
                 cursor += 1;
             }
-            if (/^as\\b/i.test(scan.slice(cursor))) {
-                cursor += 2;
+            if (cursor >= scan.length) {
+                break;
+            }
+            if (scan[cursor] === '(') {
+                let depth = 0;
+                const subqueryStart = cursor;
+                for (; cursor < scan.length; cursor += 1) {
+                    if (scan[cursor] === '(') {
+                        depth += 1;
+                    }
+                    else if (scan[cursor] === ')') {
+                        depth -= 1;
+                        if (depth === 0) {
+                            cursor += 1;
+                            break;
+                        }
+                    }
+                }
                 while (cursor < scan.length && /\\s/.test(scan[cursor])) {
                     cursor += 1;
                 }
+                if (/^as\\b/i.test(scan.slice(cursor))) {
+                    cursor += 2;
+                    while (cursor < scan.length && /\\s/.test(scan[cursor])) {
+                        cursor += 1;
+                    }
+                }
+                let alias = '';
+                while (cursor < scan.length && /[A-Za-z0-9_$]/.test(scan[cursor])) {
+                    alias += scan[cursor];
+                    cursor += 1;
+                }
+                if (alias && alias === objectName && !reserved.has(alias.toUpperCase())) {
+                    const inner = scan.slice(subqueryStart, cursor);
+                    const innerFromMatches = Array.from(inner.matchAll(/\\bFROM\\s+([A-Za-z0-9_$]+(?:\\.[A-Za-z0-9_$]+)?)/gi));
+                    const lastInner = innerFromMatches[innerFromMatches.length - 1];
+                    if (lastInner) {
+                        const parts = lastInner[1].split('.');
+                        const tableName = parts.length > 1 ? parts[1] : parts[0];
+                        const schemaName = parts.length > 1 ? parts[0] : undefined;
+                        found = { type: 'tableColumns', tableName, schemaName };
+                    }
+                }
+                while (cursor < scan.length && /\\s/.test(scan[cursor])) {
+                    cursor += 1;
+                }
+                if (scan[cursor] === ',') {
+                    cursor += 1;
+                    continue;
+                }
+                break;
             }
-            let alias = '';
-            while (cursor < scan.length && /[A-Za-z0-9_$]/.test(scan[cursor])) {
-                alias += scan[cursor];
+            const rest = scan.slice(cursor);
+            if (stopRe.test(rest)) {
+                break;
+            }
+            const tableMatch = rest.match(/^([A-Za-z0-9_$]+(?:\\.[A-Za-z0-9_$]+)?)(?:\\s+(?:AS\\s+)?([A-Za-z0-9_$]+))?/i);
+            if (!tableMatch) {
+                break;
+            }
+            const tableRef = tableMatch[1];
+            const alias = tableMatch[2];
+            const parts = tableRef.split('.');
+            const tableName = parts.length > 1 ? parts[1] : parts[0];
+            const schemaName = parts.length > 1 ? parts[0] : undefined;
+            const names = [tableName, [schemaName, tableName].filter(Boolean).join('.')];
+            if (alias && !reserved.has(alias.toUpperCase())) {
+                names.push(alias);
+            }
+            if (names.includes(objectName)) {
+                found = { type: 'tableColumns', tableName, schemaName };
+            }
+            cursor += tableMatch[0].length;
+            while (cursor < scan.length && /\\s/.test(scan[cursor])) {
                 cursor += 1;
             }
-            if (alias && alias === objectName && !reserved.has(alias.toUpperCase())) {
-                const inner = scan.slice(subqueryStart, cursor);
-                const innerFromMatches = Array.from(inner.matchAll(/\\bFROM\\s+([A-Za-z0-9_$]+(?:\\.[A-Za-z0-9_$]+)?)/gi));
-                const lastInner = innerFromMatches[innerFromMatches.length - 1];
-                if (lastInner) {
-                    const parts = lastInner[1].split('.');
-                    const tableName = parts.length > 1 ? parts[1] : parts[0];
-                    const schemaName = parts.length > 1 ? parts[0] : undefined;
-                    found = { type: 'tableColumns', tableName, schemaName };
-                }
+            if (scan[cursor] === ',') {
+                cursor += 1;
+                continue;
             }
-            continue;
-        }
-        const rest = scan.slice(cursor);
-        const tableMatch = rest.match(/^([A-Za-z0-9_$]+(?:\\.[A-Za-z0-9_$]+)?)(?:\\s+(?:AS\\s+)?([A-Za-z0-9_$]+))?/i);
-        if (!tableMatch) {
-            continue;
-        }
-        const tableRef = tableMatch[1];
-        const alias = tableMatch[2];
-        const parts = tableRef.split('.');
-        const tableName = parts.length > 1 ? parts[1] : parts[0];
-        const schemaName = parts.length > 1 ? parts[0] : undefined;
-        const names = [tableName, [schemaName, tableName].filter(Boolean).join('.')];
-        if (alias && !reserved.has(alias.toUpperCase())) {
-            names.push(alias);
-        }
-        if (names.includes(objectName)) {
-            found = { type: 'tableColumns', tableName, schemaName };
+            break;
         }
     }
     return found;
@@ -356,7 +402,7 @@ function resolve_tableSources(node) {
       content = replaceOnce(
       content,
       `const convertMap = {\n    BEGI: "BEGIN",\n    ENGINE_: 'ENGINE',\n    ERROR_P: 'ERROR',\n    FILEX: 'FILE',\n    NULLX: 'NULL'\n};\n`,
-      `const convertMap = {\n    BEGI: "BEGIN",\n    ENGINE_: 'ENGINE',\n    ERROR_P: 'ERROR',\n    FILEX: 'FILE',\n    NULLX: 'NULL'\n};\nfunction getTableReferenceTrigger(text, offset) {\n    const leftText = text.substring(0, offset);\n    const tail = leftText.split(/;|\\n/).pop() || '';\n    const match = tail.match(/(?:^|\\s)(?:from|(?:left|right|inner|full|cross|straight_join)(?:\\s+outer)?\\s+join|join)\\s+([\`\\w$]*(?:\\.[\`\\w$]*)?)?$/i);\n    if (!match) {\n        return null;\n    }\n    const word = (match[1] || '').replace(/\`/g, '');\n    const dotIndex = word.indexOf('.');\n    if (dotIndex > -1) {\n        return { schema: word.substring(0, dotIndex), namePrefix: word.substring(dotIndex + 1) };\n    }\n    return { namePrefix: word };\n}\nfunction getTableReferenceCompletions(trigger, includeSchemas = true) {\n    const completions = [];\n    completions.push({\n        type: 'allTables',\n        schema: trigger.schema,\n        namePrefix: trigger.namePrefix\n    });\n    if (includeSchemas && !trigger.schema) {\n        completions.push({\n            type: 'allSchemas',\n            namePrefix: trigger.namePrefix\n        });\n    }\n    return completions;\n}
+      `const convertMap = {\n    BEGI: "BEGIN",\n    ENGINE_: 'ENGINE',\n    ERROR_P: 'ERROR',\n    FILEX: 'FILE',\n    NULLX: 'NULL'\n};\nfunction getTableReferenceTrigger(text, offset) {\n    const leftText = text.substring(0, offset);\n    const tail = leftText.split(/;|\\n/).pop() || '';\n    if (!/\\b(?:from|(?:left|right|inner|full|cross|straight_join)(?:\\s+outer)?\\s+join|join)\\b/i.test(tail)) {\n        return null;\n    }\n    let match = tail.match(/(?:^|\\s)(?:from|(?:left|right|inner|full|cross|straight_join)(?:\\s+outer)?\\s+join|join)\\s+([\`\\w$]*(?:\\.[\`\\w$]*)?)?$/i);\n    if (!match) {\n        match = tail.match(/,\\s*([\`\\w$]*(?:\\.[\`\\w$]*)?)?$/i);\n    }\n    if (!match) {\n        return null;\n    }\n    const word = (match[1] || '').replace(/\`/g, '');\n    const dotIndex = word.indexOf('.');\n    if (dotIndex > -1) {\n        return { schema: word.substring(0, dotIndex), namePrefix: word.substring(dotIndex + 1) };\n    }\n    return { namePrefix: word };\n}\nfunction getTableReferenceCompletions(trigger, includeSchemas = true) {\n    const completions = [];\n    completions.push({\n        type: 'allTables',\n        schema: trigger.schema,\n        namePrefix: trigger.namePrefix\n    });\n    if (includeSchemas && !trigger.schema) {\n        completions.push({\n            type: 'allSchemas',\n            namePrefix: trigger.namePrefix\n        });\n    }\n    return completions;\n}
 function getJoinAliasColumnCompletion(text, offset, objectName) {
     if (!objectName) {
         return null;
@@ -444,6 +490,9 @@ function getJoinAliasColumnCompletion(text, offset, objectName) {
 ${joinAliasColumnCompletion}`,
         file
       );
+    }
+    if (content.includes('function getTableReferenceTrigger(text, offset)')) {
+      content = replaceFunction(content, 'getTableReferenceTrigger', tableReferenceTrigger);
     }
     if (content.includes('function getJoinAliasColumnCompletion(text, offset, objectName)')) {
       content = replaceFunction(content, 'getJoinAliasColumnCompletion', joinAliasColumnCompletion);
@@ -550,7 +599,7 @@ ${joinAliasColumnCompletion}`,
 
 function patchWorkerBundle(file) {
   let content = read(file);
-  const aliasHelper = "function $odcJoinAliasColumn(e,t,E){if(!E)return null;let a=\"\";for(let i=0;i<e.length;){const c=e[i];if(c===\"'\"||c==='\"'){const q=c;a+=\" \";i++;while(i<e.length){a+=\" \";if(e[i]===\"\\\\\"){a+=\" \";i+=2;continue}if(e[i]===q){i++;break}i++}continue}if(c===\"-\"&&e[i+1]===\"-\"){while(i<e.length&&e[i]!==String.fromCharCode(10)){a+=\" \";i++}continue}if(c===\"/\"&&e[i+1]===\"*\"){a+=\"  \";i+=2;while(i<e.length&&!(e[i]===\"*\"&&e[i+1]===\"/\")){a+=\" \";i++}if(i<e.length){a+=\"  \";i+=2}continue}a+=e[i];i++}a=a.replaceAll(\"`\",\"\");const s=new Set([\"AS\",\"LEFT\",\"RIGHT\",\"INNER\",\"FULL\",\"CROSS\",\"JOIN\",\"WHERE\",\"ON\",\"ORDER\",\"GROUP\",\"LIMIT\",\"UNION\",\"SELECT\",\"BY\",\"HAVING\",\"SET\"]);const re=/(?:^|[^A-Za-z0-9_`$])((?:FROM|JOIN|UPDATE))\\s+/gi;let m,found=null;while((m=re.exec(a))!==null){let i=m.index+m[0].length;while(i<a.length&&/\\s/.test(a[i]))i++;if(a[i]===\"(\"){let d=0,start=i;for(;i<a.length;i++){if(a[i]===\"(\")d++;else if(a[i]===\")\"){d--;if(d===0){i++;break}}}while(i<a.length&&/\\s/.test(a[i]))i++;if(/^as\\b/i.test(a.slice(i))){i+=2;while(i<a.length&&/\\s/.test(a[i]))i++}let alias=\"\";while(i<a.length&&/[A-Za-z0-9_$]/.test(a[i]))alias+=a[i++];if(alias&&alias===E&&!s.has(alias.toUpperCase())){const inner=a.slice(start,i);const inners=[...inner.matchAll(/\\bFROM\\s+([A-Za-z0-9_$]+(?:\\.[A-Za-z0-9_$]+)?)/gi)];const last=inners[inners.length-1];if(last){const r=last[1].split(\".\"),T=r.length>1?r[1]:r[0],i2=r.length>1?r[0]:void 0;found={type:\"tableColumns\",tableName:T,schemaName:i2}}}continue}const rest=a.slice(i);const tm=rest.match(/^([A-Za-z0-9_$]+(?:\\.[A-Za-z0-9_$]+)?)(?:\\s+(?:AS\\s+)?([A-Za-z0-9_$]+))?/i);if(!tm)continue;const tableRef=tm[1],alias=tm[2],r=tableRef.split(\".\"),T=r.length>1?r[1]:r[0],i2=r.length>1?r[0]:void 0,o=[T,[i2,T].filter(Boolean).join(\".\")];if(alias&&!s.has(alias.toUpperCase()))o.push(alias);if(o.includes(E))found={type:\"tableColumns\",tableName:T,schemaName:i2}}return found}";
+  const aliasHelper = "function $odcJoinAliasColumn(e,t,E){if(!E)return null;let a=\"\";for(let i=0;i<e.length;){const c=e[i];if(c===\"'\"||c==='\"'){const q=c;a+=\" \";i++;while(i<e.length){a+=\" \";if(e[i]===\"\\\\\"){a+=\" \";i+=2;continue}if(e[i]===q){i++;break}i++}continue}if(c===\"-\"&&e[i+1]===\"-\"){while(i<e.length&&e[i]!==String.fromCharCode(10)){a+=\" \";i++}continue}if(c===\"/\"&&e[i+1]===\"*\"){a+=\"  \";i+=2;while(i<e.length&&!(e[i]===\"*\"&&e[i+1]===\"/\")){a+=\" \";i++}if(i<e.length){a+=\"  \";i+=2}continue}a+=e[i];i++}a=a.replaceAll(\"`\",\"\");const s=new Set([\"AS\",\"LEFT\",\"RIGHT\",\"INNER\",\"FULL\",\"CROSS\",\"JOIN\",\"WHERE\",\"ON\",\"ORDER\",\"GROUP\",\"LIMIT\",\"UNION\",\"SELECT\",\"BY\",\"HAVING\",\"SET\"]);const stop=/^(WHERE|JOIN|LEFT|RIGHT|INNER|FULL|CROSS|STRAIGHT_JOIN|ON|ORDER|GROUP|LIMIT|UNION|HAVING|SET|SELECT)\\b/i;const re=/(?:^|[^A-Za-z0-9_`$])((?:FROM|JOIN|UPDATE))\\s+/gi;let m,found=null;while((m=re.exec(a))!==null){let i=m.index+m[0].length;while(i<a.length){while(i<a.length&&/\\s/.test(a[i]))i++;if(i>=a.length)break;if(a[i]===\"(\"){let d=0,start=i;for(;i<a.length;i++){if(a[i]===\"(\")d++;else if(a[i]===\")\"){d--;if(d===0){i++;break}}}while(i<a.length&&/\\s/.test(a[i]))i++;if(/^as\\b/i.test(a.slice(i))){i+=2;while(i<a.length&&/\\s/.test(a[i]))i++}let alias=\"\";while(i<a.length&&/[A-Za-z0-9_$]/.test(a[i]))alias+=a[i++];if(alias&&alias===E&&!s.has(alias.toUpperCase())){const inner=a.slice(start,i);const inners=[...inner.matchAll(/\\bFROM\\s+([A-Za-z0-9_$]+(?:\\.[A-Za-z0-9_$]+)?)/gi)];const last=inners[inners.length-1];if(last){const r=last[1].split(\".\"),T=r.length>1?r[1]:r[0],i2=r.length>1?r[0]:void 0;found={type:\"tableColumns\",tableName:T,schemaName:i2}}}while(i<a.length&&/\\s/.test(a[i]))i++;if(a[i]===\",\"){i++;continue}break}const rest=a.slice(i);if(stop.test(rest))break;const tm=rest.match(/^([A-Za-z0-9_$]+(?:\\.[A-Za-z0-9_$]+)?)(?:\\s+(?:AS\\s+)?([A-Za-z0-9_$]+))?/i);if(!tm)break;const tableRef=tm[1],alias=tm[2],r=tableRef.split(\".\"),T=r.length>1?r[1]:r[0],i2=r.length>1?r[0]:void 0,o=[T,[i2,T].filter(Boolean).join(\".\")];if(alias&&!s.has(alias.toUpperCase()))o.push(alias);if(o.includes(E))found={type:\"tableColumns\",tableName:T,schemaName:i2};i+=tm[0].length;while(i<a.length&&/\\s/.test(a[i]))i++;if(a[i]===\",\"){i++;continue}break}}return found}";
   const aliasPrefixFallbackMysql =
     'var _am=B.substring(0,E).match(/([A-Za-z0-9_$]+)\\.([A-Za-z0-9_$]*)$/);if(_am){var _ac=$odcJoinAliasColumn(B,E,_am[1]);if(_ac)return[_ac]}const L=$odcJoinTableTrigger(B,E);if(L)return $odcJoinCompletions(L);let O;console.log(T),T=null==T?void 0:T.filter((e=>dt.has(e))),T&&(o=T.map((e=>a[e]||e)));const I=_t(N.result);';
   const aliasPrefixFallbackObmysql =
@@ -564,7 +613,8 @@ function patchWorkerBundle(file) {
   const normalizeHelpers = "function $odcNormalizeCmpText(e){if(!e||!e.text||!e.tokens)return e&&e.text;const t=e.text,E=e.start||0,a=e.tokens.filter(e=>0===e.channel&&-1!==e.type),s=[];for(let i=0;i<a.length;i++){const n=a[i],c=n.start-E,r=a[i+1],T=a[i+2];if(\"<\"===n.text&&r&&\"=\"===r.text&&T&&\">\"===T.text&&r.start===n.stop+1&&T.start===r.stop+1){s.push({c:c,f:\"<=>\",t:\"!= \"});i+=2;continue}if(\">\"===n.text&&r&&\"=\"===r.text&&r.start===n.stop+1){s.push({c:c,f:\">=\",t:\"!=\"});i+=1;continue}if(\"<\"===n.text&&r&&\"=\"===r.text&&r.start===n.stop+1){s.push({c:c,f:\"<=\",t:\"!=\"});i+=1;continue}if(\"<>\"===n.text){s.push({c:c,f:\"<>\",t:\"!=\"});continue}if(\">\"===n.text||\"<\"===n.text)s.push({c:c,f:n.text,t:\"=\"})}if(!s.length)return t;let n=t;s.sort((e,t)=>t.c-e.c).forEach(e=>{n=n.slice(0,e.c)+e.t+n.slice(e.c+e.f.length)});return n}function $odcWithNormalizedCmp(e,docFn,delim){const t=$odcNormalizeCmpText(e);return t===e.text?e:(docFn(t,delim).statements||[])[0]||e}";
   const normalizeCmpText = "function $odcNormalizeCmpText(e){if(!e||!e.text||!e.tokens)return e&&e.text;const t=e.text,E=e.start||0,a=e.tokens.filter(e=>0===e.channel&&-1!==e.type),s=[];for(let i=0;i<a.length;i++){const n=a[i],c=n.start-E,r=a[i+1],T=a[i+2];if(\"<\"===n.text&&r&&\"=\"===r.text&&T&&\">\"===T.text&&r.start===n.stop+1&&T.start===r.stop+1){s.push({c:c,f:\"<=>\",t:\"!= \"});i+=2;continue}if(\">\"===n.text&&r&&\"=\"===r.text&&r.start===n.stop+1){s.push({c:c,f:\">=\",t:\"!=\"});i+=1;continue}if(\"<\"===n.text&&r&&\"=\"===r.text&&r.start===n.stop+1){s.push({c:c,f:\"<=\",t:\"!=\"});i+=1;continue}if(\"<>\"===n.text){s.push({c:c,f:\"<>\",t:\"!=\"});continue}if(\">\"===n.text||\"<\"===n.text)s.push({c:c,f:n.text,t:\"=\"})}if(!s.length)return t;let n=t;s.sort((e,t)=>t.c-e.c).forEach(e=>{n=n.slice(0,e.c)+e.t+n.slice(e.c+e.f.length)});return n}";
   const withNormalizedCmp = "function $odcWithNormalizedCmp(e,docFn,delim){const t=$odcNormalizeCmpText(e);return t===e.text?e:(docFn(t,delim).statements||[])[0]||e}";
-  const helperPrefix = "function $odcJoinTableTrigger(e,t){const E=e.substring(0,t).split(/;|\\n/).pop()||\"\",a=E.match(/(?:^|\\s)(?:from|(?:left|right|inner|full|cross|straight_join)(?:\\s+outer)?\\s+join|join)\\s+([`\\w$]*(?:\\.[`\\w$]*)?)?$/i);if(!a)return null;const s=(a[1]||\"\").replace(/`/g,\"\"),n=s.indexOf(\".\");return n>-1?{schema:s.substring(0,n),namePrefix:s.substring(n+1)}:{namePrefix:s}}function $odcJoinCompletions(e,t=!0){const E=[];return E.push({type:\"allTables\",schema:e.schema,namePrefix:e.namePrefix}),t&&!e.schema&&E.push({type:\"allSchemas\",namePrefix:e.namePrefix}),E}";
+  const joinTableTriggerHelper = "function $odcJoinTableTrigger(e,t){const E=e.substring(0,t).split(/;|\\n/).pop()||\"\";if(!/\\b(?:from|(?:left|right|inner|full|cross|straight_join)(?:\\s+outer)?\\s+join|join)\\b/i.test(E))return null;let a=E.match(/(?:^|\\s)(?:from|(?:left|right|inner|full|cross|straight_join)(?:\\s+outer)?\\s+join|join)\\s+([`\\w$]*(?:\\.[`\\w$]*)?)?$/i);if(!a)a=E.match(/,\\s*([`\\w$]*(?:\\.[`\\w$]*)?)?$/i);if(!a)return null;const s=(a[1]||\"\").replace(/`/g,\"\"),n=s.indexOf(\".\");return n>-1?{schema:s.substring(0,n),namePrefix:s.substring(n+1)}:{namePrefix:s}}";
+  const helperPrefix = "function $odcJoinTableTrigger(e,t){const E=e.substring(0,t).split(/;|\\n/).pop()||\"\";if(!/\\b(?:from|(?:left|right|inner|full|cross|straight_join)(?:\\s+outer)?\\s+join|join)\\b/i.test(E))return null;let a=E.match(/(?:^|\\s)(?:from|(?:left|right|inner|full|cross|straight_join)(?:\\s+outer)?\\s+join|join)\\s+([`\\w$]*(?:\\.[`\\w$]*)?)?$/i);if(!a)a=E.match(/,\\s*([`\\w$]*(?:\\.[`\\w$]*)?)?$/i);if(!a)return null;const s=(a[1]||\"\").replace(/`/g,\"\"),n=s.indexOf(\".\");return n>-1?{schema:s.substring(0,n),namePrefix:s.substring(n+1)}:{namePrefix:s}}function $odcJoinCompletions(e,t=!0){const E=[];return E.push({type:\"allTables\",schema:e.schema,namePrefix:e.namePrefix}),t&&!e.schema&&E.push({type:\"allSchemas\",namePrefix:e.namePrefix}),E}";
   const helper = helperPrefix + aliasHelper + normalizeHelpers;
   const mysqlFlattenHelper = 'function $odcFlattenMysqlJoin(e){if(!e)return[];const t=[e];return e.join&&t.push(...$odcFlattenMysqlJoin(e.join)),e.joins&&e.joins.forEach((e=>{t.push(...$odcFlattenMysqlJoin(e))})),t}';
   const withNormalizedMysql =
@@ -582,6 +632,7 @@ function patchWorkerBundle(file) {
         file
       );
     } else {
+      content = replaceFunction(content, '$odcJoinTableTrigger', joinTableTriggerHelper);
       content = replaceFunction(content, '$odcJoinAliasColumn', aliasHelper);
       if (!content.includes('function $odcNormalizeCmpText(')) {
         content = replaceOnce(
