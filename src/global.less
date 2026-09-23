@@ -1,24 +1,35 @@
 @import 'antd/dist/reset.css';
 @import './_variable.less';
 
+/* Digit 0 only: default glyph is slashed zero (Atkinson Hyperlegible, SIL OFL 1.1) */
+@font-face {
+  font-family: 'Atkinson Hyperlegible';
+  src: url('./assets/font/AtkinsonHyperlegible-Regular.woff2') format('woff2'),
+    url('./assets/font/AtkinsonHyperlegible-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  unicode-range: U+0030;
+}
+
 @font-face {
   font-family: 'PlusJakartaSans Medium';
   src: url('./assets/font/PlusJakartaSans-Medium.ttf');
-  unicode-range: U+30-39, U+61-7a, U+41-5a;
+  /* Letters + digits 1-9; U+0030 left to Atkinson Hyperlegible */
+  unicode-range: U+61-7a, U+41-5a, U+31-39;
 }
 
 .font-en-num-medium {
-  font-family: 'PlusJakartaSans Medium', -apple-system, 'Microsoft YaHei',
-    BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans',
-    sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
-    'Noto Color Emoji';
+  font-family: 'Atkinson Hyperlegible', 'PlusJakartaSans Medium', -apple-system,
+    'Microsoft YaHei', BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
+    Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
 body * {
-  font-family: 'PlusJakartaSans Medium', -apple-system, 'Microsoft YaHei',
-    BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans',
-    sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
-    'Noto Color Emoji';
+  font-family: 'Atkinson Hyperlegible', 'PlusJakartaSans Medium', -apple-system,
+    'Microsoft YaHei', BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
+    Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
 /**
