@@ -478,20 +478,39 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
         baseOffset: 0
       });
     }
+    this.applyLintResultAfterExecute(result, sqlToExecute);
+  };
+
+  /**
+   * 已真正执行（executeResult 非空）→ 关掉问题页；拦截未执行且有 lint → 保留问题页。
+   * 不以 violatedRules / hasLintResults 单独决定留问题页（S2 §10.3）。
+   */
+  private applyLintResultAfterExecute = (
+    result: IExecuteTaskResult | undefined,
+    sqlToExecute: string
+  ) => {
+    const { sqlStore, pageKey } = this.props;
+    const hasTrulyExecuted =
+      Array.isArray(result?.executeResult) && result.executeResult.length > 0;
+
+    if (hasTrulyExecuted) {
+      // 复用 hanldeCloseLintPage 语义：清 lint，当前页落结果/日志
+      this.setState({
+        lintResultSet: null,
+        executeOrPreCheckSql: sqlToExecute,
+        sqlChanged: false,
+        errorMessage: null
+      });
+      const firstResultKey = sqlStore.getFirstUnlockedResultKey(pageKey);
+      sqlStore.setActiveTab(
+        pageKey,
+        firstResultKey ? firstResultKey : recordsTabKey
+      );
+      return;
+    }
+
     if (result?.hasLintResults) {
-      if (
-        result?.executeResult &&
-        Array.isArray(result?.executeResult) &&
-        result?.executeResult?.find(
-          (result) => result.status !== ISqlExecuteResultStatus.SUCCESS
-        )
-      ) {
-        const firstResultKey = sqlStore.getFirstUnlockedResultKey(pageKey);
-        sqlStore.setActiveTab(
-          pageKey,
-          firstResultKey ? firstResultKey : recordsTabKey
-        );
-      } else if (result?.status !== EStatus.SUBMIT) {
+      if (result?.status !== EStatus.SUBMIT) {
         sqlStore.setActiveTab(pageKey, sqlLintTabKey);
       }
       this.setState({
@@ -500,16 +519,18 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
         sqlChanged: false,
         errorMessage: null
       });
-    } else {
-      this.setState({
-        baseOffset: 0,
-        lintResultSet: null,
-        executeOrPreCheckSql: sqlToExecute,
-        sqlChanged: false,
-        errorMessage: null
-      });
+      return;
     }
+
+    this.setState({
+      baseOffset: 0,
+      lintResultSet: null,
+      executeOrPreCheckSql: sqlToExecute,
+      sqlChanged: false,
+      errorMessage: null
+    });
   };
+
   // 执行选中的 SQL
   public handleExecuteSelectedSQL = async () => {
     const { sqlStore, pageKey } = this.props;
@@ -582,37 +603,7 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
         baseOffset: range.begin || 0
       });
     }
-    if (results?.hasLintResults) {
-      if (
-        results?.executeResult &&
-        Array.isArray(results?.executeResult) &&
-        results?.executeResult?.find(
-          (result) => result.status !== ISqlExecuteResultStatus.SUCCESS
-        )
-      ) {
-        const firstResultKey = sqlStore.getFirstUnlockedResultKey(pageKey);
-        sqlStore.setActiveTab(
-          pageKey,
-          firstResultKey ? firstResultKey : recordsTabKey
-        );
-      } else if (results?.status !== EStatus.SUBMIT) {
-        sqlStore.setActiveTab(pageKey, sqlLintTabKey);
-      }
-      this.setState({
-        lintResultSet: results?.lintResultSet,
-        executeOrPreCheckSql: selectedSQL,
-        sqlChanged: false,
-        errorMessage: null
-      });
-    } else {
-      this.setState({
-        baseOffset: 0,
-        lintResultSet: null,
-        executeOrPreCheckSql: selectedSQL,
-        sqlChanged: false,
-        errorMessage: null
-      });
-    }
+    this.applyLintResultAfterExecute(results, selectedSQL);
   };
 
   public async saveScript() {
