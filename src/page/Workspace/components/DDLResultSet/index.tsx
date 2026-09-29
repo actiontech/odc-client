@@ -60,6 +60,7 @@ import Icon, {
   EditOutlined,
   ExportOutlined,
   FilterOutlined,
+  InsertRowBelowOutlined,
   MinusOutlined,
   PlusOutlined,
   SyncOutlined,
@@ -82,9 +83,9 @@ import {
   Popover,
   Row,
   Spin,
+  Tooltip,
   Typography
 } from 'antd';
-import BigNumber from 'bignumber.js';
 import {
   cloneDeep,
   debounce,
@@ -103,8 +104,17 @@ import React, {
 } from 'react';
 import type { RowType } from '../EditableTable';
 import EditableTable from '../EditableTable';
+import BatchInsertModal from './BatchInsertModal';
 import ColumnModeModal from './ColumnModeModal';
-import useColumns, { isNumberType } from './hooks/useColumns';
+import {
+  BATCH_INSERT_TIP_SELECT_FIELD,
+  BatchInsertField,
+  collectBatchInsertFields
+} from './hooks/batchInsertUtils';
+import useBatchFillPaste, {
+  formatPasteCellValue
+} from './hooks/useBatchFillPaste';
+import useColumns from './hooks/useColumns';
 import styles from './index.less';
 import ResultContext from './ResultContext';
 import ResultSetContextMenu from './ResultSetContextMenu';
@@ -293,6 +303,14 @@ const DDLResultSet: React.FC<IProps> = function (props) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   /**
+   * 批量插入弹窗
+   */
+  const [batchInsertOpen, setBatchInsertOpen] = useState(false);
+  const [batchInsertFields, setBatchInsertFields] = useState<
+    BatchInsertField[]
+  >([]);
+
+  /**
    * 设置显示的columns，需要重新触发布局
    */
   const setColumnsToDisplay = useCallback(
@@ -445,6 +463,89 @@ const DDLResultSet: React.FC<IProps> = function (props) {
       gridRef.current?.addRows([row]);
     }
   }, [columns, rows, selectedCellRowsKey, gridRef]);
+
+  const getBatchInsertFieldMeta = useCallback(() => {
+    return collectBatchInsertFields({
+      grid: gridRef.current,
+      columnsToDisplay,
+      tableColumns: table?.columns,
+      selectedCellColumnsKey
+    });
+  }, [columnsToDisplay, table?.columns, selectedCellColumnsKey]);
+
+  const batchInsertWritableCount = useMemo(() => {
+    return getBatchInsertFieldMeta().writable.length;
+  }, [getBatchInsertFieldMeta, rows, isEditing]);
+
+  const handleOpenBatchInsert = useCallback(() => {
+    const { writable, skipped } = getBatchInsertFieldMeta();
+    if (!writable.length) {
+      message.warning(BATCH_INSERT_TIP_SELECT_FIELD);
+      return;
+    }
+    if (skipped.length) {
+      message.warning(
+        formatMessage(
+          {
+            id: 'odc.components.DDLResultSet.BatchInsert.SkipReadonlyFields',
+            defaultMessage: '已忽略不可编辑字段：{fields}'
+          },
+          { fields: skipped.map((f) => f.name).join(', ') }
+        )
+      );
+    }
+    setBatchInsertFields(writable);
+    setBatchInsertOpen(true);
+  }, [getBatchInsertFieldMeta]);
+
+  const handleBatchInsertConfirm = useCallback(
+    (newRows: RowType<any>[]) => {
+      const rowsToAdd = newRows.map((row) => ({
+        ...row,
+        _rowIndex: generateUniqKey()
+      }));
+      gridRef.current?.addRows(rowsToAdd);
+      setBatchInsertOpen(false);
+      setBatchInsertFields([]);
+    },
+    [gridRef]
+  );
+
+  const handleBatchInsertCancel = useCallback(() => {
+    setBatchInsertOpen(false);
+    setBatchInsertFields([]);
+  }, []);
+
+  const renderBatchInsertButton = useCallback(() => {
+    const disabled = batchInsertWritableCount === 0;
+    const button = (
+      <ToolbarButton
+        key="batch-insert"
+        text={formatMessage({
+          id: 'odc.components.DDLResultSet.BatchInsert.Title',
+          defaultMessage: '批量插入'
+        })}
+        icon={<InsertRowBelowOutlined />}
+        isShowText
+        disabled={disabled}
+        onClick={handleOpenBatchInsert}
+        aria-label="批量插入"
+      />
+    );
+    if (!disabled) {
+      return button;
+    }
+    return (
+      <Tooltip
+        key="batch-insert-tip"
+        title={BATCH_INSERT_TIP_SELECT_FIELD}
+        placement="bottom"
+      >
+        <span style={{ display: 'inline-flex' }}>{button}</span>
+      </Tooltip>
+    );
+  }, [batchInsertWritableCount, handleOpenBatchInsert]);
+
   const scrollToTop = useCallback(() => {
     gridRef.current?.scrollToRow(0);
   }, [gridRef]);
@@ -720,7 +821,17 @@ const DDLResultSet: React.FC<IProps> = function (props) {
         }
       ].filter(Boolean);
     },
-    [table, columns, isEditing, gridRef, downloadObjectData, rows, sessionId, session, settingStore]
+    [
+      table,
+      columns,
+      isEditing,
+      gridRef,
+      downloadObjectData,
+      rows,
+      sessionId,
+      session,
+      settingStore
+    ]
   );
   const getContextMenuConfig = useCallback(
     function (row: any, column: CalculatedColumn<any, any>) {
@@ -773,24 +884,19 @@ const DDLResultSet: React.FC<IProps> = function (props) {
       column: CalculatedColumn<RowType<any>, any>,
       value: any
     ) {
-      const nativeColumn = columnsToDisplay.find(
-        (item) => item.key === column.key
-      );
-      const originValue = row[column.key];
-      if (!nativeColumn) return originValue;
-      if (isObjectColumn(nativeColumn.columnType)) return originValue;
-      if (isNumberType(nativeColumn.columnType)) {
-        if (!value) {
-          return null;
-        } else {
-          value = new BigNumber(value);
-          return value.isNaN() ? originValue : value.toString();
-        }
-      }
-      return value;
+      return formatPasteCellValue(row, column.key, value, columnsToDisplay)
+        .value;
     },
     [columnsToDisplay]
   );
+
+  useBatchFillPaste({
+    enabled: !!isEditing,
+    gridRef,
+    columnsToDisplay,
+    tableColumns: table?.columns,
+    setEditRows
+  });
   const isInTransaction = session?.transState?.transState === TransState.IDLE;
 
   const updateExecutePlanGuideCache = () => {
@@ -1057,7 +1163,8 @@ const DDLResultSet: React.FC<IProps> = function (props) {
           })}
           icon={<CopyOutlined />}
           onClick={handleCopyRow}
-        />
+        />,
+        renderBatchInsertButton()
       ];
     } else {
       const buttons = [
@@ -1159,7 +1266,8 @@ const DDLResultSet: React.FC<IProps> = function (props) {
           })}
           icon={<CopyOutlined />}
           onClick={handleCopyRow}
-        />
+        />,
+        renderBatchInsertButton()
       ];
     } else {
       return [
@@ -1518,6 +1626,13 @@ const DDLResultSet: React.FC<IProps> = function (props) {
             currentIdx={filterRowIdx}
             total={filterRows?.length}
             useUniqueColumnName={useUniqueColumnName}
+          />
+          <BatchInsertModal
+            open={batchInsertOpen}
+            fields={batchInsertFields}
+            columnsToDisplay={columnsToDisplay}
+            onCancel={handleBatchInsertCancel}
+            onConfirm={handleBatchInsertConfirm}
           />
         </ResultContext.Provider>
       </div>

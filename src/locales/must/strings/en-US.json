@@ -6008,5 +6008,19 @@
   "src.component.Task.AlterDdlTask.CreateModal.1A8336C1": "Retry Attempts on Lock Failure",
   "src.component.Task.AlterDdlTask.CreateModal.A56878AD": "Enter the number of retry attempts on lock failure",
   "src.page.Workspace.SideBar.ResourceTree.NoMatchingDataSource": "No matching data sources",
-  "src.page.Workspace.SideBar.ResourceTree.DatabaseSearch.EnterLocateFirst": "Jump to first matching data source"
+  "src.page.Workspace.SideBar.ResourceTree.DatabaseSearch.EnterLocateFirst": "Jump to first matching data source",
+  "odc.components.DDLResultSet.BatchFill.NoEditableCells": "No editable fields in the selected area",
+  "odc.components.DDLResultSet.BatchFill.SkippedReadonly": "Skipped {count} non-editable cell(s)",
+  "odc.components.DDLResultSet.BatchFill.FormatFailed": "{count} cell(s) were not modified due to invalid format",
+  "odc.components.DDLResultSet.BatchInsert.Title": "Batch Insert",
+  "odc.components.DDLResultSet.BatchInsert.SelectFieldsFirst": "Please select fields to insert first",
+  "odc.components.DDLResultSet.BatchInsert.Hint": "Copy data from a spreadsheet and paste it below. Unselected fields use database defaults on submit.",
+  "odc.components.DDLResultSet.BatchInsert.TooManyColumns": "Pasted data has {actual} columns, but at most {expected} are allowed",
+  "odc.components.DDLResultSet.BatchInsert.FormatError": "Invalid format for \"{column}\" in row {row}",
+  "odc.components.DDLResultSet.BatchInsert.NeedData": "Please enter at least one row of data",
+  "odc.components.DDLResultSet.BatchInsert.Ok": "OK",
+  "odc.components.DDLResultSet.BatchInsert.Cancel": "Cancel",
+  "odc.components.DDLResultSet.BatchInsert.Empty": "Paste or enter data",
+  "odc.components.DDLResultSet.BatchInsert.UnsetPlaceholder": "Unset",
+  "odc.components.DDLResultSet.BatchInsert.SkipReadonlyFields": "Skipped non-editable fields: {fields}"
 }

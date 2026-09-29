@@ -6054,5 +6054,19 @@
   "odc.EditorToolBar.actions.sql.FileTypeErrorContent": "仅支持 .sql 和 .txt 文件",
   "odc.EditorToolBar.actions.sql.ReadFileErrorContent": "无法读取文件内容，请检查文件是否损坏",
   "src.page.Workspace.SideBar.ResourceTree.NoMatchingDataSource": "无匹配数据源",
-  "src.page.Workspace.SideBar.ResourceTree.DatabaseSearch.EnterLocateFirst": "定位到第一个匹配的数据源"
+  "src.page.Workspace.SideBar.ResourceTree.DatabaseSearch.EnterLocateFirst": "定位到第一个匹配的数据源",
+  "odc.components.DDLResultSet.BatchFill.NoEditableCells": "选中区域没有可编辑字段",
+  "odc.components.DDLResultSet.BatchFill.SkippedReadonly": "已跳过 {count} 个不可编辑单元格",
+  "odc.components.DDLResultSet.BatchFill.FormatFailed": "{count} 个单元格因格式不正确未修改",
+  "odc.components.DDLResultSet.BatchInsert.Title": "批量插入",
+  "odc.components.DDLResultSet.BatchInsert.SelectFieldsFirst": "请先选择要插入的字段",
+  "odc.components.DDLResultSet.BatchInsert.Hint": "从表格复制数据后，可直接粘贴到下方区域。未选择的字段提交时使用数据库默认值。",
+  "odc.components.DDLResultSet.BatchInsert.TooManyColumns": "粘贴数据包含 {actual} 列，当前最多允许 {expected} 列",
+  "odc.components.DDLResultSet.BatchInsert.FormatError": "第 {row} 行的“{column}”格式不正确",
+  "odc.components.DDLResultSet.BatchInsert.NeedData": "请至少输入一条数据",
+  "odc.components.DDLResultSet.BatchInsert.Ok": "确定",
+  "odc.components.DDLResultSet.BatchInsert.Cancel": "取消",
+  "odc.components.DDLResultSet.BatchInsert.Empty": "请粘贴或输入数据",
+  "odc.components.DDLResultSet.BatchInsert.UnsetPlaceholder": "未设置",
+  "odc.components.DDLResultSet.BatchInsert.SkipReadonlyFields": "已忽略不可编辑字段：{fields}"
 }
