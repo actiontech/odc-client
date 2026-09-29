@@ -1,2 +1,3 @@
 patchedDependencies:
   '@oceanbase-odc/ob-parser-js@3.0.5': patches/@oceanbase-odc__ob-parser-js@3.0.5.patch
+  '@oceanbase-odc/ob-react-data-grid@4.0.0': patches/@oceanbase-odc__ob-react-data-grid@4.0.0.patch

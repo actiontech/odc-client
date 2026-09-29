@@ -1,0 +1,58 @@
+diff --git a/lib/bundle.js b/lib/bundle.js
+--- a/lib/bundle.js
++++ b/lib/bundle.js
+@@ -1032,11 +1032,12 @@
+         endColumnIdx: columnIdx,
+         endRowIdx: rowIdx
+       };
+-      if (isUpdateIndex) {
++      // Shift keeps the existing anchor (rowIdx/columnIdx); only the end cell moves
++      if (isUpdateIndex && !isShiftClick) {
+         _selectedRange.columnIdx = columnIdx;
+         _selectedRange.rowIdx = rowIdx;
+       }
+-      selectCell(_selectedRange, false, enableEditor);
++      selectCell(_selectedRange, isShiftClick, enableEditor);
+     }
+   }, [selectAllRows, selectColumn, selectRow, selectedRange, selectCell]));
+   return {
+@@ -1756,6 +1757,10 @@
+     const isShiftClick = event.nativeEvent.shiftKey;
+     if (isShiftClick) {
+       event.preventDefault();
++      // Shift+click: extend selectedRange from current anchor to this cell (same selection as drag box-select)
++      if (!isSelectColumn && event.button === 0 && checkIsSelf(event)) {
++        selectCellWrapper(true, false);
++      }
+       return;
+     }
+     if (!((_event$target = event.target) != null && _event$target.closest != null && _event$target.closest('.rdg-cell'))) {
+diff --git a/lib/bundle.cjs b/lib/bundle.cjs
+--- a/lib/bundle.cjs
++++ b/lib/bundle.cjs
+@@ -1036,11 +1036,12 @@
+         endColumnIdx: columnIdx,
+         endRowIdx: rowIdx
+       };
+-      if (isUpdateIndex) {
++      // Shift keeps the existing anchor (rowIdx/columnIdx); only the end cell moves
++      if (isUpdateIndex && !isShiftClick) {
+         _selectedRange.columnIdx = columnIdx;
+         _selectedRange.rowIdx = rowIdx;
+       }
+-      selectCell(_selectedRange, false, enableEditor);
++      selectCell(_selectedRange, isShiftClick, enableEditor);
+     }
+   }, [selectAllRows, selectColumn, selectRow, selectedRange, selectCell]));
+   return {
+@@ -1760,6 +1761,10 @@
+     const isShiftClick = event.nativeEvent.shiftKey;
+     if (isShiftClick) {
+       event.preventDefault();
++      // Shift+click: extend selectedRange from current anchor to this cell (same selection as drag box-select)
++      if (!isSelectColumn && event.button === 0 && checkIsSelf(event)) {
++        selectCellWrapper(true, false);
++      }
+       return;
+     }
+     if (!((_event$target = event.target) != null && _event$target.closest != null && _event$target.closest('.rdg-cell'))) {
