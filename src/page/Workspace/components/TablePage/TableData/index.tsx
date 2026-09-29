@@ -201,10 +201,11 @@ class TableData extends React.Component<
         let type: 'INSERT' | 'UPDATE' | 'DELETE';
         if (row._deleted) {
           type = 'DELETE';
+        } else if (row._created) {
+          // 批量插入/新增行优先 INSERT，避免编辑后被误判为 UPDATE
+          type = 'INSERT';
         } else if (row.modified || row._originRow) {
           type = 'UPDATE';
-        } else if (row._created) {
-          type = 'INSERT';
         }
         if (!type) {
           return null;
