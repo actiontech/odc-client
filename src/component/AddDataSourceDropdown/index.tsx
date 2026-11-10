@@ -24,6 +24,7 @@ import { useMemo } from 'react';
 interface IProps {}
 export default function AddDataSourceDropdown(props: IProps) {
   const dorisConnectTypes = getAllConnectTypes(IDataSourceType.Doris);
+  const clickHouseConnectTypes = getAllConnectTypes(IDataSourceType.ClickHouse);
   const mysqlConnectTypes = getAllConnectTypes(IDataSourceType.MySQL);
   const obConnectTypes = getAllConnectTypes(IDataSourceType.OceanBase);
   const result: ItemType[] = useMemo(() => {
@@ -49,6 +50,12 @@ export default function AddDataSourceDropdown(props: IProps) {
         key: t
       });
     });
+    clickHouseConnectTypes.forEach((t) => {
+      result.push({
+        label: ConnectTypeText(t),
+        key: t
+      });
+    });
     result.push({
       label: formatMessage({
         id: 'odc.src.component.AddDataSourceDropdown.BatchImport',
@@ -57,7 +64,12 @@ export default function AddDataSourceDropdown(props: IProps) {
       key: 'batchImport'
     });
     return result;
-  }, [dorisConnectTypes, mysqlConnectTypes, obConnectTypes]);
+  }, [
+    dorisConnectTypes,
+    clickHouseConnectTypes,
+    mysqlConnectTypes,
+    obConnectTypes
+  ]);
   return (
     <Dropdown
       menu={{

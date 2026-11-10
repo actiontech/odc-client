@@ -80,6 +80,12 @@ export const objectTypeConfig = {
   [ConnectType.MYSQL]: mysqlObjectType,
   [ConnectType.DORIS]: mysqlObjectType,
   [ConnectType.GBASE_8A]: mysqlObjectType,
+  // ClickHouse schema plugin exposes database / table (S3 §2 / AC-003).
+  [ConnectType.ClickHouse]: [
+    DbObjectType.database,
+    DbObjectType.table,
+    DbObjectType.column
+  ],
   [ConnectType.PG]: pgObjectType,
   // GaussDB / openGauss expose the same searchable objects as native PostgreSQL
   // (table / column / function / view / trigger). Without this entry the search

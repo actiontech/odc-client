@@ -1,4 +1,5 @@
 pids
+.playwright-cli/
 logs
 node_modules
 npm-debug.log

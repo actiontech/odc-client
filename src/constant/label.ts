@@ -132,6 +132,7 @@ export const ConnectTypeText = (type: ConnectType) => {
     [ConnectType.DORIS]: 'Doris',
     [ConnectType.TIDB]: 'TiDB',
     [ConnectType.GBASE_8A]: 'GBase-8a',
+    [ConnectType.ClickHouse]: 'ClickHouse',
     [ConnectType.ORACLE]: 'Oracle',
     [ConnectType.PG]: 'PostgreSQL',
     [ConnectType.OSS]: formatMessage({

@@ -53,6 +53,7 @@ export enum IDataSourceType {
   PG = 'postgresql',
   GaussDB = 'gaussdb',
   GBase8a = 'gbase8a',
+  ClickHouse = 'clickhouse',
   ALIYUNOSS = 'ALIYUNOSS',
   QCLOUD = 'QCLOUD',
   HUAWEI = 'HUAWEI',

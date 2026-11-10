@@ -74,6 +74,7 @@ const NewDatasourceButton: React.FC<{
     ...(getAllConnectTypes(IDataSourceType.OceanBase) || []),
     ...(getAllConnectTypes(IDataSourceType.MySQL) || []),
     ...(getAllConnectTypes(IDataSourceType.Doris) || []),
+    ...(getAllConnectTypes(IDataSourceType.ClickHouse) || []),
     ...(getAllConnectTypes(IDataSourceType.Oracle) || []),
     ...(getAllConnectTypes(IDataSourceType.PG) || []),
     ...(getAllConnectTypes(IDataSourceType.ALIYUNOSS) || []),
