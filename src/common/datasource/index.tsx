@@ -27,6 +27,7 @@ import TiDB from './tidb';
 import PG from './pg';
 import GaussDB from './gaussdb';
 import GBase8a from './gbase8a';
+import ClickHouse from './clickhouse';
 import DM from './dm';
 import KingBase from './kingbase';
 import Hana from './hana';
@@ -186,6 +187,17 @@ const _styles = {
       component: DBGBase8aSvg
     }
   },
+  // ClickHouse reuses MySQL svg assets to avoid shipping new binaries (same
+  // restraint as GaussDB→PG). Dedicated registry keeps type identity / grouping.
+  [IDataSourceType.ClickHouse]: {
+    icon: {
+      component: MySQLSvg,
+      color: '#fceb02'
+    },
+    dbIcon: {
+      component: DBMySQLSvg
+    }
+  },
   [IDataSourceType.ALIYUNOSS]: {
     icon: {
       component: OSSSvg,
@@ -298,6 +310,7 @@ const _gruops = {
   [IDataSourceType.PG]: DatasourceGroup.OtherDatabase,
   [IDataSourceType.GaussDB]: DatasourceGroup.OtherDatabase,
   [IDataSourceType.GBase8a]: DatasourceGroup.OtherDatabase,
+  [IDataSourceType.ClickHouse]: DatasourceGroup.OtherDatabase,
   [IDataSourceType.ALIYUNOSS]: DatasourceGroup.FileSystem,
   [IDataSourceType.AWSS3]: DatasourceGroup.FileSystem,
   [IDataSourceType.HUAWEI]: DatasourceGroup.FileSystem,
@@ -364,6 +377,7 @@ function initDatasource() {
   register(IDataSourceType.PG, PG);
   register(IDataSourceType.GaussDB, GaussDB);
   register(IDataSourceType.GBase8a, GBase8a);
+  register(IDataSourceType.ClickHouse, ClickHouse);
   register(IDataSourceType.ALIYUNOSS, FileSystem.ALIYUN);
   register(IDataSourceType.AWSS3, FileSystem.AWSS3);
   register(IDataSourceType.HUAWEI, FileSystem.HUAWEI);

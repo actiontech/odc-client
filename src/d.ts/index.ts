@@ -770,6 +770,8 @@ export enum ConnectionMode {
   PG = 'POSTGRESQL',
   GAUSSDB = 'GAUSSDB',
   GBASE_8A = 'GBASE_8A',
+  // Wire value must match backend DialectType / ConnectType.name() = ClickHouse
+  ClickHouse = 'ClickHouse',
   ORACLE = 'ORACLE',
   OB_MYSQL = 'OB_MYSQL',
   OB_ORACLE = 'OB_ORACLE',
@@ -3587,6 +3589,8 @@ export enum ConnectType {
   PG = 'POSTGRESQL',
   GAUSSDB = 'GAUSSDB',
   GBASE_8A = 'GBASE_8A',
+  // Product / DMS / ODC backend wire value is literally "ClickHouse"
+  ClickHouse = 'ClickHouse',
   ORACLE = 'ORACLE',
   OSS = 'OSS',
   COS = 'COS',
