@@ -87,7 +87,13 @@ export function encryptConnection<T>(connection: T) {
 }
 
 export function isConnectionModeBeMySQLType(dbMode: ConnectionMode) {
-  return [ConnectionMode.MYSQL, ConnectionMode.OB_MYSQL].includes(dbMode);
+  // ClickHouse: `;` split + MySQL-style `--` / `/* */` comments (align backend SqlCommentProcessor).
+  // Needed so SQL console "run current statement" selects the right slice for CREATE/INSERT/SELECT.
+  return [
+    ConnectionMode.MYSQL,
+    ConnectionMode.OB_MYSQL,
+    ConnectionMode.ClickHouse
+  ].includes(dbMode);
 }
 
 /**

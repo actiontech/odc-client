@@ -188,7 +188,9 @@ class DataTypes {
     // KingBase (oracle mode) reuses Oracle data types for column extra / DDL UI.
     [ConnectionMode.KINGBASE]: OracleDataTypes,
     // GBase-8a is MySQL-wire; reuse MySQL data types for column extras.
-    [ConnectionMode.GBASE_8A]: MySQLDataTypes
+    [ConnectionMode.GBASE_8A]: MySQLDataTypes,
+    // ClickHouse: approximate MySQL data-type helpers for column extras when present.
+    [ConnectionMode.ClickHouse]: MySQLDataTypes
   };
   public getParamsCount(mode: ConnectionMode, dataTypeName: string) {
     if (!dataTypeName) {
