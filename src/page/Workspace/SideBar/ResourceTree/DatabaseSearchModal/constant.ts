@@ -92,6 +92,7 @@ export const objectTypeConfig = {
   [ConnectType.SQL_SERVER]: sqlServerObjectType,
   [ConnectType.HANA]: hanaObjectType,
   [ConnectType.HIVE]: [DbObjectType.table, DbObjectType.column],
+  [ConnectType.CLICKHOUSE]: [DbObjectType.table, DbObjectType.column],
   [ConnectType.DB2]: mysqlObjectType,
   SEARCH_OBJECT_FROM_ALL_DATABASE: oracleObjectType
 };
