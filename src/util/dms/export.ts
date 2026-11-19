@@ -151,6 +151,22 @@ export const openDMSUrl = (url: string) => {
   }
 };
 
+/**
+ * ODC dataSource.name 常为 `project:dsName`；DMS 创建页 tips 按裸 `dsName` 匹配。
+ * 解析出 DMS 侧数据源名，同时保留完整名给项目解析。
+ */
+const resolveDmsInstanceName = (
+  dataSourceName?: string
+): string | undefined => {
+  if (!dataSourceName) {
+    return dataSourceName;
+  }
+  if (!dataSourceName.includes(':')) {
+    return dataSourceName;
+  }
+  return dataSourceName.split(':').slice(1).join(':') || dataSourceName;
+};
+
 export const openDMSExportWorkflow = (params: {
   dataSourceName: string;
   schemaName?: string;
@@ -160,7 +176,7 @@ export const openDMSExportWorkflow = (params: {
   const { dataSourceName, schemaName, sql, desc } = params;
   const url = generateDMSExportUrl({
     sql,
-    instanceName: dataSourceName,
+    instanceName: resolveDmsInstanceName(dataSourceName),
     schemaName,
     desc,
     projectName: getDMSProjectNameByDatasourceName(dataSourceName)
