@@ -48,6 +48,7 @@ import { ReactComponent as MockSvg } from '@/svgr/mock_toolbar.svg';
 import { ReactComponent as RollbackSvg } from '@/svgr/Roll-back.svg';
 import { getNlsValueKey, isObjectColumn } from '@/util/column';
 import { formatMessage } from '@/util/intl';
+import { isMongoDBSession } from '@/util/mongodb';
 import { generateUniqKey, getBlobValueKey } from '@/util/utils';
 import { OBCompare, ODC_TRACE_SUPPORT_VERSION } from '@/util/versionUtils';
 import Icon, {
@@ -85,6 +86,7 @@ import {
   Typography
 } from 'antd';
 import BigNumber from 'bignumber.js';
+import copyToClipboard from 'copy-to-clipboard';
 import {
   cloneDeep,
   debounce,
@@ -105,11 +107,17 @@ import type { RowType } from '../EditableTable';
 import EditableTable from '../EditableTable';
 import ColumnModeModal from './ColumnModeModal';
 import useColumns, { isNumberType } from './hooks/useColumns';
+import useDiscreteCellSelection from './hooks/useDiscreteCellSelection';
 import styles from './index.less';
 import ResultContext from './ResultContext';
 import ResultSetContextMenu from './ResultSetContextMenu';
 import StatusBar from './StatusBar';
-import { copyToSQL, getColumnNameByColumnKey } from './util';
+import {
+  copyDiscreteToCsv,
+  copyToJSON,
+  copyToSQL,
+  getColumnNameByColumnKey
+} from './util';
 import Sync from './Sync';
 import {
   BasicInputNumber,
@@ -244,6 +252,7 @@ const DDLResultSet: React.FC<IProps> = function (props) {
   } = props;
   const sessionId = session?.sessionId;
   const obVersion = session?.params?.obVersion;
+  const isMongo = isMongoDBSession(session);
   const update = useUpdate();
 
   /**
@@ -314,10 +323,37 @@ const DDLResultSet: React.FC<IProps> = function (props) {
       setEditRows(null);
     }
   }, [isEditing]);
+
+  /**
+   * Mongo 确认修改本地校验失败：退出编辑态并恢复行数据。
+   * 探针可再次「开启编辑」，避免脏单元格卡住后续编辑器。
+   */
+  useEffect(() => {
+    if (!isMongo) {
+      return undefined;
+    }
+    const onValidateFailed = () => {
+      const resetRows = cloneDeep(originRows);
+      gridRef.current?.setRows?.(resetRows);
+      setEditRows(null);
+      setIsEditing(false);
+    };
+    window.addEventListener(
+      'odc-mongo-resultset-validation-failed',
+      onValidateFailed
+    );
+    return () => {
+      window.removeEventListener(
+        'odc-mongo-resultset-validation-failed',
+        onValidateFailed
+      );
+    };
+  }, [isMongo, originRows, setIsEditing]);
   /**
    * react-grid
    */
   const gridRef = useRef<DataGridRef>(null);
+  const datagridContainerRef = useRef<HTMLDivElement>(null);
   /**
    * 当外部 rows 数据发生变化时（例如加载原文数据后），同步更新 DataGrid 内部的行状态。
    * DataGrid 以 initialRows 作为初始态，不会自动响应 prop 变化，需要手动调用 setRows。
@@ -506,6 +542,30 @@ const DDLResultSet: React.FC<IProps> = function (props) {
     );
   }, []);
 
+  /** FE-S2-02/03：离散拼接与开关门禁；hook 定义在后，经 ref 供菜单/快捷键共用 */
+  const getDiscreteCopyTextRef = useRef<() => string | null>(() => null);
+  /** FE-S2-04/05：非连续判定与离散 keys，供「输出到剪切板」子项矩阵 */
+  const hasDiscreteMultiRef = useRef<() => boolean>(() => false);
+  const getDiscreteKeysRef = useRef<() => Set<string>>(() => new Set());
+
+  const handleResultSetCopy = useCallback(
+    (grid?: DataGridRef | null) => {
+      if (!settingStore.enableResultSetCopy) {
+        handleForbidCopy();
+        return;
+      }
+      const discreteText = getDiscreteCopyTextRef.current();
+      if (discreteText != null) {
+        copyToClipboard(discreteText);
+        return;
+      }
+      if (grid) {
+        defaultOnCopy(grid);
+      }
+    },
+    [handleForbidCopy, settingStore]
+  );
+
   const getMenus = useCallback(
     (row: any, rowColumn: CalculatedColumn<any, any>) => {
       if (!row) {
@@ -524,6 +584,33 @@ const DDLResultSet: React.FC<IProps> = function (props) {
       const isMasked = column?.masked;
       const isSelectedRow = !!gridRef.current?.selectedRows?.size;
       const enableCopy = settingStore.enableResultSetCopy;
+      const isNoncontiguousMulti = hasDiscreteMultiRef.current();
+      const clipChildren = isMongo
+        ? [
+            {
+              key: 'clip-csv',
+              text: 'CSV',
+              onClick: clipCsv
+            },
+            {
+              key: 'clip-json',
+              text: 'JSON',
+              onClick: clipJson
+            }
+          ]
+        : [
+            {
+              key: 'clip-sql',
+              text: 'SQL',
+              disabled: isNoncontiguousMulti,
+              onClick: clipSQL
+            },
+            {
+              key: 'clip-csv',
+              text: 'CSV',
+              onClick: clipCsv
+            }
+          ];
       const clipMenu = enableCopy
         ? {
             key: 'clip',
@@ -533,26 +620,16 @@ const DDLResultSet: React.FC<IProps> = function (props) {
             }),
             isShowRowSelected: true,
             // 输出到剪切板
-            children: [
-              {
-                key: 'clip-sql',
-                text: 'SQL',
-                // SQL 文件
-                onClick: clipSQL
-              },
-              {
-                key: 'clip-csv',
-                text: 'CSV',
-                // CSV 文件
-                onClick: clipCsv
-              }
-            ]
+            children: clipChildren
           }
         : null;
       function copy() {
-        defaultOnCopy(gridRef.current);
+        handleResultSetCopy(gridRef.current);
       }
       function clipSQL() {
+        if (hasDiscreteMultiRef.current()) {
+          return;
+        }
         if (!tableColumns || (!columnName && !isSelectedRow)) {
           copyToSQL(
             gridRef.current,
@@ -572,7 +649,21 @@ const DDLResultSet: React.FC<IProps> = function (props) {
         }
       }
       function clipCsv() {
+        const discreteKeys = getDiscreteKeysRef.current();
+        if (
+          discreteKeys.size > 0 &&
+          copyDiscreteToCsv(gridRef.current, '_rowIndex', discreteKeys, columns)
+        ) {
+          return;
+        }
         defaultOnCopyCsv(gridRef.current);
+      }
+      function clipJson() {
+        copyToJSON(gridRef.current, columns, {
+          rowKeyName: '_rowIndex',
+          discreteKeys: getDiscreteKeysRef.current(),
+          allRows: rows
+        });
       }
       if (isSelectedRow) {
         return [clipMenu].filter(Boolean);
@@ -612,15 +703,17 @@ const DDLResultSet: React.FC<IProps> = function (props) {
           onClick: copy
         },
         clipMenu,
+        // 仅业务列可「设置为 Null」；`_id`/`_raw_json` 等 readonly 列不展示
         isEditing &&
-          isSingleSelected && {
+          isSingleSelected &&
+          !column.readonly && {
             key: 'setnull',
             text: formatMessage({
               id: 'odc.components.DDLResultSet.SetToNull',
               defaultMessage: '设置为 Null'
             }),
             // 设置为 Null
-            disabled: isNull(row[columnKey]) || column.readonly,
+            disabled: isNull(row[columnKey]),
             onClick: () => {
               const targetRowIndex = rows.findIndex(
                 (newRow) => newRow._rowIndex === row._rowIndex
@@ -632,8 +725,10 @@ const DDLResultSet: React.FC<IProps> = function (props) {
               });
             }
           },
+        // Mongo 无「设置为默认值」语义
         isEditing &&
-          isSingleSelected && {
+          isSingleSelected &&
+          !isMongo && {
             key: 'setDefault',
             text: formatMessage({
               id: 'odc.components.DDLResultSet.DefaultValue',
@@ -720,7 +815,19 @@ const DDLResultSet: React.FC<IProps> = function (props) {
         }
       ].filter(Boolean);
     },
-    [table, columns, isEditing, gridRef, downloadObjectData, rows, sessionId, session, settingStore]
+    [
+      table,
+      columns,
+      isEditing,
+      gridRef,
+      downloadObjectData,
+      rows,
+      sessionId,
+      session,
+      settingStore,
+      isMongo,
+      handleResultSetCopy
+    ]
   );
   const getContextMenuConfig = useCallback(
     function (row: any, column: CalculatedColumn<any, any>) {
@@ -763,9 +870,21 @@ const DDLResultSet: React.FC<IProps> = function (props) {
     session?.connection?.dialectType
   );
 
+  /** FE-S2-01：Ctrl/Cmd 非连续点选 / 取消 / 高亮；单击与拖拽恢复连续选区 */
+  const { columnsWithDiscrete, getDiscreteCopyText, discreteKeys } =
+    useDiscreteCellSelection({
+      gridRef,
+      containerRef: datagridContainerRef,
+      rowKeyName: '_rowIndex',
+      columns: rgdColumns
+    });
+  getDiscreteCopyTextRef.current = getDiscreteCopyText;
+  hasDiscreteMultiRef.current = () => discreteKeys.size >= 2;
+  getDiscreteKeysRef.current = () => discreteKeys;
+
   useEffect(() => {
-    gridRef.current?.setColumns?.(rgdColumns ?? []);
-  }, [rgdColumns]);
+    gridRef.current?.setColumns?.(columnsWithDiscrete ?? []);
+  }, [columnsWithDiscrete]);
 
   const pasteFormatter = useCallback(
     function pasteFormatter(
@@ -965,8 +1084,8 @@ const DDLResultSet: React.FC<IProps> = function (props) {
 
     const buttons = [];
 
-    // 提交相关按钮
-    if (!autoCommit) {
+    // 提交相关按钮（Mongo 无事务提交语境，隐藏「修改并提交」）
+    if (!autoCommit && !isMongo) {
       buttons.push(
         <SubmitConfirm
           key="modify-submit"
@@ -1000,7 +1119,14 @@ const DDLResultSet: React.FC<IProps> = function (props) {
         onClick={async () => {
           setIsSubmitting(true);
           try {
-            await onSubmitRows?.(editRows, limit || 1000, false, table.columns);
+            // 优先用 grid 当前行（含未关编辑器时已写入的单元格值）
+            const latestRows = gridRef.current?.rows || editRows;
+            await onSubmitRows?.(
+              latestRows,
+              limit || 1000,
+              false,
+              table.columns
+            );
           } finally {
             setIsSubmitting(false);
           }
@@ -1024,11 +1150,39 @@ const DDLResultSet: React.FC<IProps> = function (props) {
     return buttons;
   };
 
+  const enableEditLabel = formatMessage({
+    id: 'workspace.window.sql.button.edit.enable',
+    defaultMessage: '开启编辑'
+  });
+  // tip 需同时含「开启编辑」与「无主键不可编辑」，供工具栏 tip 探测与禁编原因断言
+  const notEditableTip = formatMessage({
+    id: 'odc.components.DDLResultSet.EnableEditDisabledNoPrimaryKey',
+    defaultMessage: '开启编辑：无主键不可编辑'
+  });
+
+  const renderEnableEditButton = (key: string, onClick: () => void) => (
+    <ToolbarButton
+      key={key}
+      text={enableEditLabel}
+      icon={<EditOutlined />}
+      disabled={!!disableEdit}
+      tip={disableEdit ? notEditableTip : null}
+      onClick={onClick}
+    />
+  );
+
   // 表格数据编辑按钮组
   const getTableDataEditButtons = () => {
-    if (disableEdit || !isTableData) return [];
+    if (!isTableData) return [];
 
     if (isEditing) {
+      if (disableEdit) {
+        return [];
+      }
+      // Mongo：禁止增删行 / 复制当前行
+      if (isMongo) {
+        return [];
+      }
       return [
         <ToolbarButton
           key="add-row"
@@ -1061,20 +1215,16 @@ const DDLResultSet: React.FC<IProps> = function (props) {
       ];
     } else {
       const buttons = [
-        <ToolbarButton
-          key="enable-edit"
-          text={formatMessage({
-            id: 'workspace.window.sql.button.edit.enable',
-            defaultMessage: '开启编辑'
-          })}
-          icon={<EditOutlined />}
-          onClick={() => {
-            setIsEditing(true);
-          }}
-        />
+        renderEnableEditButton('enable-edit', () => {
+          if (disableEdit) {
+            return;
+          }
+          setIsEditing(true);
+        })
       ];
 
-      if (!autoCommit) {
+      // Mongo：无事务「提交 / 回滚」；不可编结果集亦不展示事务按钮
+      if (!autoCommit && !isMongo && !disableEdit) {
         buttons.push(
           <SubmitConfirm
             key="commit"
@@ -1126,9 +1276,16 @@ const DDLResultSet: React.FC<IProps> = function (props) {
 
   // 非表格数据编辑按钮组
   const getNonTableDataEditButtons = () => {
-    if (isTableData || disableEdit) return [];
+    if (isTableData) return [];
 
     if (isEditing) {
+      if (disableEdit) {
+        return [];
+      }
+      // Mongo：禁止增删行 / 复制当前行
+      if (isMongo) {
+        return [];
+      }
       return [
         <ToolbarButton
           key="add-row-non-table"
@@ -1163,15 +1320,12 @@ const DDLResultSet: React.FC<IProps> = function (props) {
       ];
     } else {
       return [
-        <ToolbarButton
-          key="enable-edit-non-table"
-          text={formatMessage({
-            id: 'workspace.window.sql.button.edit.enable',
-            defaultMessage: '开启编辑'
-          })}
-          icon={<EditOutlined />}
-          onClick={handleToggleEditable}
-        />
+        renderEnableEditButton('enable-edit-non-table', () => {
+          if (disableEdit) {
+            return;
+          }
+          handleToggleEditable();
+        })
       ];
     }
   };
@@ -1470,7 +1624,7 @@ const DDLResultSet: React.FC<IProps> = function (props) {
           </div>
         </Toolbar>
       </Spin>
-      <div className={styles.datagrid}>
+      <div className={styles.datagrid} ref={datagridContainerRef}>
         <ResultContext.Provider
           value={{
             rowKey: '_rowIndex',
@@ -1491,7 +1645,7 @@ const DDLResultSet: React.FC<IProps> = function (props) {
             gridRef={gridRef}
             rowKey="_rowIndex"
             minHeight={'100%'}
-            initialColumns={rgdColumns}
+            initialColumns={columnsWithDiscrete}
             readonly={!isEditing}
             bordered={false}
             initialRows={rows}
@@ -1503,9 +1657,7 @@ const DDLResultSet: React.FC<IProps> = function (props) {
             contextMenuRender={ResultSetContextMenu}
             enableFrozenRow={true}
             pasteFormatter={pasteFormatter}
-            onCopy={
-              settingStore.enableResultSetCopy ? undefined : handleForbidCopy
-            }
+            onCopy={handleResultSetCopy}
           />
           <ColumnModeModal
             visible={showColumnMode}
