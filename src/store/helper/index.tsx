@@ -44,7 +44,13 @@ export function generateResultSetColumns(
             columnIndex: index,
             columnComment: field.columnComment,
             internal: field.internal,
-            readonly: field.editable === false,
+            // Mongo：后端对 `_id`/`_raw_json` 下发 editable=false；再按列名/展示名兜底
+            readonly:
+              field.editable === false ||
+              field.columnName === '_id' ||
+              field.columnLabel === '_id' ||
+              field.columnName === '_raw_json' ||
+              field.columnLabel === '_raw_json',
             masked: field.masked,
             tableName: field.tableName
           };

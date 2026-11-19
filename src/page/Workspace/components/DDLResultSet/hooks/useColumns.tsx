@@ -17,6 +17,7 @@
 import { ConnectionMode, ResultSetColumn } from '@/d.ts';
 import { isNlsColumn, isObjectColumn } from '@/util/column';
 import { isConnectionModeBeOracleSqlFamily } from '@/util/connection';
+import type { EditorProps } from '@oceanbase-odc/ob-react-data-grid';
 import { isNil, isString, isUndefined } from 'lodash';
 import React, { useMemo } from 'react';
 import {
@@ -31,6 +32,20 @@ import { TextEditor } from '../../EditableTable/Editors/TextEditor';
 import BlobFormatter from './components/BlobFormatter';
 import TextFormatter from './components/TextFormatter';
 import styles from './index.less';
+
+/** `_id` 列：打开只读编辑器，禁止改值（兼容探测「editorOpened + immutable」） */
+function IdReadOnlyEditor<T>({ row, column }: EditorProps<T>) {
+  const value = row?.[column.key];
+  return (
+    <input
+      className="rdg-text-editor"
+      readOnly
+      disabled
+      value={value == null ? '' : String(value)}
+      style={{ width: '100%' }}
+    />
+  );
+}
 
 export default function useColumns(
   columns: ResultSetColumn[],
@@ -58,6 +73,16 @@ export default function useColumns(
       const isNls = isNlsColumn(column.columnType, dbMode);
       const isMasked = column.masked;
       const isNlsAndMasked = isNls && isMasked;
+      const isIdColumn = column.columnName === '_id' || column.name === '_id';
+      const isRawJsonColumn =
+        column.columnName === '_raw_json' || column.name === '_raw_json';
+      // Phase-4 AC-EDIT-005：`_raw_json` 强制不可进入编辑；`_id` 另挂只读 editor
+      const columnEditable =
+        !column.readonly &&
+        !isIdColumn &&
+        !isRawJsonColumn &&
+        isColumnEditable(column.columnType) &&
+        !isNlsAndMasked;
       return {
         key: column.key,
         name: column.name,
@@ -71,13 +96,16 @@ export default function useColumns(
         sortable: isNlsColumn(column.columnType, dbMode) ? false : true,
         filterable: isNlsColumn(column.columnType, dbMode) ? false : true,
         /**
-         * 时间列脱敏之后不允许编辑，避免数据结构对不上
+         * 时间列脱敏之后不允许编辑，避免数据结构对不上。
+         * `_id`：挂只读 editor（disabled/readonly），双击可打开但不可改值。
+         * `_raw_json`：不挂 editor，禁止进入编辑（FE-S1-05）。
          */
-        editable:
-          !column.readonly &&
-          isColumnEditable(column.columnType) &&
-          !isNlsAndMasked,
-        editor: getEditor(column.columnType, dbMode),
+        editable: isIdColumn ? true : columnEditable,
+        editor: isIdColumn
+          ? IdReadOnlyEditor
+          : columnEditable
+          ? getEditor(column.columnType, dbMode)
+          : undefined,
         formatter: getCellFormatter(
           column.columnType,
           enableEdit,
