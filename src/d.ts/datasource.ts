@@ -64,5 +64,6 @@ export enum IDataSourceType {
   MongoDB = 'mongodb',
   Redis = 'redis',
   HIVE = 'HIVE',
-  DB2 = 'DB2'
+  DB2 = 'DB2',
+  ClickHouse = 'clickhouse'
 }

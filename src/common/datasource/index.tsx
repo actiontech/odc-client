@@ -34,6 +34,7 @@ import MongoDB from './mongodb';
 import Redis from './redis';
 import Hive from './hive';
 import DB2 from './db2';
+import ClickHouse from './clickhouse';
 import FileSystem from './fileSystem';
 import { ReactComponent as OBSvg } from '@/svgr/source_ob.svg';
 import { ReactComponent as DBOBSvg } from '@/svgr/database_oceanbase.svg';
@@ -286,6 +287,17 @@ const _styles = {
     dbIcon: {
       component: DBDB2Svg
     }
+  },
+  // ClickHouse reuses generic database SVG assets (same strategy as Hive);
+  // ConnectType must stay CLICKHOUSE — never alias MySQL/Hive/Doris.
+  [IDataSourceType.ClickHouse]: {
+    icon: {
+      component: MongoDBSvg,
+      color: '#FFCC00'
+    },
+    dbIcon: {
+      component: DBMongoDBSvg
+    }
   }
 };
 
@@ -309,7 +321,8 @@ const _gruops = {
   [IDataSourceType.MongoDB]: DatasourceGroup.OtherDatabase,
   [IDataSourceType.Redis]: DatasourceGroup.OtherDatabase,
   [IDataSourceType.HIVE]: DatasourceGroup.OtherDatabase,
-  [IDataSourceType.DB2]: DatasourceGroup.OtherDatabase
+  [IDataSourceType.DB2]: DatasourceGroup.OtherDatabase,
+  [IDataSourceType.ClickHouse]: DatasourceGroup.OtherDatabase
 };
 
 export const connectType2Ds: Map<ConnectType, IDataSourceType> = new Map();
@@ -376,6 +389,7 @@ function initDatasource() {
   register(IDataSourceType.Redis, Redis);
   register(IDataSourceType.HIVE, Hive);
   register(IDataSourceType.DB2, DB2);
+  register(IDataSourceType.ClickHouse, ClickHouse);
 }
 
 function getAllConnectTypes(ds?: IDataSourceType): ConnectType[] {
