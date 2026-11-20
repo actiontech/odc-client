@@ -234,16 +234,23 @@ export default function useDiscreteCellSelection<
         return;
       }
 
-      const rowNodes = Array.from(
-        root.querySelectorAll('.rdg-row:not(.rdg-header-row)')
-      );
-      const rowIdx = rowNodes.indexOf(rowEl);
-      if (rowIdx < 0) {
-        return;
-      }
-      const cellNodes = Array.from(rowEl.querySelectorAll('.rdg-cell'));
-      const columnIdx = cellNodes.indexOf(cellEl);
-      if (columnIdx < 0) {
+      // AC-HF-006：用 aria-* 映射数据模型下标；禁止 DOM 可见行 indexOf（虚拟滚动会错行）
+      const rowIdxAttr = cellEl.getAttribute('aria-rowindex');
+      const colIdxAttr = cellEl.getAttribute('aria-colindex');
+      const rowIdx =
+        rowIdxAttr != null && rowIdxAttr !== ''
+          ? parseInt(rowIdxAttr, 10)
+          : Number.NaN;
+      const columnIdx =
+        colIdxAttr != null && colIdxAttr !== ''
+          ? parseInt(colIdxAttr, 10) - 1
+          : Number.NaN;
+      if (
+        !Number.isFinite(rowIdx) ||
+        rowIdx < 0 ||
+        !Number.isFinite(columnIdx) ||
+        columnIdx < 0
+      ) {
         return;
       }
 
