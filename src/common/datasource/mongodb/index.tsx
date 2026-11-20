@@ -30,7 +30,7 @@ const items: Record<ConnectType.MONGODB, IDataSourceModeConfig> = {
       disableURLParse: true
     },
     features: {
-      task: [TaskType.ASYNC],
+      task: [TaskType.ASYNC, TaskType.EXPORT_RESULT_SET],
       obclient: false,
       recycleBin: false,
       plRun: false,

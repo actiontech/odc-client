@@ -47,7 +47,8 @@ export const EditableTableStyleWrapper = styled(DataGrid)`
         theme.sharedTheme.uiToken.colorFillTertiary} !important;
     }
 
-    .rdg-cell-selected {
+    .rdg-cell-selected,
+    .odc-cell-discrete-selected {
       background-color: ${({ theme }) =>
         theme.sharedTheme.basic.colorPrimaryBgHover} !important;
 
