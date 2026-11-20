@@ -867,7 +867,8 @@ const DDLResultSet: React.FC<IProps> = function (props) {
     isEditing,
     !!sqlId,
     originRows,
-    session?.connection?.dialectType
+    session?.connection?.dialectType,
+    isMongo
   );
 
   /** FE-S2-01：Ctrl/Cmd 非连续点选 / 取消 / 高亮；单击与拖拽恢复连续选区 */

@@ -52,7 +52,9 @@ export default function useColumns(
   enableEdit: boolean,
   supportBlob: boolean,
   originRows: any[],
-  dbMode: ConnectionMode
+  dbMode: ConnectionMode,
+  /** AC-HF-005：仅 Mongo 对 `_id` 挂只读 editor；关系库同名列可正常编辑 */
+  isMongo: boolean = false
 ) {
   const rows = originRows?.slice(0, 30) || [];
   const maxRowsLength = {};
@@ -73,13 +75,14 @@ export default function useColumns(
       const isNls = isNlsColumn(column.columnType, dbMode);
       const isMasked = column.masked;
       const isNlsAndMasked = isNls && isMasked;
-      const isIdColumn = column.columnName === '_id' || column.name === '_id';
+      const isMongoIdColumn =
+        isMongo && (column.columnName === '_id' || column.name === '_id');
       const isRawJsonColumn =
         column.columnName === '_raw_json' || column.name === '_raw_json';
-      // Phase-4 AC-EDIT-005：`_raw_json` 强制不可进入编辑；`_id` 另挂只读 editor
+      // Phase-4 AC-EDIT-005：`_raw_json` 强制不可进入编辑；Mongo `_id` 另挂只读 editor
       const columnEditable =
         !column.readonly &&
-        !isIdColumn &&
+        !isMongoIdColumn &&
         !isRawJsonColumn &&
         isColumnEditable(column.columnType) &&
         !isNlsAndMasked;
@@ -97,11 +100,12 @@ export default function useColumns(
         filterable: isNlsColumn(column.columnType, dbMode) ? false : true,
         /**
          * 时间列脱敏之后不允许编辑，避免数据结构对不上。
-         * `_id`：挂只读 editor（disabled/readonly），双击可打开但不可改值。
+         * Mongo `_id`：挂只读 editor（disabled/readonly），双击可打开但不可改值。
+         * 关系库 `_id`：不走只读特例，跟随 column.readonly / editable。
          * `_raw_json`：不挂 editor，禁止进入编辑（FE-S1-05）。
          */
-        editable: isIdColumn ? true : columnEditable,
-        editor: isIdColumn
+        editable: isMongoIdColumn ? true : columnEditable,
+        editor: isMongoIdColumn
           ? IdReadOnlyEditor
           : columnEditable
           ? getEditor(column.columnType, dbMode)
@@ -114,7 +118,7 @@ export default function useColumns(
         )
       };
     });
-  }, [columns, enableEdit]);
+  }, [columns, enableEdit, isMongo]);
 }
 
 function isColumnEditable(columnType) {
