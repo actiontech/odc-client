@@ -778,6 +778,7 @@ export enum ConnectionMode {
   KINGBASE = 'KINGBASE',
   HANA = 'HANA',
   DB2 = 'DB2',
+  CLICKHOUSE = 'CLICKHOUSE',
   ALL = 'ALL',
   UNKNOWN = 'UNKNOWN'
 }
@@ -3599,7 +3600,8 @@ export enum ConnectType {
   MONGODB = 'MONGODB',
   REDIS = 'REDIS',
   HIVE = 'HIVE',
-  DB2 = 'DB2'
+  DB2 = 'DB2',
+  CLICKHOUSE = 'CLICKHOUSE'
 }
 
 export enum DatasourceGroup {

@@ -154,7 +154,8 @@ export const ConnectTypeText = (type: ConnectType) => {
     }),
     [ConnectType.KINGBASE]: 'KingBase',
     [ConnectType.HANA]: 'SAP HANA',
-    [ConnectType.DB2]: 'DB2'
+    [ConnectType.DB2]: 'DB2',
+    [ConnectType.CLICKHOUSE]: 'ClickHouse'
   };
   return textMap?.[type];
 };
