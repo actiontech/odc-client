@@ -400,36 +400,43 @@ function wrapDataDML(
     return data;
   }
 
-  // `_raw_json` 仅只读展示，禁止进入变更 units（AC-EDIT-005 / FE-S1-05）
-  return columns
-    .filter((column) => column?.columnName !== '_raw_json')
-    .map((column) => {
-      const uniqueColumnName = column?.columnName;
-      const blobExt: LobExt = row[getBlobValueKey(uniqueColumnName)];
-      const nlsObject: INlsObject = row[getNlsValueKey(uniqueColumnName)];
-      const initNlsObject: INlsObject =
-        initialRow?.[getNlsValueKey(uniqueColumnName)];
-      let oldData = initialRow ? initialRow[uniqueColumnName] : null;
-      let newData = blobExt ? blobExt.info : row[uniqueColumnName];
-      if (initNlsObject) {
-        oldData = getServerDateformat(initNlsObject, column?.dataType);
-      }
-      if (nlsObject) {
-        newData = getServerDateformat(nlsObject, column?.dataType);
-      }
-      return {
-        tableName,
-        columnName: column.columnName,
-        columnType: column.dataType,
-        newData,
-        oldData,
-        newDataType: blobExt?.type || RSModifyDataType.RAW,
-        useDefault:
-          typeof row[uniqueColumnName] === 'undefined' &&
-          column.columnName !== 'ROWID',
-        primaryKey: column.primaryKey
-      };
-    });
+  // AC-HF-011：继续下发未变更 `_raw_json`（供后端类型保真）；禁止前端改写其内容。
+  // 列仍只读不可编辑；若误改，以 UI 校验拦截，此处原样透传。
+  return columns.map((column) => {
+    const uniqueColumnName = column?.columnName;
+    const blobExt: LobExt = row[getBlobValueKey(uniqueColumnName)];
+    const nlsObject: INlsObject = row[getNlsValueKey(uniqueColumnName)];
+    const initNlsObject: INlsObject =
+      initialRow?.[getNlsValueKey(uniqueColumnName)];
+    let oldData = initialRow ? initialRow[uniqueColumnName] : null;
+    let newData = blobExt ? blobExt.info : row[uniqueColumnName];
+    if (initNlsObject) {
+      oldData = getServerDateformat(initNlsObject, column?.dataType);
+    }
+    if (nlsObject) {
+      newData = getServerDateformat(nlsObject, column?.dataType);
+    }
+    // `_raw_json`：强制 oldData/newData 一致，禁止网络层改写内容
+    if (column?.columnName === '_raw_json') {
+      const raw = initialRow
+        ? initialRow[uniqueColumnName]
+        : row[uniqueColumnName];
+      oldData = raw;
+      newData = raw;
+    }
+    return {
+      tableName,
+      columnName: column.columnName,
+      columnType: column.dataType,
+      newData,
+      oldData,
+      newDataType: blobExt?.type || RSModifyDataType.RAW,
+      useDefault:
+        typeof row[uniqueColumnName] === 'undefined' &&
+        column.columnName !== 'ROWID',
+      primaryKey: column.primaryKey
+    };
+  });
 }
 
 export async function downloadDataObject(
