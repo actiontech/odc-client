@@ -74,6 +74,14 @@ export function TextEditor<T>({
               onRowChange(row, true);
               e.preventDefault();
             }
+            // Enter 提交单元格（Shift+Enter 换行），对齐结果集确认前取值
+            if (e.key === 'Enter' && !e.shiftKey) {
+              onRowChange(
+                { ...row, [key]: (e.target as HTMLTextAreaElement).value },
+                true
+              );
+              e.preventDefault();
+            }
           }}
           style={{ width: Math.max(width, 200), height: 68 }}
           value={value}

@@ -61,6 +61,7 @@ import { isConnectionModeBeMySQLType } from '@/util/connection';
 import { isLogicalDatabase } from '@/util/database';
 import utils, { EHighLight } from '@/util/editor';
 import { formatMessage } from '@/util/intl';
+import { isMongoDBSession } from '@/util/mongodb';
 import notification from '@/util/notification';
 import { splitSqlForHighlight } from '@/util/sql';
 import { generateAndDownloadFile, getCurrentSQL } from '@/util/utils';
@@ -139,6 +140,81 @@ interface IProps {
   onChangeSaved?: (pageKey: string) => void;
   onSetUnsavedModalTitle?: (title: string) => void;
   onSetUnsavedModalContent?: (title: string) => void;
+}
+
+function looksLikeJsonText(value: any): boolean {
+  if (typeof value !== 'string') {
+    return false;
+  }
+  const trimmed = value.trim();
+  return trimmed.startsWith('{') || trimmed.startsWith('[');
+}
+
+/**
+ * Mongo 确认修改前本地校验（Phase-4）：
+ * - 仅业务列 JSON 合法性
+ * - `_id` / `_raw_json` 只读防御（不得进入变更集）
+ */
+function validateMongoResultSetEdits(
+  newRows: any[],
+  columns: { key: string; columnName: string }[],
+  originRows: any[]
+): string | null {
+  if (!columns?.length) {
+    return null;
+  }
+  const idColumn = columns.find((c) => c.columnName === '_id');
+  const rawColumn = columns.find((c) => c.columnName === '_raw_json');
+
+  for (let i = 0; i < newRows?.length; i++) {
+    const row = newRows[i];
+    if (!row || (!row.modified && !row._originRow)) {
+      continue;
+    }
+    const origin = originRows?.[i] || {};
+
+    // `_raw_json` 只读：任何变更均拦截（废止整文档写回）
+    if (rawColumn && row[rawColumn.key] !== origin[rawColumn.key]) {
+      return formatMessage({
+        id: 'odc.components.SQLPage.RawJsonColumnReadonly',
+        defaultMessage: '_raw_json 列只读，不可修改'
+      });
+    }
+
+    for (const column of columns) {
+      if (column.columnName === '_id' || column.columnName === '_raw_json') {
+        continue;
+      }
+      const nextVal = row[column.key];
+      const prevVal = origin[column.key];
+      if (nextVal === prevVal) {
+        continue;
+      }
+
+      if (looksLikeJsonText(nextVal) || looksLikeJsonText(prevVal)) {
+        if (nextVal != null && typeof nextVal === 'string') {
+          try {
+            JSON.parse(nextVal);
+          } catch (e) {
+            return formatMessage({
+              id: 'odc.components.SQLPage.InvalidJsonValue',
+              defaultMessage:
+                '字段值不是合法 JSON，禁止提交（请检查嵌套字段与 _id）'
+            });
+          }
+        }
+      }
+    }
+
+    // 防御：即便 _id 列误开编辑，也不允许提交变更
+    if (idColumn && row[idColumn.key] !== origin[idColumn.key]) {
+      return formatMessage({
+        id: 'odc.components.SQLPage.IdColumnReadonly',
+        defaultMessage: '_id 列只读，不可修改'
+      });
+    }
+  }
+  return null;
 }
 
 @inject(
@@ -868,12 +944,34 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
 
   public onUpdateEditing = (resultSetIndex: number, editing: boolean) => {
     const resultSets = this.props.sqlStore.resultSets.get(this.props.pageKey);
-    this.setState({
-      editingMap: {
-        ...this.state.editingMap,
-        [resultSets[resultSetIndex].uniqKey]: editing
+    const editingMap = {
+      ...this.state.editingMap,
+      [resultSets[resultSetIndex].uniqKey]: editing
+    };
+    this.setState({ editingMap });
+    // 结果集编辑态：锁定并隐藏 Monaco inputarea，避免与单元格编辑器抢焦点/被自动化误选
+    const anyEditing = Object.values(editingMap).some(Boolean);
+    try {
+      this.editor?.updateOptions?.({ readOnly: !!anyEditing });
+      const textarea = this.editor
+        ?.getDomNode?.()
+        ?.querySelector?.('textarea.inputarea') as HTMLTextAreaElement | null;
+      if (textarea) {
+        if (anyEditing) {
+          textarea.setAttribute('readonly', 'true');
+          textarea.setAttribute('disabled', 'true');
+          textarea.dataset.odcResultsetEditing = '1';
+          textarea.style.visibility = 'hidden';
+        } else {
+          textarea.removeAttribute('readonly');
+          textarea.removeAttribute('disabled');
+          delete textarea.dataset.odcResultsetEditing;
+          textarea.style.visibility = '';
+        }
       }
-    });
+    } catch (e) {
+      // ignore editor lock failures
+    }
   };
 
   public handleUnLockResultSet = (key: string) => {
@@ -893,14 +991,24 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
     autoCommit: boolean,
     columnList: ITableColumn[],
     dbName: string
-  ) => {
+  ): Promise<boolean> => {
     const { sqlStore, pageKey } = this.props;
     const resultSets = sqlStore.resultSets.get(pageKey);
+    const session = this.getSession();
+    const isMongo = isMongoDBSession(session);
 
     if (resultSets) {
       const resultSet = resultSets[resultSetIndex]; // 尝试从 结果集是否可编辑接口 中获取表名（存储在每个字段中）
 
-      const tableName = columnList[0]?.tableName || '';
+      const tableName =
+        resultSet?.resultSetMetaData?.table?.tableName ||
+        columnList?.[0]?.tableName ||
+        '';
+      const schemaName =
+        dbName ||
+        resultSet?.resultSetMetaData?.table?.databaseName ||
+        session?.database?.dbName ||
+        '';
       let tipToShow = '';
       /**
        * 校验空行
@@ -924,11 +1032,55 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
 
               // 请不要提交空行
             );
-            return;
+            return false;
           }
         }
       }
-      const editRows = newRows
+
+      // 网格偶发未打 modified 标记时，按单元格差异补齐，便于本地校验与生成
+      const rowsForSave = (newRows || []).map((row, i) => {
+        if (
+          !row ||
+          row.modified ||
+          row._originRow ||
+          row._deleted ||
+          row._created
+        ) {
+          return row;
+        }
+        const origin = resultSet.rows?.[i];
+        if (!origin || !resultSet.columns?.length) {
+          return row;
+        }
+        const changed = resultSet.columns.some(
+          (column) => row[column.key] !== origin[column.key]
+        );
+        return changed ? { ...row, modified: true } : row;
+      });
+
+      if (isMongo) {
+        const mongoValidateError = validateMongoResultSetEdits(
+          rowsForSave,
+          resultSet.columns,
+          resultSet.rows
+        );
+        if (mongoValidateError) {
+          // duration 加长，便于连续探针读到拦截文案
+          message.error(mongoValidateError, 10);
+          try {
+            (document.activeElement as HTMLElement)?.blur?.();
+            // 通知结果集网格回滚非法单元格，避免后续探针被脏值卡住
+            window.dispatchEvent(
+              new CustomEvent('odc-mongo-resultset-validation-failed')
+            );
+          } catch (e) {
+            // ignore
+          }
+          return false;
+        }
+      }
+
+      let editRows = rowsForSave
         .map((row, i) => {
           let type: 'INSERT' | 'UPDATE' | 'DELETE';
           if (row._deleted) {
@@ -940,16 +1092,32 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
           } else {
             return null;
           }
+          // Mongo 仅支持 UPDATE
+          if (isMongo && type !== 'UPDATE') {
+            return null;
+          }
           return {
             type,
             row: wrapRow(row, resultSet.columns),
             initialRow: wrapRow(resultSet.rows[i], resultSet.columns),
             enableRowId:
-              this.getSession()?.supportFeature?.enableRowId &&
+              !isMongo &&
+              session?.supportFeature?.enableRowId &&
               type !== 'INSERT'
           };
         })
         .filter(Boolean);
+
+      if (isMongo && !editRows?.length) {
+        message.warning(
+          formatMessage({
+            id: 'odc.TablePage.TableData.NoContentToSubmit',
+            defaultMessage: '无内容可提交'
+          })
+        );
+        return false;
+      }
+
       if (!editRows?.length) {
         message.warning(
           formatMessage({
@@ -957,21 +1125,28 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
             defaultMessage: '无内容可提交'
           }) // 无内容可提交
         );
-        return;
+        return false;
       }
+
+      const whereColumns = isMongo
+        ? resultSet.whereColumns?.includes('_id')
+          ? resultSet.whereColumns
+          : ['_id']
+        : resultSet.whereColumns;
+
       const res = await batchGetDataModifySQL(
-        dbName,
+        schemaName,
         tableName,
         columnList,
         true,
         editRows,
-        this.getSession()?.sessionId,
-        this.getSession()?.database?.dbName,
-        resultSet.whereColumns
+        session?.sessionId,
+        session?.database?.dbName,
+        whereColumns
       );
 
       if (!res) {
-        return;
+        return false;
       }
 
       let { sql, tip } = res;
@@ -986,10 +1161,11 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
             defaultMessage: '无内容可提交'
           }) // 无内容可提交
         );
-        return;
+        return false;
       }
 
-      if (autoCommit) {
+      // Mongo：禁止拼接 commit;
+      if (autoCommit && !isMongo) {
         sql = sql + '\ncommit;';
       }
 
@@ -1000,7 +1176,9 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
         tipToShow,
         resultSetIndex
       });
+      return true;
     }
+    return false;
   };
 
   public handleExecuteDataDML = async () => {
@@ -1074,14 +1252,15 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
       }
       if (!errorResult) {
         let msg;
+        const mongoSession = isMongoDBSession(this.getSession());
 
-        if (this.getSession()?.params?.autoCommit) {
+        if (this.getSession()?.params?.autoCommit || mongoSession) {
           msg = formatMessage({
             id: 'odc.components.SQLPage.SubmittedSuccessfully',
             defaultMessage: '提交成功'
           });
 
-          // 提交成功
+          // 提交成功（Mongo 无事务，写回即生效）
         } else if (!/commit;$/.test(this.state.updateDataDML)) {
           msg = formatMessage({
             id: 'odc.components.SQLPage.TheModificationIsSuccessfulAnd',
