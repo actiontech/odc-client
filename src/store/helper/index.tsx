@@ -44,12 +44,9 @@ export function generateResultSetColumns(
             columnIndex: index,
             columnComment: field.columnComment,
             internal: field.internal,
-            // AC-HF-005：不得按列名把所有库的 `_id` 锁只读；Mongo `_id` 靠后端 editable=false。
-            // `_raw_json` 为 Mongo 专用只读列，名称兜底保留（AC-EDIT-005）。
-            readonly:
-              field.editable === false ||
-              field.columnName === '_raw_json' ||
-              field.columnLabel === '_raw_json',
+            // AC-HF-005 / AC-HF-012：不得按列名把所有库的 `_id` / `_raw_json` 锁只读；
+            // Mongo 侧依赖后端下发 editable=false。
+            readonly: field.editable === false,
             masked: field.masked,
             tableName: field.tableName
           };

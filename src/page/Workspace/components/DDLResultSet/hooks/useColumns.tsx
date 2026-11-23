@@ -77,9 +77,11 @@ export default function useColumns(
       const isNlsAndMasked = isNls && isMasked;
       const isMongoIdColumn =
         isMongo && (column.columnName === '_id' || column.name === '_id');
+      // AC-HF-012：`_raw_json` 只读仅作用于 Mongo；关系库同名列跟随后端 editable
       const isRawJsonColumn =
-        column.columnName === '_raw_json' || column.name === '_raw_json';
-      // Phase-4 AC-EDIT-005：`_raw_json` 强制不可进入编辑；Mongo `_id` 另挂只读 editor
+        isMongo &&
+        (column.columnName === '_raw_json' || column.name === '_raw_json');
+      // Mongo `_raw_json` / `_id` 只读；关系库同名列不按列名锁死
       const columnEditable =
         !column.readonly &&
         !isMongoIdColumn &&
@@ -102,7 +104,8 @@ export default function useColumns(
          * 时间列脱敏之后不允许编辑，避免数据结构对不上。
          * Mongo `_id`：挂只读 editor（disabled/readonly），双击可打开但不可改值。
          * 关系库 `_id`：不走只读特例，跟随 column.readonly / editable。
-         * `_raw_json`：不挂 editor，禁止进入编辑（FE-S1-05）。
+         * Mongo `_raw_json`：不挂 editor，禁止进入编辑（AC-EDIT-005 / AC-HF-012）。
+         * 关系库 `_raw_json`：跟随后端 editable / column.readonly。
          */
         editable: isMongoIdColumn ? true : columnEditable,
         editor: isMongoIdColumn
