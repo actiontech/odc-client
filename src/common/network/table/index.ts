@@ -38,6 +38,7 @@ import { generateDatabaseSid, generateTableSid } from '../pathUtil';
 import { convertServerTableToTable, convertTableToServerTable } from './helper';
 import { getLogicalTableDetail } from '@/common/network/logicalDatabase';
 import odc from '@/plugins/odc';
+import { isMongoDBSession } from '@/util/mongodb';
 
 const SILENT_IDENTITY_ERROR_CODES = new Set([
   'ConnectionOccupied',
@@ -310,6 +311,8 @@ export async function batchGetDataModifySQL(
   tip: string;
 }> {
   const sid = generateTableSid(tableName, dbName, sessionId);
+  const session = sessionManager.sessionMap.get(sessionId);
+  const isMongo = isMongoDBSession(session);
   const ret = await request.post(`/api/v1/data/batchGetModifySql/${sid}`, {
     data: {
       tableName,
@@ -325,7 +328,8 @@ export async function batchGetDataModifySQL(
             initialRow,
             columns,
             useUniqueColumnName,
-            enableRowId
+            enableRowId,
+            isMongo
           )
         };
       })
@@ -344,7 +348,9 @@ function wrapDataDML(
   columns: Partial<ITableColumn>[],
   useUniqueColumnName: boolean = false,
   /** 是否支持row id */
-  enableRowId: boolean = false
+  enableRowId: boolean = false,
+  /** 仅 Mongo 会话对 `_raw_json` 强制 newData=oldData（AC-HF-015） */
+  isMongo: boolean = false
 ) {
   if (enableRowId) {
     const exsitRowIdColumn = columns.find((column) => {
@@ -400,8 +406,8 @@ function wrapDataDML(
     return data;
   }
 
-  // AC-HF-011：继续下发未变更 `_raw_json`（供后端类型保真）；禁止前端改写其内容。
-  // 列仍只读不可编辑；若误改，以 UI 校验拦截，此处原样透传。
+  // AC-HF-011 / AC-HF-015：仅 Mongo 会话继续下发未变更 `_raw_json`（供后端类型保真），
+  // 并强制 newData=oldData；关系库同名列不得静默丢弃用户改动。
   return columns.map((column) => {
     const uniqueColumnName = column?.columnName;
     const blobExt: LobExt = row[getBlobValueKey(uniqueColumnName)];
@@ -416,8 +422,8 @@ function wrapDataDML(
     if (nlsObject) {
       newData = getServerDateformat(nlsObject, column?.dataType);
     }
-    // `_raw_json`：强制 oldData/newData 一致，禁止网络层改写内容
-    if (column?.columnName === '_raw_json') {
+    // Mongo `_raw_json`：强制 oldData/newData 一致；非 Mongo 透传用户 newData
+    if (isMongo && column?.columnName === '_raw_json') {
       const raw = initialRow
         ? initialRow[uniqueColumnName]
         : row[uniqueColumnName];
