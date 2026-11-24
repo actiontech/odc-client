@@ -90,6 +90,8 @@ export enum ResourceNodeType {
   GroupNodeCluster,
   GroupNodeTenant,
   SecondGroupNodeDataSource,
+  /** PostgreSQL virtual Database(catalog) grouping node */
+  PgCatalogGroup,
   /** 物化视图 */
   MaterializedViewRoot,
   MaterializedView,

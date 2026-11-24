@@ -7,6 +7,21 @@ import modalStore from '@/store/modal';
 import { SearchStatus } from '@/page/Workspace/SideBar/ResourceTree/DatabaseSearchModal/constant';
 import { TreeDataNode } from '@/page/Workspace/SideBar/ResourceTree/type';
 import React, { useContext, useEffect } from 'react';
+import { getPgCatalogExpandKey } from './pgThreeLayer';
+
+const TreeDataPgCatalogKey = 'PgCatalog';
+
+/** Insert virtual Database(catalog) expand key before schema/db keys. */
+const pushPgCatalogExpandKey = (
+  keys: React.Key[],
+  db?: IDatabase
+): React.Key[] => {
+  const catalogKey = getPgCatalogExpandKey(db);
+  if (catalogKey && !keys.includes(catalogKey)) {
+    keys.push(catalogKey);
+  }
+  return keys;
+};
 
 const isSupportQuickOpenGlobalSearchNodes = (type: ResourceNodeType, key) => {
   let isSupport = false;
@@ -45,7 +60,8 @@ const isGroupNode = (type) => {
     ResourceNodeType.GroupNodeEnviponment,
     ResourceNodeType.GroupNodeTenant,
     ResourceNodeType.GroupNodeDataSource,
-    ResourceNodeType.SecondGroupNodeDataSource
+    ResourceNodeType.SecondGroupNodeDataSource,
+    ResourceNodeType.PgCatalogGroup
   ].includes(type);
 };
 
@@ -110,6 +126,7 @@ const getShouldExpandedGroupKeys = (params: {
     getGroupKey(mapId, groupMode),
     getSecondGroupKey(mapId, secondMapId, groupMode)
   );
+  pushPgCatalogExpandKey(shouldExpandedKeys, db);
   if (
     [
       DatabaseGroup.project,
@@ -150,6 +167,7 @@ const getShouldExpandedKeysByObject = (params: {
       getSecondGroupKey(mapId, secondMapId, groupMode)
     );
   }
+  pushPgCatalogExpandKey(shouldExpandedKeys, db);
   switch (type) {
     case DbObjectType.database: {
       currentKey = db.id;
@@ -291,6 +309,7 @@ const getObjectShouldExpandedKeysByPage = (params: {
       getSecondGroupKey(mapId, secondMapId, groupMode)
     );
   }
+  pushPgCatalogExpandKey(shouldExpandedKeys, db);
   switch (page.type) {
     case PageType.SQL:
     case PageType.PL: {
@@ -518,6 +537,7 @@ const openGlobalSearch = (node: TreeDataNode) => {
 export {
   TreeDataGroupKey,
   TreeDataSecondGroupKey,
+  TreeDataPgCatalogKey,
   getGroupKey,
   getSecondGroupKey,
   getShouldExpandedGroupKeys,
