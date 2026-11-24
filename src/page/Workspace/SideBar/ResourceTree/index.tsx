@@ -209,17 +209,17 @@ const ResourceTree: React.FC<IProps> = function ({
     });
   };
 
-  // 切换分组类型
+  // 切换分组类型（含 NONE：仍需展开 PgCatalogGroup）
   useEffect(() => {
     if (currentObject) {
       const { value: key, type } = currentObject;
-      if (groupMode !== DatabaseGroup.none) {
-        const shouldExpandedGroupKeys = getShouldExpandedGroupKeys({
-          key,
-          type,
-          groupMode,
-          databaseList
-        });
+      const shouldExpandedGroupKeys = getShouldExpandedGroupKeys({
+        key,
+        type,
+        groupMode,
+        databaseList
+      });
+      if (shouldExpandedGroupKeys.length) {
         setTimeout(() => {
           setExpandedKeys(
             Array.from(new Set([...expandedKeys, ...shouldExpandedGroupKeys]))
@@ -296,10 +296,14 @@ const ResourceTree: React.FC<IProps> = function ({
   };
 
   /** PG `<catalog>.<schema>` → Catalog → Schema(title=schema)；非 PG 原样 */
-  const buildDbTreeChildren = (dbs: IDatabase[] | undefined) =>
+  const buildDbTreeChildren = (
+    dbs: IDatabase[] | undefined,
+    groupScope?: string | number | null
+  ) =>
     mapDatabasesWithPgThreeLayer(
       dbs?.filter(filterVisibleDatabase),
-      resolveLoadedDbNode
+      resolveLoadedDbNode,
+      groupScope
     );
 
   const treeData = (() => {
@@ -329,7 +333,10 @@ const ResourceTree: React.FC<IProps> = function ({
             } else if (groupMode === DatabaseGroup.project) {
               icon = <Icon component={ProjectSvg} />;
             }
-            const children = buildDbTreeChildren(groupItem.databases);
+            const children = buildDbTreeChildren(
+              groupItem.databases,
+              groupItem.mapId
+            );
             return {
               title: groupItem.groupName,
               tip: groupItem.tip,
@@ -359,7 +366,10 @@ const ResourceTree: React.FC<IProps> = function ({
               );
               const data = datasourceList.find((d) => d.id === sItem.mapId);
               const icon = data && <StatusIcon item={data} />;
-              const children = buildDbTreeChildren(sItem.databases);
+              const children = buildDbTreeChildren(
+                sItem.databases,
+                groupItem.mapId
+              );
               return {
                 title: sItem.groupName,
                 key: sencondGroupKey,

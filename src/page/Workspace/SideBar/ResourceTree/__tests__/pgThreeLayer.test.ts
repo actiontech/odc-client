@@ -20,7 +20,8 @@
  * 覆盖：
  *   1. 三层分组：ConnectType.PG + 点号库名 → Database(catalog)→Schema→对象
  *   2. 非 PG / 无点号：原样扁平 passthrough
- *   3. 定位展开：getPgCatalogExpandKey 返回 PgCatalog-{dsId}-{catalog} 中间键
+ *   3. 定位展开：getPgCatalogExpandKey 返回 PgCatalog-{scope}-{dsId}-{catalog} 中间键
+ *   4. 外层分组：同 DS 同 catalog 跨 project 的 key 不碰撞
  */
 
 jest.mock('@ant-design/icons', () => ({
@@ -57,8 +58,9 @@ function makeDb(partial: {
   name: string;
   connectType?: ConnectType;
   dataSource?: { id: number; type: ConnectType };
+  project?: { id: number; name?: string };
 }) {
-  const { dataSource, connectType, ...rest } = partial;
+  const { dataSource, connectType, project, ...rest } = partial;
   return {
     existed: true,
     environment: { id: 1 },
@@ -68,6 +70,7 @@ function makeDb(partial: {
       type: ConnectType.PG,
       ...(dataSource || {})
     },
+    project: project || undefined,
     ...rest
   } as any;
 }
@@ -151,7 +154,7 @@ describe('pgThreeLayer three-layer grouping (AC-UT-FE-001)', () => {
     expect(tree).toHaveLength(2);
     expect(tree[0].type).toBe(ResourceNodeType.PgCatalogGroup);
     expect(tree[0].title).toBe('testdb');
-    expect(tree[0].key).toBe(pgCatalogNodeKey(100, 'testdb'));
+    expect(tree[0].key).toBe(pgCatalogNodeKey(100, 'testdb', 'none'));
     expect(tree[0].children!.map((c) => c.title)).toEqual([
       'public',
       'biz_schema'
@@ -191,8 +194,39 @@ describe('pgThreeLayer three-layer grouping (AC-UT-FE-001)', () => {
 
     const tree = mapDatabasesWithPgThreeLayer(databases, resolveDbNode);
     expect(tree).toHaveLength(2);
-    expect(tree[0].key).toBe(pgCatalogNodeKey(10, 'testdb'));
-    expect(tree[1].key).toBe(pgCatalogNodeKey(20, 'testdb'));
+    expect(tree[0].key).toBe(pgCatalogNodeKey(10, 'testdb', 'none'));
+    expect(tree[1].key).toBe(pgCatalogNodeKey(20, 'testdb', 'none'));
+  });
+
+  it('isolates same catalog across projects via groupScope (AC-RV-FE-002)', () => {
+    const databases = [
+      makeDb({
+        id: 1,
+        name: 'testdb.public',
+        project: { id: 701 },
+        dataSource: { id: 100, type: ConnectType.PG }
+      }),
+      makeDb({
+        id: 2,
+        name: 'testdb.public',
+        project: { id: 702 },
+        dataSource: { id: 100, type: ConnectType.PG }
+      })
+    ];
+    // Flat list without explicit scope → each db uses project.id
+    const flat = mapDatabasesWithPgThreeLayer(databases, resolveDbNode);
+    expect(flat).toHaveLength(2);
+    expect(flat[0].key).toBe(pgCatalogNodeKey(100, 'testdb', 701));
+    expect(flat[1].key).toBe(pgCatalogNodeKey(100, 'testdb', 702));
+    expect(flat[0].key).not.toBe(flat[1].key);
+
+    // Explicit outer groupScope (as ResourceTree passes groupItem.mapId)
+    const underProject701 = mapDatabasesWithPgThreeLayer(
+      [databases[0]],
+      resolveDbNode,
+      701
+    );
+    expect(underProject701[0].key).toBe(pgCatalogNodeKey(100, 'testdb', 701));
   });
 });
 
@@ -260,11 +294,14 @@ describe('pgThreeLayer non-PG / undotted passthrough (AC-UT-FE-001)', () => {
 });
 
 describe('pgThreeLayer locate expand PgCatalog intermediate key (AC-UT-FE-001)', () => {
-  it('returns PgCatalog-{dataSourceId}-{catalog} for foldable PG db', () => {
+  it('returns PgCatalog-{scope}-{dataSourceId}-{catalog} for foldable PG db', () => {
     const db = makeDb({ id: 1, name: 'testdb.biz_schema' });
-    expect(getPgCatalogExpandKey(db)).toBe('PgCatalog-100-testdb');
+    expect(getPgCatalogExpandKey(db)).toBe('PgCatalog-none-100-testdb');
     expect(getPgCatalogExpandKey(db)).toBe(
-      pgCatalogNodeKey(db.dataSource.id, 'testdb')
+      pgCatalogNodeKey(db.dataSource.id, 'testdb', 'none')
+    );
+    expect(getPgCatalogExpandKey(db, 700300)).toBe(
+      pgCatalogNodeKey(db.dataSource.id, 'testdb', 700300)
     );
   });
 

@@ -57,18 +57,46 @@ export function shouldFoldPgThreeLayer(db: IDatabase): boolean {
   return !!parsePgCatalogSchemaName(db?.name);
 }
 
+/**
+ * Virtual Catalog node key.
+ * Includes outer groupScope (project / env / … mapId) so the same
+ * dataSource+catalog under different parents never collide in Ant Tree.
+ */
 export function pgCatalogNodeKey(
   dataSourceId: number | string | undefined,
-  catalog: string
+  catalog: string,
+  groupScope?: string | number | null
 ) {
-  return `PgCatalog-${dataSourceId ?? 'na'}-${catalog}`;
+  const scope =
+    groupScope === undefined || groupScope === null || groupScope === ''
+      ? 'none'
+      : groupScope;
+  return `PgCatalog-${scope}-${dataSourceId ?? 'na'}-${catalog}`;
+}
+
+/** Default scope when caller does not pass an outer group mapId. */
+export function resolvePgCatalogGroupScope(
+  db?: IDatabase,
+  explicitScope?: string | number | null
+): string | number {
+  if (
+    explicitScope !== undefined &&
+    explicitScope !== null &&
+    explicitScope !== ''
+  ) {
+    return explicitScope;
+  }
+  return db?.project?.id ?? 'none';
 }
 
 /**
  * Expand-key for the virtual Database (catalog) node above a folded schema.
  * Returns null when the db is not in PG three-layer fold mode.
  */
-export function getPgCatalogExpandKey(db?: IDatabase): string | null {
+export function getPgCatalogExpandKey(
+  db?: IDatabase,
+  groupScope?: string | number | null
+): string | null {
   if (!db || !shouldFoldPgThreeLayer(db)) {
     return null;
   }
@@ -76,18 +104,26 @@ export function getPgCatalogExpandKey(db?: IDatabase): string | null {
   if (!parsed || isPgSystemSchema(parsed.schema)) {
     return null;
   }
-  return pgCatalogNodeKey(db.dataSource?.id, parsed.catalog);
+  return pgCatalogNodeKey(
+    db.dataSource?.id,
+    parsed.catalog,
+    resolvePgCatalogGroupScope(db, groupScope)
+  );
 }
 
 /**
  * Map a flat database list into tree children: PG dotted names become
  * Catalog → Schema(title=schema only); others stay as-is.
- * Catalog buckets are keyed by dataSourceId+catalog so multi-DS groups
- * (NONE / project / …) never merge same-named catalogs across connections.
+ * Catalog buckets are keyed by groupScope+dataSourceId+catalog so multi-DS /
+ * multi-project groups never merge or collide same-named catalogs.
+ *
+ * @param groupScope outer group mapId (project/dataSource/…); when omitted,
+ *   each db uses `project.id ?? 'none'`.
  */
 export function mapDatabasesWithPgThreeLayer(
   databases: IDatabase[] | undefined,
-  resolveDbNode: (db: IDatabase) => TreeDataNode | undefined
+  resolveDbNode: (db: IDatabase) => TreeDataNode | undefined,
+  groupScope?: string | number | null
 ): TreeDataNode[] {
   if (!databases?.length) {
     return [];
@@ -100,6 +136,7 @@ export function mapDatabasesWithPgThreeLayer(
     {
       catalog: string;
       dataSourceId?: number;
+      groupScope: string | number;
       schemas: TreeDataNode[];
     }
   >();
@@ -128,12 +165,14 @@ export function mapDatabasesWithPgThreeLayer(
     };
 
     const dataSourceId = db.dataSource?.id;
-    const bucketKey = `${dataSourceId ?? 'na'}::${parsed.catalog}`;
+    const scope = resolvePgCatalogGroupScope(db, groupScope);
+    const bucketKey = `${scope}::${dataSourceId ?? 'na'}::${parsed.catalog}`;
     let bucket = catalogMap.get(bucketKey);
     if (!bucket) {
       bucket = {
         catalog: parsed.catalog,
         dataSourceId,
+        groupScope: scope,
         schemas: []
       };
       catalogMap.set(bucketKey, bucket);
@@ -146,10 +185,18 @@ export function mapDatabasesWithPgThreeLayer(
     const bucket = catalogMap.get(bucketKey)!;
     return {
       title: bucket.catalog,
-      key: pgCatalogNodeKey(bucket.dataSourceId, bucket.catalog),
+      key: pgCatalogNodeKey(
+        bucket.dataSourceId,
+        bucket.catalog,
+        bucket.groupScope
+      ),
       isLeaf: bucket.schemas.length === 0,
       type: ResourceNodeType.PgCatalogGroup,
-      data: { catalog: bucket.catalog, dataSourceId: bucket.dataSourceId },
+      data: {
+        catalog: bucket.catalog,
+        dataSourceId: bucket.dataSourceId,
+        groupScope: bucket.groupScope
+      },
       icon: (
         <Icon
           component={DatabaseSvg}

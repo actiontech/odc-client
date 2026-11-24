@@ -11,12 +11,33 @@ import { getPgCatalogExpandKey } from './pgThreeLayer';
 
 const TreeDataPgCatalogKey = 'PgCatalog';
 
+/** Resolve outer groupScope for PgCatalog keys (must match tree build). */
+const resolveExpandGroupScope = (
+  db: IDatabase | undefined,
+  groupMode?: DatabaseGroup
+): string | number | null => {
+  if (!db) {
+    return 'none';
+  }
+  if (groupMode && groupMode !== DatabaseGroup.none) {
+    const mapped = getMapIdByDB(db, groupMode);
+    if (mapped?.mapId !== undefined && mapped?.mapId !== null) {
+      return mapped.mapId;
+    }
+  }
+  return db.project?.id ?? 'none';
+};
+
 /** Insert virtual Database(catalog) expand key before schema/db keys. */
 const pushPgCatalogExpandKey = (
   keys: React.Key[],
-  db?: IDatabase
+  db?: IDatabase,
+  groupMode?: DatabaseGroup
 ): React.Key[] => {
-  const catalogKey = getPgCatalogExpandKey(db);
+  const catalogKey = getPgCatalogExpandKey(
+    db,
+    resolveExpandGroupScope(db, groupMode)
+  );
   if (catalogKey && !keys.includes(catalogKey)) {
     keys.push(catalogKey);
   }
@@ -86,6 +107,7 @@ const getSecondGroupKey = (
 
 /**
  * 获取应该展开的groupkey
+ * NONE 模式不再直接 return []：PG 仍需展开 PgCatalogGroup。
  */
 const getShouldExpandedGroupKeys = (params: {
   key: React.Key;
@@ -94,7 +116,6 @@ const getShouldExpandedGroupKeys = (params: {
   databaseList: IDatabase[];
 }) => {
   const { key, type, groupMode, databaseList } = params;
-  if (groupMode === DatabaseGroup.none) return [];
   let shouldExpandedKeys: React.Key[] = [];
   let dbId: number;
   switch (type) {
@@ -111,6 +132,21 @@ const getShouldExpandedGroupKeys = (params: {
       dbId = key as number;
       break;
     }
+    case ResourceNodeType.PgCatalogGroup: {
+      // key: PgCatalog-{scope}-{dsId}-{catalog} — pick a foldable db under it
+      const matched = databaseList.find((item) => {
+        const catalogKey = getPgCatalogExpandKey(
+          item,
+          resolveExpandGroupScope(item, groupMode)
+        );
+        return catalogKey === key;
+      });
+      if (!matched) {
+        return groupMode === DatabaseGroup.none ? [key] : [];
+      }
+      dbId = matched.id;
+      break;
+    }
     default: {
       if (isString(key)) {
         dbId = Number((key as string).split('-')[0]);
@@ -120,14 +156,17 @@ const getShouldExpandedGroupKeys = (params: {
   }
   const db = databaseList.find((item) => item.id === dbId);
   if (!db) return [];
-  const { mapId } = getMapIdByDB(db, groupMode);
-  const { mapId: secondMapId } = getMapIdByDB(db, DatabaseGroup.dataSource);
-  shouldExpandedKeys.push(
-    getGroupKey(mapId, groupMode),
-    getSecondGroupKey(mapId, secondMapId, groupMode)
-  );
-  pushPgCatalogExpandKey(shouldExpandedKeys, db);
+  if (groupMode && groupMode !== DatabaseGroup.none) {
+    const { mapId } = getMapIdByDB(db, groupMode);
+    const { mapId: secondMapId } = getMapIdByDB(db, DatabaseGroup.dataSource);
+    shouldExpandedKeys.push(
+      getGroupKey(mapId, groupMode),
+      getSecondGroupKey(mapId, secondMapId, groupMode)
+    );
+  }
+  pushPgCatalogExpandKey(shouldExpandedKeys, db, groupMode);
   if (
+    groupMode &&
     [
       DatabaseGroup.project,
       DatabaseGroup.dataSource,
@@ -167,7 +206,7 @@ const getShouldExpandedKeysByObject = (params: {
       getSecondGroupKey(mapId, secondMapId, groupMode)
     );
   }
-  pushPgCatalogExpandKey(shouldExpandedKeys, db);
+  pushPgCatalogExpandKey(shouldExpandedKeys, db, groupMode);
   switch (type) {
     case DbObjectType.database: {
       currentKey = db.id;
@@ -309,7 +348,7 @@ const getObjectShouldExpandedKeysByPage = (params: {
       getSecondGroupKey(mapId, secondMapId, groupMode)
     );
   }
-  pushPgCatalogExpandKey(shouldExpandedKeys, db);
+  pushPgCatalogExpandKey(shouldExpandedKeys, db, groupMode);
   switch (page.type) {
     case PageType.SQL:
     case PageType.PL: {
