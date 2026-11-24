@@ -271,6 +271,11 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
   private actions: IDisposable[];
   private config: Partial<IUserConfig>;
 
+  /** AC-HF-013：进入结果集编辑前 SQL 编辑器的 readOnly，退出时按原值恢复 */
+  private editorReadOnlyBeforeResultsetEditing: boolean | null = null;
+  private textareaReadonlyBeforeResultsetEditing: boolean | null = null;
+  private textareaDisabledBeforeResultsetEditing: boolean | null = null;
+
   constructor(props) {
     super(props);
     const resultSetKey: string = props.sqlStore.getFirstUnlockedResultKey(
@@ -944,29 +949,61 @@ export class SQLPage extends Component<IProps, ISQLPageState> {
 
   public onUpdateEditing = (resultSetIndex: number, editing: boolean) => {
     const resultSets = this.props.sqlStore.resultSets.get(this.props.pageKey);
+    const prevAnyEditing = Object.values(this.state.editingMap).some(Boolean);
     const editingMap = {
       ...this.state.editingMap,
       [resultSets[resultSetIndex].uniqKey]: editing
     };
     this.setState({ editingMap });
-    // 结果集编辑态：锁定并隐藏 Monaco inputarea，避免与单元格编辑器抢焦点/被自动化误选
+    // AC-HF-013：结果集编辑态锁定 Monaco；退出时恢复进入前的原只读态（禁止无条件可写）
     const anyEditing = Object.values(editingMap).some(Boolean);
     try {
-      this.editor?.updateOptions?.({ readOnly: !!anyEditing });
       const textarea = this.editor
         ?.getDomNode?.()
         ?.querySelector?.('textarea.inputarea') as HTMLTextAreaElement | null;
-      if (textarea) {
-        if (anyEditing) {
+
+      if (anyEditing && !prevAnyEditing) {
+        const rawOpts = this.editor?.getRawOptions?.();
+        this.editorReadOnlyBeforeResultsetEditing = !!rawOpts?.readOnly;
+        if (textarea) {
+          this.textareaReadonlyBeforeResultsetEditing =
+            textarea.hasAttribute('readonly');
+          this.textareaDisabledBeforeResultsetEditing =
+            textarea.hasAttribute('disabled');
           textarea.setAttribute('readonly', 'true');
           textarea.setAttribute('disabled', 'true');
           textarea.dataset.odcResultsetEditing = '1';
           textarea.style.visibility = 'hidden';
-        } else {
-          textarea.removeAttribute('readonly');
-          textarea.removeAttribute('disabled');
+        }
+        this.editor?.updateOptions?.({ readOnly: true });
+      } else if (!anyEditing && prevAnyEditing) {
+        const priorReadOnly = !!this.editorReadOnlyBeforeResultsetEditing;
+        this.editor?.updateOptions?.({ readOnly: priorReadOnly });
+        this.editorReadOnlyBeforeResultsetEditing = null;
+        if (textarea) {
           delete textarea.dataset.odcResultsetEditing;
           textarea.style.visibility = '';
+          // 按进入前属性恢复，禁止无条件清除 readonly/disabled
+          if (this.textareaReadonlyBeforeResultsetEditing) {
+            textarea.setAttribute('readonly', 'true');
+          } else {
+            textarea.removeAttribute('readonly');
+          }
+          if (this.textareaDisabledBeforeResultsetEditing) {
+            textarea.setAttribute('disabled', 'true');
+          } else {
+            textarea.removeAttribute('disabled');
+          }
+          this.textareaReadonlyBeforeResultsetEditing = null;
+          this.textareaDisabledBeforeResultsetEditing = null;
+        }
+      } else if (anyEditing) {
+        this.editor?.updateOptions?.({ readOnly: true });
+        if (textarea) {
+          textarea.setAttribute('readonly', 'true');
+          textarea.setAttribute('disabled', 'true');
+          textarea.dataset.odcResultsetEditing = '1';
+          textarea.style.visibility = 'hidden';
         }
       }
     } catch (e) {
