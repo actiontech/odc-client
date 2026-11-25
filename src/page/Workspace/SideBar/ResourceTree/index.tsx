@@ -35,6 +35,7 @@ import styles from './index.less';
 import { DataBaseTreeData } from './Nodes/database';
 import TreeNodeMenu from './TreeNodeMenu';
 import { ResourceNodeType, TreeDataNode } from './type';
+import { mapDatabasesWithPgThreeLayer } from './pgThreeLayer';
 import tracert from '@/util/tracert';
 import Reload from '@/component/Button/Reload';
 import ThemeToggle from '@/component/Button/ThemeToggle';
@@ -57,7 +58,8 @@ import {
   getSecondGroupKey,
   getShouldExpandedGroupKeys,
   TreeDataSecondGroupKey,
-  TreeDataGroupKey
+  TreeDataGroupKey,
+  TreeDataPgCatalogKey
 } from './const';
 import useDataSourceDrawer from './hooks/useDataSourceDrawer';
 import DataSourceNodeMenu from '@/page/Workspace/SideBar/ResourceTree/TreeNodeMenu/dataSource';
@@ -207,17 +209,17 @@ const ResourceTree: React.FC<IProps> = function ({
     });
   };
 
-  // 切换分组类型
+  // 切换分组类型（含 NONE：仍需展开 PgCatalogGroup）
   useEffect(() => {
     if (currentObject) {
       const { value: key, type } = currentObject;
-      if (groupMode !== DatabaseGroup.none) {
-        const shouldExpandedGroupKeys = getShouldExpandedGroupKeys({
-          key,
-          type,
-          groupMode,
-          databaseList
-        });
+      const shouldExpandedGroupKeys = getShouldExpandedGroupKeys({
+        key,
+        type,
+        groupMode,
+        databaseList
+      });
+      if (shouldExpandedGroupKeys.length) {
         setTimeout(() => {
           setExpandedKeys(
             Array.from(new Set([...expandedKeys, ...shouldExpandedGroupKeys]))
@@ -247,8 +249,12 @@ const ResourceTree: React.FC<IProps> = function ({
     }
     if (isString(shouldExpandedKeys?.[index])) {
       const type = (shouldExpandedKeys?.[index] as string).split('-')?.[0];
-      if (type === TreeDataGroupKey || type === TreeDataSecondGroupKey) {
-        // 是分组节点只需等待页面加载时间，不需要考虑网络请求时间
+      if (
+        type === TreeDataGroupKey ||
+        type === TreeDataSecondGroupKey ||
+        type === TreeDataPgCatalogKey
+      ) {
+        // 分组 / PG 虚拟 Database 节点只需等待页面加载时间
         duration = 500;
       }
     }
@@ -269,31 +275,41 @@ const ResourceTree: React.FC<IProps> = function ({
     }
   }, [shouldExpandedKeys]);
 
+  const resolveLoadedDbNode = (database: IDatabase) => {
+    if (loadedKeys.includes(database.id)) {
+      const dbId = database.id;
+      const dbSessionId = sessionIds[dbId];
+      const dbSession = sessionManagerStore.sessionMap.get(dbSessionId);
+      DatabaseDataNodeMap.set(
+        database.id,
+        DataBaseTreeData(dbSession, database, database?.id, true)
+      );
+    }
+    return DatabaseDataNodeMap.get(database.id);
+  };
+
+  const filterVisibleDatabase = (db: IDatabase) => {
+    return (
+      !(envs?.length && !envs.includes(db.environment?.id)) &&
+      !(connectTypes?.length && !connectTypes.includes(db.dataSource?.type))
+    );
+  };
+
+  /** PG `<catalog>.<schema>` → Catalog → Schema(title=schema)；非 PG 原样 */
+  const buildDbTreeChildren = (
+    dbs: IDatabase[] | undefined,
+    groupScope?: string | number | null
+  ) =>
+    mapDatabasesWithPgThreeLayer(
+      dbs?.filter(filterVisibleDatabase),
+      resolveLoadedDbNode,
+      groupScope
+    );
+
   const treeData = (() => {
     switch (groupMode) {
       case DatabaseGroup.none: {
-        return databases
-          ?.filter((db: IDatabase) => {
-            return (
-              !(envs?.length && !envs.includes(db.environment?.id)) &&
-              !(
-                connectTypes?.length &&
-                !connectTypes.includes(db.dataSource?.type)
-              )
-            );
-          })
-          ?.map((database: IDatabase) => {
-            if (loadedKeys.includes(database.id)) {
-              const dbId = database.id;
-              const dbSessionId = sessionIds[dbId];
-              const dbSession = sessionManagerStore.sessionMap.get(dbSessionId);
-              DatabaseDataNodeMap.set(
-                database.id,
-                DataBaseTreeData(dbSession, database, database?.id, true)
-              );
-            }
-            return DatabaseDataNodeMap.get(database.id);
-          });
+        return buildDbTreeChildren(databases as IDatabase[]);
       }
       case DatabaseGroup.project:
       case DatabaseGroup.dataSource:
@@ -317,6 +333,10 @@ const ResourceTree: React.FC<IProps> = function ({
             } else if (groupMode === DatabaseGroup.project) {
               icon = <Icon component={ProjectSvg} />;
             }
+            const children = buildDbTreeChildren(
+              groupItem.databases,
+              groupItem.mapId
+            );
             return {
               title: groupItem.groupName,
               tip: groupItem.tip,
@@ -324,30 +344,8 @@ const ResourceTree: React.FC<IProps> = function ({
               type: GroupNodeToResourceNodeType[groupMode],
               data: data ?? null,
               icon: icon ?? null,
-              isLeaf: groupItem.databases.length ? false : true,
-              children: groupItem.databases
-                ?.filter((db: IDatabase) => {
-                  return (
-                    !(envs?.length && !envs.includes(db.environment?.id)) &&
-                    !(
-                      connectTypes?.length &&
-                      !connectTypes.includes(db.dataSource?.type)
-                    )
-                  );
-                })
-                ?.map((database: IDatabase) => {
-                  if (loadedKeys.includes(database.id)) {
-                    const dbId = database.id;
-                    const dbSessionId = sessionIds[dbId];
-                    const dbSession =
-                      sessionManagerStore.sessionMap.get(dbSessionId);
-                    DatabaseDataNodeMap.set(
-                      database.id,
-                      DataBaseTreeData(dbSession, database, database?.id, true)
-                    );
-                  }
-                  return DatabaseDataNodeMap.get(database.id);
-                })
+              isLeaf: children.length ? false : true,
+              children
             };
           });
       }
@@ -368,41 +366,18 @@ const ResourceTree: React.FC<IProps> = function ({
               );
               const data = datasourceList.find((d) => d.id === sItem.mapId);
               const icon = data && <StatusIcon item={data} />;
+              const children = buildDbTreeChildren(
+                sItem.databases,
+                groupItem.mapId
+              );
               return {
                 title: sItem.groupName,
                 key: sencondGroupKey,
                 type: ResourceNodeType.SecondGroupNodeDataSource,
                 data: data ?? null,
                 icon: icon ?? null,
-                isLeaf: sItem.databases.length ? false : true,
-                children: sItem.databases
-                  ?.filter((db: IDatabase) => {
-                    return (
-                      !(envs?.length && !envs.includes(db.environment?.id)) &&
-                      !(
-                        connectTypes?.length &&
-                        !connectTypes.includes(db.dataSource?.type)
-                      )
-                    );
-                  })
-                  ?.map((database: IDatabase) => {
-                    if (loadedKeys.includes(database.id)) {
-                      const dbId = database.id;
-                      const dbSessionId = sessionIds[dbId];
-                      const dbSession =
-                        sessionManagerStore.sessionMap.get(dbSessionId);
-                      DatabaseDataNodeMap.set(
-                        database.id,
-                        DataBaseTreeData(
-                          dbSession,
-                          database,
-                          database?.id,
-                          true
-                        )
-                      );
-                    }
-                    return DatabaseDataNodeMap.get(database.id);
-                  })
+                isLeaf: children.length ? false : true,
+                children
               };
             })
           };

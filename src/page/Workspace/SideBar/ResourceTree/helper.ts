@@ -43,7 +43,8 @@ export async function loadNode(
     case ResourceNodeType.GroupNodeEnviponment:
     case ResourceNodeType.GroupNodeTenant:
     case ResourceNodeType.GroupNodeDataSource:
-    case ResourceNodeType.SecondGroupNodeDataSource: {
+    case ResourceNodeType.SecondGroupNodeDataSource:
+    case ResourceNodeType.PgCatalogGroup: {
       break;
     }
     case ResourceNodeType.TableRoot:
